@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization } from 'src/providers/hooks';
-import { requestListInUseSpecies, requestListSpecies } from 'src/redux/features/species/speciesAsyncThunks';
+import { requestListSpecies } from 'src/redux/features/species/speciesAsyncThunks';
 import { selectSpeciesInUseListRequest, selectSpeciesListRequest } from 'src/redux/features/species/speciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Species } from 'src/types/Species';
 
+import { usePlantingSiteData } from '../Tracking/PlantingSiteContext';
 import { SpeciesContext, SpeciesData } from './SpeciesContext';
 
 export type Props = {
@@ -15,6 +17,7 @@ export type Props = {
 const SpeciesProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [speciesRequestId, setSpeciesRequestId] = useState<string>('');
   const [inUseSpeciesRequestId, setInUseSpeciesRequestId] = useState<string>('');
@@ -24,19 +27,28 @@ const SpeciesProvider = ({ children }: Props) => {
 
   const [species, setSpecies] = useState<Species[]>([]);
   const [inUseSpecies, setInUseSpecies] = useState<Species[]>([]);
+  const { acceleratorOrganizationId } = usePlantingSiteData();
 
   const reload = useCallback(() => {
-    const speciesRequest = dispatch(requestListSpecies(selectedOrganization.id));
-    const inUseSpeciesRequest = dispatch(requestListInUseSpecies(selectedOrganization.id));
+    const orgId = isAcceleratorRoute ? acceleratorOrganizationId ?? selectedOrganization.id : selectedOrganization.id;
+    const speciesRequest = dispatch(requestListSpecies(orgId));
+    const inUseSpeciesRequest = dispatch(requestListSpecies(orgId));
 
     setSpeciesRequestId(speciesRequest.requestId);
     setInUseSpeciesRequestId(inUseSpeciesRequest.requestId);
-  }, [dispatch, selectedOrganization, setSpeciesRequestId, setInUseSpeciesRequestId]);
+  }, [
+    dispatch,
+    selectedOrganization,
+    setSpeciesRequestId,
+    setInUseSpeciesRequestId,
+    isAcceleratorRoute,
+    acceleratorOrganizationId,
+  ]);
 
   // Do a reload if organization changes
   useEffect(() => {
     reload();
-  }, [selectedOrganization]);
+  }, [selectedOrganization, acceleratorOrganizationId]);
 
   useEffect(() => {
     if (speciesResponse?.status === 'success') {

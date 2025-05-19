@@ -6,6 +6,7 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
@@ -17,15 +18,21 @@ const MAX_SPECIES_NAME_LENGTH = 20;
 
 type PlantsReportedPerSpeciesCardProps = {
   newVersion?: boolean;
+  projectId?: number;
 };
 
 export default function PlantsReportedPerSpeciesCard({
   newVersion,
+  projectId,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
   const { plantingSite } = usePlantingSiteData();
 
+  if (projectId && plantingSite?.id === -1) {
+    return <RolledUpCard projectId={projectId} />;
+  }
+
   if (!plantingSite) {
-    return undefined;
+    return <RolledUpCard projectId={projectId} />;
   } else if (!plantingSite.plantingZones?.length) {
     return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else {
@@ -76,6 +83,35 @@ const calculateSpeciesQuantities = (plantings: { plants: number; scientificName:
   return speciesQuantities;
 };
 
+const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
+  const [labels, setLabels] = useState<string[]>();
+  const [values, setValues] = useState<number[]>();
+  const [tooltipTitles, setTooltipTitles] = useState<string[]>();
+
+  const { reportedPlants } = useProjectPlantings(projectId);
+  const { species: orgSpecies } = useSpeciesData();
+
+  const speciesQuantities = useMemo(() => {
+    const transformedPlantings = reportedPlants
+      .flatMap((site) => site.species)
+      .map((sp) => ({
+        plants: sp.totalPlants,
+        scientificName: orgSpecies.find((s) => s.id === sp.id)?.scientificName || '',
+      }));
+    return calculateSpeciesQuantities(transformedPlantings, true);
+  }, [reportedPlants, orgSpecies]);
+
+  useEffect(() => {
+    setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
+    setValues(Object.values(speciesQuantities));
+    setTooltipTitles(Object.keys(speciesQuantities));
+  }, [speciesQuantities]);
+
+  return (
+    <ChartData plantingSiteId={-1} tooltipTitles={tooltipTitles} labels={labels} values={values} newVersion={true} />
+  );
+};
+
 const SiteWithoutZonesCard = ({
   plantingSiteId,
   newVersion,
@@ -120,6 +156,7 @@ const SiteWithZonesCard = ({
 }: {
   plantingSiteId: number;
   newVersion?: boolean;
+  organizationId?: number;
 }): JSX.Element => {
   const { plantingSiteReportedPlants } = usePlantingSiteData();
   const { species: orgSpecies } = useSpeciesData();
@@ -180,10 +217,6 @@ const ChartData = ({
   const theme = useTheme();
 
   const chartData = useMemo(() => {
-    if (!labels?.length || !values?.length) {
-      return undefined;
-    }
-
     return {
       labels: labels ?? [],
       datasets: [
@@ -216,6 +249,13 @@ const ChartData = ({
           chartId='plantsBySpecies'
           chartData={chartData}
           maxWidth='100%'
+          pluginsOptions={{
+            emptyDoughnut: {
+              color: theme.palette.TwClrBaseGray050,
+              width: 100,
+              radiusDecrease: 70,
+            },
+          }}
         />
       </Box>
     </Box>

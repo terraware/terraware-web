@@ -6,6 +6,7 @@ import { Box, Slide, useTheme } from '@mui/material';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
 import ApplicationProvider from 'src/providers/Application';
+import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
 import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -68,38 +69,40 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   return (
     <ApplicationProvider>
       <PlantingSiteProvider>
-        {type !== 'desktop' ? (
-          <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-            <Box sx={navBarOpened}>
-              <NavBar setShowNavBar={setShowNavBar} />
-            </Box>
-          </Slide>
-        ) : (
-          <NavBar setShowNavBar={setShowNavBar} backgroundTransparent={viewHasBackgroundImage()} />
-        )}
-        <Box
-          sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
-          className='scrollable-content'
-        >
-          <ErrorBoundary setShowNavBar={setShowNavBar}>
-            <Routes>
-              <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_MODULES}/*`} element={<ModuleContent />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={<ModuleView />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT}/*`} element={<EventEdit />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={<People />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_PARTICIPANTS}/*`} element={<Participants />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={<Organizations />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_FUNDING_ENTITIES}/*`} element={<FundingEntities />} />
-              <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
-              <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
-            </Routes>
-          </ErrorBoundary>
-        </Box>
+        <SpeciesProvider>
+          {type !== 'desktop' ? (
+            <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
+              <Box sx={navBarOpened}>
+                <NavBar setShowNavBar={setShowNavBar} />
+              </Box>
+            </Slide>
+          ) : (
+            <NavBar setShowNavBar={setShowNavBar} backgroundTransparent={viewHasBackgroundImage()} />
+          )}
+          <Box
+            sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+            className='scrollable-content'
+          >
+            <ErrorBoundary setShowNavBar={setShowNavBar}>
+              <Routes>
+                <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_MODULES}/*`} element={<ModuleContent />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={<ModuleView />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT}/*`} element={<EventEdit />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={<People />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_PARTICIPANTS}/*`} element={<Participants />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={<Organizations />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_FUNDING_ENTITIES}/*`} element={<FundingEntities />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
+                <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
+              </Routes>
+            </ErrorBoundary>
+          </Box>
+        </SpeciesProvider>
       </PlantingSiteProvider>
     </ApplicationProvider>
   );
