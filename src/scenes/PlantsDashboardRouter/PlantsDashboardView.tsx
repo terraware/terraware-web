@@ -28,13 +28,17 @@ type PlantsDashboardViewProps = {
   organizationId?: number;
 };
 
-export default function PlantsDashboardView({ projectId, organizationId }: PlantsDashboardViewProps): JSX.Element {
+export default function PlantsDashboardView({
+  projectId: acceleratorProjectId,
+  organizationId,
+}: PlantsDashboardViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
 
   const {
     setAcceleratorOrganizationId,
@@ -385,11 +389,12 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       showGeometryNote={geometryChangedNote}
       latestObservationId={latestResultId}
       projectId={projectId}
+      onSelectProjectId={(newProjectId: number) => setProjectId(newProjectId === -1 ? undefined : newProjectId)}
       organizationId={organizationId}
       isEmptyState={isLoading ? false : plantingSite === undefined}
       isLoading={isLoading}
       onSelect={onSelect}
-      allowAllAsSiteSelection={isAcceleratorRoute}
+      allowAllAsSiteSelection={isAcceleratorRoute || projectId !== undefined}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}

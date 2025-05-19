@@ -48,7 +48,7 @@ const ListViewHeader = () => {
       selectedValue={currentParticipantProject?.id}
     />
   ) : (
-    <Typography sx={selectStyles.input}>{options[0].label}</Typography>
+    <Typography sx={selectStyles.input}>{options[0]?.label}</Typography>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, IconName, Message } from '@terraware/web-components';
@@ -10,6 +10,11 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocalization, useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -36,6 +41,7 @@ export type PlantsPrimaryPageViewProps = {
   showGeometryNote?: boolean;
   latestObservationId?: number;
   projectId?: number;
+  onSelectProjectId?: (projectId: number) => void;
   isLoading?: boolean;
 };
 
@@ -50,6 +56,7 @@ export default function PlantsPrimaryPageView({
   latestObservationId,
   projectId,
   isEmptyState,
+  onSelectProjectId,
   newHeader,
   title,
   actionButton,
@@ -59,6 +66,36 @@ export default function PlantsPrimaryPageView({
   const { isDesktop, isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
+  const projects = useAppSelector(selectProjects);
+  const dispatch = useAppDispatch();
+  const { allPlantingSites } = usePlantingSiteData();
+
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
+  }, [activeLocale, dispatch, selectedOrganization.id]);
+
+  const projectsWithPlantingSites = useMemo(() => {
+    if (!allPlantingSites) {
+      return [];
+    }
+
+    const projectIds = allPlantingSites.map((ps) => ps.projectId);
+    const uniqueProjectIds = Array.from(new Set(projectIds));
+
+    return uniqueProjectIds;
+  }, [allPlantingSites]);
+
+  const projectsOptions = useMemo(() => {
+    const iOptions = projects
+      ?.filter((p) => projectsWithPlantingSites.includes(p.id))
+      .map((proj) => ({ label: proj.name, value: proj.id }));
+    iOptions?.unshift({ label: strings.NO_PROJECT, value: -1 });
+    return iOptions;
+  }, [projects, projectsWithPlantingSites]);
 
   const isRolledUpView = useMemo(() => {
     return projectId !== undefined && selectedPlantingSiteId === -1;
@@ -125,15 +162,33 @@ export default function PlantsPrimaryPageView({
           <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
             <Grid container alignItems={'center'} spacing={4}>
               <Grid item xs={isDesktop ? 3 : 12}>
-                <Dropdown
-                  placeholder={strings.SELECT}
-                  id='planting-site-selector'
-                  onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
-                  options={options}
-                  selectedValue={selectedPlantingSiteId}
-                  fullWidth
-                  disabled={isAcceleratorRoute && options.length === 1}
-                />
+                {!isAcceleratorRoute && (projectsOptions?.length ?? 0) > 1 && onSelectProjectId && (
+                  <Box marginBottom={1}>
+                    <Dropdown
+                      placeholder={strings.SELECT}
+                      id='project-selector'
+                      onChange={(newValue) => onSelectProjectId(Number(newValue))}
+                      options={projectsOptions}
+                      selectedValue={projectId}
+                      fullWidth
+                    />
+                  </Box>
+                )}
+                {isAcceleratorRoute && options.length === 1 ? (
+                  <Typography fontSize={'20px'} fontWeight={600}>
+                    {options[0].label}
+                  </Typography>
+                ) : (
+                  <Dropdown
+                    placeholder={strings.SELECT}
+                    id='planting-site-selector'
+                    onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
+                    options={options}
+                    selectedValue={selectedPlantingSiteId}
+                    fullWidth
+                    disabled={isAcceleratorRoute && options.length === 0}
+                  />
+                )}
               </Grid>
               <Grid item xs={isDesktop ? 3 : 12}>
                 <Box>
