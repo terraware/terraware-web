@@ -60,7 +60,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
         adHocObservationResults?.find((_result) => _result.observationId === Number(observationId))
       );
     }
-  }, [observationResults, observationId]);
+  }, [observationResults, adHocObservationResults, observationId]);
 
   useEffect(() => {
     if (result) {
