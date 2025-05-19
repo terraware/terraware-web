@@ -54,10 +54,10 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
 
   const result = useMemo(() => {
-    if (!Number.isNaN(Number(observationId))) {
+    if (!Number.isNaN(observationId)) {
       return (
-        observationResults?.find((_result) => _result.observationId === Number(observationId)) ??
-        adHocObservationResults?.find((_result) => _result.observationId === Number(observationId))
+        observationResults?.find((_result) => _result.observationId === observationId) ??
+        adHocObservationResults?.find((_result) => _result.observationId === observationId)
       );
     }
   }, [observationResults, adHocObservationResults, observationId]);
@@ -71,6 +71,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
               setPlantingZoneResult(zone);
               setPlantingSubzoneResult(subzone);
               setMonitoringPlotResult(plot);
+              return;
             }
           })
         )
