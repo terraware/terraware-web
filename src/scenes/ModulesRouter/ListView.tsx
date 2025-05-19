@@ -26,6 +26,9 @@ export default function ListView(): JSX.Element {
     'displayed in the To Do list on your Home screen. Please log in to Terraware regularly to check which ' +
     'deliverables are due.';
 
+  const dueDiligencePhaseDescription =
+    'Terraformation conducts due diligence to help the company identify and verify potential partners. Terraformation may be required by law to collect certain information to meet its international compliance obligations. In other instances, Terraformation may be required by investors to collect certain information before they will invest in the project. Finally, some information is required in order to register the project with Verra or another carbon registry.';
+
   const phases = [
     {
       name: 'Phase 0 - Due Diligence',
@@ -74,7 +77,7 @@ export default function ListView(): JSX.Element {
         <CurrentTimeline steps={phases} currentIndex={currentPhaseIndex} />
 
         <Box paddingY={theme.spacing(3)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
-          <Typography>{phaseDescription}</Typography>
+          <Typography>{currentPhaseIndex === 0 ? dueDiligencePhaseDescription : phaseDescription}</Typography>
         </Box>
 
         <ListModulesContent />
