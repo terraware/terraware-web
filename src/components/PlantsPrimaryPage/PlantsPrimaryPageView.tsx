@@ -160,7 +160,7 @@ export default function PlantsPrimaryPageView({
           <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
             <Grid container alignItems={'center'} spacing={4}>
               <Grid item xs={isDesktop ? 3 : 12}>
-                {!isAcceleratorRoute && (projectsOptions?.length ?? 0) > 0 && onSelectProjectId && (
+                {!isAcceleratorRoute && (projectsOptions?.length ?? 0) > 1 && onSelectProjectId && (
                   <Box marginBottom={1}>
                     <Dropdown
                       placeholder={strings.SELECT}
