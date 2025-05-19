@@ -113,6 +113,7 @@ export default function ObservationPlantingZone(): JSX.Element {
       {
         plantingSiteId,
         observationId,
+        orgId: selectedOrganization.id,
         plantingZoneName,
         search,
         plotType: filters.plotType === undefined ? undefined : filters.plotType.values[0] === strings.PERMANENT,

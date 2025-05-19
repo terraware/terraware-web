@@ -8,6 +8,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
@@ -40,7 +41,7 @@ export default function PlantingSitesList(): JSX.Element {
   });
   const [filters, setFilters] = useForm<PlantingSitesFilters>({});
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {

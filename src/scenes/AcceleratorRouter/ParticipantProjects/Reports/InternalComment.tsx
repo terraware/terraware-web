@@ -39,10 +39,12 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
     setStatus(entity.status);
   }, [entity.status]);
 
-  const dropdownOptions: DropdownItem[] = AcceleratorReportStatuses.map((_status) => ({
-    label: _status,
-    value: _status,
-  }));
+  const dropdownOptions: DropdownItem[] = AcceleratorReportStatuses.filter((_status) => _status !== 'Not Needed').map(
+    (_status) => ({
+      label: _status,
+      value: _status,
+    })
+  );
 
   return (
     <>
@@ -106,7 +108,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
               onChange={(value) => setStatus(value as AcceleratorReportStatus)}
               options={dropdownOptions}
               required
-              disabled={entity.status === 'Not Submitted'}
+              disabled={entity.status === 'Not Submitted' || entity.status === 'Not Needed'}
               selectedValue={status}
             />
           </Grid>

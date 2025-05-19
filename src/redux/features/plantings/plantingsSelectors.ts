@@ -164,15 +164,20 @@ export const selectUpdatePlantingsCompleted = (state: RootState, requestId: stri
 
 export const selectZonesHaveStatistics = createSelector(
   [
-    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => state,
-    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => zoneIdsBySiteId,
-    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => defaultTimeZoneId,
+    (state: RootState, orgId: number, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
+      state,
+    (state: RootState, orgId: number, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
+      orgId,
+    (state: RootState, orgId: number, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
+      zoneIdsBySiteId,
+    (state: RootState, orgId: number, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) =>
+      defaultTimeZoneId,
   ],
-  (state, zoneIdsBySiteId, defaultTimeZoneId) => {
+  (state, orgId, zoneIdsBySiteId, defaultTimeZoneId) => {
     if (zoneIdsBySiteId && defaultTimeZoneId) {
       const zonesHaveStatistics = Object.keys(zoneIdsBySiteId).some((siteId) => {
         const siteIdSelected = Number(siteId);
-        const latestObservations = selectLatestObservation(state, siteIdSelected, defaultTimeZoneId);
+        const latestObservations = selectLatestObservation(state, siteIdSelected, orgId, defaultTimeZoneId);
         return Array.from(zoneIdsBySiteId[siteIdSelected]).some((zoneId) => {
           return latestObservations?.plantingZones.some(
             (plantingZone) =>

@@ -12,6 +12,7 @@ import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTimeZones } from 'src/providers';
 import { FacilityService } from 'src/services';
@@ -42,7 +43,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [results, setResults] = useState<Facility[]>([]);
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);

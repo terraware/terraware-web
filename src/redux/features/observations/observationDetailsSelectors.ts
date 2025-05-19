@@ -11,6 +11,7 @@ import { searchResultZones } from './utils';
 // search observation details (search planting zone name only)
 
 export type DetailsParams = {
+  orgId: number;
   plantingSiteId: number;
   observationId: number;
 };
@@ -27,7 +28,7 @@ export type DetailsSearchParams = SearchParams &
 export const selectObservationDetails = createSelector(
   [
     (state, params, defaultTimeZone) =>
-      selectMergedPlantingSiteObservations(state, params.plantingSiteId, defaultTimeZone, ALL_STATES),
+      selectMergedPlantingSiteObservations(state, params.plantingSiteId, params.orgId, defaultTimeZone, ALL_STATES),
     (state, params, defaultTimeZone) => params,
   ],
   (observationsResults, params) =>
@@ -47,8 +48,8 @@ export const searchObservationDetails = createCachedSelector(
 
 // get zone names in observation result
 export const selectDetailsZoneNames = createCachedSelector(
-  (state: RootState, plantingSiteId: number, observationId: number) =>
-    selectObservationDetails(state, { plantingSiteId, observationId, search: '', zoneNames: [] }, ''),
+  (state: RootState, plantingSiteId: number, observationId: number, orgId: number) =>
+    selectObservationDetails(state, { plantingSiteId, observationId, orgId, search: '', zoneNames: [] }, ''),
   (details) =>
     Array.from(
       new Set(
