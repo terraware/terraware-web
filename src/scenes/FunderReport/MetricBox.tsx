@@ -20,7 +20,7 @@ type MetricBoxProps = {
 };
 
 const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) => {
-  const { isDesktop } = useDeviceInfo();
+  const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter(user?.locale);
@@ -39,17 +39,19 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
       paddingBottom={isDesktop ? 0 : 3}
       paddingRight={isDesktop ? 3 : 0}
     >
-      <Box display={'flex'} alignItems={'center'}>
-        <Typography fontSize='20px' fontWeight={600} paddingRight={'10px'}>
-          {isReportSystemMetric(metric) ? metric.metric : metric.name}
-        </Typography>
-        {metric.description && (
-          <Tooltip title={metric.description}>
-            <Box display='flex'>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' style={{ marginRight: '10px' }} />
-            </Box>
-          </Tooltip>
-        )}
+      <Box display={isMobile ? 'block' : 'flex'} alignItems={'center'}>
+        <Box display={'flex'} alignItems={'center'} marginBottom={isMobile ? 1 : 0}>
+          <Typography fontSize='20px' fontWeight={600} paddingRight={'10px'}>
+            {isReportSystemMetric(metric) ? metric.metric : metric.name}
+          </Typography>
+          {metric.description && (
+            <Tooltip title={metric.description}>
+              <Box display='flex'>
+                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' style={{ marginRight: '10px' }} />
+              </Box>
+            </Tooltip>
+          )}
+        </Box>
         {metric.status && <MetricStatusBadge status={metric.status} />}
       </Box>
       <Box display='flex' marginTop={1}>
