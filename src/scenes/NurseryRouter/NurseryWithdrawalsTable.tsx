@@ -11,6 +11,7 @@ import SearchFiltersWrapper, {
 } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -60,7 +61,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(searchValue, 250);
+  const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'withdrawnDate',
     direction: 'Descending',

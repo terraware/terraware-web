@@ -10,7 +10,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import {
   searchObservationDetails,
   selectDetailsZoneNames,
@@ -45,6 +45,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const { ...searchProps }: SearchProps = props;
 
   const { activeLocale } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
   const navigate = useSyncNavigate();
   const params = useParams<{
@@ -74,6 +75,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     searchObservations(
       state,
       plantingSiteId,
+      selectedOrganization.id,
       defaultTimeZone.get().id,
       searchProps.search,
       searchProps.filtersProps?.filters?.zone?.values ?? [],
@@ -95,6 +97,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       {
         plantingSiteId,
         observationId,
+        orgId: selectedOrganization.id,
         search: searchProps.search,
         zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
       },
@@ -128,7 +131,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
-  const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
+  const zoneNames = useAppSelector((state) =>
+    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
+  );
 
   const title = useMemo(() => {
     const plantingSiteName = details?.plantingSiteName ?? '';

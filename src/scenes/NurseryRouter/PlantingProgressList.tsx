@@ -10,6 +10,7 @@ import Table from 'src/components/common/table';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
 import {
@@ -97,11 +98,12 @@ export default function PlantingProgressList({
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();
+  const { selectedOrganization } = useOrganization();
   const [requestId, setRequestId] = useState<string>('');
   const [selectedZoneIdsBySiteId, setSelectedZoneIdsBySiteId] = useState<Record<number, Set<number>>>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
   const subzonesStatisticsResult = useAppSelector((state) =>
-    selectZonesHaveStatistics(state, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
+    selectZonesHaveStatistics(state, selectedOrganization.id, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
   );
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);

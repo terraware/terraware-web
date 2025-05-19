@@ -15,6 +15,7 @@ type EditVariableModalProps = {
   variable: VariableWithValues;
   onFinish: (edited: boolean) => void;
   onCancel: () => void;
+  onSectionClicked?: (sectionNumber: string) => void;
   projectId: number;
   setUpdateWorkflowRequestId?: (requestId: string) => void;
   showVariableHistory: () => void;
@@ -24,6 +25,7 @@ export default function EditVariableModal({
   display,
   onCancel,
   onFinish,
+  onSectionClicked,
   projectId,
   setUpdateWorkflowRequestId,
   showVariableHistory,
@@ -64,6 +66,7 @@ export default function EditVariableModal({
         <EditVariable
           display={display}
           onFinish={onFinish}
+          onSectionClicked={onSectionClicked}
           projectId={projectId}
           sectionsUsed={getUsedSections(variable.id)}
           setUpdateWorkflowRequestId={setUpdateWorkflowRequestId}

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
 
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
@@ -29,7 +30,7 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
   const [speciesList, setSpeciesList] = useState<SuggestedSpecies[]>([]);
   const [selectedValue, setSelectedValue] = useState<SuggestedSpecies>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
   const populateSpecies = useCallback(
     async (searchTerm: string) => {

@@ -7,6 +7,7 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useOrganization } from 'src/providers';
 import {
   searchObservationDetails,
   selectDetailsZoneNames,
@@ -31,6 +32,7 @@ const columns = (): TableColumnType[] => [
 const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   const { ...searchProps }: SearchProps = props;
 
+  const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
   const navigate = useSyncNavigate();
   const params = useParams<{
@@ -47,6 +49,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
       {
         plantingSiteId,
         observationId,
+        orgId: selectedOrganization.id,
         search: searchProps.search,
         zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
       },
@@ -54,7 +57,9 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
     )
   );
 
-  const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
+  const zoneNames = useAppSelector((state) =>
+    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
+  );
 
   useEffect(() => {
     if (!details) {

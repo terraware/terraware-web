@@ -21,10 +21,21 @@ export const requestGetOneSpecies = createAsyncThunk(
 
 export const requestListSpecies = createAsyncThunk(
   'species/list',
-  async (request: { organizationId: number; inUse?: boolean }, { rejectWithValue }) => {
-    const { organizationId, inUse } = request;
+  async (organizationId: number, { rejectWithValue }) => {
+    const response = await SpeciesService.getAllSpecies(organizationId, false);
 
-    const response = await SpeciesService.getAllSpecies(organizationId, inUse);
+    if (response && response.requestSucceeded && response.data) {
+      return response.data.species;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestListInUseSpecies = createAsyncThunk(
+  'species/listInUse',
+  async (organizationId: number, { rejectWithValue }) => {
+    const response = await SpeciesService.getAllSpecies(organizationId, true);
 
     if (response && response.requestSucceeded && response.data) {
       return response.data.species;

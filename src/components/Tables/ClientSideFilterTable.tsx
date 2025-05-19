@@ -11,6 +11,7 @@ import SearchFiltersWrapperV2, {
 import { defaultSearchNodeCreator } from 'src/components/common/SearchFiltersWrapperV2/FeaturedFilters';
 import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
@@ -64,7 +65,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [searchValue, setSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(searchValue, 250);
+  const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>(defaultSortOrder);
   const { sessionFilters } = useSessionFilters(id);
 

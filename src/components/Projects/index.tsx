@@ -12,6 +12,7 @@ import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import ProjectsService from 'src/services/ProjectsService';
@@ -33,7 +34,7 @@ export default function ProjectsList(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [results, setResults] = useState<Project[]>();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
