@@ -342,6 +342,8 @@ export default fixupConfigRules([
 
       'prefer-const': 'error',
       radix: 'error',
+
+      // react
       'react/display-name': 'error',
       'react/jsx-boolean-value': 'off',
       'react/jsx-key': 'error',
@@ -377,6 +379,10 @@ export default fixupConfigRules([
       'react/react-in-jsx-scope': 'error',
       'react/require-render-return': 'error',
       'react/self-closing-comp': 'error',
+
+      // react-hooks
+      'react-hooks/exhaustive-deps': 'error',
+
       'require-await': 'off',
       'require-yield': 'error',
       'space-in-parens': ['off', 'never'],

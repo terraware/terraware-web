@@ -124,7 +124,7 @@ export default function NavBar({
       const request = dispatch(requestOrganizationFeatures({ organizationId: selectedOrganization.id }));
       setOrgFeaturesRequestId(request.requestId);
     }
-  }, [selectedOrganization.id]);
+  }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
     if (!currentParticipantProject && projectsWithModules && projectsWithModules.length > 0) {
@@ -175,11 +175,12 @@ export default function NavBar({
         />
       ) : null,
     [
-      activeLocale,
-      closeAndNavigateTo,
-      isDeliverablesRoute,
-      isDeliverableViewRoute,
       orgFeatures?.data?.deliverables?.enabled,
+      activeLocale,
+      isDeliverablesRoute,
+      mixpanel,
+      closeAndNavigateTo,
+      isDeliverableViewRoute,
     ]
   );
 
@@ -199,7 +200,15 @@ export default function NavBar({
           id='reports-list'
         />
       ) : null,
-    [activeLocale, closeAndNavigateTo, isReportsEnabled, isReportsRoute, orgFeatures?.data?.reports?.enabled]
+    [
+      activeLocale,
+      closeAndNavigateTo,
+      isAllowed,
+      isReportsEnabled,
+      isReportsRoute,
+      orgFeatures?.data?.reports?.enabled,
+      selectedOrganization,
+    ]
   );
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
@@ -248,7 +257,9 @@ export default function NavBar({
       closeAndNavigateTo,
       currentParticipantProject,
       isProjectModulesRoute,
-      orgFeatures?.data?.reports?.enabled,
+      mixpanel,
+      orgFeatures?.data?.modules?.enabled,
+      selectedOrganization,
     ]
   );
 
@@ -281,7 +292,14 @@ export default function NavBar({
           id='applications-list'
         />
       ) : null,
-    [activeLocale, closeAndNavigateTo, isApplicationRoute, orgFeatures?.data?.applications?.enabled]
+    [
+      activeLocale,
+      closeAndNavigateTo,
+      isApplicationRoute,
+      orgFeatures?.data?.applications?.enabled,
+      theme.palette.TwClrIcnSecondary,
+      theme.palette.TwClrTxt,
+    ]
   );
 
   const acceleratorSectionTitle = useMemo<string>(

@@ -82,7 +82,7 @@ const ContactUsForm = () => {
     ) {
       goToHelpSupport();
     }
-  }, [types, supportRequestType]);
+  }, [types, supportRequestType, goToHelpSupport]);
 
   const [supportRequest, , onChangeSupportRequest] = useForm<SupportRequest>({
     attachmentIds: [],
@@ -95,7 +95,7 @@ const ContactUsForm = () => {
     if (supportRequestType) {
       onChangeSupportRequest('requestType', supportRequestType);
     }
-  }, [supportRequestType]);
+  }, [onChangeSupportRequest, supportRequestType]);
 
   const [allAttachments, setAllAttachments] = useState<AttachmentRequest[]>([]);
 
@@ -116,7 +116,7 @@ const ContactUsForm = () => {
           .map(({ temporaryAttachmentId }) => temporaryAttachmentId)
       );
     },
-    [supportRequest]
+    [onChangeSupportRequest]
   );
 
   const submit = useCallback(() => {
@@ -139,7 +139,7 @@ const ContactUsForm = () => {
 
   const handleOnSave = useCallback(() => {
     submit();
-  }, [supportRequest]);
+  }, [submit]);
 
   useEffect(() => {
     if (!submitSupportRequest) {
@@ -153,27 +153,22 @@ const ContactUsForm = () => {
       snackbar.toastSuccess(strings.formatString(strings.THANK_YOU_FOR_CONTACTING_SUPPORT, `${issueKey}`));
       goToHelpSupport();
     }
-  }, [activeLocale, submitSupportRequest, snackbar]);
+  }, [activeLocale, submitSupportRequest, snackbar, goToHelpSupport]);
 
   const supportRequestTitle = useMemo(
     () => (supportRequestType ? getSupportRequestName(supportRequestType) : ''),
-    [activeLocale, supportRequestType]
+    [supportRequestType]
   );
 
   const supportRequestInstructions = useMemo(
     () => (supportRequestType ? getSupportRequestInstructions(supportRequestType) : ''),
-    [activeLocale, supportRequestType]
+    [supportRequestType]
   );
 
   // Confirming that no uploads are pending.
   const uploadCompleted = useMemo(
     () => allAttachments.every((attachment) => attachment.status !== 'pending'),
     [allAttachments]
-  );
-
-  const attachmentDescription = useMemo(
-    () => strings.formatString(strings.ATTACHMENT_DESCRIPTION, MAX_FILES_LIMIT, MAX_FILE_SIZE),
-    [activeLocale]
   );
 
   return (
@@ -254,7 +249,7 @@ const ContactUsForm = () => {
                 marginBottom={theme.spacing(1)}
                 display={'inline'}
               >
-                {attachmentDescription}
+                {strings.formatString(strings.ATTACHMENT_DESCRIPTION, MAX_FILES_LIMIT, MAX_FILE_SIZE)}
               </Typography>
               <ContactUsAttachments maxFiles={MAX_FILES_LIMIT} onChange={onChangeAttachments} />
             </Grid>

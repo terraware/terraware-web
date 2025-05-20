@@ -65,13 +65,16 @@ export default function SpeciesDetailView(): JSX.Element {
     setShowRejectDialog(false);
   };
 
-  const onOptionItemClick = (optionItem: DropdownItem) => {
-    switch (optionItem.value) {
-      case 'edit': {
-        goToParticipantProjectSpeciesEdit(deliverableId, projectId, participantProjectSpeciesId);
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'edit': {
+          goToParticipantProjectSpeciesEdit(deliverableId, projectId, participantProjectSpeciesId);
+        }
       }
-    }
-  };
+    },
+    [deliverableId, goToParticipantProjectSpeciesEdit, participantProjectSpeciesId, projectId]
+  );
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string) => {
@@ -82,7 +85,7 @@ export default function SpeciesDetailView(): JSX.Element {
         });
       }
     },
-    [currentParticipantProjectSpecies]
+    [currentParticipantProjectSpecies, update]
   );
 
   const optionItems = useMemo(
@@ -95,7 +98,7 @@ export default function SpeciesDetailView(): JSX.Element {
             },
           ]
         : [],
-    [activeLocale, currentDeliverable?.status]
+    [activeLocale]
   );
 
   const actions = useMemo(() => {
@@ -140,7 +143,7 @@ export default function SpeciesDetailView(): JSX.Element {
             },
           ]
         : [],
-    [activeLocale, currentDeliverable]
+    [activeLocale, currentDeliverable?.name, deliverableId, projectId]
   );
 
   const GridItemWrapper = useCallback(
@@ -149,7 +152,7 @@ export default function SpeciesDetailView(): JSX.Element {
         {children}
       </Grid>
     ),
-    [gridSize]
+    [gridSize, theme]
   );
 
   return (

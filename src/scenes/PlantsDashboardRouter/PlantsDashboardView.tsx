@@ -52,13 +52,6 @@ export default function PlantsDashboardView({
 
   const hasObservations = useMemo(() => !!latestResult, [latestResult]);
 
-  const sitePlantingComplete = useMemo(() => {
-    return (
-      plantingSite?.plantingZones?.flatMap((zone) => zone.plantingSubzones)?.every((sz) => sz.plantingCompleted) ??
-      false
-    );
-  }, [plantingSite]);
-
   const onPreferences = useCallback(
     (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
     [setPlantsDashboardPreferences]
@@ -83,7 +76,7 @@ export default function PlantsDashboardView({
   useEffect(() => {
     const orgId = organizationId ?? selectedOrganization.id;
     setAcceleratorOrganizationId(orgId);
-  }, [dispatch, organizationId, selectedOrganization]);
+  }, [dispatch, organizationId, selectedOrganization, setAcceleratorOrganizationId]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -126,7 +119,13 @@ export default function PlantsDashboardView({
     ) : (
       ''
     );
-  }, [latestResult, isAcceleratorRoute]);
+  }, [
+    latestResult?.plantingZones,
+    latestResult?.completedTime,
+    latestResult?.observationId,
+    plantingSite,
+    isAcceleratorRoute,
+  ]);
 
   const renderMortalityRate = useCallback(
     () =>
@@ -153,7 +152,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, renderLatestObservationLink, hasObservations]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
   );
 
   const renderTotalPlantsAndSpecies = () => (
@@ -202,7 +201,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, sitePlantingComplete, hasObservations, renderLatestObservationLink]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
   );
 
   const renderPlantingSiteTrends = useCallback(
@@ -251,7 +250,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, renderLatestObservationLink, hasObservations]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
   );
 
   const renderSimpleSiteMap = useCallback(
@@ -273,7 +272,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite]
+    [plantingSite, theme]
   );
 
   const hasPolygons = useMemo(
@@ -339,7 +338,7 @@ export default function PlantsDashboardView({
               : ''}
           </b>
         ) as string);
-  }, [plantingSite, observationSummaries, observationHectares]);
+  }, [plantingSite, observationSummaries, observationHectares, renderLatestObservationLink, summariesHectares]);
 
   const onSelect = useCallback(
     (plantingSiteId: number) => {
@@ -371,7 +370,7 @@ export default function PlantsDashboardView({
         </Grid>
       </>
     );
-  }, [projectId, organizationId]);
+  }, [theme, organizationId, selectedOrganization.id, projectId]);
 
   return (
     <PlantsPrimaryPage
