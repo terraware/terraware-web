@@ -118,7 +118,7 @@ export default function PlantsPrimaryPageView({
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
   }, [plantingSites]);
 
-  if (!plantingSites || ((allPlantingSites?.length ?? 0 > 1) && !selectedPlantingSiteId)) {
+  if (!plantingSites || ((allPlantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId)) {
     return (
       <TfMain>
         <CircularProgress sx={{ margin: 'auto' }} />
