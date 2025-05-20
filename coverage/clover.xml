@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747694479946" clover="3.2.0">
-  <project timestamp="1747694479946" name="All files">
+<coverage generated="1747754438821" clover="3.2.0">
+  <project timestamp="1747754438821" name="All files">
     <metrics statements="30836" coveredstatements="1299" conditionals="21072" coveredconditionals="388" methods="9528" coveredmethods="211" elements="61436" coveredelements="1898" complexity="0" loc="30836" ncloc="30836" packages="262" files="1271" classes="1271"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -29980,7 +29980,7 @@
         <line num="79" count="0" type="stmt"/>
         <line num="80" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="83" count="0" type="stmt"/>
-        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
       </file>
       <file name="PlantsReportedPerSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantsReportedPerSpeciesCard.tsx">
         <metrics statements="87" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="26" coveredmethods="0"/>
