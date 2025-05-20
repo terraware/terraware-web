@@ -89,7 +89,13 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
               <Typography fontSize='24px' fontWeight={600} paddingRight={1}>
                 {strings.formatString(strings.X_HA, <FormattedNumber value={Math.round(totalPlantedArea || 0)} />)}
               </Typography>
-              <Tooltip title={strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP}>
+              <Tooltip
+                title={
+                  plantingSite?.id === -1
+                    ? strings.PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP
+                    : strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP
+                }
+              >
                 <Box display='flex'>
                   <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
                 </Box>
@@ -138,7 +144,13 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                 )}{' '}
                 {strings.PLANTS}
               </Typography>
-              <Tooltip title={strings.TOTAL_PLANTS_PLANTED_TOOLTIP}>
+              <Tooltip
+                title={
+                  plantingSite?.id === -1
+                    ? strings.TOTAL_PLANTS_PLANTED_ROLLED_UP_TOOLTIP
+                    : strings.TOTAL_PLANTS_PLANTED_TOOLTIP
+                }
+              >
                 <Box display='flex'>
                   <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
                 </Box>
@@ -162,7 +174,13 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                 )}{' '}
                 {strings.SPECIES}
               </Typography>
-              <Tooltip title={strings.TOTAL_SPECIES_PLANTED_TOOLTIP}>
+              <Tooltip
+                title={
+                  plantingSite?.id === -1
+                    ? strings.TOTAL_SPECIES_PLANTED_ROLLED_UP_TOOLTIP
+                    : strings.TOTAL_SPECIES_PLANTED_TOOLTIP
+                }
+              >
                 <Box display='flex'>
                   <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
                 </Box>
