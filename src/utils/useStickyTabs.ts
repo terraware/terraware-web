@@ -12,6 +12,7 @@ interface StickyTabsProps {
   tabs: Tab[];
   viewIdentifier: string;
   keepQuery?: boolean;
+  tabsAreNewPages?: boolean;
 }
 
 const makeTabSessionKey = (viewIdentifier: string) => `tab-${viewIdentifier}`;
@@ -32,7 +33,13 @@ const writeTabToSession = (viewIdentifier: string, tab: string): void => {
   }
 };
 
-const useStickyTabs = ({ defaultTab, tabs, viewIdentifier, keepQuery = true }: StickyTabsProps) => {
+const useStickyTabs = ({
+  defaultTab,
+  tabs,
+  viewIdentifier,
+  keepQuery = true,
+  tabsAreNewPages = true,
+}: StickyTabsProps) => {
   const location = useStateLocation();
   const navigate = useSyncNavigate();
   const query = useQuery();
@@ -44,10 +51,12 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier, keepQuery = true }: S
     (newTab: string) => {
       query.set('tab', newTab);
       const emptyQuery = tab === newTab ? query.toString() : new URLSearchParams(`tab=${newTab}`);
-      navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()));
+      navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()), {
+        replace: !tabsAreNewPages,
+      });
       writeTabToSession(viewIdentifier, newTab);
     },
-    [navigate, location, query, viewIdentifier, keepQuery]
+    [navigate, location, query, viewIdentifier, keepQuery, tab, tabsAreNewPages]
   );
 
   useEffect(() => {
