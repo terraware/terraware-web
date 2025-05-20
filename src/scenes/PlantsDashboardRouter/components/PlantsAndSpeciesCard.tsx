@@ -132,7 +132,9 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                     ''
                   )
                 ) : (
-                  reportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)
+                  <FormattedNumber
+                    value={reportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)}
+                  />
                 )}{' '}
                 {strings.PLANTS}
               </Typography>
@@ -156,7 +158,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                 {plantingSite && plantingSite?.id !== -1 ? (
                   <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
                 ) : (
-                  projectTotalSpecies
+                  <FormattedNumber value={projectTotalSpecies} />
                 )}{' '}
                 {strings.SPECIES}
               </Typography>
