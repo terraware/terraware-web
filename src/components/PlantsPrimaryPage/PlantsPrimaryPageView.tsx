@@ -42,7 +42,6 @@ export type PlantsPrimaryPageViewProps = {
   latestObservationId?: number;
   projectId?: number;
   onSelectProjectId?: (projectId: number) => void;
-  isLoading?: boolean;
 };
 
 export default function PlantsPrimaryPageView({
@@ -60,7 +59,6 @@ export default function PlantsPrimaryPageView({
   newHeader,
   title,
   actionButton,
-  isLoading,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
@@ -70,7 +68,7 @@ export default function PlantsPrimaryPageView({
   const { activeLocale } = useLocalization();
   const projects = useAppSelector(selectProjects);
   const dispatch = useAppDispatch();
-  const { allPlantingSites } = usePlantingSiteData();
+  const { allPlantingSites, isLoading, isPlantingSiteSet } = usePlantingSiteData();
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -120,7 +118,7 @@ export default function PlantsPrimaryPageView({
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
   }, [plantingSites]);
 
-  if (!plantingSites || (plantingSites.length && !selectedPlantingSiteId) || isLoading) {
+  if (!plantingSites || ((allPlantingSites?.length ?? 0 > 1) && !selectedPlantingSiteId)) {
     return (
       <TfMain>
         <CircularProgress sx={{ margin: 'auto' }} />
@@ -141,16 +139,22 @@ export default function PlantsPrimaryPageView({
                     <b>{strings.PLEASE_NOTE}</b>
                     {strings.formatString(
                       strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
-                      <Link
-                        fontSize={'16px'}
-                        to={`${APP_PATHS.OBSERVATION_DETAILS.replace(
-                          ':plantingSiteId',
-                          selectedPlantingSiteId.toString()
-                        ).replace(':observationId', latestObservationId.toString())}?map=true`}
-                        target='_blank'
-                      >
-                        {strings.HAS_CHANGED}
-                      </Link>
+                      isAcceleratorRoute ? (
+                        <Link
+                          fontSize={'16px'}
+                          to={`${APP_PATHS.OBSERVATION_DETAILS.replace(
+                            ':plantingSiteId',
+                            selectedPlantingSiteId.toString()
+                          ).replace(':observationId', latestObservationId.toString())}?map=true`}
+                          target='_blank'
+                        >
+                          {strings.HAS_CHANGED}
+                        </Link>
+                      ) : (
+                        <Typography fontSize={'16px'} display={'inline'}>
+                          {strings.HAS_CHANGED}
+                        </Typography>
+                      )
                     )}
                   </span>
                 }
@@ -203,14 +207,18 @@ export default function PlantsPrimaryPageView({
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={isDesktop ? 6 : 12}>
-                <Typography fontSize='16px' marginTop={theme.spacing(1)}>
-                  {text}
-                </Typography>
-              </Grid>
+              {!isPlantingSiteSet ? (
+                <CircularProgress sx={{ margin: 'auto' }} />
+              ) : (
+                <Grid item xs={isDesktop ? 6 : 12}>
+                  <Typography fontSize='16px' marginTop={theme.spacing(1)}>
+                    {text}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
           </Card>
-          {isEmptyState && !isAcceleratorRoute && <PlantsDashboardEmptyMessage />}
+          {isEmptyState && !isAcceleratorRoute && !isLoading && isPlantingSiteSet && <PlantsDashboardEmptyMessage />}
         </>
       ) : (
         <PageHeaderWrapper nextElement={contentRef.current}>
@@ -277,9 +285,13 @@ export default function PlantsPrimaryPageView({
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Box ref={contentRef} sx={style}>
-        {children}
-      </Box>
+      {newHeader && !isPlantingSiteSet ? (
+        <CircularProgress sx={{ margin: 'auto' }} />
+      ) : (
+        <Box ref={contentRef} sx={style}>
+          {children}
+        </Box>
+      )}
     </Wrapper>
   );
 }

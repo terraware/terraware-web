@@ -237,6 +237,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
         summariesResponse?.status === 'pending' ||
         historiesResponse?.status === 'pending' ||
         reportedPlantsResponse?.status === 'pending',
+      isPlantingSiteSet:
+        plantingSitesResults !== undefined && (allPlantingSites?.length ?? 0) > 1 && plantingSite !== undefined,
     }),
     [
       acceleratorOrganizationId,
@@ -255,6 +257,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       latestObservation,
       nextObservation,
       latestResult,
+      plantingSitesResults,
     ]
   );
 
