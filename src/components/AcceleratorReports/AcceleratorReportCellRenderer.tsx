@@ -42,7 +42,7 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
         <TextTruncated fontSize={16} fontWeight={500} stringList={[reportName]} width={400} />
       </Link>
     );
-  }, [isAcceleratorRoute, row.id]);
+  }, [isAcceleratorRoute, projectId, row.frequency, row.id, row.quarter, row.startDate]);
 
   const modifiedByName = useMemo(() => {
     return modifiedByUser
