@@ -98,7 +98,7 @@ export default function PlantsPrimaryPage({
     const initializePlantingSite = async () => {
       if (plantingSitesList && plantingSitesList.length) {
         let lastVisitedPlantingSite: any = {};
-        if (selectedOrganization.id !== -1) {
+        if (selectedOrganization.id !== -1 && !projectId) {
           const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
           if (response[lastVisitedPreferenceName]) {
             lastVisitedPlantingSite = response[lastVisitedPreferenceName];
@@ -107,12 +107,12 @@ export default function PlantsPrimaryPage({
         const lastPlantingSiteId = Number(lastVisitedPlantingSite.plantingSiteId);
         const paramPlantingSiteId = plantingSiteId ? Number(plantingSiteId) : undefined;
 
-        const plantingSiteIdToUse = paramPlantingSiteId ?? lastPlantingSiteId;
+        const plantingSiteIdToUse = !projectId ? paramPlantingSiteId ?? lastPlantingSiteId : lastPlantingSiteId;
         const nextPlantingSite =
           plantingSitesList.find((plantingSite) => plantingSite?.id === plantingSiteIdToUse) ?? plantingSitesList[0];
         const nextPlantingSiteId = nextPlantingSite.id;
 
-        if (selectedOrganization.id !== -1) {
+        if (selectedOrganization.id !== -1 && !projectId) {
           if (nextPlantingSiteId !== lastPlantingSiteId) {
             await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
               [lastVisitedPreferenceName]: { plantingSiteId: nextPlantingSiteId },
@@ -131,6 +131,7 @@ export default function PlantsPrimaryPage({
 
     void initializePlantingSite();
   }, [
+    projectId,
     plantingSitesList,
     plantingSiteId,
     setActivePlantingSite,
