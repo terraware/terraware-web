@@ -101,18 +101,10 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                 </Box>
               </Tooltip>
             </Box>
-            <Typography fontSize={'16px'} fontWeight={600} marginRight={1}>
-              {strings.TOTAL_PLANTED_COMPLETE}
-            </Typography>
-            <Box marginTop={2}>
-              <Box display='flex' alignItems={'center'}>
-                <Typography fontSize='14px' fontWeight={500} maxWidth={'190px'}>
-                  {strings.PLANTING_COMPLETE_CHART}: {percentagePlanted}%
-                </Typography>
-                <Box width={'280px'} marginLeft={1}>
-                  <ProgressChart value={totalPlantedArea || 0} target={totalArea} />
-                </Box>
-              </Box>
+            <Box display='flex' justifyContent={'space-between'} maxWidth={'440px'}>
+              <Typography fontSize={'16px'} fontWeight={600} marginRight={1}>
+                {strings.TOTAL_PLANTED_COMPLETE}
+              </Typography>
               <Typography
                 fontSize='14px'
                 fontWeight={400}
@@ -122,6 +114,16 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
               >
                 {strings.formatString(strings.TARGET_HECTARES_PLANTED, <FormattedNumber value={totalArea || 0} />)}
               </Typography>
+            </Box>
+            <Box marginTop={1}>
+              <Box display='flex' alignItems={'center'}>
+                <Typography fontSize='14px' fontWeight={500} maxWidth={'190px'}>
+                  {strings.PLANTING_COMPLETE_CHART}: {percentagePlanted}%
+                </Typography>
+                <Box width={'280px'} marginLeft={1}>
+                  <ProgressChart value={totalPlantedArea || 0} target={totalArea} />
+                </Box>
+              </Box>
             </Box>
           </Box>
         </Card>
