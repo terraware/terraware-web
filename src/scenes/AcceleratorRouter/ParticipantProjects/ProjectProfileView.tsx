@@ -41,8 +41,6 @@ import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
-
 type ProjectProfileViewProps = {
   participantProject?: ParticipantProject;
   projectDetails?: ParticipantProject | FunderProjectDetails;
@@ -150,14 +148,6 @@ const ProjectProfileView = ({
     [funderView, lastPublishedReport, lastSubmittedReport]
   );
 
-  const strippedDealName = useMemo(() => {
-    if (projectDetails?.dealName?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {
-      return projectDetails?.dealName?.replace(DEAL_NAME_COUNTRY_CODE_REGEX, '');
-    } else {
-      return projectDetails?.dealName;
-    }
-  }, [projectDetails?.dealName]);
-
   return (
     <Card
       flushMobile
@@ -202,12 +192,6 @@ const ProjectProfileView = ({
               fontWeight={500}
             />
           </Box>
-        </Grid>
-      )}
-
-      {funderView && (
-        <Grid container>
-          <InvertedCard md={12} backgroundColor={theme.palette.TwClrBaseGray050} value={strippedDealName} />
         </Grid>
       )}
 
