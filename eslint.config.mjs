@@ -8,6 +8,7 @@ import jsdoc from 'eslint-plugin-jsdoc';
 import nodePlugin from 'eslint-plugin-n';
 import preferArrow from 'eslint-plugin-prefer-arrow';
 import reactPlugin from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -35,6 +36,7 @@ export default fixupConfigRules([
       files: ['**/*.ts', '**/*.tsx'],
       ignores: ['**/generated-schema.ts'],
     })),
+  reactHooks.configs['recommended-latest'],
   {
     files: ['**/*.ts', '**/*.tsx'],
 
