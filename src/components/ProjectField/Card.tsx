@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
-import { ProjectFieldProps, renderFieldValue } from '.';
+import { ProjectFieldProps, ProjectFieldValue } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
 const ProjectFieldCard = ({ height, label, md, value, rightBorder }: ProjectFieldProps) => {
@@ -24,7 +24,7 @@ const ProjectFieldCard = ({ height, label, md, value, rightBorder }: ProjectFiel
             <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}>
               {label}
             </Typography>
-            {renderFieldValue(value)}
+            <ProjectFieldValue value={value} />
           </Grid>
         </Grid>
       </Box>
