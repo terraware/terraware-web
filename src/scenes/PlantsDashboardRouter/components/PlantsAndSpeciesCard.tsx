@@ -87,7 +87,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize='24px' fontWeight={600} paddingRight={1}>
-                {strings.formatString(strings.X_HA, <FormattedNumber value={Math.round(totalPlantedArea || 0)} />)}
+                {strings.formatString(strings.X_HA, <FormattedNumber value={Math.round(totalPlantedArea * 10) / 10} />)}
               </Typography>
               <Tooltip title={strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP}>
                 <Box display='flex'>
