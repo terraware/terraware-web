@@ -1,3 +1,4 @@
+f17b14e0535 SW-6946 Legend should always be visible on trends charts (#4040)
 361345fe288 Fix rules-of-hooks lint errors from react-hooks (#4030)
 0cc6e7d0aa2 SW-6905 Display Carbon Certification on Project Profile (#4028)
 78d92ac260b SW-6945 Move Target hectares above progress bar (#4037)
