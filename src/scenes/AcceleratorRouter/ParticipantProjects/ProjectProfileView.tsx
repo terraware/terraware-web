@@ -461,7 +461,11 @@ const ProjectProfileView = ({
       </Grid>
 
       <Grid container marginBottom={theme.spacing(2)}>
-        {(!funderView || (funderView && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
+        {(!funderView ||
+          (funderView &&
+            (projectDetails?.standard ||
+              projectDetails?.methodologyNumber ||
+              (projectDetails?.carbonCertifications?.length ?? 0) > 0))) && (
           <Box marginX={theme.spacing(2)} width={'100%'}>
             <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
@@ -509,7 +513,7 @@ const ProjectProfileView = ({
             padding={theme.spacing(2)}
           >
             {!funderView && (
-              <>
+              <Box paddingBottom={theme.spacing(1)}>
                 <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
                   {strings.PROJECT_LINKS}
                 </Typography>
@@ -536,7 +540,7 @@ const ProjectProfileView = ({
                 )}
                 {project && isAllowedViewScoreAndVoting && (
                   <ProjectFieldLink
-                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', project.id.toString())}
                     label={strings.SCORING}
                   />
                 )}
@@ -546,10 +550,10 @@ const ProjectProfileView = ({
                     label={strings.REPORTS}
                   />
                 )}
-              </>
+              </Box>
             )}
 
-            <Box paddingTop={theme.spacing(1)}>
+            <Box>
               <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
                 {strings.EXTERNAL_PROJECT_LINKS}
               </Typography>
