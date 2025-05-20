@@ -210,6 +210,14 @@ const PlantingSiteProvider = ({ children }: Props) => {
     );
   }, [observationResults]);
 
+  const hasSites = useMemo(() => {
+    return (allPlantingSites?.length ?? 0) > 1;
+  }, [allPlantingSites]);
+
+  const plantingSiteSelected = useMemo(() => {
+    return plantingSite !== undefined;
+  }, [plantingSite]);
+
   const value = useMemo(
     (): PlantingSiteData => ({
       acceleratorOrganizationId,
@@ -238,7 +246,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
         historiesResponse?.status === 'pending' ||
         reportedPlantsResponse?.status === 'pending',
       isPlantingSiteSet:
-        plantingSitesResults !== undefined && (allPlantingSites?.length ?? 0) > 1 && plantingSite !== undefined,
+        plantingSitesResults !== undefined &&
+        ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected)),
     }),
     [
       acceleratorOrganizationId,
