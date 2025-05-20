@@ -46,7 +46,8 @@ export default function ProjectProfileTests() {
     await page.getByRole('button', { name: 'Applications' }).click();
     await page.getByText('Pre-screen').click();
     await page.getByPlaceholder('Search').click();
-    await page.getByPlaceholder('Search').fill('Application');
+    await page.getByPlaceholder('Search').fill('COL_Terraformation (staging)');
+    await page.waitForTimeout(1000); // wait for results to return
     await page.locator('#row1-internalName').click();
     await page.getByText('See Project Details').click();
 
@@ -288,11 +289,21 @@ async function validateProjectProfilePage(projectDetails: ProjectDetails, page: 
   }
 
   for (const link of projectDetails.projectLinksVisible || []) {
-    await expect(page.getByRole('link', { name: link, ...exactOptions })).toBeVisible();
+    await expect(
+      page
+        .getByText('Project Links')
+        .locator('..')
+        .getByRole('button', { name: link, ...exactOptions })
+    ).toBeVisible();
   }
 
   for (const link of projectDetails.projectLinksHidden || []) {
-    await expect(page.getByRole('link', { name: link, ...exactOptions })).toBeHidden();
+    await expect(
+      page
+        .getByText('Project Links')
+        .locator('..')
+        .getByRole('button', { name: link, ...exactOptions })
+    ).toBeHidden();
   }
 
   if (projectDetails.sdgList) {
