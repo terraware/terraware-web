@@ -30,6 +30,7 @@ type ProjectDetails = {
   minMaxCarbonAccumulation?: string;
   methodology?: string;
   standard?: string;
+  carbonCertifications?: string[];
   projectLinksVisible?: string[];
   projectLinksHidden?: string[];
   sdgList?: number[];
@@ -192,6 +193,7 @@ export default function ProjectProfileTests() {
       projectLinksHidden: ['Application'],
       sdgList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
       additionalPageText: ['Test Cohort Phase 2', 'Phase 2 - Plan and Scale', 'Viewing: Project Zone Figure Variable'],
+      carbonCertifications: [],
     };
 
     await validateProjectProfilePage(projectDetails, page);
@@ -208,6 +210,7 @@ export default function ProjectProfileTests() {
       projectLinksVisible: projectDetails.projectLinksHidden!!.slice(0, -1), // Remove Slack
       projectLinksHidden: ['Slack', ...projectDetails.projectLinksHidden!!],
       sdgList: [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      carbonCertifications: ['CCB Standard'],
     };
 
     await page.getByRole('button', { name: 'Edit Project', ...exactOptions }).click();
@@ -234,6 +237,11 @@ export default function ProjectProfileTests() {
     await page
       .locator('li')
       .filter({ hasText: /^Plan Vivo$/ })
+      .click();
+    await page.locator('#carbonCertifications').click();
+    await page
+      .locator('li')
+      .filter({ hasText: /^CCB Standard$/ })
       .click();
     await page.locator('#slackLink').getByRole('textbox').fill('');
     await page.getByText('7. Affordable and Clean Energy').locator('..').getByLabel('remove').click();
@@ -274,6 +282,10 @@ async function validateProjectProfilePage(projectDetails: ProjectDetails, page: 
     (await validateWithPre('Min-Max Carbon Accumulation', `${projectDetails.minMaxCarbonAccumulation} tCO2/ha/yr`));
   await validateWithPre('Standard', projectDetails.standard);
   await validateWithPre('Methodology Number', projectDetails.methodology);
+
+  for (const altText of projectDetails.carbonCertifications || []) {
+    await expect(page.getByAltText(altText, exactOptions)).toBeVisible();
+  }
 
   for (const link of projectDetails.projectLinksVisible || []) {
     await expect(page.getByRole('link', { name: link, ...exactOptions })).toBeVisible();

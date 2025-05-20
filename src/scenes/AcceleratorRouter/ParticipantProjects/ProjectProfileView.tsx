@@ -10,6 +10,7 @@ import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
 import ProjectFieldLink from 'src/components/ProjectField/Link';
+import ProjectCertificationDisplay from 'src/components/ProjectField/ProjectCertificationDisplay';
 import ProjectDataDisplay from 'src/components/ProjectField/ProjectDataDisplay';
 import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
 import ProjectMap from 'src/components/ProjectField/ProjectMap';
@@ -398,7 +399,7 @@ const ProjectProfileView = ({
           borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
           width={'100%'}
         >
-          <Grid item xs={12} marginTop={theme.spacing(2)}>
+          <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
             <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
               {strings.LAND_DATA}
             </Typography>
@@ -459,10 +460,10 @@ const ProjectProfileView = ({
         />
       </Grid>
 
-      <Grid container>
+      <Grid container marginBottom={theme.spacing(2)}>
         {(!funderView || (funderView && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
           <Box marginX={theme.spacing(2)} width={'100%'}>
-            <Grid item xs={12} marginTop={theme.spacing(2)}>
+            <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
                 {strings.CARBON_DATA}
               </Typography>
@@ -495,12 +496,13 @@ const ProjectProfileView = ({
             <ProjectDataDisplay label={strings.METHODOLOGY_NUMBER} md={4} value={projectDetails?.methodologyNumber} />
           </>
         )}
+        <ProjectCertificationDisplay certifications={projectDetails?.carbonCertifications} />
       </Grid>
 
       {((funderView && projectDetails?.verraLink) || !funderView) && (
         <Grid container>
           <Box
-            margin={theme.spacing(2, 1, 3)}
+            margin={theme.spacing(0, 1, 3)}
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
             borderRadius={theme.spacing(1)}
             width={'100%'}

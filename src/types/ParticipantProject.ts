@@ -6,6 +6,8 @@ import { CohortPhaseType } from './Cohort';
 // These will all change when the BE is done, some of the props might even come from different models
 export type ParticipantProject = components['schemas']['ProjectAcceleratorDetailsPayload'];
 
+export type CarbonCertifications = ParticipantProject['carbonCertifications'];
+
 export type ParticipantProjectSearchResult = {
   acceleratorDetails_confirmedReforestableLand: string;
   country_name: string;
