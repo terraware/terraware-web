@@ -104,7 +104,10 @@ export default function PlantsDashboardView({
     return plantingSite && latestResult?.completedTime ? (
       isAcceleratorRoute ? (
         <Typography fontSize={'16px'} display={'inline'}>
-          {DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')}
+          {strings.formatString(
+            strings.DATE_OBSERVATION,
+            DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
+          )}
         </Typography>
       ) : (
         <Link
