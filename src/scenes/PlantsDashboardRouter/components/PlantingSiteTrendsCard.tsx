@@ -95,6 +95,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
       datasets: [
         {
           values: values ?? [],
+          label: strings.ACTUAL,
           pointRadius: values?.length === 1 ? 4 : 0,
           color: '#D29AB4',
         },
@@ -179,6 +180,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
             selectedValue={selectedMortalityZone}
           />
         </Box>
+        <Box id='legend-container-mr' sx={{ marginTop: 3 }} />
         <Box paddingTop={2}>
           <Chart
             chartId='mortalityChart'
@@ -189,6 +191,8 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
             type={'line'}
             xAxisType='time'
             lineColor='#D29AB4'
+            customLegend
+            customLegendContainerId='legend-container-mr'
           />
         </Box>
       </Box>
