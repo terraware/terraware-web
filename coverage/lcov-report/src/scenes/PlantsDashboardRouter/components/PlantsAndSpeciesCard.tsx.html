@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -255,7 +255,27 @@
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,7 +410,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -536,26 +576,24 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           &lt;Box flexBasis='100%'&gt;
             &lt;Box display={'flex'} alignItems={'center'}&gt;
               &lt;Typography fontSize='24px' fontWeight={600} paddingRight={1}&gt;
-                {strings.formatString(strings.X_HA, &lt;FormattedNumber value={Math.round(totalPlantedArea || 0)} /&gt;)}
+                {strings.formatString(strings.X_HA, &lt;FormattedNumber value={Math.round(totalPlantedArea * 10) / 10} /&gt;)}
               &lt;/Typography&gt;
-              &lt;Tooltip title={strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP}&gt;
+              &lt;Tooltip
+                title={
+                  plantingSite?.id === -1
+                    ? strings.PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP
+                    : strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP
+                }
+              &gt;
                 &lt;Box display='flex'&gt;
                   &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
                 &lt;/Box&gt;
               &lt;/Tooltip&gt;
             &lt;/Box&gt;
-            &lt;Typography fontSize={'16px'} fontWeight={600} marginRight={1}&gt;
-              {strings.TOTAL_PLANTED_COMPLETE}
-            &lt;/Typography&gt;
-            &lt;Box marginTop={2}&gt;
-              &lt;Box display='flex' alignItems={'center'}&gt;
-                &lt;Typography fontSize='14px' fontWeight={500} maxWidth={'190px'}&gt;
-                  {strings.PLANTING_COMPLETE_CHART}: {percentagePlanted}%
-                &lt;/Typography&gt;
-                &lt;Box width={'280px'} marginLeft={1}&gt;
-                  &lt;ProgressChart value={totalPlantedArea || 0} target={totalArea} /&gt;
-                &lt;/Box&gt;
-              &lt;/Box&gt;
+            &lt;Box display='flex' justifyContent={'space-between'} maxWidth={'440px'}&gt;
+              &lt;Typography fontSize={'16px'} fontWeight={600} marginRight={1}&gt;
+                {strings.TOTAL_PLANTED_COMPLETE}
+              &lt;/Typography&gt;
               &lt;Typography
                 fontSize='14px'
                 fontWeight={400}
@@ -565,6 +603,16 @@ export default function <span class="fstat-no" title="function not covered" >Pla
               &gt;
                 {strings.formatString(strings.TARGET_HECTARES_PLANTED, &lt;FormattedNumber value={totalArea || 0} /&gt;)}
               &lt;/Typography&gt;
+            &lt;/Box&gt;
+            &lt;Box marginTop={1}&gt;
+              &lt;Box display='flex' alignItems={'center'}&gt;
+                &lt;Typography fontSize='14px' fontWeight={500} maxWidth={'190px'}&gt;
+                  {strings.PLANTING_COMPLETE_CHART}: {percentagePlanted}%
+                &lt;/Typography&gt;
+                &lt;Box width={'280px'} marginLeft={1}&gt;
+                  &lt;ProgressChart value={totalPlantedArea || 0} target={totalArea} /&gt;
+                &lt;/Box&gt;
+              &lt;/Box&gt;
             &lt;/Box&gt;
           &lt;/Box&gt;
         &lt;/Card&gt;
@@ -587,7 +635,13 @@ export default function <span class="fstat-no" title="function not covered" >Pla
                 )}{' '}
                 {strings.PLANTS}
               &lt;/Typography&gt;
-              &lt;Tooltip title={strings.TOTAL_PLANTS_PLANTED_TOOLTIP}&gt;
+              &lt;Tooltip
+                title={
+                  plantingSite?.id === -1
+                    ? strings.TOTAL_PLANTS_PLANTED_ROLLED_UP_TOOLTIP
+                    : strings.TOTAL_PLANTS_PLANTED_TOOLTIP
+                }
+              &gt;
                 &lt;Box display='flex'&gt;
                   &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
                 &lt;/Box&gt;
@@ -611,7 +665,13 @@ export default function <span class="fstat-no" title="function not covered" >Pla
                 )}{' '}
                 {strings.SPECIES}
               &lt;/Typography&gt;
-              &lt;Tooltip title={strings.TOTAL_SPECIES_PLANTED_TOOLTIP}&gt;
+              &lt;Tooltip
+                title={
+                  plantingSite?.id === -1
+                    ? strings.TOTAL_SPECIES_PLANTED_ROLLED_UP_TOOLTIP
+                    : strings.TOTAL_SPECIES_PLANTED_TOOLTIP
+                }
+              &gt;
                 &lt;Box display='flex'&gt;
                   &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
                 &lt;/Box&gt;
@@ -646,7 +706,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-20T15:20:38.055Z
+                at 2025-05-20T15:31:13.286Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
