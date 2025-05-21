@@ -4,6 +4,7 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
@@ -123,7 +124,10 @@ export default function MultiplePlantingSiteMap({
         }}
       >
         <Typography fontSize='20px' fontWeight={600}>
-          {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, Math.round(totalArea * 100) / 100 || '')}
+          {strings.formatString(
+            strings.X_HA_IN_TOTAL_PLANTING_AREA,
+            <FormattedNumber value={Math.round(totalArea * 100) / 100} />
+          )}
         </Typography>
         <Box display={'flex'} flexDirection={isDesktop ? 'row' : 'column-reverse'}>
           <MapLegend legends={legends} />
