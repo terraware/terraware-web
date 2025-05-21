@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
@@ -51,7 +51,7 @@ const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
     }
   }, [activeLocale, isAcceleratorRoute, status, theme]);
 
-  return <>{badgeProps && <Badge {...badgeProps} />}</>;
+  return <Box sx={{ textWrap: 'nowrap' }}>{badgeProps && <Badge {...badgeProps} />}</Box>;
 };
 
 export default MetricStatusBadge;
