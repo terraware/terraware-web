@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747860016735" clover="3.2.0">
-  <project timestamp="1747860016735" name="All files">
-    <metrics statements="30854" coveredstatements="1299" conditionals="21109" coveredconditionals="388" methods="9533" coveredmethods="211" elements="61496" coveredelements="1898" complexity="0" loc="30854" ncloc="30854" packages="263" files="1273" classes="1273"/>
+<coverage generated="1747860630211" clover="3.2.0">
+  <project timestamp="1747860630211" name="All files">
+    <metrics statements="30854" coveredstatements="1299" conditionals="21113" coveredconditionals="388" methods="9533" coveredmethods="211" elements="61500" coveredelements="1898" complexity="0" loc="30854" ncloc="30854" packages="263" files="1273" classes="1273"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5389,9 +5389,9 @@
       </file>
     </package>
     <package name="src.components.PlantsPrimaryPage">
-      <metrics statements="87" coveredstatements="0" conditionals="115" coveredconditionals="0" methods="29" coveredmethods="0"/>
+      <metrics statements="87" coveredstatements="0" conditionals="119" coveredconditionals="0" methods="29" coveredmethods="0"/>
       <file name="PlantsPrimaryPageView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsPrimaryPage/PlantsPrimaryPageView.tsx">
-        <metrics statements="42" coveredstatements="0" conditionals="69" coveredconditionals="0" methods="18" coveredmethods="0"/>
+        <metrics statements="42" coveredstatements="0" conditionals="73" coveredconditionals="0" methods="18" coveredmethods="0"/>
         <line num="66" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
@@ -5430,10 +5430,10 @@
         <line num="125" count="0" type="stmt"/>
         <line num="132" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="133" count="0" type="stmt"/>
-        <line num="171" count="0" type="stmt"/>
-        <line num="186" count="0" type="stmt"/>
-        <line num="204" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="256" count="0" type="stmt"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="205" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="258" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsPrimaryPage/index.tsx">
         <metrics statements="45" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="11" coveredmethods="0"/>

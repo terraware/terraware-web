@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
@@ -353,7 +353,9 @@
 <a name='L288'></a><a href='#L288'>288</a>
 <a name='L289'></a><a href='#L289'>289</a>
 <a name='L290'></a><a href='#L290'>290</a>
-<a name='L291'></a><a href='#L291'>291</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -523,20 +525,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -553,10 +541,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -805,61 +809,63 @@ export default function <span class="fstat-no" title="function not covered" >Pla
               /&gt;
             &lt;/Box&gt;
           )}
-          &lt;Card radius={'8px'} style={{ 'margin-bottom': '32px' }}&gt;
-            &lt;Grid container alignItems={'center'} spacing={4}&gt;
-              &lt;Grid item xs={isDesktop ? 3 : 12}&gt;
-                {!isAcceleratorRoute &amp;&amp; (projectsOptions?.length ?? 0) &gt; 1 &amp;&amp; onSelectProjectId &amp;&amp; (
-                  &lt;Box marginBottom={1}&gt;
+          {(isAcceleratorRoute || (!isAcceleratorRoute &amp;&amp; options.length &gt; 0)) &amp;&amp; (
+            &lt;Card radius={'8px'} style={{ 'margin-bottom': '32px' }}&gt;
+              &lt;Grid container alignItems={'center'} spacing={4}&gt;
+                &lt;Grid item xs={isDesktop ? 3 : 12}&gt;
+                  {!isAcceleratorRoute &amp;&amp; (projectsOptions?.length ?? 0) &gt; 1 &amp;&amp; onSelectProjectId &amp;&amp; (
+                    &lt;Box marginBottom={1}&gt;
+                      &lt;Dropdown
+                        placeholder={strings.NO_PROJECT_SELECTED}
+                        id='project-selector'
+                        onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >onSelectProjectId(Number(newValue))}</span>
+                        options={projectsOptions}
+                        selectedValue={projectId}
+                        fullWidth
+                      /&gt;
+                    &lt;/Box&gt;
+                  )}
+                  {isAcceleratorRoute &amp;&amp; options.length === 1 ? (
+                    &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
+                      {options[0].label}
+                    &lt;/Typography&gt;
+                  ) : (
                     &lt;Dropdown
-                      placeholder={strings.NO_PROJECT_SELECTED}
-                      id='project-selector'
-                      onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >onSelectProjectId(Number(newValue))}</span>
-                      options={projectsOptions}
-                      selectedValue={projectId}
+                      placeholder={strings.SELECT}
+                      id='planting-site-selector'
+                      onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >onChangePlantingSiteId(Number(newValue))}</span>
+                      options={options}
+                      selectedValue={selectedPlantingSiteId}
                       fullWidth
+                      disabled={isAcceleratorRoute &amp;&amp; options.length === 0}
                     /&gt;
+                  )}
+                &lt;/Grid&gt;
+                &lt;Grid item xs={isDesktop ? 3 : 12}&gt;
+                  &lt;Box&gt;
+                    &lt;Typography fontWeight={600}&gt;{strings.TOTAL_PLANTING_AREA}&lt;/Typography&gt;
+                    &lt;Typography fontSize='28px' fontWeight={600}&gt;
+                      {strings.formatString(
+                        strings.X_HA,
+                        isRolledUpView ? (
+                          &lt;FormattedNumber value={Math.round(totalArea * 100) / 100} /&gt;
+                        ) : (
+                          &lt;FormattedNumber
+                            value={plantingSites.find(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; <span class="cstat-no" title="statement not covered" >ps.id === selectedPlantingSiteId)</span>?.areaHa || 0}
+                          /&gt;
+                        )
+                      )}
+                    &lt;/Typography&gt;
                   &lt;/Box&gt;
-                )}
-                {isAcceleratorRoute &amp;&amp; options.length === 1 ? (
-                  &lt;Typography fontSize={'20px'} fontWeight={600}&gt;
-                    {options[0].label}
+                &lt;/Grid&gt;
+                &lt;Grid item xs={isDesktop ? 6 : 12}&gt;
+                  &lt;Typography fontSize='16px' marginTop={theme.spacing(1)}&gt;
+                    {text}
                   &lt;/Typography&gt;
-                ) : (
-                  &lt;Dropdown
-                    placeholder={strings.SELECT}
-                    id='planting-site-selector'
-                    onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >onChangePlantingSiteId(Number(newValue))}</span>
-                    options={options}
-                    selectedValue={selectedPlantingSiteId}
-                    fullWidth
-                    disabled={isAcceleratorRoute &amp;&amp; options.length === 0}
-                  /&gt;
-                )}
+                &lt;/Grid&gt;
               &lt;/Grid&gt;
-              &lt;Grid item xs={isDesktop ? 3 : 12}&gt;
-                &lt;Box&gt;
-                  &lt;Typography fontWeight={600}&gt;{strings.TOTAL_PLANTING_AREA}&lt;/Typography&gt;
-                  &lt;Typography fontSize='28px' fontWeight={600}&gt;
-                    {strings.formatString(
-                      strings.X_HA,
-                      isRolledUpView ? (
-                        &lt;FormattedNumber value={Math.round(totalArea * 100) / 100} /&gt;
-                      ) : (
-                        &lt;FormattedNumber
-                          value={plantingSites.find(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; <span class="cstat-no" title="statement not covered" >ps.id === selectedPlantingSiteId)</span>?.areaHa || 0}
-                        /&gt;
-                      )
-                    )}
-                  &lt;/Typography&gt;
-                &lt;/Box&gt;
-              &lt;/Grid&gt;
-              &lt;Grid item xs={isDesktop ? 6 : 12}&gt;
-                &lt;Typography fontSize='16px' marginTop={theme.spacing(1)}&gt;
-                  {text}
-                &lt;/Typography&gt;
-              &lt;/Grid&gt;
-            &lt;/Grid&gt;
-          &lt;/Card&gt;
+            &lt;/Card&gt;
+          )}
           {isEmptyState &amp;&amp; !isAcceleratorRoute &amp;&amp; &lt;PlantsDashboardEmptyMessage /&gt;}
         &lt;/&gt;
       ) : (
@@ -940,7 +946,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-21T20:40:16.015Z
+                at 2025-05-21T20:50:29.501Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
