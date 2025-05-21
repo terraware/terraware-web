@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { Box, Switch, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import { AntSwitch } from 'src/components/Switch/AntSwitch';
 
 type MapLegendItem = {
   borderColor: string;
@@ -32,14 +34,6 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
   const theme = useTheme();
   const { isMobile, isDesktop } = useDeviceInfo();
 
-  const separatorStyles = {
-    width: '1px',
-    height: 'auto',
-    backgroundColor: theme.palette.TwClrBrdrTertiary,
-    marginRight: '24px',
-    marginLeft: '24px',
-  };
-
   return (
     <Box
       display='flex'
@@ -47,21 +41,20 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
       border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
       borderRadius='8px'
       padding={theme.spacing(2)}
-      flexDirection={isMobile ? 'column' : 'row'}
+      flexDirection={'column'}
+      maxWidth={'184px'}
+      marginRight={2}
     >
-      {legends.map((legend) => (
-        <Box key={legend.title} sx={{ opacity: legend.disabled ? 0.7 : 1 }}>
-          <Box
-            border={legend.switch ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
-            display='flex'
-            padding={2}
-            borderRadius={1}
-            marginRight={2}
-            flexDirection={isDesktop ? 'row' : 'column'}
-          >
-            {legend.switch && (
-              <Box>
-                <Switch
+      {legends.map((legend, index) => (
+        <Box
+          key={legend.title}
+          sx={{ opacity: legend.disabled ? 0.7 : 1 }}
+          borderBottom={index === legends.length - 1 ? 'none' : `1px solid ${theme.palette.TwClrBrdrTertiary}`}
+        >
+          <Box paddingBottom={2} paddingTop={index === 0 ? 0 : 2} flexDirection={isDesktop ? 'row' : 'column'}>
+            <Box display='flex' alignItems={'center'}>
+              {legend.switch && (
+                <AntSwitch
                   disabled={legend.disabled}
                   checked={!legend.disabled && legend.checked}
                   onChange={(event, isChecked) => {
@@ -77,27 +70,26 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
                     }
                   }}
                 />
-              </Box>
-            )}
-            <Box>
+              )}
               <Typography
                 fontSize='14px'
                 fontWeight={600}
                 width={isMobile ? '100%' : undefined}
                 marginRight={isMobile ? 0 : theme.spacing(4)}
+                paddingLeft={legend.switch ? theme.spacing(1) : 0}
               >
                 {legend.title}
               </Typography>
-              <Box display='flex'>
-                {legend.items.map((item) => (
-                  <Box key={`${legend.title}-${item.label}`} paddingRight={1}>
-                    <LabeledSwatch {...item} />
-                  </Box>
-                ))}
-              </Box>
+            </Box>
+
+            <Box>
+              {legend.items.map((item) => (
+                <Box key={`${legend.title}-${item.label}`} paddingRight={1} paddingTop={1}>
+                  <LabeledSwatch {...item} />
+                </Box>
+              ))}
             </Box>
           </Box>
-          {!legend.switch && <div style={separatorStyles} />}
         </Box>
       ))}
     </Box>
@@ -126,7 +118,7 @@ function LabeledSwatch({
           backgroundImage: fillPatternUrl ? `url("${fillPatternUrl}")` : undefined,
           backgroundRepeat: 'repeat',
           opacity: isDisabled ? 0.7 : opacity,
-          height: height ? height : '8px',
+          height: height ? height : '16px',
           width: '24px',
           marginRight: theme.spacing(1),
         }}
