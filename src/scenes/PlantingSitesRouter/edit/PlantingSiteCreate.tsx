@@ -176,7 +176,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                     setPlantingSeasons={setPlantingSeasons}
                     setRecord={setRecord}
                   />
-                  {plantingSite?.plantingZones && (
+                  {record?.plantingZones && (
                     <BoundariesAndZones
                       plantingSite={record}
                       search={search}
