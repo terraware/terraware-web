@@ -19,14 +19,15 @@ export default function TotalMortalityRateCard(): JSX.Element {
   useEffect(() => {
     let _highestMortalityRate = 0;
     let _lowestMortalityRate = 100;
-    let _highestZoneId: number | undefined = undefined;
-    let _lowestZoneId: number | undefined = undefined;
+    let _highestZoneId: number | undefined;
+    let _lowestZoneId: number | undefined;
     observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
       if (zone.mortalityRate !== undefined) {
         if (zone.mortalityRate >= _highestMortalityRate) {
           _highestMortalityRate = zone.mortalityRate;
           _highestZoneId = zone.plantingZoneId;
-        } else if (zone.mortalityRate <= _lowestMortalityRate) {
+        }
+        if (zone.mortalityRate <= _lowestMortalityRate) {
           _lowestMortalityRate = zone.mortalityRate;
           _lowestZoneId = zone.plantingZoneId;
         }
