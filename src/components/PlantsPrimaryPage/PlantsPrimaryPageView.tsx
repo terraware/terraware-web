@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
+import FormattedNumber from '../common/FormattedNumber';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import PlantsDashboardEmptyMessage from '../emptyStatePages/PlantsDashboardEmptyMessage';
 
@@ -196,9 +197,13 @@ export default function PlantsPrimaryPageView({
                   <Typography fontSize='28px' fontWeight={600}>
                     {strings.formatString(
                       strings.X_HA,
-                      isRolledUpView
-                        ? Math.round(totalArea * 100) / 100
-                        : plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
+                      isRolledUpView ? (
+                        <FormattedNumber value={Math.round(totalArea * 100) / 100} />
+                      ) : (
+                        <FormattedNumber
+                          value={plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa || 0}
+                        />
+                      )
                     )}
                   </Typography>
                 </Box>
