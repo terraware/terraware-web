@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -196,13 +196,9 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -244,10 +240,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -255,9 +247,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -294,9 +283,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -343,8 +331,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { Box, Switch, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+&nbsp;
+import { AntSwitch } from 'src/components/Switch/AntSwitch';
 &nbsp;
 type MapLegendItem = {
   borderColor: string;
@@ -375,14 +365,6 @@ export default function <span class="fstat-no" title="function not covered" >Map
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isMobile, isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
-  const separatorStyles = <span class="cstat-no" title="statement not covered" >{</span>
-    width: '1px',
-    height: 'auto',
-    backgroundColor: theme.palette.TwClrBrdrTertiary,
-    marginRight: '24px',
-    marginLeft: '24px',
-  };
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box
       display='flex'
@@ -390,21 +372,22 @@ export default function <span class="fstat-no" title="function not covered" >Map
       border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
       borderRadius='8px'
       padding={theme.spacing(2)}
-      flexDirection={isMobile ? 'column' : 'row'}
+      flexDirection={'column'}
+      maxWidth={isDesktop ? '184px' : '100%'}
+      width={isDesktop ? 'auto' : '100%'}
+      marginRight={2}
+      marginTop={isDesktop ? 0 : 2}
     &gt;
-      {legends.map(<span class="fstat-no" title="function not covered" >(l</span>egend) =&gt; (
-<span class="cstat-no" title="statement not covered" >        &lt;Box key={legend.title} sx={{ opacity: legend.disabled ? 0.7 : 1 }}&gt;</span>
-          &lt;Box
-            border={legend.switch ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
-            display='flex'
-            padding={2}
-            borderRadius={1}
-            marginRight={2}
-            flexDirection={isDesktop ? 'row' : 'column'}
-          &gt;
-            {legend.switch &amp;&amp; (
-              &lt;Box&gt;
-                &lt;Switch
+      {legends.map(<span class="fstat-no" title="function not covered" >(l</span>egend, index) =&gt; (
+<span class="cstat-no" title="statement not covered" >        &lt;Box</span>
+          key={legend.title}
+          sx={{ opacity: legend.disabled ? 0.7 : 1 }}
+          borderBottom={index === legends.length - 1 ? 'none' : `1px solid ${theme.palette.TwClrBrdrTertiary}`}
+        &gt;
+          &lt;Box paddingBottom={2} paddingTop={index === 0 ? 0 : 2} flexDirection={isDesktop ? 'row' : 'column'}&gt;
+            &lt;Box display='flex' alignItems={'center'}&gt;
+              {legend.switch &amp;&amp; (
+                &lt;AntSwitch
                   disabled={legend.disabled}
                   checked={!legend.disabled &amp;&amp; legend.checked}
                   onChange={<span class="fstat-no" title="function not covered" >(e</span>vent, isChecked) =&gt; {
@@ -420,27 +403,26 @@ export default function <span class="fstat-no" title="function not covered" >Map
                     }
                   }}
                 /&gt;
-              &lt;/Box&gt;
-            )}
-            &lt;Box&gt;
+              )}
               &lt;Typography
                 fontSize='14px'
                 fontWeight={600}
                 width={isMobile ? '100%' : undefined}
                 marginRight={isMobile ? 0 : theme.spacing(4)}
+                paddingLeft={legend.switch ? theme.spacing(1) : 0}
               &gt;
                 {legend.title}
               &lt;/Typography&gt;
-              &lt;Box display='flex'&gt;
-                {legend.items.map(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; (
-<span class="cstat-no" title="statement not covered" >                  &lt;Box key={`${legend.title}-${item.label}`} paddingRight={1}&gt;</span>
-                    &lt;LabeledSwatch {...item} /&gt;
-                  &lt;/Box&gt;
-                ))}
-              &lt;/Box&gt;
+            &lt;/Box&gt;
+&nbsp;
+            &lt;Box&gt;
+              {legend.items.map(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; (
+<span class="cstat-no" title="statement not covered" >                &lt;Box key={`${legend.title}-${item.label}`} paddingRight={1} paddingTop={1}&gt;</span>
+                  &lt;LabeledSwatch {...item} /&gt;
+                &lt;/Box&gt;
+              ))}
             &lt;/Box&gt;
           &lt;/Box&gt;
-          {!legend.switch &amp;&amp; &lt;div style={separatorStyles} /&gt;}
         &lt;/Box&gt;
       ))}
     &lt;/Box&gt;
@@ -469,7 +451,7 @@ function <span class="fstat-no" title="function not covered" >LabeledSwatch(</sp
           backgroundImage: fillPatternUrl ? `url("${fillPatternUrl}")` : undefined,
           backgroundRepeat: 'repeat',
           opacity: isDisabled ? 0.7 : opacity,
-          height: height ? height : '8px',
+          height: height ? height : '16px',
           width: '24px',
           marginRight: theme.spacing(1),
         }}
@@ -487,7 +469,7 @@ function <span class="fstat-no" title="function not covered" >LabeledSwatch(</sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-21T15:54:25.667Z
+                at 2025-05-21T19:42:40.531Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
