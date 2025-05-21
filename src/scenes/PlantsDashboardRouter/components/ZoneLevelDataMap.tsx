@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
@@ -17,7 +18,7 @@ type ZoneLevelDataMapProps = {
 
 export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = useTheme();
-
+  const { isDesktop } = useDeviceInfo();
   const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =
     usePlantingSiteData();
 
@@ -80,28 +81,13 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     ];
 
     result.push({
-      title: strings.MORTALITY_RATE,
+      title: strings.OBSERVATION_EVENTS,
       items: [
         {
-          label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
+          label: strings.OBSERVATION_EVENT,
           borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-          fillColor: 'transparent',
-          fillPatternUrl: '/assets/mortality-rate-less-25.png',
-          height: '16px',
-        },
-        {
-          label: strings.TWENTY_FIVE_TO_FIFTY_PERCENT,
-          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-          fillColor: 'transparent',
-          fillPatternUrl: '/assets/mortality-rate-less-50.png',
-          height: '16px',
-        },
-        {
-          label: strings.GREATER_THAN_FIFTY_PERCENT,
-          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-          fillColor: 'transparent',
-          fillPatternUrl: '/assets/mortality-rate-more-50.png',
-          height: '16px',
+          fillColor: theme.palette.TwClrBasePink200 as string,
+          opacity: 0.9,
         },
       ],
       switch: true,
@@ -110,14 +96,25 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     });
 
     result.push({
-      title: strings.OBSERVATION_RECENCY,
+      title: strings.MORTALITY_RATE,
       items: [
         {
-          label: strings.LATEST_OBSERVATION,
+          label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
           borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-          fillColor: theme.palette.TwClrBasePink200 as string,
-          opacity: 0.9,
-          height: '16px',
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-less-25.png',
+        },
+        {
+          label: strings.TWENTY_FIVE_TO_FIFTY_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-less-50.png',
+        },
+        {
+          label: strings.GREATER_THAN_FIFTY_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-more-50.png',
         },
       ],
       switch: true,
@@ -257,40 +254,42 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       <Typography fontSize='20px' fontWeight={600}>
         {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, plantingSite?.areaHa?.toString() || '')}{' '}
       </Typography>
-      <MapLegend legends={legends} setLegends={setLegends} />
-      {plantingSite?.boundary && mapData ? (
-        <PlantingSiteMap
-          mapData={mapData}
-          style={{ borderRadius: '8px' }}
-          layers={['Planting Site', 'Zones', 'Sub-Zones']}
-          showMortalityRateFill={!!latestResult && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
-          showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked}
-          focusEntities={focusEntities}
-          contextRenderer={{
-            render: contextRenderer,
-            sx: {
-              '.mapboxgl-popup .mapboxgl-popup-content': {
-                borderRadius: '8px',
-                padding: '0',
-                width: 'fit-content',
-                maxWidth: '350px',
+      <Box display={'flex'} flexDirection={isDesktop ? 'row' : 'column-reverse'}>
+        <MapLegend legends={legends} setLegends={setLegends} />
+        {plantingSite?.boundary && mapData ? (
+          <PlantingSiteMap
+            mapData={mapData}
+            style={{ borderRadius: '8px' }}
+            layers={['Planting Site', 'Zones', 'Sub-Zones']}
+            showMortalityRateFill={!!latestResult && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
+            showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked}
+            focusEntities={focusEntities}
+            contextRenderer={{
+              render: contextRenderer,
+              sx: {
+                '.mapboxgl-popup .mapboxgl-popup-content': {
+                  borderRadius: '8px',
+                  padding: '0',
+                  width: 'fit-content',
+                  maxWidth: '350px',
+                },
+                '.mapboxgl-popup .mapboxgl-popup-content .mapboxgl-popup-close-button': {
+                  display: 'none',
+                },
+                '.mapboxgl-popup-anchor-top .mapboxgl-popup-tip': {
+                  borderBottomColor: theme.palette.TwClrBgSecondary,
+                },
               },
-              '.mapboxgl-popup .mapboxgl-popup-content .mapboxgl-popup-close-button': {
-                display: 'none',
-              },
-              '.mapboxgl-popup-anchor-top .mapboxgl-popup-tip': {
-                borderBottomColor: theme.palette.TwClrBgSecondary,
-              },
-            },
-          }}
-          zoneInteractive={true}
-          subzoneInteractive={false}
-        />
-      ) : (
-        <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
-          <CircularProgress />
-        </Box>
-      )}
+            }}
+            zoneInteractive={true}
+            subzoneInteractive={false}
+          />
+        ) : (
+          <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
+            <CircularProgress />
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 }

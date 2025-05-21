@@ -92,7 +92,7 @@ export default function PlantingSiteMapLegend({ options }: PlantingSiteMapLegend
   ]);
 
   return (
-    <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='column'>
+    <Box display='flex'>
       <MapLegend legends={legends} />
     </Box>
   );
