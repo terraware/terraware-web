@@ -1,6 +1,7 @@
 import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, useTheme } from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
@@ -25,8 +26,8 @@ export default function MultiplePlantingSiteMap({
 }: MultiplePlantingSiteMapProps): JSX.Element {
   const { allPlantingSites } = usePlantingSiteData();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
-  const [legends, setLegends] = useState<MapLegendGroup[]>([]);
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
 
   useEffect(() => {
     if (allPlantingSites) {
@@ -54,7 +55,7 @@ export default function MultiplePlantingSiteMap({
       fillColor: 'transparent',
     },
   ];
-  const result: MapLegendGroup[] = [
+  const legends: MapLegendGroup[] = [
     {
       title: strings.BOUNDARIES,
       items: [
@@ -66,10 +67,47 @@ export default function MultiplePlantingSiteMap({
         },
       ],
     },
+    {
+      title: strings.OBSERVATION_EVENTS,
+      items: [
+        {
+          label: strings.OBSERVATION_EVENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: theme.palette.TwClrBasePink200 as string,
+          opacity: 0.9,
+        },
+      ],
+      switch: true,
+      disabled: true,
+    },
+    {
+      title: strings.MORTALITY_RATE,
+      items: [
+        {
+          label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-less-25.png',
+        },
+        {
+          label: strings.TWENTY_FIVE_TO_FIFTY_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-less-50.png',
+        },
+        {
+          label: strings.GREATER_THAN_FIFTY_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-more-50.png',
+        },
+      ],
+      switch: true,
+      disabled: true,
+    },
   ];
-
-  useEffect(() => {
-    setLegends(result);
+  const totalArea = useMemo(() => {
+    return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
   }, [plantingSites]);
 
   if (plantingSites) {
@@ -80,17 +118,22 @@ export default function MultiplePlantingSiteMap({
           flexDirection: 'column',
           background: theme.palette.TwClrBg,
           borderRadius: '8px',
-          padding: theme.spacing(3),
+          padding: theme.spacing(1),
           gap: theme.spacing(3),
         }}
       >
-        <MapLegend legends={legends} setLegends={setLegends} />
-        <PlantingSiteMap
-          mapData={mapData!}
-          style={{ width: '100%', borderRadius: '24px', ...style }}
-          layers={['Planting Site']}
-          hideAllControls={hideAllControls}
-        />
+        <Typography fontSize='20px' fontWeight={600}>
+          {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, Math.round(totalArea * 100) / 100 || '')}
+        </Typography>
+        <Box display={'flex'} flexDirection={isDesktop ? 'row' : 'column-reverse'}>
+          <MapLegend legends={legends} />
+          <PlantingSiteMap
+            mapData={mapData!}
+            style={{ width: '100%', borderRadius: '24px', ...style }}
+            layers={['Planting Site']}
+            hideAllControls={hideAllControls}
+          />
+        </Box>
       </Box>
     );
   } else {

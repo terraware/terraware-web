@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
@@ -30,6 +31,7 @@ export default function BiomassMeasurementMapView({
 }: BiomassMeasurementMapViewProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
+  const { isDesktop } = useDeviceInfo();
 
   const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
 
@@ -176,7 +178,7 @@ export default function BiomassMeasurementMapView({
   );
 
   return (
-    <Box display='flex' flexDirection='column' flexGrow={1}>
+    <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
       <PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
       <Box display='flex' sx={{ flexGrow: 1 }}>
         {mapData.site && (

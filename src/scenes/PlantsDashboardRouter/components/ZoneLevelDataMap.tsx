@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
@@ -17,7 +18,7 @@ type ZoneLevelDataMapProps = {
 
 export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = useTheme();
-
+  const { isDesktop } = useDeviceInfo();
   const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =
     usePlantingSiteData();
 
@@ -80,6 +81,21 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     ];
 
     result.push({
+      title: strings.OBSERVATION_EVENTS,
+      items: [
+        {
+          label: strings.OBSERVATION_EVENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: theme.palette.TwClrBasePink200 as string,
+          opacity: 0.9,
+        },
+      ],
+      switch: true,
+      disabled: !latestResult,
+      checked: true,
+    });
+
+    result.push({
       title: strings.MORTALITY_RATE,
       items: [
         {
@@ -99,21 +115,6 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           borderColor: theme.palette.TwClrBaseLightGreen300 as string,
           fillColor: 'transparent',
           fillPatternUrl: '/assets/mortality-rate-more-50.png',
-        },
-      ],
-      switch: true,
-      disabled: !latestResult,
-      checked: true,
-    });
-
-    result.push({
-      title: strings.OBSERVATION_RECENCY,
-      items: [
-        {
-          label: strings.LATEST_OBSERVATION,
-          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-          fillColor: theme.palette.TwClrBasePink200 as string,
-          opacity: 0.9,
         },
       ],
       switch: true,
@@ -253,7 +254,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       <Typography fontSize='20px' fontWeight={600}>
         {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, plantingSite?.areaHa?.toString() || '')}{' '}
       </Typography>
-      <Box display={'flex'}>
+      <Box display={'flex'} flexDirection={isDesktop ? 'row' : 'column-reverse'}>
         <MapLegend legends={legends} setLegends={setLegends} />
         {plantingSite?.boundary && mapData ? (
           <PlantingSiteMap

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
@@ -46,6 +47,7 @@ export default function ObservationMapView({
   const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
   const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
   const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
+  const { isDesktop } = useDeviceInfo();
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
     selectPlantingSiteObservations(state, selectedPlantingSite.id)
@@ -234,7 +236,7 @@ export default function ObservationMapView({
   );
 
   return (
-    <Box display='flex' flexDirection='column' flexGrow={1}>
+    <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
       <PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
       <Box display='flex' sx={{ flexGrow: 1 }}>
         {mapData.site && (

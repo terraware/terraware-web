@@ -42,8 +42,10 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
       borderRadius='8px'
       padding={theme.spacing(2)}
       flexDirection={'column'}
-      maxWidth={'184px'}
+      maxWidth={isDesktop ? '184px' : '100%'}
+      width={isDesktop ? 'auto' : '100%'}
       marginRight={2}
+      marginTop={isDesktop ? 0 : 2}
     >
       {legends.map((legend, index) => (
         <Box
