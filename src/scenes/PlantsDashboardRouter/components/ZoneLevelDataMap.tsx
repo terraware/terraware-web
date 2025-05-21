@@ -5,6 +5,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
@@ -252,7 +253,10 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       }}
     >
       <Typography fontSize='20px' fontWeight={600}>
-        {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, plantingSite?.areaHa?.toString() || '')}{' '}
+        {strings.formatString(
+          strings.X_HA_IN_TOTAL_PLANTING_AREA,
+          <FormattedNumber value={plantingSite?.areaHa || 0} />
+        )}{' '}
       </Typography>
       <Box display={'flex'} flexDirection={isDesktop ? 'row' : 'column-reverse'}>
         <MapLegend legends={legends} setLegends={setLegends} />
