@@ -1095,6 +1095,7 @@ NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Aña
 NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",
 NO_PLANTS,No hay plantas.,
 NO_PROJECT,Sin proyectos,
+NO_PROJECT_SELECTED,No se seleccionó ningún proyecto,
 NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,No hay métricas específicas del proyecto para mostrar.,
 NO_QUANTITY_SET,No se ha establecido una cantidad.,
 NO_REASSIGNMENTS,No hay reasignaciones.,

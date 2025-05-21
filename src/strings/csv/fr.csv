@@ -1095,6 +1095,7 @@ NO_PLANTING_SITES_DESCRIPTION,Commencez par ajouter un site de plantation. L'ajo
 NO_PLANTING_SITES_TITLE,"Un instant, ajoutons d'abord un site de plantation.",
 NO_PLANTS,Aucune plante,
 NO_PROJECT,Pas de projet,
+NO_PROJECT_SELECTED,Aucun projet sélectionné,
 NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,Aucun indicateur spécifique au projet à afficher.,
 NO_QUANTITY_SET,Pas de quantité définie,
 NO_REASSIGNMENTS,Aucune réaffectation,
