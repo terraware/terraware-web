@@ -28,6 +28,7 @@ export type ProjectDetails = {
   sdgList?: number[];
   additionalPageText?: string[];
   hiddenText?: string[];
+  fundingEntities?: string[];
 };
 
 export async function validateProjectProfilePage(projectDetails: ProjectDetails, page: Page) {
@@ -95,5 +96,9 @@ export async function validateProjectProfilePage(projectDetails: ProjectDetails,
 
   for (const text of projectDetails.hiddenText || []) {
     await expect(page.getByText(text, exactOptions)).toBeHidden();
+  }
+
+  for (const entity of projectDetails.fundingEntities || []) {
+    await expect(page.getByText('Funding Entities').locator('../..').getByText(entity)).toBeVisible();
   }
 }
