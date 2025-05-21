@@ -195,7 +195,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [filteredVariablesWithValues]);
+  }, [filteredVariablesWithValues, query, scrollToVariable]);
 
   const {
     hasVariableError,
@@ -247,7 +247,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
         variablesStableIds: dependentVariableStableIds,
       })
     );
-  }, [deliverable, dependentVariableStableIds]);
+  }, [deliverable, dependentVariableStableIds, dispatch]);
 
   useEffect(() => {
     const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
@@ -277,7 +277,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       exit();
       return;
     }
-  }, [complete, deliverable, exit, isApplicationPortal, missingFields, update]);
+  }, [complete, deliverable, exit, incomplete, isApplicationPortal, missingFields, update]);
 
   return (
     <WrappedPageForm

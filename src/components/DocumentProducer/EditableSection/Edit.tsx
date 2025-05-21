@@ -124,7 +124,7 @@ const SectionEdit = ({
           return <TextChunk {...props} />;
       }
     },
-    [allVariables]
+    [allVariables, onEditVariableValue]
   );
 
   const insertVariable = useCallback(

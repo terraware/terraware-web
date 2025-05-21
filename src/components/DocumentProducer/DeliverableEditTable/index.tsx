@@ -19,10 +19,13 @@ const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditabl
   const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState<VariableTableCell[][]>(initialCellValues);
 
-  const onChangeCellValues = useCallback((nextCellValues: VariableTableCell[][]) => {
-    setCellValues(nextCellValues);
-    onChange(nextCellValues);
-  }, []);
+  const onChangeCellValues = useCallback(
+    (nextCellValues: VariableTableCell[][]) => {
+      setCellValues(nextCellValues);
+      onChange(nextCellValues);
+    },
+    [onChange]
+  );
 
   const setCellValue = (rowNum: number, colNum: number, newValue: string | number) => {
     const newCellValues: VariableTableCell[][] = [];
@@ -47,7 +50,7 @@ const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditabl
     onChangeCellValues(newCellValues);
   };
 
-  const addRow = () => {
+  const addRow = useCallback(() => {
     const newRow: VariableTableCell[] = [];
     columns.forEach((col) => {
       newRow.push({
@@ -59,7 +62,7 @@ const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditabl
       });
     });
     onChangeCellValues([...cellValues, newRow]);
-  };
+  }, [cellValues, columns, onChangeCellValues]);
 
   const removeRow = (rowNum: number) => {
     const newCellValues = [...cellValues];
@@ -71,7 +74,7 @@ const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditabl
     if (initialCellValues.length === 0 && cellValues.length === 0) {
       addRow();
     }
-  }, [cellValues, initialCellValues]);
+  }, [addRow, cellValues, initialCellValues]);
 
   return (
     <>

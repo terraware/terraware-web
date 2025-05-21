@@ -167,7 +167,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   const yearFilterOptions = useMemo(() => {
     return allReportYears.map((year) => year.toString());
-  }, [allAcceleratorReports]);
+  }, [allReportYears]);
 
   useEffect(() => {
     if (!!allAcceleratorReports?.length && !!allReportYears.length) {
@@ -187,7 +187,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
         }
       }
     }
-  }, [allAcceleratorReports, allReportYears, yearQuery]);
+  }, [allAcceleratorReports, allReportYears, currentYear, yearQuery]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
@@ -222,7 +222,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
           </Box>
         </>
       ) : null,
-    [activeLocale, allReportYears, yearFilter]
+    [activeLocale, yearFilter, yearFilterOptions]
   );
 
   if (!projectId) {

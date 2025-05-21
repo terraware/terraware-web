@@ -140,7 +140,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const areFilteredChallengesDifferent = useMemo(() => {
     const filteredChallenges = getNonEmptyChallenges();
     return filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges);
-  }, [challengeMitigations]);
+  }, [getNonEmptyChallenges, report?.challenges]);
 
   useEffect(() => {
     if (!editing) {
@@ -152,9 +152,13 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     if (((editing && !getNonEmptyChallenges()) || getNonEmptyChallenges().length === 0) && report?.challenges) {
       setChallengeMitigations(report?.challenges ?? []);
     }
-  }, [report?.challenges]);
+  }, [editing, getNonEmptyChallenges, report?.challenges]);
 
-  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
+
+  const addRow = useCallback(() => {
+    setChallengeMitigations(challengeMitigations.concat({ challenge: '', mitigationPlan: '' }));
+  }, [challengeMitigations]);
 
   useEffect(() => {
     setValidateFields(false);
@@ -169,7 +173,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
         onChange(challengeMitigations);
       }
     }
-  }, [challengeMitigations]);
+  }, [addRow, areFilteredChallengesDifferent, challengeMitigations, onChange]);
 
   useEffect(() => {
     if (updateReportResponse?.status === 'error') {
@@ -179,7 +183,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar]);
+  }, [updateReportResponse, snackbar, reload]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -204,16 +208,12 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       );
       setRequestId(request.requestId);
     }
-  }, [dispatch, projectId, challengeMitigations, report]);
+  }, [report, getNonEmptyChallenges, dispatch, projectId]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
     setChallengeMitigations(report?.challenges || []);
   }, [report?.challenges]);
-
-  const addRow = useCallback(() => {
-    setChallengeMitigations(challengeMitigations.concat({ challenge: '', mitigationPlan: '' }));
-  }, [challengeMitigations]);
 
   const updateChallenge = (newChal: ChallengeMitigation, index: number) => {
     setChallengeMitigations(challengeMitigations.map((chal, i) => (index === i ? newChal : chal)));

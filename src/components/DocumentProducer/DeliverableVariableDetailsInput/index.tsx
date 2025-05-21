@@ -303,7 +303,7 @@ const DeliverableVariableDetailsInput = ({
     } else {
       setVariableHasError(variable.id, false);
     }
-  }, [errorMessage]);
+  }, [errorMessage, setVariableHasError, variable.id]);
 
   return (
     <>

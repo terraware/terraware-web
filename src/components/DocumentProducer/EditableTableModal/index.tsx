@@ -90,14 +90,36 @@ const EditableTableEdit = ({
       setUpdateVariableWorkflowDetailsRequestId(request.requestId);
       setUpdateWorkflowRequestId?.(request.requestId);
     }
-  }, [updateVariableValuesRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
+  }, [
+    dispatch,
+    projectId,
+    setUpdateWorkflowRequestId,
+    updateVariableValuesRequest,
+    updateVariableWorkflowDetailsRequestId,
+    variable.id,
+    variableWorkflowDetails,
+  ]);
+
+  const addRow = useCallback(() => {
+    const newRow: VariableTableCell[] = [];
+    columns.forEach((col) => {
+      newRow.push({
+        type: col.variable.type,
+        rowId: undefined,
+        colId: col.variable.id,
+        values: undefined,
+        changed: false,
+      });
+    });
+    setCellValues([...cellValues, newRow]);
+  }, [cellValues, columns]);
 
   useEffect(() => {
     if (initialCellValues.length === 0 && cellValues.length === 0) {
       // if there are no initial values, add a row
       addRow();
     }
-  }, [cellValues, initialCellValues]);
+  }, [addRow, cellValues, initialCellValues]);
 
   const handleSave = useCallback(() => {
     if (columns.length === 0) {
@@ -206,20 +228,6 @@ const EditableTableEdit = ({
       newCellValues.push(newRow);
     });
     setCellValues(newCellValues);
-  };
-
-  const addRow = () => {
-    const newRow: VariableTableCell[] = [];
-    columns.forEach((col) => {
-      newRow.push({
-        type: col.variable.type,
-        rowId: undefined,
-        colId: col.variable.id,
-        values: undefined,
-        changed: false,
-      });
-    });
-    setCellValues([...cellValues, newRow]);
   };
 
   const removeRow = (rowNum: number) => {

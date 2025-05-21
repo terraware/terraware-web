@@ -70,13 +70,13 @@ export default function MultiLineComponentNonEditable({
     if (ownerId && ownerId !== -1) {
       void dispatch(requestGetUser(ownerId));
     }
-  }, [ownerId]);
+  }, [dispatch, ownerId]);
 
   useEffect(() => {
     if (updateWorkflowDetailsResponse?.status === 'success') {
       reloadVariables();
     }
-  }, [updateWorkflowDetailsResponse]);
+  }, [reloadVariables, updateWorkflowDetailsResponse]);
 
   useEffect(() => {
     if (updateOwnerResponse?.status === 'success') {
@@ -86,12 +86,15 @@ export default function MultiLineComponentNonEditable({
     if (updateOwnerResponse?.status === 'error') {
       snackbar.toastError();
     }
-  }, [updateOwnerResponse]);
+  }, [reload, snackbar, updateOwnerResponse]);
 
-  const setStatus = (_status: VariableStatusType) => {
-    const request = dispatch(requestUpdateVariableWorkflowDetails({ status: _status, variableId, projectId }));
-    setRequestId(request.requestId);
-  };
+  const setStatus = useCallback(
+    (_status: VariableStatusType) => {
+      const request = dispatch(requestUpdateVariableWorkflowDetails({ status: _status, variableId, projectId }));
+      setRequestId(request.requestId);
+    },
+    [dispatch, projectId, variableId]
+  );
 
   const assignOwner = (_ownerId?: string) => {
     if (_ownerId) {
@@ -138,7 +141,7 @@ export default function MultiLineComponentNonEditable({
         }
       }
     },
-    [setStatus]
+    [setStatus, status]
   );
 
   return (

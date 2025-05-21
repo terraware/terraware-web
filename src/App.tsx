@@ -106,7 +106,7 @@ function AppContent() {
         },
       },
     };
-  }, [isDesktop]);
+  }, [isDesktop, theme]);
 
   return (
     <StyledEngineProvider injectFirst>

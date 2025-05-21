@@ -27,7 +27,7 @@ const SpeciesDeliverableCard = (props: EditProps): JSX.Element => {
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
-  }, [deliverable.projectId]);
+  }, [deliverable.projectId, dispatch]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>

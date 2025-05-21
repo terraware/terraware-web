@@ -25,7 +25,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
   const snackbar = useSnackbar();
 
   useEffect(() => setHighlights(report?.highlights), [report?.highlights]);
-  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
     if (highlights && highlights !== report?.highlights) {
@@ -41,7 +41,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar]);
+  }, [updateReportResponse, snackbar, reload]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -65,7 +65,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
   const onCancel = useCallback(() => {
     setHighlights(report?.highlights);
     setInternalEditing(false);
-  }, [highlights, report?.highlights]);
+  }, [report?.highlights]);
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 

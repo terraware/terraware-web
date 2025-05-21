@@ -67,7 +67,7 @@ export default function ListMapView({
 
   useEffect(() => {
     updateView(initialView);
-  }, [initialView]);
+  }, [initialView, updateView]);
 
   return (
     <Card

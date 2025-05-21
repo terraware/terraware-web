@@ -49,7 +49,7 @@ const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
       default:
         return undefined;
     }
-  }, [activeLocale, isAcceleratorRoute, status, theme]);
+  }, [activeLocale, status, theme]);
 
   return <>{badgeProps && <Badge {...badgeProps} />}</>;
 };

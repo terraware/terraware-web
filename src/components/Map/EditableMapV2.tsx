@@ -191,7 +191,7 @@ export default function EditableMap({
         });
       }
     },
-    [featureSelectorOnClick, initializePopupInfo, overridePopupInfo, readOnlyBoundary]
+    [featureSelectorOnClick, initializePopupInfo, readOnlyBoundary]
   );
 
   /**
