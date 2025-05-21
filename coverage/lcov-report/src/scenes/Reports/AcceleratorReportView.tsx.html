@@ -286,7 +286,15 @@
 <a name='L221'></a><a href='#L221'>221</a>
 <a name='L222'></a><a href='#L222'>222</a>
 <a name='L223'></a><a href='#L223'>223</a>
-<a name='L224'></a><a href='#L224'>224</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -411,6 +419,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -559,22 +575,22 @@ const AcceleratorReportView = <span class="cstat-no" title="statement not covere
   const getReportResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAcceleratorReport(requestId));</span>
   const submitReportResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSubmitAcceleratorReport(submitReportRequestId));</span>
 &nbsp;
-  const reload = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (projectId) {</span>
       const request = <span class="cstat-no" title="statement not covered" >dispatch(requestAcceleratorReport({ projectId, reportId, includeMetrics: true }));</span>
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
     }
-  };
+  }, [projectId, dispatch, reportId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (projectId !== currentParticipantProject?.id?.toString()) {</span>
 <span class="cstat-no" title="statement not covered" >      setCurrentParticipantProject(projectId);</span>
     }
-  }, [currentParticipantProject?.id, projectId]);
+  }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    reload();</span>
-  }, [projectId]);
+  }, [reload]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (getReportResults?.status === 'error') {</span>
@@ -592,7 +608,7 @@ const AcceleratorReportView = <span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" >      reload();</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.REPORT_SUBMITTED_FOR_APPROVAL);</span>
     }
-  }, [submitReportResults?.status]);
+  }, [reload, snackbar, submitReportResults?.status]);
 &nbsp;
   const year = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return report?.startDate.split('-')[0];</span>
@@ -640,7 +656,15 @@ const AcceleratorReportView = <span class="cstat-no" title="statement not covere
         /&gt;
       &lt;/&gt;
     );
-  }, [activeLocale, getReportResults?.status, report?.status, submitReportResults?.status]);
+  }, [
+    getReportResults?.status,
+    goToAcceleratorReportEdit,
+    projectId,
+    report?.id,
+    report?.status,
+    reportId,
+    submitReportResults?.status,
+  ]);
 &nbsp;
   const rightComponent = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (
@@ -648,14 +672,14 @@ const AcceleratorReportView = <span class="cstat-no" title="statement not covere
         {callToAction}
       &lt;/Box&gt;
     ),
-    [callToAction]
+    [callToAction, theme]
   );
 &nbsp;
   const submitReport = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const request = <span class="cstat-no" title="statement not covered" >dispatch(requestSubmitAcceleratorReport({ projectId, reportId }));</span>
 <span class="cstat-no" title="statement not covered" >    setSubmitReportRequestId(request.requestId);</span>
 <span class="cstat-no" title="statement not covered" >    setShowApproveDialog(false);</span>
-  }, [projectId, reportId]);
+  }, [dispatch, projectId, reportId]);
 &nbsp;
   const reportName = <span class="cstat-no" title="statement not covered" >report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';</span>
 &nbsp;
@@ -739,7 +763,7 @@ export default AcceleratorReportView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-20T21:02:15.197Z
+                at 2025-05-21T14:25:06.470Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

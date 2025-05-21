@@ -308,7 +308,15 @@
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
 <a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -469,6 +477,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -611,7 +627,7 @@ const ParticipantProjectSpeciesProvider = <span class="cstat-no" title="statemen
 &nbsp;
   const goToParticipantProjectSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    _goToParticipantProjectSpecies(deliverableId, projectId, participantProjectSpeciesId);</span>
-  }, [deliverableId, projectId, participantProjectSpeciesId]);
+  }, [_goToParticipantProjectSpecies, deliverableId, projectId, participantProjectSpeciesId]);
 &nbsp;
   const reloadPPS = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isNaN(participantProjectSpeciesId)) {</span>
@@ -620,7 +636,7 @@ const ParticipantProjectSpeciesProvider = <span class="cstat-no" title="statemen
 &nbsp;
     const request = <span class="cstat-no" title="statement not covered" >dispatch(requestGetParticipantProjectSpecies(participantProjectSpeciesId));</span>
 <span class="cstat-no" title="statement not covered" >    setGetPPSRequestId(request.requestId);</span>
-  }, [dispatch, projectId]);
+  }, [dispatch, participantProjectSpeciesId]);
 &nbsp;
   const reloadSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!(currentParticipantProjectSpecies?.speciesId &amp;&amp; currentDeliverable?.organizationId)) {</span>
@@ -635,7 +651,7 @@ const ParticipantProjectSpeciesProvider = <span class="cstat-no" title="statemen
     );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    setGetSpeciesRequestId(request.requestId);</span>
-  }, [dispatch, projectId, currentDeliverable, currentParticipantProjectSpecies]);
+  }, [dispatch, currentDeliverable, currentParticipantProjectSpecies]);
 &nbsp;
   const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    reloadPPS();</span>
@@ -681,7 +697,7 @@ const ParticipantProjectSpeciesProvider = <span class="cstat-no" title="statemen
 <span class="cstat-no" title="statement not covered" >        setUpdateSpeciesRequestId(updateSpeciesRequest.requestId);</span>
       }
     },
-    [currentDeliverable, currentParticipantProjectSpecies, currentSpecies]
+    [currentDeliverable, currentParticipantProjectSpecies, currentSpecies, dispatch, goToParticipantProjectSpecies]
   );
 &nbsp;
   const [participantProjectSpeciesData, setParticipantProjectSpeciesData] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantProjectSpeciesData&gt;({</span>
@@ -715,7 +731,15 @@ const ParticipantProjectSpeciesProvider = <span class="cstat-no" title="statemen
     } else <span class="cstat-no" title="statement not covered" >if (updatePPSResponse.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }
-  }, [goToParticipantProjectSpecies, reloadPPS, updatePPSResponse]);
+  }, [
+    currentParticipantProjectSpecies,
+    currentSpecies,
+    goToParticipantProjectSpecies,
+    newStatus,
+    reloadPPS,
+    snackbar,
+    updatePPSResponse,
+  ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!updateSpeciesResponse) {</span>
@@ -728,7 +752,7 @@ const ParticipantProjectSpeciesProvider = <span class="cstat-no" title="statemen
     } else <span class="cstat-no" title="statement not covered" >if (updateSpeciesResponse.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }
-  }, [reloadSpecies, updateSpeciesResponse]);
+  }, [reloadSpecies, snackbar, updateSpeciesResponse]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!getPPSResponse) {</span>
@@ -805,7 +829,7 @@ export default ParticipantProjectSpeciesProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-20T21:02:15.197Z
+                at 2025-05-21T14:25:06.470Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

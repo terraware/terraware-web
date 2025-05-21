@@ -513,7 +513,25 @@
 <a name='L448'></a><a href='#L448'>448</a>
 <a name='L449'></a><a href='#L449'>449</a>
 <a name='L450'></a><a href='#L450'>450</a>
-<a name='L451'></a><a href='#L451'>451</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -698,6 +716,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -710,6 +729,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -767,6 +794,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -793,6 +822,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1089,7 +1125,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
       const request = <span class="cstat-no" title="statement not covered" >dispatch(requestOrganizationFeatures({ organizationId: selectedOrganization.id }));</span>
 <span class="cstat-no" title="statement not covered" >      setOrgFeaturesRequestId(request.requestId);</span>
     }
-  }, [selectedOrganization.id]);
+  }, [dispatch, selectedOrganization]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!currentParticipantProject &amp;&amp; projectsWithModules &amp;&amp; projectsWithModules.length &gt; 0) {</span>
@@ -1140,11 +1176,12 @@ export default function <span class="fstat-no" title="function not covered" >Nav
         /&gt;
       ) : null,
     [
-      activeLocale,
-      closeAndNavigateTo,
-      isDeliverablesRoute,
-      isDeliverableViewRoute,
       orgFeatures?.data?.deliverables?.enabled,
+      activeLocale,
+      isDeliverablesRoute,
+      mixpanel,
+      closeAndNavigateTo,
+      isDeliverableViewRoute,
     ]
   );
 &nbsp;
@@ -1164,7 +1201,15 @@ export default function <span class="fstat-no" title="function not covered" >Nav
           id='reports-list'
         /&gt;
       ) : null,
-    [activeLocale, closeAndNavigateTo, isReportsEnabled, isReportsRoute, orgFeatures?.data?.reports?.enabled]
+    [
+      activeLocale,
+      closeAndNavigateTo,
+      isAllowed,
+      isReportsEnabled,
+      isReportsRoute,
+      orgFeatures?.data?.reports?.enabled,
+      selectedOrganization,
+    ]
   );
 &nbsp;
   const seedFundReportsMenu = <span class="cstat-no" title="statement not covered" >useMemo&lt;JSX.Element | null&gt;(</span>
@@ -1213,7 +1258,9 @@ export default function <span class="fstat-no" title="function not covered" >Nav
       closeAndNavigateTo,
       currentParticipantProject,
       isProjectModulesRoute,
-      orgFeatures?.data?.reports?.enabled,
+      mixpanel,
+      orgFeatures?.data?.modules?.enabled,
+      selectedOrganization,
     ]
   );
 &nbsp;
@@ -1246,7 +1293,14 @@ export default function <span class="fstat-no" title="function not covered" >Nav
           id='applications-list'
         /&gt;
       ) : null,
-    [activeLocale, closeAndNavigateTo, isApplicationRoute, orgFeatures?.data?.applications?.enabled]
+    [
+      activeLocale,
+      closeAndNavigateTo,
+      isApplicationRoute,
+      orgFeatures?.data?.applications?.enabled,
+      theme.palette.TwClrIcnSecondary,
+      theme.palette.TwClrTxt,
+    ]
   );
 &nbsp;
   const acceleratorSectionTitle = <span class="cstat-no" title="statement not covered" >useMemo&lt;string&gt;(</span>
@@ -1420,7 +1474,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-20T21:02:15.197Z
+                at 2025-05-21T14:25:06.470Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
