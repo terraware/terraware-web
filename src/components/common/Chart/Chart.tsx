@@ -169,7 +169,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
               unit: 'month' as TimeUnit,
             },
             ticks: {
-              source: 'data' as TimeScaleTickOptionsSource,
+              stepSize: 4,
             },
           };
         }
