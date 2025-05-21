@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { APP_PATHS } from 'src/constants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 
 import GenericZoneView from './GenericZoneView';
