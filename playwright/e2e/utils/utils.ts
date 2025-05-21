@@ -15,5 +15,14 @@ export const addCookies = async (context: BrowserContext) => {
   ]);
 };
 
+export const addFunderCookies = async (context: BrowserContext) => {
+  // Make all requests look like they are associated with an existing login session
+  // so we don't have to depend on a Keycloak server to run the test suite. The
+  // session value here is the base64-encoded session ID from dump/session.sql.
+  await context.addCookies([
+    { name: 'SESSION', value: 'YjliMDBkZGEtYzc4OS00MGNkLThjMDItN2VmMjEwMjVjNGQ4', url: 'http://127.0.0.1:3000' },
+  ]);
+};
+
 // Just a typing saver for `getByText`
 export const exactOptions = { exact: true };

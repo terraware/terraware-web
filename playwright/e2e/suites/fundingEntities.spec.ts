@@ -77,7 +77,18 @@ export default function FundingEntitiesTests() {
     const updatedEntity: FundingEntity = {
       name: updatedEntityName,
       projects: ['Phase 1 Project Deal'],
-      // funders: [], // TODO
+      funders: [
+        {
+          name: 'Test Funder',
+          email: 'funder@terraformation.com',
+          status: 'Added 2025-05-21',
+        },
+        {
+          name: '',
+          email: 'pending@terraformation.com',
+          status: 'Invitation Pending',
+        },
+      ],
     };
 
     await validateFundingEntityPage(updatedEntity, page);
@@ -110,7 +121,7 @@ async function validateFundingEntityPage(fundingEntity: FundingEntity, page: Pag
     for (const funder of fundingEntity.funders) {
       // ensures that the full row is visible so that the status isn't for a different row
       await expect(
-        page.getByText(funder.name).locator('..').getByText(funder.email).locator('..').getByText(funder.status)
+        page.getByText(funder.name).locator('../..').getByText(funder.email).locator('../..').getByText(funder.status)
       ).toBeVisible();
     }
   } else {
