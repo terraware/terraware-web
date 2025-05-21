@@ -46,7 +46,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     return zoneStats;
   }, [plantingSite, plantingSiteReportedPlants]);
 
-  const lastSummary = useMemo(() => {
+  const latestSummary = useMemo(() => {
     if (observationSummaries?.length) {
       return observationSummaries[0];
     }
@@ -143,8 +143,16 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       return baseMap;
     }
 
-    return MapService.getMapDataFromPlantingSiteHistory(plantingSite, plantingSiteHistory);
-  }, [plantingSite, plantingSiteHistories]);
+    if (!latestSummary) {
+      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, plantingSiteHistory);
+    } else {
+      return MapService.getMapDataFromPlantingSiteFromHistoryAndResults(
+        plantingSite,
+        plantingSiteHistory,
+        latestSummary
+      );
+    }
+  }, [latestResult, latestSummary, plantingSite, plantingSiteHistories]);
 
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
@@ -179,7 +187,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             { key: strings.NO_PLANTS, value: '' },
           ];
         } else if (zonesProgress[entityZoneId] && zoneStat) {
-          const lastZoneSummary = lastSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
+          const lastZoneSummary = latestSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
           if (lastZoneSummary) {
             properties = [
               {
@@ -238,7 +246,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           />
         );
       },
-    [findZoneArea, latestResult, zonesProgress, zonesStats, lastSummary]
+    [findZoneArea, latestResult, zonesProgress, zonesStats, latestSummary]
   );
 
   return (

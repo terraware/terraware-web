@@ -7,6 +7,7 @@ import {
   ObservationPlantingSubzoneResults,
   ObservationPlantingZoneResults,
   ObservationResultsWithLastObv,
+  ObservationSummary
 } from 'src/types/Observations';
 import { MinimalPlantingSite, MultiPolygon, PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
@@ -335,6 +336,34 @@ const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseDat
   };
 };
 
+const extractSubzonesFromHistoryAndResult = (
+  site: PlantingSiteHistory,
+  result: ObservationSummary
+): MapSourceBaseData => {
+  const latestTime = result.latestObservationTime;
+  const allPlantingSubzonesData =
+    site.plantingZones?.flatMap((zone) => {
+      const { id: zoneId, plantingSubzones } = zone;
+      const zoneResult = result.plantingZones.find((_zone) => _zone.plantingZoneId === zoneId);
+      return plantingSubzones.map((subzone) => {
+        const { id, name, fullName, boundary } = subzone;
+        const subzoneResult = zoneResult?.plantingSubzones?.find((_subzone) => _subzone.plantingSubzoneId === id);
+        const recency = subzoneResult?.completedTime === latestTime ? 1 : 0;
+        const mortalityRate = subzoneResult?.mortalityRate;
+        return {
+          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id, recency, mortalityRate },
+          boundary: getPolygons(boundary),
+          id,
+        };
+      });
+    }) || [];
+
+  return {
+    entities: allPlantingSubzonesData.flatMap((f) => f),
+    id: 'subzones',
+  };
+};
+
 /**
  * Get boundary polygons for a map entity
  */
@@ -391,6 +420,24 @@ const getMapDataFromPlantingSiteHistory = (plantingSite: PlantingSite, history: 
     site: extractPlantingSiteFromHistory(plantingSite, history),
     zone: extractPlantingZonesFromHistory(history),
     subzone: extractSubzonesFromHistory(history),
+    permanentPlot: undefined,
+    temporaryPlot: undefined,
+    adHocPlot: undefined,
+  };
+};
+
+/**
+ * Extract Planting Site, Zones, Subzones from planting site data and results
+ */
+const getMapDataFromPlantingSiteFromHistoryAndResults = (
+  plantingSite: PlantingSite,
+  history: PlantingSiteHistory,
+  result: ObservationSummary
+): MapData => {
+  return {
+    site: extractPlantingSiteFromHistory(plantingSite, history),
+    zone: extractPlantingZonesFromHistory(history),
+    subzone: extractSubzonesFromHistoryAndResult(history, result),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -550,6 +597,7 @@ const MapService = {
   getMapDataFromPlantingSite,
   getMapDataFromPlantingSites,
   getMapDataFromPlantingSiteHistory,
+  getMapDataFromPlantingSiteFromHistoryAndResults,
   getMapDataFromObservation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,

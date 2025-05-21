@@ -7891,6 +7891,7 @@ export interface components {
             totalSpecies: number;
         };
         PlantingSitePayload: {
+            adHocPlots: components["schemas"]["MonitoringPlotPayload"][];
             /** @description Area of planting site in hectares. Only present if the site has planting zones. */
             areaHa?: number;
             boundary?: components["schemas"]["MultiPolygon"];

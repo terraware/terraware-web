@@ -213,8 +213,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     getRenderAttributes,
     showMortalityRateFill,
     showRecencyFill,
-    theme,
     subzoneInteractive,
+    theme,
     zoneInteractive,
   ]);
 
