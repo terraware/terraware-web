@@ -2,7 +2,6 @@
 import { createCachedSelector } from 're-reselect';
 
 import { RootState } from 'src/redux/rootReducer';
-import { SubzoneAggregation, ZoneAggregation } from 'src/types/Observations';
 import { MinimalPlantingZone } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
@@ -52,16 +51,12 @@ export const searchDraftPlantingSiteSubzones = createCachedSelector(
 );
 
 // convert zone to aggregation view
-const toAggregation = (zone: MinimalPlantingZone): ZoneAggregation =>
-  ({
-    ...zone,
+const toAggregation = (zone: MinimalPlantingZone) => ({
+  ...zone,
+  areaHa: 0,
+  plantingSubzones: zone.plantingSubzones.map((subzone) => ({
+    ...subzone,
     areaHa: 0,
-    plantingSubzones: zone.plantingSubzones.map(
-      (subzone) =>
-        ({
-          ...subzone,
-          areaHa: 0,
-          monitoringPlots: [],
-        }) as SubzoneAggregation
-    ),
-  }) as ZoneAggregation;
+    monitoringPlots: [],
+  })),
+});

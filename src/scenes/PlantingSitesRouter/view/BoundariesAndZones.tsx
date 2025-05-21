@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
-import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
+import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import ListMapView from 'src/components/ListMapView';
 import { PlantingSiteMap } from 'src/components/Map';
@@ -12,22 +12,13 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { useOrganization } from 'src/providers';
-import {
-  searchAdHocObservations,
-  searchObservations,
-  selectPlantingSiteAdHocObservations,
-  selectPlantingSiteObservations,
-} from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
-import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
-import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { AdHocObservationResults, Observation, ObservationResults, ZoneAggregation } from 'src/types/Observations';
-import { MinimalPlantingSite, MinimalPlantingZone, PlantingSiteHistory } from 'src/types/Tracking';
+import { MapEntityId, MapSourceProperties } from 'src/types/Map';
+import { ObservationResultsPayload } from 'src/types/Observations';
+import { PlantingSite } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 import { regexMatch } from 'src/utils/search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -38,8 +29,7 @@ import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
 export type ObservationType = 'plantMonitoring' | 'biomassMeasurements';
 
 type BoundariesAndZonesProps = {
-  data: ZoneAggregation[];
-  plantingSite: MinimalPlantingSite;
+  plantingSite: PlantingSite;
   search?: string;
   setSearch: (query: string) => void;
   setView?: (view: View) => void;
@@ -48,7 +38,6 @@ type BoundariesAndZonesProps = {
 };
 
 export default function BoundariesAndZones({
-  data,
   plantingSite,
   search,
   setSearch,
@@ -134,15 +123,13 @@ export default function BoundariesAndZones({
           search={<Search {...searchProps} />}
           list={
             <PlantingSiteDetailsTable
-              data={data}
               plantingSite={plantingSite}
               zoneViewUrl={zoneViewUrl}
               plotSelection={selectedPlotSelection}
               observationType={selectedObservationType}
             />
           }
-          map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search ? search.trim() : ''} />}
-          data={data}
+          map={<PlantingSiteMapView search={search ? search.trim() : ''} />}
         />
       )}
     </Box>
@@ -150,69 +137,51 @@ export default function BoundariesAndZones({
 }
 
 type PlantingSiteMapViewProps = {
-  plantingSite: MinimalPlantingSite;
-  data: ZoneAggregation[];
   search?: string;
 };
 
-function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapViewProps): JSX.Element | null {
+function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element | null {
+  const { isDesktop } = useDeviceInfo();
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
   const defaultTimeZone = useDefaultTimeZone();
-  const { selectedOrganization } = useOrganization();
-  const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
-  const dispatch = useAppDispatch();
-  const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
-  const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
-  const { isDesktop } = useDeviceInfo();
+  const {
+    plantingSite,
+    plantingSiteHistories,
+    observations,
+    adHocObservations,
+    observationResults,
+    adHocObservationResults,
+  } = usePlantingSiteData();
+  const [selectedObservation, setSelectedObservation] = useState<ObservationResultsPayload>();
+  const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<ObservationResultsPayload>();
 
-  const [requestId, setRequestId] = useState<string>('');
-
-  const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
-
-  const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
-
-  const observations: Observation[] | undefined = useAppSelector((state) =>
-    selectPlantingSiteObservations(state, plantingSite.id)
+  const nonUpcomingResult = useMemo(
+    () => observationResults?.filter((result) => result.state !== 'Upcoming'),
+    [observationResults]
   );
 
-  const adHocObservations: Observation[] | undefined = useAppSelector((state) =>
-    selectPlantingSiteAdHocObservations(state, plantingSite.id)
-  );
+  const timeZone = useMemo(() => {
+    return plantingSite?.timeZone ?? defaultTimeZone.get().id;
+  }, [defaultTimeZone, plantingSite]);
 
-  const status = useMemo(() => {
-    return ['Completed', 'InProgress', 'Overdue', 'Abandoned'];
-  }, []);
-
-  useEffect(() => {
-    if (observationHistory?.status === 'success') {
-      setPlantingSiteHistory(observationHistory.data);
-    }
-  }, [observationHistory]);
-
-  const observationsResults = useAppSelector((state) =>
-    searchObservations(state, plantingSite.id, selectedOrganization.id, timeZone, '', [], status)
-  );
-
-  const adHocObservationResults = useAppSelector((state) =>
-    searchAdHocObservations(state, plantingSite.id, timeZone, '')
+  const getObservationDate = useCallback(
+    (obseration: ObservationResultsPayload) => {
+      return obseration.completedTime ? getDateDisplayValue(obseration.completedTime, timeZone) : obseration.startDate;
+    },
+    [timeZone]
   );
 
   const observationsDates = useMemo(() => {
-    const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
-    uniqueDates.add(getTodaysDateFormatted());
-
-    adHocObservationResults?.forEach((obs) => {
-      const dateToUse = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
-      uniqueDates.add(dateToUse);
-    });
+    const uniqueDates = new Set<string>();
+    nonUpcomingResult?.forEach((result) => uniqueDates.add(getObservationDate(result)));
+    adHocObservationResults?.forEach((result) => uniqueDates.add(getObservationDate(result)));
 
     return Array.from(uniqueDates)
-      ?.filter((time) => time)
-      ?.map((time) => time)
+      ?.filter((time) => time.length > 0)
       ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
-  }, [observationsResults, adHocObservationResults]);
+  }, [nonUpcomingResult, adHocObservationResults, getObservationDate]);
 
   useEffect(() => {
     if (observationsDates) {
@@ -229,20 +198,18 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   }, [observationsDates]);
 
   useEffect(() => {
-    const selObservation = observationsResults?.find((obs) => {
-      const dateToCheck = obs.state === 'Completed' || obs.state === 'Abandoned' ? obs.completedDate : obs.startDate;
-      return dateToCheck === selectedObservationDate;
+    const _selectedObservation = nonUpcomingResult?.find((results) => {
+      return getObservationDate(results) === selectedObservationDate;
     });
 
-    setSelectedObservation(selObservation);
+    setSelectedObservation(_selectedObservation);
 
-    const selAdHocObservation = adHocObservationResults?.find((obs) => {
-      const dateToCheck = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
-      return dateToCheck === selectedObservationDate;
+    const selAdHocObservation = adHocObservationResults?.find((results) => {
+      return getObservationDate(results) === selectedObservationDate;
     });
 
     setSelectedAdHocObservation(selAdHocObservation);
-  }, [observationsResults, adHocObservationResults, plantingSite, selectedObservationDate, timeZone]);
+  }, [nonUpcomingResult, adHocObservationResults, getObservationDate, selectedObservationDate]);
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,
@@ -260,198 +227,168 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     }
 
     return (
-      observations.find((obv) => obv.id === observationToUse?.observationId) ||
-      adHocObservations.find((obv) => obv.id === observationToUse?.observationId)
+      observations?.find((obv) => obv.id === observationToUse?.observationId) ||
+      adHocObservations?.find((obv) => obv.id === observationToUse?.observationId)
     );
-  }, [observations, selectedObservation, selectedAdHocObservation]);
+  }, [observations, adHocObservations, selectedObservation, selectedAdHocObservation]);
 
-  useEffect(() => {
+  const plantingSiteHistory = useMemo(() => {
     if (observationData) {
-      const historyId = observationData.plantingSiteHistoryId;
-      if (historyId) {
-        const requestObservationHistory = dispatch(
-          requestGetPlantingSiteHistory({
-            plantingSiteId: plantingSite.id,
-            historyId,
-          })
-        );
-        setRequestId(requestObservationHistory.requestId);
-      }
-    } else {
-      setRequestId('');
+      return plantingSiteHistories?.find((history) => history.id === observationData.plantingSiteHistoryId);
     }
-  }, [observationData]);
+  }, [observationData, plantingSiteHistories]);
+
+  const mapData = useMemo(() => {
+    if (plantingSite && plantingSiteHistory) {
+      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, plantingSiteHistory);
+    }
+  }, [plantingSite, plantingSiteHistory]);
 
   useEffect(() => {
     if (!search) {
       setSearchZoneEntities([]);
     } else {
-      const entities = data
-        .filter((zone: MinimalPlantingZone) => regexMatch(zone.name, search))
+      const entities = plantingSite?.plantingZones
+        ?.filter((zone) => regexMatch(zone.name, search))
         .map((zone) => ({ sourceId: 'zones', id: zone.id }));
-      setSearchZoneEntities(entities);
+      setSearchZoneEntities(entities ?? []);
     }
-  }, [data, search]);
-
-  const mapDataFromAggregation = useMemo(() => {
-    return MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data });
-  }, [plantingSite, data]);
-
-  const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    let observationToUse = selectedObservation || selectedAdHocObservation;
-    if (selectedObservation && selectedAdHocObservation) {
-      if (isAfter(selectedAdHocObservation.completedTime, selectedObservation.completedTime)) {
-        observationToUse = selectedAdHocObservation;
-      }
-    }
-
-    if (!selectedObservationDate || !observationToUse || !plantingSiteHistory) {
-      return {
-        site: mapDataFromAggregation.site,
-        zone: mapDataFromAggregation.zone,
-        subzone: mapDataFromAggregation.subzone,
-        permanentPlot: undefined,
-        temporaryPlot: undefined,
-        adHocPlot: undefined,
-      };
-    }
-    const newMapData = MapService.getMapDataFromObservation(observationToUse, plantingSiteHistory);
-    return newMapData;
-  }, [
-    selectedObservation,
-    selectedObservationDate,
-    mapDataFromAggregation,
-    plantingSiteHistory,
-    selectedAdHocObservation,
-  ]);
+  }, [plantingSite, search]);
 
   const layerOptions: MapLayer[] = useMemo(() => {
     const result: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];
     if (
-      (mapData.permanentPlot?.entities && mapData.permanentPlot.entities.length > 0) ||
-      (mapData.temporaryPlot?.entities && mapData.temporaryPlot.entities.length > 0)
+      mapData &&
+      ((mapData.permanentPlot?.entities && mapData.permanentPlot.entities.length > 0) ||
+        (mapData.temporaryPlot?.entities && mapData.temporaryPlot.entities.length > 0))
     ) {
       result.push('Monitoring Plots');
     }
     return result;
   }, [mapData]);
 
-  if (!plantingSite.boundary) {
+  if (!plantingSite?.boundary) {
     return null;
   }
 
   return (
     <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
       <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
-      <PlantingSiteMap
-        mapData={mapData}
-        style={{ borderRadius: '24px' }}
-        layers={includedLayers}
-        highlightEntities={searchZoneEntities}
-        focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
-        contextRenderer={{
-          render: contextRenderer(plantingSite, data, timeZone, selectedAdHocObservation),
-          sx: {
-            '.mapboxgl-popup .mapboxgl-popup-content': {
-              borderRadius: '8px',
-              padding: '10px',
-              width: 'fit-content',
-              maxWidth: '350px',
+      {mapData && plantingSite && (
+        <PlantingSiteMap
+          mapData={mapData}
+          style={{ borderRadius: '24px' }}
+          layers={includedLayers}
+          highlightEntities={searchZoneEntities}
+          focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
+          contextRenderer={{
+            render: ContextRenderer(plantingSite, timeZone),
+            sx: {
+              '.mapboxgl-popup .mapboxgl-popup-content': {
+                borderRadius: '8px',
+                padding: '10px',
+                width: 'fit-content',
+                maxWidth: '350px',
+              },
             },
-          },
-        }}
-        topRightMapControl={
-          <MapLayerSelect
-            initialSelection={includedLayers}
-            onUpdateSelection={(selection) => setIncludedLayers(selection)}
-            menuSections={[
-              layerOptions.map((opt) => ({
-                label: layerOptionLabels[opt],
-                value: opt,
-              })),
-            ]}
-          />
-        }
-        bottomLeftMapControl={
-          observationsDates &&
-          observationsDates.length > 0 && (
-            <MapDateSelect
-              dates={observationsDates}
-              selectedDate={selectedObservationDate ?? observationsDates[0]}
-              onChange={setSelectedObservationDate}
+          }}
+          topRightMapControl={
+            <MapLayerSelect
+              initialSelection={includedLayers}
+              onUpdateSelection={(selection) => setIncludedLayers(selection)}
+              menuSections={[
+                layerOptions.map((opt) => ({
+                  label: layerOptionLabels[opt],
+                  value: opt,
+                })),
+              ]}
             />
-          )
-        }
-      />
+          }
+          bottomLeftMapControl={
+            observationsDates &&
+            observationsDates.length > 0 && (
+              <MapDateSelect
+                dates={observationsDates}
+                selectedDate={selectedObservationDate ?? observationsDates[0]}
+                onChange={setSelectedObservationDate}
+              />
+            )
+          }
+        />
+      )}
     </Box>
   );
 }
 
-const contextRenderer =
+const ContextRenderer =
   (
-    site: MinimalPlantingSite,
-    data: ZoneAggregation[],
+    site: PlantingSite,
     timeZone: string,
-    selectedAdHocObservation?: AdHocObservationResults
   ) =>
   // eslint-disable-next-line react/display-name
   (entity: MapSourceProperties): JSX.Element => {
+    const zones = site.plantingZones ?? [];
     let properties: TooltipProperty[] = [];
     let title: string | undefined;
     if (entity.type === 'site') {
       title = site.name;
       properties = [
-        { key: strings.ZONES, value: data.length },
-        { key: strings.SUBZONES, value: data.flatMap((z) => z.plantingSubzones).length },
+        { key: strings.ZONES, value: zones.length },
+        { key: strings.SUBZONES, value: zones.flatMap((z) => z.plantingSubzones).length },
         {
           key: strings.MONITORING_PLOTS,
-          value: data.flatMap((z) => z.plantingSubzones).flatMap((sz) => sz.monitoringPlots).length,
+          value: zones.reduce((accumulator, zone) => accumulator + zone.numPermanentPlots, 0),
         },
       ];
     } else if (entity.type === 'zone') {
-      const zone = data.find((z) => z.id === entity.id);
+      const zone = zones.find((z) => z.id === entity.id);
       title = zone?.name;
       properties = [
         { key: strings.AREA_HA, value: zone?.areaHa && zone?.areaHa > 0 ? zone?.areaHa : '' },
         { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
-        { key: strings.PLANTING_COMPLETE, value: zone?.plantingCompleted ? strings.YES : strings.NO },
+        {
+          key: strings.PLANTING_COMPLETE,
+          value: zone?.plantingSubzones?.every((subzone) => subzone.plantingCompleted) ? strings.YES : strings.NO,
+        },
         { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
         {
           key: strings.MONITORING_PLOTS,
-          value: zone?.plantingSubzones.flatMap((sz) => sz.monitoringPlots).length ?? 0,
+          value: zone?.numPermanentPlots ?? 0,
         },
         {
           key: strings.LAST_OBSERVED,
-          value: zone?.completedTime ? getDateDisplayValue(zone.completedTime, timeZone) : '',
+          value: zone?.latestObservationCompletedTime
+            ? getDateDisplayValue(zone.latestObservationCompletedTime, timeZone)
+            : '',
         },
       ];
     } else if (entity.type === 'subzone') {
-      const subzone = data.flatMap((z) => z.plantingSubzones).find((sz) => sz.id === entity.id);
+      const subzone = zones.flatMap((z) => z.plantingSubzones).find((sz) => sz.id === entity.id);
       title = subzone?.fullName;
       properties = [
         { key: strings.AREA_HA, value: subzone?.areaHa && subzone?.areaHa > 0 ? subzone?.areaHa : '' },
         { key: strings.PLANTING_COMPLETE, value: subzone?.plantingCompleted ? strings.YES : strings.NO },
-        { key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 },
+        // { key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 },
       ];
     } else {
       // monitoring plot
-      const plot =
-        selectedAdHocObservation?.adHocPlot ||
-        data
-          .flatMap((z) => z.plantingSubzones)
-          .flatMap((sz) => sz.monitoringPlots)
-          .find((mp) => mp.monitoringPlotId === entity.id);
-      title = plot?.monitoringPlotNumber.toString();
-      properties = [
-        {
-          key: strings.PLOT_TYPE,
-          value: plot ? (plot.isAdHoc ? strings.AD_HOC : plot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : '',
-        },
-        {
-          key: strings.LAST_OBSERVED,
-          value: plot?.completedTime ? getDateDisplayValue(plot.completedTime, timeZone) : '',
-        },
-      ];
+      // const plot =
+      //   selectedAdHocObservation?.adHocPlot ||
+      //   data
+      //     .flatMap((z) => z.plantingSubzones)
+      //     .flatMap((sz) => sz.monitoringPlots)
+      //     .find((mp) => mp.monitoringPlotId === entity.id);
+      // title = plot?.monitoringPlotNumber.toString();
+      // properties = [
+      //   {
+      //     key: strings.PLOT_TYPE,
+      //     value: plot ? (plot.isAdHoc ? strings.AD_HOC : plot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : '',
+      //   },
+      //   {
+      //     key: strings.LAST_OBSERVED,
+      //     value: plot?.completedTime ? getDateDisplayValue(plot.completedTime, timeZone) : '',
+      //   },
+      // ];
     }
 
     return <MapTooltip title={title} properties={properties} />;

@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectPlantingZone } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingZoneObservationSummary } from 'src/types/Observations';
 
@@ -13,42 +11,42 @@ export default function TotalMortalityRateCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries, plantingSite } = usePlantingSiteData();
 
-  let highestMortalityRate: number | undefined;
-  let highestZoneId: number;
+  const [highestMortalityRate, setHighestMortalityRate] = useState<number>();
+  const [lowestMortalityRate, setLowestMortalityRate] = useState<number>();
+  const [highestZoneId, setHighestZoneId] = useState<number>();
+  const [lowestZoneId, setLowestZoneId] = useState<number>();
 
-  let lowestMortalityRate = 100;
-  let lowestZoneId: number;
+  useEffect(() => {
+    let _highestMortalityRate = 0;
+    let _lowestMortalityRate = 100;
+    let _highestZoneId: number | undefined = undefined;
+    let _lowestZoneId: number | undefined = undefined;
+    observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
+      if (zone.mortalityRate !== undefined) {
+        if (zone.mortalityRate >= _highestMortalityRate) {
+          _highestMortalityRate = zone.mortalityRate;
+          _highestZoneId = zone.plantingZoneId;
+        } else if (zone.mortalityRate <= _lowestMortalityRate) {
+          _lowestMortalityRate = zone.mortalityRate;
+          _lowestZoneId = zone.plantingZoneId;
+        }
+      }
+    });
 
-  observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
-    if (
-      zone.mortalityRate !== undefined &&
-      zone.mortalityRate !== null &&
-      zone.mortalityRate >= (highestMortalityRate || 0)
-    ) {
-      highestMortalityRate = zone.mortalityRate;
-      highestZoneId = zone.plantingZoneId;
-    }
-  });
+    setLowestMortalityRate(_lowestZoneId ? _lowestMortalityRate : undefined);
+    setLowestZoneId(_lowestZoneId);
 
-  observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
-    if (
-      zone.mortalityRate !== undefined &&
-      zone.mortalityRate !== null &&
-      zone.mortalityRate <= lowestMortalityRate &&
-      zone.plantingZoneId !== highestZoneId
-    ) {
-      lowestMortalityRate = zone.mortalityRate;
-      lowestZoneId = zone.plantingZoneId;
-    }
-  });
+    setHighestMortalityRate(_highestZoneId ? _highestMortalityRate : undefined);
+    setHighestZoneId(_highestZoneId);
+  }, [observationSummaries]);
 
-  const highestPlantingZone = useAppSelector((state) =>
-    selectPlantingZone(state, plantingSite?.id || -1, Number(highestZoneId))
-  );
+  const highestPlantingZone = useMemo(() => {
+    return plantingSite?.plantingZones?.find((zone) => zone.id === highestZoneId);
+  }, [plantingSite, highestZoneId]);
 
-  const lowestPlantingZone = useAppSelector((state) =>
-    selectPlantingZone(state, plantingSite?.id || -1, Number(lowestZoneId))
-  );
+  const lowestPlantingZone = useMemo(() => {
+    return plantingSite?.plantingZones?.find((zone) => zone.id === lowestZoneId);
+  }, [plantingSite, lowestZoneId]);
 
   return (
     <Box>

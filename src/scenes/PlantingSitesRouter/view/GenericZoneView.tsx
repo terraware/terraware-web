@@ -14,11 +14,8 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { RootState } from 'src/redux/rootReducer';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ZoneAggregation } from 'src/types/Observations';
-import { MinimalPlantingSite } from 'src/types/Tracking';
+import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
 
 const columns = (): TableColumnType[] => [
   {
@@ -44,34 +41,24 @@ const columns = (): TableColumnType[] => [
   },
 ];
 
-export type Props = {
-  siteSelector: (state: RootState, plantingSiteId: number) => MinimalPlantingSite | undefined;
+export type GenericZoneViewProps = {
+  plantingSite: MinimalPlantingSite;
+  plantingZone: MinimalPlantingZone;
   siteViewPrefix: string;
   siteViewUrl: string;
   subzoneViewUrl: string;
-  zoneSelector: (
-    state: RootState,
-    plantingSiteId: number,
-    zoneId: number,
-    query: string
-  ) => ZoneAggregation | undefined;
 };
 
 export default function GenericZoneView({
-  siteSelector,
+  plantingSite,
+  plantingZone,
   siteViewPrefix,
   siteViewUrl,
   subzoneViewUrl,
-  zoneSelector,
-}: Props): JSX.Element {
+}: GenericZoneViewProps): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const navigate = useSyncNavigate();
   const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
-
-  const plantingSite = useAppSelector((state) => siteSelector(state, Number(plantingSiteId)));
-  const plantingZone = useAppSelector((state) =>
-    zoneSelector(state, Number(plantingSiteId), Number(zoneId), search.trim())
-  );
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -135,7 +122,7 @@ const DetailsRenderer =
     };
 
     const createLinkToSubzone = () => {
-      if (row.monitoringPlots.length === 0) {
+      if (row.monitoringPlots?.length === 0) {
         // don't link if there are no monitoring plots to show in the details view
         return row.fullName;
       }

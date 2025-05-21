@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
@@ -14,9 +14,7 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { searchPlantingSiteMonitoringPlots } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -38,23 +36,32 @@ const columns = (): TableColumnType[] => [
   },
 ];
 
-export default function PlantingSiteZoneView(): JSX.Element {
+export default function PlantingSiteSubzoneView(): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const navigate = useSyncNavigate();
   const defaultTimeZone = useDefaultTimeZone();
 
-  const { plantingSiteId, zoneId, subzoneId } = useParams<{
-    plantingSiteId: string;
+  const params = useParams<{
     zoneId: string;
     subzoneId: string;
   }>();
 
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
-  const plantingZone = useAppSelector((state) =>
-    searchPlantingSiteMonitoringPlots(state, Number(plantingSiteId), Number(zoneId), Number(subzoneId), search.trim())
-  );
+  const zoneId = Number(params.zoneId);
+  const subzoneId = Number(params.subzoneId);
 
-  const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
+  const { plantingSite, isLoading } = usePlantingSiteData();
+
+  const timeZone = useMemo(() => {
+    return plantingSite?.timeZone ?? defaultTimeZone.get().id;
+  }, [defaultTimeZone, plantingSite]);
+
+  const plantingZone = useMemo(() => {
+    return plantingSite?.plantingZones?.find((zone) => zone.id === zoneId);
+  }, [plantingSite, zoneId]);
+
+  const plantingSubzone = useMemo(() => {
+    return plantingZone?.plantingSubzones?.find((subzone) => subzone.id === subzoneId);
+  }, [plantingSite, subzoneId]);
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -64,17 +71,24 @@ export default function PlantingSiteZoneView(): JSX.Element {
     [search]
   );
 
-  if (!plantingSite) {
-    navigate(APP_PATHS.PLANTING_SITES);
-  }
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
 
-  if (plantingSiteId && !plantingZone) {
-    navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
-  }
-
-  if (zoneId && plantingSiteId && !plantingZone?.plantingSubzones.length) {
-    navigate(APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId));
-  }
+    if (!plantingSite) {
+      navigate(APP_PATHS.PLANTING_SITES);
+    } else if (!plantingZone) {
+      navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString()));
+    } else if (!plantingSubzone) {
+      navigate(
+        APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSite.id.toString()).replace(
+          ':zoneId',
+          plantingZone.id.toString()
+        )
+      );
+    }
+  }, [isLoading, plantingSite, plantingZone, plantingSubzone]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -84,25 +98,25 @@ export default function PlantingSiteZoneView(): JSX.Element {
       },
       {
         name: plantingSite?.name ?? '',
-        to: `/${plantingSiteId}`,
+        to: `/${plantingSite?.id}`,
       },
       {
         name: plantingZone?.name ?? '',
-        to: `/zone/${zoneId}`,
+        to: `/zone/${plantingZone?.id}`,
       },
     ],
-    [plantingSiteId, zoneId, plantingSite?.name, plantingZone?.name]
+    [plantingSite, plantingZone]
   );
 
   return (
-    <Page crumbs={crumbs} title={plantingZone?.plantingSubzones[0]?.fullName ?? ''}>
+    <Page crumbs={crumbs} title={plantingSubzone?.fullName ?? ''}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Search {...searchProps} />
         <Box>
           <Table
             id='planting-site-subzone-details-table'
             columns={columns}
-            rows={plantingZone?.plantingSubzones[0]?.monitoringPlots ?? []}
+            rows={[]} // TODO: Enable once API returns list of monitoring plots
             orderBy='monitoringPlotNumber'
             Renderer={DetailsRenderer(timeZone)}
           />
@@ -125,6 +139,7 @@ const DetailsRenderer =
       },
     };
 
+    // TODO: Make this into a link for the latest observation
     if (column.key === 'completedTime') {
       return (
         <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />

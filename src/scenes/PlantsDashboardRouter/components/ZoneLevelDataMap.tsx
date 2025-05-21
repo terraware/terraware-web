@@ -143,8 +143,8 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       return baseMap;
     }
 
-    return MapService.getMapDataFromPlantingSiteFromHistory(plantingSite, plantingSiteHistory);
-  }, [plantingSite, latestResult, plantingSiteHistories]);
+    return MapService.getMapDataFromPlantingSiteHistory(plantingSite, plantingSiteHistory);
+  }, [plantingSite, plantingSiteHistories]);
 
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];

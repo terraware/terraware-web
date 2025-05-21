@@ -7,9 +7,6 @@ import {
   ObservationPlantingSubzoneResults,
   ObservationPlantingZoneResults,
   ObservationResultsWithLastObv,
-  PlantingSiteAggregation,
-  SubzoneAggregation,
-  ZoneAggregation,
 } from 'src/types/Observations';
 import { MinimalPlantingSite, MultiPolygon, PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
@@ -252,11 +249,11 @@ const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
 const extractPlantingZonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
   const zonesData =
     site.plantingZones?.map((zone) => {
-      const { id, name, boundary } = zone;
+      const { id, plantingZoneId, name, boundary } = zone;
       return {
-        properties: { id, name, type: 'zone', recency: 0 },
+        properties: { id: plantingZoneId, name, type: 'zone', recency: 0 },
         boundary: getPolygons(boundary),
-        id,
+        id: plantingZoneId ?? id,
       };
     }) || [];
 
@@ -389,7 +386,7 @@ const getMapDataFromPlantingSite = (plantingSite: PlantingSite): MapData => {
 /**
  * Extract Planting Site, Zones, Subzones from planting site data
  */
-const getMapDataFromPlantingSiteFromHistory = (plantingSite: PlantingSite, history: PlantingSiteHistory): MapData => {
+const getMapDataFromPlantingSiteHistory = (plantingSite: PlantingSite, history: PlantingSiteHistory): MapData => {
   return {
     site: extractPlantingSiteFromHistory(plantingSite, history),
     zone: extractPlantingZonesFromHistory(history),
@@ -527,29 +524,6 @@ const getMapDataFromObservation = (
   };
 };
 
-/**
- * Extract Planting Site, Zones, Subzones and monitoring plots from planting site aggregated data,
- * which is a hybrid of planting site and observation results.
- */
-const getMapDataFromAggregation = (plantingSite: PlantingSiteAggregation): MapData => {
-  const permanentPlotEntities = plantingSite.plantingZones.flatMap((zone: ZoneAggregation) =>
-    zone.plantingSubzones.flatMap((sz: SubzoneAggregation) => getMonitoringPlotMapData(sz.monitoringPlots, true))
-  );
-
-  const temporaryPlotEntities = plantingSite.plantingZones.flatMap((zone: ZoneAggregation) =>
-    zone.plantingSubzones.flatMap((sz: SubzoneAggregation) => getMonitoringPlotMapData(sz.monitoringPlots, false))
-  );
-
-  return {
-    site: extractPlantingSite(plantingSite),
-    zone: extractPlantingZones(plantingSite),
-    subzone: extractSubzones(plantingSite),
-    permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
-    temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
-    adHocPlot: { id: 'adHocPlots', entities: [] },
-  };
-};
-
 // private util
 const getMonitoringPlotMapData = (
   monitoringPlots: (ObservationMonitoringPlotResults | ObservationMonitoringPlotResultsPayload)[],
@@ -575,9 +549,8 @@ const MapService = {
   getBoundingBox,
   getMapDataFromPlantingSite,
   getMapDataFromPlantingSites,
-  getMapDataFromPlantingSiteFromHistory,
+  getMapDataFromPlantingSiteHistory,
   getMapDataFromObservation,
-  getMapDataFromAggregation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
   extractPlantingSite,

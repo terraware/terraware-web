@@ -7871,6 +7871,10 @@ export interface components {
             exclusion?: components["schemas"]["MultiPolygon"];
             /** Format: int64 */
             id: number;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
             name: string;
             /** Format: int64 */
             organizationId: number;
@@ -7925,6 +7929,10 @@ export interface components {
             fullName: string;
             /** Format: int64 */
             id: number;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
             name: string;
             /**
              * Format: date-time
@@ -8027,7 +8035,15 @@ export interface components {
             boundaryModifiedTime: string;
             /** Format: int64 */
             id: number;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
             name: string;
+            /** Format: int32 */
+            numPermanentPlots: number;
+            /** Format: int32 */
+            numTemporaryPlots: number;
             plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
             targetPlantingDensity: number;
         };

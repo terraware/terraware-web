@@ -14,7 +14,6 @@ import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { selectPlantingSite, selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ZoneAggregation } from 'src/types/Observations';
 import { Project } from 'src/types/Project';
 import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -140,7 +139,7 @@ export default function PlantingProgress(): JSX.Element {
           : strings.PLANTING_PROGRESS_MAP_DESCRIPTION}
       </Typography>
       <ListMapView
-        data={plantingSite?.plantingZones as ZoneAggregation[]}
+        data={plantingSite?.plantingZones}
         style={{
           display: 'flex',
           flexDirection: 'column',

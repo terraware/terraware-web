@@ -15,33 +15,28 @@ import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { RootState } from 'src/redux/rootReducer';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ZoneAggregation } from 'src/types/Observations';
-import { MinimalPlantingSite, PlantingSeason } from 'src/types/Tracking';
+import { PlantingSeason, PlantingSite } from 'src/types/Tracking';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import BoundariesAndZones from './BoundariesAndZones';
 import SimplePlantingSite from './SimplePlantingSite';
 
-export type GenericSiteViewProps<T extends MinimalPlantingSite> = {
+export type GenericSiteViewProps = {
   editDisabled?: boolean;
   editUrl: string;
   onDelete: () => void;
-  plantingSite: T;
-  selector: (state: RootState, plantingSiteId: number, query: string) => ZoneAggregation[];
+  plantingSite: PlantingSite;
   zoneViewUrl: string;
 };
 
-export default function GenericSiteView<T extends MinimalPlantingSite>({
+export default function GenericSiteView({
   editDisabled,
   editUrl,
   onDelete,
   plantingSite,
-  selector,
   zoneViewUrl,
-}: GenericSiteViewProps<T>): JSX.Element {
+}: GenericSiteViewProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useSyncNavigate();
@@ -50,7 +45,6 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   const [search, setSearch] = useState<string>('');
   const [view, setView] = useState<View>('map');
   const { selectedProject } = useProjects(plantingSite);
-  const data = useAppSelector((state) => selector(state, plantingSite.id, view === 'map' ? '' : search.trim()));
 
   const gridSize = () => {
     if (isMobile) {
@@ -189,7 +183,6 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
         </Grid>
         {plantingSite.boundary && plantingSite.plantingZones && (
           <BoundariesAndZones
-            data={data}
             plantingSite={plantingSite}
             search={search}
             setSearch={setSearch}
