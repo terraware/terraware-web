@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -40,12 +40,15 @@ export default function ListMapView({
   const numberFormatter = useNumberFormatter(activeLocale);
   const { isMobile } = useDeviceInfo();
 
-  const updateView = (nextView: View) => {
-    setView(nextView);
-    if (onView) {
-      onView(nextView);
-    }
-  };
+  const updateView = useCallback(
+    (nextView: View) => {
+      setView(nextView);
+      if (onView) {
+        onView(nextView);
+      }
+    },
+    [onView]
+  );
 
   const siteAreaHa = useMemo(() => {
     return data ? data.reduce((total, currentValue) => total + currentValue.areaHa, 0) : 0;
