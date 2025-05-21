@@ -147,7 +147,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         }}
       >
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
-          {isLoading && plantingSite && (
+          {!isLoading && plantingSite && (
             <>
               <Grid
                 spacing={3}

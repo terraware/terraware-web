@@ -61,7 +61,7 @@ export default function PlantingSiteSubzoneView(): JSX.Element {
 
   const plantingSubzone = useMemo(() => {
     return plantingZone?.plantingSubzones?.find((subzone) => subzone.id === subzoneId);
-  }, [plantingSite, subzoneId]);
+  }, [plantingZone, subzoneId]);
 
   const searchProps = useMemo<SearchProps>(
     () => ({
