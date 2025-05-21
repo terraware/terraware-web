@@ -8,7 +8,6 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import Link from 'src/components/common/Link';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -56,7 +55,7 @@ export type GenericZoneViewProps = {
 export default function GenericZoneView({ plantingSite, plantingZone }: GenericZoneViewProps): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const navigate = useSyncNavigate();
-  const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
+  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
 
@@ -100,7 +99,7 @@ export default function GenericZoneView({ plantingSite, plantingZone }: GenericZ
             columns={columns}
             rows={plantingZone?.plantingSubzones ?? []}
             orderBy='fullName'
-            Renderer={DetailsRenderer(Number(plantingSiteId), Number(zoneId), timeZone)}
+            Renderer={DetailsRenderer(timeZone)}
           />
         </Box>
       </Card>
@@ -109,7 +108,7 @@ export default function GenericZoneView({ plantingSite, plantingZone }: GenericZ
 }
 
 const DetailsRenderer =
-  (plantingSiteId: number, zoneId: number, timeZone: string) =>
+  (timeZone: string) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
@@ -120,25 +119,6 @@ const DetailsRenderer =
         fontSize: '16px',
       },
     };
-
-    const createLinkToSubzone = () => {
-      if (row.monitoringPlots?.length === 0) {
-        // don't link if there are no monitoring plots to show in the details view
-        return row.fullName;
-      }
-      const url = APP_PATHS.PLANTING_SITES_SUBZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString())
-        .replace(':zoneId', zoneId.toString())
-        .replace(':subzoneId', row.id.toString());
-      return (
-        <Link fontSize='16px' to={url}>
-          {row.fullName as React.ReactNode}
-        </Link>
-      );
-    };
-
-    if (column.key === 'fullName') {
-      return <CellRenderer {...props} value={createLinkToSubzone()} sx={textStyles} />;
-    }
 
     if (column.key === 'monitoringPlots') {
       const numMonitoringPlots = row.monitoringPlots?.length;
