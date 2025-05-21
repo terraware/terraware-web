@@ -124,7 +124,16 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
         text: true,
       },
     ];
-  }, [activeLocale, biomassMeasurements, defaultTimeZone, plantingSite]);
+  }, [
+    activeLocale,
+    biomassMeasurements,
+    defaultTimeZone,
+    monitoringPlot,
+    plantingSite?.timeZone,
+    swCoordinatesLat,
+    swCoordinatesLong,
+    timeZone,
+  ]);
 
   const title = (
     <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
@@ -147,7 +156,8 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     }
 
     return curmbsData;
-  }, [activeLocale, plantingSiteId, observationId]);
+  }, [plantingSiteId]);
+
   const southwestCornerPhoto = monitoringPlot?.photos
     .filter((photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner')
     .at(0);
@@ -179,37 +189,37 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     }
   }, [biomassMeasurements, setShowPageMessage, setUnrecognizedSpecies]);
 
-  const downloadCsv = async (
-    fileNameSuffix: string,
-    fetchContent: (observationId: number) => Promise<string | null>
-  ) => {
-    if (observation) {
-      const content = await fetchContent(observation.observationId);
+  const downloadCsv = useCallback(
+    async (fileNameSuffix: string, fetchContent: (observationId: number) => Promise<string | null>) => {
+      if (observation) {
+        const content = await fetchContent(observation.observationId);
 
-      if (content !== null && plantingSite) {
-        const fileName = sanitize(`${plantingSite.name}-${observation?.startDate}-${fileNameSuffix}.csv`);
+        if (content !== null && plantingSite) {
+          const fileName = sanitize(`${plantingSite.name}-${observation?.startDate}-${fileNameSuffix}.csv`);
 
-        const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
+          const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
 
-        const link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', fileName);
-        link.click();
+          const link = document.createElement('a');
+          link.setAttribute('href', encodedUri);
+          link.setAttribute('download', fileName);
+          link.click();
+        }
       }
-    }
-  };
+    },
+    [observation, plantingSite]
+  );
 
   const exportDetailsCsv = useCallback(async () => {
     await downloadCsv(strings.BIOMASS_MONITORING, ObservationsService.exportBiomassDetailsCsv);
-  }, [observation, plantingSite]);
+  }, [downloadCsv]);
 
   const exportSpeciesCsv = useCallback(async () => {
     await downloadCsv(strings.SPECIES, ObservationsService.exportBiomassSpeciesCsv);
-  }, [observation, plantingSite]);
+  }, [downloadCsv]);
 
   const exportTreesShrubsCsv = useCallback(async () => {
     await downloadCsv(strings.TREES_AND_SHRUBS, ObservationsService.exportBiomassTreesShrubsCsv);
-  }, [observation, plantingSite]);
+  }, [downloadCsv]);
 
   const exportAllCsvs = useCallback(async () => {
     if (observation && plantingSite) {

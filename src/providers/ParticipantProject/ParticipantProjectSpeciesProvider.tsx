@@ -56,7 +56,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
 
   const goToParticipantProjectSpecies = useCallback(() => {
     _goToParticipantProjectSpecies(deliverableId, projectId, participantProjectSpeciesId);
-  }, [deliverableId, projectId, participantProjectSpeciesId]);
+  }, [_goToParticipantProjectSpecies, deliverableId, projectId, participantProjectSpeciesId]);
 
   const reloadPPS = useCallback(() => {
     if (isNaN(participantProjectSpeciesId)) {
@@ -65,7 +65,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
 
     const request = dispatch(requestGetParticipantProjectSpecies(participantProjectSpeciesId));
     setGetPPSRequestId(request.requestId);
-  }, [dispatch, projectId]);
+  }, [dispatch, participantProjectSpeciesId]);
 
   const reloadSpecies = useCallback(() => {
     if (!(currentParticipantProjectSpecies?.speciesId && currentDeliverable?.organizationId)) {
@@ -80,7 +80,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
     );
 
     setGetSpeciesRequestId(request.requestId);
-  }, [dispatch, projectId, currentDeliverable, currentParticipantProjectSpecies]);
+  }, [dispatch, currentDeliverable, currentParticipantProjectSpecies]);
 
   const reload = useCallback(() => {
     reloadPPS();
@@ -126,7 +126,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
         setUpdateSpeciesRequestId(updateSpeciesRequest.requestId);
       }
     },
-    [currentDeliverable, currentParticipantProjectSpecies, currentSpecies]
+    [currentDeliverable, currentParticipantProjectSpecies, currentSpecies, dispatch, goToParticipantProjectSpecies]
   );
 
   const [participantProjectSpeciesData, setParticipantProjectSpeciesData] = useState<ParticipantProjectSpeciesData>({
@@ -160,7 +160,15 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
     } else if (updatePPSResponse.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [goToParticipantProjectSpecies, reloadPPS, updatePPSResponse]);
+  }, [
+    currentParticipantProjectSpecies,
+    currentSpecies,
+    goToParticipantProjectSpecies,
+    newStatus,
+    reloadPPS,
+    snackbar,
+    updatePPSResponse,
+  ]);
 
   useEffect(() => {
     if (!updateSpeciesResponse) {
@@ -173,7 +181,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
     } else if (updateSpeciesResponse.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [reloadSpecies, updateSpeciesResponse]);
+  }, [reloadSpecies, snackbar, updateSpeciesResponse]);
 
   useEffect(() => {
     if (!getPPSResponse) {

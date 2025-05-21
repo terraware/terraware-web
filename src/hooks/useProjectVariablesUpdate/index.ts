@@ -63,29 +63,47 @@ export const useProjectVariablesUpdate = (
 
   const [noOp, setNoOp] = useState(false);
 
-  const setValues = (variableId: number, values: VariableValueValue[]) => {
-    setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));
-  };
+  const setValues = useCallback(
+    (variableId: number, values: VariableValueValue[]) => {
+      setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));
+    },
+    [pendingVariableValues]
+  );
 
-  const setRemovedValue = (variableId: number, value: VariableValueValue) => {
-    setRemovedVariableValues(new Map(removedVariableValues).set(variableId, value));
-  };
+  const setRemovedValue = useCallback(
+    (variableId: number, value: VariableValueValue) => {
+      setRemovedVariableValues(new Map(removedVariableValues).set(variableId, value));
+    },
+    [removedVariableValues]
+  );
 
-  const setCellValues = (variableId: number, values: VariableTableCell[][]) => {
-    setPendingCellValues(new Map(pendingCellValues).set(variableId, values));
-  };
+  const setCellValues = useCallback(
+    (variableId: number, values: VariableTableCell[][]) => {
+      setPendingCellValues(new Map(pendingCellValues).set(variableId, values));
+    },
+    [pendingCellValues]
+  );
 
-  const setImages = (variableId: number, values: VariableValueImageValue[]) => {
-    setPendingImages(new Map(pendingImages).set(variableId, values));
-  };
+  const setImages = useCallback(
+    (variableId: number, values: VariableValueImageValue[]) => {
+      setPendingImages(new Map(pendingImages).set(variableId, values));
+    },
+    [pendingImages]
+  );
 
-  const setDeletedImages = (variableId: number, values: VariableValueImageValue[]) => {
-    setPendingDeletedImages(new Map(pendingDeletedImages).set(variableId, values));
-  };
+  const setDeletedImages = useCallback(
+    (variableId: number, values: VariableValueImageValue[]) => {
+      setPendingDeletedImages(new Map(pendingDeletedImages).set(variableId, values));
+    },
+    [pendingDeletedImages]
+  );
 
-  const setNewImages = (variableId: number, values: PhotoWithAttributes[]) => {
-    setPendingNewImages(new Map(pendingNewImages).set(variableId, values));
-  };
+  const setNewImages = useCallback(
+    (variableId: number, values: PhotoWithAttributes[]) => {
+      setPendingNewImages(new Map(pendingNewImages).set(variableId, values));
+    },
+    [pendingNewImages]
+  );
 
   const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
     return variablesWithValues.map((variableWithValues) => {
@@ -116,7 +134,7 @@ export const useProjectVariablesUpdate = (
 
   const missingFields = useMemo(
     () => missingRequiredFields(stagedVariableWithValues, stagedCellValues),
-    [missingRequiredFields, stagedVariableWithValues, stagedCellValues]
+    [stagedVariableWithValues, stagedCellValues]
   );
 
   const update = useCallback(
@@ -233,6 +251,7 @@ export const useProjectVariablesUpdate = (
       return operations.length > 0 || imageValuesToUpload.length > 0;
     },
     [
+      dispatch,
       pendingCellValues,
       pendingDeletedImages,
       pendingImages,
@@ -240,6 +259,7 @@ export const useProjectVariablesUpdate = (
       pendingVariableValues,
       projectId,
       removedVariableValues,
+      snackbar,
       variablesWithValues,
     ]
   );
@@ -250,7 +270,7 @@ export const useProjectVariablesUpdate = (
     } else if (updateResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [projectId, updateResult]);
+  }, [projectId, snackbar, updateResult]);
 
   const updateSuccess = useMemo(() => noOp || updateResult?.status === 'success', [noOp, updateResult]);
 
