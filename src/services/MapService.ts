@@ -337,21 +337,23 @@ const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseDat
 };
 
 const extractSubzonesFromHistoryAndResult = (
-  site: PlantingSiteHistory,
+  history: PlantingSiteHistory,
   result: ObservationSummary
 ): MapSourceBaseData => {
   const latestTime = result.latestObservationTime;
   const allPlantingSubzonesData =
-    site.plantingZones?.flatMap((zone) => {
-      const { id: zoneId, plantingSubzones } = zone;
-      const zoneResult = result.plantingZones.find((_zone) => _zone.plantingZoneId === zoneId);
-      return plantingSubzones.map((subzone) => {
-        const { id, name, fullName, boundary } = subzone;
-        const subzoneResult = zoneResult?.plantingSubzones?.find((_subzone) => _subzone.plantingSubzoneId === id);
+    history.plantingZones?.flatMap((zoneHistory) => {
+      const { plantingZoneId, plantingSubzones } = zoneHistory;
+      const zoneResult = result.plantingZones.find((_zone) => _zone.plantingZoneId === plantingZoneId);
+      return plantingSubzones.map((subzoneHistory) => {
+        const { id, plantingSubzoneId, name, fullName, boundary } = subzoneHistory;
+        const subzoneResult = zoneResult?.plantingSubzones?.find(
+          (_subzone) => _subzone.plantingSubzoneId === plantingSubzoneId
+        );
         const recency = subzoneResult?.completedTime === latestTime ? 1 : 0;
         const mortalityRate = subzoneResult?.mortalityRate;
         return {
-          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id, recency, mortalityRate },
+          properties: { id, name, fullName, type: 'subzone', zoneId: plantingZoneId, recency, mortalityRate },
           boundary: getPolygons(boundary),
           id,
         };

@@ -154,6 +154,11 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     }
   }, [latestResult, latestSummary, plantingSite, plantingSiteHistories]);
 
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(mapData);
+  }, [mapData]);
+
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
@@ -274,7 +279,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             style={{ borderRadius: '8px' }}
             layers={['Planting Site', 'Zones', 'Sub-Zones']}
             showMortalityRateFill={!!latestResult && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
-            showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked}
+            showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_EVENTS)?.checked}
             focusEntities={focusEntities}
             contextRenderer={{
               render: contextRenderer,
