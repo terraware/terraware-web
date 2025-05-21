@@ -166,7 +166,7 @@ export default function PlantsPrimaryPageView({
                 {!isAcceleratorRoute && (projectsOptions?.length ?? 0) > 1 && onSelectProjectId && (
                   <Box marginBottom={1}>
                     <Dropdown
-                      placeholder={strings.SELECT}
+                      placeholder={strings.NO_PROJECT_SELECTED}
                       id='project-selector'
                       onChange={(newValue) => onSelectProjectId(Number(newValue))}
                       options={projectsOptions}
