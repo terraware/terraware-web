@@ -561,7 +561,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               {strings.WITHDRAWAL_DETAILS}
             </Typography>
             <Typography>{strings.WITHDRAW_INSTRUCTIONS}</Typography>
-            <Grid xs={12} padding={theme.spacing(4, 0, 0)}>
+            <Grid padding={theme.spacing(4, 0, 0)}>
               <Typography fontSize='14px' fontWeight={400} lineHeight='20px'>
                 {strings.SPECIES_SELECTED}
               </Typography>
@@ -569,7 +569,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 {batchSpeciesNames.join(', ')}
               </Typography>
             </Grid>
-            <Grid xs={12} padding={theme.spacing(4, 0, 0)}>
+            <Grid padding={theme.spacing(4, 0, 0)}>
               <FormControl>
                 <FormLabel
                   sx={{
@@ -657,7 +657,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             {isOutplant && (
               <>
                 <Divisor mt={3} />
-                <Grid xs={12}>
+                <Grid>
                   <Dropdown
                     id='plantingSiteId'
                     placeholder={strings.SELECT}

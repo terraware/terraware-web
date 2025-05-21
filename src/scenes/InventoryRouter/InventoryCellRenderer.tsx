@@ -54,11 +54,29 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     createLinkWithQuery(APP_PATHS.INVENTORY_BATCH.replace(':batchId', row.batchId.toString()), iValue);
 
   if (column.key === 'facilityInventories' && typeof value === 'string') {
-    return <CellRenderer index={index} column={column} value={getNamesList(value)} row={row} sx={textStyles} />;
+    return (
+      <CellRenderer
+        component={'span'}
+        index={index}
+        column={column}
+        value={getNamesList(value)}
+        row={row}
+        sx={textStyles}
+      />
+    );
   }
 
   if (column.key === 'subLocations' && typeof value === 'string') {
-    return <CellRenderer index={index} column={column} value={getNamesList(value)} row={row} sx={textStyles} />;
+    return (
+      <CellRenderer
+        component={'span'}
+        index={index}
+        column={column}
+        value={getNamesList(value)}
+        row={row}
+        sx={textStyles}
+      />
+    );
   }
 
   if (column.key === 'species_scientificName') {
