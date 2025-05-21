@@ -78,6 +78,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       return {
         name: strings.ALL_PLANTING_SITES,
         id: -1,
+        adHocPlots: [],
         organizationId: orgId,
         plantingSeasons: [],
       };

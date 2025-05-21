@@ -7,7 +7,7 @@ import {
   ObservationPlantingSubzoneResults,
   ObservationPlantingZoneResults,
   ObservationResultsWithLastObv,
-  ObservationSummary
+  ObservationSummary,
 } from 'src/types/Observations';
 import { MinimalPlantingSite, MultiPolygon, PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
