@@ -134,7 +134,7 @@ export default function MultiplePlantingSiteMap({
           <PlantingSiteMap
             mapData={mapData!}
             style={{ width: '100%', borderRadius: '24px', ...style }}
-            layers={['Planting Site']}
+            layers={['Planting Site', 'Zones', 'Sub-Zones']}
             hideAllControls={hideAllControls}
           />
         </Box>
