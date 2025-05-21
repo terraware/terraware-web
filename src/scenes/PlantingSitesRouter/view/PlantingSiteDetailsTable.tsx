@@ -14,7 +14,7 @@ import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring
 import { ObservationType } from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
 import strings from 'src/strings';
 import { ExistingTreePayload } from 'src/types/Observations';
-import { PlantingSite } from 'src/types/Tracking';
+import { MinimalPlantingSite } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 /**
@@ -22,8 +22,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
  */
 
 type PlantingSiteDetailsTableProps = {
-  plantingSite: PlantingSite;
-  zoneViewUrl: string;
+  plantingSite: MinimalPlantingSite;
   plotSelection: PlotSelectionType;
   observationType: ObservationType;
 };
@@ -121,7 +120,6 @@ const biomassColumns = (): TableColumnType[] => [
 
 export default function PlantingSiteDetailsTable({
   plantingSite,
-  zoneViewUrl,
   plotSelection,
   observationType,
 }: PlantingSiteDetailsTableProps): JSX.Element {
@@ -146,7 +144,7 @@ export default function PlantingSiteDetailsTable({
           columns={columns}
           rows={plantingSite.plantingZones ?? []}
           orderBy='name'
-          Renderer={DetailsRenderer(timeZone, plantingSite.id, zoneViewUrl)}
+          Renderer={DetailsRenderer(timeZone, plantingSite.id)}
         />
       )}
       {plotSelection === 'adHoc' && observationType === 'plantMonitoring' && (
@@ -155,7 +153,7 @@ export default function PlantingSiteDetailsTable({
           columns={adHocColumns}
           rows={monitoringAdHocResults ?? []}
           orderBy='name'
-          Renderer={DetailsRenderer(timeZone, plantingSite.id, zoneViewUrl)}
+          Renderer={DetailsRenderer(timeZone, plantingSite.id)}
         />
       )}
       {plotSelection === 'adHoc' && observationType === 'biomassMeasurements' && (
@@ -172,7 +170,7 @@ export default function PlantingSiteDetailsTable({
 }
 
 const DetailsRenderer =
-  (timeZone: string, plantingSiteId: number, zoneViewUrl: string) =>
+  (timeZone: string, plantingSiteId: number) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
@@ -185,9 +183,10 @@ const DetailsRenderer =
     };
 
     const createLinkToZone = () => {
-      const url = zoneViewUrl
-        .replace(':plantingSiteId', plantingSiteId.toString())
-        .replace(':zoneId', row.id.toString());
+      const url = APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString()).replace(
+        ':zoneId',
+        row.id.toString()
+      );
       return (
         <Link fontSize='16px' to={url}>
           {(row.name || '--') as React.ReactNode}
@@ -214,7 +213,7 @@ const DetailsRenderer =
       return <CellRenderer {...props} value={createLinkToZone()} sx={textStyles} title={value as string} />;
     }
 
-    if (column.key === 'completedTime') {
+    if (column.key === 'latestObservationCompletedTime') {
       return (
         <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />
       );

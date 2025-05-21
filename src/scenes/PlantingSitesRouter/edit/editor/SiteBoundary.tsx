@@ -40,8 +40,6 @@ const createPlantingZoneWith = (boundary?: MultiPolygon): MinimalPlantingZone | 
     id: 0,
     name: zoneName,
     targetPlantingDensity: 1500,
-    numPermanentPlots: 0,
-    numTemporaryPlots: 0,
   });
 };
 

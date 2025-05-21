@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -16,6 +17,7 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
 import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const columns = (): TableColumnType[] => [
   {
@@ -39,26 +41,24 @@ const columns = (): TableColumnType[] => [
     name: strings.MONITORING_PLOTS,
     type: 'number',
   },
+  {
+    key: 'latestObservationCompletedTime',
+    name: strings.LAST_OBSERVED,
+    type: 'string',
+  },
 ];
 
 export type GenericZoneViewProps = {
   plantingSite: MinimalPlantingSite;
   plantingZone: MinimalPlantingZone;
-  siteViewPrefix: string;
-  siteViewUrl: string;
-  subzoneViewUrl: string;
 };
 
-export default function GenericZoneView({
-  plantingSite,
-  plantingZone,
-  siteViewPrefix,
-  siteViewUrl,
-  subzoneViewUrl,
-}: GenericZoneViewProps): JSX.Element {
+export default function GenericZoneView({ plantingSite, plantingZone }: GenericZoneViewProps): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const navigate = useSyncNavigate();
   const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
+  const defaultTimeZone = useDefaultTimeZone();
+  const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -73,7 +73,7 @@ export default function GenericZoneView({
   }
 
   if (!plantingZone && plantingSiteId) {
-    navigate(siteViewUrl.replace(':plantingSiteId', plantingSiteId));
+    navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
   }
 
   const crumbs: Crumb[] = useMemo(
@@ -84,10 +84,10 @@ export default function GenericZoneView({
       },
       {
         name: plantingSite?.name ?? '',
-        to: `${siteViewPrefix}/${plantingSiteId}`,
+        to: `/${plantingSiteId}`,
       },
     ],
-    [plantingSite?.name, plantingSiteId, siteViewPrefix]
+    [plantingSite?.name, plantingSiteId]
   );
 
   return (
@@ -100,7 +100,7 @@ export default function GenericZoneView({
             columns={columns}
             rows={plantingZone?.plantingSubzones ?? []}
             orderBy='fullName'
-            Renderer={DetailsRenderer(Number(plantingSiteId), Number(zoneId), subzoneViewUrl)}
+            Renderer={DetailsRenderer(Number(plantingSiteId), Number(zoneId), timeZone)}
           />
         </Box>
       </Card>
@@ -109,7 +109,7 @@ export default function GenericZoneView({
 }
 
 const DetailsRenderer =
-  (plantingSiteId: number, zoneId: number, subzoneViewUrl: string) =>
+  (plantingSiteId: number, zoneId: number, timeZone: string) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
@@ -126,8 +126,7 @@ const DetailsRenderer =
         // don't link if there are no monitoring plots to show in the details view
         return row.fullName;
       }
-      const url = subzoneViewUrl
-        .replace(':plantingSiteId', plantingSiteId.toString())
+      const url = APP_PATHS.PLANTING_SITES_SUBZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':zoneId', zoneId.toString())
         .replace(':subzoneId', row.id.toString());
       return (
@@ -142,12 +141,18 @@ const DetailsRenderer =
     }
 
     if (column.key === 'monitoringPlots') {
-      const numMonitoringPlots = row.monitoringPlots.length;
+      const numMonitoringPlots = row.monitoringPlots?.length;
       return <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} sx={textStyles} />;
     }
 
     if (column.key === 'areaHa') {
       return <CellRenderer {...props} value={value || ''} sx={textStyles} />;
+    }
+
+    if (column.key === 'latestObservationCompletedTime') {
+      return (
+        <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />
+      );
     }
 
     return <CellRenderer {...props} />;

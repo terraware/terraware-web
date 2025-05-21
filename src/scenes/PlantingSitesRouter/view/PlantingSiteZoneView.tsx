@@ -20,13 +20,5 @@ export default function PlantingSiteZoneView(): JSX.Element | undefined {
     return undefined;
   }
 
-  return (
-    <GenericZoneView
-      plantingSite={plantingSite}
-      plantingZone={plantingZone}
-      siteViewPrefix=''
-      siteViewUrl={APP_PATHS.PLANTING_SITES_VIEW}
-      subzoneViewUrl={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW}
-    />
-  );
+  return <GenericZoneView plantingSite={plantingSite} plantingZone={plantingZone} />;
 }

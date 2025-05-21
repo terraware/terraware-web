@@ -20,17 +20,17 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const columns = (): TableColumnType[] => [
   {
-    key: 'monitoringPlotNumber',
+    key: 'plotNumber',
     name: strings.MONITORING_PLOT,
     type: 'string',
   },
   {
-    key: 'isPermanent',
+    key: 'plotType',
     name: strings.PLOT_TYPE,
     type: 'string',
   },
   {
-    key: 'completedTime',
+    key: 'latestObservationCompletedTime',
     name: strings.LAST_OBSERVED,
     type: 'string',
   },
@@ -116,7 +116,7 @@ export default function PlantingSiteSubzoneView(): JSX.Element {
           <Table
             id='planting-site-subzone-details-table'
             columns={columns}
-            rows={[]} // TODO: Enable once API returns list of monitoring plots
+            rows={plantingSubzone?.monitoringPlots ?? []}
             orderBy='monitoringPlotNumber'
             Renderer={DetailsRenderer(timeZone)}
           />
@@ -146,9 +146,13 @@ const DetailsRenderer =
       );
     }
 
-    if (column.key === 'isPermanent') {
+    if (column.key === 'plotType') {
+      return <CellRenderer {...props} value={row.isAdHoc ? strings.AD_HOC : strings.ASSIGNED} sx={textStyles} />;
+    }
+
+    if (column.key === 'latestObservationCompletedTime') {
       return (
-        <CellRenderer {...props} value={row.isPermanent ? strings.PERMANENT : strings.TEMPORARY} sx={textStyles} />
+        <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />
       );
     }
 

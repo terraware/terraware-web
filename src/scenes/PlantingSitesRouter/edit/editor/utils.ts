@@ -30,8 +30,6 @@ export const defaultZonePayload = (payload: DefaultZonePayload): MinimalPlanting
       },
     ],
     targetPlantingDensity,
-    numPermanentPlots: 0,
-    numTemporaryPlots: 0,
   };
 };
 

@@ -183,7 +183,6 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                       setSearch={setSearch}
                       setView={setView}
                       view={view}
-                      zoneViewUrl={APP_PATHS.PLANTING_SITES_ZONE_VIEW}
                     />
                   )}
                   {!record?.plantingZones && (

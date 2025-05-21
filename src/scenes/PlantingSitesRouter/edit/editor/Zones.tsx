@@ -59,8 +59,6 @@ const createDraftSiteWith = (site: DraftPlantingSite) => (cutZones: GeometryFeat
       id: index,
       name: zoneNameGenerator(new Set<string>(), strings.ZONE),
       targetPlantingDensity: zone.properties?.targetPlantingDensity ?? 1500,
-      numPermanentPlots: 0,
-      numTemporaryPlots: 0,
     })
   ),
 });
@@ -124,8 +122,6 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
               id: properties?.id ?? index,
               name: properties?.name ?? '',
               targetPlantingDensity: properties?.targetPlantingDensity ?? 1500,
-              numPermanentPlots: 0,
-              numTemporaryPlots: 0,
             });
           } else {
             return undefined;

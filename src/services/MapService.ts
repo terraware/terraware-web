@@ -372,7 +372,7 @@ const getMapDataFromPlantingSites = (plantingSites: PlantingSite[]): MapData => 
 /**
  * Extract Planting Site, Zones, Subzones from planting site data
  */
-const getMapDataFromPlantingSite = (plantingSite: PlantingSite): MapData => {
+const getMapDataFromPlantingSite = (plantingSite: MinimalPlantingSite): MapData => {
   return {
     site: extractPlantingSite(plantingSite),
     zone: extractPlantingZones(plantingSite),

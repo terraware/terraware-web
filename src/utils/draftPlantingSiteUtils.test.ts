@@ -146,8 +146,6 @@ const plantingZones: MinimalPlantingZone[] = [
       },
     ],
     targetPlantingDensity: 1500,
-    numPermanentPlots: 0,
-    numTemporaryPlots: 0,
   },
   {
     boundary: zone2,
@@ -170,8 +168,6 @@ const plantingZones: MinimalPlantingZone[] = [
       },
     ],
     targetPlantingDensity: 2500,
-    numPermanentPlots: 0,
-    numTemporaryPlots: 0,
   },
 ];
 

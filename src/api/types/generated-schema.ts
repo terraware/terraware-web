@@ -6914,6 +6914,33 @@ export interface components {
             overview?: string;
             preparationMaterials?: string;
         };
+        MonitoringPlotHistoryPayload: {
+            boundary: components["schemas"]["Polygon"];
+            /** Format: int64 */
+            id: number;
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int32 */
+            sizeMeters: number;
+        };
+        MonitoringPlotPayload: {
+            boundary: components["schemas"]["Polygon"];
+            elevationMeters?: number;
+            /** Format: int64 */
+            id: number;
+            isAdHoc: boolean;
+            isAvailable: boolean;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
+            /** Format: int32 */
+            permanentIndex?: number;
+            /** Format: int64 */
+            plotNumber: number;
+            /** Format: int32 */
+            sizeMeters: number;
+        };
         MultiLineString: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             coordinates: number[][][];
             /** @enum {string} */
@@ -7809,6 +7836,7 @@ export interface components {
             startDate: string;
         };
         PlantingSiteHistoryPayload: {
+            areaHa?: number;
             boundary: components["schemas"]["MultiPolygon"];
             exclusion?: components["schemas"]["MultiPolygon"];
             /** Format: int64 */
@@ -7911,10 +7939,12 @@ export interface components {
             problemType: "DuplicateSubzoneName" | "DuplicateZoneName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubzoneBoundaryOverlaps" | "SubzoneInExclusionArea" | "SubzoneNotInZone" | "ZoneBoundaryOverlaps" | "ZoneHasNoSubzones" | "ZoneNotInSite" | "ZoneTooSmall" | "ZonesWithoutSiteBoundary";
         };
         PlantingSubzoneHistoryPayload: {
+            areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
             fullName: string;
             /** Format: int64 */
             id: number;
+            monitoringPlots: components["schemas"]["MonitoringPlotHistoryPayload"][];
             name: string;
             /**
              * Format: int64
@@ -7933,6 +7963,7 @@ export interface components {
             latestObservationCompletedTime?: string;
             /** Format: int64 */
             latestObservationId?: number;
+            monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
             name: string;
             /**
              * Format: date-time
@@ -7964,6 +7995,7 @@ export interface components {
             scientificName: string;
         };
         PlantingZoneHistoryPayload: {
+            areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
             /** Format: int64 */
             id: number;
