@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747858926167" clover="3.2.0">
-  <project timestamp="1747858926167" name="All files">
+<coverage generated="1747859334029" clover="3.2.0">
+  <project timestamp="1747859334029" name="All files">
     <metrics statements="30854" coveredstatements="1299" conditionals="21109" coveredconditionals="388" methods="9533" coveredmethods="211" elements="61496" coveredelements="1898" complexity="0" loc="30854" ncloc="30854" packages="263" files="1273" classes="1273"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -23357,18 +23357,18 @@
         <line num="54" count="0" type="stmt"/>
         <line num="56" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="60" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="106" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
       </file>
       <file name="InventoryCreateView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/InventoryCreateView.tsx">
         <metrics statements="39" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>

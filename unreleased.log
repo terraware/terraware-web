@@ -1,3 +1,4 @@
+2a32dbaaa48 Fix 2 console warnings during playwright tests (#4055)
 2c6345c2ead SW-6961 Project Selector not showing "No Project Selected" (#4054)
 b5e59ad0751 SW-6917 Fix Metric status badge wrapping (#4053)
 15ef77c747f SW-6954 Include localized thousandths separator for number for "Total Planting Area" (#4051)
