@@ -1,3 +1,6 @@
+2c6345c2ead SW-6961 Project Selector not showing "No Project Selected" (#4054)
+b5e59ad0751 SW-6917 Fix Metric status badge wrapping (#4053)
+15ef77c747f SW-6954 Include localized thousandths separator for number for "Total Planting Area" (#4051)
 48cf77c9149 SW-6830 Modify map legends style in dashboard (#4048)
 0d40cef1d4b SW-6963 Update Funder Portal title for both tabs (#4045)
 523ecff578b SW-6956 SW-6958 SW-6959 Fix funder portal project profile UI issues (#4044)
