@@ -252,7 +252,10 @@
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -274,8 +277,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -462,10 +468,13 @@ const DeliverableEditableTableEdit = <span class="cstat-no" title="statement not
   const initialCellValues = <span class="cstat-no" title="statement not covered" >useMemo&lt;VariableTableCell[][]&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >getInitialCellValues(variable),</span> [variable]);</span>
   const [cellValues, setCellValues] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableTableCell[][]&gt;(initialCellValues);</span>
 &nbsp;
-  const onChangeCellValues = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(n</span>extCellValues: VariableTableCell[][]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setCellValues(nextCellValues);</span>
-<span class="cstat-no" title="statement not covered" >    onChange(nextCellValues);</span>
-  }, []);
+  const onChangeCellValues = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (n</span>extCellValues: VariableTableCell[][]) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setCellValues(nextCellValues);</span>
+<span class="cstat-no" title="statement not covered" >      onChange(nextCellValues);</span>
+    },
+    [onChange]
+  );
 &nbsp;
   const setCellValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>owNum: number, colNum: number, newValue: string | number) =&gt; {</span>
     const newCellValues: VariableTableCell[][] = <span class="cstat-no" title="statement not covered" >[];</span>
@@ -490,7 +499,7 @@ const DeliverableEditableTableEdit = <span class="cstat-no" title="statement not
 <span class="cstat-no" title="statement not covered" >    onChangeCellValues(newCellValues);</span>
   };
 &nbsp;
-  const addRow = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const addRow = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const newRow: VariableTableCell[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    columns.forEach(<span class="fstat-no" title="function not covered" >(c</span>ol) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      newRow.push({</span>
@@ -502,7 +511,7 @@ const DeliverableEditableTableEdit = <span class="cstat-no" title="statement not
       });
     });
 <span class="cstat-no" title="statement not covered" >    onChangeCellValues([...cellValues, newRow]);</span>
-  };
+  }, [cellValues, columns, onChangeCellValues]);
 &nbsp;
   const removeRow = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>owNum: number) =&gt; {</span>
     const newCellValues = <span class="cstat-no" title="statement not covered" >[...cellValues];</span>
@@ -514,7 +523,7 @@ const DeliverableEditableTableEdit = <span class="cstat-no" title="statement not
 <span class="cstat-no" title="statement not covered" >    if (initialCellValues.length === 0 &amp;&amp; cellValues.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      addRow();</span>
     }
-  }, [cellValues, initialCellValues]);
+  }, [addRow, cellValues, initialCellValues]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
@@ -637,7 +646,7 @@ export default DeliverableEditableTableEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-21T20:50:29.501Z
+                at 2025-05-22T13:35:53.771Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

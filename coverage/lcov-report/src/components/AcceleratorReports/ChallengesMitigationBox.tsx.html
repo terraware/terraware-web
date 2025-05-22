@@ -486,6 +486,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -534,10 +538,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -729,7 +729,7 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
   const areFilteredChallengesDifferent = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const filteredChallenges = <span class="cstat-no" title="statement not covered" >getNonEmptyChallenges();</span>
 <span class="cstat-no" title="statement not covered" >    return filteredChallenges &amp;&amp; JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges);</span>
-  }, [challengeMitigations]);
+  }, [getNonEmptyChallenges, report?.challenges]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!editing) {</span>
@@ -741,9 +741,13 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
 <span class="cstat-no" title="statement not covered" >    if (((editing &amp;&amp; !getNonEmptyChallenges()) || getNonEmptyChallenges().length === 0) &amp;&amp; report?.challenges) {</span>
 <span class="cstat-no" title="statement not covered" >      setChallengeMitigations(report?.challenges ?? []);</span>
     }
-  }, [report?.challenges]);
+  }, [editing, getNonEmptyChallenges, report?.challenges]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onEditChange?.(internalEditing),</span> [internalEditing]);</span>
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onEditChange?.(internalEditing),</span> [internalEditing, onEditChange]);</span>
+&nbsp;
+  const addRow = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setChallengeMitigations(challengeMitigations.concat({ challenge: '', mitigationPlan: '' }));</span>
+  }, [challengeMitigations]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setValidateFields(false);</span>
@@ -758,7 +762,7 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
 <span class="cstat-no" title="statement not covered" >        onChange(challengeMitigations);</span>
       }
     }
-  }, [challengeMitigations]);
+  }, [addRow, areFilteredChallengesDifferent, challengeMitigations, onChange]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (updateReportResponse?.status === 'error') {</span>
@@ -768,7 +772,7 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
 <span class="cstat-no" title="statement not covered" >      setInternalEditing(false);</span>
 <span class="cstat-no" title="statement not covered" >      reload?.();</span>
     }
-  }, [updateReportResponse, snackbar]);
+  }, [updateReportResponse, snackbar, reload]);
 &nbsp;
   const onSave = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorReport(report)) {</span>
@@ -793,16 +797,12 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
       );
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
     }
-  }, [dispatch, projectId, challengeMitigations, report]);
+  }, [report, getNonEmptyChallenges, dispatch, projectId]);
 &nbsp;
   const onCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setInternalEditing(false);</span>
 <span class="cstat-no" title="statement not covered" >    setChallengeMitigations(report?.challenges || []);</span>
   }, [report?.challenges]);
-&nbsp;
-  const addRow = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setChallengeMitigations(challengeMitigations.concat({ challenge: '', mitigationPlan: '' }));</span>
-  }, [challengeMitigations]);
 &nbsp;
   const updateChallenge = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewChal: ChallengeMitigation, index: number) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setChallengeMitigations(challengeMitigations.map(<span class="fstat-no" title="function not covered" >(c</span>hal, i) =&gt; (<span class="cstat-no" title="statement not covered" >index === i ? newChal : chal)</span>));</span>
@@ -856,7 +856,7 @@ export default ChallengesMitigationBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-21T20:50:29.501Z
+                at 2025-05-22T13:35:53.771Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

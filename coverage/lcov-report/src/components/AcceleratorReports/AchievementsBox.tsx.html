@@ -322,18 +322,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -343,6 +337,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -359,10 +363,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -491,7 +491,11 @@ const AchievementsBox = <span class="cstat-no" title="statement not covered" ><s
   }, [achievements]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setAchievements(report?.achievements || []),</span> [report?.achievements]);</span>
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onEditChange?.(internalEditing),</span> [internalEditing]);</span>
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onEditChange?.(internalEditing),</span> [internalEditing, onEditChange]);</span>
+&nbsp;
+  const addRow = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setAchievements(achievements.concat(''));</span>
+  }, [achievements]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (achievements.length === 0) {</span>
@@ -501,7 +505,7 @@ const AchievementsBox = <span class="cstat-no" title="statement not covered" ><s
 <span class="cstat-no" title="statement not covered" >    if (filteredAchievements &amp;&amp; JSON.stringify(filteredAchievements) !== JSON.stringify(report?.achievements)) {</span>
 <span class="cstat-no" title="statement not covered" >      onChange?.(filteredAchievements);</span>
     }
-  }, [achievements]);
+  }, [achievements, addRow, getNonEmptyAchievements, onChange, report?.achievements]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (updateReportResponse?.status === 'error') {</span>
@@ -511,7 +515,7 @@ const AchievementsBox = <span class="cstat-no" title="statement not covered" ><s
 <span class="cstat-no" title="statement not covered" >      setInternalEditing(false);</span>
 <span class="cstat-no" title="statement not covered" >      reload?.();</span>
     }
-  }, [updateReportResponse, snackbar]);
+  }, [updateReportResponse, snackbar, reload]);
 &nbsp;
   const onSave = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorReport(report)) {</span>
@@ -529,7 +533,7 @@ const AchievementsBox = <span class="cstat-no" title="statement not covered" ><s
       );
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
     }
-  }, [dispatch, projectId, achievements, report]);
+  }, [report, dispatch, getNonEmptyAchievements, projectId]);
 &nbsp;
   const onCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setInternalEditing(false);</span>
@@ -538,10 +542,6 @@ const AchievementsBox = <span class="cstat-no" title="statement not covered" ><s
 &nbsp;
   const updateAchievement = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewAchievement: string, index: number) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setAchievements(achievements.map(<span class="fstat-no" title="function not covered" >(a</span>ch, i) =&gt; (<span class="cstat-no" title="statement not covered" >index === i ? newAchievement : ach)</span>));</span>
-  };
-&nbsp;
-  const addRow = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setAchievements(achievements.concat(''));</span>
   };
 &nbsp;
   const isEditing = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >editing || internalEditing,</span> [editing, internalEditing]);</span>
@@ -589,7 +589,7 @@ export default AchievementsBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-21T20:50:29.501Z
+                at 2025-05-22T13:35:53.771Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
