@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/119</span>
+                <span class='fraction'>0/113</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -468,20 +468,7 @@
 <a name='L403'></a><a href='#L403'>403</a>
 <a name='L404'></a><a href='#L404'>404</a>
 <a name='L405'></a><a href='#L405'>405</a>
-<a name='L406'></a><a href='#L406'>406</a>
-<a name='L407'></a><a href='#L407'>407</a>
-<a name='L408'></a><a href='#L408'>408</a>
-<a name='L409'></a><a href='#L409'>409</a>
-<a name='L410'></a><a href='#L410'>410</a>
-<a name='L411'></a><a href='#L411'>411</a>
-<a name='L412'></a><a href='#L412'>412</a>
-<a name='L413'></a><a href='#L413'>413</a>
-<a name='L414'></a><a href='#L414'>414</a>
-<a name='L415'></a><a href='#L415'>415</a>
-<a name='L416'></a><a href='#L416'>416</a>
-<a name='L417'></a><a href='#L417'>417</a>
-<a name='L418'></a><a href='#L418'>418</a>
-<a name='L419'></a><a href='#L419'>419</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L406'></a><a href='#L406'>406</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -571,19 +558,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -988,19 +962,12 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   );
 &nbsp;
   const renderLatestObservationLink = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const allMonitoringPlots = <span class="cstat-no" title="statement not covered" >latestResult?.plantingZones.flatMap(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >      pz.plantingSubzones.flatMap(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >sz.monitoringPlots)</span></span>
-    );
-    const maxCompletedTime = <span class="cstat-no" title="statement not covered" >allMonitoringPlots?.reduce(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>cc, plot) =&gt; (<span class="cstat-no" title="statement not covered" >isAfter(plot.completedTime, acc) ? plot.completedTime : acc)</span>,
-      allMonitoringPlots[0].completedTime
-    );
-<span class="cstat-no" title="statement not covered" >    return plantingSite &amp;&amp; latestResult?.completedTime ? (</span>
+<span class="cstat-no" title="statement not covered" >    return plantingSite?.latestObservationId &amp;&amp; plantingSite.latestObservationCompletedTime ? (</span>
       isAcceleratorRoute ? (
         &lt;Typography fontSize={'16px'} display={'inline'}&gt;
           {strings.formatString(
             strings.DATE_OBSERVATION,
-            DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
+            DateTime.fromISO(plantingSite.latestObservationCompletedTime).toFormat('yyyy-MM-dd')
           )}
         &lt;/Typography&gt;
       ) : (
@@ -1008,25 +975,19 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           fontSize={'16px'}
           to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
             ':observationId',
-            latestResult.observationId.toString()
+            plantingSite.latestObservationId.toString()
           )}
         &gt;
           {strings.formatString(
             strings.DATE_OBSERVATION,
-            DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
+            DateTime.fromISO(plantingSite.latestObservationCompletedTime).toFormat('yyyy-MM-dd')
           )}
         &lt;/Link&gt;
       )
     ) : (
       ''
     );
-  }, [
-    latestResult?.plantingZones,
-    latestResult?.completedTime,
-    latestResult?.observationId,
-    plantingSite,
-    isAcceleratorRoute,
-  ]);
+  }, [plantingSite, isAcceleratorRoute]);
 &nbsp;
   const renderMortalityRate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
@@ -1324,7 +1285,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-22T18:40:21.564Z
+                at 2025-05-22T19:36:09.406Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
