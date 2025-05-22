@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 import { paths } from 'src/api/types/generated-schema';
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
 import {
@@ -106,6 +108,28 @@ const getBoundingBox = (geometries: MapGeometry[]): MapBoundingBox => {
     lowerLeft: [llx, lly],
     upperRight: [urx, ury],
   };
+};
+
+/**
+ * Return recency number based on time
+ */
+const getRecencyFromTime = (time: string): number => {
+  const date = DateTime.fromISO(time);
+
+  const diff = date.diffNow(['months']);
+  const months = -diff.months;
+
+  if (months < 3) {
+    return 1;
+  } else if (months < 6) {
+    return 2;
+  } else if (months < 12) {
+    return 3;
+  } else if (months < 18) {
+    return 4;
+  } else {
+    return 5;
+  }
 };
 
 /**
@@ -337,20 +361,24 @@ const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseDat
 };
 
 const extractSubzonesFromHistoryAndResult = (
+  site: PlantingSite,
   history: PlantingSiteHistory,
   result: ObservationSummary
 ): MapSourceBaseData => {
-  const latestTime = result.latestObservationTime;
   const allPlantingSubzonesData =
     history.plantingZones?.flatMap((zoneHistory) => {
       const { plantingZoneId, plantingSubzones } = zoneHistory;
+      const zone = site.plantingZones?.find((_zone) => _zone.id === plantingZoneId);
       const zoneResult = result.plantingZones.find((_zone) => _zone.plantingZoneId === plantingZoneId);
       return plantingSubzones.map((subzoneHistory) => {
         const { id, plantingSubzoneId, name, fullName, boundary } = subzoneHistory;
+        const subzone = zone?.plantingSubzones?.find((_subzone) => _subzone.id === plantingSubzoneId);
         const subzoneResult = zoneResult?.plantingSubzones?.find(
           (_subzone) => _subzone.plantingSubzoneId === plantingSubzoneId
         );
-        const recency = subzoneResult?.completedTime === latestTime ? 1 : 0;
+        const recency = subzone?.latestObservationCompletedTime
+          ? getRecencyFromTime(subzone.latestObservationCompletedTime)
+          : -1;
         const mortalityRate = subzoneResult?.mortalityRate;
         return {
           properties: { id, name, fullName, type: 'subzone', zoneId: plantingZoneId, recency, mortalityRate },
@@ -439,7 +467,7 @@ const getMapDataFromPlantingSiteFromHistoryAndResults = (
   return {
     site: extractPlantingSiteFromHistory(plantingSite, history),
     zone: extractPlantingZonesFromHistory(history),
-    subzone: extractSubzonesFromHistoryAndResult(history, result),
+    subzone: extractSubzonesFromHistoryAndResult(plantingSite, history, result),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
