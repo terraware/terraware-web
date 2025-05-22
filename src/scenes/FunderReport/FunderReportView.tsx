@@ -43,7 +43,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
   const biodiversityMetrics = allMetrics.filter((m) => m.component === 'Biodiversity');
   const communityMetrics = allMetrics.filter((m) => m.component === 'Community');
 
-  const metricBoxStyle = { borderRadius: '8px', paddingTop: 0, display: 'flex' };
+  const metricBoxStyle = { borderRadius: '8px', paddingTop: 0 };
 
   return (
     <Box>
@@ -102,7 +102,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               </Typography>
 
               <Card style={metricBoxStyle}>
-                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap'>
+                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
                   {climateMetrics?.map((metric, index) => (
                     <MetricBox
                       metric={metric}
@@ -124,7 +124,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               </Typography>
 
               <Card style={metricBoxStyle}>
-                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap'>
+                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
                   {biodiversityMetrics?.map((metric, index) => (
                     <MetricBox
                       metric={metric}
@@ -146,7 +146,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               </Typography>
 
               <Card style={metricBoxStyle}>
-                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap'>
+                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap' overflow='hidden'>
                   {communityMetrics?.map((metric, index) => (
                     <MetricBox
                       metric={metric}
