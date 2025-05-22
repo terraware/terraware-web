@@ -196,7 +196,10 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               },
               {
                 key: strings.MORTALITY_RATE,
-                value: lastZoneSummary.mortalityRate ? `${lastZoneSummary.mortalityRate}%` : strings.INSUFFICIENT_DATA,
+                value:
+                  lastZoneSummary.mortalityRate !== undefined
+                    ? `${lastZoneSummary.mortalityRate}%`
+                    : strings.INSUFFICIENT_DATA,
               },
               {
                 key: strings.PLANTING_DENSITY,
