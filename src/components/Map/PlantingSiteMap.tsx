@@ -210,10 +210,12 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     snackbar,
     mapOptions,
     layers,
-    theme.palette.TwClrBaseWhite,
     getRenderAttributes,
     showMortalityRateFill,
     showRecencyFill,
+    theme,
+    subzoneInteractive,
+    zoneInteractive,
   ]);
 
   const entityOptions: MapEntityOptions = useMemo(

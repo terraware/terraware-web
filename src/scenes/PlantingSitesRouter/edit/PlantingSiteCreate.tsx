@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { MultiPolygon } from 'geojson';
@@ -12,10 +11,8 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
-import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
 import BoundariesAndZones from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
 import TrackingService, { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import strings from 'src/strings';
@@ -33,18 +30,14 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { reloadPlantingSites } = props;
-  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
-  const [loaded, setLoaded] = useState(false);
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
   const [view, setView] = useState<View>('map');
   const [search, setSearch] = useState<string>('');
-  const selectedPlantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
-  const data = useAppSelector((state) =>
-    searchPlantingSiteZones(state, Number(plantingSiteId), view === 'map' ? '' : search.trim())
-  );
+
+  const { isLoading, plantingSite } = usePlantingSiteData();
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -56,22 +49,18 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const [record, setRecord, onChange] = useForm<PlantingSite>(defaultPlantingSite());
 
   useEffect(() => {
-    setLoaded(true);
-  }, [selectedPlantingSite]);
-
-  useEffect(() => {
     setRecord({
-      boundary: selectedPlantingSite?.boundary,
-      description: selectedPlantingSite?.description,
-      id: selectedPlantingSite?.id || -1,
-      name: selectedPlantingSite?.name || '',
+      boundary: plantingSite?.boundary,
+      description: plantingSite?.description,
+      id: plantingSite?.id || -1,
+      name: plantingSite?.name || '',
       organizationId: selectedOrganization.id,
-      plantingSeasons: selectedPlantingSite?.plantingSeasons || [],
-      plantingZones: selectedPlantingSite?.plantingZones,
-      projectId: selectedPlantingSite?.projectId,
-      timeZone: selectedPlantingSite?.timeZone,
+      plantingSeasons: plantingSite?.plantingSeasons || [],
+      plantingZones: plantingSite?.plantingZones,
+      projectId: plantingSite?.projectId,
+      timeZone: plantingSite?.timeZone,
     });
-  }, [selectedPlantingSite, setRecord, selectedOrganization.id]);
+  }, [plantingSite, setRecord, selectedOrganization.id]);
 
   const goToPlantingSite = (id?: number) => {
     const plantingSitesLocation = {
@@ -158,7 +147,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         }}
       >
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
-          {loaded && (
+          {!isLoading && plantingSite && (
             <>
               <Grid
                 spacing={3}
@@ -173,12 +162,8 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   display='flex'
                   flexDirection='column'
                 >
-                  <Typography
-                    fontSize={selectedPlantingSite ? '20px' : '24px'}
-                    fontWeight={600}
-                    margin={theme.spacing(1, 0)}
-                  >
-                    {record.id !== -1 && selectedPlantingSite ? selectedPlantingSite.name : strings.ADD_PLANTING_SITE}
+                  <Typography fontSize={plantingSite ? '20px' : '24px'} fontWeight={600} margin={theme.spacing(1, 0)}>
+                    {record.id !== -1 && plantingSite ? plantingSite.name : strings.ADD_PLANTING_SITE}
                   </Typography>
                 </Box>
                 <PageSnackbar />
@@ -193,13 +178,11 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   />
                   {record?.plantingZones && (
                     <BoundariesAndZones
-                      data={data}
                       plantingSite={record}
                       search={search}
                       setSearch={setSearch}
                       setView={setView}
                       view={view}
-                      zoneViewUrl={APP_PATHS.PLANTING_SITES_ZONE_VIEW}
                     />
                   )}
                   {!record?.plantingZones && (

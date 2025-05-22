@@ -1,7 +1,7 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
-import { MinimalPlantingSite, MultiPolygon, PlantingSubzone, PlantingZone } from './Tracking';
+import { MultiPolygon } from './Tracking';
 
 // basic information on a single observation (excluding observation results)
 export type Observation = components['schemas']['ObservationPayload'];
@@ -152,26 +152,6 @@ export const getReplaceObservationPlotDuration = (duration: ReplaceObservationPl
     default:
       return '';
   }
-};
-
-export type Aggregation = {
-  subzones: Record<string, Set<number>>;
-  plots: Record<number, ObservationMonitoringPlotResultsPayload>;
-  completedTime?: string;
-};
-
-export type SubzoneAggregation = PlantingSubzone & {
-  monitoringPlots: ObservationMonitoringPlotResultsPayload[];
-};
-
-export type ZoneAggregation = Omit<PlantingZone, 'plantingSubzones'> & {
-  completedTime?: string;
-  plantingCompleted: boolean;
-  plantingSubzones: SubzoneAggregation[];
-};
-
-export type PlantingSiteAggregation = Omit<MinimalPlantingSite, 'plantingZones'> & {
-  plantingZones: ZoneAggregation[];
 };
 
 export type ObservationSummary = components['schemas']['PlantingSiteObservationSummaryPayload'];
