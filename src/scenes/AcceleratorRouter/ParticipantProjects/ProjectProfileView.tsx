@@ -26,6 +26,7 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import useProjectReports from 'src/hooks/useProjectReports';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
@@ -74,6 +75,7 @@ const ProjectProfileView = ({
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
+  const navigate = useSyncNavigate();
 
   const isProjectInPhase = useMemo(
     () => participantProject?.cohortPhase?.startsWith('Phase'),
@@ -148,6 +150,14 @@ const ProjectProfileView = ({
     [funderView, lastPublishedReport, lastSubmittedReport]
   );
 
+  const goToReports = () => {
+    const value = funderView
+      ? `${APP_PATHS.FUNDER_HOME}?tab=report`
+      : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', (projectDetails?.projectId || '').toString());
+
+    navigate(value);
+    window.scroll(0, 0);
+  };
   return (
     <Card
       flushMobile
@@ -359,18 +369,7 @@ const ProjectProfileView = ({
             )}
 
             <Grid item>
-              <Link
-                to={
-                  funderView
-                    ? `${APP_PATHS.FUNDER_HOME}?tab=report`
-                    : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
-                        ':projectId',
-                        (projectDetails?.projectId || '').toString()
-                      )
-                }
-              >
-                {strings.VIEW_REPORTS}
-              </Link>
+              <Link onClick={goToReports}>{strings.VIEW_REPORTS}</Link>
             </Grid>
           </>
         )}
