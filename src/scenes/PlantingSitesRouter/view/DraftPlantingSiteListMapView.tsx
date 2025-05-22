@@ -76,6 +76,7 @@ type PlantingSiteMapViewProps = {
 };
 
 function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewProps): JSX.Element | null {
+  const { isDesktop } = useDeviceInfo();
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Sub-Zones']);
 
@@ -120,8 +121,8 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
   }
 
   return (
-    <Box display='flex' flexDirection='column' flexGrow={1}>
-      <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
+    <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
+      <PlantingSiteMapLegend options={['site', 'zone', 'subzone']} />
       {mapData && plantingSite && (
         <PlantingSiteMap
           mapData={mapData}

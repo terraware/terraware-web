@@ -225,7 +225,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
 const ContextRenderer =
   (site: PlantingSite, timeZone: string) =>
   // eslint-disable-next-line react/display-name
-  (entity: MapSourceProperties): JSX.Element => {
+  (entity: MapSourceProperties): JSX.Element | null => {
     const zones = site.plantingZones ?? [];
     let properties: TooltipProperty[] = [];
     let title: string;
@@ -270,7 +270,7 @@ const ContextRenderer =
         { key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 },
       ];
     } else {
-      return <> </>;
+      return null;
     }
 
     return <MapTooltip title={title} properties={properties} />;
