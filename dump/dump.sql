@@ -10349,8 +10349,8 @@ COPY docprod.variables (id, variable_type_id, replaces_variable_id, is_list, sta
 --
 
 COPY funder.funding_entities (id, name, created_by, created_time, modified_by, modified_time) FROM stdin;
-1	Existing Funding Entity	1	2025-05-21 20:42:32.552474+00	1	2025-05-21 20:42:32.552474+00
 2	Funding Entity to Delete	1	2025-05-21 20:48:02.972643+00	1	2025-05-21 20:48:02.972643+00
+1	Existing Funding Entity	1	2025-05-21 20:42:32.552474+00	1	2025-05-21 22:21:05.497134+00
 \.
 
 
@@ -10359,7 +10359,7 @@ COPY funder.funding_entities (id, name, created_by, created_time, modified_by, m
 --
 
 COPY funder.funding_entity_projects (funding_entity_id, project_id) FROM stdin;
-1	4
+1	3
 \.
 
 
@@ -13913,7 +13913,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 24, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 26, true);
 
 
 --
