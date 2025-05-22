@@ -1,3 +1,4 @@
+1723cf238d8 SW-6936 Separate planting site tables and draft planting site tables, and show only current info (#4046)
 1390b43f9c0 SW-6956 Fix View Reports button not scrolling to top of screen (#4063)
 d0610bde753 Fix infinite render on challenges (#4062)
 9f58bfe265e SW-6966 Formatting is not correct for Project-specific metrics in non-Climate Components (#4061)
