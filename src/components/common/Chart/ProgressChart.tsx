@@ -15,7 +15,7 @@ export default function ProgressChart({ value, target }: ProgressChartProps): JS
   return (
     <LinearProgress
       variant='determinate'
-      value={percentage < 100 ? percentage : 100}
+      value={isNaN(percentage) ? 0 : percentage < 100 ? percentage : 100}
       valueBuffer={100}
       sx={{
         height: '12px',

@@ -89,7 +89,7 @@ const ReportView = () => {
       );
       setApproveRequestId(request.requestId);
     }
-  }, [selectedReport]);
+  }, [dispatch, projectId, reportId, selectedReport]);
 
   const rejectReport = useCallback(
     (feedback?: string) => {
@@ -108,7 +108,7 @@ const ReportView = () => {
         setRejectRequestId(request.requestId);
       }
     },
-    [selectedReport]
+    [dispatch, projectId, reportId, selectedReport]
   );
 
   useEffect(() => {
@@ -119,7 +119,7 @@ const ReportView = () => {
       reload();
       setShowApproveDialog(false);
     }
-  }, [approveReportResponse]);
+  }, [approveReportResponse, reload]);
 
   useEffect(() => {
     if (rejectReportResponse?.status === 'error') {
@@ -129,7 +129,7 @@ const ReportView = () => {
       reload();
       setShowRejectDialog(false);
     }
-  }, [rejectReportResponse]);
+  }, [rejectReportResponse, reload]);
 
   useEffect(() => {
     if (publishReportResponse?.status === 'error') {
@@ -141,7 +141,7 @@ const ReportView = () => {
       reload();
       setShowPublishModal(false);
     }
-  }, [publishReportResponse]);
+  }, [publishReportResponse, reload, snackbar]);
 
   useEffect(() => {
     if (reports) {
@@ -174,19 +174,25 @@ const ReportView = () => {
     }
 
     return crumbsList;
-  }, [activeLocale, participantProject, project, year]);
+  }, [
+    activeLocale,
+    isAcceleratorRoute,
+    participantProject?.dealName,
+    participantProject?.projectId,
+    participantProjectCrumbs,
+    project?.name,
+    projectId,
+    year,
+  ]);
 
-  const onOptionItemClick = useCallback(
-    (optionItem: DropdownItem) => {
-      switch (optionItem.value) {
-        case 'publish': {
-          setShowPublishModal(true);
-          break;
-        }
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    switch (optionItem.value) {
+      case 'publish': {
+        setShowPublishModal(true);
+        break;
       }
-    },
-    [showPublishModal]
-  );
+    }
+  };
 
   const optionItems = useMemo(
     (): DropdownItem[] =>
@@ -233,7 +239,7 @@ const ReportView = () => {
         </>
       )
     );
-  }, [selectedReport?.status, isAllowed]);
+  }, [isAllowed, selectedReport?.status, optionItems]);
 
   const rightComponent = useMemo(
     () => (
@@ -241,7 +247,7 @@ const ReportView = () => {
         {callToAction}
       </Box>
     ),
-    [callToAction]
+    [callToAction, theme]
   );
 
   const reportName = selectedReport ? getReportName(selectedReport) : '';

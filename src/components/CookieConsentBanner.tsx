@@ -21,11 +21,14 @@ export default function CookieConsentBanner() {
   const [confirmed, setConfirmed] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const setUserCookieConsent = useCallback((consent: boolean) => {
-    void updateUserCookieConsent(consent);
-    setVisible(false);
-    setConfirmed(true);
-  }, []);
+  const setUserCookieConsent = useCallback(
+    (consent: boolean) => {
+      void updateUserCookieConsent(consent);
+      setVisible(false);
+      setConfirmed(true);
+    },
+    [updateUserCookieConsent]
+  );
 
   useEffect(() => {
     if (!user) {

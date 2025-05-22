@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 
-import { ProjectFieldProps, renderFieldValue } from '.';
+import { ProjectFieldProps, ProjectFieldValue } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
 const ProjectFieldDisplay = ({ label, md, rightBorder, value, tooltip, height, units }: ProjectFieldProps) => {
@@ -25,7 +25,7 @@ const ProjectFieldDisplay = ({ label, md, rightBorder, value, tooltip, height, u
             </Tooltip>
           )}
         </Typography>
-        {value !== false ? renderFieldValue(value, units) : null}
+        {value !== false ? <ProjectFieldValue value={value} units={units} /> : null}
       </Box>
     </GridEntryWrapper>
   );

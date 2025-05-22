@@ -29,6 +29,7 @@ export type PlantsPrimaryPageProps = {
   projectId?: number;
   organizationId?: number;
   onSelect: (plantingSiteId: number) => void;
+  onSelectProjectId?: (projectId: number) => void;
   isLoading?: boolean;
 };
 
@@ -51,6 +52,7 @@ export default function PlantsPrimaryPage({
   projectId,
   organizationId,
   onSelect,
+  onSelectProjectId,
   isLoading,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -70,13 +72,12 @@ export default function PlantsPrimaryPage({
   }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization.id]);
 
   const plantingSitesList = useMemo((): PlantingSite[] => {
-    const sitesWithAll = allowAllAsSiteSelection
-      ? plantingSitesData
-      : plantingSitesData.filter((site) => site.id !== -1);
     const projectSites = projectId
-      ? sitesWithAll.filter((site) => site.projectId === projectId || site.id === -1)
-      : sitesWithAll;
-    return projectSites.toSorted((a, b) => a.id - b.id);
+      ? plantingSitesData.filter((site) => site.projectId === projectId || site.id === -1)
+      : plantingSitesData;
+    const projectSitesWithAll =
+      allowAllAsSiteSelection && projectSites.length > 2 ? projectSites : projectSites.filter((site) => site.id !== -1);
+    return projectSitesWithAll.toSorted((a, b) => a.id - b.id);
   }, [plantingSitesData, allowAllAsSiteSelection, selectedOrganization, projectId]);
 
   const setActivePlantingSite = useCallback(
@@ -97,7 +98,7 @@ export default function PlantsPrimaryPage({
     const initializePlantingSite = async () => {
       if (plantingSitesList && plantingSitesList.length) {
         let lastVisitedPlantingSite: any = {};
-        if (selectedOrganization.id !== -1) {
+        if (selectedOrganization.id !== -1 && !projectId) {
           const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
           if (response[lastVisitedPreferenceName]) {
             lastVisitedPlantingSite = response[lastVisitedPreferenceName];
@@ -106,12 +107,12 @@ export default function PlantsPrimaryPage({
         const lastPlantingSiteId = Number(lastVisitedPlantingSite.plantingSiteId);
         const paramPlantingSiteId = plantingSiteId ? Number(plantingSiteId) : undefined;
 
-        const plantingSiteIdToUse = paramPlantingSiteId ?? lastPlantingSiteId;
+        const plantingSiteIdToUse = !projectId ? paramPlantingSiteId ?? lastPlantingSiteId : lastPlantingSiteId;
         const nextPlantingSite =
           plantingSitesList.find((plantingSite) => plantingSite?.id === plantingSiteIdToUse) ?? plantingSitesList[0];
         const nextPlantingSiteId = nextPlantingSite.id;
 
-        if (selectedOrganization.id !== -1) {
+        if (selectedOrganization.id !== -1 && !projectId) {
           if (nextPlantingSiteId !== lastPlantingSiteId) {
             await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
               [lastVisitedPreferenceName]: { plantingSiteId: nextPlantingSiteId },
@@ -130,6 +131,7 @@ export default function PlantsPrimaryPage({
 
     void initializePlantingSite();
   }, [
+    projectId,
     plantingSitesList,
     plantingSiteId,
     setActivePlantingSite,
@@ -161,6 +163,7 @@ export default function PlantsPrimaryPage({
       showGeometryNote={showGeometryNote}
       latestObservationId={latestObservationId}
       projectId={projectId}
+      onSelectProjectId={onSelectProjectId}
       isLoading={isLoading}
     />
   );

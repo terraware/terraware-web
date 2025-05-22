@@ -10048,6 +10048,7 @@ COPY docprod.variable_select_options (id, variable_id, variable_type_id, "positi
 232	50	5	15	15: Life on Land	\N	\N
 233	50	5	16	16: Peace, Justice, and Strong Institutions	\N	\N
 234	50	5	17	17: Partnerships for the Goals	\N	\N
+235	56	5	1	CCB Standard	\N	\N
 \.
 
 
@@ -10063,6 +10064,7 @@ COPY docprod.variable_selects (variable_id, variable_type_id, is_multiple) FROM 
 31	5	f
 32	5	f
 50	5	t
+56	5	t
 \.
 
 
@@ -10338,6 +10340,7 @@ COPY docprod.variables (id, variable_type_id, replaces_variable_id, is_list, sta
 53	7	\N	f	549	ClickUp Link	\N	ClickUp Link	\N	\N	\N	f	f
 54	7	\N	f	550	Slack Link	\N	Slack Link	\N	\N	\N	f	f
 55	4	\N	f	551	Project Highlight Photo	\N	Project Highlight Photo	\N	\N	\N	f	f
+56	5	\N	f	552	Certification	\N	Certification	\N	\N	\N	f	f
 \.
 
 
@@ -11417,6 +11420,7 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 396	\N	Comments	SQL	R__Comments.sql	1968888313	ihudson	2025-05-13 10:27:40.148878	54	t
 397	\N	Countries	SQL	R__Countries.sql	1430440513	ihudson	2025-05-13 10:27:40.217241	10	t
 398	\N	TypeCodes	SQL	R__TypeCodes.sql	286456408	ihudson	2025-05-13 10:27:40.232243	148	t
+399	379	DeleteDuplicatedReports	SQL	0350/V379__DeleteDuplicatedReports.sql	-749812797	postgres	2025-05-20 15:36:12.895028	7	t
 \.
 
 
@@ -13777,7 +13781,7 @@ SELECT pg_catalog.setval('docprod.variable_section_default_values_id_seq', 1, fa
 -- Name: variable_select_options_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
 --
 
-SELECT pg_catalog.setval('docprod.variable_select_options_id_seq', 234, true);
+SELECT pg_catalog.setval('docprod.variable_select_options_id_seq', 235, true);
 
 
 --
@@ -13805,7 +13809,7 @@ SELECT pg_catalog.setval('docprod.variable_workflow_history_id_seq', 5, true);
 -- Name: variables_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
 --
 
-SELECT pg_catalog.setval('docprod.variables_id_seq', 55, true);
+SELECT pg_catalog.setval('docprod.variables_id_seq', 56, true);
 
 
 --
@@ -13952,7 +13956,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 16, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 20, true);
 
 
 --

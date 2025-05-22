@@ -39,11 +39,11 @@ export default function DocumentsView(): JSX.Element | null {
     if (availableProjects && query.get('dealName')) {
       return availableProjects.find((p) => p.dealName === query.get('dealName'));
     }
-  }, [availableProjects, query.get('dealName')]);
+  }, [availableProjects, query]);
 
   const resetFilter = useCallback(() => {
     navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
-  }, [location, query]);
+  }, [location, navigate, query]);
 
   const PageHeaderLeftComponent = useMemo(
     () =>
@@ -85,7 +85,7 @@ export default function DocumentsView(): JSX.Element | null {
           </Grid>
         </>
       ) : undefined,
-    [activeLocale, availableProjects, query.get('dealName')]
+    [activeLocale, availableProjects, filteredProject?.id, query, resetFilter, theme]
   );
 
   return (

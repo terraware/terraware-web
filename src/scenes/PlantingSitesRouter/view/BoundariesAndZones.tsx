@@ -165,6 +165,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   const dispatch = useAppDispatch();
   const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
   const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
+  const { isDesktop } = useDeviceInfo();
 
   const [requestId, setRequestId] = useState<string>('');
 
@@ -340,7 +341,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   }
 
   return (
-    <Box display='flex' flexDirection='column' flexGrow={1}>
+    <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
       <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
       <PlantingSiteMap
         mapData={mapData}

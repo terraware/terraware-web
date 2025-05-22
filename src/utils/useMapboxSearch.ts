@@ -25,10 +25,12 @@ const useMapboxSearch = (): MapboxSearch => {
   const [sessionToken, setSessionToken] = useState<SessionToken>();
   const [suggestResult, setSuggestResult] = useState<AddressAutofillSuggestion[]>([]);
 
-  const addressAutofillCore = new AddressAutofillCore({
-    accessToken: token,
-  });
-  const session = new SearchSession(addressAutofillCore);
+  const session = useMemo(() => {
+    const addressAutofillCore = new AddressAutofillCore({
+      accessToken: token,
+    });
+    return new SearchSession(addressAutofillCore);
+  }, [token]);
 
   useEffect(() => {
     if (!sessionStorage) {
@@ -37,7 +39,7 @@ const useMapboxSearch = (): MapboxSearch => {
 
     const currentItem = sessionStorage.getItem('mapboxAutofillTokenId');
     setSessionId(currentItem);
-  }, [sessionStorage, setSessionId]);
+  }, [setSessionId]);
 
   useEffect(() => {
     if (sessionId !== undefined) {
@@ -48,7 +50,7 @@ const useMapboxSearch = (): MapboxSearch => {
         sessionStorage.setItem('mapboxAutofillTokenId', newSessionToken.id);
       }
     }
-  }, [sessionId, sessionStorage, setSessionToken]);
+  }, [sessionId, setSessionToken]);
 
   const [suggestText, setSuggestText] = useState<string>();
 

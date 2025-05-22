@@ -10,6 +10,7 @@ import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
 import ProjectFieldLink from 'src/components/ProjectField/Link';
+import ProjectCertificationDisplay from 'src/components/ProjectField/ProjectCertificationDisplay';
 import ProjectDataDisplay from 'src/components/ProjectField/ProjectDataDisplay';
 import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
 import ProjectMap from 'src/components/ProjectField/ProjectMap';
@@ -39,8 +40,6 @@ import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
-
-const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
 
 type ProjectProfileViewProps = {
   participantProject?: ParticipantProject;
@@ -149,14 +148,6 @@ const ProjectProfileView = ({
     [funderView, lastPublishedReport, lastSubmittedReport]
   );
 
-  const strippedDealName = useMemo(() => {
-    if (projectDetails?.dealName?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {
-      return projectDetails?.dealName?.replace(DEAL_NAME_COUNTRY_CODE_REGEX, '');
-    } else {
-      return projectDetails?.dealName;
-    }
-  }, [projectDetails?.dealName]);
-
   return (
     <Card
       flushMobile
@@ -201,12 +192,6 @@ const ProjectProfileView = ({
               fontWeight={500}
             />
           </Box>
-        </Grid>
-      )}
-
-      {funderView && (
-        <Grid container>
-          <InvertedCard md={12} backgroundColor={theme.palette.TwClrBaseGray050} value={strippedDealName} />
         </Grid>
       )}
 
@@ -398,7 +383,7 @@ const ProjectProfileView = ({
           borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
           width={'100%'}
         >
-          <Grid item xs={12} marginTop={theme.spacing(2)}>
+          <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
             <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
               {strings.LAND_DATA}
             </Typography>
@@ -459,10 +444,14 @@ const ProjectProfileView = ({
         />
       </Grid>
 
-      <Grid container>
-        {(!funderView || (funderView && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
+      <Grid container marginBottom={theme.spacing(2)}>
+        {(!funderView ||
+          (funderView &&
+            (projectDetails?.standard ||
+              projectDetails?.methodologyNumber ||
+              (projectDetails?.carbonCertifications?.length ?? 0) > 0))) && (
           <Box marginX={theme.spacing(2)} width={'100%'}>
-            <Grid item xs={12} marginTop={theme.spacing(2)}>
+            <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
                 {strings.CARBON_DATA}
               </Typography>
@@ -495,19 +484,20 @@ const ProjectProfileView = ({
             <ProjectDataDisplay label={strings.METHODOLOGY_NUMBER} md={4} value={projectDetails?.methodologyNumber} />
           </>
         )}
+        <ProjectCertificationDisplay certifications={projectDetails?.carbonCertifications} />
       </Grid>
 
       {((funderView && projectDetails?.verraLink) || !funderView) && (
         <Grid container>
           <Box
-            margin={theme.spacing(2, 1, 3)}
+            margin={theme.spacing(0, 1, 3)}
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
             borderRadius={theme.spacing(1)}
             width={'100%'}
             padding={theme.spacing(2)}
           >
             {!funderView && (
-              <>
+              <Box paddingBottom={theme.spacing(1)}>
                 <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
                   {strings.PROJECT_LINKS}
                 </Typography>
@@ -534,7 +524,7 @@ const ProjectProfileView = ({
                 )}
                 {project && isAllowedViewScoreAndVoting && (
                   <ProjectFieldLink
-                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', project.id.toString())}
                     label={strings.SCORING}
                   />
                 )}
@@ -544,10 +534,10 @@ const ProjectProfileView = ({
                     label={strings.REPORTS}
                   />
                 )}
-              </>
+              </Box>
             )}
 
-            <Box paddingTop={theme.spacing(1)}>
+            <Box>
               <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
                 {strings.EXTERNAL_PROJECT_LINKS}
               </Typography>

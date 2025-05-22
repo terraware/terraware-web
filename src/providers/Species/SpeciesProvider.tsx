@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization } from 'src/providers/hooks';
-import { requestListSpecies } from 'src/redux/features/species/speciesAsyncThunks';
+import { requestListInUseSpecies, requestListSpecies } from 'src/redux/features/species/speciesAsyncThunks';
 import { selectSpeciesInUseListRequest, selectSpeciesListRequest } from 'src/redux/features/species/speciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Species } from 'src/types/Species';
@@ -32,7 +32,7 @@ const SpeciesProvider = ({ children }: Props) => {
   const reload = useCallback(() => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId ?? selectedOrganization.id : selectedOrganization.id;
     const speciesRequest = dispatch(requestListSpecies(orgId));
-    const inUseSpeciesRequest = dispatch(requestListSpecies(orgId));
+    const inUseSpeciesRequest = dispatch(requestListInUseSpecies(orgId));
 
     setSpeciesRequestId(speciesRequest.requestId);
     setInUseSpeciesRequestId(inUseSpeciesRequest.requestId);

@@ -80,7 +80,11 @@ const AchievementsBox = (props: ReportBoxProps) => {
   }, [achievements]);
 
   useEffect(() => setAchievements(report?.achievements || []), [report?.achievements]);
-  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
+
+  const addRow = useCallback(() => {
+    setAchievements(achievements.concat(''));
+  }, [achievements]);
 
   useEffect(() => {
     if (achievements.length === 0) {
@@ -90,7 +94,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
     if (filteredAchievements && JSON.stringify(filteredAchievements) !== JSON.stringify(report?.achievements)) {
       onChange?.(filteredAchievements);
     }
-  }, [achievements]);
+  }, [achievements, addRow, getNonEmptyAchievements, onChange, report?.achievements]);
 
   useEffect(() => {
     if (updateReportResponse?.status === 'error') {
@@ -100,7 +104,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar]);
+  }, [updateReportResponse, snackbar, reload]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -118,7 +122,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
       );
       setRequestId(request.requestId);
     }
-  }, [dispatch, projectId, achievements, report]);
+  }, [report, dispatch, getNonEmptyAchievements, projectId]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
@@ -127,10 +131,6 @@ const AchievementsBox = (props: ReportBoxProps) => {
 
   const updateAchievement = (newAchievement: string, index: number) => {
     setAchievements(achievements.map((ach, i) => (index === i ? newAchievement : ach)));
-  };
-
-  const addRow = () => {
-    setAchievements(achievements.concat(''));
   };
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);

@@ -115,18 +115,18 @@ const QuestionBox = ({
     setUpdatePendingId(variable.id);
     waitAndReload();
     snackbar.toastSuccess(strings.ANSWER_APPROVED);
-  }, [waitAndReload, snackbar]);
+  }, [setUpdatePendingId, variable.id, waitAndReload, snackbar]);
 
   const rejectCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
     waitAndReload();
     snackbar.toastSuccess(strings.UPDATE_REQUESTED);
-  }, [waitAndReload, snackbar]);
+  }, [setUpdatePendingId, variable.id, waitAndReload, snackbar]);
 
   const updateCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
     waitAndReload();
-  }, [waitAndReload]);
+  }, [setUpdatePendingId, variable.id, waitAndReload]);
 
   const approveItem = useCallback(() => {
     updateWorkflow('Approved', undefined, workflowDetails.internalComment, approveCallback);
@@ -150,7 +150,7 @@ const QuestionBox = ({
     update(false);
     updateWorkflow(workflowDetails.status, workflowDetails.feedback, workflowDetails.internalComment, updateCallback);
     setEditingId(undefined);
-  }, [update, updateCallback, updateWorkflow, workflowDetails]);
+  }, [setEditingId, update, updateCallback, updateWorkflow, workflowDetails]);
 
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
@@ -453,7 +453,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
     void dispatch(
       requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
     );
-  }, [deliverable]);
+  }, [deliverable, dispatch]);
 
   useEffect(() => {
     if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
@@ -467,7 +467,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
         variablesStableIds: dependentVariableStableIds,
       })
     );
-  }, [deliverable, dependentVariableStableIds]);
+  }, [deliverable, dependentVariableStableIds, dispatch]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
@@ -481,7 +481,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
       }
       setUpdatePendingId(undefined);
     }
-  }, [variablesWithValues]);
+  }, [updatePendingId, variablesWithValues]);
 
   const dependentVariablesWithValues = useAppSelector((state) =>
     selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)

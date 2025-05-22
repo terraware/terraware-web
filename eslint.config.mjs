@@ -8,6 +8,7 @@ import jsdoc from 'eslint-plugin-jsdoc';
 import nodePlugin from 'eslint-plugin-n';
 import preferArrow from 'eslint-plugin-prefer-arrow';
 import reactPlugin from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -35,6 +36,7 @@ export default fixupConfigRules([
       files: ['**/*.ts', '**/*.tsx'],
       ignores: ['**/generated-schema.ts'],
     })),
+  reactHooks.configs['recommended-latest'],
   {
     files: ['**/*.ts', '**/*.tsx'],
 
@@ -340,6 +342,8 @@ export default fixupConfigRules([
 
       'prefer-const': 'error',
       radix: 'error',
+
+      // react
       'react/display-name': 'error',
       'react/jsx-boolean-value': 'off',
       'react/jsx-key': 'error',
@@ -375,6 +379,10 @@ export default fixupConfigRules([
       'react/react-in-jsx-scope': 'error',
       'react/require-render-return': 'error',
       'react/self-closing-comp': 'error',
+
+      // react-hooks
+      'react-hooks/exhaustive-deps': 'error',
+
       'require-await': 'off',
       'require-yield': 'error',
       'space-in-parens': ['off', 'never'],

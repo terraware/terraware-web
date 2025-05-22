@@ -249,7 +249,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         }
       }
     }
-  }, [allReports, getReportsYears]);
+  }, [allReports, currentYear, getReportsYears]);
 
   const extraFilter = useMemo(
     () =>
@@ -269,7 +269,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
           </Box>
         </>
       ) : null,
-    [activeLocale, reports, yearFilter]
+    [activeLocale, getReportsYearsString, yearFilter]
   );
 
   const onRowClick = (metric: TableRowType) => {

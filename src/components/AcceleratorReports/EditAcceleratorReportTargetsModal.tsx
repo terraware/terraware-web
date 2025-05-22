@@ -80,7 +80,7 @@ export default function EditAcceleratorReportTargetsModal({
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload();
     }
-  }, [updateReportMetricsResponse, snackbar]);
+  }, [updateReportMetricsResponse, snackbar, onClose, reload]);
 
   useEffect(() => {
     if (updateReportsResponse?.status === 'error') {
@@ -90,7 +90,7 @@ export default function EditAcceleratorReportTargetsModal({
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload();
     }
-  }, [updateReportsResponse, snackbar]);
+  }, [updateReportsResponse, snackbar, onClose, reload]);
 
   const save = () => {
     if (!projectId) {
@@ -223,7 +223,7 @@ export default function EditAcceleratorReportTargetsModal({
 
       return !isAllowedReviewReportTargets && !(report.status === 'Not Submitted' || report.status === 'Needs Update');
     },
-    [isAllowedReviewReportTargets, reports, reportsById]
+    [isAllowedReviewReportTargets, reportsById]
   );
 
   return (

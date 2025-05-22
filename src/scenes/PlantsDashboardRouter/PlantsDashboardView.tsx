@@ -28,13 +28,17 @@ type PlantsDashboardViewProps = {
   organizationId?: number;
 };
 
-export default function PlantsDashboardView({ projectId, organizationId }: PlantsDashboardViewProps): JSX.Element {
+export default function PlantsDashboardView({
+  projectId: acceleratorProjectId,
+  organizationId,
+}: PlantsDashboardViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
 
   const {
     setAcceleratorOrganizationId,
@@ -47,13 +51,6 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   } = usePlantingSiteData();
 
   const hasObservations = useMemo(() => !!latestResult, [latestResult]);
-
-  const sitePlantingComplete = useMemo(() => {
-    return (
-      plantingSite?.plantingZones?.flatMap((zone) => zone.plantingSubzones)?.every((sz) => sz.plantingCompleted) ??
-      false
-    );
-  }, [plantingSite]);
 
   const onPreferences = useCallback(
     (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
@@ -79,7 +76,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   useEffect(() => {
     const orgId = organizationId ?? selectedOrganization.id;
     setAcceleratorOrganizationId(orgId);
-  }, [dispatch, organizationId, selectedOrganization]);
+  }, [dispatch, organizationId, selectedOrganization, setAcceleratorOrganizationId]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -98,22 +95,37 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       allMonitoringPlots[0].completedTime
     );
     return plantingSite && latestResult?.completedTime ? (
-      <Link
-        fontSize={'16px'}
-        to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
-          ':observationId',
-          latestResult.observationId.toString()
-        )}
-      >
-        {strings.formatString(
-          strings.DATE_OBSERVATION,
-          DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
-        )}
-      </Link>
+      isAcceleratorRoute ? (
+        <Typography fontSize={'16px'} display={'inline'}>
+          {strings.formatString(
+            strings.DATE_OBSERVATION,
+            DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
+          )}
+        </Typography>
+      ) : (
+        <Link
+          fontSize={'16px'}
+          to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
+            ':observationId',
+            latestResult.observationId.toString()
+          )}
+        >
+          {strings.formatString(
+            strings.DATE_OBSERVATION,
+            DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
+          )}
+        </Link>
+      )
     ) : (
       ''
     );
-  }, [latestResult]);
+  }, [
+    latestResult?.plantingZones,
+    latestResult?.completedTime,
+    latestResult?.observationId,
+    plantingSite,
+    isAcceleratorRoute,
+  ]);
 
   const renderMortalityRate = useCallback(
     () =>
@@ -140,7 +152,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, renderLatestObservationLink, hasObservations]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
   );
 
   const renderTotalPlantsAndSpecies = () => (
@@ -189,7 +201,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, sitePlantingComplete, hasObservations, renderLatestObservationLink]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
   );
 
   const renderPlantingSiteTrends = useCallback(
@@ -238,7 +250,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, renderLatestObservationLink, hasObservations]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
   );
 
   const renderSimpleSiteMap = useCallback(
@@ -260,7 +272,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite]
+    [plantingSite, theme]
   );
 
   const hasPolygons = useMemo(
@@ -326,7 +338,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
               : ''}
           </b>
         ) as string);
-  }, [plantingSite, observationSummaries, observationHectares]);
+  }, [plantingSite, observationSummaries, observationHectares, renderLatestObservationLink, summariesHectares]);
 
   const onSelect = useCallback(
     (plantingSiteId: number) => {
@@ -358,7 +370,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         </Grid>
       </>
     );
-  }, [projectId, organizationId]);
+  }, [theme, organizationId, selectedOrganization.id, projectId]);
 
   return (
     <PlantsPrimaryPage
@@ -385,11 +397,12 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       showGeometryNote={geometryChangedNote}
       latestObservationId={latestResultId}
       projectId={projectId}
+      onSelectProjectId={(newProjectId: number) => setProjectId(newProjectId === -1 ? undefined : newProjectId)}
       organizationId={organizationId}
       isEmptyState={isLoading ? false : plantingSite === undefined}
       isLoading={isLoading}
       onSelect={onSelect}
-      allowAllAsSiteSelection={isAcceleratorRoute}
+      allowAllAsSiteSelection={isAcceleratorRoute || projectId !== undefined}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}

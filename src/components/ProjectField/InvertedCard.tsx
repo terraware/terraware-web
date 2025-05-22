@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
-import { ProjectFieldProps, renderFieldValue } from '.';
+import { ProjectFieldProps, ProjectFieldValue } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
 type InvertedCardProps = {
@@ -23,7 +23,7 @@ const InvertedCard = ({ label, md, value, backgroundColor, units, rightLabel }: 
       >
         <Grid container alignContent={'left'}>
           <Grid item xs={rightLabel ? 6 : 12}>
-            {renderFieldValue(value, units)}
+            <ProjectFieldValue value={value} units={units} />
             <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginTop={theme.spacing(1)}>
               {label}
             </Typography>

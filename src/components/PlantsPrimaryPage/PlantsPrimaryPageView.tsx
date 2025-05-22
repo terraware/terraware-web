@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, IconName, Message } from '@terraware/web-components';
@@ -10,9 +10,15 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocalization, useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
+import FormattedNumber from '../common/FormattedNumber';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import PlantsDashboardEmptyMessage from '../emptyStatePages/PlantsDashboardEmptyMessage';
 
@@ -36,6 +42,7 @@ export type PlantsPrimaryPageViewProps = {
   showGeometryNote?: boolean;
   latestObservationId?: number;
   projectId?: number;
+  onSelectProjectId?: (projectId: number) => void;
   isLoading?: boolean;
 };
 
@@ -50,6 +57,7 @@ export default function PlantsPrimaryPageView({
   latestObservationId,
   projectId,
   isEmptyState,
+  onSelectProjectId,
   newHeader,
   title,
   actionButton,
@@ -59,6 +67,36 @@ export default function PlantsPrimaryPageView({
   const { isDesktop, isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
+  const projects = useAppSelector(selectProjects);
+  const dispatch = useAppDispatch();
+  const { allPlantingSites } = usePlantingSiteData();
+
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
+  }, [activeLocale, dispatch, selectedOrganization.id]);
+
+  const projectsWithPlantingSites = useMemo(() => {
+    if (!allPlantingSites) {
+      return [];
+    }
+
+    const projectIds = allPlantingSites.map((ps) => ps.projectId);
+    const uniqueProjectIds = Array.from(new Set(projectIds));
+
+    return uniqueProjectIds;
+  }, [allPlantingSites]);
+
+  const projectsOptions = useMemo(() => {
+    const iOptions = projects
+      ?.filter((p) => projectsWithPlantingSites.includes(p.id))
+      .map((proj) => ({ label: proj.name, value: proj.id }));
+    iOptions?.unshift({ label: strings.NO_PROJECT, value: -1 });
+    return iOptions;
+  }, [projects, projectsWithPlantingSites]);
 
   const isRolledUpView = useMemo(() => {
     return projectId !== undefined && selectedPlantingSiteId === -1;
@@ -122,39 +160,63 @@ export default function PlantsPrimaryPageView({
               />
             </Box>
           )}
-          <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
-            <Grid container alignItems={'center'} spacing={4}>
-              <Grid item xs={isDesktop ? 3 : 12}>
-                <Dropdown
-                  placeholder={strings.SELECT}
-                  id='planting-site-selector'
-                  onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
-                  options={options}
-                  selectedValue={selectedPlantingSiteId}
-                  fullWidth
-                  disabled={isAcceleratorRoute && options.length === 1}
-                />
-              </Grid>
-              <Grid item xs={isDesktop ? 3 : 12}>
-                <Box>
-                  <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
-                  <Typography fontSize='28px' fontWeight={600}>
-                    {strings.formatString(
-                      strings.X_HA,
-                      isRolledUpView
-                        ? Math.round(totalArea * 100) / 100
-                        : plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
-                    )}
+          {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && (
+            <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
+              <Grid container alignItems={'center'} spacing={4}>
+                <Grid item xs={isDesktop ? 3 : 12}>
+                  {!isAcceleratorRoute && (projectsOptions?.length ?? 0) > 1 && onSelectProjectId && (
+                    <Box marginBottom={1}>
+                      <Dropdown
+                        placeholder={strings.NO_PROJECT_SELECTED}
+                        id='project-selector'
+                        onChange={(newValue) => onSelectProjectId(Number(newValue))}
+                        options={projectsOptions}
+                        selectedValue={projectId}
+                        fullWidth
+                      />
+                    </Box>
+                  )}
+                  {isAcceleratorRoute && options.length === 1 ? (
+                    <Typography fontSize={'20px'} fontWeight={600}>
+                      {options[0].label}
+                    </Typography>
+                  ) : (
+                    <Dropdown
+                      placeholder={strings.SELECT}
+                      id='planting-site-selector'
+                      onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
+                      options={options}
+                      selectedValue={selectedPlantingSiteId}
+                      fullWidth
+                      disabled={isAcceleratorRoute && options.length === 0}
+                    />
+                  )}
+                </Grid>
+                <Grid item xs={isDesktop ? 3 : 12}>
+                  <Box>
+                    <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
+                    <Typography fontSize='28px' fontWeight={600}>
+                      {strings.formatString(
+                        strings.X_HA,
+                        isRolledUpView ? (
+                          <FormattedNumber value={Math.round(totalArea * 100) / 100} />
+                        ) : (
+                          <FormattedNumber
+                            value={plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa || 0}
+                          />
+                        )
+                      )}
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={isDesktop ? 6 : 12}>
+                  <Typography fontSize='16px' marginTop={theme.spacing(1)}>
+                    {text}
                   </Typography>
-                </Box>
+                </Grid>
               </Grid>
-              <Grid item xs={isDesktop ? 6 : 12}>
-                <Typography fontSize='16px' marginTop={theme.spacing(1)}>
-                  {text}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Card>
+            </Card>
+          )}
           {isEmptyState && !isAcceleratorRoute && <PlantsDashboardEmptyMessage />}
         </>
       ) : (

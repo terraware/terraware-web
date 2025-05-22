@@ -130,7 +130,7 @@ export default function Map(props: MapProps): JSX.Element {
         }
       });
     },
-    [mapImages, snackbar, mapImages]
+    [mapImages, snackbar]
   );
 
   const mapRefCb = useCallback(
@@ -144,7 +144,7 @@ export default function Map(props: MapProps): JSX.Element {
         loadImages(map);
       }
     },
-    [mapImages, snackbar, mapImages]
+    [loadImages]
   );
 
   const onMapError = useCallback(
@@ -247,10 +247,10 @@ export default function Map(props: MapProps): JSX.Element {
     [geoData]
   );
 
-  const zoomToFit = () => {
+  const zoomToFit = useCallback(() => {
     const map: any = mapRef?.current;
     map?.fitBounds([options.bbox.lowerLeft, options.bbox.upperRight], { padding: 20, linear: true });
-  };
+  }, [options.bbox.lowerLeft, options.bbox.upperRight]);
 
   useEffect(() => {
     const map: any = mapRef && mapRef.current;
@@ -385,7 +385,7 @@ export default function Map(props: MapProps): JSX.Element {
     ));
 
     return sources;
-  }, [geoData, reloadSources, mapImages]);
+  }, [mapImages, geoData, loadImages]);
 
   useEffect(() => {
     if (entityOptions?.highlight) {
@@ -407,7 +407,7 @@ export default function Map(props: MapProps): JSX.Element {
     } else {
       zoomToFit();
     }
-  }, [drawFocusTo, entityOptions?.focus, geoData]);
+  }, [drawFocusTo, entityOptions?.focus, geoData, zoomToFit]);
 
   const hasEntities = options.sources?.some((source) => {
     return source.entities?.some((entity) => entity?.boundary?.length);

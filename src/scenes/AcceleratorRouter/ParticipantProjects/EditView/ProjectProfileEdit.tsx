@@ -8,6 +8,7 @@ import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
+import ProjectFieldMultiSelect from 'src/components/ProjectField/MultiSelect';
 import SdgMultiSelect from 'src/components/ProjectField/SdgMultiSelect';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
@@ -46,7 +47,14 @@ const HighlightPhotoStableId = '551';
 const ZoneFigureStableId = '525';
 const standardStableId = '350';
 const methodologyNumberStableId = '351';
-const variableStableIds = [HighlightPhotoStableId, ZoneFigureStableId, standardStableId, methodologyNumberStableId];
+const carbonCertificationsStableId = '552';
+const variableStableIds = [
+  HighlightPhotoStableId,
+  ZoneFigureStableId,
+  standardStableId,
+  methodologyNumberStableId,
+  carbonCertificationsStableId,
+];
 
 const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
@@ -536,6 +544,22 @@ const ProjectProfileEdit = () => {
               value={participantProjectRecord?.methodologyNumber}
               options={(stableToVariable?.[methodologyNumberStableId] as SelectVariable)?.options}
             />
+            {stableToVariable && (
+              <ProjectFieldMultiSelect
+                id={'carbonCertifications'}
+                md={4}
+                label={strings.CARBON_CERTIFICATIONS}
+                onChange={onChangeParticipantProject}
+                values={participantProjectRecord?.carbonCertifications}
+                options={(stableToVariable[carbonCertificationsStableId] as SelectVariable).options.reduce(
+                  (map, option) => {
+                    map.set(option.name, option.name);
+                    return map;
+                  },
+                  new Map<string, string>()
+                )}
+              />
+            )}
 
             <Box marginX={theme.spacing(2)} width={'100%'}>
               <Grid item xs={12} marginTop={theme.spacing(2)}>

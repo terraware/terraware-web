@@ -103,7 +103,15 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
       setUpdateVariableWorkflowDetailsRequestId(request.requestId);
       setUpdateWorkflowRequestId?.(request.requestId);
     }
-  }, [updateVariableValuesRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
+  }, [
+    dispatch,
+    projectId,
+    setUpdateWorkflowRequestId,
+    updateVariableValuesRequest,
+    updateVariableWorkflowDetailsRequestId,
+    variable.id,
+    variableWorkflowDetails,
+  ]);
 
   const save = () => {
     setValidate(true);
@@ -222,7 +230,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     setUpdateVariableValuesRequestId('');
     setUpdateVariableWorkflowDetailsRequestId('');
     onFinish(false);
-  }, []);
+  }, [onFinish]);
 
   const onSuccess = useCallback(() => {
     onFinish(true);
