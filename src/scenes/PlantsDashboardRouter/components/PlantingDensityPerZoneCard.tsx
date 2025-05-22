@@ -72,7 +72,7 @@ export default function PlantingDensityPerZoneCard(): JSX.Element {
       labels,
       datasets,
     };
-  }, [actuals, labels, targets]);
+  }, [actuals, labels, targets, theme]);
 
   return (
     <Box>

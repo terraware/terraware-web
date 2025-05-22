@@ -124,7 +124,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     });
 
     setLegends(result);
-  }, [latestResult, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
+  }, [latestResult, theme]);
 
   const mapData = useMemo((): MapData | undefined => {
     if (!plantingSite?.boundary) {
@@ -144,7 +144,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     }
 
     return MapService.getMapDataFromPlantingSiteFromHistory(plantingSite, plantingSiteHistory);
-  }, [plantingSite, plantingSiteHistories]);
+  }, [plantingSite, latestResult, plantingSiteHistories]);
 
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
@@ -238,7 +238,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           />
         );
       },
-    [latestResult, zonesProgress, zonesStats, lastSummary]
+    [findZoneArea, latestResult, zonesProgress, zonesStats, lastSummary]
   );
 
   return (
