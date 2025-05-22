@@ -133,13 +133,13 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
-  const getNonEmptyChallenges = (challengesList: ChallengeMitigation[]) =>
-    challengesList.filter((s) => !!s.challenge || !!s.mitigationPlan);
+  const nonEmptyChallenges = useMemo(() => {
+    return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
+  }, [challengeMitigations]);
 
   const areFilteredChallengesDifferent = useMemo(() => {
-    const filteredChallenges = getNonEmptyChallenges(challengeMitigations);
-    return filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges);
-  }, [report?.challenges, challengeMitigations]);
+    return nonEmptyChallenges && JSON.stringify(nonEmptyChallenges) !== JSON.stringify(report?.challenges);
+  }, [report?.challenges, nonEmptyChallenges]);
 
   useEffect(() => {
     if (!editing) {
@@ -181,8 +181,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
       setValidateFields(false);
-      const filteredChallenges = getNonEmptyChallenges(challengeMitigations);
-      if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
+      if (nonEmptyChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
         setValidateFields(true);
         return;
       }
@@ -192,7 +191,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
           review: {
             ...report,
             achievements: report?.achievements || [],
-            challenges: filteredChallenges,
+            challenges: nonEmptyChallenges,
             status: report?.status || 'Not Submitted',
           },
           projectId: Number(projectId),
@@ -201,7 +200,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       );
       setRequestId(request.requestId);
     }
-  }, [report, challengeMitigations, dispatch, projectId]);
+  }, [report, nonEmptyChallenges, dispatch, projectId]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
