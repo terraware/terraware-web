@@ -87,19 +87,12 @@ export default function PlantsDashboardView({
   );
 
   const renderLatestObservationLink = useCallback(() => {
-    const allMonitoringPlots = latestResult?.plantingZones.flatMap((pz) =>
-      pz.plantingSubzones.flatMap((sz) => sz.monitoringPlots)
-    );
-    const maxCompletedTime = allMonitoringPlots?.reduce(
-      (acc, plot) => (isAfter(plot.completedTime, acc) ? plot.completedTime : acc),
-      allMonitoringPlots[0].completedTime
-    );
-    return plantingSite && latestResult?.completedTime ? (
+    return plantingSite?.latestObservationId && plantingSite.latestObservationCompletedTime ? (
       isAcceleratorRoute ? (
         <Typography fontSize={'16px'} display={'inline'}>
           {strings.formatString(
             strings.DATE_OBSERVATION,
-            DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
+            DateTime.fromISO(plantingSite.latestObservationCompletedTime).toFormat('yyyy-MM-dd')
           )}
         </Typography>
       ) : (
@@ -107,12 +100,12 @@ export default function PlantsDashboardView({
           fontSize={'16px'}
           to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
             ':observationId',
-            latestResult.observationId.toString()
+            plantingSite.latestObservationId.toString()
           )}
         >
           {strings.formatString(
             strings.DATE_OBSERVATION,
-            DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
+            DateTime.fromISO(plantingSite.latestObservationCompletedTime).toFormat('yyyy-MM-dd')
           )}
         </Link>
       )
@@ -120,9 +113,6 @@ export default function PlantsDashboardView({
       ''
     );
   }, [
-    latestResult?.plantingZones,
-    latestResult?.completedTime,
-    latestResult?.observationId,
     plantingSite,
     isAcceleratorRoute,
   ]);
