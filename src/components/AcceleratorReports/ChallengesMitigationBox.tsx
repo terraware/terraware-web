@@ -138,7 +138,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   }, [challengeMitigations]);
 
   const areFilteredChallengesDifferent = useMemo(() => {
-    return nonEmptyChallenges && JSON.stringify(nonEmptyChallenges) !== JSON.stringify(report?.challenges);
+    return nonEmptyChallenges.length > 0 && JSON.stringify(nonEmptyChallenges) !== JSON.stringify(report?.challenges);
   }, [report?.challenges, nonEmptyChallenges]);
 
   useEffect(() => {
