@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { MetricStatus } from 'src/types/AcceleratorReport';
@@ -17,7 +16,6 @@ const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
   const { status } = props;
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const badgeProps = useMemo((): BadgeProps | undefined => {
     if (!activeLocale) {
@@ -49,9 +47,9 @@ const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
       default:
         return undefined;
     }
-  }, [activeLocale, isAcceleratorRoute, status, theme]);
+  }, [activeLocale, status, theme]);
 
-  return <>{badgeProps && <Badge {...badgeProps} />}</>;
+  return <Box sx={{ textWrap: 'nowrap' }}>{badgeProps && <Badge {...badgeProps} />}</Box>;
 };
 
 export default MetricStatusBadge;

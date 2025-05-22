@@ -13,7 +13,6 @@ import PlantingSiteDraftCreate from './edit/PlantingSiteDraftCreate';
 import PlantingSiteDraftEdit from './edit/PlantingSiteDraftEdit';
 import PlantingSiteDraftView from './view/PlantingSiteDraftView';
 import PlantingSiteDraftZoneView from './view/PlantingSiteDraftZoneView';
-import PlantingSiteSubzoneView from './view/PlantingSiteSubzoneView';
 import PlantingSiteView from './view/PlantingSiteView';
 import PlantingSiteZoneView from './view/PlantingSiteZoneView';
 import PlantingSitesList from './view/PlantingSitesList';
@@ -62,7 +61,6 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
 
   return (
     <Routes>
-      <Route path={'/zone/:zoneId/subzone/:subzoneId'} element={<PlantingSiteSubzoneView />} />
       <Route path={'/zone/:zoneId'} element={<PlantingSiteZoneView />} />
       <Route path={'/edit'} element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />} />
       <Route path={'*'} element={<PlantingSiteView />} />

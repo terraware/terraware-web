@@ -78,6 +78,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       return {
         name: strings.ALL_PLANTING_SITES,
         id: -1,
+        adHocPlots: [],
         organizationId: orgId,
         plantingSeasons: [],
       };
@@ -94,23 +95,25 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   const allPlantingSites = useMemo(
     () => (plantingSitesResults && allSitesOption ? [...plantingSitesResults, allSitesOption] : []),
-    [plantingSitesResults]
+    [allSitesOption, plantingSitesResults]
   );
 
   // Function to select a planting site
   const setSelectedPlantingSite = useCallback(
     (plantingSiteId: number) => {
       const foundSite = allPlantingSites.find((site) => site.id === plantingSiteId);
-      _setSelectedPlantingSite(foundSite);
-      setObservations(undefined);
-      setObservationResults(undefined);
-      setObservationSummaries(undefined);
-      setAdHocObservations(undefined);
-      setAdHocObservationResults(undefined);
-      setHistories(undefined);
-      setReportedPlants(undefined);
+      if (plantingSite !== foundSite) {
+        _setSelectedPlantingSite(foundSite);
+        setObservations(undefined);
+        setObservationResults(undefined);
+        setObservationSummaries(undefined);
+        setAdHocObservations(undefined);
+        setAdHocObservationResults(undefined);
+        setHistories(undefined);
+        setReportedPlants(undefined);
+      }
     },
-    [allPlantingSites]
+    [allPlantingSites, plantingSite]
   );
 
   useEffect(() => {
@@ -178,6 +181,28 @@ const PlantingSiteProvider = ({ children }: Props) => {
     }
   }, [reportedPlantsResponse]);
 
+  const isLoading = useMemo(() => {
+    return (
+      plantingSitesResults === undefined ||
+      observationsResponse?.status === 'pending' ||
+      resultsResponse?.status === 'pending' ||
+      adHocObservationsResponse?.status === 'pending' ||
+      adHocResultsResponse?.status === 'pending' ||
+      summariesResponse?.status === 'pending' ||
+      historiesResponse?.status === 'pending' ||
+      reportedPlantsResponse?.status === 'pending'
+    );
+  }, [
+    adHocObservationsResponse?.status,
+    adHocResultsResponse?.status,
+    historiesResponse?.status,
+    observationsResponse?.status,
+    plantingSitesResults,
+    reportedPlantsResponse?.status,
+    resultsResponse?.status,
+    summariesResponse?.status,
+  ]);
+
   const latestResult = useMemo(() => {
     return observationResults?.find(
       (result) =>
@@ -194,21 +219,21 @@ const PlantingSiteProvider = ({ children }: Props) => {
         observation.isAdHoc === false &&
         observation.type === 'Monitoring'
     );
-  }, [observationResults]);
+  }, [observations]);
 
   const currentObservation = useMemo(() => {
     return observations?.find(
       (observation) =>
         observation.state === 'InProgress' && observation.isAdHoc === false && observation.type === 'Monitoring'
     );
-  }, [observationResults]);
+  }, [observations]);
 
   const nextObservation = useMemo(() => {
     return observations?.find(
       (observation) =>
         observation.state === 'Upcoming' && observation.isAdHoc === false && observation.type === 'Monitoring'
     );
-  }, [observationResults]);
+  }, [observations]);
 
   const hasSites = useMemo(() => {
     return (allPlantingSites?.length ?? 0) > 1;
@@ -236,15 +261,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       latestObservation,
       nextObservation,
       latestResult,
-      isLoading:
-        plantingSitesResults === undefined ||
-        observationsResponse?.status === 'pending' ||
-        resultsResponse?.status === 'pending' ||
-        adHocObservationsResponse?.status === 'pending' ||
-        adHocResultsResponse?.status === 'pending' ||
-        summariesResponse?.status === 'pending' ||
-        historiesResponse?.status === 'pending' ||
-        reportedPlantsResponse?.status === 'pending',
+      isLoading,
       isPlantingSiteSet:
         plantingSitesResults !== undefined &&
         ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected)),
@@ -266,6 +283,9 @@ const PlantingSiteProvider = ({ children }: Props) => {
       latestObservation,
       nextObservation,
       latestResult,
+      isLoading,
+      hasSites,
+      plantingSiteSelected,
       plantingSitesResults,
     ]
   );

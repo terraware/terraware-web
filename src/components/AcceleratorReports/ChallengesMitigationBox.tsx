@@ -133,28 +133,25 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
-  const getNonEmptyChallenges = useCallback(() => {
+  const nonEmptyChallenges = useMemo(() => {
     return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
   }, [challengeMitigations]);
 
   const areFilteredChallengesDifferent = useMemo(() => {
-    const filteredChallenges = getNonEmptyChallenges();
-    return filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges);
-  }, [challengeMitigations]);
+    return nonEmptyChallenges.length > 0 && JSON.stringify(nonEmptyChallenges) !== JSON.stringify(report?.challenges);
+  }, [report?.challenges, nonEmptyChallenges]);
 
   useEffect(() => {
     if (!editing) {
       setChallengeMitigations(report?.challenges || []);
     }
-    // For participant editing, react can't keep up with setting challengeMitigations, then calling onChange on the
-    // report, and having this useEffect update challengeMitigations again. This check ensures we're only setting it
-    // from report when needed
-    if (((editing && !getNonEmptyChallenges()) || getNonEmptyChallenges().length === 0) && report?.challenges) {
-      setChallengeMitigations(report?.challenges ?? []);
-    }
-  }, [report?.challenges]);
+  }, [editing, report?.challenges]);
 
-  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
+
+  const addRow = useCallback(() => {
+    setChallengeMitigations(challengeMitigations.concat({ challenge: '', mitigationPlan: '' }));
+  }, [challengeMitigations]);
 
   useEffect(() => {
     setValidateFields(false);
@@ -169,7 +166,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
         onChange(challengeMitigations);
       }
     }
-  }, [challengeMitigations]);
+  }, [addRow, areFilteredChallengesDifferent, challengeMitigations, onChange]);
 
   useEffect(() => {
     if (updateReportResponse?.status === 'error') {
@@ -179,13 +176,12 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar]);
+  }, [updateReportResponse, snackbar, reload]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
       setValidateFields(false);
-      const filteredChallenges = getNonEmptyChallenges();
-      if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
+      if (nonEmptyChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
         setValidateFields(true);
         return;
       }
@@ -195,7 +191,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
           review: {
             ...report,
             achievements: report?.achievements || [],
-            challenges: filteredChallenges,
+            challenges: nonEmptyChallenges,
             status: report?.status || 'Not Submitted',
           },
           projectId: Number(projectId),
@@ -204,16 +200,12 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       );
       setRequestId(request.requestId);
     }
-  }, [dispatch, projectId, challengeMitigations, report]);
+  }, [report, nonEmptyChallenges, dispatch, projectId]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
     setChallengeMitigations(report?.challenges || []);
   }, [report?.challenges]);
-
-  const addRow = useCallback(() => {
-    setChallengeMitigations(challengeMitigations.concat({ challenge: '', mitigationPlan: '' }));
-  }, [challengeMitigations]);
 
   const updateChallenge = (newChal: ChallengeMitigation, index: number) => {
     setChallengeMitigations(challengeMitigations.map((chal, i) => (index === i ? newChal : chal)));

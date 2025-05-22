@@ -9,12 +9,11 @@ import Table from 'src/components/common/table';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import { searchAdHocObservations } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring';
 import { ObservationType } from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
 import strings from 'src/strings';
-import { ExistingTreePayload, SubzoneAggregation, ZoneAggregation } from 'src/types/Observations';
+import { ExistingTreePayload } from 'src/types/Observations';
 import { MinimalPlantingSite } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -23,9 +22,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
  */
 
 type PlantingSiteDetailsTableProps = {
-  data: ZoneAggregation[];
   plantingSite: MinimalPlantingSite;
-  zoneViewUrl: string;
   plotSelection: PlotSelectionType;
   observationType: ObservationType;
 };
@@ -59,12 +56,12 @@ const columns = (): TableColumnType[] => [
     type: 'number',
   },
   {
-    key: 'monitoringPlots',
+    key: 'numPermanentPlots',
     name: strings.MONITORING_PLOTS,
     type: 'number',
   },
   {
-    key: 'completedTime',
+    key: 'latestObservationCompletedTime',
     name: strings.LAST_OBSERVED,
     type: 'string',
   },
@@ -122,41 +119,22 @@ const biomassColumns = (): TableColumnType[] => [
 ];
 
 export default function PlantingSiteDetailsTable({
-  data,
   plantingSite,
-  zoneViewUrl,
   plotSelection,
   observationType,
 }: PlantingSiteDetailsTableProps): JSX.Element {
   const defaultTimeZone = useDefaultTimeZone();
-
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
 
-  const allAdHocObservationResults = useAppSelector((state) =>
-    searchAdHocObservations(state, plantingSite.id, defaultTimeZone.get().id)
-  );
+  const { adHocObservationResults } = usePlantingSiteData();
 
-  const monitoringadHocObservationResults = useMemo(() => {
-    if (!allAdHocObservationResults || !plantingSite.id) {
-      return [];
-    }
+  const monitoringAdHocResults = useMemo(() => {
+    return adHocObservationResults?.filter((result) => result.isAdHoc && result.type === 'Monitoring');
+  }, [adHocObservationResults]);
 
-    return allAdHocObservationResults?.filter((observationResult) => {
-      const isMonitoring = observationResult.type === 'Monitoring';
-      return isMonitoring;
-    });
-  }, [allAdHocObservationResults, plantingSite]);
-
-  const biomassadHocObservationResults = useMemo(() => {
-    if (!allAdHocObservationResults || !plantingSite.id) {
-      return [];
-    }
-
-    return allAdHocObservationResults?.filter((observationResult) => {
-      const isBiomass = observationResult.type === 'Biomass Measurements';
-      return isBiomass;
-    });
-  }, [allAdHocObservationResults, plantingSite]);
+  const biomassAdHocResults = useMemo(() => {
+    return adHocObservationResults?.filter((result) => result.isAdHoc && result.type === 'Biomass Measurements');
+  }, [adHocObservationResults]);
 
   return (
     <Box>
@@ -164,25 +142,25 @@ export default function PlantingSiteDetailsTable({
         <Table
           id='planting-site-details-table'
           columns={columns}
-          rows={data}
+          rows={plantingSite.plantingZones ?? []}
           orderBy='name'
-          Renderer={DetailsRenderer(timeZone, plantingSite.id, zoneViewUrl)}
+          Renderer={DetailsRenderer(timeZone, plantingSite.id)}
         />
       )}
       {plotSelection === 'adHoc' && observationType === 'plantMonitoring' && (
         <Table
           id='planting-site-ad-hoc-details-table'
           columns={adHocColumns}
-          rows={monitoringadHocObservationResults}
+          rows={monitoringAdHocResults ?? []}
           orderBy='name'
-          Renderer={DetailsRenderer(timeZone, plantingSite.id, zoneViewUrl)}
+          Renderer={DetailsRenderer(timeZone, plantingSite.id)}
         />
       )}
       {plotSelection === 'adHoc' && observationType === 'biomassMeasurements' && (
         <Table
           id='planting-site-ad-hoc-details-table'
           columns={biomassColumns}
-          rows={biomassadHocObservationResults}
+          rows={biomassAdHocResults ?? []}
           orderBy='name'
           Renderer={BiomassRenderer(timeZone)}
         />
@@ -192,7 +170,7 @@ export default function PlantingSiteDetailsTable({
 }
 
 const DetailsRenderer =
-  (timeZone: string, plantingSiteId: number, zoneViewUrl: string) =>
+  (timeZone: string, plantingSiteId: number) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
@@ -205,9 +183,10 @@ const DetailsRenderer =
     };
 
     const createLinkToZone = () => {
-      const url = zoneViewUrl
-        .replace(':plantingSiteId', plantingSiteId.toString())
-        .replace(':zoneId', row.id.toString());
+      const url = APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString()).replace(
+        ':zoneId',
+        row.id.toString()
+      );
       return (
         <Link fontSize='16px' to={url}>
           {(row.name || '--') as React.ReactNode}
@@ -234,7 +213,7 @@ const DetailsRenderer =
       return <CellRenderer {...props} value={createLinkToZone()} sx={textStyles} title={value as string} />;
     }
 
-    if (column.key === 'completedTime') {
+    if (column.key === 'latestObservationCompletedTime') {
       return (
         <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />
       );
@@ -242,11 +221,6 @@ const DetailsRenderer =
 
     if (column.key === 'areaHa') {
       return <CellRenderer {...props} value={value || ''} sx={textStyles} />;
-    }
-
-    if (column.key === 'monitoringPlots') {
-      const numMonitoringPlots = row.plantingSubzones.flatMap((sz: SubzoneAggregation) => sz.monitoringPlots).length;
-      return <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} sx={textStyles} />;
     }
 
     if (column.key === 'plantingSubzones') {

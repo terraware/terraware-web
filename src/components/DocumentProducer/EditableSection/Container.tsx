@@ -141,7 +141,7 @@ export default function EditableSectionContainer({
     );
     setUpdateInternalCommentRequestId(request.requestId);
     setOpenEditCommenteModal(false);
-  }, [section, internalComment]);
+  }, [section.variableValues, section.id, dispatch, internalComment, projectId]);
 
   const onEditVariableValue = (variable?: VariableWithValues) => {
     if (variable === undefined) {
@@ -198,7 +198,7 @@ export default function EditableSectionContainer({
         )}
       </>
     );
-  }, [editing, section, theme]);
+  }, [editing, section]);
 
   return (
     <>

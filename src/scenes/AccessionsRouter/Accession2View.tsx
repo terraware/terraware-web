@@ -11,6 +11,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import BackToLink from 'src/components/common/BackToLink';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -30,8 +32,6 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import OverviewItemCard from '../../components/common/OverviewItemCard';
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
 import DeleteAccessionModal from './edit/DeleteAccessionModal';
 import EditLocationModal from './edit/EditLocationModal';
 import EditStateModal from './edit/EditStateModal';
@@ -180,7 +180,7 @@ export default function Accession2View(): JSX.Element {
 
   const handleChange = (newValue: string) => {
     query.set('tab', newValue);
-    navigate(getLocation(location.pathname, location, query.toString()));
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   };
 
   const linkStyle = {
@@ -397,12 +397,13 @@ export default function Accession2View(): JSX.Element {
         ),
       },
     ];
-  }, [accession, reloadData, themeObj, viabilityEditable, hasPendingTests]);
+  }, [accession, reloadData, activeLocale, themeObj, viabilityEditable, isMobile, hasPendingTests]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'detail',
     tabs,
     viewIdentifier: 'accession-view',
+    tabsAreNewPages: false,
   });
 
   return (

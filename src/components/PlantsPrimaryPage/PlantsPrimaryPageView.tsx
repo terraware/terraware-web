@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
+import FormattedNumber from '../common/FormattedNumber';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import PlantsDashboardEmptyMessage from '../emptyStatePages/PlantsDashboardEmptyMessage';
 
@@ -163,61 +164,67 @@ export default function PlantsPrimaryPageView({
               />
             </Box>
           )}
-          <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
-            <Grid container alignItems={'center'} spacing={4}>
-              <Grid item xs={isDesktop ? 3 : 12}>
-                {!isAcceleratorRoute && (projectsOptions?.length ?? 0) > 1 && onSelectProjectId && (
-                  <Box marginBottom={1}>
+          {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && (
+            <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
+              <Grid container alignItems={'center'} spacing={4}>
+                <Grid item xs={isDesktop ? 3 : 12}>
+                  {!isAcceleratorRoute && (projectsOptions?.length ?? 0) > 1 && onSelectProjectId && (
+                    <Box marginBottom={1}>
+                      <Dropdown
+                        placeholder={strings.NO_PROJECT_SELECTED}
+                        id='project-selector'
+                        onChange={(newValue) => onSelectProjectId(Number(newValue))}
+                        options={projectsOptions}
+                        selectedValue={projectId}
+                        fullWidth
+                      />
+                    </Box>
+                  )}
+                  {isAcceleratorRoute && options.length === 1 ? (
+                    <Typography fontSize={'20px'} fontWeight={600}>
+                      {options[0].label}
+                    </Typography>
+                  ) : (
                     <Dropdown
                       placeholder={strings.SELECT}
-                      id='project-selector'
-                      onChange={(newValue) => onSelectProjectId(Number(newValue))}
-                      options={projectsOptions}
-                      selectedValue={projectId}
+                      id='planting-site-selector'
+                      onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
+                      options={options}
+                      selectedValue={selectedPlantingSiteId}
                       fullWidth
+                      disabled={isAcceleratorRoute && options.length === 0}
                     />
-                  </Box>
-                )}
-                {isAcceleratorRoute && options.length === 1 ? (
-                  <Typography fontSize={'20px'} fontWeight={600}>
-                    {options[0].label}
-                  </Typography>
-                ) : (
-                  <Dropdown
-                    placeholder={strings.SELECT}
-                    id='planting-site-selector'
-                    onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
-                    options={options}
-                    selectedValue={selectedPlantingSiteId}
-                    fullWidth
-                    disabled={isAcceleratorRoute && options.length === 0}
-                  />
-                )}
-              </Grid>
-              <Grid item xs={isDesktop ? 3 : 12}>
-                <Box>
-                  <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
-                  <Typography fontSize='28px' fontWeight={600}>
-                    {strings.formatString(
-                      strings.X_HA,
-                      isRolledUpView
-                        ? Math.round(totalArea * 100) / 100
-                        : plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
-                    )}
-                  </Typography>
-                </Box>
-              </Grid>
-              {!isPlantingSiteSet ? (
-                <CircularProgress sx={{ margin: 'auto' }} />
-              ) : (
-                <Grid item xs={isDesktop ? 6 : 12}>
-                  <Typography fontSize='16px' marginTop={theme.spacing(1)}>
-                    {text}
-                  </Typography>
+                  )}
                 </Grid>
-              )}
-            </Grid>
-          </Card>
+                <Grid item xs={isDesktop ? 3 : 12}>
+                  <Box>
+                    <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
+                    <Typography fontSize='28px' fontWeight={600}>
+                      {strings.formatString(
+                        strings.X_HA,
+                        isRolledUpView ? (
+                          <FormattedNumber value={Math.round(totalArea * 100) / 100} />
+                        ) : (
+                          <FormattedNumber
+                            value={plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa || 0}
+                          />
+                        )
+                      )}
+                    </Typography>
+                  </Box>
+                </Grid>
+                {!isPlantingSiteSet ? (
+                  <CircularProgress sx={{ margin: 'auto' }} />
+                ) : (
+                  <Grid item xs={isDesktop ? 6 : 12}>
+                    <Typography fontSize='16px' marginTop={theme.spacing(1)}>
+                      {text}
+                    </Typography>
+                  </Grid>
+                )}
+              </Grid>
+            </Card>
+          )}
           {isEmptyState && !isAcceleratorRoute && !isLoading && isPlantingSiteSet && <PlantsDashboardEmptyMessage />}
         </>
       ) : (

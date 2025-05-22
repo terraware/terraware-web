@@ -22,7 +22,6 @@ import ReportMetricCard from 'src/components/ProjectField/ReportMetricCard';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
-import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import useProjectReports from 'src/hooks/useProjectReports';
@@ -40,8 +39,6 @@ import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
-
-const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
 
 type ProjectProfileViewProps = {
   participantProject?: ParticipantProject;
@@ -150,14 +147,6 @@ const ProjectProfileView = ({
     [funderView, lastPublishedReport, lastSubmittedReport]
   );
 
-  const strippedDealName = useMemo(() => {
-    if (projectDetails?.dealName?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {
-      return projectDetails?.dealName?.replace(DEAL_NAME_COUNTRY_CODE_REGEX, '');
-    } else {
-      return projectDetails?.dealName;
-    }
-  }, [projectDetails?.dealName]);
-
   return (
     <Card
       flushMobile
@@ -202,12 +191,6 @@ const ProjectProfileView = ({
               fontWeight={500}
             />
           </Box>
-        </Grid>
-      )}
-
-      {funderView && (
-        <Grid container>
-          <InvertedCard md={12} backgroundColor={theme.palette.TwClrBaseGray050} value={strippedDealName} />
         </Grid>
       )}
 
@@ -375,8 +358,8 @@ const ProjectProfileView = ({
             )}
 
             <Grid item>
-              <Link
-                to={
+              <ProjectFieldLink
+                value={
                   funderView
                     ? `${APP_PATHS.FUNDER_HOME}?tab=report`
                     : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
@@ -384,9 +367,8 @@ const ProjectProfileView = ({
                         (projectDetails?.projectId || '').toString()
                       )
                 }
-              >
-                {strings.VIEW_REPORTS}
-              </Link>
+                label={strings.VIEW_REPORTS}
+              />
             </Grid>
           </>
         )}
@@ -461,7 +443,11 @@ const ProjectProfileView = ({
       </Grid>
 
       <Grid container marginBottom={theme.spacing(2)}>
-        {(!funderView || (funderView && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
+        {(!funderView ||
+          (funderView &&
+            (projectDetails?.standard ||
+              projectDetails?.methodologyNumber ||
+              (projectDetails?.carbonCertifications?.length ?? 0) > 0))) && (
           <Box marginX={theme.spacing(2)} width={'100%'}>
             <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
@@ -509,7 +495,7 @@ const ProjectProfileView = ({
             padding={theme.spacing(2)}
           >
             {!funderView && (
-              <>
+              <Box paddingBottom={theme.spacing(1)}>
                 <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
                   {strings.PROJECT_LINKS}
                 </Typography>
@@ -536,7 +522,7 @@ const ProjectProfileView = ({
                 )}
                 {project && isAllowedViewScoreAndVoting && (
                   <ProjectFieldLink
-                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', project.id.toString())}
                     label={strings.SCORING}
                   />
                 )}
@@ -546,10 +532,10 @@ const ProjectProfileView = ({
                     label={strings.REPORTS}
                   />
                 )}
-              </>
+              </Box>
             )}
 
-            <Box paddingTop={theme.spacing(1)}>
+            <Box>
               <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
                 {strings.EXTERNAL_PROJECT_LINKS}
               </Typography>

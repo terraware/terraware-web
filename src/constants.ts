@@ -131,7 +131,6 @@ export enum APP_PATHS {
   PLANTING_SITES_DRAFT_ZONE_VIEW = '/planting-sites/draft/:plantingSiteId/zone/:zoneId',
   PLANTING_SITES_EDIT = '/planting-sites/:plantingSiteId/edit',
   PLANTING_SITES_NEW = '/planting-sites/new',
-  PLANTING_SITES_SUBZONE_VIEW = '/planting-sites/:plantingSiteId/zone/:zoneId/subzone/:subzoneId',
   PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
   PLANTING_SITES_ZONE_VIEW = '/planting-sites/:plantingSiteId/zone/:zoneId',
   PROJECT_EDIT = '/projects/:projectId/edit',

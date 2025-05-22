@@ -50,7 +50,17 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     } else {
       reload();
     }
-  }, [deliverable.id, deliverable.projectId, dispatch, isApplicationPortal, onClose, snackbar, uploadResult?.status]);
+  }, [
+    deliverable.id,
+    deliverable.projectId,
+    dispatch,
+    isApplicationPortal,
+    onClose,
+    reload,
+    snackbar,
+    uploadResult.data,
+    uploadResult?.status,
+  ]);
 
   const submit = useCallback(() => {
     setValidate(true);

@@ -76,12 +76,12 @@ export default function SpeciesProjectsTable({
     if (selectedOrganization.id !== -1) {
       void dispatch(requestProjects(selectedOrganization.id));
     }
-  }, [selectedOrganization]);
+  }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
     const request = dispatch(requestGetProjectsForSpecies({ speciesId }));
     setRequestId(request.requestId);
-  }, [selectedOrganization, reload, speciesId]);
+  }, [dispatch, selectedOrganization, reload, speciesId]);
 
   useEffect(() => {
     if (projectsForSpeciesRequest?.status === 'success') {
@@ -89,7 +89,7 @@ export default function SpeciesProjectsTable({
     } else if (projectsForSpeciesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [projectsForSpeciesRequest]);
+  }, [projectsForSpeciesRequest, snackbar]);
 
   useEffect(() => {
     const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));
@@ -124,7 +124,7 @@ export default function SpeciesProjectsTable({
     }
 
     setFilteredResults(updatedResults);
-  }, [addedProjectsSpecies, removedProjectsIds, searchResults]);
+  }, [addedProjectsSpecies, allProjects, removedProjectsIds, searchResults, speciesId]);
 
   const onAddHandler = (projectsSpeciesAdded: ProjectSpecies[]) => {
     // only add new project if it's not already added

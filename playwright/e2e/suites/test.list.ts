@@ -1,6 +1,8 @@
 import { test } from '@playwright/test';
 
 import AccessionTests from './accession.spec';
+import FunderProjectProfileTests from './funderProjectProfile.spec';
+import FundingEntitiesTests from './fundingEntities.spec';
 import InventoryTests from './inventory.spec';
 import LocationTests from './locations.spec';
 import ProjectProfileTests from './projectProfile.spec';
@@ -11,3 +13,5 @@ test.describe(SpeciesTests);
 test.describe(AccessionTests);
 test.describe(InventoryTests);
 test.describe(ProjectProfileTests);
+test.describe(FundingEntitiesTests);
+test.describe(FunderProjectProfileTests);

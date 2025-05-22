@@ -48,22 +48,22 @@ const AcceleratorReportView = () => {
   const getReportResults = useAppSelector(selectAcceleratorReport(requestId));
   const submitReportResults = useAppSelector(selectSubmitAcceleratorReport(submitReportRequestId));
 
-  const reload = () => {
+  const reload = useCallback(() => {
     if (projectId) {
       const request = dispatch(requestAcceleratorReport({ projectId, reportId, includeMetrics: true }));
       setRequestId(request.requestId);
     }
-  };
+  }, [projectId, dispatch, reportId]);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id?.toString()) {
       setCurrentParticipantProject(projectId);
     }
-  }, [currentParticipantProject?.id, projectId]);
+  }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
 
   useEffect(() => {
     reload();
-  }, [projectId]);
+  }, [reload]);
 
   useEffect(() => {
     if (getReportResults?.status === 'error') {
@@ -81,7 +81,7 @@ const AcceleratorReportView = () => {
       reload();
       snackbar.toastSuccess(strings.REPORT_SUBMITTED_FOR_APPROVAL);
     }
-  }, [submitReportResults?.status]);
+  }, [reload, snackbar, submitReportResults?.status]);
 
   const year = useMemo(() => {
     return report?.startDate.split('-')[0];
@@ -129,7 +129,15 @@ const AcceleratorReportView = () => {
         />
       </>
     );
-  }, [activeLocale, getReportResults?.status, report?.status, submitReportResults?.status]);
+  }, [
+    getReportResults?.status,
+    goToAcceleratorReportEdit,
+    projectId,
+    report?.id,
+    report?.status,
+    reportId,
+    submitReportResults?.status,
+  ]);
 
   const rightComponent = useMemo(
     () => (
@@ -137,14 +145,14 @@ const AcceleratorReportView = () => {
         {callToAction}
       </Box>
     ),
-    [callToAction]
+    [callToAction, theme]
   );
 
   const submitReport = useCallback(() => {
     const request = dispatch(requestSubmitAcceleratorReport({ projectId, reportId }));
     setSubmitReportRequestId(request.requestId);
     setShowApproveDialog(false);
-  }, [projectId, reportId]);
+  }, [dispatch, projectId, reportId]);
 
   const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
 

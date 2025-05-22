@@ -8,7 +8,6 @@ import {
   PluginOptionsByType,
   ScaleOptionsByType,
   ScaleType,
-  TimeScaleTickOptions,
   TimeUnit,
   TooltipItem,
   TooltipModel,
@@ -140,8 +139,6 @@ function ChartContent(props: ChartContentProps): JSX.Element {
 
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
-  type TimeScaleTickOptionsSource = TimeScaleTickOptions['source'];
-
   const getPlugins = () => {
     const plugins = [];
     if (type === 'pie') {
@@ -169,7 +166,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
               unit: 'month' as TimeUnit,
             },
             ticks: {
-              source: 'data' as TimeScaleTickOptionsSource,
+              stepSize: 4,
             },
           };
         }

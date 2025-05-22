@@ -4,7 +4,7 @@
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
-    "start": "craco start",
+    "start": "craco --max_old_space_size=8192 start",
     "build": "craco --max_old_space_size=8192 build",
     "start:dev": "craco start",
     "build-with-version": "export REACT_APP_TERRAWARE_FE_BUILD_VERSION=$(git rev-parse --short HEAD) && craco --max_old_space_size=8192 build",
@@ -51,7 +51,7 @@
     "@mui/styled-engine-sc": "^5.14.12",
     "@mui/styles": "^6.2.0",
     "@reduxjs/toolkit": "^1.9.3",
-    "@terraware/web-components": "^3.4.22",
+    "@terraware/web-components": "^3.4.24",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.4.3",

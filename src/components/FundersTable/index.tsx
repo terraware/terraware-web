@@ -83,12 +83,12 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       );
       setDeleteFundersRequestId(request.requestId);
     },
-    [dispatch]
+    [dispatch, fundingEntityId]
   );
 
   useEffect(() => {
     reload();
-  }, [dispatch, fundingEntityId]);
+  }, [dispatch, fundingEntityId, reload]);
 
   useEffect(() => {
     if (deleteFundersResponse) {
@@ -99,7 +99,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
         snackbar.toastError(strings.GENERIC_ERROR);
       }
     }
-  }, [deleteFundersResponse, snackbar]);
+  }, [deleteFundersResponse, reload, snackbar]);
 
   useEffect(() => {
     if (listFundersResponse) {
@@ -113,7 +113,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
 
   const goToInvitePage = useCallback(
     () => navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITY_INVITE.replace(':fundingEntityId', fundingEntityId.toString())),
-    [fundingEntityId]
+    [fundingEntityId, navigate]
   );
 
   const rightComponent = useMemo(
@@ -130,7 +130,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       ) : (
         ''
       ),
-    [goToInvitePage]
+    [goToInvitePage, isAllowed]
   );
 
   return (

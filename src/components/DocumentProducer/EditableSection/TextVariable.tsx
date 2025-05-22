@@ -23,7 +23,7 @@ const EMPTY_VARIABLE = '--';
 
 export default function TextVariable(props: TextVariableProps): React.ReactElement {
   const theme = useTheme();
-  const { isEditing, reference, variable } = props;
+  const { isEditing, reference, variable, icon, onClick } = props;
   const attributes = props.attributes || {};
   const children = props.children || null;
 
@@ -56,13 +56,13 @@ export default function TextVariable(props: TextVariableProps): React.ReactEleme
     }
 
     return (
-      props.icon && (
-        <span className='icon-container left' onClick={props.onClick}>
+      icon && (
+        <span className='icon-container left' onClick={onClick}>
           <Icon name={iconName} fillColor={color} />
         </span>
       )
     );
-  }, [status]);
+  }, [icon, onClick, status, theme]);
 
   return (
     <Box
@@ -104,9 +104,9 @@ export default function TextVariable(props: TextVariableProps): React.ReactEleme
         {isEditing ? `${variable?.name}: ` : ''}
         {displayValue}
       </Box>
-      {props.icon && (
-        <span className='icon-container right' onClick={props.onClick}>
-          <Icon name={props.icon} fillColor={theme.palette.TwClrIcnSecondary} />
+      {icon && (
+        <span className='icon-container right' onClick={onClick}>
+          <Icon name={icon} fillColor={theme.palette.TwClrIcnSecondary} />
         </span>
       )}
     </Box>
