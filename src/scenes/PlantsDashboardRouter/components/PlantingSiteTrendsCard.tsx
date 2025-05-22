@@ -101,7 +101,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
         },
       ],
     };
-  }, [observationSummaries, selectedMortalityZone]);
+  }, [observationSummaries, selectedMortalityZone, selectedPlantsPerHaZone]);
 
   return (
     <Card

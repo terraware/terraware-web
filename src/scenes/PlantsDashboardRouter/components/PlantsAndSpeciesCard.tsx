@@ -74,7 +74,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
       return projectTotalPlanted;
     }
     return 0;
-  }, [plantingSite, plantingSites]);
+  }, [plantingSite, projectTotalPlanted]);
 
   const percentagePlanted = useMemo(() => {
     return totalArea > 0 ? Math.round(((totalPlantedArea || 0) / totalArea) * 100) : 0;
