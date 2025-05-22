@@ -1,3 +1,4 @@
+9480a9ca904 Replace lambda calls with callbacks (#4064)
 5294011ec4a SW-6930 Added rececny and mortality rate to subzone level results map (#4052)
 1723cf238d8 SW-6936 Separate planting site tables and draft planting site tables, and show only current info (#4046)
 1390b43f9c0 SW-6956 Fix View Reports button not scrolling to top of screen (#4063)
