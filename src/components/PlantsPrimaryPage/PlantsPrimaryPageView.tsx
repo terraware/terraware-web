@@ -69,7 +69,19 @@ export default function PlantsPrimaryPageView({
   const { activeLocale } = useLocalization();
   const projects = useAppSelector(selectProjects);
   const dispatch = useAppDispatch();
-  const { allPlantingSites, isLoading, isPlantingSiteSet } = usePlantingSiteData();
+  const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
+
+  const hasSites = useMemo(() => {
+    return (allPlantingSites?.length ?? 0) > 1;
+  }, [allPlantingSites]);
+
+  const plantingSiteSelected = useMemo(() => {
+    return plantingSite !== undefined;
+  }, [plantingSite]);
+
+  const isPlantingSiteSet = useMemo(() => {
+    return isInitiated && ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected));
+  }, [isInitiated, hasSites, plantingSiteSelected]);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -164,7 +176,7 @@ export default function PlantsPrimaryPageView({
               />
             </Box>
           )}
-          {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && (
+          {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && isPlantingSiteSet && (
             <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
               <Grid container alignItems={'center'} spacing={4}>
                 <Grid item xs={isDesktop ? 3 : 12}>

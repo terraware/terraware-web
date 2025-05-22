@@ -183,7 +183,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   const isLoading = useMemo(() => {
     return (
-      plantingSitesResults === undefined ||
       observationsResponse?.status === 'pending' ||
       resultsResponse?.status === 'pending' ||
       adHocObservationsResponse?.status === 'pending' ||
@@ -197,7 +196,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
     adHocResultsResponse?.status,
     historiesResponse?.status,
     observationsResponse?.status,
-    plantingSitesResults,
     reportedPlantsResponse?.status,
     resultsResponse?.status,
     summariesResponse?.status,
@@ -235,14 +233,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
     );
   }, [observations]);
 
-  const hasSites = useMemo(() => {
-    return (allPlantingSites?.length ?? 0) > 1;
-  }, [allPlantingSites]);
-
-  const plantingSiteSelected = useMemo(() => {
-    return plantingSite !== undefined;
-  }, [plantingSite]);
-
   const value = useMemo(
     (): PlantingSiteData => ({
       acceleratorOrganizationId,
@@ -262,9 +252,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       nextObservation,
       latestResult,
       isLoading,
-      isPlantingSiteSet:
-        plantingSitesResults !== undefined &&
-        ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected)),
+      isInitiated: plantingSitesResults !== undefined,
     }),
     [
       acceleratorOrganizationId,
@@ -284,8 +272,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
       nextObservation,
       latestResult,
       isLoading,
-      hasSites,
-      plantingSiteSelected,
       plantingSitesResults,
     ]
   );

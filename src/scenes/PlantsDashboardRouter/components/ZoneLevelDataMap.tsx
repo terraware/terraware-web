@@ -154,11 +154,6 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     }
   }, [latestResult, latestSummary, plantingSite, plantingSiteHistories]);
 
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(mapData);
-  }, [mapData]);
-
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
