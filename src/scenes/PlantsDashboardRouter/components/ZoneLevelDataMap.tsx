@@ -154,11 +154,6 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     }
   }, [latestResult, latestSummary, plantingSite, plantingSiteHistories]);
 
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(mapData);
-  }, [mapData]);
-
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
@@ -201,7 +196,10 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               },
               {
                 key: strings.MORTALITY_RATE,
-                value: `${lastZoneSummary.mortalityRate}%`,
+                value:
+                  lastZoneSummary.mortalityRate !== undefined
+                    ? `${lastZoneSummary.mortalityRate}%`
+                    : strings.INSUFFICIENT_DATA,
               },
               {
                 key: strings.PLANTING_DENSITY,
