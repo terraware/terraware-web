@@ -68,9 +68,12 @@ export type Location = {
   timeZone?: string;
 };
 
-export type MinimalPlantingSubzone = Omit<PlantingSubzone, 'areaHa'>;
+export type MinimalPlantingSubzone = Omit<PlantingSubzone, 'areaHa' | 'monitoringPlots'>;
 
-export type MinimalPlantingZone = Omit<PlantingZone, 'areaHa' | 'plantingSubzones' | 'boundaryModifiedTime'> & {
+export type MinimalPlantingZone = Omit<
+  PlantingZone,
+  'areaHa' | 'plantingSubzones' | 'boundaryModifiedTime' | 'numPermanentPlots' | 'numTemporaryPlots'
+> & {
   plantingSubzones: MinimalPlantingSubzone[];
 };
 

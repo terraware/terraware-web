@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -11,62 +11,80 @@ import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries } = usePlantingSiteData();
-  const { species: availableSpecies } = useSpeciesData();
+  const { species } = useSpeciesData();
 
-  let highestMortalityRate: number | undefined;
-  let highestSpecies = '';
+  const [highestMortalityRate, setHighestMortalityRate] = useState<number>();
+  const [lowestMortalityRate, setLowestMortalityRate] = useState<number>();
+  const [highestSpeciesName, setHighestSpeciesName] = useState<string>();
+  const [lowestSpeciesName, setLowestSpeciesName] = useState<string>();
 
-  let lowestMortalityRate = 100;
-  let lowestSpecies = '';
+  const getSpeciesName = useCallback(
+    (observationSpecies: ObservationSpeciesResultsPayload) => {
+      if (observationSpecies.speciesId) {
+        const foundSpecies = species.find((_species) => _species.id === observationSpecies.speciesId);
+        return foundSpecies?.scientificName;
+      } else {
+        return observationSpecies.speciesName;
+      }
+    },
+    [species]
+  );
 
-  observationSummaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
-    if (
-      sp.mortalityRate !== undefined &&
-      sp.mortalityRate !== null &&
-      sp.mortalityRate >= (highestMortalityRate || 0)
-    ) {
-      highestMortalityRate = sp.mortalityRate;
-      highestSpecies =
-        availableSpecies.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
-    }
-  });
+  useEffect(() => {
+    let _highestMortalityRate = 0;
+    let _lowestMortalityRate = 100;
+    let _highestSpeciesName: string | undefined;
+    let _lowestSpeciesName: string | undefined;
+    observationSummaries?.[0]?.species.forEach((observationSpecies: ObservationSpeciesResultsPayload) => {
+      const speciesName = getSpeciesName(observationSpecies);
+      if (observationSpecies.mortalityRate !== undefined && speciesName !== undefined) {
+        if (observationSpecies.mortalityRate >= _highestMortalityRate) {
+          _highestMortalityRate = observationSpecies.mortalityRate;
+          _highestSpeciesName = speciesName;
+        }
+        if (observationSpecies.mortalityRate <= _lowestMortalityRate) {
+          _lowestMortalityRate = observationSpecies.mortalityRate;
+          _lowestSpeciesName = speciesName;
+        }
+      }
+    });
 
-  observationSummaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
-    if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate < lowestMortalityRate) {
-      lowestMortalityRate = sp.mortalityRate;
-      lowestSpecies = availableSpecies.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
-    }
-  });
+    setLowestMortalityRate(_lowestSpeciesName ? _lowestMortalityRate : undefined);
+    setLowestSpeciesName(_lowestSpeciesName);
+
+    setHighestMortalityRate(_highestSpeciesName ? _highestMortalityRate : undefined);
+    setHighestSpeciesName(_highestSpeciesName);
+  }, [observationSummaries, getSpeciesName]);
 
   return (
     <Box>
-      {highestSpecies && highestMortalityRate !== undefined && (
+      {highestSpeciesName && highestMortalityRate !== undefined && (
         <>
           <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
             <Typography fontSize='16px' fontWeight={400}>
               {strings.HIGHEST}
             </Typography>
             <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
-              {highestSpecies}
+              {highestSpeciesName}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
               <FormattedNumber value={highestMortalityRate} />%
             </Typography>
           </Box>
-          {(!lowestSpecies || lowestSpecies === highestSpecies) && (
+          {(!lowestSpeciesName || lowestSpeciesName === highestSpeciesName) && (
             <Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}>
               {strings.SINGLE_SPECIES_MORTALITY_RATE_MESSAGE}
             </Typography>
           )}
         </>
       )}
-      {lowestSpecies && lowestSpecies !== highestSpecies && (
+      {lowestSpeciesName && lowestSpeciesName !== highestSpeciesName && (
         <Box sx={{ backgroundColor: ' #5D822B33', padding: 1, borderRadius: 1 }}>
           <Typography fontSize='16px' fontWeight={400}>
             {strings.LOWEST}
           </Typography>
           <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
-            {lowestSpecies}
+            {lowestSpeciesName}
           </Typography>
           <Typography fontSize='24px' fontWeight={600}>
             <FormattedNumber value={lowestMortalityRate || 0} />%

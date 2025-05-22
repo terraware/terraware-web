@@ -6914,6 +6914,27 @@ export interface components {
             overview?: string;
             preparationMaterials?: string;
         };
+        MonitoringPlotHistoryPayload: {
+            boundary: components["schemas"]["Polygon"];
+            /** Format: int64 */
+            id: number;
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int32 */
+            sizeMeters: number;
+        };
+        MonitoringPlotPayload: {
+            boundary: components["schemas"]["Polygon"];
+            elevationMeters?: number;
+            /** Format: int64 */
+            id: number;
+            isAdHoc: boolean;
+            isAvailable: boolean;
+            /** Format: int64 */
+            plotNumber: number;
+            /** Format: int32 */
+            sizeMeters: number;
+        };
         MultiLineString: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             coordinates: number[][][];
             /** @enum {string} */
@@ -7809,6 +7830,7 @@ export interface components {
             startDate: string;
         };
         PlantingSiteHistoryPayload: {
+            areaHa?: number;
             boundary: components["schemas"]["MultiPolygon"];
             exclusion?: components["schemas"]["MultiPolygon"];
             /** Format: int64 */
@@ -7863,6 +7885,7 @@ export interface components {
             totalSpecies: number;
         };
         PlantingSitePayload: {
+            adHocPlots: components["schemas"]["MonitoringPlotPayload"][];
             /** @description Area of planting site in hectares. Only present if the site has planting zones. */
             areaHa?: number;
             boundary?: components["schemas"]["MultiPolygon"];
@@ -7871,6 +7894,10 @@ export interface components {
             exclusion?: components["schemas"]["MultiPolygon"];
             /** Format: int64 */
             id: number;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
             name: string;
             /** Format: int64 */
             organizationId: number;
@@ -7907,10 +7934,12 @@ export interface components {
             problemType: "DuplicateSubzoneName" | "DuplicateZoneName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubzoneBoundaryOverlaps" | "SubzoneInExclusionArea" | "SubzoneNotInZone" | "ZoneBoundaryOverlaps" | "ZoneHasNoSubzones" | "ZoneNotInSite" | "ZoneTooSmall" | "ZonesWithoutSiteBoundary";
         };
         PlantingSubzoneHistoryPayload: {
+            areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
             fullName: string;
             /** Format: int64 */
             id: number;
+            monitoringPlots: components["schemas"]["MonitoringPlotHistoryPayload"][];
             name: string;
             /**
              * Format: int64
@@ -7925,6 +7954,11 @@ export interface components {
             fullName: string;
             /** Format: int64 */
             id: number;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
+            monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
             name: string;
             /**
              * Format: date-time
@@ -7956,6 +7990,7 @@ export interface components {
             scientificName: string;
         };
         PlantingZoneHistoryPayload: {
+            areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
             /** Format: int64 */
             id: number;
@@ -8027,7 +8062,15 @@ export interface components {
             boundaryModifiedTime: string;
             /** Format: int64 */
             id: number;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
             name: string;
+            /** Format: int32 */
+            numPermanentPlots: number;
+            /** Format: int32 */
+            numTemporaryPlots: number;
             plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
             targetPlantingDensity: number;
         };

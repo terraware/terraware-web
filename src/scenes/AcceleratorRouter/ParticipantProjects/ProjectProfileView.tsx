@@ -22,7 +22,6 @@ import ReportMetricCard from 'src/components/ProjectField/ReportMetricCard';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
-import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import useProjectReports from 'src/hooks/useProjectReports';
@@ -359,8 +358,8 @@ const ProjectProfileView = ({
             )}
 
             <Grid item>
-              <Link
-                to={
+              <ProjectFieldLink
+                value={
                   funderView
                     ? `${APP_PATHS.FUNDER_HOME}?tab=report`
                     : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
@@ -368,9 +367,8 @@ const ProjectProfileView = ({
                         (projectDetails?.projectId || '').toString()
                       )
                 }
-              >
-                {strings.VIEW_REPORTS}
-              </Link>
+                label={strings.VIEW_REPORTS}
+              />
             </Grid>
           </>
         )}
