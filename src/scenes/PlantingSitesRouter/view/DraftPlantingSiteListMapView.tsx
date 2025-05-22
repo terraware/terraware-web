@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -46,6 +46,13 @@ export default function DraftPlantingSiteListMapView({
     [search, setSearch]
   );
 
+  const setViewCallback = useCallback(
+    (newView: View) => {
+      setView?.(newView);
+    },
+    [setView]
+  );
+
   return (
     <Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}>
       <Box display='flex' flexGrow={0} alignItems='center'>
@@ -60,7 +67,7 @@ export default function DraftPlantingSiteListMapView({
             ...(view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : {}),
           }}
           initialView={'map'}
-          onView={(newView) => setView?.(newView)}
+          onView={setViewCallback}
           search={<Search {...searchProps} />}
           list={<DraftPlantingSiteDetailsTable plantingSite={plantingSite} />}
           map={<DraftPlantingSiteMapView plantingSite={plantingSite} search={search ? search.trim() : ''} />}

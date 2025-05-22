@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -51,6 +51,13 @@ export default function BoundariesAndZones({
       onSearch: (value: string) => setSearch(value),
     }),
     [search, setSearch]
+  );
+
+  const setViewCallback = useCallback(
+    (newView: View) => {
+      setView?.(newView);
+    },
+    [setView]
   );
 
   return (
@@ -114,7 +121,7 @@ export default function BoundariesAndZones({
             ...(view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : {}),
           }}
           initialView={'map'}
-          onView={(newView) => setView?.(newView)}
+          onView={setViewCallback}
           search={<Search {...searchProps} />}
           list={
             <PlantingSiteDetailsTable
