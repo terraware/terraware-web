@@ -1,3 +1,6 @@
+1390b43f9c0 SW-6956 Fix View Reports button not scrolling to top of screen (#4063)
+d0610bde753 Fix infinite render on challenges (#4062)
+9f58bfe265e SW-6966 Formatting is not correct for Project-specific metrics in non-Climate Components (#4061)
 22a66426e5b SW-6975 Do not reload data  for plant dashboard if set to the same site (#4060)
 2391005cea3 SW-6960 Funder Project Profile test (#4059)
 08b8efe119a SW-6971 E2E Tests for Funding Entities (#4058)
