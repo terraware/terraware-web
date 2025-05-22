@@ -112,10 +112,7 @@ export default function PlantsDashboardView({
     ) : (
       ''
     );
-  }, [
-    plantingSite,
-    isAcceleratorRoute,
-  ]);
+  }, [plantingSite, isAcceleratorRoute]);
 
   const renderMortalityRate = useCallback(
     () =>
