@@ -133,26 +133,19 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
-  const getNonEmptyChallenges = useCallback(() => {
-    return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
-  }, [challengeMitigations]);
+  const getNonEmptyChallenges = (challengesList: ChallengeMitigation[]) =>
+    challengesList.filter((s) => !!s.challenge || !!s.mitigationPlan);
 
   const areFilteredChallengesDifferent = useMemo(() => {
-    const filteredChallenges = getNonEmptyChallenges();
+    const filteredChallenges = getNonEmptyChallenges(challengeMitigations);
     return filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges);
-  }, [getNonEmptyChallenges, report?.challenges]);
+  }, [report?.challenges, challengeMitigations]);
 
   useEffect(() => {
     if (!editing) {
       setChallengeMitigations(report?.challenges || []);
     }
-    // For participant editing, react can't keep up with setting challengeMitigations, then calling onChange on the
-    // report, and having this useEffect update challengeMitigations again. This check ensures we're only setting it
-    // from report when needed
-    if (((editing && !getNonEmptyChallenges()) || getNonEmptyChallenges().length === 0) && report?.challenges) {
-      setChallengeMitigations(report?.challenges ?? []);
-    }
-  }, [editing, getNonEmptyChallenges, report?.challenges]);
+  }, [editing, report?.challenges]);
 
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
@@ -188,7 +181,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
       setValidateFields(false);
-      const filteredChallenges = getNonEmptyChallenges();
+      const filteredChallenges = getNonEmptyChallenges(challengeMitigations);
       if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
         setValidateFields(true);
         return;
@@ -208,7 +201,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       );
       setRequestId(request.requestId);
     }
-  }, [report, getNonEmptyChallenges, dispatch, projectId]);
+  }, [report, challengeMitigations, dispatch, projectId]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
