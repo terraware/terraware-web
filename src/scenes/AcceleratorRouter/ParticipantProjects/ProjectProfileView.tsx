@@ -111,6 +111,7 @@ const ProjectProfileView = ({
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
     isTablet,
+    theme,
     numberFormatter,
   ]);
 
