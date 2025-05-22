@@ -133,26 +133,19 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
-  const getNonEmptyChallenges = useCallback(() => {
+  const nonEmptyChallenges = useMemo(() => {
     return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
   }, [challengeMitigations]);
 
   const areFilteredChallengesDifferent = useMemo(() => {
-    const filteredChallenges = getNonEmptyChallenges();
-    return filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges);
-  }, [getNonEmptyChallenges, report?.challenges]);
+    return nonEmptyChallenges.length > 0 && JSON.stringify(nonEmptyChallenges) !== JSON.stringify(report?.challenges);
+  }, [report?.challenges, nonEmptyChallenges]);
 
   useEffect(() => {
     if (!editing) {
       setChallengeMitigations(report?.challenges || []);
     }
-    // For participant editing, react can't keep up with setting challengeMitigations, then calling onChange on the
-    // report, and having this useEffect update challengeMitigations again. This check ensures we're only setting it
-    // from report when needed
-    if (((editing && !getNonEmptyChallenges()) || getNonEmptyChallenges().length === 0) && report?.challenges) {
-      setChallengeMitigations(report?.challenges ?? []);
-    }
-  }, [editing, getNonEmptyChallenges, report?.challenges]);
+  }, [editing, report?.challenges]);
 
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
@@ -188,8 +181,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
       setValidateFields(false);
-      const filteredChallenges = getNonEmptyChallenges();
-      if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
+      if (nonEmptyChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
         setValidateFields(true);
         return;
       }
@@ -199,7 +191,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
           review: {
             ...report,
             achievements: report?.achievements || [],
-            challenges: filteredChallenges,
+            challenges: nonEmptyChallenges,
             status: report?.status || 'Not Submitted',
           },
           projectId: Number(projectId),
@@ -208,7 +200,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       );
       setRequestId(request.requestId);
     }
-  }, [report, getNonEmptyChallenges, dispatch, projectId]);
+  }, [report, nonEmptyChallenges, dispatch, projectId]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
