@@ -46,7 +46,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     return zoneStats;
   }, [plantingSite, plantingSiteReportedPlants]);
 
-  const lastSummary = useMemo(() => {
+  const latestSummary = useMemo(() => {
     if (observationSummaries?.length) {
       return observationSummaries[0];
     }
@@ -143,8 +143,21 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       return baseMap;
     }
 
-    return MapService.getMapDataFromPlantingSiteHistory(plantingSite, plantingSiteHistory);
-  }, [plantingSite, plantingSiteHistories]);
+    if (!latestSummary) {
+      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, plantingSiteHistory);
+    } else {
+      return MapService.getMapDataFromPlantingSiteFromHistoryAndResults(
+        plantingSite,
+        plantingSiteHistory,
+        latestSummary
+      );
+    }
+  }, [latestResult, latestSummary, plantingSite, plantingSiteHistories]);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(mapData);
+  }, [mapData]);
 
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
@@ -179,7 +192,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             { key: strings.NO_PLANTS, value: '' },
           ];
         } else if (zonesProgress[entityZoneId] && zoneStat) {
-          const lastZoneSummary = lastSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
+          const lastZoneSummary = latestSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
           if (lastZoneSummary) {
             properties = [
               {
@@ -238,7 +251,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           />
         );
       },
-    [findZoneArea, latestResult, zonesProgress, zonesStats, lastSummary]
+    [findZoneArea, latestResult, zonesProgress, zonesStats, latestSummary]
   );
 
   return (
@@ -266,7 +279,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             style={{ borderRadius: '8px' }}
             layers={['Planting Site', 'Zones', 'Sub-Zones']}
             showMortalityRateFill={!!latestResult && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
-            showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked}
+            showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_EVENTS)?.checked}
             focusEntities={focusEntities}
             contextRenderer={{
               render: contextRenderer,

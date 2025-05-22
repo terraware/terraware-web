@@ -41,6 +41,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
+    adHocPlots: [],
     name: '',
     organizationId: selectedOrganization.id,
     plantingSeasons: [],
@@ -50,6 +51,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
   useEffect(() => {
     setRecord({
+      adHocPlots: plantingSite?.adHocPlots || [],
       boundary: plantingSite?.boundary,
       description: plantingSite?.description,
       id: plantingSite?.id || -1,

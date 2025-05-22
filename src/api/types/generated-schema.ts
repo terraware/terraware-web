@@ -6930,12 +6930,6 @@ export interface components {
             id: number;
             isAdHoc: boolean;
             isAvailable: boolean;
-            /** Format: date-time */
-            latestObservationCompletedTime?: string;
-            /** Format: int64 */
-            latestObservationId?: number;
-            /** Format: int32 */
-            permanentIndex?: number;
             /** Format: int64 */
             plotNumber: number;
             /** Format: int32 */
@@ -7891,6 +7885,7 @@ export interface components {
             totalSpecies: number;
         };
         PlantingSitePayload: {
+            adHocPlots: components["schemas"]["MonitoringPlotPayload"][];
             /** @description Area of planting site in hectares. Only present if the site has planting zones. */
             areaHa?: number;
             boundary?: components["schemas"]["MultiPolygon"];
