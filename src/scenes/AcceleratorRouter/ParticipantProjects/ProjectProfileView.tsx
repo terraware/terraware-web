@@ -237,6 +237,7 @@ const ProjectProfileView = ({
           <ProjectMap
             application={projectApplication}
             countryCode={projectDetails?.countryCode}
+            includeLabel={!funderView}
             md={isMobile || isTablet ? 12 : projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
           />
         )}
