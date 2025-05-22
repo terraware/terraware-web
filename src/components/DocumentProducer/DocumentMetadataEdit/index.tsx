@@ -87,7 +87,7 @@ const DocumentMetadataEdit = ({
     if (participant.id) {
       void dispatch(requestGetParticipant(participant.id));
     }
-  }, [participant]);
+  }, [dispatch, participant, setProjectId]);
 
   useEffect(() => {
     void dispatch(requestListDocumentTemplates());
@@ -148,7 +148,7 @@ const DocumentMetadataEdit = ({
     if (projectName && documentTemplateName && documentName === projectName) {
       setDocumentName(`${projectName} - ${documentTemplateName}`);
     }
-  }, [documentName, documentTemplateName, documentNameFieldHasBeenFocused, projectName]);
+  }, [documentName, documentTemplateName, documentNameFieldHasBeenFocused, projectName, setDocumentName]);
 
   return (
     <>

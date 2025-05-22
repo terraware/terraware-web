@@ -81,8 +81,9 @@ const MetricBox = ({
     if (JSON.stringify(record) !== JSON.stringify(metric)) {
       onChangeMetric?.(record, type);
     }
-  }, [record]);
-  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
+  }, [metric, onChangeMetric, record, type]);
+
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
     if (updateReportMetricResponse?.status === 'error') {
@@ -92,7 +93,18 @@ const MetricBox = ({
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload?.();
     }
-  }, [updateReportMetricResponse, snackbar]);
+  }, [updateReportMetricResponse, snackbar, reload]);
+
+  const onChangeProgress = useCallback(
+    (newValue: string) => {
+      if (isStandardOrProjectMetric(record)) {
+        onChange('value', newValue);
+      } else {
+        onChange('overrideValue', newValue);
+      }
+    },
+    [onChange, record]
+  );
 
   useEffect(() => {
     if (refreshReportMetricResponse?.status === 'error') {
@@ -106,9 +118,9 @@ const MetricBox = ({
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload?.();
     }
-  }, [refreshReportMetricResponse, snackbar]);
+  }, [metric, onChangeProgress, refreshReportMetricResponse, reload, snackbar]);
 
-  const getUpdateBody = () => {
+  const getUpdateBody = useCallback(() => {
     const baseMetric = {
       underperformanceJustification: record.underperformanceJustification,
       progressNotes: record.progressNotes,
@@ -159,7 +171,7 @@ const MetricBox = ({
       projectMetrics: [],
       standardMetrics: [],
     };
-  };
+  }, [record, type]);
 
   const onSave = useCallback(() => {
     const request = dispatch(
@@ -170,15 +182,7 @@ const MetricBox = ({
       })
     );
     setRequestId(request.requestId);
-  }, [dispatch, projectId, reportId, record]);
-
-  const onChangeProgress = (newValue: string) => {
-    if (isStandardOrProjectMetric(record)) {
-      onChange('value', newValue);
-    } else {
-      onChange('overrideValue', newValue);
-    }
-  };
+  }, [dispatch, getUpdateBody, projectId, reportId]);
 
   const getProgressValue = () => {
     if (isStandardOrProjectMetric(record)) {

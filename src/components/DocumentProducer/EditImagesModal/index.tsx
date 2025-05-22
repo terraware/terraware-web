@@ -94,7 +94,15 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
       setUpdateVariableWorkflowDetailsRequestId(request.requestId);
       setUpdateWorkflowRequestId?.(request.requestId);
     }
-  }, [updateVariableValuesRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
+  }, [
+    dispatch,
+    projectId,
+    setUpdateWorkflowRequestId,
+    updateVariableValuesRequest,
+    updateVariableWorkflowDetailsRequestId,
+    variable.id,
+    variableWorkflowDetails,
+  ]);
 
   const handleSave = () => {
     // update old images

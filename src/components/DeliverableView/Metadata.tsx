@@ -38,7 +38,7 @@ const Metadata = (props: ViewProps): JSX.Element => {
         reload();
       }
     },
-    [deliverable, reload, isApplicationConsole]
+    [update, deliverable, isApplicationConsole, reload]
   );
 
   useEffect(() => {

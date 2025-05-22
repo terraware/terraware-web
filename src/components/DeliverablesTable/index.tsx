@@ -150,8 +150,7 @@ const DeliverablesTable = ({
   );
 
   const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', { organization: selectedOrganization });
-
-  const getFilterProjectName = useCallback(
+  useCallback(
     (_projectId: number | string) => {
       return (
         (participantId
@@ -162,12 +161,12 @@ const DeliverablesTable = ({
     [participantId, projectsFilterOptions, selectedParticipant?.projects]
   );
 
-  const removeParam = () => {
+  const removeParam = useCallback(() => {
     if (projectParam) {
       query.delete('projectId');
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
-  };
+  }, [location, navigate, projectParam, query]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
@@ -232,12 +231,13 @@ const DeliverablesTable = ({
     return activeLocale ? filters : [];
   }, [
     activeLocale,
-    getFilterProjectName,
     isAcceleratorRoute,
-    projectsFilterOptions,
+    iconFilters,
     selectedParticipant?.projects,
-    projectParam,
+    projectsFilterOptions,
     projectId,
+    projectParam,
+    removeParam,
   ]);
 
   const dispatchSearchRequest = useCallback(

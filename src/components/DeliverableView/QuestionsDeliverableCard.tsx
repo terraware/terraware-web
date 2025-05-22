@@ -130,7 +130,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
     void dispatch(
       requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
     );
-  }, [deliverable]);
+  }, [deliverable, dispatch]);
 
   useEffect(() => {
     if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
@@ -144,7 +144,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
         variablesStableIds: dependentVariableStableIds,
       })
     );
-  }, [deliverable, dependentVariableStableIds]);
+  }, [deliverable, dependentVariableStableIds, dispatch]);
 
   if (!deliverable) {
     return null;
