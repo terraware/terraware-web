@@ -1,3 +1,4 @@
+5ba5f91c927 SW-6981 Added recency gradient based on diffs from today (#4067)
 d29624eb72d SW-6976 Use latest observation from planting site payload (#4065)
 9480a9ca904 Replace lambda calls with callbacks (#4064)
 5294011ec4a SW-6930 Added rececny and mortality rate to subzone level results map (#4052)
