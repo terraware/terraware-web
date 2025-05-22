@@ -142,6 +142,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           fillColor: showRecencyFill
             ? [
                 'case',
+                ['==', ['get', 'recency'], -1],
+                getRenderAttributes('subzone').fillColor,
                 ['==', ['get', 'recency'], 0],
                 getRenderAttributes('subzone').fillColor,
                 ['==', ['get', 'recency'], 1],
@@ -150,7 +152,11 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.7),
                 ['==', ['get', 'recency'], 3],
                 getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.5),
+                ['==', ['get', 'recency'], 4],
                 getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.3),
+                ['==', ['get', 'recency'], 5],
+                getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.1),
+                getRenderAttributes('subzone').fillColor,
               ]
             : getRenderAttributes('subzone').fillColor,
           patternFill: showMortalityRateFill
