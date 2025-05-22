@@ -127,33 +127,31 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     setLegends(result);
   }, [latestResult, theme]);
 
+  const latestResultSiteHistory = useMemo(() => {
+    return plantingSiteHistories?.find((history) => history.id === latestResult?.plantingSiteHistoryId);
+  }, [plantingSiteHistories, latestResult]);
+
   const mapData = useMemo((): MapData | undefined => {
     if (!plantingSite?.boundary) {
       return undefined;
     }
 
     const baseMap = MapService.getMapDataFromPlantingSite(plantingSite);
-    if (!latestResult?.plantingSiteHistoryId || !plantingSiteHistories) {
-      return baseMap;
-    }
 
-    const plantingSiteHistory = plantingSiteHistories.find(
-      (history) => history.id === latestResult.plantingSiteHistoryId
-    );
-    if (!plantingSiteHistory) {
+    if (!latestResultSiteHistory) {
       return baseMap;
     }
 
     if (!latestSummary) {
-      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, plantingSiteHistory);
+      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, latestResultSiteHistory);
     } else {
       return MapService.getMapDataFromPlantingSiteFromHistoryAndResults(
         plantingSite,
-        plantingSiteHistory,
+        latestResultSiteHistory,
         latestSummary
       );
     }
-  }, [latestResult, latestSummary, plantingSite, plantingSiteHistories]);
+  }, [latestResultSiteHistory, latestSummary, plantingSite]);
 
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
@@ -171,29 +169,34 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     () =>
       // eslint-disable-next-line react/display-name
       (entity: MapSourceProperties): JSX.Element => {
-        const entityZoneId = Number(entity.id);
         let properties: TooltipProperty[] = [];
 
-        const zoneObservation = latestResult?.plantingZones.find(
-          (zoneResult) => zoneResult.plantingZoneId === entityZoneId
+        const zoneHistory = latestResultSiteHistory?.plantingZones.find(
+          (_zoneHistory) => _zoneHistory.id === entity.id
         );
-        const zoneStat = zonesStats[entityZoneId];
+        const zoneId = zoneHistory?.plantingZoneId;
+        const zoneObservation = latestResult?.plantingZones.find(
+          (zoneResult) => zoneResult.plantingZoneId === zoneHistory?.plantingZoneId
+        );
+        const zoneStat = zoneId !== undefined ? zonesStats[zoneId] : undefined;
+        const progress = zoneId !== undefined ? zonesProgress[zoneId] : undefined;
+        const zoneArea = zoneId !== undefined ? findZoneArea(zoneId) : undefined;
+        const lastZoneSummary = latestSummary?.plantingZones.find((pz) => pz.plantingZoneId === zoneId);
 
         if (!zoneStat) {
           properties = [
             {
               key: strings.AREA_HA,
-              value: findZoneArea(entity.id as number) || strings.UNKNOWN,
+              value: zoneArea ?? strings.UNKNOWN,
             },
             { key: strings.NO_PLANTS, value: '' },
           ];
-        } else if (zonesProgress[entityZoneId] && zoneStat) {
-          const lastZoneSummary = latestSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
+        } else if (progress && zoneStat) {
           if (lastZoneSummary) {
             properties = [
               {
                 key: strings.AREA_HA,
-                value: lastZoneSummary?.areaHa ?? findZoneArea(entityZoneId) ?? strings.UNKNOWN,
+                value: lastZoneSummary.areaHa,
               },
               {
                 key: strings.MORTALITY_RATE,
@@ -227,7 +230,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             properties = [
               {
                 key: strings.AREA_HA,
-                value: findZoneArea(entity.id as number) || strings.UNKNOWN,
+                value: zoneArea || strings.UNKNOWN,
               },
               {
                 key: strings.PLANTED_PLANTS,
@@ -250,7 +253,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           />
         );
       },
-    [findZoneArea, latestResult, zonesProgress, zonesStats, latestSummary]
+    [latestResultSiteHistory, latestResult, zonesStats, zonesProgress, findZoneArea, latestSummary]
   );
 
   return (
