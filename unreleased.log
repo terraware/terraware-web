@@ -1,3 +1,4 @@
+22a66426e5b SW-6975 Do not reload data  for plant dashboard if set to the same site (#4060)
 2391005cea3 SW-6960 Funder Project Profile test (#4059)
 08b8efe119a SW-6971 E2E Tests for Funding Entities (#4058)
 b486c893035 Fix more exhaustive-deps errors (#4049)
