@@ -46,7 +46,7 @@ export default function FunderProjectProfileTests() {
         'Slack',
       ],
       sdgList: [4, 5, 6],
-      additionalPageText: ['Viewing: Project Zone Figure Variable'],
+      hiddenText: ['Viewing: Project Zone Figure Variable'],
     };
 
     await validateProjectProfilePage(projectDetails, page);

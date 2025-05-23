@@ -231,7 +231,7 @@ const ProjectProfileView = ({
             projectId={projectDetails.projectId}
             imageValueId={projectDetails.projectZoneFigureValueId}
             alt={strings.PROJECT_ZONE_FIGURE}
-            label={<ProjectFigureLabel labelText={strings.PROJECT_ZONE_FIGURE_VARIABLE} />}
+            label={!funderView && <ProjectFigureLabel labelText={strings.PROJECT_ZONE_FIGURE_VARIABLE} />}
           />
         )}
         {projectDetails && !projectDetails?.projectZoneFigureValueId && (
