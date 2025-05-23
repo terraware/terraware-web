@@ -18,7 +18,7 @@ const ProjectFieldLink = ({ label, value }: ProjectFieldProps) => {
 
   return (
     value && (
-      <Link fontSize={'16px'} onClick={onClick} style={{ paddingLeft: theme.spacing(2) }}>
+      <Link fontSize={'16px'} onClick={onClick} style={{ paddingRight: theme.spacing(2) }}>
         {label}
       </Link>
     )

@@ -498,7 +498,13 @@ const ProjectProfileView = ({
           >
             {!funderView && (
               <Box paddingBottom={theme.spacing(1)}>
-                <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+                <Typography
+                  fontSize='16px'
+                  fontWeight={600}
+                  lineHeight='24px'
+                  component={'span'}
+                  marginRight={theme.spacing(2)}
+                >
                   {strings.PROJECT_LINKS}
                 </Typography>
                 {projectApplication && (
@@ -538,7 +544,13 @@ const ProjectProfileView = ({
             )}
 
             <Box>
-              <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+              <Typography
+                fontSize='16px'
+                fontWeight={600}
+                lineHeight='24px'
+                component={'span'}
+                marginRight={theme.spacing(2)}
+              >
                 {strings.EXTERNAL_PROJECT_LINKS}
               </Typography>
               {!funderView && (
