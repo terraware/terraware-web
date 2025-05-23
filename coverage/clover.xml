@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1748013535760" clover="3.2.0">
-  <project timestamp="1748013535760" name="All files">
-    <metrics statements="30790" coveredstatements="1301" conditionals="21091" coveredconditionals="388" methods="9482" coveredmethods="211" elements="61363" coveredelements="1900" complexity="0" loc="30790" ncloc="30790" packages="263" files="1275" classes="1275"/>
+<coverage generated="1748015297612" clover="3.2.0">
+  <project timestamp="1748015297612" name="All files">
+    <metrics statements="30790" coveredstatements="1301" conditionals="21093" coveredconditionals="388" methods="9482" coveredmethods="211" elements="61365" coveredelements="1900" complexity="0" loc="30790" ncloc="30790" packages="263" files="1275" classes="1275"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5425,10 +5425,10 @@
         <line num="125" count="0" type="stmt"/>
         <line num="132" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="133" count="0" type="stmt"/>
-        <line num="172" count="0" type="stmt"/>
-        <line num="187" count="0" type="stmt"/>
-        <line num="205" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="258" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="208" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="261" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsPrimaryPage/index.tsx">
         <metrics statements="45" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="11" coveredmethods="0"/>
@@ -22094,9 +22094,9 @@
       </file>
     </package>
     <package name="src.scenes.FunderHome">
-      <metrics statements="56" coveredstatements="0" conditionals="41" coveredconditionals="0" methods="14" coveredmethods="0"/>
+      <metrics statements="56" coveredstatements="0" conditionals="43" coveredconditionals="0" methods="14" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/FunderHome/index.tsx">
-        <metrics statements="56" coveredstatements="0" conditionals="41" coveredconditionals="0" methods="14" coveredmethods="0"/>
+        <metrics statements="56" coveredstatements="0" conditionals="43" coveredconditionals="0" methods="14" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
@@ -22148,11 +22148,11 @@
         <line num="118" count="0" type="stmt"/>
         <line num="120" count="0" type="stmt"/>
         <line num="124" count="0" type="stmt"/>
-        <line num="146" count="0" type="stmt"/>
-        <line num="149" count="0" type="stmt"/>
-        <line num="150" count="0" type="stmt"/>
         <line num="151" count="0" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.FunderReport">
