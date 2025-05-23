@@ -174,7 +174,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         const zoneHistory = latestResultSiteHistory?.plantingZones.find(
           (_zoneHistory) => _zoneHistory.id === entity.id
         );
-        const zoneId = zoneHistory?.plantingZoneId;
+
+        // If zone history is not found, the id in the base map uses current zone ID instead.
+        const zoneId = zoneHistory?.plantingZoneId ?? entity.id;
         const zoneObservation = latestResult?.plantingZones.find(
           (zoneResult) => zoneResult.plantingZoneId === zoneHistory?.plantingZoneId
         );
