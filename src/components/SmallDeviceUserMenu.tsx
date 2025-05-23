@@ -208,15 +208,17 @@ export default function SmallDeviceUserMenu({
                       </Typography>
                     </div>
                   </Box>
-                  <MenuItem
-                    onClick={(e) => {
-                      navigateTo(APP_PATHS.MY_ACCOUNT);
-                      handleClose(e);
-                    }}
-                    sx={menuItemStyles}
-                  >
-                    {strings.MY_ACCOUNT}
-                  </MenuItem>
+                  {!isFunder && (
+                    <MenuItem
+                      onClick={(e) => {
+                        navigateTo(APP_PATHS.MY_ACCOUNT);
+                        handleClose(e);
+                      }}
+                      sx={menuItemStyles}
+                    >
+                      {strings.MY_ACCOUNT}
+                    </MenuItem>
+                  )}
                   <MenuItem
                     onClick={(e) => {
                       onLogout();
