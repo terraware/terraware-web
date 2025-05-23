@@ -132,7 +132,12 @@ export default function FunderHome() {
         }}
       >
         <Box>
-          <Box margin={theme.spacing(3)} display='flex' alignItems='center' justifyContent='space-between'>
+          <Box
+            margin={theme.spacing(3)}
+            display={isMobile ? 'block' : 'flex'}
+            alignItems='center'
+            justifyContent='space-between'
+          >
             <Typography fontWeight={600} lineHeight={'40px'} fontSize={'24px'}>
               {strippedDealName}
             </Typography>
@@ -150,7 +155,7 @@ export default function FunderHome() {
                 renderOption={(_report: PublishedReport) => `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
                 displayLabel={(_report: PublishedReport) => `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
                 toT={(name: string) => ({ name }) as unknown as PublishedReport}
-                selectStyles={{ inputContainer: { 'margin-top': isMobile ? theme.spacing(4) : 0 } }}
+                selectStyles={{ inputContainer: { 'margin-top': isMobile ? theme.spacing(2) : 0 } }}
               />
             )}
           </Box>
