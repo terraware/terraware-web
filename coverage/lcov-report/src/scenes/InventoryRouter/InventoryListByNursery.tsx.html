@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -228,19 +228,7 @@
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
 <a name='L165'></a><a href='#L165'>165</a>
-<a name='L166'></a><a href='#L166'>166</a>
-<a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -310,8 +298,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -356,14 +342,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -423,7 +401,7 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
-import { useOrganization, useUser } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
@@ -433,7 +411,6 @@ import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 &nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
   { key: 'facility_name', name: strings.NURSERY, type: 'string' },
@@ -486,8 +463,6 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   });
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useForm&lt;InventoryFiltersType&gt;({});</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(user?.locale);</span>
 &nbsp;
   const onSearchSortOrder = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rder: SearchSortOrder) =&gt; {</span>
     const isClientSorted = <span class="cstat-no" title="statement not covered" >BE_SORTED_FIELDS.indexOf(order.field) === -1;</span>
@@ -531,19 +506,11 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 <span class="cstat-no" title="statement not covered" >          setShowResults(updatedResult.length &gt; 0);</span>
         }
 <span class="cstat-no" title="statement not covered" >        if (getRequestId('searchInventory') === requestId) {</span>
-<span class="cstat-no" title="statement not covered" >          setSearchResults(</span>
-            updatedResult.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-              ...result,
-              germinatingQuantity: numberFormatter.format(Number(result.germinatingQuantity)),
-              notReadyQuantity: numberFormatter.format(Number(result.notReadyQuantity)),
-              readyQuantity: numberFormatter.format(Number(result.readyQuantity)),
-              totalQuantity: numberFormatter.format(Number(result.totalQuantity)),
-            }))
-          );
+<span class="cstat-no" title="statement not covered" >          setSearchResults(updatedResult);</span>
         }
       }
     }
-  }, [filters, debouncedSearchTerm, numberFormatter, selectedOrganization, searchSortOrder, setReportData]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    void onApplyFilters();</span>
@@ -598,7 +565,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-23T17:46:31.016Z
+                at 2025-05-23T19:57:20.867Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
