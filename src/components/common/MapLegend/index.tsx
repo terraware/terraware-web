@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Tooltip, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { AntSwitch } from 'src/components/Switch/AntSwitch';
@@ -18,6 +19,7 @@ type MapLegendItem = {
 export type MapLegendGroup = {
   title: string;
   items: MapLegendItem[];
+  tooltip?: string;
   switch?: boolean;
   // is the legend turned on
   checked?: boolean;
@@ -74,13 +76,20 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
                 />
               )}
               <Typography
-                fontSize='14px'
+                fontSize='16px'
                 fontWeight={600}
                 width={isMobile ? '100%' : undefined}
                 marginRight={isMobile ? 0 : theme.spacing(4)}
                 paddingLeft={legend.switch ? theme.spacing(1) : 0}
               >
-                {legend.title}
+                {legend.title}{' '}
+                {legend.tooltip && (
+                  <Tooltip title={legend.tooltip} sx={{ display: 'inline-block', verticalAlign: 'text-top' }}>
+                    <Box display='flex'>
+                      <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                    </Box>
+                  </Tooltip>
+                )}
               </Typography>
             </Box>
 
@@ -125,7 +134,7 @@ function LabeledSwatch({
           marginRight: theme.spacing(1),
         }}
       />
-      <Typography fontSize='12px' fontWeight={400}>
+      <Typography fontSize='14px' fontWeight={400}>
         {label}
       </Typography>
     </Box>

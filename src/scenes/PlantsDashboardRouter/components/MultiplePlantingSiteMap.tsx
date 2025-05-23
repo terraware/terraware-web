@@ -70,9 +70,10 @@ export default function MultiplePlantingSiteMap({
     },
     {
       title: strings.OBSERVATION_EVENTS,
+      tooltip: strings.OBSERVATION_EVENTS_TOOLTIP,
       items: [
         {
-          label: strings.OBSERVATION_EVENT,
+          label: strings.LATEST_OBSERVATION,
           borderColor: theme.palette.TwClrBaseLightGreen300 as string,
           fillColor: theme.palette.TwClrBasePink200 as string,
           opacity: 0.9,

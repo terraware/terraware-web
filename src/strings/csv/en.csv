@@ -1180,6 +1180,7 @@ OBSERVATION_ENDED_MESSAGE,The {0} observation has been ended.,
 OBSERVATION_EVENT,Observation Event,
 OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for planting site(s):,"Example: Observation event is scheduled for June 1, 2023 for planting site(s): "
 OBSERVATION_EVENTS,Observation Events,
+OBSERVATION_EVENTS_TOOLTIP,Previous Observations are shown in decreased opacity.,
 OBSERVATION_IN_PROGRESS,Observation in Progress,
 OBSERVATION_OVERDUE,Observation Overdue,
 OBSERVATION_PERIOD_WARN,Observation period cannot exceed two months.,
