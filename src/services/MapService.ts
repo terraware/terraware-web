@@ -276,9 +276,9 @@ const extractPlantingZonesFromHistory = (site: PlantingSiteHistory): MapSourceBa
     site.plantingZones?.map((zone) => {
       const { id, plantingZoneId, name, boundary } = zone;
       return {
-        properties: { id: plantingZoneId, name, type: 'zone', recency: 0 },
+        properties: { id, plantingZoneId, name, type: 'zone', recency: 0 },
         boundary: getPolygons(boundary),
-        id: plantingZoneId ?? id,
+        id,
       };
     }) || [];
 
