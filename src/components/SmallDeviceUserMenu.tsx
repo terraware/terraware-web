@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useEffect, useRef } from 'react';
 
 import {
@@ -66,6 +66,8 @@ export default function SmallDeviceUserMenu({
     fontWeight: 500,
     borderRadius: '16px',
   };
+
+  const isFunder = useMemo(() => user?.userType === 'Funder', [user]);
 
   const navigateTo = (url: string) => {
     navigate(url);
@@ -206,15 +208,17 @@ export default function SmallDeviceUserMenu({
                       </Typography>
                     </div>
                   </Box>
-                  <MenuItem
-                    onClick={(e) => {
-                      navigateTo(APP_PATHS.MY_ACCOUNT);
-                      handleClose(e);
-                    }}
-                    sx={menuItemStyles}
-                  >
-                    {strings.MY_ACCOUNT}
-                  </MenuItem>
+                  {!isFunder && (
+                    <MenuItem
+                      onClick={(e) => {
+                        navigateTo(APP_PATHS.MY_ACCOUNT);
+                        handleClose(e);
+                      }}
+                      sx={menuItemStyles}
+                    >
+                      {strings.MY_ACCOUNT}
+                    </MenuItem>
+                  )}
                   <MenuItem
                     onClick={(e) => {
                       onLogout();
@@ -224,60 +228,65 @@ export default function SmallDeviceUserMenu({
                   >
                     {strings.LOG_OUT}
                   </MenuItem>
-                  <Divider
-                    sx={{
-                      background: theme.palette.TwClrBrdrTertiary,
-                      '&.MuiDivider-root': {
-                        margin: theme.spacing(1, 2, 1, 2),
-                      },
-                      margin: '16px 0',
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      paddingLeft: '16px',
-                      paddingBottom: '12px',
-                      paddingTop: '12px',
-                      color: theme.palette.TwClrTxt,
-                      fontSize: '12px',
-                      fontWeight: 400,
-                    }}
-                  >
-                    {strings.ORGANIZATIONS.toUpperCase()}
-                  </Typography>
-                  {hasOrganizations ? (
-                    <div>
-                      {organizations?.map((org, index) => {
-                        return (
-                          <MenuItem
-                            onClick={(e) => {
-                              selectOrganization(org);
-                              handleClose(e);
-                            }}
-                            key={`item-${index}`}
-                            sx={[
-                              menuItemStyles,
-                              selectedOrganization.id === org.id && {
-                                backgroundColor: theme.palette.TwClrBgGhostActive,
-                              },
-                            ]}
-                          >
-                            {org.name}
-                          </MenuItem>
-                        );
-                      })}
-                    </div>
-                  ) : null}
-                  <MenuItem
-                    onClick={(e) => {
-                      handleClose(e);
-                      setNewOrganizationModalOpened(true);
-                    }}
-                    sx={menuItemStyles}
-                  >
-                    <Icon name='plus' />
-                    <div style={{ paddingLeft: '8px' }}>{strings.CREATE_NEW_ORGANIZATION}</div>
-                  </MenuItem>
+
+                  {!isFunder && (
+                    <>
+                      <Divider
+                        sx={{
+                          background: theme.palette.TwClrBrdrTertiary,
+                          '&.MuiDivider-root': {
+                            margin: theme.spacing(1, 2, 1, 2),
+                          },
+                          margin: '16px 0',
+                        }}
+                      />
+                      <Typography
+                        sx={{
+                          paddingLeft: '16px',
+                          paddingBottom: '12px',
+                          paddingTop: '12px',
+                          color: theme.palette.TwClrTxt,
+                          fontSize: '12px',
+                          fontWeight: 400,
+                        }}
+                      >
+                        {strings.ORGANIZATIONS.toUpperCase()}
+                      </Typography>
+                      {hasOrganizations ? (
+                        <div>
+                          {organizations?.map((org, index) => {
+                            return (
+                              <MenuItem
+                                onClick={(e) => {
+                                  selectOrganization(org);
+                                  handleClose(e);
+                                }}
+                                key={`item-${index}`}
+                                sx={[
+                                  menuItemStyles,
+                                  selectedOrganization.id === org.id && {
+                                    backgroundColor: theme.palette.TwClrBgGhostActive,
+                                  },
+                                ]}
+                              >
+                                {org.name}
+                              </MenuItem>
+                            );
+                          })}
+                        </div>
+                      ) : null}
+                      <MenuItem
+                        onClick={(e) => {
+                          handleClose(e);
+                          setNewOrganizationModalOpened(true);
+                        }}
+                        sx={menuItemStyles}
+                      >
+                        <Icon name='plus' />
+                        <div style={{ paddingLeft: '8px' }}>{strings.CREATE_NEW_ORGANIZATION}</div>
+                      </MenuItem>
+                    </>
+                  )}
                   {!isProduction && hasOrganizations ? (
                     <div>
                       <MenuItem
