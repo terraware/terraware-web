@@ -361,7 +361,7 @@ export default function PlantsDashboardView({
 
   return (
     <PlantsPrimaryPage
-      title={strings.DASHBOARD}
+      title={strings.PLANTS_DASHBOARD}
       text={
         plantingSite?.id !== -1
           ? plantingSite
