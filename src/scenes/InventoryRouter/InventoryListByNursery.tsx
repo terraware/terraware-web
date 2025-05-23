@@ -6,7 +6,7 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
-import { useOrganization, useUser } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
@@ -16,7 +16,6 @@ import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const columns = (): TableColumnType[] => [
   { key: 'facility_name', name: strings.NURSERY, type: 'string' },
@@ -69,8 +68,6 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   });
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
   const theme = useTheme();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
 
   const onSearchSortOrder = (order: SearchSortOrder) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
@@ -114,19 +111,11 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
           setShowResults(updatedResult.length > 0);
         }
         if (getRequestId('searchInventory') === requestId) {
-          setSearchResults(
-            updatedResult.map((result) => ({
-              ...result,
-              germinatingQuantity: numberFormatter.format(Number(result.germinatingQuantity)),
-              notReadyQuantity: numberFormatter.format(Number(result.notReadyQuantity)),
-              readyQuantity: numberFormatter.format(Number(result.readyQuantity)),
-              totalQuantity: numberFormatter.format(Number(result.totalQuantity)),
-            }))
-          );
+          setSearchResults(updatedResult);
         }
       }
     }
-  }, [filters, debouncedSearchTerm, numberFormatter, selectedOrganization, searchSortOrder, setReportData]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 
   useEffect(() => {
     void onApplyFilters();
