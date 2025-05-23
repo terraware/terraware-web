@@ -1,5 +1,6 @@
 import React from 'react';
 
+import defaultStrings from 'src/strings';
 import { Country } from 'src/types/Country';
 import { FundingEntity } from 'src/types/FundingEntity';
 import { Organization } from 'src/types/Organization';
@@ -46,6 +47,7 @@ export type ProvidedLocalizationData = {
    */
   selectedLocale: string;
   setSelectedLocale: (locale: string) => void;
+  strings: typeof defaultStrings;
   supportedTimeZones: TimeZoneDescription[];
   bootstrapped: boolean;
 };
