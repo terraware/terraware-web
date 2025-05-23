@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1748015297612" clover="3.2.0">
-  <project timestamp="1748015297612" name="All files">
-    <metrics statements="30790" coveredstatements="1301" conditionals="21093" coveredconditionals="388" methods="9482" coveredmethods="211" elements="61365" coveredelements="1900" complexity="0" loc="30790" ncloc="30790" packages="263" files="1275" classes="1275"/>
+<coverage generated="1748017113719" clover="3.2.0">
+  <project timestamp="1748017113719" name="All files">
+    <metrics statements="30790" coveredstatements="1301" conditionals="21095" coveredconditionals="388" methods="9482" coveredmethods="211" elements="61367" coveredelements="1900" complexity="0" loc="30790" ncloc="30790" packages="263" files="1275" classes="1275"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8434,7 +8434,7 @@
         <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="68" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PlantingSiteSelector.tsx">
         <metrics statements="21" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="8" coveredmethods="0"/>
@@ -9071,23 +9071,23 @@
       </file>
     </package>
     <package name="src.components.common.MapLegend">
-      <metrics statements="14" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <metrics statements="14" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="7" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/MapLegend/index.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <metrics statements="14" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.common.Navbar">
@@ -29659,11 +29659,11 @@
         <line num="43" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="111" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="115" count="0" type="stmt"/>
-        <line num="144" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="112" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="115" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="145" count="0" type="stmt"/>
       </file>
       <file name="NumberOfSpeciesPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/NumberOfSpeciesPlantedCard.tsx">
         <metrics statements="113" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="23" coveredmethods="0"/>
@@ -30058,44 +30058,44 @@
         <line num="58" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="99" count="0" type="stmt"/>
-        <line num="126" count="0" type="stmt"/>
-        <line num="129" count="0" type="stmt"/>
-        <line num="130" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="131" count="0" type="stmt"/>
-        <line num="134" count="0" type="stmt"/>
-        <line num="135" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="136" count="0" type="stmt"/>
-        <line num="139" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="131" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="132" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="137" count="0" type="stmt"/>
         <line num="140" count="0" type="stmt"/>
-        <line num="142" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="143" count="0" type="stmt"/>
-        <line num="146" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="147" count="0" type="stmt"/>
-        <line num="149" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="143" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="147" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
         <line num="158" count="0" type="stmt"/>
-        <line num="161" count="0" type="stmt"/>
-        <line num="163" count="0" type="stmt"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="162" count="0" type="stmt"/>
         <line num="164" count="0" type="stmt"/>
-        <line num="169" count="0" type="stmt"/>
-        <line num="172" count="0" type="stmt"/>
+        <line num="165" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
         <line num="173" count="0" type="stmt"/>
         <line num="174" count="0" type="stmt"/>
-        <line num="176" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
         <line num="177" count="0" type="stmt"/>
-        <line num="179" count="0" type="stmt"/>
-        <line num="181" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="182" count="0" type="stmt"/>
-        <line num="189" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="190" count="0" type="stmt"/>
-        <line num="191" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="192" count="0" type="stmt"/>
-        <line num="226" count="0" type="stmt"/>
-        <line num="244" count="0" type="stmt"/>
-        <line num="255" count="0" type="stmt"/>
-        <line num="279" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="280" count="0" type="stmt"/>
+        <line num="178" count="0" type="stmt"/>
+        <line num="180" count="0" type="stmt"/>
+        <line num="182" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="190" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="192" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="227" count="0" type="stmt"/>
+        <line num="245" count="0" type="stmt"/>
+        <line num="256" count="0" type="stmt"/>
+        <line num="280" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="281" count="0" type="stmt"/>
       </file>
       <file name="htmlLegendPlugin.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/htmlLegendPlugin.ts">
         <metrics statements="56" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="4" coveredmethods="0"/>
