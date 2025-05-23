@@ -82,9 +82,12 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
                 marginRight={isMobile ? 0 : theme.spacing(4)}
                 paddingLeft={legend.switch ? theme.spacing(1) : 0}
               >
-                {legend.title}{' '}
+                {legend.title}
                 {legend.tooltip && (
-                  <Tooltip title={legend.tooltip} sx={{ display: 'inline-block', verticalAlign: 'text-top' }}>
+                  <Tooltip
+                    title={legend.tooltip}
+                    sx={{ display: 'inline-block', verticalAlign: 'text-top', marginLeft: theme.spacing(1) }}
+                  >
                     <Box display='flex'>
                       <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
                     </Box>

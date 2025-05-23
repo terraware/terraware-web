@@ -89,6 +89,8 @@ export default function PlantingSiteMapLegend({ options }: PlantingSiteMapLegend
     theme.palette.TwClrBaseBlue300,
     theme.palette.TwClrBasePink300,
     theme.palette.TwClrBaseYellow300,
+    theme.palette.TwClrBaseOrange300,
+    hasAdHocPlot,
   ]);
 
   return (
