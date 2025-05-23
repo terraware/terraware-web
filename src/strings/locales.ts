@@ -27,7 +27,7 @@ export const useSupportedLocales = (): LocaleDetails[] => {
 };
 
 /**
- * Returns the locale from the list of supported locales that matches the user's selected langauge.
+ * Returns the locale from the list of supported locales that matches the user's selected language.
  *
  * The user's locale can include both a language and a country code, but entries in the menu of
  * languages usually don't have country codes. So we need to find the entry that is the longest
