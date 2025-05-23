@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -18,9 +18,10 @@ type ProjectMapProps = {
   application?: Application;
   countryCode?: string;
   md?: number;
+  includeLabel?: boolean;
 };
 
-const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
+const ProjectMap = ({ application, countryCode, md, includeLabel }: ProjectMapProps) => {
   const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
   const dispatch = useAppDispatch();
@@ -32,29 +33,32 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
     }
   }, [dispatch, countryCode]);
 
-  const getMapOptions = (coordinates: number[][][][], name: string, type: RenderableObject, id: number) => {
-    return {
-      bbox: MapService.getBoundingBox([coordinates]),
-      sources: [
-        {
-          entities: [
-            {
-              properties: {
+  const getMapOptions = useCallback(
+    (coordinates: number[][][][], name: string, type: RenderableObject, id: number) => {
+      return {
+        bbox: MapService.getBoundingBox([coordinates]),
+        sources: [
+          {
+            entities: [
+              {
+                properties: {
+                  id,
+                  name,
+                  type,
+                },
+                boundary: coordinates,
                 id,
-                name,
-                type,
               },
-              boundary: coordinates,
-              id,
-            },
-          ],
-          id: 'boundary',
-          isInteractive: false,
-          ...getRenderAttributes(type),
-        },
-      ],
-    };
-  };
+            ],
+            id: 'boundary',
+            isInteractive: false,
+            ...getRenderAttributes(type),
+          },
+        ],
+      };
+    },
+    [getRenderAttributes]
+  );
 
   const countryMapOptions = useMemo<MapOptions | undefined>(() => {
     if (!countryBoundaryResult || !countryBoundaryResult.data) {
@@ -62,7 +66,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
     }
 
     return getMapOptions(countryBoundaryResult.data.coordinates, 'countryBoundary', 'countryBoundary', 1);
-  }, [getRenderAttributes, countryBoundaryResult]);
+  }, [countryBoundaryResult, getMapOptions]);
 
   const appBoundaryMapOptions = useMemo<MapOptions | undefined>(() => {
     if (!application?.boundary) {
@@ -70,7 +74,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
     }
 
     return getMapOptions(application.boundary.coordinates, 'boundary', 'site', application.id);
-  }, [application, getRenderAttributes]);
+  }, [application?.boundary, application?.id, getMapOptions]);
 
   const mapElement = useMemo(() => {
     const style = { height: '100%', width: '100%', borderRadius: theme.spacing(1) };
@@ -81,7 +85,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
           mapViewStyle={'Satellite'}
           style={style}
           hideAllControls={true}
-          bottomRightLabel={<ProjectFigureLabel labelText={strings.APPLICATION_SITE_BOUNDARY} />}
+          bottomRightLabel={includeLabel && <ProjectFigureLabel labelText={strings.APPLICATION_SITE_BOUNDARY} />}
         />
       );
     } else if (countryCode && countryMapOptions) {
@@ -92,11 +96,11 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
           style={style}
           hideAllControls={true}
           disableZoom={true}
-          bottomRightLabel={<ProjectFigureLabel labelText={strings.COUNTRY_ONLY} />}
+          bottomRightLabel={includeLabel && <ProjectFigureLabel labelText={strings.COUNTRY_ONLY} />}
         />
       );
     }
-  }, [application?.boundary, countryCode, countryMapOptions]);
+  }, [appBoundaryMapOptions, application?.boundary, countryCode, countryMapOptions, includeLabel, theme]);
 
   return (
     <Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)}>
