@@ -134,6 +134,9 @@ export default function PlantsPrimaryPageView({
     <Wrapper>
       {newHeader ? (
         <>
+          <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
+            <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
+          </Grid>
           {showGeometryNote && selectedPlantingSiteId && latestObservationId && (
             <Box marginBottom={theme.spacing(4)}>
               <Message
