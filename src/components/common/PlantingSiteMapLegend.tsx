@@ -78,18 +78,7 @@ export default function PlantingSiteMapLegend({ options }: PlantingSiteMapLegend
         items,
       },
     ];
-  }, [
-    hasSite,
-    hasZone,
-    hasSubzone,
-    hasPermanentPlot,
-    hasTemporaryPlot,
-    theme.palette.TwClrBaseGreen300,
-    theme.palette.TwClrBaseLightGreen300,
-    theme.palette.TwClrBaseBlue300,
-    theme.palette.TwClrBasePink300,
-    theme.palette.TwClrBaseYellow300,
-  ]);
+  }, [hasSite, hasZone, hasSubzone, hasPermanentPlot, hasTemporaryPlot, theme, hasAdHocPlot]);
 
   return (
     <Box display='flex'>
