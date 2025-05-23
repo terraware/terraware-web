@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1748017113719" clover="3.2.0">
-  <project timestamp="1748017113719" name="All files">
-    <metrics statements="30790" coveredstatements="1301" conditionals="21095" coveredconditionals="388" methods="9482" coveredmethods="211" elements="61367" coveredelements="1900" complexity="0" loc="30790" ncloc="30790" packages="263" files="1275" classes="1275"/>
+<coverage generated="1748021018150" clover="3.2.0">
+  <project timestamp="1748021018150" name="All files">
+    <metrics statements="30791" coveredstatements="1301" conditionals="21099" coveredconditionals="388" methods="9483" coveredmethods="211" elements="61373" coveredelements="1900" complexity="0" loc="30791" ncloc="30791" packages="263" files="1275" classes="1275"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -299,7 +299,7 @@
       </file>
     </package>
     <package name="src.components">
-      <metrics statements="450" coveredstatements="0" conditionals="249" coveredconditionals="0" methods="138" coveredmethods="0"/>
+      <metrics statements="451" coveredstatements="0" conditionals="253" coveredconditionals="0" methods="139" coveredmethods="0"/>
       <file name="AddNewOrganizationModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AddNewOrganizationModal.tsx">
         <metrics statements="81" coveredstatements="0" conditionals="40" coveredconditionals="0" methods="23" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
@@ -670,7 +670,7 @@
         <line num="15" count="0" type="stmt"/>
       </file>
       <file name="SmallDeviceUserMenu.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SmallDeviceUserMenu.tsx">
-        <metrics statements="46" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="16" coveredmethods="0"/>
+        <metrics statements="47" coveredstatements="0" conditionals="27" coveredconditionals="0" methods="17" coveredmethods="0"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
@@ -683,40 +683,41 @@
         <line num="50" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="79" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
+        <line num="81" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="82" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="90" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="103" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="92" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
+        <line num="105" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="106" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
-        <line num="132" count="0" type="stmt"/>
-        <line num="211" count="0" type="stmt"/>
-        <line num="212" count="0" type="stmt"/>
-        <line num="220" count="0" type="stmt"/>
-        <line num="221" count="0" type="stmt"/>
-        <line num="251" count="0" type="stmt"/>
-        <line num="254" count="0" type="stmt"/>
-        <line num="255" count="0" type="stmt"/>
-        <line num="273" count="0" type="stmt"/>
-        <line num="274" count="0" type="stmt"/>
-        <line num="285" count="0" type="stmt"/>
-        <line num="286" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="214" count="0" type="stmt"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="224" count="0" type="stmt"/>
+        <line num="225" count="0" type="stmt"/>
+        <line num="258" count="0" type="stmt"/>
+        <line num="261" count="0" type="stmt"/>
+        <line num="262" count="0" type="stmt"/>
+        <line num="280" count="0" type="stmt"/>
+        <line num="281" count="0" type="stmt"/>
+        <line num="294" count="0" type="stmt"/>
+        <line num="295" count="0" type="stmt"/>
       </file>
       <file name="TimeZoneSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/TimeZoneSelector.tsx">
         <metrics statements="28" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="15" coveredmethods="0"/>
@@ -17903,7 +17904,7 @@
         <line num="151" count="0" type="stmt"/>
         <line num="312" count="0" type="stmt"/>
         <line num="337" count="0" type="stmt"/>
-        <line num="585" count="0" type="stmt"/>
+        <line num="597" count="0" type="stmt"/>
       </file>
       <file name="ProjectVariablesView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/ProjectVariablesView.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
