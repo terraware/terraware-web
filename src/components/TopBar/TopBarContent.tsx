@@ -121,7 +121,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       sx={{
         background:
           isFunderRoute || user?.userType === 'Funder'
-            ? 'url(/assets/funder-logo-mobile.svg) no-repeat 0/199px'
+            ? 'url(/assets/funder-logo-mobile.svg) no-repeat 0/145px'
             : 'url(/assets/terraware-logo-mobile.svg) no-repeat 32px/105px',
         display: 'flex',
         alignItems: 'center',
