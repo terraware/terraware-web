@@ -1180,6 +1180,7 @@ OBSERVATION_ENDED_MESSAGE,La observación {0} ha finalizado.,
 OBSERVATION_EVENT,Incidencia de observación,
 OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {0} para el(los) terreno(s) de plantación:,"Example: Observation event is scheduled for June 1, 2023 for planting site(s): "
 OBSERVATION_EVENTS,Incidencias de observación,
+OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,
 OBSERVATION_IN_PROGRESS,Observación en progreso,
 OBSERVATION_OVERDUE,Observación con atraso,
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,
