@@ -29,7 +29,7 @@ export default fixupConfigRules([
       'plugin:react/recommended',
       'plugin:jest-react/recommended',
       // 'plugin:storybook/recommended',
-      'prettier',
+      'prettier'
     )
     .map((config) => ({
       ...config,
