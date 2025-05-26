@@ -1,2 +1,6 @@
+32afbd82246 SW-6986 Fix Margins for mobile View Reports link (#4080)
+af9024b0857 Update Node.js to v22.16.0 (#4081)
+83139d29393 Updated translations from Phrase (#4077)
+c7f4e7a37a2 SW-6982 Remove zone figure label on funder portal (#4079)
 4207d8eeeae Enable jsx-no-bind linting rule, prepare to remove it in CI (#4072)
 7cae54ad9b6 SW-6974 Added planting site history slider (#4068)
