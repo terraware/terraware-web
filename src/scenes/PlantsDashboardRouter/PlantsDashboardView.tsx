@@ -361,7 +361,7 @@ export default function PlantsDashboardView({
 
   return (
     <PlantsPrimaryPage
-      title={strings.PLANTS_DASHBOARD}
+      title={isAcceleratorRoute ? '' : strings.PLANTS_DASHBOARD}
       text={
         plantingSite?.id !== -1
           ? plantingSite
