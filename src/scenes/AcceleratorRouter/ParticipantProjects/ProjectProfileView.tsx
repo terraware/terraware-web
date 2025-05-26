@@ -359,7 +359,7 @@ const ProjectProfileView = ({
               </Grid>
             )}
 
-            <Grid item>
+            <Grid item marginLeft={isMobile ? theme.spacing(1) : 0}>
               <ProjectFieldLink
                 value={
                   funderView
