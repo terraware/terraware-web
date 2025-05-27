@@ -80,13 +80,7 @@ export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JS
           </Typography>
         )}
         {subtitle && (
-          <Typography
-            fontSize='16px'
-            fontWeight={500}
-            marginBottom={0}
-            textAlign='left'
-            color={theme.palette.TwClrBasePink500}
-          >
+          <Typography fontSize='16px' fontWeight={500} marginBottom={0} textAlign='left'>
             {subtitle}
           </Typography>
         )}
