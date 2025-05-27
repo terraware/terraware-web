@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
@@ -12,6 +12,7 @@ import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapSourceProperties } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type ZoneLevelDataMapProps = {
   plantingSiteId: number;
@@ -22,7 +23,8 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const { isDesktop } = useDeviceInfo();
   const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =
     usePlantingSiteData();
-
+  const defaultTimeZone = useDefaultTimeZone();
+  const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
   const zonesProgress = useMemo(() => {
     const zoneProgress: Record<number, { name: string; progress: number; targetDensity: number }> = {};
 
@@ -247,15 +249,42 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           }
         }
 
+        const latestZoneObservationTime = plantingSite?.plantingZones?.find(
+          (z) => z.id === zoneId
+        )?.latestObservationCompletedTime;
+
         return (
           <MapTooltip
             title={zoneObservation?.name ?? entity.name}
-            subtitle={''} // TODO calculate latest observation per zone
+            subtitle={
+              latestZoneObservationTime
+                ? strings
+                    .formatString(
+                      strings.AS_OF_X,
+                      strings
+                        .formatString(
+                          strings.DATE_OBSERVATION,
+                          getDateDisplayValue(latestZoneObservationTime || '', timeZone)
+                        )
+                        .toString()
+                    )
+                    .toString()
+                : ''
+            }
             properties={properties}
           />
         );
       },
-    [latestResultSiteHistory, latestResult, zonesStats, zonesProgress, findZoneArea, latestSummary]
+    [
+      latestResultSiteHistory,
+      latestResult,
+      zonesStats,
+      zonesProgress,
+      findZoneArea,
+      latestSummary,
+      plantingSite,
+      timeZone,
+    ]
   );
 
   return (
