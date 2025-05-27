@@ -1,3 +1,4 @@
+8c8628f83d7 SW-6970 (follow-up) Add padding to all Plants Dashboard section headers (#4076)
 c3a87bbb5bc SW-6994 Map: Include "as of [latest Observation date] Observation" in Zone popover (#4084)
 7ebaac453db Plants Dashboard - Fix Console spinner condition (#4082)
 32afbd82246 SW-6986 Fix Margins for mobile View Reports link (#4080)
