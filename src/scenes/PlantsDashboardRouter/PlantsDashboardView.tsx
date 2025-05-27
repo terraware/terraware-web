@@ -126,7 +126,7 @@ export default function PlantsDashboardView({
                 flexDirection: isMobile ? 'column' : 'row',
               }}
             >
-              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}>
                 {strings.MORTALITY_RATE}
               </Typography>
               {hasObservations && (
@@ -150,6 +150,7 @@ export default function PlantsDashboardView({
             display: 'flex',
             alignItems: isMobile ? 'flex-start' : 'center',
             flexDirection: isMobile ? 'column' : 'row',
+            paddingLeft: theme.spacing(3),
           }}
         >
           <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
@@ -173,6 +174,7 @@ export default function PlantsDashboardView({
                 display: 'flex',
                 alignItems: isMobile ? 'flex-start' : 'center',
                 flexDirection: isMobile ? 'column' : 'row',
+                paddingLeft: theme.spacing(3),
               }}
             >
               <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
@@ -188,7 +190,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink, theme]
   );
 
   const renderPlantingSiteTrends = useCallback(
@@ -196,7 +198,7 @@ export default function PlantsDashboardView({
       plantingSite ? (
         <>
           <Grid item xs={12}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: theme.spacing(3) }}>
               <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
                 {strings.ZONE_TRENDS}
               </Typography>
@@ -209,7 +211,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite]
+    [plantingSite, theme]
   );
 
   const renderZoneLevelData = useCallback(
@@ -224,7 +226,7 @@ export default function PlantsDashboardView({
                 flexDirection: isMobile ? 'column' : 'row',
               }}
             >
-              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}>
                 {strings.SITE_MAP}
               </Typography>
               {hasObservations && (
