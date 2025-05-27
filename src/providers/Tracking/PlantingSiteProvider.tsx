@@ -85,13 +85,17 @@ const PlantingSiteProvider = ({ children }: Props) => {
     }
   }, [activeLocale, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization]);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;
     if (orgId) {
       void dispatch(requestPlantingSites(orgId));
       _setSelectedPlantingSite(undefined);
     }
-  }, [dispatch, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization, _setSelectedPlantingSite]);
+  }, [acceleratorOrganizationId, dispatch, isAcceleratorRoute, selectedOrganization.id]);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
 
   const allPlantingSites = useMemo(
     () => (plantingSitesResults && allSitesOption ? [...plantingSitesResults, allSitesOption] : []),
@@ -253,6 +257,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       latestResult,
       isLoading,
       isInitiated: plantingSitesResults !== undefined,
+      reload,
     }),
     [
       acceleratorOrganizationId,
@@ -273,6 +278,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       latestResult,
       isLoading,
       plantingSitesResults,
+      reload,
     ]
   );
 
