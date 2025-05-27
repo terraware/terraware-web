@@ -31,11 +31,13 @@ const SpeciesProvider = ({ children }: Props) => {
 
   const reload = useCallback(() => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId ?? selectedOrganization.id : selectedOrganization.id;
-    const speciesRequest = dispatch(requestListSpecies(orgId));
-    const inUseSpeciesRequest = dispatch(requestListInUseSpecies(orgId));
+    if (orgId > 0) {
+      const speciesRequest = dispatch(requestListSpecies(orgId));
+      const inUseSpeciesRequest = dispatch(requestListInUseSpecies(orgId));
 
-    setSpeciesRequestId(speciesRequest.requestId);
-    setInUseSpeciesRequestId(inUseSpeciesRequest.requestId);
+      setSpeciesRequestId(speciesRequest.requestId);
+      setInUseSpeciesRequestId(inUseSpeciesRequest.requestId);
+    }
   }, [
     dispatch,
     selectedOrganization,
@@ -45,10 +47,9 @@ const SpeciesProvider = ({ children }: Props) => {
     acceleratorOrganizationId,
   ]);
 
-  // Do a reload if organization changes
   useEffect(() => {
     reload();
-  }, [selectedOrganization, acceleratorOrganizationId]);
+  }, [reload]);
 
   useEffect(() => {
     if (speciesResponse?.status === 'success') {
