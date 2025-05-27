@@ -58,7 +58,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     onClose,
     reload,
     snackbar,
-    uploadResult.data,
+    uploadResult?.data,
     uploadResult?.status,
   ]);
 
