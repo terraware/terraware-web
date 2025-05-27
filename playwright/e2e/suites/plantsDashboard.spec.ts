@@ -12,9 +12,9 @@ export default function PlantsDashbordTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await page.getByRole('link', { name: 'Phase 2 Project Deal' }).click();
+    await page.getByRole('link', { name: 'Phase 0 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
-    await expect(page.getByText('Phase 2 Project Deal', { exact: true })).toBeVisible();
+    await expect(page.getByText('Phase 0 Project Deal', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('0 ha').first()).toBeVisible();
     await expect(
