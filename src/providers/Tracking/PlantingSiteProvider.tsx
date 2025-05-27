@@ -95,7 +95,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   useEffect(() => {
     reload();
-  }, [dispatch, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization, _setSelectedPlantingSite, reload]);
+  }, [reload]);
 
   const allPlantingSites = useMemo(
     () => (plantingSitesResults && allSitesOption ? [...plantingSitesResults, allSitesOption] : []),
