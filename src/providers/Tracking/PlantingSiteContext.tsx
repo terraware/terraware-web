@@ -28,6 +28,7 @@ export type PlantingSiteData = {
 
   isLoading: boolean;
   isInitiated: boolean;
+  reload: () => void;
 };
 
 // default values pointing to nothing
@@ -38,6 +39,8 @@ export const PlantingSiteContext = createContext<PlantingSiteData>({
   setSelectedPlantingSite: () => {},
   isLoading: true,
   isInitiated: false,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  reload: () => {},
 });
 
 export const usePlantingSiteData = () => useContext(PlantingSiteContext);
