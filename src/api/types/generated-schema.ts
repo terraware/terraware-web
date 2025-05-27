@@ -7832,6 +7832,8 @@ export interface components {
         PlantingSiteHistoryPayload: {
             areaHa?: number;
             boundary: components["schemas"]["MultiPolygon"];
+            /** Format: date-time */
+            createdTime: string;
             exclusion?: components["schemas"]["MultiPolygon"];
             /** Format: int64 */
             id: number;

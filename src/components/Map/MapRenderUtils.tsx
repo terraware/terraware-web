@@ -70,7 +70,7 @@ export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JS
         sx={{
           backgroundColor: theme.palette.TwClrBgSecondary,
           borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-          padding: theme.spacing(2, 4),
+          padding: theme.spacing(2),
           borderRadius: 1,
         }}
       >

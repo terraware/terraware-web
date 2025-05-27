@@ -8,6 +8,7 @@ import ListMapView from 'src/components/ListMapView';
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import { View } from 'src/components/common/ListMapSelector';
+import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
@@ -16,7 +17,7 @@ import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
-import { PlantingSite } from 'src/types/Tracking';
+import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -146,7 +147,25 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
   const defaultTimeZone = useDefaultTimeZone();
-  const { plantingSite } = usePlantingSiteData();
+  const { plantingSite, plantingSiteHistories } = usePlantingSiteData();
+  const [selectedHistory, setSelectedHistory] = useState<PlantingSiteHistory>();
+
+  const dates = useMemo(() => {
+    return plantingSiteHistories?.map((history) => history.createdTime);
+  }, [plantingSiteHistories]);
+
+  useEffect(() => {
+    if (!selectedHistory && plantingSiteHistories?.length) {
+      setSelectedHistory(plantingSiteHistories[0]);
+    }
+  }, [plantingSiteHistories, selectedHistory]);
+
+  const selectDate = useCallback(
+    (date?: string) => {
+      setSelectedHistory(plantingSiteHistories?.find((_history) => _history.createdTime === date));
+    },
+    [plantingSiteHistories]
+  );
 
   const timeZone = useMemo(() => plantingSite?.timeZone ?? defaultTimeZone.get().id, [plantingSite, defaultTimeZone]);
 
@@ -158,10 +177,10 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
   };
 
   const mapData = useMemo(() => {
-    if (plantingSite) {
-      return MapService.getMapDataFromPlantingSite(plantingSite);
+    if (plantingSite && selectedHistory) {
+      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, selectedHistory);
     }
-  }, [plantingSite]);
+  }, [plantingSite, selectedHistory]);
 
   useEffect(() => {
     if (!search) {
@@ -186,6 +205,69 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
     return result;
   }, [mapData]);
 
+  const contextRenderer = useCallback(
+    (entity: MapSourceProperties): JSX.Element | null => {
+      if (plantingSite && selectedHistory) {
+        let properties: TooltipProperty[] = [];
+        let title: string;
+        if (entity.type === 'site') {
+          title = plantingSite.name;
+          properties = [
+            { key: strings.ZONES, value: selectedHistory.plantingZones.length },
+            { key: strings.SUBZONES, value: selectedHistory.plantingZones.flatMap((z) => z.plantingSubzones).length },
+          ];
+        } else if (entity.type === 'zone') {
+          const zoneHistory = selectedHistory.plantingZones.find((_zoneHistory) => _zoneHistory.id === entity.id);
+          const zone = plantingSite.plantingZones?.find((_zone) => _zone.id === zoneHistory?.plantingZoneId);
+          title = zoneHistory?.name ?? zone?.name ?? '';
+
+          properties = [
+            { key: strings.AREA_HA, value: zoneHistory?.areaHa && zoneHistory?.areaHa > 0 ? zoneHistory?.areaHa : '' },
+            { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
+            {
+              key: strings.PLANTING_COMPLETE,
+              value: zone?.plantingSubzones?.every((subzone) => subzone.plantingCompleted) ? strings.YES : strings.NO,
+            },
+            { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
+            {
+              key: strings.MONITORING_PLOTS,
+              value: zone?.numPermanentPlots ?? 0,
+            },
+            {
+              key: strings.LAST_OBSERVED,
+              value: zone?.latestObservationCompletedTime
+                ? getDateDisplayValue(zone.latestObservationCompletedTime, timeZone)
+                : '',
+            },
+          ];
+        } else if (entity.type === 'subzone') {
+          const subzoneHistory = selectedHistory.plantingZones
+            .flatMap((_zoneHistory) => _zoneHistory.plantingSubzones)
+            .find((_subzoneHistory) => _subzoneHistory.id === entity.id);
+          const subzone = plantingSite.plantingZones
+            ?.flatMap((_zone) => _zone.plantingSubzones)
+            .find((_subzone) => _subzone.id === subzoneHistory?.plantingSubzoneId);
+          title = subzoneHistory?.name ?? subzone?.name ?? '';
+          properties = [
+            {
+              key: strings.AREA_HA,
+              value: subzoneHistory?.areaHa && subzoneHistory?.areaHa > 0 ? subzoneHistory?.areaHa : '',
+            },
+            { key: strings.PLANTING_COMPLETE, value: subzone?.plantingCompleted ? strings.YES : strings.NO },
+            { key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 },
+          ];
+        } else {
+          return null;
+        }
+
+        return <MapTooltip title={title} properties={properties} />;
+      } else {
+        return null;
+      }
+    },
+    [plantingSite, selectedHistory, timeZone]
+  );
+
   if (!plantingSite?.boundary) {
     return null;
   }
@@ -201,7 +283,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
           highlightEntities={searchZoneEntities}
           focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
           contextRenderer={{
-            render: ContextRenderer(plantingSite, timeZone),
+            render: contextRenderer,
             sx: {
               '.mapboxgl-popup .mapboxgl-popup-content': {
                 borderRadius: '8px',
@@ -223,62 +305,13 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
               ]}
             />
           }
+          bottomLeftMapControl={
+            dates?.length && (
+              <MapDateSelect dates={dates} selectedDate={selectedHistory?.createdTime ?? ''} onChange={selectDate} />
+            )
+          }
         />
       )}
     </Box>
   );
 }
-
-const ContextRenderer =
-  (site: PlantingSite, timeZone: string) =>
-  // eslint-disable-next-line react/display-name
-  (entity: MapSourceProperties): JSX.Element | null => {
-    const zones = site.plantingZones ?? [];
-    let properties: TooltipProperty[] = [];
-    let title: string;
-    if (entity.type === 'site') {
-      title = site.name;
-      properties = [
-        { key: strings.ZONES, value: zones.length },
-        { key: strings.SUBZONES, value: zones.flatMap((z) => z.plantingSubzones).length },
-        {
-          key: strings.MONITORING_PLOTS,
-          value: zones.reduce((accumulator, zone) => accumulator + zone.numPermanentPlots, 0),
-        },
-      ];
-    } else if (entity.type === 'zone') {
-      const zone = zones.find((z) => z.id === entity.id);
-      title = zone?.name ?? '';
-      properties = [
-        { key: strings.AREA_HA, value: zone?.areaHa && zone?.areaHa > 0 ? zone?.areaHa : '' },
-        { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
-        {
-          key: strings.PLANTING_COMPLETE,
-          value: zone?.plantingSubzones?.every((subzone) => subzone.plantingCompleted) ? strings.YES : strings.NO,
-        },
-        { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
-        {
-          key: strings.MONITORING_PLOTS,
-          value: zone?.numPermanentPlots ?? 0,
-        },
-        {
-          key: strings.LAST_OBSERVED,
-          value: zone?.latestObservationCompletedTime
-            ? getDateDisplayValue(zone.latestObservationCompletedTime, timeZone)
-            : '',
-        },
-      ];
-    } else if (entity.type === 'subzone') {
-      const subzone = zones.flatMap((z) => z.plantingSubzones).find((sz) => sz.id === entity.id);
-      title = subzone?.fullName ?? '';
-      properties = [
-        { key: strings.AREA_HA, value: subzone?.areaHa && subzone?.areaHa > 0 ? subzone?.areaHa : '' },
-        { key: strings.PLANTING_COMPLETE, value: subzone?.plantingCompleted ? strings.YES : strings.NO },
-        { key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 },
-      ];
-    } else {
-      return null;
-    }
-
-    return <MapTooltip title={title} properties={properties} />;
-  };

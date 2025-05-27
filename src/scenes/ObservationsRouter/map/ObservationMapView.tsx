@@ -120,7 +120,7 @@ export default function ObservationMapView({
       observations.find((obv) => obv.id === observationToUse?.observationId) ||
       adHocObservations.find((obv) => obv.id === observationToUse?.observationId)
     );
-  }, [observations, selectedObservation, selectedAdHocObservation]);
+  }, [adHocObservations, observations, selectedObservation, selectedAdHocObservation]);
 
   useEffect(() => {
     if (observationData) {
@@ -137,7 +137,7 @@ export default function ObservationMapView({
     } else {
       setRequestId('');
     }
-  }, [observationData]);
+  }, [dispatch, observationData, selectedPlantingSite]);
 
   const plantingSiteMapData: MapSourceBaseData | undefined = useMemo(
     () => MapService.getMapDataFromPlantingSite(selectedPlantingSite)?.site,
@@ -232,7 +232,7 @@ export default function ObservationMapView({
         />
       );
     },
-    [selectedObservation, selectedPlantingSite, plantingSiteHistory]
+    [selectedAdHocObservation, selectedObservation, selectedPlantingSite, plantingSiteHistory]
   );
 
   return (

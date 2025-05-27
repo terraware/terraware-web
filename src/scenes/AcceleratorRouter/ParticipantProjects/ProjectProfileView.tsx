@@ -231,7 +231,7 @@ const ProjectProfileView = ({
             projectId={projectDetails.projectId}
             imageValueId={projectDetails.projectZoneFigureValueId}
             alt={strings.PROJECT_ZONE_FIGURE}
-            label={<ProjectFigureLabel labelText={strings.PROJECT_ZONE_FIGURE_VARIABLE} />}
+            label={!funderView && <ProjectFigureLabel labelText={strings.PROJECT_ZONE_FIGURE_VARIABLE} />}
           />
         )}
         {projectDetails && !projectDetails?.projectZoneFigureValueId && (
@@ -359,7 +359,7 @@ const ProjectProfileView = ({
               </Grid>
             )}
 
-            <Grid item>
+            <Grid item marginLeft={isMobile ? theme.spacing(1) : 0}>
               <ProjectFieldLink
                 value={
                   funderView
