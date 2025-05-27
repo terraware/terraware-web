@@ -72,7 +72,10 @@ export default function PlantsPrimaryPageView({
   const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
 
   const hasSites = useMemo(() => {
-    return (allPlantingSites?.length ?? 0) > 1;
+    return (
+      (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1) ||
+      (isAcceleratorRoute && (plantingSites?.length ?? 0) > 1)
+    );
   }, [allPlantingSites]);
 
   const plantingSiteSelected = useMemo(() => {
@@ -131,7 +134,11 @@ export default function PlantsPrimaryPageView({
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
   }, [plantingSites]);
 
-  if (!plantingSites || ((allPlantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId)) {
+  if (
+    !plantingSites ||
+    (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId) ||
+    (isAcceleratorRoute && (plantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId)
+  ) {
     return (
       <TfMain>
         <CircularProgress sx={{ margin: 'auto' }} />
@@ -144,9 +151,11 @@ export default function PlantsPrimaryPageView({
     <Wrapper>
       {newHeader ? (
         <>
-          <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
-            <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
-          </Grid>
+          {title && (
+            <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
+              <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
+            </Grid>
+          )}
           {showGeometryNote && selectedPlantingSiteId && latestObservationId && (
             <Box marginBottom={theme.spacing(4)}>
               <Message
