@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/106</span>
+                <span class='fraction'>0/108</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/107</span>
             </div>
         
             
@@ -345,7 +345,13 @@
 <a name='L280'></a><a href='#L280'>280</a>
 <a name='L281'></a><a href='#L281'>281</a>
 <a name='L282'></a><a href='#L282'>282</a>
-<a name='L283'></a><a href='#L283'>283</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -444,8 +450,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -582,6 +592,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -714,13 +726,17 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
     }
   }, [activeLocale, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const orgId = <span class="cstat-no" title="statement not covered" >isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;</span>
 <span class="cstat-no" title="statement not covered" >    if (orgId) {</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestPlantingSites(orgId));</span>
 <span class="cstat-no" title="statement not covered" >      _setSelectedPlantingSite(undefined);</span>
     }
-  }, [dispatch, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization, _setSelectedPlantingSite]);
+  }, [acceleratorOrganizationId, dispatch, isAcceleratorRoute, selectedOrganization.id]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    reload();</span>
+  }, [reload]);
 &nbsp;
   const allPlantingSites = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >plantingSitesResults &amp;&amp; allSitesOption ? [...plantingSitesResults, allSitesOption] : [])</span>,
@@ -882,6 +898,7 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
       latestResult,
       isLoading,
       isInitiated: plantingSitesResults !== undefined,
+      reload,
     }),
     [
       acceleratorOrganizationId,
@@ -902,6 +919,7 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
       latestResult,
       isLoading,
       plantingSitesResults,
+      reload,
     ]
   );
 &nbsp;
@@ -916,7 +934,7 @@ export default PlantingSiteProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-27T18:00:33.794Z
+                at 2025-05-27T20:31:53.632Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
