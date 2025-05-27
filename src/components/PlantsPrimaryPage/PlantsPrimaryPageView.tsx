@@ -161,7 +161,7 @@ export default function PlantsPrimaryPageView({
               <Message
                 body={
                   <span>
-                    <b>{strings.PLEASE_NOTE}</b>
+                    <b>{strings.PLEASE_NOTE}</b>{' '}
                     {strings.formatString(
                       strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
                       isAcceleratorRoute ? (
