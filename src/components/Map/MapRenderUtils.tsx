@@ -37,10 +37,11 @@ export type TooltipProperty = {
 export type MapTooltipProps = {
   title?: string;
   subtitle?: string;
+  subtitleColor?: string;
   properties: TooltipProperty[];
 };
 
-export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JSX.Element {
+export function MapTooltip({ title, properties, subtitle, subtitleColor }: MapTooltipProps): JSX.Element {
   const theme = useTheme();
 
   const textStyle = {
@@ -80,7 +81,13 @@ export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JS
           </Typography>
         )}
         {subtitle && (
-          <Typography fontSize='16px' fontWeight={500} marginBottom={0} textAlign='left'>
+          <Typography
+            fontSize='16px'
+            fontWeight={500}
+            marginBottom={0}
+            textAlign='left'
+            color={subtitleColor || theme.palette.TwClrBasePink500}
+          >
             {subtitle}
           </Typography>
         )}
