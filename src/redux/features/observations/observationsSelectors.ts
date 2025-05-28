@@ -241,9 +241,10 @@ export const selectLatestObservation = createCachedSelector(
 export const selectAdHocObservationResults = (state: RootState) => state.adHocObservationResults?.observations;
 
 // scheduling selectors
-export const selectScheduleObservation = (state: RootState, requestId: string) => state.scheduleObservation[requestId];
+export const selectScheduleObservation = (requestId: string) => (state: RootState) =>
+  state.scheduleObservation[requestId];
 
-export const selectRescheduleObservation = (state: RootState, requestId: string) =>
+export const selectRescheduleObservation = (requestId: string) => (state: RootState) =>
   state.rescheduleObservation[requestId];
 
 // replace observation plot selector

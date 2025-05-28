@@ -1,100 +1,79 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
+import { BusySpinner } from '@terraware/web-components';
+
 import { APP_PATHS } from 'src/constants';
+import useRescheduleObservation from 'src/hooks/useRescheduleObservation';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers';
-import { requestRescheduleObservation } from 'src/redux/features/observations/observationsAsyncThunks';
-import { selectObservations } from 'src/redux/features/observations/observationsSelectors';
-import { selectRescheduleObservation } from 'src/redux/features/observations/observationsSelectors';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { RescheduleObservationRequestPayload } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import ScheduleObservationForm from './ScheduleObservationForm';
+import RescheduleObservationForm from './RescheduleObservationForm';
 
 export default function ScheduleObservation(): JSX.Element {
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
-  const { selectedOrganization } = useOrganization();
-  const [validate, setValidate] = useState(false);
-  const [plantingSiteId, setPlantingSiteId] = useState<number>();
-  const [startDate, setStartDate] = useState<string>();
-  const [endDate, setEndDate] = useState<string>();
-  const [hasErrors, setHasErrors] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState<string>('');
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
-  const { observationId } = useParams<{ observationId: string }>();
+  const params = useParams<{ observationId: string }>();
+  const { observations, reload, setSelectedPlantingSite } = usePlantingSiteData();
+  const { reschedule, rescheduleResult } = useRescheduleObservation();
 
-  const plantingSitesResult = useAppSelector(selectPlantingSites);
-  const observations = useAppSelector(selectObservations);
-  const result = useAppSelector((state) => selectRescheduleObservation(state, requestId));
+  const [formData, setFormData] = useState<RescheduleObservationRequestPayload>();
 
-  const rescheduleObservation = async () => {
-    setValidate(true);
-    if (!hasErrors && observationId && startDate && endDate) {
-      const dispatched = dispatch(
-        requestRescheduleObservation({
-          observationId: Number(observationId),
-          request: { startDate, endDate },
-        })
-      );
-      setRequestId(dispatched.requestId);
+  const observationId = useMemo(() => {
+    if (params.observationId) {
+      return Number(params.observationId);
     }
-    return Promise.resolve(true);
-  };
+  }, [params]);
 
   const goToObservations = useCallback(() => navigate(APP_PATHS.OBSERVATIONS), [navigate]);
 
-  const onErrors = useCallback((errors: boolean) => {
-    setHasErrors(errors);
-  }, []);
-
   useEffect(() => {
-    const observation = observations?.find((data) => data.id.toString() === observationId);
-    const plantingSite = plantingSitesResult?.find((ps) => ps.id === observation?.plantingSiteId);
-    if (!observationId || (observations?.length && plantingSitesResult?.length && !plantingSite)) {
-      goToObservations();
-    } else if (plantingSite && observation) {
-      setPlantingSites([plantingSite]);
-      setPlantingSiteId(plantingSite.id);
-      setStartDate(observation?.startDate);
-      setEndDate(observation?.endDate);
+    if (observations) {
+      const observation = observations.find((data) => data.id === observationId);
+      if (!observation) {
+        goToObservations();
+      } else {
+        setSelectedPlantingSite(observation.plantingSiteId);
+        setFormData({ startDate: observation.startDate, endDate: observation.endDate });
+      }
     }
-  }, [goToObservations, observationId, plantingSitesResult, observations]);
+  }, [goToObservations, observationId, observations, setSelectedPlantingSite]);
 
   useEffect(() => {
-    if (result?.status === 'error') {
+    if (rescheduleResult?.status === 'error') {
       snackbar.toastError();
-    } else if (result?.status === 'success' && selectedOrganization.id !== -1) {
+    } else if (rescheduleResult?.status === 'success') {
       snackbar.toastSuccess(strings.OBSERVATION_RESCHEDULED);
-      void dispatch(requestObservations(selectedOrganization.id));
-      void dispatch(requestObservationsResults(selectedOrganization.id));
+      reload();
       goToObservations();
     }
-  }, [dispatch, goToObservations, selectedOrganization.id, snackbar, result?.status]);
+  }, [dispatch, rescheduleResult, goToObservations, snackbar, reload]);
+
+  const onSave = useCallback(
+    (data: RescheduleObservationRequestPayload) => {
+      if (observationId) {
+        reschedule(observationId, data.startDate, data.endDate);
+      }
+    },
+    [observationId, reschedule]
+  );
 
   return (
-    <ScheduleObservationForm
-      title={strings.RESCHEDULE_OBSERVATION}
-      plantingSites={plantingSites}
-      plantingSiteId={plantingSiteId}
-      onPlantingSiteId={(id) => setPlantingSiteId(id)}
-      startDate={startDate}
-      onStartDate={(date) => setStartDate(date)}
-      endDate={endDate}
-      onEndDate={(date) => setEndDate(date)}
-      validate={validate}
-      onErrors={onErrors}
-      cancelID='cancelRescheduleObservation'
-      saveID='rescheduleObservation'
-      onCancel={() => goToObservations()}
-      onSave={() => void rescheduleObservation()}
-      status={result?.status}
-    />
+    <>
+      {rescheduleResult?.status === 'pending' && <BusySpinner withSkrim={true} />}
+      {formData && (
+        <RescheduleObservationForm
+          title={strings.RESCHEDULE_OBSERVATION}
+          initialData={formData}
+          onCancel={goToObservations}
+          onSave={onSave}
+        />
+      )}
+    </>
   );
 }
