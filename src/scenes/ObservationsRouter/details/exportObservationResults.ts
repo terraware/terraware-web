@@ -3,12 +3,19 @@ import { asBlob, generateCsv, mkConfig } from 'export-to-csv';
 import { AcceptedData, ColumnHeader } from 'export-to-csv/output/lib/types';
 
 import { APP_PATHS } from 'src/constants';
+import { mergeObservations } from 'src/redux/features/observations/utils';
+import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import { ObservationResults, getPlotStatus } from 'src/types/Observations';
+import { Species } from 'src/types/Species';
+import { PlantingSite } from 'src/types/Tracking';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
 interface UseExportObservationResultsParams {
-  observationResults: ObservationResults;
+  observationId: number;
+  defaultTimeZone: string;
+  plantingSites: PlantingSite[];
+  species: Species[];
 }
 
 function makeCsv(columns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob {
@@ -185,23 +192,33 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
   return makeCsv(columnHeaders, data);
 }
 
-export default function exportObservationResults(params: UseExportObservationResultsParams) {
-  const { observationResults } = params;
-  const prefix = `${observationResults.plantingSiteName}-${observationResults.completedDate}`;
-  const dirName = `${prefix}-${strings.OBSERVATION}`;
+export default async function exportObservationResults(params: UseExportObservationResultsParams) {
+  const { observationId, defaultTimeZone, plantingSites, species } = params;
 
-  return downloadZipFile({
-    dirName,
-    files: [
-      {
-        fileName: dirName,
-        content: makeObservationCsv(observationResults),
-      },
-      {
-        fileName: `${prefix}-${strings.SPECIES}`,
-        content: makePlotSpeciesCsv(observationResults),
-      },
-    ],
-    suffix: '.csv',
-  });
+  const resultsWithUnknown = await ObservationsService.getSingleObservationResults(observationId, true);
+  if (resultsWithUnknown.requestSucceeded && resultsWithUnknown.data?.observation) {
+    const mergedResults = mergeObservations(
+      [resultsWithUnknown.data.observation],
+      defaultTimeZone,
+      plantingSites,
+      species
+    )[0];
+
+    const prefix = `${mergedResults.plantingSiteName}-${mergedResults.completedDate}`;
+    const dirName = `${prefix}-${strings.OBSERVATION}`;
+    return downloadZipFile({
+      dirName,
+      files: [
+        {
+          fileName: dirName,
+          content: makeObservationCsv(mergedResults),
+        },
+        {
+          fileName: `${prefix}-${strings.SPECIES}`,
+          content: makePlotSpeciesCsv(mergedResults),
+        },
+      ],
+      suffix: '.csv',
+    });
+  }
 }

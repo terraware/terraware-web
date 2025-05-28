@@ -11,6 +11,7 @@ import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper'
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   searchObservationDetails,
   selectDetailsZoneNames,
@@ -47,6 +48,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
+  const speciesData = useSpeciesData();
   const navigate = useSyncNavigate();
   const params = useParams<{
     plantingSiteId: string;
@@ -205,10 +207,15 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
   const onExportObservationResults = useCallback(() => {
-    if (selectedObservationResults && selectedObservationResults.length > 0) {
-      void exportObservationResults({ observationResults: selectedObservationResults[0] });
+    if (plantingSite && selectedObservationResults && selectedObservationResults.length > 0) {
+      void exportObservationResults({
+        observationId: selectedObservationResults[0].observationId,
+        defaultTimeZone: defaultTimeZone.get().id,
+        plantingSites: [plantingSite],
+        species: speciesData.species,
+      });
     }
-  }, [selectedObservationResults]);
+  }, [defaultTimeZone, plantingSite, selectedObservationResults, speciesData]);
 
   return (
     <DetailsPage

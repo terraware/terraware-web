@@ -8,6 +8,8 @@ import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { requestAbandonObservation } from 'src/redux/features/observations/observationsAsyncThunks';
 import {
   selectAbandonObservation,
@@ -105,6 +107,8 @@ export default function OrgObservationsListView({
   timeZone,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const speciesData = useSpeciesData();
+  const plantingSiteData = usePlantingSiteData();
   const { activeLocale } = useLocalization();
   const [results, setResults] = useState<any>([]);
   const theme = useTheme();
@@ -206,12 +210,16 @@ export default function OrgObservationsListView({
 
   const onExportObservationResults = useCallback(
     (observationId: number) => {
-      const observation = (observationsResults ?? []).find((item) => item.observationId === observationId);
-      if (observation !== undefined) {
-        void exportObservationResults({ observationResults: observation });
+      if (speciesData.species && plantingSiteData.allPlantingSites) {
+        void exportObservationResults({
+          observationId,
+          defaultTimeZone: timeZone,
+          species: speciesData.species,
+          plantingSites: plantingSiteData.allPlantingSites,
+        });
       }
     },
-    [observationsResults]
+    [timeZone, speciesData, plantingSiteData]
   );
 
   const goToRescheduleObservation = useCallback(

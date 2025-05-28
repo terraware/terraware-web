@@ -19,6 +19,7 @@ import SearchService from './SearchService';
 const AD_HOC_OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations/adHoc';
 const AD_HOC_OBSERVATION_RESULTS_ENDPOINT = '/api/v1/tracking/observations/adHoc/results';
 const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
+const OBSERVATION_RESULTS_SINGLE_ENDPOINT = '/api/v1/tracking/observations/{observationId}/results';
 const OBSERVATION_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
@@ -34,6 +35,9 @@ type AdHocObservationResultsPayload =
 
 type ObservationResultsResponsePayload =
   paths[typeof OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type ObservationResultsSingleResponsePayload =
+  paths[typeof OBSERVATION_RESULTS_SINGLE_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type ObservationsResponsePayload =
   paths[typeof OBSERVATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -55,6 +59,7 @@ export type ObservationsData = {
 const httpAdHocObservations = HttpService.root(AD_HOC_OBSERVATIONS_ENDPOINT);
 const httpAdHocObservationResults = HttpService.root(AD_HOC_OBSERVATION_RESULTS_ENDPOINT);
 const httpObservationResults = HttpService.root(OBSERVATION_RESULTS_ENDPOINT);
+const httpObservationResultsSingle = HttpService.root(OBSERVATION_RESULTS_SINGLE_ENDPOINT);
 const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
 const httpObservation = HttpService.root(OBSERVATION_ENDPOINT);
 const httpObservationExport = HttpService.root(OBSERVATION_EXPORT_ENDPOINT);
@@ -229,6 +234,18 @@ const exportGpx = async (observationId: number): Promise<any> => {
   } catch {
     return null;
   }
+};
+
+const getSingleObservationResults = async (
+  observationId: number,
+  includeUnknown: boolean = false
+): Promise<Response2<ObservationResultsSingleResponsePayload>> => {
+  const response = await httpObservationResultsSingle.get2<ObservationResultsSingleResponsePayload>({
+    params: { includeUnknown: includeUnknown.toString() },
+    urlReplacements: { '{observationId}': observationId.toString() },
+  });
+
+  return response;
 };
 
 /**
@@ -474,6 +491,7 @@ const ObservationsService = {
   replaceObservationPlot,
   rescheduleObservation,
   scheduleObservation,
+  getSingleObservationResults,
   getPlantingSiteObservationsSummaries,
   abandonObservation,
   listAdHocObservationResults,

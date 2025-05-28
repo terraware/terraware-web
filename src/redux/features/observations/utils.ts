@@ -231,7 +231,9 @@ const mergeSpecies = (
   return speciesObservations
     .filter(
       (speciesObservation: ObservationSpeciesResultsPayload) =>
-        species[speciesObservation.speciesId ?? -1] || speciesObservation.speciesName
+        species[speciesObservation.speciesId ?? -1] ||
+        speciesObservation.speciesName ||
+        speciesObservation.certainty === 'Unknown'
     )
     .map(
       (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesResults => ({
