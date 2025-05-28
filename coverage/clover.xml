@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1748377914323" clover="3.2.0">
-  <project timestamp="1748377914323" name="All files">
-    <metrics statements="30814" coveredstatements="1301" conditionals="21158" coveredconditionals="388" methods="9495" coveredmethods="211" elements="61467" coveredelements="1900" complexity="0" loc="30814" ncloc="30814" packages="263" files="1275" classes="1275"/>
+<coverage generated="1748390397524" clover="3.2.0">
+  <project timestamp="1748390397524" name="All files">
+    <metrics statements="30815" coveredstatements="1301" conditionals="21160" coveredconditionals="388" methods="9495" coveredmethods="211" elements="61470" coveredelements="1900" complexity="0" loc="30815" ncloc="30815" packages="263" files="1275" classes="1275"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11727,14 +11727,14 @@
       </file>
     </package>
     <package name="src.providers.Species">
-      <metrics statements="30" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="8" coveredmethods="0"/>
+      <metrics statements="31" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="SpeciesContext.tsx" path="/home/runner/work/terraware-web/terraware-web/src/providers/Species/SpeciesContext.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
       </file>
       <file name="SpeciesProvider.tsx" path="/home/runner/work/terraware-web/terraware-web/src/providers/Species/SpeciesProvider.tsx">
-        <metrics statements="28" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="29" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
@@ -11748,21 +11748,22 @@
         <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="34" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="62" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="66" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.providers.Tracking">
