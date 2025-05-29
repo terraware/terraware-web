@@ -1580,7 +1580,7 @@ REMOVE_ONLY_ONE_ORG_AT_A_TIME,You may only remove yourself from one organization
 REMOVE_ORGANIZATION,Remove Organization?,
 REMOVE_ORGANIZATION_MODAL_TEXT,Are you sure you want to remove these organizations from the list of Accelerator Participants?,
 REMOVE_PARTICIPANT,Remove Participant,
-REMOVE_PARTICIPANT_CONFIRMATION,Are you sure you want to remove participant {0}. This cannot be undone.,
+REMOVE_PARTICIPANT_CONFIRMATION,Are you sure you want to remove participant {0}? This cannot be undone.,
 REMOVE_PEOPLE,Remove People,
 REMOVE_PEOPLE_DESC,Are you sure you want to remove these people? Removing them means they won’t have access to your organization’s data anymore.,
 REMOVE_PERSON,Remove Person,
