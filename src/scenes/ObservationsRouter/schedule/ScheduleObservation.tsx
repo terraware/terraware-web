@@ -1,16 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+
+import { BusySpinner } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
+import useScheduleObservation from 'src/hooks/useScheduleObservation';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers';
-import { requestScheduleObservation } from 'src/redux/features/observations/observationsAsyncThunks';
-import { selectScheduleObservation } from 'src/redux/features/observations/observationsSelectors';
-import { requestObservations } from 'src/redux/features/observations/observationsThunks';
-import { selectObservationSchedulableSitesWithPlantReportData } from 'src/redux/features/observations/observationsUtilsSelectors';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { requestSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { ScheduleObservationRequestPayload } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ScheduleObservationForm from './ScheduleObservationForm';
@@ -18,84 +15,34 @@ import ScheduleObservationForm from './ScheduleObservationForm';
 export default function ScheduleObservation(): JSX.Element {
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
-  const { selectedOrganization } = useOrganization();
 
-  const [validate, setValidate] = useState(false);
-  const [plantingSiteId, setPlantingSiteId] = useState<number>();
-  const [startDate, setStartDate] = useState<string>();
-  const [endDate, setEndDate] = useState<string>();
-  const [hasErrors, setHasErrors] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState<string>('');
-  const [selectedSubzones, setSelectedSubzones] = useState<number[]>([]);
-
-  const plantingSites = useAppSelector(selectObservationSchedulableSitesWithPlantReportData) ?? [];
-  const result = useAppSelector((state) => selectScheduleObservation(state, requestId));
-
-  const scheduleObservation = useCallback(() => {
-    setValidate(true);
-    if (!hasErrors && plantingSiteId && startDate && endDate) {
-      const dispatched = dispatch(
-        requestScheduleObservation({ endDate, plantingSiteId, requestedSubzoneIds: selectedSubzones, startDate })
-      );
-      setRequestId(dispatched.requestId);
-    }
-  }, [dispatch, hasErrors, startDate, endDate, plantingSiteId, selectedSubzones]);
+  const { reload } = useOrgTracking();
+  const { schedule, scheduleResult } = useScheduleObservation();
 
   const goToObservations = useCallback(() => navigate(APP_PATHS.OBSERVATIONS), [navigate]);
 
-  const onErrors = useCallback((errors: boolean) => {
-    setHasErrors(errors);
-  }, []);
-
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      void dispatch(requestPlantings(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization.id]);
-
-  // This populates planting site specific data into the selectObservationSchedulableSitesWithPlantReportData selector
-  useEffect(() => {
-    if (plantingSiteId) {
-      void dispatch(requestSiteReportedPlants(plantingSiteId));
-    }
-  }, [plantingSiteId, dispatch]);
-
-  useEffect(() => {
-    if (result?.status === 'error') {
+    if (scheduleResult?.status === 'error') {
       snackbar.toastError();
-    } else if (result?.status === 'success' && selectedOrganization.id !== -1) {
+    } else if (scheduleResult?.status === 'success') {
       snackbar.toastSuccess(strings.OBSERVATION_SCHEDULED);
-      void dispatch(requestObservations(selectedOrganization.id));
+      reload();
       goToObservations();
     }
-  }, [dispatch, goToObservations, selectedOrganization.id, snackbar, result?.status]);
+  }, [goToObservations, scheduleResult, snackbar, reload]);
 
-  const selectedPlantingSite = useMemo(
-    () => plantingSites.find((plantingSite) => plantingSite.id === plantingSiteId),
-    [plantingSites, plantingSiteId]
+  const onSave = useCallback(
+    (data: ScheduleObservationRequestPayload) => {
+      schedule(data.plantingSiteId, data.startDate, data.endDate, data.requestedSubzoneIds);
+    },
+    [schedule]
   );
 
   return (
-    <ScheduleObservationForm
-      cancelID='cancelScheduleObservation'
-      endDate={endDate}
-      title={strings.SCHEDULE_OBSERVATION}
-      plantingSiteId={plantingSiteId}
-      plantingSites={plantingSites}
-      onCancel={() => goToObservations()}
-      selectedSubzones={selectedSubzones}
-      onChangeSelectedSubzones={setSelectedSubzones}
-      onEndDate={(date) => setEndDate(date)}
-      onErrors={onErrors}
-      onPlantingSiteId={(id) => setPlantingSiteId(id)}
-      onSave={() => void scheduleObservation()}
-      onStartDate={(date) => setStartDate(date)}
-      saveID='scheduleObservation'
-      selectedPlantingSite={selectedPlantingSite}
-      startDate={startDate}
-      status={result?.status}
-      validate={validate}
-    />
+    <>
+      {scheduleResult?.status === 'pending' && <BusySpinner withSkrim={true} />}
+
+      <ScheduleObservationForm title={strings.SCHEDULE_OBSERVATION} onCancel={goToObservations} onSave={onSave} />
+    </>
   );
 }

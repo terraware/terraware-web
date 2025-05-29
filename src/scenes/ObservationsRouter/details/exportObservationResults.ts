@@ -80,7 +80,10 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
   const data = observationResults.plantingZones.flatMap((plantingZone) =>
     plantingZone.plantingSubzones.flatMap((subzone) =>
       subzone.monitoringPlots.map((monitoringPlot) => {
-        const [totalDead, totalExisting, totalLive] = monitoringPlot.species.reduce(
+        const allSpecies = monitoringPlot.unknownSpecies
+          ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
+          : monitoringPlot.species;
+        const [totalDead, totalExisting, totalLive] = allSpecies.reduce(
           (acc, species) => [acc[0] + species.totalDead, acc[1] + species.totalExisting, acc[2] + species.totalLive],
           [0, 0, 0]
         );
@@ -158,8 +161,11 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
 
   const data = observationResults.plantingZones.flatMap((plantingZone) =>
     plantingZone.plantingSubzones.flatMap((subzone) =>
-      subzone.monitoringPlots.flatMap((monitoringPlot) =>
-        monitoringPlot.species.map((species) => {
+      subzone.monitoringPlots.flatMap((monitoringPlot) => {
+        const allSpecies = monitoringPlot.unknownSpecies
+          ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
+          : monitoringPlot.species;
+        return allSpecies.map((species) => {
           let speciesName: string;
           if (species.speciesId) {
             speciesName = scientificNamesById[species.speciesId];
@@ -177,8 +183,8 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
             livePlants: species.totalLive,
             deadPlants: species.totalDead,
           };
-        })
-      )
+        });
+      })
     )
   );
 

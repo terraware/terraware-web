@@ -148,7 +148,7 @@ export const requestPlantingSiteAdHocObservationResults = createAsyncThunk(
 export const requestOrganizationObservations = createAsyncThunk(
   'observations/org',
   async (request: { organizationId: number }, { rejectWithValue }) => {
-    const response = await ObservationsService.listOrganizationAdHocObservations(request.organizationId);
+    const response = await ObservationsService.listOrganizationObservations(request.organizationId);
     if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
       return response.data.observations;
     }
@@ -178,7 +178,7 @@ export const requestOrganizationAdHocObservations = createAsyncThunk(
 export const requestOrganizationAdHocObservationResults = createAsyncThunk(
   'observations/orgAdHocResults',
   async (request: { organizationId: number }, { rejectWithValue }) => {
-    const response = await ObservationsService.listOrganizationObservationResults(request.organizationId);
+    const response = await ObservationsService.listOrganizationAdHocObservationResults(request.organizationId);
     if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
       return response.data.observations;
     }

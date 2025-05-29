@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Checkbox, Dropdown } from '@terraware/web-components';
+import { Dropdown, DropdownItem } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -9,77 +9,93 @@ import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
-import { Statuses } from 'src/redux/features/asyncUtils';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
-import { PlantingSite, PlantingSiteWithReportedPlants } from 'src/types/Tracking';
+import { ScheduleObservationRequestPayload } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ObservationSubzoneSelector from './ObservationSubzoneSelector';
 
 export type ScheduleObservationFormProps = {
-  cancelID: string;
-  endDate?: string;
   title: string;
   onCancel: () => void;
-  selectedSubzones?: number[];
-  onChangeSelectedSubzones?: (requestedSubzoneIds: number[]) => void;
-  onEndDate: (value: string) => void;
-  onErrors: (hasErrors: boolean) => void;
-  onPlantingSiteId: (siteId: number) => void;
-  onSave: () => void;
-  onStartDate: (value: string) => void;
+  onSave: (formData: ScheduleObservationRequestPayload) => void;
+
+  // If planting sites are not selectable, props for displaying the planting stie
   plantingSiteId?: number;
-  plantingSites: PlantingSite[];
-  saveID: string;
-  selectedPlantingSite?: PlantingSiteWithReportedPlants;
-  startDate?: string;
-  status?: Statuses;
-  validate?: boolean;
+  disablePlantingSiteSelect?: boolean;
+
+  // Hide subzone selections
+  disablePlantingSubzoneSelect?: boolean;
 };
 
 export default function ScheduleObservationForm({
-  cancelID,
-  endDate,
   title,
-  plantingSiteId,
-  plantingSites,
   onCancel,
-  selectedSubzones,
-  onChangeSelectedSubzones,
-  onEndDate,
-  onErrors,
-  onPlantingSiteId,
   onSave,
-  onStartDate,
-  saveID,
-  selectedPlantingSite,
-  startDate,
-  status,
-  validate,
 }: ScheduleObservationFormProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
+  const { observations, reportedPlants } = useOrgTracking();
+  const { allPlantingSites, plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
+
+  const [startDate, setStartDate] = useState<string>();
+  const [endDate, setEndDate] = useState<string>();
+  const [requestedSubzoneIds, setRequestedSubzoneIds] = useState<number[]>();
+
+  const [validate, setValidate] = useState<boolean>(false);
   const [startDateError, setStartDateError] = useState<string>();
   const [endDateError, setEndDateError] = useState<string>();
-  const [selectAll, setSelectAll] = useState(false);
+  const [subzoneError, setSubzoneError] = useState<string>();
 
-  const gridSize = () => {
-    if (isMobile) {
-      return 12;
+  const upcomingObservations = useMemo(() => {
+    const now = Date.now();
+    return observations?.filter((observation) => {
+      const endTime = new Date(observation.endDate).getTime();
+      return observation.state === 'Upcoming' && now <= endTime;
+    });
+  }, [observations]);
+
+  const plantingSitesWithZonesAndNoUpcomingObservations = useMemo(() => {
+    if (!allPlantingSites || !reportedPlants) {
+      return [];
     }
-    return 6;
-  };
+    return allPlantingSites?.filter((site) => {
+      if (!site.plantingZones?.length) {
+        return false;
+      }
+      const sitePlants = reportedPlants.find((_sitePlants) => _sitePlants.id === site.id);
+      if (!sitePlants?.totalPlants) {
+        return false;
+      }
+      const siteUpcomingObservations = upcomingObservations?.filter(
+        (observation) => observation.plantingSiteId === site.id
+      );
+      if (siteUpcomingObservations.length > 0) {
+        return false;
+      }
+      return true;
+    });
+  }, [allPlantingSites, reportedPlants, upcomingObservations]);
 
-  useEffect(() => {
-    let startError: string = '';
-    let endError: string = '';
-    let subzoneError: string = '';
+  const siteOptions = useMemo((): DropdownItem[] => {
+    return plantingSitesWithZonesAndNoUpcomingObservations.map((site) => ({
+      label: site.name,
+      value: site.id,
+    }));
+  }, [plantingSitesWithZonesAndNoUpcomingObservations]);
+
+  const findErrors = useCallback(() => {
+    let _startDateError: string = '';
+    let _endDateError: string = '';
+    let _subzoneError: string = '';
     if (!startDate) {
-      startError = strings.REQUIRED_FIELD;
+      _startDateError = strings.REQUIRED_FIELD;
     }
     if (!endDate) {
-      endError = strings.REQUIRED_FIELD;
+      _endDateError = strings.REQUIRED_FIELD;
     }
     if (startDate && endDate) {
       const today = DateTime.now().startOf('day');
@@ -89,35 +105,55 @@ export default function ScheduleObservationForm({
       const twoMonthsFromStart = DateTime.fromMillis(start).plus({ months: 2 }).toMillis();
       if (start < today.toMillis() || start > oneYearFromToday) {
         // start should be between today and one year from today
-        startError = strings.INVALID_DATE;
+        _startDateError = strings.INVALID_DATE;
       } else if (end <= start || end > twoMonthsFromStart) {
         // end should be between start and two months from start
-        endError = strings.INVALID_DATE;
+        _endDateError = strings.INVALID_DATE;
       }
     }
-    setStartDateError(startError);
-    setEndDateError(endError);
 
-    if (!selectedSubzones || selectedSubzones?.length === 0) {
-      subzoneError = strings.SELECT_AT_LEAST_ONE_SUBZONE;
+    if (!requestedSubzoneIds || requestedSubzoneIds?.length === 0) {
+      _subzoneError = strings.SELECT_AT_LEAST_ONE_SUBZONE;
     }
-    const hasErrors: boolean = startError || endError || subzoneError || !plantingSiteId ? true : false;
-    onErrors(hasErrors);
-  }, [plantingSiteId, startDate, endDate, onErrors]);
 
-  const sites = useMemo(
-    () =>
-      plantingSites.map((site) => ({
-        label: site.name,
-        value: site.id.toString(),
-      })),
-    [plantingSites]
+    setStartDateError(_startDateError);
+    setEndDateError(_endDateError);
+    setSubzoneError(_subzoneError);
+
+    return _startDateError || _endDateError || _subzoneError;
+  }, [endDate, requestedSubzoneIds, startDate]);
+
+  const onSelectPlantingSite = useCallback(
+    (value: string) => {
+      setSelectedPlantingSite(Number(value));
+    },
+    [setSelectedPlantingSite]
+  );
+
+  const onSubmit = useCallback(() => {
+    setValidate(true);
+    if (!findErrors() && startDate && endDate && requestedSubzoneIds && plantingSite) {
+      onSave({ startDate, endDate, requestedSubzoneIds, plantingSiteId: plantingSite.id });
+    }
+  }, [endDate, findErrors, onSave, plantingSite, requestedSubzoneIds, startDate]);
+
+  const setStartDateCallback = useCallback(
+    (value: DateTime<boolean> | undefined) => setStartDate(value?.toISODate() || undefined),
+    []
+  );
+  const setEndDateCallback = useCallback(
+    (value: DateTime<boolean> | undefined) => setEndDate(value?.toISODate() || undefined),
+    []
   );
 
   return (
     <TfMain>
-      {status === 'pending' && <BusySpinner withSkrim={true} />}
-      <PageForm cancelID={cancelID} saveID={saveID} onCancel={onCancel} onSave={onSave}>
+      <PageForm
+        cancelID={'cancelScheduleObservation'}
+        saveID={'scheduleObservation'}
+        onCancel={onCancel}
+        onSave={onSubmit}
+      >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {title}
@@ -131,70 +167,42 @@ export default function ScheduleObservationForm({
               <Dropdown
                 id='site'
                 label={strings.PLANTING_SITE}
-                onChange={(id) => onPlantingSiteId(Number(id))}
-                options={sites}
-                selectedValue={plantingSiteId?.toString()}
-                errorText={validate && !plantingSiteId ? strings.REQUIRED_FIELD : ''}
+                onChange={onSelectPlantingSite}
+                options={siteOptions}
+                selectedValue={plantingSite?.id}
+                errorText={validate && !plantingSite?.id ? strings.REQUIRED_FIELD : ''}
                 fullWidth
               />
             </Grid>
 
-            {onChangeSelectedSubzones && selectedPlantingSite && (
-              <>
-                <Grid item xs={12}>
-                  <Typography> {strings.SCHEDULE_OBSERVATION_MESSAGE}</Typography>
-                  {validate && (!selectedSubzones || selectedSubzones?.length === 0) && (
-                    <Typography color={theme.palette.TwClrTxtDanger}>{strings.SELECT_AT_LEAST_ONE_SUBZONE}</Typography>
-                  )}
-                </Grid>
-                <Grid item xs={12}>
-                  <Checkbox
-                    id='selectAll'
-                    name='SelectAll'
-                    label={strings.SELECT_ALL}
-                    value={selectAll}
-                    onChange={(value) => setSelectAll(value)}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <ObservationSubzoneSelector
-                    onChangeSelectedSubzones={onChangeSelectedSubzones}
-                    plantingSite={selectedPlantingSite}
-                    selectAll={selectAll}
-                  />
-                </Grid>
-              </>
-            )}
+            <Grid item xs={12}>
+              <ObservationSubzoneSelector
+                errorText={validate ? subzoneError : ''}
+                onChangeSelectedSubzones={setRequestedSubzoneIds}
+              />
+            </Grid>
 
             <Grid item xs={12}>
               <Divider />
             </Grid>
 
-            <Grid item xs={gridSize()}>
+            <Grid item xs={isMobile ? 12 : 6}>
               <DatePicker
                 id='startDate'
                 label={strings.OBSERVATION_START_DATE}
                 value={startDate ?? ''}
-                onChange={(value) => {
-                  if (value) {
-                    onStartDate(value.toISOString());
-                  }
-                }}
+                onDateChange={setStartDateCallback}
                 aria-label='date-picker'
                 errorText={validate ? startDateError : ''}
               />
             </Grid>
 
-            <Grid item xs={gridSize()}>
+            <Grid item xs={isMobile ? 12 : 6}>
               <DatePicker
                 id='endDate'
                 label={strings.OBSERVATION_END_DATE}
                 value={endDate ?? ''}
-                onChange={(value) => {
-                  if (value) {
-                    onEndDate(value.toISOString());
-                  }
-                }}
+                onDateChange={setEndDateCallback}
                 aria-label='date-picker'
                 errorText={validate ? endDateError : ''}
               />

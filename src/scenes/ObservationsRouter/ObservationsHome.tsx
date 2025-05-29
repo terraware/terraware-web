@@ -7,15 +7,12 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import {
-  selectObservationSchedulableSites,
-  selectUpcomingObservations,
-} from 'src/redux/features/observations/observationsUtilsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppDispatch } from 'src/redux/store';
 import BiomassMeasurement from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurement';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -32,12 +29,49 @@ export type ObservationsHomeProps = SearchProps & {
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
   const navigate = useSyncNavigate();
+  const dispatch = useAppDispatch();
+
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
 
   const { allPlantingSites, plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
-  const dispatch = useAppDispatch();
+  const { observations, reportedPlants, reload } = useOrgTracking();
+
+  const upcomingObservations = useMemo(() => {
+    const now = Date.now();
+    return observations?.filter((observation) => {
+      const endTime = new Date(observation.endDate).getTime();
+      return observation.state === 'Upcoming' && now <= endTime;
+    });
+  }, [observations]);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
+
+  const plantingSitesWithZonesAndNoUpcomingObservations = useMemo(() => {
+    if (!allPlantingSites || !reportedPlants) {
+      return [];
+    }
+    return allPlantingSites?.filter((site) => {
+      if (!site.plantingZones?.length) {
+        return false;
+      }
+      const sitePlants = reportedPlants.find((_sitePlants) => _sitePlants.id === site.id);
+      if (!sitePlants?.totalPlants) {
+        return false;
+      }
+      const siteUpcomingObservations = upcomingObservations?.filter(
+        (observation) => observation.plantingSiteId === site.id
+      );
+
+      if (siteUpcomingObservations.length > 0) {
+        return false;
+      }
+      return true;
+    });
+  }, [allPlantingSites, reportedPlants, upcomingObservations]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -64,10 +98,10 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     keepQuery: false,
   });
 
-  // get upcoming observations for notifications
-  const upcomingObservations = useAppSelector(selectUpcomingObservations);
-  // get observation schedulable sites
-  const newObservationsSchedulable = useAppSelector(selectObservationSchedulableSites).length;
+  const newObservationsSchedulable = useMemo(() => {
+    return plantingSitesWithZonesAndNoUpcomingObservations.length > 0;
+  }, [plantingSitesWithZonesAndNoUpcomingObservations]);
+
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 
   const onPreferences = useCallback(

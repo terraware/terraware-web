@@ -7396,6 +7396,8 @@ export interface components {
              * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
              */
             totalSpecies: number;
+            /** @description Information about plants of unknown species, if any were observed. */
+            unknownSpecies?: components["schemas"]["ObservationSpeciesResultsPayload"];
         };
         ObservationPayload: {
             /**
@@ -7568,6 +7570,7 @@ export interface components {
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
         };
+        /** @description Information about observed plants of a particular species in a region. */
         ObservationSpeciesResultsPayload: {
             /** @enum {string} */
             certainty: "Known" | "Other" | "Unknown";

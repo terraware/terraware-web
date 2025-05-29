@@ -271,6 +271,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
                     .toString()
                 : ''
             }
+            subtitleColor={theme.palette.TwClrTxt}
             properties={properties}
           />
         );
