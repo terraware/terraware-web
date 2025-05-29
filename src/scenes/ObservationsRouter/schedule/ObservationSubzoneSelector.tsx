@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Icon } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
@@ -21,7 +22,7 @@ const ObservationSubzoneSelector = ({ errorText, onChangeSelectedSubzones }: Obs
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   const [selectedSubzones, setSelectedSubzones] = useState(new Map<number, boolean>());
-  const { plantingSite, observations } = usePlantingSiteData();
+  const { plantingSite } = usePlantingSiteData();
 
   const handleOnChangeSelectedSubzones = useCallback(
     (nextSelectedSubzones: Map<number, boolean>) => {
@@ -97,7 +98,6 @@ const ObservationSubzoneSelector = ({ errorText, onChangeSelectedSubzones }: Obs
           />
         </Grid>
         {plantingSite.plantingZones?.map((zone, index) => {
-          const lastZoneObservation = observations?.find((observation) => observation.id === zone.latestObservationId);
           return (
             <Grid item xs={12} key={index}>
               <Checkbox
@@ -117,34 +117,35 @@ const ObservationSubzoneSelector = ({ errorText, onChangeSelectedSubzones }: Obs
                   paddingLeft: 1,
                 }}
               >
-                {lastZoneObservation
-                  ? strings.formatString(strings.LAST_OBSERVATION, lastZoneObservation.startDate || '')
+                {zone.latestObservationCompletedTime
+                  ? strings.formatString(
+                      strings.LAST_OBSERVATION,
+                      getDateDisplayValue(zone.latestObservationCompletedTime)
+                    )
                   : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
               </Typography>
-              {lastZoneObservation && isAfter(zone.boundaryModifiedTime, lastZoneObservation.startDate) && (
-                <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
-                  <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
-                  <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
-                    {strings.formatString(
-                      strings.ZONE_GEOMETRY_CHANGED,
-                      zone.name,
-                      DateTime.fromISO(zone.boundaryModifiedTime).toFormat('yyyy-MM-dd')
-                    )}
-                  </Typography>
-                  <Link
-                    target='_blank'
-                    fontSize={'16px'}
-                    to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
-                  >
-                    {strings.VIEW_MAP}
-                  </Link>
-                </Box>
-              )}
+              {zone.latestObservationCompletedTime &&
+                isAfter(zone.boundaryModifiedTime, zone.latestObservationCompletedTime) && (
+                  <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
+                    <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
+                    <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
+                      {strings.formatString(
+                        strings.ZONE_GEOMETRY_CHANGED,
+                        zone.name,
+                        DateTime.fromISO(zone.boundaryModifiedTime).toFormat('yyyy-MM-dd')
+                      )}
+                    </Typography>
+                    <Link
+                      target='_blank'
+                      fontSize={'16px'}
+                      to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
+                    >
+                      {strings.VIEW_MAP}
+                    </Link>
+                  </Box>
+                )}
               <Box sx={{ columnGap: theme.spacing(3), paddingLeft: `${theme.spacing(4)}` }}>
                 {zone.plantingSubzones.map((subzone, _index) => {
-                  const lastSubzoneObservation = observations?.find(
-                    (observation) => observation.id === zone.latestObservationId
-                  );
                   return (
                     <Box sx={{ display: 'inline-block', width: '100%' }} key={_index}>
                       <Checkbox
@@ -154,7 +155,7 @@ const ObservationSubzoneSelector = ({ errorText, onChangeSelectedSubzones }: Obs
                         onChange={onChangeSubzoneCheckbox(subzone.id)}
                         value={selectedSubzones.get(subzone.id)}
                       />
-                      {lastZoneObservation && (
+                      {subzone.latestObservationCompletedTime && (
                         <Typography
                           sx={{
                             display: 'inline',
@@ -164,8 +165,11 @@ const ObservationSubzoneSelector = ({ errorText, onChangeSelectedSubzones }: Obs
                             paddingLeft: 1,
                           }}
                         >
-                          {lastSubzoneObservation
-                            ? strings.formatString(strings.LAST_OBSERVATION, lastSubzoneObservation.startDate || '')
+                          {subzone.latestObservationCompletedTime
+                            ? strings.formatString(
+                                strings.LAST_OBSERVATION,
+                                getDateDisplayValue(subzone.latestObservationCompletedTime)
+                              )
                             : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
                         </Typography>
                       )}
