@@ -154,7 +154,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
 
   return (
     <Routes>
-      {scheduleObservationsEnabled && <Route path={'schedule/:observationId'} element={<RescheduleObservation />} />}
+      {scheduleObservationsEnabled && <Route path={'/schedule/:observationId'} element={<RescheduleObservation />} />}
       {scheduleObservationsEnabled && <Route path={'/schedule'} element={<ScheduleObservation />} />}
       <Route
         path={'/:plantingSiteId/results/:observationId/biomassMeasurements/:monitoringPlotId'}

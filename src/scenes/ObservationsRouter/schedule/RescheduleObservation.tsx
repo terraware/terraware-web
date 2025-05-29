@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { BusySpinner } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import useRescheduleObservation from 'src/hooks/useRescheduleObservation';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -14,12 +15,13 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import RescheduleObservationForm from './RescheduleObservationForm';
 
-export default function ScheduleObservation(): JSX.Element {
+export default function RescheduleObservation(): JSX.Element {
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   const params = useParams<{ observationId: string }>();
-  const { observations, reload, setSelectedPlantingSite } = usePlantingSiteData();
+  const { observations } = useOrgTracking();
+  const { reload, setSelectedPlantingSite } = usePlantingSiteData();
   const { reschedule, rescheduleResult } = useRescheduleObservation();
 
   const [formData, setFormData] = useState<RescheduleObservationRequestPayload>();
@@ -35,14 +37,12 @@ export default function ScheduleObservation(): JSX.Element {
   useEffect(() => {
     if (observations) {
       const observation = observations.find((data) => data.id === observationId);
-      if (!observation) {
-        goToObservations();
-      } else {
+      if (observation) {
         setSelectedPlantingSite(observation.plantingSiteId);
         setFormData({ startDate: observation.startDate, endDate: observation.endDate });
       }
     }
-  }, [goToObservations, observationId, observations, setSelectedPlantingSite]);
+  }, [observationId, observations, setSelectedPlantingSite]);
 
   useEffect(() => {
     if (rescheduleResult?.status === 'error') {
