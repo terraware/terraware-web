@@ -1,3 +1,4 @@
+ebff7fe32db Used observation completed for subzone selector when scheduling (#4100)
 6e50cd6ef95 SW-7014 Used hook data instead of incorrect selector data for rescheduling observations (#4093)
 2a24efe3676 SW-7016 Include unknown species in results CSVs (#4096)
 b861c62367d Use question mark instead of period for question string (#4098)

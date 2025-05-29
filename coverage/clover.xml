@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1748547510264" clover="3.2.0">
-  <project timestamp="1748547510264" name="All files">
-    <metrics statements="30806" coveredstatements="1301" conditionals="21158" coveredconditionals="388" methods="9477" coveredmethods="211" elements="61441" coveredelements="1900" complexity="0" loc="30806" ncloc="30806" packages="263" files="1277" classes="1277"/>
+<coverage generated="1748552682525" clover="3.2.0">
+  <project timestamp="1748552682526" name="All files">
+    <metrics statements="30803" coveredstatements="1301" conditionals="21154" coveredconditionals="388" methods="9475" coveredmethods="211" elements="61432" coveredelements="1900" complexity="0" loc="30803" ncloc="30803" packages="263" files="1277" classes="1277"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -27003,46 +27003,43 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.schedule">
-      <metrics statements="184" coveredstatements="0" conditionals="134" coveredconditionals="0" methods="51" coveredmethods="0"/>
+      <metrics statements="181" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="49" coveredmethods="0"/>
       <file name="ObservationSubzoneSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/schedule/ObservationSubzoneSelector.tsx">
-        <metrics statements="37" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="19" coveredmethods="0"/>
-        <line num="19" count="0" type="stmt"/>
+        <metrics statements="34" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="17" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
         <line num="101" count="0" type="stmt"/>
-        <line num="145" count="0" type="stmt"/>
-        <line num="146" count="0" type="stmt"/>
-        <line num="148" count="0" type="stmt"/>
+        <line num="149" count="0" type="stmt"/>
       </file>
       <file name="RescheduleObservation.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/schedule/RescheduleObservation.tsx">
         <metrics statements="29" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="7" coveredmethods="0"/>
