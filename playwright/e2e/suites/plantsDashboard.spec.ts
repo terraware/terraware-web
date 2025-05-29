@@ -64,7 +64,7 @@ export default function PlantsDashbordTests() {
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
-    await expect(page.getByText('15,417.3 ha').first()).toBeVisible();
+    await expect(page.getByText('10,879.4 ha').first()).toBeVisible();
     await expect(page.getByText('Project Area Totals', { exact: true })).toBeVisible();
     await expect(
       page
@@ -74,7 +74,7 @@ export default function PlantsDashbordTests() {
     ).toBeVisible();
     await expect(page.getByText('Total Planted Complete', { exact: true })).toBeVisible();
     await expect(page.getByText('Planting Complete: 0%', { exact: true })).toBeVisible();
-    await expect(page.getByText('Target: 15,417.3 ha', { exact: true })).toBeVisible();
+    await expect(page.getByText('Target: 10,879.4 ha', { exact: true })).toBeVisible();
     await expect(page.getByText('200 Plants', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Planted').nth(1)).toBeVisible();
     await expect(page.getByText('1 Species', { exact: true })).toBeVisible();
@@ -84,7 +84,7 @@ export default function PlantsDashbordTests() {
     await expect(page.getByText('Species Categories', { exact: true })).toBeVisible();
     await expect(page.locator('#speciesByCategory')).toBeVisible();
     await expect(page.getByText('Project Area Map', { exact: true })).toBeVisible();
-    await expect(page.getByText('15,417.3 ha in Total Planting Area', { exact: true })).toBeVisible();
+    await expect(page.getByText('10,879.4 ha in Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('Boundaries')).toBeVisible();
     await expect(page.locator('div').filter({ hasText: /^Observation Events$/ })).toBeVisible();
     await expect(
@@ -111,7 +111,7 @@ export default function PlantsDashbordTests() {
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS1').click();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
-    await expect(page.getByText('11,311.9 ha').first()).toBeVisible();
+    await expect(page.getByText('6,788.4 ha').first()).toBeVisible();
     await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
     await expect(
       page
@@ -121,7 +121,7 @@ export default function PlantsDashbordTests() {
     ).toBeVisible();
     await expect(page.getByText('Total Planted Complete', { exact: true })).toBeVisible();
     await expect(page.getByText('Planting Complete: 0%', { exact: true })).toBeVisible();
-    await expect(page.getByText('Target: 11,311.9 ha', { exact: true })).toBeVisible();
+    await expect(page.getByText('Target: 6,788.4 ha', { exact: true })).toBeVisible();
     await expect(page.getByText('100 Plants', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Planted').nth(1)).toBeVisible();
     await expect(page.getByText('1 Species', { exact: true })).toBeVisible();
@@ -131,7 +131,7 @@ export default function PlantsDashbordTests() {
     await expect(page.getByText('Species Categories', { exact: true })).toBeVisible();
     await expect(page.locator('#speciesByCategory')).toBeVisible();
     await expect(page.getByText('Site Map', { exact: true })).toBeVisible();
-    await expect(page.getByText('11,311.9 ha in Total Planting Area', { exact: true })).toBeVisible();
+    await expect(page.getByText('6,788.4 ha in Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('Boundaries')).toBeVisible();
     await expect(page.locator('div').filter({ hasText: /^Observation Events$/ })).toBeVisible();
     await expect(
@@ -158,7 +158,7 @@ export default function PlantsDashbordTests() {
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2').click();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
-    await expect(page.getByText('4,105.4 ha').first()).toBeVisible();
+    await expect(page.getByText('4,091 ha').first()).toBeVisible();
     await expect(
       page.getByText(
         'Observation data on this dashboard is based on a sample of 2.97 hectares from the 2025-05-29 Observation for this planting site.',
@@ -174,7 +174,7 @@ export default function PlantsDashbordTests() {
     ).toBeVisible();
     await expect(page.getByText('Total Planted Complete', { exact: true })).toBeVisible();
     await expect(page.getByText('Planting Complete: 0%', { exact: true })).toBeVisible();
-    await expect(page.getByText('Target: 4,105.4 ha', { exact: true })).toBeVisible();
+    await expect(page.getByText('Target: 4,091 ha', { exact: true })).toBeVisible();
     await expect(page.getByText('100 Plants', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Planted').nth(1)).toBeVisible();
     await expect(page.getByText('1 Species', { exact: true })).toBeVisible();
@@ -197,30 +197,27 @@ export default function PlantsDashbordTests() {
         .filter({ hasText: /^Observed Density$/ })
         .getByRole('paragraph')
     ).toBeVisible();
-    await expect(page.getByText('1,039Plants/ha')).toBeVisible();
+    await expect(page.getByText('1,014Plants/ha')).toBeVisible();
     await expect(page.getByText('Observed Density Per Zone')).toBeVisible();
     await expect(page.locator('#plantingDensityByZone')).toBeVisible();
     await expect(page.getByText('Mortality Rate').nth(1)).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').nth(1)).toBeVisible();
     await expect(page.getByText('Mortality Rate').nth(2)).toBeVisible();
-    await expect(page.getByText('12%').first()).toBeVisible();
+    await expect(page.getByText('10%').first()).toBeVisible();
     await expect(page.getByText('Zone Mortality', { exact: true })).toBeVisible();
     await expect(page.getByText('Highest').first()).toBeVisible();
+    await expect(page.getByText('Zone 01', { exact: true })).toBeVisible();
+    await expect(page.locator('p').filter({ hasText: '10%' })).toBeVisible();
+    await expect(page.getByText('Lowest').first()).toBeVisible();
     await expect(page.getByText('Zone 02', { exact: true })).toBeVisible();
-    await expect(page.locator('p').filter({ hasText: '12%' })).toBeVisible();
-    await expect(
-      page.getByText(
-        'You have only 1 zone with a mortality rate right now. Once there are more, the zone with the lowest mortality rate will appear.',
-        { exact: true }
-      )
-    ).toBeVisible();
+    await expect(page.locator('p').filter({ hasText: '9%' })).toBeVisible();
     await expect(page.getByText('Species Mortality', { exact: true })).toBeVisible();
     await expect(page.getByText('Highest').nth(1)).toBeVisible();
+    await expect(page.getByText('Other 2', { exact: true })).toBeVisible();
+    await expect(page.getByText('15%', { exact: true })).toBeVisible();
+    await expect(page.getByText('Lowest').nth(1)).toBeVisible();
     await expect(page.getByText('Other 5', { exact: true })).toBeVisible();
-    await expect(page.getByText('20%', { exact: true })).toBeVisible();
-    await expect(page.getByText('Lowest', { exact: true })).toBeVisible();
-    await expect(page.getByText('Kousa Dogwood', { exact: true })).toBeVisible();
-    await expect(page.getByText('10%', { exact: true })).toBeVisible();
+    await expect(page.getByText('4%', { exact: true })).toBeVisible();
     await expect(page.getByText('Mortality Breakdown', { exact: true })).toBeVisible();
     await expect(
       page.locator('div:nth-child(2) > div > .select > .textfield-container > .textfield-value')
@@ -228,7 +225,7 @@ export default function PlantsDashbordTests() {
 
     await expect(page.getByText('Site Map', { exact: true })).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').nth(1)).toBeVisible();
-    await expect(page.getByText('4,105.4 ha in Total Planting Area', { exact: true })).toBeVisible();
+    await expect(page.getByText('4,091 ha in Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('Boundaries')).toBeVisible();
     await expect(page.locator('div').filter({ hasText: /^Observation Events$/ })).toBeVisible();
     await expect(

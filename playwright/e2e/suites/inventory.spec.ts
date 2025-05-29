@@ -128,7 +128,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('link', { name: '-2-2-003' }).click();
+    await page.getByRole('link', { name: '-2-2-004' }).click();
     await page.getByLabel('Details').getByRole('button').nth(1).click();
     await page.getByRole('spinbutton').click();
     await page.getByRole('spinbutton').fill('20');
@@ -148,7 +148,7 @@ export default function InventoryTests() {
     await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').click();
     await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').fill('0');
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('button', { name: 'Withdraw' }).click();
+    await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
     await expect(page.getByRole('main')).toContainText('Germination Rate 80');
     await expect(page.getByRole('main')).toContainText('Loss Rate 14');
     await expect(page.getByRole('main')).toContainText('Total Withdrawn 15');
@@ -158,7 +158,7 @@ export default function InventoryTests() {
     await page.getByRole('link', { name: 'Withdrawal - Dead' }).click();
     await expect(page.getByText('Purpose Dead')).toBeVisible();
     await expect(page.getByText('Quantity 15')).toBeVisible();
-    await expect(page.getByRole('link', { name: '-2-2-003' })).toBeVisible();
+    await expect(page.getByRole('link', { name: '-2-2-004' })).toBeVisible();
     await expect(page.locator('#row1-name')).toContainText('Coconut');
     await expect(page.locator('#row1-germinating')).toContainText('5');
     await expect(page.locator('#row1-notReady')).toContainText('10');
@@ -175,7 +175,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('link', { name: '-2-2-002' }).click();
+    await page.getByRole('link', { name: '-2-2-003' }).click();
     await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
     await page.waitForTimeout(1000); //Wait for modal to load
     await page.getByLabel('Nursery Transfer').check();
@@ -201,13 +201,13 @@ export default function InventoryTests() {
     await expect(page.getByText('Quantity 150')).toBeVisible();
     await expect(page.getByText('Destination Nursery')).toBeVisible();
     await expect(page.getByText('Notes Transfering some banana')).toBeVisible();
-    await expect(page.getByRole('cell', { name: '-2-2-002' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: '-2-2-003' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Banana' })).toBeVisible();
     await expect(page.locator('#row1-germinating')).toBeVisible();
     await expect(page.locator('#row1-notReady')).toBeVisible();
     await expect(page.locator('#row1-ready')).toBeVisible();
     await expect(page.getByRole('cell', { name: '150' })).toBeVisible();
-    await page.getByRole('link', { name: '-2-2-002' }).click();
+    await page.getByRole('link', { name: '-2-2-003' }).click();
     await expect(page.getByText('Germinating Quantity 450')).toBeVisible();
     await expect(page.getByText('Not Ready Quantity 50')).toBeVisible();
     await expect(page.getByText('Ready Quantity 50', { exact: true })).toBeVisible();
@@ -217,7 +217,7 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-editedByName')).toBeVisible();
     await page.getByRole('link', { name: 'Inventory / Batches of Banana' }).click();
     await page.locator('#row1-germinatingQuantity').click();
-    await expect(page.getByRole('cell', { name: '-2-1-002' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: '-2-1-003' })).toBeVisible();
     await expect(page.locator('#row1-germinatingQuantity')).toContainText('50');
     await expect(page.locator('#row1-notReadyQuantity')).toContainText('50');
     await expect(page.locator('#row1-readyQuantity')).toContainText('50');
@@ -235,7 +235,7 @@ export default function InventoryTests() {
     await expect(page.getByText('Total Quantity 100')).toBeVisible();
     await expect(page.getByText('Batches at Nursery')).toBeVisible();
     await expect(page.getByText('Species Banana')).toBeVisible();
-    await page.getByRole('button', { name: '-2-1-002' }).click();
+    await page.getByRole('button', { name: '-2-1-003' }).click();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Nursery Transfer' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Test User' })).toBeVisible();
@@ -255,7 +255,7 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Inventory' }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
 
-    await page.getByRole('link', { name: '-2-2-003' }).click();
+    await page.getByRole('link', { name: '-2-2-004' }).click();
     await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
     await page.getByLabel('Planting').check();
     await page.locator('#plantingSiteId').getByPlaceholder('Select...').click();

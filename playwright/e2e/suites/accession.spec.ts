@@ -141,7 +141,7 @@ export default function AccessionTests() {
     await page.getByRole('tab', { name: 'By Nursery' }).click();
     await expect(page.locator('#row1-facility_name')).toContainText(/My New Nursery/);
     await page.getByRole('tab', { name: 'By Batch' }).click();
-    await expect(page.locator('#row1-batchNumber')).toContainText('2-2-001');
+    await expect(page.locator('#row1-batchNumber')).toContainText('2-2-002');
   });
 
   test('Withdraw to Outplant', async ({ page }, testInfo) => {
