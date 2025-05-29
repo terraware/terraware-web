@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1748552682525" clover="3.2.0">
-  <project timestamp="1748552682526" name="All files">
+<coverage generated="1748558323681" clover="3.2.0">
+  <project timestamp="1748558323681" name="All files">
     <metrics statements="30803" coveredstatements="1301" conditionals="21154" coveredconditionals="388" methods="9475" coveredmethods="211" elements="61432" coveredelements="1900" complexity="0" loc="30803" ncloc="30803" packages="263" files="1277" classes="1277"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -27043,22 +27043,22 @@
       </file>
       <file name="RescheduleObservation.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/schedule/RescheduleObservation.tsx">
         <metrics statements="29" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
