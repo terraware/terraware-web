@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
@@ -13,7 +13,6 @@ import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch } from 'src/redux/store';
-import strings from 'src/strings';
 import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 import useQuery from 'src/utils/useQuery';
@@ -31,43 +30,9 @@ const defaultSearchOrder: SearchSortOrder = {
   direction: 'Descending',
 };
 
-const columns = (activeLocale: string | null): TableColumnType[] => {
-  if (!activeLocale) {
-    return [];
-  }
-
-  return [
-    {
-      key: 'reportName',
-      name: strings.REPORT,
-      type: 'string',
-    },
-    {
-      key: 'status',
-      name: strings.STATUS,
-      type: 'string',
-    },
-    {
-      key: 'modifiedBy',
-      name: strings.LAST_EDITED_BY,
-      type: 'string',
-    },
-    {
-      key: 'submittedBy',
-      name: strings.SUBMITTED_BY,
-      type: 'string',
-    },
-    {
-      key: 'submittedTime',
-      name: strings.DATE_SUBMITTED,
-      type: 'string',
-    },
-  ];
-};
-
 export default function AcceleratorReportsTable(): JSX.Element {
   const dispatch = useAppDispatch();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
@@ -126,6 +91,38 @@ export default function AcceleratorReportsTable(): JSX.Element {
       setAcceleratorReports([]);
     }
   }, [projectReports]);
+
+  const columns = useCallback((): TableColumnType[] => {
+    return [
+      {
+        key: 'reportName',
+        name: strings.REPORT,
+        type: 'string',
+      },
+      {
+        key: 'status',
+        name: strings.STATUS,
+        type: 'string',
+      },
+      {
+        key: 'modifiedBy',
+        name: strings.LAST_EDITED_BY,
+        type: 'string',
+      },
+      {
+        key: 'submittedBy',
+        name: strings.SUBMITTED_BY,
+        type: 'string',
+      },
+      {
+        key: 'submittedTime',
+        name: strings.DATE_SUBMITTED,
+        type: 'string',
+      },
+    ];
+  }, [strings]);
+
+  const tableIsClickable = useCallback(() => false, []);
 
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 
@@ -190,7 +187,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
   }, [allAcceleratorReports, allReportYears, currentYear, yearQuery]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
-    const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
+    const rejectedStatus = isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED;
     const filters: FilterConfigWithValues[] = [
       {
         field: 'status',
@@ -202,27 +199,24 @@ export default function AcceleratorReportsTable(): JSX.Element {
       },
     ];
 
-    return activeLocale ? filters : [];
-  }, [activeLocale, isAcceleratorRoute]);
+    return filters;
+  }, [isAcceleratorRoute, strings]);
 
   const extraFilter = useMemo(
-    () =>
-      activeLocale ? (
-        <>
-          <Box marginTop={0.5} paddingLeft={1}>
-            <Select
-              id='yearFilter'
-              label=''
-              onChange={(year: string) => setYearFilter(year)}
-              options={yearFilterOptions}
-              placeholder={strings.YEAR}
-              selectedValue={yearFilter}
-              sx={{ textAlign: 'left' }}
-            />
-          </Box>
-        </>
-      ) : null,
-    [activeLocale, yearFilter, yearFilterOptions]
+    () => (
+      <Box marginTop={0.5} paddingLeft={1}>
+        <Select
+          id='yearFilter'
+          label=''
+          onChange={setYearFilter}
+          options={yearFilterOptions}
+          placeholder={strings.YEAR}
+          selectedValue={yearFilter}
+          sx={{ textAlign: 'left' }}
+        />
+      </Box>
+    ),
+    [strings, yearFilter, yearFilterOptions]
   );
 
   if (!projectId) {
@@ -238,7 +232,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
       featuredFilters={featuredFilters}
       fuzzySearchColumns={fuzzySearchColumns}
       id='accelerator-reports-table'
-      isClickable={() => false}
+      isClickable={tableIsClickable}
       Renderer={AcceleratorReportCellRenderer({ projectId })}
       rows={acceleratorReports}
       stickyFilters
