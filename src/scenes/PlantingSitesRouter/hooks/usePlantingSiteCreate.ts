@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDraftPlantingSiteEdit } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestDeleteDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
@@ -38,6 +39,7 @@ export default function usePlantingSiteCreate(): Response {
   const deleteDraftResult = useAppSelector(selectDraftPlantingSiteEdit(deleteDraftRequestId));
 
   const { validateDraft, validateSite, validateSiteStatus, isValid, problems } = usePlantingSiteValidate();
+  const { reload } = usePlantingSiteData();
 
   const _validateDraft = useCallback(
     (draft: DraftPlantingSite) => {
@@ -95,10 +97,11 @@ export default function usePlantingSiteCreate(): Response {
 
   useEffect(() => {
     if (deleteDraftResult?.status === 'success' && createResult.data) {
+      reload();
       snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
       goToPlantingSiteView(createResult.data);
     }
-  }, [deleteDraftResult, createResult, dispatch, goToPlantingSiteView, snackbar]);
+  }, [deleteDraftResult, createResult, dispatch, goToPlantingSiteView, snackbar, reload]);
 
   return useMemo<Response>(
     () => ({

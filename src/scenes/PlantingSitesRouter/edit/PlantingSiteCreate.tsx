@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { MultiPolygon } from 'geojson';
 
-import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
-import { View } from 'src/components/common/ListMapSelector';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
-import BoundariesAndZones from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
 import TrackingService, { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
@@ -34,8 +30,6 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const snackbar = useSnackbar();
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
-  const [view, setView] = useState<View>('map');
-  const [search, setSearch] = useState<string>('');
 
   const { isLoading, plantingSite } = usePlantingSiteData();
 
@@ -64,12 +58,15 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     });
   }, [plantingSite, setRecord, selectedOrganization.id]);
 
-  const goToPlantingSite = (id?: number) => {
-    const plantingSitesLocation = {
-      pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
-    };
-    navigate(plantingSitesLocation);
-  };
+  const goToPlantingSite = useCallback(
+    (id?: number) => {
+      const plantingSitesLocation = {
+        pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
+      };
+      navigate(plantingSitesLocation);
+    },
+    [navigate]
+  );
 
   const onSave = () =>
     new Promise((resolve) => {
@@ -127,15 +124,6 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     }
   };
 
-  const onBoundaryChanged = (newBoundary: MultiPolygon | null) => {
-    setRecord((previousRecord: PlantingSite): PlantingSite => {
-      return {
-        ...previousRecord,
-        boundary: (newBoundary as any) || undefined,
-      };
-    });
-  };
-
   return (
     <TfMain>
       <PageForm
@@ -151,13 +139,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
           {!isLoading && plantingSite && (
             <>
-              <Grid
-                spacing={3}
-                flexGrow={view === 'list' ? 0 : 1}
-                display='flex'
-                flexDirection='column'
-                marginTop={theme.spacing(3)}
-              >
+              <Grid spacing={3} flexGrow={0} display='flex' flexDirection='column' marginTop={theme.spacing(3)}>
                 <Box
                   paddingLeft={theme.spacing(3)}
                   marginBottom={theme.spacing(4)}
@@ -178,22 +160,6 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                     setPlantingSeasons={setPlantingSeasons}
                     setRecord={setRecord}
                   />
-                  {record?.plantingZones && (
-                    <BoundariesAndZones
-                      plantingSite={record}
-                      search={search}
-                      setSearch={setSearch}
-                      setView={setView}
-                      view={view}
-                    />
-                  )}
-                  {!record?.plantingZones && (
-                    <Grid container flexGrow={1}>
-                      <Grid item xs={12} display='flex'>
-                        <PlantingSiteMapEditor onBoundaryChanged={onBoundaryChanged} plantingSite={record} />
-                      </Grid>
-                    </Grid>
-                  )}
                 </Card>
               </Grid>
             </>
