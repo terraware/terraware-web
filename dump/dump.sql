@@ -247,10 +247,10 @@ COMMENT ON EXTENSION vector IS 'vector data type and ivfflat and hnsw access met
 
 CREATE FUNCTION docprod.reject_delete() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RAISE 'This table does not allow deletes.';
-END;
+    AS $$
+BEGIN
+    RAISE 'This table does not allow deletes.';
+END;
 $$;
 
 
@@ -260,15 +260,15 @@ $$;
 
 CREATE FUNCTION docprod.reject_delete_value() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM documents WHERE id = OLD.document_id) THEN
-        RAISE 'This table does not allow deletes.';
-    ELSE
-        -- The entire document is being deleted.
-        RETURN OLD;
-    END IF;
-END;
+    AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM documents WHERE id = OLD.document_id) THEN
+        RAISE 'This table does not allow deletes.';
+    ELSE
+        -- The entire document is being deleted.
+        RETURN OLD;
+    END IF;
+END;
 $$;
 
 
@@ -285,14 +285,14 @@ COMMENT ON FUNCTION docprod.reject_delete_value() IS 'Trigger function that reje
 
 CREATE FUNCTION docprod.reject_delete_value_child() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM variable_values WHERE id = OLD.variable_value_id) THEN
-        RAISE 'This table does not allow deletes.';
-    ELSE
-        RETURN OLD;
-    END IF;
-END;
+    AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM variable_values WHERE id = OLD.variable_value_id) THEN
+        RAISE 'This table does not allow deletes.';
+    ELSE
+        RETURN OLD;
+    END IF;
+END;
 $$;
 
 
@@ -302,10 +302,10 @@ $$;
 
 CREATE FUNCTION docprod.reject_update() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RAISE 'This table does not allow updates.';
-END;
+    AS $$
+BEGIN
+    RAISE 'This table does not allow updates.';
+END;
 $$;
 
 
@@ -315,19 +315,19 @@ $$;
 
 CREATE FUNCTION docprod.reject_update_value() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF (OLD.created_by != -1 AND NEW.created_by = -1
-        AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.created_by))
-        OR (OLD.verified_by != -1 AND NEW.verified_by = -1
-            AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.verified_by))
-    THEN
-        RAISE 'This table does not allow updates.';
-    ELSE
-        -- This is an update triggered by a user being deleted.
-        RETURN NEW;
-    END IF;
-END;
+    AS $$
+BEGIN
+    IF (OLD.created_by != -1 AND NEW.created_by = -1
+        AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.created_by))
+        OR (OLD.verified_by != -1 AND NEW.verified_by = -1
+            AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.verified_by))
+    THEN
+        RAISE 'This table does not allow updates.';
+    ELSE
+        -- This is an update triggered by a user being deleted.
+        RETURN NEW;
+    END IF;
+END;
 $$;
 
 
@@ -337,22 +337,22 @@ $$;
 
 CREATE FUNCTION public.column_exists(ptable text, pcolumn text) RETURNS boolean
     LANGUAGE sql STABLE STRICT
-    AS $$
-
-    -- does the requested table.column exist in schema?
-
-SELECT EXISTS
-
-           (SELECT NULL
-
-            FROM information_schema.columns
-
-            WHERE table_name = ptable
-
-              AND column_name = pcolumn
-
-           );
-
+    AS $$
+
+    -- does the requested table.column exist in schema?
+
+SELECT EXISTS
+
+           (SELECT NULL
+
+            FROM information_schema.columns
+
+            WHERE table_name = ptable
+
+              AND column_name = pcolumn
+
+           );
+
 $$;
 
 
@@ -362,22 +362,22 @@ $$;
 
 CREATE FUNCTION public.rename_column_if_exists(ptable text, pcolumn text, new_name text) RETURNS void
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-    -- Rename the column if it exists.
-
-    IF column_exists(ptable, pcolumn) THEN
-
-        EXECUTE FORMAT('ALTER TABLE %I RENAME COLUMN %I TO %I;',
-
-                       ptable, pcolumn, new_name);
-
-    END IF;
-
-END
-
+    AS $$
+
+BEGIN
+
+    -- Rename the column if it exists.
+
+    IF column_exists(ptable, pcolumn) THEN
+
+        EXECUTE FORMAT('ALTER TABLE %I RENAME COLUMN %I TO %I;',
+
+                       ptable, pcolumn, new_name);
+
+    END IF;
+
+END
+
 $$;
 
 
@@ -10426,6 +10426,7 @@ COPY funder.published_reports (report_id, project_id, report_frequency_id, repor
 --
 
 COPY nursery.batch_details_history (id, batch_id, version, created_by, created_time, notes, ready_by_date, project_id, project_name, substrate_id, substrate_notes, treatment_id, treatment_notes) FROM stdin;
+1	1	1	1	2025-05-29 18:48:31.338767+00	\N	\N	3	Phase 1 Project	\N	\N	\N	\N
 \.
 
 
@@ -10450,6 +10451,9 @@ COPY nursery.batch_photos (id, batch_id, file_id, created_by, created_time, dele
 --
 
 COPY nursery.batch_quantity_history (id, batch_id, history_type_id, created_by, created_time, germinating_quantity, not_ready_quantity, ready_quantity, withdrawal_id, version) FROM stdin;
+1	1	1	1	2025-05-29 18:48:31.418448+00	0	0	200	\N	1
+2	1	2	1	2025-05-29 18:49:05.998985+00	0	0	100	1	2
+3	1	2	1	2025-05-29 18:49:17.954018+00	0	0	0	2	3
 \.
 
 
@@ -10491,6 +10495,8 @@ COPY nursery.batch_substrates (id, name) FROM stdin;
 --
 
 COPY nursery.batch_withdrawals (batch_id, withdrawal_id, germinating_quantity_withdrawn, not_ready_quantity_withdrawn, ready_quantity_withdrawn, destination_batch_id) FROM stdin;
+1	1	0	0	100	\N
+1	2	0	0	100	\N
 \.
 
 
@@ -10499,6 +10505,7 @@ COPY nursery.batch_withdrawals (batch_id, withdrawal_id, germinating_quantity_wi
 --
 
 COPY nursery.batches (id, version, organization_id, facility_id, species_id, batch_number, added_date, germinating_quantity, not_ready_quantity, ready_quantity, latest_observed_germinating_quantity, latest_observed_not_ready_quantity, latest_observed_ready_quantity, latest_observed_time, created_by, created_time, modified_by, modified_time, notes, ready_by_date, accession_id, project_id, substrate_id, substrate_notes, treatment_id, treatment_notes, germination_rate, loss_rate, initial_batch_id, total_germinated, total_germination_candidates, total_lost, total_loss_candidates) FROM stdin;
+1	3	1	103	3	25-2-1-001	2025-05-29	0	0	0	0	0	200	2025-05-29 18:48:31.338767+00	1	2025-05-29 18:48:31.338767+00	1	2025-05-29 18:49:17.952372+00	\N	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	0	200
 \.
 
 
@@ -10528,6 +10535,8 @@ COPY nursery.withdrawal_purposes (id, name) FROM stdin;
 --
 
 COPY nursery.withdrawals (id, facility_id, purpose_id, withdrawn_date, created_by, created_time, modified_by, modified_time, destination_facility_id, notes, undoes_withdrawal_id) FROM stdin;
+1	103	3	2025-05-29	1	2025-05-29 18:49:05.936727+00	1	2025-05-29 18:49:05.936754+00	\N	\N	\N
+2	103	3	2025-05-29	1	2025-05-29 18:49:17.93405+00	1	2025-05-29 18:49:17.93407+00	\N	\N	\N
 \.
 
 
@@ -10977,10 +10986,10 @@ COPY public.ecosystem_types (id, name) FROM stdin;
 --
 
 COPY public.facilities (id, type_id, name, created_time, modified_time, created_by, modified_by, max_idle_minutes, last_timeseries_time, idle_after_time, idle_since_time, description, connection_state_id, organization_id, time_zone, last_notification_date, next_notification_time, build_started_date, build_completed_date, operation_started_date, capacity, facility_number) FROM stdin;
-100	1	Seed Bank	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-21	2025-05-22 00:01:00+00	\N	\N	\N	\N	1
-101	1	garage	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-21	2025-05-22 00:01:00+00	\N	\N	\N	\N	2
-102	1	Test facility	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-21	2025-05-22 00:01:00+00	\N	\N	\N	\N	3
-103	4	Nursery	2024-03-05 04:06:31.354789+00	2024-03-05 04:06:31.354802+00	1	1	30	\N	\N	\N	My First Nursery!	1	1	\N	2025-05-21	2025-05-22 00:01:00+00	\N	\N	\N	\N	1
+100	1	Seed Bank	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-29	2025-05-30 00:01:00+00	\N	\N	\N	\N	1
+101	1	garage	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-29	2025-05-30 00:01:00+00	\N	\N	\N	\N	2
+102	1	Test facility	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-29	2025-05-30 00:01:00+00	\N	\N	\N	\N	3
+103	4	Nursery	2024-03-05 04:06:31.354789+00	2024-03-05 04:06:31.354802+00	1	1	30	\N	\N	\N	My First Nursery!	1	1	\N	2025-05-29	2025-05-30 00:01:00+00	\N	\N	\N	\N	1
 \.
 
 
@@ -11427,6 +11436,7 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 398	\N	TypeCodes	SQL	R__TypeCodes.sql	286456408	ihudson	2025-05-13 10:27:40.232243	148	t
 399	379	DeleteDuplicatedReports	SQL	0350/V379__DeleteDuplicatedReports.sql	-749812797	postgres	2025-05-20 15:36:12.895028	7	t
 400	380	MonitoringPlotsSubzoneIndex	SQL	0350/V380__MonitoringPlotsSubzoneIndex.sql	-1378642699	postgres	2025-05-21 20:40:26.381455	23	t
+401	381	FixDeletedObservedSpecies	SQL	0350/V381__FixDeletedObservedSpecies.sql	-2039396647	postgres	2025-05-29 18:35:15.26896	109	t
 \.
 
 
@@ -11510,6 +11520,8 @@ COPY public.growth_forms (id, name) FROM stdin;
 --
 
 COPY public.identifier_sequences (organization_id, prefix, next_value) FROM stdin;
+1	25-2-	1
+1	PlotNumber	33
 \.
 
 
@@ -11530,7 +11542,7 @@ COPY public.internal_tags (id, name, description, is_system, created_by, created
 --
 
 COPY public.jobrunr_backgroundjobservers (id, workerpoolsize, pollintervalinseconds, firstheartbeat, lastheartbeat, running, systemtotalmemory, systemfreememory, systemcpuload, processmaxmemory, processfreememory, processallocatedmemory, processcpuload, deletesucceededjobsafter, permanentlydeletejobsafter, name) FROM stdin;
-267dc6c0-d4d3-4d76-bcc2-bc8310d7a833	224	15	2025-05-21 21:41:57.683352	2025-05-21 21:46:58.063654	1	8217473024	5199380480	0.00	2055208960	1815491912	239717048	0.00	PT36H	PT72H	6c15c44a6eae
+8e52595f-dc20-4aa7-afdd-96db81ccda40	128	15	2025-05-29 20:33:26.763616	2025-05-29 20:34:41.808486	1	8346034176	4019257344	0.06	2086666240	1892569152	194097088	0.06	PT36H	PT72H	e23d61ab2712
 \.
 
 
@@ -11539,125 +11551,55 @@ COPY public.jobrunr_backgroundjobservers (id, workerpoolsize, pollintervalinseco
 --
 
 COPY public.jobrunr_jobs (id, version, jobasjson, jobsignature, state, createdat, updatedat, scheduledat, recurringjobid) FROM stdin;
-0196f493-c3d7-7c09-b352-7b4584163078	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f493-c3d7-7c09-b352-7b4584163078","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T20:40:46.807389303Z","scheduledAt":"2025-05-21T20:41:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T20:40:46.825746262Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T20:41:01.792955129Z","serverId":"0fa4b11f-575c-4ad8-b680-81ddc33abca2","serverName":"a0543195eb2a","updatedAt":"2025-05-21T20:41:01.792955129Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T20:41:01.848768171Z","latencyDuration":14.967208867,"processDuration":0.055808792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-21 20:40:46.807389	2025-05-21 20:41:01.848768	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f493-c3db-79e1-a67f-f420c64855e6	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f493-c3db-79e1-a67f-f420c64855e6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T20:40:46.811735637Z","scheduledAt":"2025-05-21T20:41:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T20:40:46.825766887Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T20:41:01.792974463Z","serverId":"0fa4b11f-575c-4ad8-b680-81ddc33abca2","serverName":"a0543195eb2a","updatedAt":"2025-05-21T20:41:01.792974463Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T20:41:01.849309671Z","latencyDuration":14.967207576,"processDuration":0.056333541}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-21 20:40:46.811736	2025-05-21 20:41:01.84931	\N	FacilityService.scanForIdleFacilities
-0196cab1-1db0-7dc9-8b15-516996b3e941	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cab1-1db0-7dc9-8b15-516996b3e941","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:28:47.279919Z","scheduledAt":"2025-05-13T17:29:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:28:47.300977Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:29:02.279832Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:29:02.279832Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:29:02.339239Z","latencyDuration":14.978855000,"processDuration":0.059403000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858463546Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 17:28:47.279919	2025-05-21 20:40:31.858464	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cab1-1db2-780d-a659-53fdcdedec14	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cab1-1db2-780d-a659-53fdcdedec14","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:28:47.282032Z","scheduledAt":"2025-05-13T17:29:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:28:47.301192Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:29:02.279862Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:29:02.279862Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:29:02.343575Z","latencyDuration":14.978670000,"processDuration":0.063711000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858704796Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 17:28:47.282032	2025-05-21 20:40:31.858705	\N	FacilityService.scanForIdleFacilities
-0196cab2-0848-7fbd-a1cd-caf4b20e9727	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cab2-0848-7fbd-a1cd-caf4b20e9727","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.336457Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344894Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337120Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337120Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.346886Z","latencyDuration":14.992226000,"processDuration":0.009763000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858715505Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 17:29:47.336457	2025-05-21 20:40:31.858716	\N	FacilityService.scanForIdleFacilities
-0196cab2-0841-7893-9d75-2e352f0bf125	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cab2-0841-7893-9d75-2e352f0bf125","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.329422Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344883Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337112Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337112Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.346930Z","latencyDuration":14.992229000,"processDuration":0.009815000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858721546Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 17:29:47.329422	2025-05-21 20:40:31.858722	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cab2-0849-76c2-a1c9-cc479600d594	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"0196cab2-0849-76c2-a1c9-cc479600d594","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.337025Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344899Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337122Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337122Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.354689Z","latencyDuration":14.992223000,"processDuration":0.017564000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858724005Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	DELETED	2025-05-13 17:29:47.337025	2025-05-21 20:40:31.858724	\N	MonitoringPlotElevationScheduler
-0196cab2-084a-7de5-be37-2f8337e73806	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0196cab2-084a-7de5-be37-2f8337e73806","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.338515Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337125Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337125Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.391362Z","latencyDuration":14.992225000,"processDuration":0.054220000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858726421Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2025-05-13 17:29:47.338515	2025-05-21 20:40:31.858726	\N	PlantingSeasonScheduler
-0196cab2-084a-7de5-be37-2f8337e73805	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0196cab2-084a-7de5-be37-2f8337e73805","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.338057Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337124Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337124Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.397087Z","latencyDuration":14.992224000,"processDuration":0.059961000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858728796Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2025-05-13 17:29:47.338057	2025-05-21 20:40:31.858729	\N	ObservationScheduler
-0196cab2-0849-76c2-a1c9-cc479600d595	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0196cab2-0849-76c2-a1c9-cc479600d595","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.337575Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344899Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337123Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337123Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.417989Z","latencyDuration":14.992224000,"processDuration":0.080862000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858731171Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2025-05-13 17:29:47.337575	2025-05-21 20:40:31.858731	\N	NotificationScanner
-0196cab2-f2f2-74c4-b121-aa124209dc9f	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cab2-f2f2-74c4-b121-aa124209dc9f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:30:47.410447Z","scheduledAt":"2025-05-13T17:31:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:30:47.415594Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:43:57.872034881Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:43:57.872034881Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:43:57.918624547Z","latencyDuration":11590.456440881,"processDuration":0.046460708},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858733713Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 17:30:47.410447	2025-05-21 20:40:31.858734	\N	FacilityService.scanForIdleFacilities
-0196cab2-f2f0-79ea-8024-8faa5e16fac4	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cab2-f2f0-79ea-8024-8faa5e16fac4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:30:47.408797Z","scheduledAt":"2025-05-13T17:31:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:30:47.415581Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:43:57.871701964Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:43:57.871701964Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:43:57.951109047Z","latencyDuration":11590.456120964,"processDuration":0.079405333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858736088Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 17:30:47.408797	2025-05-21 20:40:31.858736	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb64-b8c8-72cd-89ec-e3ec86f10ea2	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb64-b8c8-72cd-89ec-e3ec86f10ea2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:44:57.928658506Z","scheduledAt":"2025-05-13T20:45:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:44:57.942364464Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:45:12.940396346Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:45:12.940396346Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:45:12.948636096Z","latencyDuration":14.998031882,"processDuration":0.008237459},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858738255Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:44:57.928659	2025-05-21 20:40:31.858738	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb64-b8c9-714c-bad7-d782c2a0cf72	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb64-b8c9-714c-bad7-d782c2a0cf72","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:44:57.929630797Z","scheduledAt":"2025-05-13T20:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:44:57.942378214Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:45:12.940406721Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:45:12.940406721Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:45:12.949116805Z","latencyDuration":14.998028507,"processDuration":0.008707584},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858740755Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:44:57.929631	2025-05-21 20:40:31.858741	\N	FacilityService.scanForIdleFacilities
-0196cb64-b8ca-7b56-ab08-13cfb565356a	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0196cb64-b8ca-7b56-ab08-13cfb565356a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:44:57.930970506Z","scheduledAt":"2025-05-13T20:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:44:57.942381506Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:45:12.940411221Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:45:12.940411221Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:45:12.950368263Z","latencyDuration":14.998029715,"processDuration":0.009954500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858743005Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2025-05-13 20:44:57.930971	2025-05-21 20:40:31.858743	\N	NotificationScanner
-0196cb64-b8ca-7b56-ab08-13cfb5653569	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"0196cb64-b8ca-7b56-ab08-13cfb5653569","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:44:57.930414297Z","scheduledAt":"2025-05-13T20:45:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:44:57.942380214Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:45:12.940409013Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:45:12.940409013Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:45:12.954181971Z","latencyDuration":14.998028799,"processDuration":0.013770542},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858746005Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	DELETED	2025-05-13 20:44:57.930414	2025-05-21 20:40:31.858746	\N	MonitoringPlotElevationScheduler
-0196cb64-b8cb-724c-8aad-2d7ef344fc83	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0196cb64-b8cb-724c-8aad-2d7ef344fc83","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:44:57.931437714Z","scheduledAt":"2025-05-13T20:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:44:57.942382797Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:45:12.940413096Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:45:12.940413096Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:45:12.972624055Z","latencyDuration":14.998030299,"processDuration":0.032208584},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858748463Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2025-05-13 20:44:57.931438	2025-05-21 20:40:31.858748	\N	ObservationScheduler
-0196cb64-b8cb-724c-8aad-2d7ef344fc84	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0196cb64-b8cb-724c-8aad-2d7ef344fc84","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:44:57.931841047Z","scheduledAt":"2025-05-13T20:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:44:57.942384006Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:45:12.940414805Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:45:12.940414805Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:45:12.983748930Z","latencyDuration":14.998030799,"processDuration":0.043332291},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858750713Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2025-05-13 20:44:57.931841	2025-05-21 20:40:31.858751	\N	PlantingSeasonScheduler
-0196cb65-a375-7303-a616-43b9548ebce8	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb65-a375-7303-a616-43b9548ebce8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:45:58.005346922Z","scheduledAt":"2025-05-13T20:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:45:58.012394964Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:46:12.968266263Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:46:12.968266263Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:46:12.978048888Z","latencyDuration":14.955871299,"processDuration":0.009779750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858753130Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:45:58.005347	2025-05-21 20:40:31.858753	\N	FacilityService.scanForIdleFacilities
-0196cb65-a374-7571-b62f-cb555c63f843	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb65-a374-7571-b62f-cb555c63f843","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:45:58.004038881Z","scheduledAt":"2025-05-13T20:46:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:45:58.012388172Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:46:12.968255680Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:46:12.968255680Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:46:12.978435221Z","latencyDuration":14.955867508,"processDuration":0.010175625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858755546Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:45:58.004039	2025-05-21 20:40:31.858756	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb66-8dfa-768f-a257-0e76883b27dd	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb66-8dfa-768f-a257-0e76883b27dd","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:46:58.042890089Z","scheduledAt":"2025-05-13T20:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:46:58.055268214Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:47:12.998617305Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:47:12.998617305Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:47:13.007792513Z","latencyDuration":14.943349091,"processDuration":0.009172958},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858758130Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:46:58.04289	2025-05-21 20:40:31.858758	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb66-8dfc-7881-acba-0ebf94247b75	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb66-8dfc-7881-acba-0ebf94247b75","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:46:58.044404797Z","scheduledAt":"2025-05-13T20:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:46:58.055276589Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:47:12.998626263Z","serverId":"a21c9500-540a-4912-b480-a18b062e28ad","serverName":"b54763f20e0f","updatedAt":"2025-05-13T20:47:12.998626263Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:47:13.008171930Z","latencyDuration":14.943349674,"processDuration":0.009543417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858760338Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:46:58.044405	2025-05-21 20:40:31.85876	\N	FacilityService.scanForIdleFacilities
-0196cb6a-292d-7249-b70b-ccc1c3fb6523	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb6a-292d-7249-b70b-ccc1c3fb6523","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:50:54.381196254Z","scheduledAt":"2025-05-13T20:51:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:50:54.405475546Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:51:09.386264803Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:51:09.386264803Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:51:09.415336678Z","latencyDuration":14.980789257,"processDuration":0.028923292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858762588Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:50:54.381196	2025-05-21 20:40:31.858763	\N	FacilityService.scanForIdleFacilities
-0196cb6a-292c-77ed-95dc-3eff4d64f4a1	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb6a-292c-77ed-95dc-3eff4d64f4a1","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:50:54.380571879Z","scheduledAt":"2025-05-13T20:51:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:50:54.405311629Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:51:09.386251720Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:51:09.386251720Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:51:09.428631261Z","latencyDuration":14.980940091,"processDuration":0.042377458},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858764921Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:50:54.380572	2025-05-21 20:40:31.858765	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb6b-13c1-736f-be77-fba8922fce35	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb6b-13c1-736f-be77-fba8922fce35","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:51:54.433274796Z","scheduledAt":"2025-05-13T20:52:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:51:54.442074004Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:52:09.430793720Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:52:09.430793720Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:52:09.440722803Z","latencyDuration":14.988719716,"processDuration":0.009926416},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858767255Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:51:54.433275	2025-05-21 20:40:31.858767	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb6b-13c6-7ee2-80aa-9e77bae4a8e0	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb6b-13c6-7ee2-80aa-9e77bae4a8e0","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:51:54.438110046Z","scheduledAt":"2025-05-13T20:52:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:51:54.442080546Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:52:09.430806178Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:52:09.430806178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:52:09.445546636Z","latencyDuration":14.988725632,"processDuration":0.014737792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858769671Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:51:54.43811	2025-05-21 20:40:31.85877	\N	FacilityService.scanForIdleFacilities
-0196cb6b-fe3c-7957-9912-6643977ffcb4	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb6b-fe3c-7957-9912-6643977ffcb4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:52:54.460064962Z","scheduledAt":"2025-05-13T20:53:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:52:54.475065712Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:53:09.466172636Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:53:09.466172636Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:53:09.482430553Z","latencyDuration":14.991106924,"processDuration":0.016256000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858772046Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:52:54.460065	2025-05-21 20:40:31.858772	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb6b-fe3d-70ac-b8b4-4d5a41aebad8	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb6b-fe3d-70ac-b8b4-4d5a41aebad8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:52:54.461249129Z","scheduledAt":"2025-05-13T20:53:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:52:54.475077171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:53:09.466198178Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:53:09.466198178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:53:09.482462636Z","latencyDuration":14.991121007,"processDuration":0.016262792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858774421Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:52:54.461249	2025-05-21 20:40:31.858774	\N	FacilityService.scanForIdleFacilities
-0196cb6b-fe3e-7f19-91ce-4c5e0b9a3662	5	{"version":5,"jobSignature":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","jobName":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","labels":[],"jobDetails":{"className":"com.terraformation.backend.device.TimeseriesPruner","methodName":"pruneTimeseriesValues","jobParameters":[],"cacheable":true},"id":"0196cb6b-fe3e-7f19-91ce-4c5e0b9a3662","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:52:54.462234462Z","scheduledAt":"2025-05-13T20:53:00Z","recurringJobId":"pruneTimeseriesValues","reason":"Scheduled by recurring job 'com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:52:54.475078921Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:53:09.466218970Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:53:09.466218970Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:53:09.491601803Z","latencyDuration":14.991140049,"processDuration":0.025379791},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858781880Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"pruneTimeseriesValues"}	com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()	DELETED	2025-05-13 20:52:54.462234	2025-05-21 20:40:31.858782	\N	pruneTimeseriesValues
-0196cb6c-e8c9-79da-b23e-132a6ab41a57	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb6c-e8c9-79da-b23e-132a6ab41a57","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:53:54.505328796Z","scheduledAt":"2025-05-13T20:54:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:53:54.514122254Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:54:09.495806303Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:54:09.495806303Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:54:09.506026845Z","latencyDuration":14.981684049,"processDuration":0.010217417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858784421Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:53:54.505329	2025-05-21 20:40:31.858784	\N	FacilityService.scanForIdleFacilities
-0196cb6c-e8c6-7da5-bd0d-bdb70d8c4de8	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb6c-e8c6-7da5-bd0d-bdb70d8c4de8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:53:54.502306379Z","scheduledAt":"2025-05-13T20:54:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:53:54.514113212Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:54:09.495783845Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:54:09.495783845Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:54:09.506358803Z","latencyDuration":14.981670633,"processDuration":0.010572625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858786796Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:53:54.502306	2025-05-21 20:40:31.858787	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb6d-d34a-70f6-a539-87fcb050f6fe	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb6d-d34a-70f6-a539-87fcb050f6fe","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:54:54.538311421Z","scheduledAt":"2025-05-13T20:55:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:54:54.547743712Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:55:09.537507261Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:55:09.537507261Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:55:09.554315928Z","latencyDuration":14.989763549,"processDuration":0.016806625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858789130Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:54:54.538311	2025-05-21 20:40:31.858789	\N	FacilityService.scanForIdleFacilities
-0196cb6d-d349-72bb-957a-c1c577863702	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb6d-d349-72bb-957a-c1c577863702","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:54:54.537138421Z","scheduledAt":"2025-05-13T20:55:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:54:54.547734171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:55:09.537495595Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:55:09.537495595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:55:09.556886511Z","latencyDuration":14.989761424,"processDuration":0.019389708},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858791421Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:54:54.537138	2025-05-21 20:40:31.858791	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb6e-bdcc-707a-a46d-40d20400e096	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb6e-bdcc-707a-a46d-40d20400e096","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:55:54.572176671Z","scheduledAt":"2025-05-13T20:56:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:55:54.580047004Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:56:09.562885470Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:56:09.562885470Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:56:09.571063886Z","latencyDuration":14.982838466,"processDuration":0.008177250},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858793796Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:55:54.572177	2025-05-21 20:40:31.858794	\N	FacilityService.scanForIdleFacilities
-0196cb6e-bdca-7e55-a330-721a4f4e1bac	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb6e-bdca-7e55-a330-721a4f4e1bac","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:55:54.570178337Z","scheduledAt":"2025-05-13T20:56:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:55:54.580041671Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:56:09.562870886Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:56:09.562870886Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:56:09.571116428Z","latencyDuration":14.982829215,"processDuration":0.008244167},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858796130Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:55:54.570178	2025-05-21 20:40:31.858796	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb6f-a847-7acb-b22a-16339b48707e	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb6f-a847-7acb-b22a-16339b48707e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:56:54.599520004Z","scheduledAt":"2025-05-13T20:57:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:56:54.605423004Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:57:09.597286386Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:57:09.597286386Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:57:09.605906720Z","latencyDuration":14.991863382,"processDuration":0.008618417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858798338Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:56:54.59952	2025-05-21 20:40:31.858798	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb6f-a848-7baa-9745-8cc76d7c17b4	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb6f-a848-7baa-9745-8cc76d7c17b4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:56:54.600749879Z","scheduledAt":"2025-05-13T20:57:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:56:54.605427504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:57:09.597297261Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:57:09.597297261Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:57:09.606593303Z","latencyDuration":14.991869757,"processDuration":0.009294709},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858800630Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:56:54.60075	2025-05-21 20:40:31.858801	\N	FacilityService.scanForIdleFacilities
-0196cb70-92bf-7f7d-bd16-f49e6154bfbf	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb70-92bf-7f7d-bd16-f49e6154bfbf","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:57:54.623675962Z","scheduledAt":"2025-05-13T20:58:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:57:54.631611046Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:58:09.638593011Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:58:09.638593011Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:58:09.649252636Z","latencyDuration":15.006981965,"processDuration":0.010658209},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858802755Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:57:54.623676	2025-05-21 20:40:31.858803	\N	FacilityService.scanForIdleFacilities
-0196cb70-92be-78e9-8c02-9cf2d767c7a8	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb70-92be-78e9-8c02-9cf2d767c7a8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:57:54.622367921Z","scheduledAt":"2025-05-13T20:58:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:57:54.631601129Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:58:09.638580345Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:58:09.638580345Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:58:09.655058511Z","latencyDuration":15.006979216,"processDuration":0.016477291},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858805171Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:57:54.622368	2025-05-21 20:40:31.858805	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb71-7d4d-7a70-a254-a5191db36f69	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb71-7d4d-7a70-a254-a5191db36f69","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:58:54.669793004Z","scheduledAt":"2025-05-13T20:59:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:58:54.676198504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:59:09.677653428Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:59:09.677653428Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:59:09.687482845Z","latencyDuration":15.001454924,"processDuration":0.009827875},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858807421Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:58:54.669793	2025-05-21 20:40:31.858807	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb71-7d4e-751c-96a6-4b3d24b8e573	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb71-7d4e-751c-96a6-4b3d24b8e573","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:58:54.670452129Z","scheduledAt":"2025-05-13T20:59:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:58:54.676203587Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T20:59:09.677664178Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T20:59:09.677664178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T20:59:09.687736845Z","latencyDuration":15.001460591,"processDuration":0.010071375},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858809713Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:58:54.670452	2025-05-21 20:40:31.85881	\N	FacilityService.scanForIdleFacilities
-0196cb72-67cf-7467-a572-4e2d9bfed55f	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb72-67cf-7467-a572-4e2d9bfed55f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:59:54.703071754Z","scheduledAt":"2025-05-13T21:00:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:59:54.724124462Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:00:09.725165803Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:00:09.725165803Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:00:09.744662720Z","latencyDuration":15.001041341,"processDuration":0.019494542},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858812046Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 20:59:54.703072	2025-05-21 20:40:31.858812	\N	FacilityService.scanForIdleFacilities
-0196cb72-67cb-7c95-a4e3-15d164936099	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb72-67cb-7c95-a4e3-15d164936099","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:59:54.699684754Z","scheduledAt":"2025-05-13T21:00:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:59:54.724115087Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:00:09.725130220Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:00:09.725130220Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:00:09.745132636Z","latencyDuration":15.001015133,"processDuration":0.020001708},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858814380Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 20:59:54.699685	2025-05-21 20:40:31.858814	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb72-67d1-766f-8160-d62014f5c267	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0196cb72-67d1-766f-8160-d62014f5c267","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:59:54.705085046Z","scheduledAt":"2025-05-13T21:00:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:59:54.724126587Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:00:09.725168386Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:00:09.725168386Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:00:09.776190428Z","latencyDuration":15.001041799,"processDuration":0.051020750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858816963Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2025-05-13 20:59:54.705085	2025-05-21 20:40:31.858817	\N	NotificationScanner
-0196cb72-67d0-7281-9e0c-4724a83b7d20	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"0196cb72-67d0-7281-9e0c-4724a83b7d20","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:59:54.703961921Z","scheduledAt":"2025-05-13T21:00:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:59:54.724125629Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:00:09.725167511Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:00:09.725167511Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:00:09.786205803Z","latencyDuration":15.001041882,"processDuration":0.061036792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858819630Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	DELETED	2025-05-13 20:59:54.703962	2025-05-21 20:40:31.85882	\N	MonitoringPlotElevationScheduler
-0196cb72-67d1-766f-8160-d62014f5c268	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0196cb72-67d1-766f-8160-d62014f5c268","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:59:54.705587671Z","scheduledAt":"2025-05-13T21:00:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:59:54.724127546Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:00:09.725169095Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:00:09.725169095Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:00:09.810203136Z","latencyDuration":15.001041549,"processDuration":0.085033083},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858821921Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2025-05-13 20:59:54.705588	2025-05-21 20:40:31.858822	\N	ObservationScheduler
-0196cb72-67d2-7fcf-be49-ba8765d01e7c	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0196cb72-67d2-7fcf-be49-ba8765d01e7c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T20:59:54.706461129Z","scheduledAt":"2025-05-13T21:00:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T20:59:54.724128504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:00:09.725169595Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:00:09.725169595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:00:09.813601386Z","latencyDuration":15.001041091,"processDuration":0.088430500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858824171Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2025-05-13 20:59:54.706461	2025-05-21 20:40:31.858824	\N	PlantingSeasonScheduler
-0196cb73-5268-77fd-b7b1-97640334bc42	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb73-5268-77fd-b7b1-97640334bc42","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:00:54.760568504Z","scheduledAt":"2025-05-13T21:01:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:00:54.771230087Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:01:09.793822636Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:01:09.793822636Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:01:09.806816053Z","latencyDuration":15.022592549,"processDuration":0.012991834},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858826505Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:00:54.760569	2025-05-21 20:40:31.858827	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb73-526a-7310-95be-6349481df440	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb73-526a-7310-95be-6349481df440","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:00:54.762425462Z","scheduledAt":"2025-05-13T21:01:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:00:54.771235171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:01:09.793850928Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:01:09.793850928Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:01:09.806816136Z","latencyDuration":15.022615757,"processDuration":0.012963875},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858828838Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:00:54.762425	2025-05-21 20:40:31.858829	\N	FacilityService.scanForIdleFacilities
-0196cb74-3ce9-7c0a-a058-727171e1f5fc	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb74-3ce9-7c0a-a058-727171e1f5fc","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:01:54.793866212Z","scheduledAt":"2025-05-13T21:02:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:01:54.798338504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:01:54.817398796Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:01:54.817398796Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:01:54.824038754Z","latencyDuration":0.019060292,"processDuration":0.006639125},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858831130Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:01:54.793866	2025-05-21 20:40:31.858831	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb74-3cea-704a-9915-7f2446ff328f	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb74-3cea-704a-9915-7f2446ff328f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:01:54.794468462Z","scheduledAt":"2025-05-13T21:02:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:01:54.798341504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:01:54.817404421Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:01:54.817404421Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:01:54.824084879Z","latencyDuration":0.019062917,"processDuration":0.006680041},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858833380Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:01:54.794468	2025-05-21 20:40:31.858833	\N	FacilityService.scanForIdleFacilities
-0196cb75-2748-7b75-b533-feb4c3c810a5	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb75-2748-7b75-b533-feb4c3c810a5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:02:54.792845962Z","scheduledAt":"2025-05-13T21:03:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:02:54.802133754Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:02:54.812026712Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:02:54.812026712Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:02:54.819796296Z","latencyDuration":0.009892958,"processDuration":0.007768792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858835630Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:02:54.792846	2025-05-21 20:40:31.858836	\N	FacilityService.scanForIdleFacilities
-0196cb75-2745-7e45-9921-546023ac5c76	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb75-2745-7e45-9921-546023ac5c76","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:02:54.789682837Z","scheduledAt":"2025-05-13T21:03:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:02:54.802122962Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:02:54.812022171Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:02:54.812022171Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:02:54.819814046Z","latencyDuration":0.009899209,"processDuration":0.007791041},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858838005Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:02:54.789683	2025-05-21 20:40:31.858838	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb76-11cb-7590-a03f-a76ff6f17ce1	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb76-11cb-7590-a03f-a76ff6f17ce1","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:03:54.827048712Z","scheduledAt":"2025-05-13T21:04:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:03:54.838856171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:04:09.850855386Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:04:09.850855386Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:04:09.859267220Z","latencyDuration":15.011999215,"processDuration":0.008410500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858840338Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:03:54.827049	2025-05-21 20:40:31.85884	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb76-11cc-72fd-a37e-7dfb5e54974f	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb76-11cc-72fd-a37e-7dfb5e54974f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:03:54.828536796Z","scheduledAt":"2025-05-13T21:04:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:03:54.838870921Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:04:09.850862261Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:04:09.850862261Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:04:09.859712220Z","latencyDuration":15.011991340,"processDuration":0.008848875},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858842671Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:03:54.828537	2025-05-21 20:40:31.858843	\N	FacilityService.scanForIdleFacilities
-0196cb76-fc58-7a43-a6b5-ccdb5791bf6d	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb76-fc58-7a43-a6b5-ccdb5791bf6d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:04:54.872524837Z","scheduledAt":"2025-05-13T21:05:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:04:54.881158212Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:05:09.879543678Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:05:09.879543678Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:05:09.898569845Z","latencyDuration":14.998385466,"processDuration":0.019024042},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858845046Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:04:54.872525	2025-05-21 20:40:31.858845	\N	FacilityService.scanForIdleFacilities
-0196cb76-fc57-7683-9a2b-53832949bb47	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb76-fc57-7683-9a2b-53832949bb47","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:04:54.871199296Z","scheduledAt":"2025-05-13T21:05:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:04:54.881149754Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:05:09.879516511Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:05:09.879516511Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:05:09.898709428Z","latencyDuration":14.998366757,"processDuration":0.019191292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858847296Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:04:54.871199	2025-05-21 20:40:31.858847	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb77-e6d7-741c-96ac-079c579be077	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb77-e6d7-741c-96ac-079c579be077","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:05:54.903025004Z","scheduledAt":"2025-05-13T21:06:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:05:54.912051254Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:06:09.906591011Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:06:09.906591011Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:06:09.914682511Z","latencyDuration":14.994539757,"processDuration":0.008089000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858849588Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:05:54.903025	2025-05-21 20:40:31.85885	\N	FacilityService.scanForIdleFacilities
-0196cb77-e6d5-75e8-a8ed-4e9f82f4d902	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb77-e6d5-75e8-a8ed-4e9f82f4d902","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:05:54.901511212Z","scheduledAt":"2025-05-13T21:06:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:05:54.912043254Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:06:09.906582428Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:06:09.906582428Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:06:09.914682553Z","latencyDuration":14.994539174,"processDuration":0.008098208},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858852005Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:05:54.901511	2025-05-21 20:40:31.858852	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb78-d159-7d50-a754-3f6c56cc6ef5	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb78-d159-7d50-a754-3f6c56cc6ef5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:06:54.937895171Z","scheduledAt":"2025-05-13T21:07:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:06:54.948204712Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:07:09.943340928Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:07:09.943340928Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:07:09.951921636Z","latencyDuration":14.995136216,"processDuration":0.008579250},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858855296Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:06:54.937895	2025-05-21 20:40:31.858855	\N	FacilityService.scanForIdleFacilities
-0196cb78-d158-7b3d-9d3d-bd6f47e0cb43	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb78-d158-7b3d-9d3d-bd6f47e0cb43","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:06:54.936343087Z","scheduledAt":"2025-05-13T21:07:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:06:54.948189754Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:07:09.943334678Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:07:09.943334678Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:07:09.953208845Z","latencyDuration":14.995144924,"processDuration":0.009873417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858857546Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:06:54.936343	2025-05-21 20:40:31.858858	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb79-bbd6-771c-a5ee-b2d93a510b06	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb79-bbd6-771c-a5ee-b2d93a510b06","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:07:54.966774879Z","scheduledAt":"2025-05-13T21:08:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:07:54.979090171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:08:09.970151886Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:08:09.970151886Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:08:09.981285345Z","latencyDuration":14.991061715,"processDuration":0.011131292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858859796Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:07:54.966775	2025-05-21 20:40:31.85886	\N	FacilityService.scanForIdleFacilities
-0196cb79-bbd5-7335-b415-a3c00944e18c	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb79-bbd5-7335-b415-a3c00944e18c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:07:54.965345546Z","scheduledAt":"2025-05-13T21:08:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:07:54.979082587Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:08:09.970138928Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:08:09.970138928Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:08:09.981352095Z","latencyDuration":14.991056341,"processDuration":0.011211292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858862130Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:07:54.965346	2025-05-21 20:40:31.858862	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb79-bbd7-7237-8596-2504180b3c36	5	{"version":5,"jobSignature":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","jobName":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","labels":[],"jobDetails":{"className":"com.terraformation.backend.device.TimeseriesPruner","methodName":"pruneTimeseriesValues","jobParameters":[],"cacheable":true},"id":"0196cb79-bbd7-7237-8596-2504180b3c36","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:07:54.967361754Z","scheduledAt":"2025-05-13T21:08:00Z","recurringJobId":"pruneTimeseriesValues","reason":"Scheduled by recurring job 'com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:07:54.979091296Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:08:09.970154178Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:08:09.970154178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:08:09.984709470Z","latencyDuration":14.991062882,"processDuration":0.014554167},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858864296Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"pruneTimeseriesValues"}	com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()	DELETED	2025-05-13 21:07:54.967362	2025-05-21 20:40:31.858864	\N	pruneTimeseriesValues
-0196cb7a-a650-76de-8467-54d2658292ec	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb7a-a650-76de-8467-54d2658292ec","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:08:54.992876671Z","scheduledAt":"2025-05-13T21:09:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:08:55.004696046Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:09:09.990181511Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:09:09.990181511Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:09:09.999849261Z","latencyDuration":14.985485465,"processDuration":0.009666375},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858866505Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:08:54.992877	2025-05-21 20:40:31.858867	\N	FacilityService.scanForIdleFacilities
-0196cb7a-a64f-71b1-bd53-96586e25deda	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb7a-a64f-71b1-bd53-96586e25deda","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:08:54.991132462Z","scheduledAt":"2025-05-13T21:09:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:08:55.004687337Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:09:09.990150803Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:09:09.990150803Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:09:10.000826053Z","latencyDuration":14.985463466,"processDuration":0.010674292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858869088Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:08:54.991132	2025-05-21 20:40:31.858869	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb7b-90cb-76b2-b09e-6cc1678d4d38	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb7b-90cb-76b2-b09e-6cc1678d4d38","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:09:55.019415421Z","scheduledAt":"2025-05-13T21:10:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:09:55.027967254Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:10:10.019999220Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:10:10.019999220Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:10:10.027443220Z","latencyDuration":14.992031966,"processDuration":0.007439625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858871838Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:09:55.019415	2025-05-21 20:40:31.858872	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb7b-90cc-7c77-aef0-976415124b2e	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb7b-90cc-7c77-aef0-976415124b2e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:09:55.020117212Z","scheduledAt":"2025-05-13T21:10:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:09:55.027978837Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:10:10.020006845Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:10:10.020006845Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:10:10.029043928Z","latencyDuration":14.992028008,"processDuration":0.009036250},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858873963Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:09:55.020117	2025-05-21 20:40:31.858874	\N	FacilityService.scanForIdleFacilities
-0196cb7c-7b42-73ba-a1bb-efcf845eeff9	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb7c-7b42-73ba-a1bb-efcf845eeff9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:10:55.042022796Z","scheduledAt":"2025-05-13T21:11:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:10:55.055270004Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:11:10.059672178Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:11:10.059672178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:11:10.074271595Z","latencyDuration":15.004402174,"processDuration":0.014597917},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858876171Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:10:55.042023	2025-05-21 20:40:31.858876	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb7c-7b43-7d86-9e0c-9216deeadecf	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb7c-7b43-7d86-9e0c-9216deeadecf","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:10:55.043268379Z","scheduledAt":"2025-05-13T21:11:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:10:55.055287379Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:11:10.059711470Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:11:10.059711470Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:11:10.074313761Z","latencyDuration":15.004424091,"processDuration":0.014600916},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858878505Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:10:55.043268	2025-05-21 20:40:31.858879	\N	FacilityService.scanForIdleFacilities
-0196cb7d-65c9-7641-af1a-abeea8ec9278	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb7d-65c9-7641-af1a-abeea8ec9278","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:11:55.081774837Z","scheduledAt":"2025-05-13T21:12:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:11:55.093553879Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:12:10.098505720Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:12:10.098505720Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:12:10.109117678Z","latencyDuration":15.004951841,"processDuration":0.010610750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858880630Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:11:55.081775	2025-05-21 20:40:31.858881	\N	FacilityService.scanForIdleFacilities
-0196cb7d-65c8-74d4-a79c-88a62cc7e68b	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb7d-65c8-74d4-a79c-88a62cc7e68b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:11:55.079516129Z","scheduledAt":"2025-05-13T21:12:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:11:55.093538421Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:12:10.098498553Z","serverId":"e8795d11-b561-41f7-ae79-7edef325cb00","serverName":"168e7e07ca00","updatedAt":"2025-05-13T21:12:10.098498553Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:12:10.127836970Z","latencyDuration":15.004960132,"processDuration":0.029337083},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858883921Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:11:55.079516	2025-05-21 20:40:31.858884	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb9e-5acf-7cd2-bf62-fa965ccdb5e1	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb9e-5acf-7cd2-bf62-fa965ccdb5e1","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:47:54.959765170Z","scheduledAt":"2025-05-13T21:48:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:47:55.000682504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:48:09.962100594Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:48:09.962100594Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:48:09.997049678Z","latencyDuration":14.961418090,"processDuration":0.034804125},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858886088Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:47:54.959765	2025-05-21 20:40:31.858886	\N	FacilityService.scanForIdleFacilities
-0196cb9e-5acd-7b10-8c44-38762ed33d60	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb9e-5acd-7b10-8c44-38762ed33d60","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:47:54.957381504Z","scheduledAt":"2025-05-13T21:48:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:47:55.000459795Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:48:09.962082303Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:48:09.962082303Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:48:09.997057178Z","latencyDuration":14.961622508,"processDuration":0.034820833},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858888171Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:47:54.957382	2025-05-21 20:40:31.858888	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cb9f-4575-743c-930e-f15df8da9da7	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cb9f-4575-743c-930e-f15df8da9da7","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:48:55.029938045Z","scheduledAt":"2025-05-13T21:49:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:48:55.039204420Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:49:10.010818553Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:49:10.010818553Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:49:10.018873011Z","latencyDuration":14.971614133,"processDuration":0.008051708},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858890338Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:48:55.029938	2025-05-21 20:40:31.85889	\N	FacilityService.scanForIdleFacilities
-0196cb9f-4574-7295-b98a-0dad8931cc01	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cb9f-4574-7295-b98a-0dad8931cc01","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:48:55.028282795Z","scheduledAt":"2025-05-13T21:49:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:48:55.039198837Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:49:10.010807178Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:49:10.010807178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:49:10.019289928Z","latencyDuration":14.971608341,"processDuration":0.008476833},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858892380Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:48:55.028283	2025-05-21 20:40:31.858892	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba0-2ff9-7572-87f6-e97380b82ac7	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba0-2ff9-7572-87f6-e97380b82ac7","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:49:55.065517004Z","scheduledAt":"2025-05-13T21:50:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:49:55.068507879Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:50:10.053737344Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:50:10.053737344Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:50:10.069192928Z","latencyDuration":14.985229465,"processDuration":0.015453084},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858894505Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:49:55.065517	2025-05-21 20:40:31.858895	\N	FacilityService.scanForIdleFacilities
-0196cba0-2ff9-7572-87f6-e97380b82ac6	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba0-2ff9-7572-87f6-e97380b82ac6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:49:55.065082045Z","scheduledAt":"2025-05-13T21:50:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:49:55.068503129Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:50:10.053723761Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:50:10.053723761Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:50:10.069203969Z","latencyDuration":14.985220632,"processDuration":0.015478333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858896546Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:49:55.065082	2025-05-21 20:40:31.858897	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba1-1a7b-70fe-92cc-28b41baea2d0	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba1-1a7b-70fe-92cc-28b41baea2d0","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:50:55.098953420Z","scheduledAt":"2025-05-13T21:51:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:50:55.111590379Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:51:10.094157636Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:51:10.094157636Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:51:10.110680178Z","latencyDuration":14.982567257,"processDuration":0.016520083},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858898671Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:50:55.098953	2025-05-21 20:40:31.858899	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba1-1a7c-755b-8554-63dbf818956d	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba1-1a7c-755b-8554-63dbf818956d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:50:55.100386045Z","scheduledAt":"2025-05-13T21:51:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:50:55.111598254Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:51:10.094185094Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:51:10.094185094Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:51:10.111091969Z","latencyDuration":14.982586840,"processDuration":0.016904459},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858901005Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:50:55.100386	2025-05-21 20:40:31.858901	\N	FacilityService.scanForIdleFacilities
-0196cba2-0501-791b-8801-d67ee35544e9	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba2-0501-791b-8801-d67ee35544e9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:51:55.137603879Z","scheduledAt":"2025-05-13T21:52:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:51:55.149561629Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:52:10.134690886Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:52:10.134690886Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:52:10.146548428Z","latencyDuration":14.985129257,"processDuration":0.011823292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858904171Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:51:55.137604	2025-05-21 20:40:31.858904	\N	FacilityService.scanForIdleFacilities
-0196cba2-04fd-7687-8def-10e1b86efa68	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba2-04fd-7687-8def-10e1b86efa68","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:51:55.133435337Z","scheduledAt":"2025-05-13T21:52:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:51:55.149553504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:52:10.134673053Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:52:10.134673053Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:52:10.148510553Z","latencyDuration":14.985119549,"processDuration":0.013836250},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858909588Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:51:55.133435	2025-05-21 20:40:31.85891	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba2-ef7f-7a9b-973d-eff04876f5e9	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba2-ef7f-7a9b-973d-eff04876f5e9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:52:55.166857462Z","scheduledAt":"2025-05-13T21:53:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:52:55.178905129Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:53:10.170885261Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:53:10.170885261Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:53:10.180871553Z","latencyDuration":14.991980132,"processDuration":0.009984167},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858911713Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:52:55.166857	2025-05-21 20:40:31.858912	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba2-ef81-7b0f-b8f1-88fb048761e1	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba2-ef81-7b0f-b8f1-88fb048761e1","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:52:55.168941420Z","scheduledAt":"2025-05-13T21:53:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:52:55.178913879Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:53:10.171006011Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:53:10.171006011Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:53:10.181024761Z","latencyDuration":14.992092132,"processDuration":0.010017500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858913880Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:52:55.168941	2025-05-21 20:40:31.858914	\N	FacilityService.scanForIdleFacilities
-0196cba2-ef82-7bd2-8844-562f568b9dc4	5	{"version":5,"jobSignature":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","jobName":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","labels":[],"jobDetails":{"className":"com.terraformation.backend.device.TimeseriesPruner","methodName":"pruneTimeseriesValues","jobParameters":[],"cacheable":true},"id":"0196cba2-ef82-7bd2-8844-562f568b9dc4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:52:55.170088754Z","scheduledAt":"2025-05-13T21:53:00Z","recurringJobId":"pruneTimeseriesValues","reason":"Scheduled by recurring job 'com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:52:55.178915379Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:53:10.171014969Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:53:10.171014969Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:53:10.188758094Z","latencyDuration":14.992099590,"processDuration":0.017741709},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858916088Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"pruneTimeseriesValues"}	com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()	DELETED	2025-05-13 21:52:55.170089	2025-05-21 20:40:31.858916	\N	pruneTimeseriesValues
-0196cba3-da05-7817-9af0-a2b251f81bdf	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba3-da05-7817-9af0-a2b251f81bdf","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:53:55.205927295Z","scheduledAt":"2025-05-13T21:54:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:53:55.214799712Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:54:10.200993178Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:54:10.200993178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:54:10.208395844Z","latencyDuration":14.986193466,"processDuration":0.007399666},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858918255Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:53:55.205927	2025-05-21 20:40:31.858918	\N	FacilityService.scanForIdleFacilities
-0196cba3-da04-77a9-8a6e-ed705ea1c730	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba3-da04-77a9-8a6e-ed705ea1c730","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:53:55.204833670Z","scheduledAt":"2025-05-13T21:54:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:53:55.214788337Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:54:10.200984803Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:54:10.200984803Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:54:10.210675011Z","latencyDuration":14.986196466,"processDuration":0.009688041},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858920796Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:53:55.204834	2025-05-21 20:40:31.858921	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba4-c482-7329-b2ad-97d04fdcf612	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba4-c482-7329-b2ad-97d04fdcf612","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:54:55.234856462Z","scheduledAt":"2025-05-13T21:55:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:54:55.242843670Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:55:10.234159553Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:55:10.234159553Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:55:10.247076386Z","latencyDuration":14.991315883,"processDuration":0.012915708},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858923005Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:54:55.234856	2025-05-21 20:40:31.858923	\N	FacilityService.scanForIdleFacilities
-0196cba4-c481-7bee-a5bf-ed0393d99463	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba4-c481-7bee-a5bf-ed0393d99463","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:54:55.233526004Z","scheduledAt":"2025-05-13T21:55:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:54:55.242837129Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:55:10.234133344Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:55:10.234133344Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:55:10.247933553Z","latencyDuration":14.991296215,"processDuration":0.013799417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858925005Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:54:55.233526	2025-05-21 20:40:31.858925	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba5-af00-7d1d-a269-ffa4203c18a9	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba5-af00-7d1d-a269-ffa4203c18a9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:55:55.264231754Z","scheduledAt":"2025-05-13T21:56:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:55:55.279484879Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:56:10.266876761Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:56:10.266876761Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:56:10.277022636Z","latencyDuration":14.987391882,"processDuration":0.010143792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858927046Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:55:55.264232	2025-05-21 20:40:31.858927	\N	FacilityService.scanForIdleFacilities
-0196cba5-aefe-73f9-89f3-4460b09e903e	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba5-aefe-73f9-89f3-4460b09e903e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:55:55.262094962Z","scheduledAt":"2025-05-13T21:56:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:55:55.279465004Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:56:10.266867178Z","serverId":"bdc1eef6-5b2e-4703-b773-6c38f59029ce","serverName":"d4a6493e902c","updatedAt":"2025-05-13T21:56:10.266867178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:56:10.277736344Z","latencyDuration":14.987402174,"processDuration":0.010868041},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858928921Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:55:55.262095	2025-05-21 20:40:31.858929	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba6-7528-7533-ac65-b589b589e455	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba6-7528-7533-ac65-b589b589e455","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:56:45.992628222Z","scheduledAt":"2025-05-13T21:57:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:56:46.025394722Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:57:00.958320965Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T21:57:00.958320965Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:57:01.024174382Z","latencyDuration":14.932926243,"processDuration":0.065654167},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858930921Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:56:45.992628	2025-05-21 20:40:31.858931	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba6-7529-725e-892e-1a060332f295	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba6-7529-725e-892e-1a060332f295","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:56:45.993884722Z","scheduledAt":"2025-05-13T21:57:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:56:46.025591264Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:57:00.958344048Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T21:57:00.958344048Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:57:01.024175132Z","latencyDuration":14.932752784,"processDuration":0.065621875},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858932921Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:56:45.993885	2025-05-21 20:40:31.858933	\N	FacilityService.scanForIdleFacilities
-0196cba7-5fc1-7df0-82e7-bffd538dd61d	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba7-5fc1-7df0-82e7-bffd538dd61d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:57:46.049786055Z","scheduledAt":"2025-05-13T21:58:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:57:46.055221680Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:58:01.015821090Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T21:58:01.015821090Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:58:01.024754257Z","latencyDuration":14.960599410,"processDuration":0.008929875},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858934880Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:57:46.049786	2025-05-21 20:40:31.858935	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba7-5fc2-7987-b0de-f8e8a43ea77e	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba7-5fc2-7987-b0de-f8e8a43ea77e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:57:46.050462014Z","scheduledAt":"2025-05-13T21:58:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:57:46.055234722Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:58:01.015847548Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T21:58:01.015847548Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:58:01.024962548Z","latencyDuration":14.960612826,"processDuration":0.009112625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858950296Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:57:46.050462	2025-05-21 20:40:31.85895	\N	FacilityService.scanForIdleFacilities
-0196cba8-4a3d-7be2-95ef-be8008585c05	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba8-4a3d-7be2-95ef-be8008585c05","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:58:46.077686305Z","scheduledAt":"2025-05-13T21:59:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:58:46.087677472Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:59:01.046025423Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T21:59:01.046025423Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:59:01.056429882Z","latencyDuration":14.958347951,"processDuration":0.010401292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858952921Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:58:46.077686	2025-05-21 20:40:31.858953	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba8-4a3f-7aa3-9ddd-332966f6af1c	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba8-4a3f-7aa3-9ddd-332966f6af1c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:58:46.079063722Z","scheduledAt":"2025-05-13T21:59:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:58:46.087687222Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T21:59:01.046043507Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T21:59:01.046043507Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T21:59:01.056653090Z","latencyDuration":14.958356285,"processDuration":0.010607291},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858955130Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:58:46.079064	2025-05-21 20:40:31.858955	\N	FacilityService.scanForIdleFacilities
-0196cba9-34c2-7c56-a8bc-35aada42bdf0	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cba9-34c2-7c56-a8bc-35aada42bdf0","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:59:46.114466347Z","scheduledAt":"2025-05-13T22:00:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:59:46.135874972Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T22:00:01.077170048Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T22:00:01.077170048Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T22:00:01.090907382Z","latencyDuration":14.941295076,"processDuration":0.013735084},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858957338Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 21:59:46.114466	2025-05-21 20:40:31.858957	\N	RateLimitedEventPublisher.scanPendingEvents
-0196cba9-34c5-76b1-a8c6-fc26b0b33954	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cba9-34c5-76b1-a8c6-fc26b0b33954","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:59:46.117251764Z","scheduledAt":"2025-05-13T22:00:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:59:46.135896222Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T22:00:01.077175798Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T22:00:01.077175798Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T22:00:01.092034757Z","latencyDuration":14.941279576,"processDuration":0.014858042},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858959755Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 21:59:46.117252	2025-05-21 20:40:31.85896	\N	FacilityService.scanForIdleFacilities
-0196cba9-34c6-7d1d-b1da-ea47e40351e5	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0196cba9-34c6-7d1d-b1da-ea47e40351e5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:59:46.118815097Z","scheduledAt":"2025-05-13T22:00:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:59:46.135901305Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T22:00:01.077178840Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T22:00:01.077178840Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T22:00:01.107316423Z","latencyDuration":14.941277535,"processDuration":0.030125667},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858961755Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2025-05-13 21:59:46.118815	2025-05-21 20:40:31.858962	\N	NotificationScanner
-0196cba9-34c6-7d1d-b1da-ea47e40351e4	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"0196cba9-34c6-7d1d-b1da-ea47e40351e4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:59:46.118013097Z","scheduledAt":"2025-05-13T22:00:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:59:46.135900055Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T22:00:01.077177423Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T22:00:01.077177423Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T22:00:01.119013757Z","latencyDuration":14.941277368,"processDuration":0.041833750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858963963Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	DELETED	2025-05-13 21:59:46.118013	2025-05-21 20:40:31.858964	\N	MonitoringPlotElevationScheduler
-0196cba9-34c8-790c-9175-33d5134b9c8c	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0196cba9-34c8-790c-9175-33d5134b9c8c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:59:46.120452014Z","scheduledAt":"2025-05-13T22:00:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:59:46.135915889Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T22:00:01.077182340Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T22:00:01.077182340Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T22:00:01.146482048Z","latencyDuration":14.941266451,"processDuration":0.069298375},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858967338Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2025-05-13 21:59:46.120452	2025-05-21 20:40:31.858967	\N	PlantingSeasonScheduler
-0196cba9-34c7-7375-b041-16b7f369c26d	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0196cba9-34c7-7375-b041-16b7f369c26d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T21:59:46.119509014Z","scheduledAt":"2025-05-13T22:00:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T21:59:46.135914597Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T22:00:01.077181007Z","serverId":"13746c54-4d84-4658-a9a4-1b704c19d490","serverName":"9cd2292bccc9","updatedAt":"2025-05-13T22:00:01.077181007Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T22:00:01.148876382Z","latencyDuration":14.941266410,"processDuration":0.071693583},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858969588Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2025-05-13 21:59:46.119509	2025-05-21 20:40:31.85897	\N	ObservationScheduler
-0196cbaa-51c1-75e8-bdde-ca3bc5fbe102	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cbaa-51c1-75e8-bdde-ca3bc5fbe102","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T22:00:59.073505464Z","scheduledAt":"2025-05-13T22:01:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T22:00:59.138394214Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T22:01:14.089918096Z","serverId":"2bd6a4b3-16f9-4e17-85bf-b1db7888887b","serverName":"c6610ea7954f","updatedAt":"2025-05-13T22:01:14.089918096Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T22:01:14.176499721Z","latencyDuration":14.951523882,"processDuration":0.085725750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858971588Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-13 22:00:59.073505	2025-05-21 20:40:31.858972	\N	FacilityService.scanForIdleFacilities
-0196cbaa-51be-7e52-8114-f26b3ca9d81a	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cbaa-51be-7e52-8114-f26b3ca9d81a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T22:00:59.069584047Z","scheduledAt":"2025-05-13T22:01:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T22:00:59.138021922Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T22:01:14.089891054Z","serverId":"2bd6a4b3-16f9-4e17-85bf-b1db7888887b","serverName":"c6610ea7954f","updatedAt":"2025-05-13T22:01:14.089891054Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T22:01:14.178192971Z","latencyDuration":14.951869132,"processDuration":0.088299000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-21T20:40:31.858973505Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-13 22:00:59.069584	2025-05-21 20:40:31.858974	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4cc-b615-790d-b46a-219f81eeefe3	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cc-b615-790d-b46a-219f81eeefe3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:42:58.837843086Z","scheduledAt":"2025-05-21T21:43:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:42:58.884739211Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:43:13.741451968Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:43:13.741451968Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:43:13.774590384Z","latencyDuration":14.856712757,"processDuration":0.033136583}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-21 21:42:58.837843	2025-05-21 21:43:13.77459	\N	FacilityService.scanForIdleFacilities
-0196f4cc-b613-78a3-a8d9-69fc54f2c2f2	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cc-b613-78a3-a8d9-69fc54f2c2f2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:42:58.835815961Z","scheduledAt":"2025-05-21T21:43:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:42:58.884033627Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:43:13.741432634Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:43:13.741432634Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:43:13.774446468Z","latencyDuration":14.857399007,"processDuration":0.032864625}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-21 21:42:58.835816	2025-05-21 21:43:13.774446	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4cd-a0c5-7606-918c-96bef2fbe58a	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cd-a0c5-7606-918c-96bef2fbe58a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:43:58.916858794Z","scheduledAt":"2025-05-21T21:44:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:43:58.932653919Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:44:13.786080676Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:44:13.786080676Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:44:13.796639551Z","latencyDuration":14.853426757,"processDuration":0.010556208}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-21 21:43:58.916859	2025-05-21 21:44:13.79664	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4cd-a0c7-7f68-a96c-f59c2e77d6c9	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cd-a0c7-7f68-a96c-f59c2e77d6c9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:43:58.919230086Z","scheduledAt":"2025-05-21T21:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:43:58.932669294Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:44:13.786089593Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:44:13.786089593Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:44:13.796868926Z","latencyDuration":14.853420299,"processDuration":0.010777375}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-21 21:43:58.91923	2025-05-21 21:44:13.796869	\N	FacilityService.scanForIdleFacilities
-0196f4ce-8b54-70d4-8242-66c0d07f79d4	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b54-70d4-8242-66c0d07f79d4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.964250627Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982043461Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825258593Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825258593Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.840349884Z","latencyDuration":14.843215132,"processDuration":0.015089333}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-21 21:44:58.964251	2025-05-21 21:45:13.84035	\N	FacilityService.scanForIdleFacilities
-0196f4ce-8b56-7862-9c42-d7ac0950f3e2	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b56-7862-9c42-d7ac0950f3e2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.966270669Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982046711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825266384Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825266384Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.880981968Z","latencyDuration":14.843219673,"processDuration":0.055713084}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2025-05-21 21:44:58.966271	2025-05-21 21:45:13.880982	\N	ObservationScheduler
-0196f4ce-8b57-77d8-b4de-8bc55d315183	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b57-77d8-b4de-8bc55d315183","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.967038002Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982047669Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825268426Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825268426Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.882963884Z","latencyDuration":14.843220757,"processDuration":0.057694000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2025-05-21 21:44:58.967038	2025-05-21 21:45:13.882964	\N	PlantingSeasonScheduler
-0196f4ce-8b55-7581-bdee-6d36d85dce66	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b55-7581-bdee-6d36d85dce66","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.965502002Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982045711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825264384Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825264384Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.890141676Z","latencyDuration":14.843218673,"processDuration":0.064874917}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2025-05-21 21:44:58.965502	2025-05-21 21:45:13.890142	\N	NotificationScanner
-0196f4ce-8b52-7ce1-8f77-f47d7e937242	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b52-7ce1-8f77-f47d7e937242","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.962063377Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982034794Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825233301Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825233301Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.839842759Z","latencyDuration":14.843198507,"processDuration":0.014606792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-21 21:44:58.962063	2025-05-21 21:45:13.839843	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4ce-8b55-7581-bdee-6d36d85dce65	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"0196f4ce-8b55-7581-bdee-6d36d85dce65","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.964997961Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982044711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825262218Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825262218Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.852491384Z","latencyDuration":14.843217507,"processDuration":0.027223458}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	SUCCEEDED	2025-05-21 21:44:58.964998	2025-05-21 21:45:13.852491	\N	MonitoringPlotElevationScheduler
-0196f4cf-75e7-7706-8c3b-050e821fb253	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cf-75e7-7706-8c3b-050e821fb253","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:45:59.015353502Z","scheduledAt":"2025-05-21T21:46:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:45:59.028497127Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:46:13.875245926Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:46:13.875245926Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:46:13.885532551Z","latencyDuration":14.846748799,"processDuration":0.010268792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-21 21:45:59.015354	2025-05-21 21:46:13.885533	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4cf-75e9-7bfd-afce-4253b1a0c9ef	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cf-75e9-7bfd-afce-4253b1a0c9ef","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:45:59.017581752Z","scheduledAt":"2025-05-21T21:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:45:59.028506169Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:46:13.875276968Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:46:13.875276968Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:46:13.887590093Z","latencyDuration":14.846770799,"processDuration":0.012300166}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-21 21:45:59.017582	2025-05-21 21:46:13.88759	\N	FacilityService.scanForIdleFacilities
-0196f4d0-6078-7c19-81cd-b4301d65c18d	2	{"version":2,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4d0-6078-7c19-81cd-b4301d65c18d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:46:59.064684586Z","scheduledAt":"2025-05-21T21:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:46:59.079433252Z"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap"},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	ENQUEUED	2025-05-21 21:46:59.064685	2025-05-21 21:46:59.079433	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4d0-607a-7aaa-a519-00e2ada2113f	2	{"version":2,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4d0-607a-7aaa-a519-00e2ada2113f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:46:59.066423211Z","scheduledAt":"2025-05-21T21:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:46:59.079443252Z"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap"},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	ENQUEUED	2025-05-21 21:46:59.066423	2025-05-21 21:46:59.079443	\N	FacilityService.scanForIdleFacilities
+01971d5d-8c99-713d-931d-eaeb3d7df751	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5d-8c99-713d-931d-eaeb3d7df751","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:45:59.577946800Z","scheduledAt":"2025-05-29T18:46:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:45:59.587344300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:46:14.399447900Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:46:14.399447900Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:46:14.406034200Z","latencyDuration":14.812103600,"processDuration":0.006580400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:45:59.577947	2025-05-29 18:46:14.406034	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d56-32bb-7938-bdc0-6ae844cc9658	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d56-32bb-7938-bdc0-6ae844cc9658","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.819177600Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831286300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725827700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725827700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.737117400Z","latencyDuration":14.894541400,"processDuration":0.011281200}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:37:57.819178	2025-05-29 18:38:12.737117	\N	FacilityService.scanForIdleFacilities
+01971d56-32bd-7d55-bbcf-105f4c22db57	4	{"version":4,"jobSignature":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","jobName":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","labels":[],"jobDetails":{"className":"com.terraformation.backend.device.TimeseriesPruner","methodName":"pruneTimeseriesValues","jobParameters":[],"cacheable":true},"id":"01971d56-32bd-7d55-bbcf-105f4c22db57","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.821407400Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"pruneTimeseriesValues","reason":"Scheduled by recurring job 'com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831295400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725844400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725844400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.748840200Z","latencyDuration":14.894549000,"processDuration":0.022989000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"pruneTimeseriesValues"}	com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()	SUCCEEDED	2025-05-29 18:37:57.821407	2025-05-29 18:38:12.74884	\N	pruneTimeseriesValues
+01971d57-1d87-75b9-9b06-6e27df7aa007	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d57-1d87-75b9-9b06-6e27df7aa007","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:38:57.927895500Z","scheduledAt":"2025-05-29T18:39:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:38:57.942680200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:39:12.816211800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:39:12.816211800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:39:12.828502400Z","latencyDuration":14.873531600,"processDuration":0.012277600}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:38:57.927896	2025-05-29 18:39:12.828502	\N	FacilityService.scanForIdleFacilities
+01971d5d-8c9b-7d91-91fe-f0d9d70effd6	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5d-8c9b-7d91-91fe-f0d9d70effd6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:45:59.579556900Z","scheduledAt":"2025-05-29T18:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:45:59.587360900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:46:14.399473700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:46:14.399473700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:46:14.406803200Z","latencyDuration":14.812112800,"processDuration":0.007323300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:45:59.579557	2025-05-29 18:46:14.406803	\N	FacilityService.scanForIdleFacilities
+01971d56-32b9-7477-acf9-5bf11998407e	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d56-32b9-7477-acf9-5bf11998407e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.817591800Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831267600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725727100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725727100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.736477100Z","latencyDuration":14.894459500,"processDuration":0.010735400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:37:57.817592	2025-05-29 18:38:12.736477	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d59-e33a-7403-acb6-e3bab3e22d0f	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d59-e33a-7403-acb6-e3bab3e22d0f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:41:59.609649500Z","scheduledAt":"2025-05-29T18:42:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:41:59.641747900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:42:14.562425700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:42:14.562425700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:42:14.579715900Z","latencyDuration":14.920677800,"processDuration":0.017256200}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:41:59.60965	2025-05-29 18:42:14.579716	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5a-cd95-75e6-8ffb-70c4823673c8	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5a-cd95-75e6-8ffb-70c4823673c8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:42:59.605350200Z","scheduledAt":"2025-05-29T18:43:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:42:59.613932600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:43:14.507496300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:43:14.507496300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:43:14.519129600Z","latencyDuration":14.893563700,"processDuration":0.011620300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:42:59.60535	2025-05-29 18:43:14.51913	\N	FacilityService.scanForIdleFacilities
+01971d57-1d85-7f8f-b9ec-3c80a8f4b0f3	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d57-1d85-7f8f-b9ec-3c80a8f4b0f3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:38:57.925495800Z","scheduledAt":"2025-05-29T18:39:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:38:57.942662Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:39:12.816191Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:39:12.816191Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:39:12.826768800Z","latencyDuration":14.873529000,"processDuration":0.010565200}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:38:57.925496	2025-05-29 18:39:12.826769	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5e-76e6-77e0-82d8-e89ec1074686	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5e-76e6-77e0-82d8-e89ec1074686","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:46:59.558694Z","scheduledAt":"2025-05-29T18:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:46:59.581762900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:47:14.428125100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:47:14.428125100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:47:14.437303100Z","latencyDuration":14.846362200,"processDuration":0.009167300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:46:59.558694	2025-05-29 18:47:14.437303	\N	FacilityService.scanForIdleFacilities
+01971d5e-76e4-78f9-a7d2-81708a2badb5	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5e-76e4-78f9-a7d2-81708a2badb5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:46:59.556719800Z","scheduledAt":"2025-05-29T18:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:46:59.581744300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:47:14.428086200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:47:14.428086200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:47:14.436916Z","latencyDuration":14.846341900,"processDuration":0.008811700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:46:59.55672	2025-05-29 18:47:14.436916	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5f-613d-7934-a763-680169b6f855	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5f-613d-7934-a763-680169b6f855","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:47:59.549079400Z","scheduledAt":"2025-05-29T18:48:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:47:59.563236200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:48:14.381124400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:48:14.381124400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:48:14.397983500Z","latencyDuration":14.817888200,"processDuration":0.016848700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:47:59.549079	2025-05-29 18:48:14.397984	\N	FacilityService.scanForIdleFacilities
+01971d58-f8f4-7785-9a07-b68a32a6a6c2	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d58-f8f4-7785-9a07-b68a32a6a6c2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.636290700Z","scheduledAt":"2025-05-29T18:40:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649932900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606806600Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606806600Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.618378500Z","latencyDuration":14.956873700,"processDuration":0.011559300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:40:59.636291	2025-05-29 18:41:14.618379	\N	FacilityService.scanForIdleFacilities
+01971d58-f8f3-72ae-a503-c3c87ac021eb	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d58-f8f3-72ae-a503-c3c87ac021eb","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.635209100Z","scheduledAt":"2025-05-29T18:40:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649909800Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606772400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606772400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.618749600Z","latencyDuration":14.956862600,"processDuration":0.011970900}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:40:59.635209	2025-05-29 18:41:14.61875	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d58-f8f4-7785-9a07-b68a32a6a6c3	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d58-f8f4-7785-9a07-b68a32a6a6c3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.636394200Z","scheduledAt":"2025-05-29T18:41:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649944700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606820800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606820800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.624983800Z","latencyDuration":14.956876100,"processDuration":0.018150400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:40:59.636394	2025-05-29 18:41:14.624984	\N	FacilityService.scanForIdleFacilities
+01971d59-e33f-7a50-b9a3-88677d6f3e8e	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d59-e33f-7a50-b9a3-88677d6f3e8e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:41:59.615076900Z","scheduledAt":"2025-05-29T18:42:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:41:59.641762300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:42:14.562435500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:42:14.562435500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:42:14.580918700Z","latencyDuration":14.920673200,"processDuration":0.018470000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:41:59.615077	2025-05-29 18:42:14.580919	\N	FacilityService.scanForIdleFacilities
+01971d58-f8f3-72ae-a503-c3c87ac021ec	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d58-f8f3-72ae-a503-c3c87ac021ec","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.635411600Z","scheduledAt":"2025-05-29T18:41:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649924900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606791700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606791700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.621517800Z","latencyDuration":14.956866800,"processDuration":0.014666600}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:40:59.635412	2025-05-29 18:41:14.621518	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5f-613c-7ea0-8b87-7eb3f9eb0181	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5f-613c-7ea0-8b87-7eb3f9eb0181","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:47:59.548060200Z","scheduledAt":"2025-05-29T18:48:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:47:59.563217900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:48:14.381107700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:48:14.381107700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:48:14.396537800Z","latencyDuration":14.817889800,"processDuration":0.015419300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:47:59.54806	2025-05-29 18:48:14.396538	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5a-cd92-79ee-9593-93415eab6641	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5a-cd92-79ee-9593-93415eab6641","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:42:59.602061500Z","scheduledAt":"2025-05-29T18:43:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:42:59.613911300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:43:14.507478400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:43:14.507478400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:43:14.521113800Z","latencyDuration":14.893567100,"processDuration":0.013626500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:42:59.602062	2025-05-29 18:43:14.521114	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5b-b7ce-7a43-8116-f5a05d541ff5	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5b-b7ce-7a43-8116-f5a05d541ff5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:43:59.566407700Z","scheduledAt":"2025-05-29T18:44:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:43:59.579955200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:44:14.471050200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:44:14.471050200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:44:14.478721700Z","latencyDuration":14.891095000,"processDuration":0.007662500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:43:59.566408	2025-05-29 18:44:14.478722	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d60-4b7b-7a32-82d6-2aba9040d139	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d60-4b7b-7a32-82d6-2aba9040d139","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:48:59.515912400Z","scheduledAt":"2025-05-29T18:49:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:48:59.524806500Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:49:14.339722800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:49:14.339722800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:49:14.345307900Z","latencyDuration":14.814916300,"processDuration":0.005578800}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:48:59.515912	2025-05-29 18:49:14.345308	\N	FacilityService.scanForIdleFacilities
+01971d5b-b7d0-74c4-bdbc-0b4ee6eae69f	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5b-b7d0-74c4-bdbc-0b4ee6eae69f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:43:59.568222400Z","scheduledAt":"2025-05-29T18:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:43:59.579967700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:44:14.471065100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:44:14.471065100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:44:14.479794100Z","latencyDuration":14.891097400,"processDuration":0.008720700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:43:59.568222	2025-05-29 18:44:14.479794	\N	FacilityService.scanForIdleFacilities
+01971d5c-a243-7dc5-b1d4-c1004a0fdea2	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"01971d5c-a243-7dc5-b1d4-c1004a0fdea2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.587211600Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614114Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437068500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437068500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.468674300Z","latencyDuration":14.822954500,"processDuration":0.031599500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	SUCCEEDED	2025-05-29 18:44:59.587212	2025-05-29 18:45:14.468674	\N	MonitoringPlotElevationScheduler
+01971d5c-a245-785e-b00f-0b0500aa83e9	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"01971d5c-a245-785e-b00f-0b0500aa83e9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.589349300Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614126600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437086200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437086200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.508400400Z","latencyDuration":14.822959600,"processDuration":0.071305000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2025-05-29 18:44:59.589349	2025-05-29 18:45:14.5084	\N	ObservationScheduler
+01971d60-4b7b-7a32-82d6-2aba9040d138	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d60-4b7b-7a32-82d6-2aba9040d138","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:48:59.515042700Z","scheduledAt":"2025-05-29T18:49:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:48:59.524789400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:49:14.339711300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:49:14.339711300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:49:14.345561900Z","latencyDuration":14.814921900,"processDuration":0.005840800}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:48:59.515043	2025-05-29 18:49:14.345562	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5c-a23f-74cc-9e99-0304cdb629b6	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5c-a23f-74cc-9e99-0304cdb629b6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.582571Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614091300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437044900Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437044900Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.455515300Z","latencyDuration":14.822953600,"processDuration":0.018438300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:44:59.582571	2025-05-29 18:45:14.455515	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5c-a242-769d-974a-b2d1000ef198	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5c-a242-769d-974a-b2d1000ef198","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.586163Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614106900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437061500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437061500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.455515300Z","latencyDuration":14.822954600,"processDuration":0.018421700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:44:59.586163	2025-05-29 18:45:14.455515	\N	FacilityService.scanForIdleFacilities
+01971d61-35c5-74f7-9b1b-3f23bb2a763f	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d61-35c5-74f7-9b1b-3f23bb2a763f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:49:59.493476400Z","scheduledAt":"2025-05-29T18:50:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:49:59.508699700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:50:14.294021Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:50:14.294021Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:50:14.301509800Z","latencyDuration":14.785321300,"processDuration":0.007481000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:49:59.493476	2025-05-29 18:50:14.30151	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d61-35c7-7723-91b3-fdebf29c6def	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d61-35c7-7723-91b3-fdebf29c6def","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:49:59.495088100Z","scheduledAt":"2025-05-29T18:50:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:49:59.508716400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:50:14.294039300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:50:14.294039300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:50:14.303285600Z","latencyDuration":14.785322900,"processDuration":0.009236700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:49:59.495088	2025-05-29 18:50:14.303286	\N	FacilityService.scanForIdleFacilities
+01971d5c-a246-7b0f-a60e-62af7a5af49d	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"01971d5c-a246-7b0f-a60e-62af7a5af49d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.590397400Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614134100Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437095700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437095700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.524118700Z","latencyDuration":14.822961600,"processDuration":0.087015200}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2025-05-29 18:44:59.590397	2025-05-29 18:45:14.524119	\N	PlantingSeasonScheduler
+01971d5c-a244-72d7-96c8-c1bf7e0e2008	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"01971d5c-a244-72d7-96c8-c1bf7e0e2008","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.588264300Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614121100Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437077400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437077400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.536386500Z","latencyDuration":14.822956300,"processDuration":0.099299400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2025-05-29 18:44:59.588264	2025-05-29 18:45:14.536387	\N	NotificationScanner
+0196f4d0-607a-7aaa-a519-00e2ada2113f	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4d0-607a-7aaa-a519-00e2ada2113f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:46:59.066423211Z","scheduledAt":"2025-05-21T21:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:46:59.079443252Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:36:27.743615Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:36:27.743615Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:36:27.806997700Z","latencyDuration":679768.664171748,"processDuration":0.063370100}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-21 21:46:59.066423	2025-05-29 18:36:27.806998	\N	FacilityService.scanForIdleFacilities
+0196f4cf-75e9-7bfd-afce-4253b1a0c9ef	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cf-75e9-7bfd-afce-4253b1a0c9ef","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:45:59.017581752Z","scheduledAt":"2025-05-21T21:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:45:59.028506169Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:46:13.875276968Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:46:13.875276968Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:46:13.887590093Z","latencyDuration":14.846770799,"processDuration":0.012300166},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879245700Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:45:59.017582	2025-05-29 18:36:27.879246	\N	FacilityService.scanForIdleFacilities
+0196f4d0-6078-7c19-81cd-b4301d65c18d	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4d0-6078-7c19-81cd-b4301d65c18d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:46:59.064684586Z","scheduledAt":"2025-05-21T21:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:46:59.079433252Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:36:27.742732400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:36:27.742732400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:36:27.803251500Z","latencyDuration":679768.663299148,"processDuration":0.060049900}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-21 21:46:59.064685	2025-05-29 18:36:27.803252	\N	RateLimitedEventPublisher.scanPendingEvents
+0196f493-c3d7-7c09-b352-7b4584163078	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f493-c3d7-7c09-b352-7b4584163078","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T20:40:46.807389303Z","scheduledAt":"2025-05-21T20:41:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T20:40:46.825746262Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T20:41:01.792955129Z","serverId":"0fa4b11f-575c-4ad8-b680-81ddc33abca2","serverName":"a0543195eb2a","updatedAt":"2025-05-21T20:41:01.792955129Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T20:41:01.848768171Z","latencyDuration":14.967208867,"processDuration":0.055808792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.878974300Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 20:40:46.807389	2025-05-29 18:36:27.878974	\N	RateLimitedEventPublisher.scanPendingEvents
+0196f493-c3db-79e1-a67f-f420c64855e6	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f493-c3db-79e1-a67f-f420c64855e6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T20:40:46.811735637Z","scheduledAt":"2025-05-21T20:41:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T20:40:46.825766887Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T20:41:01.792974463Z","serverId":"0fa4b11f-575c-4ad8-b680-81ddc33abca2","serverName":"a0543195eb2a","updatedAt":"2025-05-21T20:41:01.792974463Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T20:41:01.849309671Z","latencyDuration":14.967207576,"processDuration":0.056333541},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879025400Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 20:40:46.811736	2025-05-29 18:36:27.879025	\N	FacilityService.scanForIdleFacilities
+0196f4cc-b613-78a3-a8d9-69fc54f2c2f2	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cc-b613-78a3-a8d9-69fc54f2c2f2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:42:58.835815961Z","scheduledAt":"2025-05-21T21:43:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:42:58.884033627Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:43:13.741432634Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:43:13.741432634Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:43:13.774446468Z","latencyDuration":14.857399007,"processDuration":0.032864625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879045700Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:42:58.835816	2025-05-29 18:36:27.879046	\N	RateLimitedEventPublisher.scanPendingEvents
+0196f4cc-b615-790d-b46a-219f81eeefe3	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cc-b615-790d-b46a-219f81eeefe3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:42:58.837843086Z","scheduledAt":"2025-05-21T21:43:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:42:58.884739211Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:43:13.741451968Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:43:13.741451968Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:43:13.774590384Z","latencyDuration":14.856712757,"processDuration":0.033136583},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879063900Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:42:58.837843	2025-05-29 18:36:27.879064	\N	FacilityService.scanForIdleFacilities
+0196f4cd-a0c5-7606-918c-96bef2fbe58a	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cd-a0c5-7606-918c-96bef2fbe58a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:43:58.916858794Z","scheduledAt":"2025-05-21T21:44:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:43:58.932653919Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:44:13.786080676Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:44:13.786080676Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:44:13.796639551Z","latencyDuration":14.853426757,"processDuration":0.010556208},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879082100Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:43:58.916859	2025-05-29 18:36:27.879082	\N	RateLimitedEventPublisher.scanPendingEvents
+0196f4cd-a0c7-7f68-a96c-f59c2e77d6c9	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cd-a0c7-7f68-a96c-f59c2e77d6c9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:43:58.919230086Z","scheduledAt":"2025-05-21T21:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:43:58.932669294Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:44:13.786089593Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:44:13.786089593Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:44:13.796868926Z","latencyDuration":14.853420299,"processDuration":0.010777375},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879100Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:43:58.91923	2025-05-29 18:36:27.8791	\N	FacilityService.scanForIdleFacilities
+0196f4ce-8b52-7ce1-8f77-f47d7e937242	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b52-7ce1-8f77-f47d7e937242","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.962063377Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982034794Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825233301Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825233301Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.839842759Z","latencyDuration":14.843198507,"processDuration":0.014606792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879117900Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:44:58.962063	2025-05-29 18:36:27.879118	\N	RateLimitedEventPublisher.scanPendingEvents
+0196f4ce-8b54-70d4-8242-66c0d07f79d4	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b54-70d4-8242-66c0d07f79d4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.964250627Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982043461Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825258593Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825258593Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.840349884Z","latencyDuration":14.843215132,"processDuration":0.015089333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879135800Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:44:58.964251	2025-05-29 18:36:27.879136	\N	FacilityService.scanForIdleFacilities
+0196f4ce-8b55-7581-bdee-6d36d85dce65	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"0196f4ce-8b55-7581-bdee-6d36d85dce65","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.964997961Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982044711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825262218Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825262218Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.852491384Z","latencyDuration":14.843217507,"processDuration":0.027223458},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879153700Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	DELETED	2025-05-21 21:44:58.964998	2025-05-29 18:36:27.879154	\N	MonitoringPlotElevationScheduler
+0196f4ce-8b56-7862-9c42-d7ac0950f3e2	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b56-7862-9c42-d7ac0950f3e2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.966270669Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982046711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825266384Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825266384Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.880981968Z","latencyDuration":14.843219673,"processDuration":0.055713084},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879171600Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2025-05-21 21:44:58.966271	2025-05-29 18:36:27.879172	\N	ObservationScheduler
+0196f4ce-8b57-77d8-b4de-8bc55d315183	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b57-77d8-b4de-8bc55d315183","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.967038002Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982047669Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825268426Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825268426Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.882963884Z","latencyDuration":14.843220757,"processDuration":0.057694000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879189400Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2025-05-21 21:44:58.967038	2025-05-29 18:36:27.879189	\N	PlantingSeasonScheduler
+0196f4ce-8b55-7581-bdee-6d36d85dce66	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b55-7581-bdee-6d36d85dce66","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.965502002Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982045711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825264384Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825264384Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.890141676Z","latencyDuration":14.843218673,"processDuration":0.064874917},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879209700Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2025-05-21 21:44:58.965502	2025-05-29 18:36:27.87921	\N	NotificationScanner
+0196f4cf-75e7-7706-8c3b-050e821fb253	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cf-75e7-7706-8c3b-050e821fb253","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:45:59.015353502Z","scheduledAt":"2025-05-21T21:46:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:45:59.028497127Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:46:13.875245926Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:46:13.875245926Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:46:13.885532551Z","latencyDuration":14.846748799,"processDuration":0.010268792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879228100Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:45:59.015354	2025-05-29 18:36:27.879228	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d55-486a-7c71-858c-6cc3291cb79c	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d55-486a-7c71-858c-6cc3291cb79c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:36:57.834656900Z","scheduledAt":"2025-05-29T18:37:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:36:57.849889400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:37:12.760492400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:37:12.760492400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:37:12.768693700Z","latencyDuration":14.910603000,"processDuration":0.008194500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:36:57.834657	2025-05-29 18:37:12.768694	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d55-486d-78b2-a1f5-f75fcafcbfe2	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d55-486d-78b2-a1f5-f75fcafcbfe2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:36:57.837178900Z","scheduledAt":"2025-05-29T18:37:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:36:57.849909700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:37:12.760514200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:37:12.760514200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:37:12.768928200Z","latencyDuration":14.910604500,"processDuration":0.008406400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:36:57.837179	2025-05-29 18:37:12.768928	\N	FacilityService.scanForIdleFacilities
 \.
 
 
@@ -11784,6 +11726,7 @@ COPY public.notifications (id, notification_type_id, user_id, organization_id, t
 2	23	1	1	Reminder: Add your next planting season	Remember to schedule your next planting season	/planting-sites/1	2024-06-11 22:00:00.332064+00	f
 3	26	1	1	View a deliverable's status	A submitted deliverable was reviewed and its status was updated.	/deliverables/102/submissions/1	2025-05-13 17:30:16.362677+00	f
 4	26	1	1	View a deliverable's status	A submitted deliverable was reviewed and its status was updated.	/deliverables/102/submissions/1	2025-05-13 20:43:57.938703+00	f
+5	18	1	1	It is time to monitor your plantings!	Observations of your plantings need to be completed this month.	/observations/3?organizationId=1	2025-05-29 18:50:08.077234+00	f
 \.
 
 
@@ -12102,7 +12045,7 @@ COPY public.species_successional_groups (species_id, successional_group_id) FROM
 
 COPY public.spring_session (primary_id, session_id, creation_time, last_access_time, max_inactive_interval, expiry_time, principal_name) FROM stdin;
 b57978b9-873d-4ea2-88c2-391fcdee5470	b9b00dda-c789-40cd-8c02-7ef21025c4d8	1747863920486	1747863989388	315360000	2063223962638	157cf509-d3e6-4bde-9e0d-d4ac07e2b721
-b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1747864022637	315360000	2063224022637	0d04525c-7933-4cec-9647-7b6ac2642838
+b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1748550879741	315360000	2063910879741	0d04525c-7933-4cec-9647-7b6ac2642838
 \.
 
 
@@ -12865,8 +12808,9 @@ COPY public.user_global_roles (user_id, global_role_id) FROM stdin;
 --
 
 COPY public.user_preferences (user_id, organization_id, preferences) FROM stdin;
-1	\N	{"lastVisitedOrg": 1, "enableFundingEntities": true, "preferredWeightSystem": "metric", "enable2025ProjectProfile": true, "dont-show-site-boundary-instructions": true}
 4	\N	{"preferredWeightSystem": "metric"}
+1	\N	{"lastVisitedOrg": 1, "enableFundingEntities": true, "preferredWeightSystem": "metric", "enable2025ProjectProfile": true, "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
+1	1	{"plants.dashboard.lastVisitedPlantingSite": {"plantingSiteId": 1}, "plants.observations.lastVisitedPlantingSite": {"plantingSiteId": -1}}
 \.
 
 
@@ -12890,7 +12834,7 @@ COPY public.users (id, auth_id, email, first_name, last_name, created_time, modi
 2	DISABLED	system	Terraware	System	2022-10-25 17:51:42.24661+00	2022-10-25 17:51:42.24661+00	4	\N	f	\N	\N	\N	\N	\N	\N
 3	\N	pending@terraformation.com	\N	\N	2025-05-21 21:42:18.239617+00	2025-05-21 21:42:18.23963+00	5	\N	f	\N	\N	\N	\N	\N	\N
 4	157cf509-d3e6-4bde-9e0d-d4ac07e2b721	funder@terraformation.com	Test	Funder	2025-05-21 21:42:25.83028+00	2025-05-21 21:45:27.385204+00	5	2025-05-21 21:46:29.411+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
-1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-05-21 21:47:02.646+00	f	\N	Etc/UTC	\N	\N	t	2024-06-11 21:53:16.594086+00
+1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-05-29 20:34:39.748+00	f	\N	Etc/UTC	\N	\N	t	2024-06-11 21:53:16.594086+00
 \.
 
 
@@ -13183,6 +13127,8 @@ COPY tracking.biomass_forest_types (id, name) FROM stdin;
 --
 
 COPY tracking.deliveries (id, withdrawal_id, planting_site_id, created_by, created_time, modified_by, modified_time, reassigned_by, reassigned_time) FROM stdin;
+1	1	2	1	2025-05-29 18:49:06.017294+00	1	2025-05-29 18:49:06.017294+00	\N	\N
+2	2	3	1	2025-05-29 18:49:17.969801+00	1	2025-05-29 18:49:17.969801+00	\N	\N
 \.
 
 
@@ -13209,6 +13155,39 @@ COPY tracking.mangrove_tides (id, name) FROM stdin;
 --
 
 COPY tracking.monitoring_plot_histories (id, monitoring_plot_id, planting_subzone_id, planting_site_id, planting_subzone_history_id, planting_site_history_id, created_by, created_time) FROM stdin;
+1	5162	7	3	7	3	1	2025-05-29 18:50:07.453112+00
+2	5163	7	3	7	3	1	2025-05-29 18:50:07.479146+00
+3	5164	7	3	7	3	1	2025-05-29 18:50:07.483888+00
+4	5165	7	3	7	3	1	2025-05-29 18:50:07.487967+00
+5	5166	7	3	7	3	1	2025-05-29 18:50:07.491594+00
+6	5167	7	3	7	3	1	2025-05-29 18:50:07.495625+00
+7	5168	7	3	7	3	1	2025-05-29 18:50:07.499319+00
+8	5169	7	3	7	3	1	2025-05-29 18:50:07.502742+00
+9	5170	8	3	8	3	1	2025-05-29 18:50:07.525231+00
+10	5171	8	3	8	3	1	2025-05-29 18:50:07.531902+00
+11	5172	8	3	8	3	1	2025-05-29 18:50:07.537179+00
+12	5173	8	3	8	3	1	2025-05-29 18:50:07.542573+00
+13	5174	8	3	8	3	1	2025-05-29 18:50:07.549173+00
+14	5175	8	3	8	3	1	2025-05-29 18:50:07.555824+00
+15	5176	8	3	8	3	1	2025-05-29 18:50:07.561879+00
+16	5177	8	3	8	3	1	2025-05-29 18:50:07.569794+00
+17	5178	9	3	9	3	1	2025-05-29 18:50:07.595451+00
+18	5179	9	3	9	3	1	2025-05-29 18:50:07.659034+00
+19	5180	9	3	9	3	1	2025-05-29 18:50:07.664713+00
+20	5181	9	3	9	3	1	2025-05-29 18:50:07.67013+00
+21	5182	9	3	9	3	1	2025-05-29 18:50:07.674458+00
+22	5183	9	3	9	3	1	2025-05-29 18:50:07.679145+00
+23	5184	9	3	9	3	1	2025-05-29 18:50:07.683523+00
+24	5185	9	3	9	3	1	2025-05-29 18:50:07.687943+00
+25	5186	7	3	7	3	1	2025-05-29 18:50:07.743795+00
+26	5187	7	3	7	3	1	2025-05-29 18:50:07.764124+00
+27	5188	7	3	7	3	1	2025-05-29 18:50:07.786189+00
+28	5189	8	3	8	3	1	2025-05-29 18:50:07.868623+00
+29	5190	8	3	8	3	1	2025-05-29 18:50:07.889255+00
+30	5191	8	3	8	3	1	2025-05-29 18:50:07.908185+00
+31	5192	9	3	9	3	1	2025-05-29 18:50:07.957077+00
+32	5193	9	3	9	3	1	2025-05-29 18:50:07.975396+00
+33	5194	9	3	9	3	1	2025-05-29 18:50:08.002837+00
 \.
 
 
@@ -13225,6 +13204,39 @@ COPY tracking.monitoring_plot_overlaps (monitoring_plot_id, overlaps_plot_id) FR
 --
 
 COPY tracking.monitoring_plots (id, planting_subzone_id, created_by, created_time, modified_by, modified_time, boundary, permanent_index, is_available, size_meters, planting_site_id, is_ad_hoc, organization_id, plot_number, elevation_meters) FROM stdin;
+5162	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E6100000010000000500000006648944833843402BD0DA2D41652F40940D3B708C3843402BD0DA2D41652F40940D3B708C384340053ED8B664652F400664894483384340053ED8B664652F4006648944833843402BD0DA2D41652F40	1	t	30	3	f	1	1	\N
+5163	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000213FD4BD4D3A434058BE1290DE5E2F40536361E9563A434058BE1290DE5E2F40536361E9563A43401DD31219025F2F40213FD4BD4D3A43401DD31219025F2F40213FD4BD4D3A434058BE1290DE5E2F40	2	t	30	3	f	1	2	\N
+5164	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E6100000010000000500000044969A3E4F3C43405F460D24345D2F40E1341E6A583C43405F460D24345D2F40E1341E6A583C43402D0C0EAD575D2F4044969A3E4F3C43402D0C0EAD575D2F4044969A3E4F3C43405F460D24345D2F40	3	t	30	3	f	1	3	\N
+5165	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000E0178735053B43401A85E409B3642F401C9435610E3B43401A85E409B3642F401C9435610E3B4340072EE292D6642F40E0178735053B4340072EE292D6642F40E0178735053B43401A85E409B3642F40	4	t	30	3	f	1	4	\N
+5166	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E6100000010000000500000009B776DEE8394340D29A1207BB5E2F401410030AF2394340D29A1207BB5E2F401410030AF239434056BE1290DE5E2F4009B776DEE839434056BE1290DE5E2F4009B776DEE8394340D29A1207BB5E2F40	5	t	30	3	f	1	5	\N
+5167	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E610000001000000050000005B2D543EE13B4340256611611E602F401E76E869EA3B4340256611611E602F401E76E869EA3B43401EF610EA41602F405B2D543EE13B43401EF610EA41602F405B2D543EE13B4340256611611E602F40	6	t	30	3	f	1	6	\N
+5168	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E610000001000000050000004542D03F0B3743408ECDB8A95F572F40D391326B143743408ECDB8A95F572F40D391326B14374340B4FEBB3283572F404542D03F0B374340B4FEBB3283572F404542D03F0B3743408ECDB8A95F572F40	7	t	30	3	f	1	7	\N
+5169	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000B9D07C8C173B43406BCDE6808F642F40A3812AB8203B43406BCDE6808F642F40A3812AB8203B43401C85E409B3642F40B9D07C8C173B43401C85E409B3642F40B9D07C8C173B43406BCDE6808F642F40	8	t	30	3	f	1	8	\N
+5170	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000B56D2DAECC3843409F6CE0BF716D2F4019FB0DDAD53843409F6CE0BF716D2F4019FB0DDAD5384340FE72DA48956D2F40B56D2DAECC384340FE72DA48956D2F40B56D2DAECC3843409F6CE0BF716D2F40	1	t	30	3	f	1	9	\N
+5171	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E610000001000000050000004D513D98273843407957E6364E6D2F4020131DC4303843407957E6364E6D2F4020131DC4303843409F6CE0BF716D2F404D513D98273843409F6CE0BF716D2F404D513D98273843407957E6364E6D2F40	2	t	30	3	f	1	10	\N
+5172	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000BD808CDECB374340B28467D6D5692F409B62580AD5374340B28467D6D5692F409B62580AD5374340360B635FF9692F40BD808CDECB374340360B635FF9692F40BD808CDECB374340B28467D6D5692F40	3	t	30	3	f	1	11	\N
+5173	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000A772044B83384340EBEB5971406A2F40F1B6D2768C384340EBEB5971406A2F40F1B6D2768C3843401F4655FA636A2F40A772044B833843401F4655FA636A2F40A772044B83384340EBEB5971406A2F40	4	t	30	3	f	1	12	\N
+5174	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E6100000010000000500000065A3D685B93743402417917C72682F40C5929AB1C23743402417917C72682F40C5929AB1C23743405F318D0596682F4065A3D685B93743405F318D0596682F4065A3D685B93743402417917C72682F40	5	t	30	3	f	1	13	\N
+5175	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E6100000010000000500000091DF85BA3A394340529A13EF316C2F40F9445FE643394340529A13EF316C2F40F9445FE643394340B1250E78556C2F4091DF85BA3A394340B1250E78556C2F4091DF85BA3A394340529A13EF316C2F40	6	t	30	3	f	1	14	\N
+5176	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000CD4B026E9639434034CE4B0CAB6A2F408DF2D2999F39434034CE4B0CAB6A2F408DF2D2999F39434013FC4695CE6A2F40CD4B026E9639434013FC4695CE6A2F40CD4B026E9639434034CE4B0CAB6A2F40	7	t	30	3	f	1	15	\N
+5177	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000C6EA931584394340EBEB5971406A2F40102F62418D394340EBEB5971406A2F40102F62418D3943401F4655FA636A2F40C6EA9315843943401F4655FA636A2F40C6EA931584394340EBEB5971406A2F40	8	t	30	3	f	1	16	\N
+5178	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000E458B6081F39434022E0D56F92502F400AD5F1332839434022E0D56F92502F400AD5F1332839434053E3DBF8B5502F40E458B6081F39434053E3DBF8B5502F40E458B6081F39434022E0D56F92502F40	1	t	30	3	f	1	17	\N
+5179	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E6100000010000000500000075FC1B86063D43401F028E3DB5552F40FEC874B10F3D43401F028E3DB5552F40FEC874B10F3D434026E491C6D8552F4075FC1B86063D434026E491C6D8552F4075FC1B86063D43401F028E3DB5552F40	2	t	30	3	f	1	18	\N
+5180	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E610000001000000050000007D33C37182374340580364E351542F404713149D8B374340580364E351542F404713149D8B374340BF78686C75542F407D33C37182374340BF78686C75542F407D33C37182374340580364E351542F40	3	t	30	3	f	1	19	\N
+5181	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E6100000010000000500000080E8D9AAB43D434023C1FE2E8B512F40FBEF1AD6BD3D434023C1FE2E8B512F40FBEF1AD6BD3D4340335D04B8AE512F4080E8D9AAB43D4340335D04B8AE512F4080E8D9AAB43D434023C1FE2E8B512F40	4	t	30	3	f	1	20	\N
+5182	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000585CC7EB183D4340F33FE02751592F407AC53417223D4340F33FE02751592F407AC53417223D4340B0A2E2B074592F40585CC7EB183D4340B0A2E2B074592F40585CC7EB183D4340F33FE02751592F40	5	t	30	3	f	1	21	\N
+5183	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000E7E8B53E453B4340AC8DB5203C572F40856D176A4E3B4340AC8DB5203C572F40856D176A4E3B43408CCDB8A95F572F40E7E8B53E453B43408CCDB8A95F572F40E7E8B53E453B4340AC8DB5203C572F40	6	t	30	3	f	1	22	\N
+5184	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000FE77721FA737434081807507E0542F403B83C64AB037434081807507E0542F403B83C64AB0374340F4BA799003552F40FE77721FA7374340F4BA799003552F40FE77721FA737434081807507E0542F40	7	t	30	3	f	1	23	\N
+5185	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E610000001000000050000003FE47254853B4340E0F08F8C0B4F2F4067AAA57F8E3B4340E0F08F8C0B4F2F4067AAA57F8E3B4340189696152F4F2F403FE47254853B4340189696152F4F2F403FE47254853B4340E0F08F8C0B4F2F40	8	t	30	3	f	1	24	\N
+5186	7	1	2025-05-29 18:50:07.725735+00	1	2025-05-29 18:50:07.725735+00	0103000020E610000001000000050000005B606645423743406E72E94BDF592F4082F5D6704B3743406E72E94BDF592F4082F5D6704B374340329AEBD4025A2F405B60664542374340329AEBD4025A2F405B606645423743406E72E94BDF592F40	\N	t	30	3	f	1	25	\N
+5187	7	1	2025-05-29 18:50:07.747218+00	1	2025-05-29 18:50:07.747218+00	0103000020E61000000100000005000000F4D9A239153843405682BE87A4662F4016755C651E3843405682BE87A4662F4016755C651E3843408B5CBB10C8662F40F4D9A239153843408B5CBB10C8662F40F4D9A239153843405682BE87A4662F40	\N	t	30	3	f	1	26	\N
+5188	7	1	2025-05-29 18:50:07.767445+00	1	2025-05-29 18:50:07.767445+00	0103000020E610000001000000050000003F068ED043394340EB19124FD75F2F40A2B820FC4C394340EB19124FD75F2F40A2B820FC4C39434068C711D8FA5F2F403F068ED04339434068C711D8FA5F2F403F068ED043394340EB19124FD75F2F40	\N	t	30	3	f	1	27	\N
+5189	8	1	2025-05-29 18:50:07.842821+00	1	2025-05-29 18:50:07.842821+00	0103000020E6100000010000000500000088B47CDDCB3743405D318D0596682F40576F4109D53743405D318D0596682F40576F4109D5374340D13C898EB9682F4088B47CDDCB374340D13C898EB9682F4088B47CDDCB3743405D318D0596682F40	\N	t	30	3	f	1	28	\N
+5190	8	1	2025-05-29 18:50:07.872472+00	1	2025-05-29 18:50:07.872472+00	0103000020E610000001000000050000000D73AA2FE83843402E0019660E6C2F40EC0C835BF13843402E0019660E6C2F40EC0C835BF1384340549A13EF316C2F400D73AA2FE8384340549A13EF316C2F400D73AA2FE83843402E0019660E6C2F40	\N	t	30	3	f	1	29	\N
+5191	8	1	2025-05-29 18:50:07.892117+00	1	2025-05-29 18:50:07.892117+00	0103000020E610000001000000050000005F470ECE9E384340370B635FF9692F40B5F4DAF9A7384340370B635FF9692F40B5F4DAF9A7384340F6825EE81C6A2F405F470ECE9E384340F6825EE81C6A2F405F470ECE9E384340370B635FF9692F40	\N	t	30	3	f	1	30	\N
+5192	9	1	2025-05-29 18:50:07.941462+00	1	2025-05-29 18:50:07.941462+00	0103000020E6100000010000000500000017746DF3AC3F43408494ED9320512F40431BAC1EB63F43408494ED9320512F40431BAC1EB63F4340CA5CF31C44512F4017746DF3AC3F4340CA5CF31C44512F4017746DF3AC3F43408494ED9320512F40	\N	t	30	3	f	1	31	\N
+5193	9	1	2025-05-29 18:50:07.959631+00	1	2025-05-29 18:50:07.959631+00	0103000020E61000000100000005000000B56B073A0B3743407457FAC81A482F40959F1265143743407457FAC81A482F40959F126514374340C2DC03523E482F40B56B073A0B374340C2DC03523E482F40B56B073A0B3743407457FAC81A482F40	\N	t	30	3	f	1	32	\N
+5194	9	1	2025-05-29 18:50:07.978125+00	1	2025-05-29 18:50:07.978125+00	0103000020E6100000010000000500000005B5BBAD7A39434039EB9C6B9A4A2F40A826D5D88339434039EB9C6B9A4A2F40A826D5D8833943409A67A5F4BD4A2F4005B5BBAD7A3943409A67A5F4BD4A2F4005B5BBAD7A39434039EB9C6B9A4A2F40	\N	t	30	3	f	1	33	\N
 \.
 
 
@@ -13331,6 +13343,39 @@ COPY tracking.observation_plot_statuses (id, name) FROM stdin;
 --
 
 COPY tracking.observation_plots (observation_id, monitoring_plot_id, claimed_by, claimed_time, completed_by, completed_time, created_by, created_time, is_permanent, modified_by, modified_time, observed_time, notes, status_id, monitoring_plot_history_id) FROM stdin;
+1	5162	1	2025-05-29 18:50:21.438088+00	1	2025-05-29 18:50:21.980998+00	1	2025-05-29 18:50:07.800992+00	t	1	2025-05-29 18:50:07.800992+00	2025-05-29 18:50:21+00	Notes for plot 5162	3	1
+1	5176	1	2025-05-29 18:50:25.400224+00	1	2025-05-29 18:50:25.536528+00	1	2025-05-29 18:50:07.916665+00	t	1	2025-05-29 18:50:07.916665+00	2025-05-29 18:50:25+00	Notes for plot 5176	3	15
+1	5163	1	2025-05-29 18:50:22.012068+00	1	2025-05-29 18:50:22.379399+00	1	2025-05-29 18:50:07.800992+00	t	1	2025-05-29 18:50:07.800992+00	2025-05-29 18:50:21+00	Notes for plot 5163	3	2
+1	5187	1	2025-05-29 18:50:28.08228+00	1	2025-05-29 18:50:28.245736+00	1	2025-05-29 18:50:07.83326+00	f	1	2025-05-29 18:50:07.83326+00	2025-05-29 18:50:28+00	Notes for plot 5187	3	26
+1	5164	1	2025-05-29 18:50:22.401065+00	1	2025-05-29 18:50:22.62732+00	1	2025-05-29 18:50:07.800992+00	t	1	2025-05-29 18:50:07.800992+00	2025-05-29 18:50:22+00	Notes for plot 5164	3	3
+1	5177	1	2025-05-29 18:50:25.557083+00	1	2025-05-29 18:50:25.876968+00	1	2025-05-29 18:50:07.916665+00	t	1	2025-05-29 18:50:07.916665+00	2025-05-29 18:50:25+00	Notes for plot 5177	3	16
+1	5165	1	2025-05-29 18:50:22.650766+00	1	2025-05-29 18:50:23.027168+00	1	2025-05-29 18:50:07.800992+00	t	1	2025-05-29 18:50:07.800992+00	2025-05-29 18:50:22+00	Notes for plot 5165	3	4
+1	5166	1	2025-05-29 18:50:23.048321+00	1	2025-05-29 18:50:23.16745+00	1	2025-05-29 18:50:07.800992+00	t	1	2025-05-29 18:50:07.800992+00	2025-05-29 18:50:23+00	Notes for plot 5166	3	5
+1	5178	1	2025-05-29 18:50:25.899348+00	1	2025-05-29 18:50:26.169584+00	1	2025-05-29 18:50:08.009903+00	t	1	2025-05-29 18:50:08.009903+00	2025-05-29 18:50:25+00	Notes for plot 5178	3	17
+1	5167	1	2025-05-29 18:50:23.191633+00	1	2025-05-29 18:50:23.600872+00	1	2025-05-29 18:50:07.800992+00	t	1	2025-05-29 18:50:07.800992+00	2025-05-29 18:50:23+00	Notes for plot 5167	3	6
+1	5188	1	2025-05-29 18:50:28.264594+00	1	2025-05-29 18:50:28.378951+00	1	2025-05-29 18:50:07.83326+00	f	1	2025-05-29 18:50:07.83326+00	2025-05-29 18:50:28+00	Notes for plot 5188	3	27
+1	5168	1	2025-05-29 18:50:23.638452+00	1	2025-05-29 18:50:23.915694+00	1	2025-05-29 18:50:07.800992+00	t	1	2025-05-29 18:50:07.800992+00	2025-05-29 18:50:23+00	Notes for plot 5168	3	7
+1	5179	1	2025-05-29 18:50:26.190544+00	1	2025-05-29 18:50:26.345946+00	1	2025-05-29 18:50:08.009903+00	t	1	2025-05-29 18:50:08.009903+00	2025-05-29 18:50:26+00	Notes for plot 5179	3	18
+1	5169	1	2025-05-29 18:50:23.936794+00	1	2025-05-29 18:50:24.079529+00	1	2025-05-29 18:50:07.800992+00	t	1	2025-05-29 18:50:07.800992+00	2025-05-29 18:50:23+00	Notes for plot 5169	3	8
+1	5170	1	2025-05-29 18:50:24.10296+00	1	2025-05-29 18:50:24.287407+00	1	2025-05-29 18:50:07.916665+00	t	1	2025-05-29 18:50:07.916665+00	2025-05-29 18:50:24+00	Notes for plot 5170	3	9
+1	5180	1	2025-05-29 18:50:26.365404+00	1	2025-05-29 18:50:26.624017+00	1	2025-05-29 18:50:08.009903+00	t	1	2025-05-29 18:50:08.009903+00	2025-05-29 18:50:26+00	Notes for plot 5180	3	19
+1	5171	1	2025-05-29 18:50:24.307833+00	1	2025-05-29 18:50:24.55938+00	1	2025-05-29 18:50:07.916665+00	t	1	2025-05-29 18:50:07.916665+00	2025-05-29 18:50:24+00	Notes for plot 5171	3	10
+1	5189	1	2025-05-29 18:50:28.39784+00	1	2025-05-29 18:50:28.527832+00	1	2025-05-29 18:50:07.931507+00	f	1	2025-05-29 18:50:07.931507+00	2025-05-29 18:50:28+00	Notes for plot 5189	3	28
+1	5172	1	2025-05-29 18:50:24.579509+00	1	2025-05-29 18:50:24.767302+00	1	2025-05-29 18:50:07.916665+00	t	1	2025-05-29 18:50:07.916665+00	2025-05-29 18:50:24+00	Notes for plot 5172	3	11
+1	5181	1	2025-05-29 18:50:26.644098+00	1	2025-05-29 18:50:26.924512+00	1	2025-05-29 18:50:08.009903+00	t	1	2025-05-29 18:50:08.009903+00	2025-05-29 18:50:26+00	Notes for plot 5181	3	20
+1	5173	1	2025-05-29 18:50:24.786596+00	1	2025-05-29 18:50:24.972195+00	1	2025-05-29 18:50:07.916665+00	t	1	2025-05-29 18:50:07.916665+00	2025-05-29 18:50:24+00	Notes for plot 5173	3	12
+1	5174	1	2025-05-29 18:50:24.99114+00	1	2025-05-29 18:50:25.150482+00	1	2025-05-29 18:50:07.916665+00	t	1	2025-05-29 18:50:07.916665+00	2025-05-29 18:50:24+00	Notes for plot 5174	3	13
+1	5190	1	2025-05-29 18:50:28.54975+00	1	2025-05-29 18:50:28.748804+00	1	2025-05-29 18:50:07.931507+00	f	1	2025-05-29 18:50:07.931507+00	2025-05-29 18:50:28+00	Notes for plot 5190	3	29
+1	5175	1	2025-05-29 18:50:25.171058+00	1	2025-05-29 18:50:25.377991+00	1	2025-05-29 18:50:07.916665+00	t	1	2025-05-29 18:50:07.916665+00	2025-05-29 18:50:25+00	Notes for plot 5175	3	14
+1	5182	1	2025-05-29 18:50:26.944145+00	1	2025-05-29 18:50:27.21994+00	1	2025-05-29 18:50:08.009903+00	t	1	2025-05-29 18:50:08.009903+00	2025-05-29 18:50:26+00	Notes for plot 5182	3	21
+1	5183	1	2025-05-29 18:50:27.23968+00	1	2025-05-29 18:50:27.462219+00	1	2025-05-29 18:50:08.009903+00	t	1	2025-05-29 18:50:08.009903+00	2025-05-29 18:50:27+00	Notes for plot 5183	3	22
+1	5191	1	2025-05-29 18:50:28.768513+00	1	2025-05-29 18:50:28.878519+00	1	2025-05-29 18:50:07.931507+00	f	1	2025-05-29 18:50:07.931507+00	2025-05-29 18:50:28+00	Notes for plot 5191	3	30
+1	5184	1	2025-05-29 18:50:27.482098+00	1	2025-05-29 18:50:27.711742+00	1	2025-05-29 18:50:08.009903+00	t	1	2025-05-29 18:50:08.009903+00	2025-05-29 18:50:27+00	Notes for plot 5184	3	23
+1	5185	1	2025-05-29 18:50:27.730399+00	1	2025-05-29 18:50:27.944181+00	1	2025-05-29 18:50:08.009903+00	t	1	2025-05-29 18:50:08.009903+00	2025-05-29 18:50:27+00	Notes for plot 5185	3	24
+1	5186	1	2025-05-29 18:50:27.964418+00	1	2025-05-29 18:50:28.063844+00	1	2025-05-29 18:50:07.83326+00	f	1	2025-05-29 18:50:07.83326+00	2025-05-29 18:50:27+00	Notes for plot 5186	3	25
+1	5192	1	2025-05-29 18:50:28.89741+00	1	2025-05-29 18:50:28.997598+00	1	2025-05-29 18:50:08.024321+00	f	1	2025-05-29 18:50:08.024321+00	2025-05-29 18:50:28+00	Notes for plot 5192	3	31
+1	5193	1	2025-05-29 18:50:29.017594+00	1	2025-05-29 18:50:29.25423+00	1	2025-05-29 18:50:08.024321+00	f	1	2025-05-29 18:50:08.024321+00	2025-05-29 18:50:29+00	Notes for plot 5193	3	32
+1	5194	1	2025-05-29 18:50:29.27518+00	1	2025-05-29 18:50:29.365383+00	1	2025-05-29 18:50:08.024321+00	f	1	2025-05-29 18:50:08.024321+00	2025-05-29 18:50:29+00	Notes for plot 5194	3	33
 \.
 
 
@@ -13339,6 +13384,9 @@ COPY tracking.observation_plots (observation_id, monitoring_plot_id, claimed_by,
 --
 
 COPY tracking.observation_requested_subzones (observation_id, planting_subzone_id) FROM stdin;
+1	7
+1	8
+1	9
 \.
 
 
@@ -13370,6 +13418,7 @@ COPY tracking.observation_types (id, name) FROM stdin;
 --
 
 COPY tracking.observations (id, planting_site_id, created_time, start_date, end_date, completed_time, state_id, upcoming_notification_sent_time, planting_site_history_id, observation_type_id, is_ad_hoc) FROM stdin;
+1	3	2025-05-29 18:49:46.313164+00	2025-05-29	2025-05-31	2025-05-29 18:50:29.365383+00	3	\N	3	1	f
 \.
 
 
@@ -13386,6 +13435,274 @@ COPY tracking.observed_plot_coordinates (id, observation_id, monitoring_plot_id,
 --
 
 COPY tracking.observed_plot_species_totals (observation_id, monitoring_plot_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live) FROM stdin;
+1	5162	4	\N	1	15	1	1	6	1	15
+1	5162	2	\N	1	15	3	1	17	3	15
+1	5162	3	\N	1	14	3	3	18	3	14
+1	5162	1	\N	1	13	3	2	19	3	13
+1	5162	\N	Other 3	2	1	0	0	0	0	1
+1	5162	\N	Other 1	2	3	0	0	0	0	3
+1	5162	\N	\N	3	6	0	0	0	0	6
+1	5162	\N	Other 2	2	1	0	0	0	0	1
+1	5163	4	\N	1	28	2	3	7	2	28
+1	5163	1	\N	1	26	1	2	4	1	26
+1	5163	3	\N	1	19	1	5	5	1	19
+1	5163	\N	Other 2	2	2	0	0	0	0	2
+1	5163	\N	Other 1	2	2	0	0	0	0	2
+1	5163	2	\N	1	20	1	0	5	1	20
+1	5163	\N	\N	3	3	0	0	0	0	3
+1	5163	\N	Other 5	2	1	0	0	0	0	1
+1	5164	2	\N	1	10	2	2	17	2	10
+1	5164	3	\N	1	13	1	2	7	1	13
+1	5164	\N	\N	3	3	0	0	0	0	3
+1	5164	4	\N	1	7	0	2	0	0	7
+1	5164	1	\N	1	8	0	1	0	0	8
+1	5164	\N	Other 2	2	0	1	0	100	1	0
+1	5164	\N	Other 3	2	1	0	0	0	0	1
+1	5164	\N	Other 1	2	1	0	0	0	0	1
+1	5165	2	\N	1	44	4	5	8	4	44
+1	5165	1	\N	1	34	3	6	8	3	34
+1	5165	3	\N	1	32	4	5	11	4	32
+1	5165	4	\N	1	32	2	6	6	2	32
+1	5165	\N	\N	3	7	1	2	13	1	7
+1	5165	\N	Other 5	2	3	0	0	0	0	3
+1	5165	\N	Other 4	2	2	0	0	0	0	2
+1	5165	\N	Other 2	2	2	0	0	0	0	2
+1	5165	\N	Other 1	2	1	0	0	0	0	1
+1	5165	\N	Other 3	2	1	0	0	0	0	1
+1	5166	\N	Other 1	2	2	0	0	0	0	2
+1	5166	4	\N	1	7	1	2	13	1	7
+1	5166	3	\N	1	12	0	0	0	0	12
+1	5166	2	\N	1	2	2	0	50	2	2
+1	5166	1	\N	1	2	2	0	50	2	2
+1	5167	1	\N	1	29	3	5	9	3	29
+1	5167	2	\N	1	39	4	0	9	4	39
+1	5167	3	\N	1	28	3	4	10	3	28
+1	5167	4	\N	1	39	9	6	19	9	39
+1	5167	\N	\N	3	8	3	1	27	3	8
+1	5167	\N	Other 1	2	2	0	0	0	0	2
+1	5167	\N	Other 4	2	3	0	0	0	0	3
+1	5167	\N	Other 5	2	1	0	1	0	0	1
+1	5167	\N	Other 2	2	2	0	1	0	0	2
+1	5167	\N	Other 3	2	1	0	0	0	0	1
+1	5168	2	\N	1	21	4	4	16	4	21
+1	5168	1	\N	1	29	4	2	12	4	29
+1	5168	\N	Other 2	2	1	0	0	0	0	1
+1	5168	3	\N	1	18	4	6	18	4	18
+1	5168	4	\N	1	22	3	5	12	3	22
+1	5168	\N	Other 3	2	1	1	0	50	1	1
+1	5168	\N	Other 4	2	2	0	1	0	0	2
+1	5168	\N	Other 5	2	2	0	0	0	0	2
+1	5168	\N	\N	3	5	0	1	0	0	5
+1	5169	2	\N	1	11	1	1	8	1	11
+1	5169	1	\N	1	7	0	4	0	0	7
+1	5169	4	\N	1	8	0	1	0	0	8
+1	5169	\N	Other 4	2	1	0	0	0	0	1
+1	5169	\N	\N	3	2	1	0	33	1	2
+1	5169	3	\N	1	4	2	1	33	2	4
+1	5169	\N	Other 5	2	1	0	0	0	0	1
+1	5169	\N	Other 2	2	1	0	0	0	0	1
+1	5170	2	\N	1	24	0	5	0	0	24
+1	5170	3	\N	1	21	4	4	16	4	21
+1	5170	4	\N	1	23	1	1	4	1	23
+1	5170	\N	\N	3	4	2	1	33	2	4
+1	5170	1	\N	1	16	1	0	6	1	16
+1	5170	\N	Other 1	2	1	0	0	0	0	1
+1	5170	\N	Other 3	2	1	0	0	0	0	1
+1	5171	4	\N	1	27	2	4	7	2	27
+1	5171	1	\N	1	21	6	3	22	6	21
+1	5171	2	\N	1	19	3	2	14	3	19
+1	5171	\N	Other 1	2	2	1	0	33	1	2
+1	5171	\N	Other 2	2	0	1	1	100	1	0
+1	5171	\N	\N	3	6	0	2	0	0	6
+1	5171	3	\N	1	31	2	3	6	2	31
+1	5171	\N	Other 3	2	1	0	0	0	0	1
+1	5172	1	\N	1	30	2	3	6	2	30
+1	5172	3	\N	1	25	2	6	7	2	25
+1	5172	\N	\N	3	7	1	1	13	1	7
+1	5172	\N	Other 2	2	1	0	0	0	0	1
+1	5172	2	\N	1	23	4	2	15	4	23
+1	5172	4	\N	1	22	0	1	0	0	22
+1	5172	\N	Other 4	2	2	0	0	0	0	2
+1	5173	2	\N	1	11	0	2	0	0	11
+1	5173	4	\N	1	19	0	5	0	0	19
+1	5173	1	\N	1	15	2	1	12	2	15
+1	5173	3	\N	1	17	1	4	6	1	17
+1	5173	\N	Other 3	2	2	0	0	0	0	2
+1	5173	\N	\N	3	1	0	1	0	0	1
+1	5173	\N	Other 2	2	1	0	0	0	0	1
+1	5174	2	\N	1	12	0	1	0	0	12
+1	5174	1	\N	1	13	0	2	0	0	13
+1	5174	\N	Other 4	2	2	0	0	0	0	2
+1	5174	3	\N	1	10	2	1	17	2	10
+1	5174	\N	Other 3	2	2	0	0	0	0	2
+1	5174	4	\N	1	6	1	0	14	1	6
+1	5174	\N	Other 1	2	1	0	0	0	0	1
+1	5174	\N	\N	3	2	2	1	50	2	2
+1	5174	\N	Other 2	2	1	0	0	0	0	1
+1	5175	\N	Other 3	2	1	0	0	0	0	1
+1	5175	2	\N	1	17	2	3	11	2	17
+1	5175	1	\N	1	15	3	2	17	3	15
+1	5175	3	\N	1	16	1	2	6	1	16
+1	5175	4	\N	1	13	2	2	13	2	13
+1	5175	\N	\N	3	1	0	0	0	0	1
+1	5175	\N	Other 1	2	2	0	0	0	0	2
+1	5175	\N	Other 2	2	1	0	1	0	0	1
+1	5175	\N	Other 5	2	2	0	0	0	0	2
+1	5176	4	\N	1	7	0	2	0	0	7
+1	5176	3	\N	1	11	3	1	21	3	11
+1	5176	2	\N	1	4	2	0	33	2	4
+1	5176	\N	Other 4	2	1	0	0	0	0	1
+1	5176	\N	Other 3	2	0	1	0	100	1	0
+1	5176	1	\N	1	7	1	0	13	1	7
+1	5176	\N	\N	3	1	0	1	0	0	1
+1	5176	\N	Other 1	2	1	0	0	0	0	1
+1	5177	4	\N	1	33	5	6	13	5	33
+1	5177	1	\N	1	28	2	4	7	2	28
+1	5177	3	\N	1	40	4	1	9	4	40
+1	5177	2	\N	1	36	2	5	5	2	36
+1	5177	\N	\N	3	9	1	0	10	1	9
+1	5177	\N	Other 5	2	7	0	0	0	0	7
+1	5177	\N	Other 3	2	2	0	0	0	0	2
+1	5177	\N	Other 4	2	1	1	0	50	1	1
+1	5177	\N	Other 1	2	0	1	0	100	1	0
+1	5177	\N	Other 2	2	1	0	0	0	0	1
+1	5178	2	\N	1	33	1	3	3	1	33
+1	5178	1	\N	1	39	3	4	7	3	39
+1	5178	\N	\N	3	7	0	0	0	0	7
+1	5178	3	\N	1	29	2	3	6	2	29
+1	5178	4	\N	1	32	5	3	14	5	32
+1	5178	\N	Other 1	2	3	0	0	0	0	3
+1	5178	\N	Other 5	2	1	0	0	0	0	1
+1	5178	\N	Other 3	2	1	0	1	0	0	1
+1	5178	\N	Other 4	2	1	0	0	0	0	1
+1	5179	3	\N	1	19	1	0	5	1	19
+1	5179	1	\N	1	10	1	2	9	1	10
+1	5179	4	\N	1	9	1	1	10	1	9
+1	5179	2	\N	1	11	1	2	8	1	11
+1	5179	\N	\N	3	2	0	1	0	0	2
+1	5179	\N	Other 1	2	1	0	0	0	0	1
+1	5180	1	\N	1	31	4	1	11	4	31
+1	5180	2	\N	1	35	1	4	3	1	35
+1	5180	\N	\N	3	14	2	1	13	2	14
+1	5180	4	\N	1	27	3	3	10	3	27
+1	5180	3	\N	1	21	3	6	13	3	21
+1	5180	\N	Other 4	2	1	0	2	0	0	1
+1	5180	\N	Other 5	2	1	0	0	0	0	1
+1	5180	\N	Other 3	2	1	0	0	0	0	1
+1	5181	3	\N	1	32	1	6	3	1	32
+1	5181	4	\N	1	40	7	4	15	7	40
+1	5181	2	\N	1	25	6	2	19	6	25
+1	5181	1	\N	1	44	6	4	12	6	44
+1	5181	\N	\N	3	5	1	0	17	1	5
+1	5181	\N	Other 4	2	1	1	0	50	1	1
+1	5181	\N	Other 3	2	1	1	0	50	1	1
+1	5181	\N	Other 2	2	1	1	0	50	1	1
+1	5181	\N	Other 5	2	3	1	0	25	1	3
+1	5182	3	\N	1	37	1	2	3	1	37
+1	5182	2	\N	1	29	3	7	9	3	29
+1	5182	1	\N	1	32	2	2	6	2	32
+1	5182	4	\N	1	42	5	0	11	5	42
+1	5182	\N	\N	3	6	0	1	0	0	6
+1	5182	\N	Other 4	2	5	0	2	0	0	5
+1	5182	\N	Other 3	2	2	0	0	0	0	2
+1	5182	\N	Other 5	2	1	0	0	0	0	1
+1	5182	\N	Other 2	2	1	0	1	0	0	1
+1	5182	\N	Other 1	2	3	0	0	0	0	3
+1	5183	4	\N	1	29	7	7	19	7	29
+1	5183	2	\N	1	28	3	5	10	3	28
+1	5183	1	\N	1	32	3	2	9	3	32
+1	5183	3	\N	1	28	3	2	10	3	28
+1	5183	\N	\N	3	10	0	1	0	0	10
+1	5183	\N	Other 3	2	1	0	0	0	0	1
+1	5183	\N	Other 4	2	4	0	0	0	0	4
+1	5184	2	\N	1	33	2	1	6	2	33
+1	5184	4	\N	1	22	8	5	27	8	22
+1	5184	1	\N	1	22	4	2	15	4	22
+1	5184	3	\N	1	23	5	1	18	5	23
+1	5184	\N	Other 4	2	0	1	0	100	1	0
+1	5184	\N	Other 2	2	1	0	0	0	0	1
+1	5184	\N	Other 1	2	1	0	0	0	0	1
+1	5184	\N	\N	3	5	1	0	17	1	5
+1	5184	\N	Other 5	2	1	0	0	0	0	1
+1	5184	\N	Other 3	2	1	0	0	0	0	1
+1	5185	3	\N	1	20	2	2	9	2	20
+1	5185	1	\N	1	35	5	3	13	5	35
+1	5185	4	\N	1	23	3	5	12	3	23
+1	5185	2	\N	1	23	3	3	12	3	23
+1	5185	\N	Other 5	2	1	0	1	0	0	1
+1	5185	\N	Other 4	2	3	0	0	0	0	3
+1	5185	\N	Other 1	2	2	0	0	0	0	2
+1	5185	\N	\N	3	2	1	0	33	1	2
+1	5185	\N	Other 3	2	3	0	0	0	0	3
+1	5186	3	\N	1	7	0	0	\N	0	0
+1	5186	4	\N	1	7	1	0	\N	0	0
+1	5186	\N	Other 1	2	1	0	0	\N	0	0
+1	5186	1	\N	1	8	1	0	\N	0	0
+1	5186	2	\N	1	1	0	1	\N	0	0
+1	5186	\N	\N	3	1	0	0	\N	0	0
+1	5187	1	\N	1	16	5	0	\N	0	0
+1	5187	4	\N	1	18	2	3	\N	0	0
+1	5187	3	\N	1	19	1	2	\N	0	0
+1	5187	2	\N	1	17	3	4	\N	0	0
+1	5187	\N	Other 2	2	3	0	0	\N	0	0
+1	5187	\N	Other 4	2	1	0	0	\N	0	0
+1	5187	\N	\N	3	3	0	0	\N	0	0
+1	5187	\N	Other 5	2	1	0	0	\N	0	0
+1	5187	\N	Other 1	2	1	0	0	\N	0	0
+1	5187	\N	Other 3	2	1	0	0	\N	0	0
+1	5188	1	\N	1	10	3	1	\N	0	0
+1	5188	4	\N	1	10	3	2	\N	0	0
+1	5188	2	\N	1	17	1	1	\N	0	0
+1	5188	3	\N	1	11	0	1	\N	0	0
+1	5188	\N	Other 4	2	2	1	0	\N	0	0
+1	5188	\N	Other 5	2	3	0	0	\N	0	0
+1	5188	\N	\N	3	2	0	0	\N	0	0
+1	5189	3	\N	1	16	1	3	\N	0	0
+1	5189	1	\N	1	14	1	3	\N	0	0
+1	5189	2	\N	1	11	1	2	\N	0	0
+1	5189	\N	\N	3	4	0	1	\N	0	0
+1	5189	4	\N	1	10	1	1	\N	0	0
+1	5189	\N	Other 2	2	2	0	0	\N	0	0
+1	5189	\N	Other 4	2	1	0	0	\N	0	0
+1	5189	\N	Other 5	2	1	0	0	\N	0	0
+1	5190	2	\N	1	30	3	6	\N	0	0
+1	5190	3	\N	1	30	2	5	\N	0	0
+1	5190	4	\N	1	26	3	6	\N	0	0
+1	5190	\N	Other 5	2	3	0	0	\N	0	0
+1	5190	\N	\N	3	5	2	0	\N	0	0
+1	5190	1	\N	1	33	1	4	\N	0	0
+1	5190	\N	Other 4	2	1	0	0	\N	0	0
+1	5190	\N	Other 2	2	1	0	0	\N	0	0
+1	5190	\N	Other 3	2	2	0	0	\N	0	0
+1	5191	1	\N	1	14	2	0	\N	0	0
+1	5191	3	\N	1	15	5	1	\N	0	0
+1	5191	2	\N	1	10	0	0	\N	0	0
+1	5191	4	\N	1	14	0	1	\N	0	0
+1	5191	\N	Other 2	2	1	0	0	\N	0	0
+1	5191	\N	\N	3	2	0	0	\N	0	0
+1	5191	\N	Other 3	2	1	0	0	\N	0	0
+1	5192	3	\N	1	12	1	1	\N	0	0
+1	5192	4	\N	1	14	0	4	\N	0	0
+1	5192	1	\N	1	13	4	2	\N	0	0
+1	5192	2	\N	1	11	1	1	\N	0	0
+1	5192	\N	\N	3	2	0	0	\N	0	0
+1	5192	\N	Other 5	2	0	0	1	\N	0	0
+1	5192	\N	Other 1	2	0	0	1	\N	0	0
+1	5193	2	\N	1	44	4	1	\N	0	0
+1	5193	3	\N	1	30	5	4	\N	0	0
+1	5193	\N	\N	3	9	3	0	\N	0	0
+1	5193	4	\N	1	31	2	3	\N	0	0
+1	5193	1	\N	1	26	8	1	\N	0	0
+1	5193	\N	Other 5	2	4	0	0	\N	0	0
+1	5193	\N	Other 3	2	3	0	0	\N	0	0
+1	5193	\N	Other 4	2	0	0	1	\N	0	0
+1	5193	\N	Other 1	2	1	0	0	\N	0	0
+1	5193	\N	Other 2	2	1	0	0	\N	0	0
+1	5194	1	\N	1	14	0	2	\N	0	0
+1	5194	3	\N	1	15	1	0	\N	0	0
+1	5194	2	\N	1	9	0	1	\N	0	0
+1	5194	4	\N	1	9	1	1	\N	0	0
+1	5194	\N	\N	3	3	1	0	\N	0	0
 \.
 
 
@@ -13394,6 +13711,16 @@ COPY tracking.observed_plot_species_totals (observation_id, monitoring_plot_id, 
 --
 
 COPY tracking.observed_site_species_totals (observation_id, planting_site_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live) FROM stdin;
+1	3	\N	Other 1	2	31	2	1	7	2	28
+1	3	\N	Other 3	2	31	3	1	11	3	24
+1	3	1	\N	1	686	86	70	10	61	538
+1	3	4	\N	1	671	81	96	11	68	532
+1	3	\N	Other 5	2	37	1	3	4	1	25
+1	3	2	\N	1	675	67	77	9	54	525
+1	3	3	\N	1	675	71	87	10	55	520
+1	3	\N	Other 4	2	34	4	6	9	3	29
+1	3	\N	\N	3	147	22	16	12	16	116
+1	3	\N	Other 2	2	25	3	4	15	3	17
 \.
 
 
@@ -13402,6 +13729,36 @@ COPY tracking.observed_site_species_totals (observation_id, planting_site_id, sp
 --
 
 COPY tracking.observed_subzone_species_totals (observation_id, planting_subzone_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live) FROM stdin;
+1	7	\N	Other 1	2	13	0	0	0	0	11
+1	7	\N	Other 3	2	6	1	0	17	1	5
+1	7	1	\N	1	182	25	23	10	16	148
+1	7	4	\N	1	193	24	31	10	18	158
+1	9	\N	Other 5	2	12	1	2	11	1	8
+1	7	2	\N	1	197	25	19	11	21	162
+1	7	3	\N	1	177	19	29	11	18	140
+1	9	\N	Other 3	2	13	1	1	9	1	10
+1	7	\N	Other 4	2	11	1	1	0	0	8
+1	7	\N	Other 5	2	12	0	1	0	0	8
+1	9	\N	Other 4	2	15	2	5	12	2	15
+1	7	\N	\N	3	40	5	4	13	5	34
+1	9	\N	Other 1	2	11	0	1	0	0	10
+1	9	\N	Other 2	2	4	1	1	25	1	3
+1	9	1	\N	1	298	40	25	10	28	245
+1	9	3	\N	1	266	25	27	8	18	209
+1	9	2	\N	1	281	25	30	8	20	217
+1	9	4	\N	1	278	42	36	15	39	224
+1	9	\N	\N	3	65	9	4	9	5	51
+1	8	\N	Other 5	2	13	0	0	0	0	9
+1	8	\N	Other 4	2	8	1	0	14	1	6
+1	8	1	\N	1	206	21	22	10	17	145
+1	8	3	\N	1	232	27	31	10	19	171
+1	8	2	\N	1	197	17	28	8	13	146
+1	8	4	\N	1	200	15	29	7	11	150
+1	8	\N	Other 2	2	9	1	2	17	1	5
+1	8	\N	\N	3	42	8	8	16	6	31
+1	8	\N	Other 3	2	12	1	0	10	1	9
+1	8	\N	Other 1	2	7	2	0	22	2	7
+1	7	\N	Other 2	2	12	1	1	10	1	9
 \.
 
 
@@ -13410,6 +13767,36 @@ COPY tracking.observed_subzone_species_totals (observation_id, planting_subzone_
 --
 
 COPY tracking.observed_zone_species_totals (observation_id, planting_zone_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live) FROM stdin;
+1	5	\N	Other 1	2	13	0	0	0	0	11
+1	7	\N	Other 1	2	11	0	1	0	0	10
+1	6	\N	Other 1	2	7	2	0	22	2	7
+1	5	\N	Other 3	2	6	1	0	17	1	5
+1	7	\N	Other 3	2	13	1	1	9	1	10
+1	6	\N	Other 3	2	12	1	0	10	1	9
+1	5	1	\N	1	182	25	23	10	16	148
+1	7	1	\N	1	298	40	25	10	28	245
+1	6	1	\N	1	206	21	22	10	17	145
+1	5	4	\N	1	193	24	31	10	18	158
+1	7	4	\N	1	278	42	36	15	39	224
+1	6	4	\N	1	200	15	29	7	11	150
+1	7	\N	Other 5	2	12	1	2	11	1	8
+1	5	\N	Other 5	2	12	0	1	0	0	8
+1	6	\N	Other 5	2	13	0	0	0	0	9
+1	5	2	\N	1	197	25	19	11	21	162
+1	7	2	\N	1	281	25	30	8	20	217
+1	6	2	\N	1	197	17	28	8	13	146
+1	5	3	\N	1	177	19	29	11	18	140
+1	7	3	\N	1	266	25	27	8	18	209
+1	6	3	\N	1	232	27	31	10	19	171
+1	5	\N	Other 4	2	11	1	1	0	0	8
+1	7	\N	Other 4	2	15	2	5	12	2	15
+1	6	\N	Other 4	2	8	1	0	14	1	6
+1	5	\N	\N	3	40	5	4	13	5	34
+1	7	\N	\N	3	65	9	4	9	5	51
+1	6	\N	\N	3	42	8	8	16	6	31
+1	7	\N	Other 2	2	4	1	1	25	1	3
+1	6	\N	Other 2	2	9	1	2	17	1	5
+1	5	\N	Other 2	2	12	1	1	10	1	9
 \.
 
 
@@ -13427,6 +13814,8 @@ COPY tracking.planting_seasons (id, planting_site_id, start_date, start_time, en
 
 COPY tracking.planting_site_histories (id, planting_site_id, created_by, created_time, boundary, grid_origin, exclusion, area_ha) FROM stdin;
 1	1	1	2024-03-06 18:56:18.746285+00	0106000020E6100000010000000103000000010000000A0000009AA10A279D5E52C02623D2801A2E3540B0A2E4BF7E5E52C01720C558172F35400D257257055E52C0E83555C52230354051849A399B5D52C03437BAEA1E303540ADEFC023285D52C000AB47E68B2F35405D68E789F35C52C075DDE42FF62D3540893021FA325D52C01631D195552C3540525064146B5E52C025E929772C2C354069731F55925E52C0C5C49FB6642C35409AA10A279D5E52C02623D2801A2E3540	0101000020E61000009AA10A279D5E52C025E929772C2C3540	0106000020E6100000140000000103000000010000004F000000883021FA325D52C01E31D195552C354013982916395D52C0CF5E68C46A2C354079FC35FF3F5D52C0A5A3E28A842C354039BBDD50445D52C0A1D2268AA12C3540969AB179465D52C07E526589BE2C354040401611495D52C0523638FAE12C3540E6E57AA84B5D52C023D334400A2D3540B7382DF44C5D52C011DBC0E9302D3540A6A422FA4F5D52C0394F72685C2D35400384F622525D52C0292C8C67792D35407A7C0D06565D52C0C68C5FADA12D35402422729D585D52C0CEA2A373BB2D3540FDF95CA95E5D52C0276D72ABDB2D35401A98D823655D52C04167E538F22D35403736549E6B5D52C0E8AD7E9B0D2E354083811DCD705D52C088014DC5252E35401793776A765D52C0326217EF3D2E35401B18B02A7B5D52C0B264678A5C2E35404D4A369F7E5D52C082ECDB096B2E35408901F5D3865D52C0A14CE6DD8C2E3540AA9F704E8D5D52C0336401A4A62E3540F2EA397D925D52C0B70AD0BFB62E3540057AE3BDA05D52C004D50E3EE22E35401184543EAA5D52C0680A1B04FC2E3540A195AEDBAF5D52C0D9D340BC0D2F3540F565B0CAB95D52C0C410E6C8322F3540B7A990DCC25D52C09B7A84F24A2F35404BBBEA79C85D52C0ABA1E171592F3540B5A42F23D45D52C0D3AB9770762F354033227FC6DC5D52C01DDF0DC5892F354058453301E85D52C03567E0B59E2F354097812AF6F45D52C08E502A18BA2F3540BCA4DE30005E52C09E9CB241D22F3540F25B9D65085E52C02FB8BEF9E32F3540FAE0D5250D5E52C0BEF99407EC2F3540A1D09BCD145E52C03AF7D5B600303540ED679216105E52C0D3A388190B3035406D54B4480C5E52C09A54E286FA2F3540EED664A5035E52C0BEF99407EC2F3540FCE536DFFB5D52C055D5894FDA2F3540230E4CD3F55D52C021AB976CCD2F3540A590FC2FED5D52C0252D6DDFB62F35409A868BAFE35D52C089A95B27A52F35405ECFCC7ADB5D52C035EF05A8962F354028180E46D35D52C0FD8EF0EF842F3540F2604F11CB5D52C0180FD937732F35404436B2B9C35D52C0756FBF7F612F3540F8EAE88ABE5D52C099126300532F354006FABAC4B65D52C096E725733C2F3540E95B3F4AB05D52C07DFA25902F2F3540F76A1184A85D52C0A3FBA33B1C2F35404A40742CA15D52C03EEFFD11042F35402DA2F8B19A5D52C04B21F34BEA2E354054CA0DA6945D52C0FC1368F7D62E35404B45D5E58F5D52C06721FE77C82E354000FA0BB78A5D52C0C1D4ABEAB12E354070E8B119855D52C021403E6BA32E3540DBD6577C7F5D52C089EEA916902E35404AC5FDDE795D52C061084F89792E3540B7B3A341745D52C02C142CC35F2E35403EBB8C5E705D52C0D65E2CD24A2E3540C3C2757B6C5D52C00646010C312E354033B11BDE665D52C040CA34E2182E35401613A063605D52C05434B8620A2E3540820146C65A5D52C05B582CF2E62D354036B67C97555D52C0A6C053C8CE2D354090101800535D52C0CEA2A373BB2D354000FFBD624D5D52C0B0A37B83892D35408406A77F495D52C04BF39A4B692D35401193C85C4A5D52C06ADF4D77472D3540969AB179465D52C0964296F81B2D354039BBDD50445D52C0DB7E3724FA2C3540DBDB0928425D52C08AAE0425DD2C354079FC35FF3F5D52C027A230B4B92C354047CAAF8A3C5D52C09FF089189B2C354013982916395D52C0579BB1C3872C35403BC03E0A335D52C0835075E07A2C35400E8333D02E5D52C0A687F1ED702C3540883021FA325D52C01E31D195552C35400103000000010000000B000000F0FA48EC595E52C0073835051C2E3540B4215CCF585E52C0AD090C8A1C2E35402AF3343A595E52C0F25092C5192E354059F8ECB0595E52C01E61EF85172E3540B0025D9E5A5E52C0CA059472152E3540F145640E5C5E52C02867A906132E354098F029965D5E52C02843A0E90F2E3540D3C916B35E5E52C0115D06C7102E35402FF385D15D5E52C0CF2DBDED142E3540AAE35D6D5C5E52C0B5FD36B2172E3540F0FA48EC595E52C0073835051C2E35400103000000010000000A00000053DCA3DA4C5E52C0336B9498692E35406A6423944D5E52C03191A1916C2E35403525B0A64D5E52C0AD741FBB6E2E3540D4A6C9CB4D5E52C013F58B3E722E354004E63CB94D5E52C0B7182807762E3540229D30ED4C5E52C0C741B7D6762E3540CF117EE94B5E52C052C30968742E354060CFD7B14B5E52C058802CB4712E3540A1D20AFC4B5E52C01C4ED1D66C2E354053DCA3DA4C5E52C0336B9498692E3540010300000001000000090000002AEB5951335E52C0FC0E3450CB2D354083BB1361345E52C056066413C22D3540B0A3F0E8345E52C056066413C22D3540922E179E355E52C0F0544EBCC22D3540325C8780365E52C0EAA23865C32D3540ECFED0AD365E52C075845FFEC92D3540BF16F425365E52C0599CB145CF2D3540B0A3F0E8345E52C0599CB145CF2D35402AEB5951335E52C0FC0E3450CB2D35400103000000010000001700000071F933B2255E52C0751B816A222F354018297AA2245E52C065953AE1152F3540C7C9EDC1265E52C0F263973D132F3540D93CF1FE275E52C05E3180E6132F35404280AE4B2A5E52C0B1C6C5EB112F3540E2AD1E2E2B5E52C0CFDC50F60D2F354051F3B1882B5E52C072250AAF082F35404BF1DB7A2D5E52C091B4062BFA2E354095BFBF7C305E52C037BDA54AEE2E3540A732C3B9315E52C0B5E6A208E72E354083BB1361345E52C04CDB15BCE32E35405F446408375E52C0E2E5B95FE62E35405F446408375E52C004A26045F02E3540BF16F425365E52C06D57D63AF42E3540C1A79C04315E52C01888D87CFB2E3540B33499C72F5E52C0F73DC367032F35403FEF056D2F5E52C01C8322480F2F3540130729E52E5E52C005D480281B2F3540C33845E32B5E52C0A4D223502C2F354067F75DA4275E52C01BEB0B3B342F3540D1CBC3CF245E52C03F993AE9322F354009B67665235E52C06C3FAF9C2F2F354071F933B2255E52C0751B816A222F35400103000000010000000F0000005C7F3F1A225E52C011E1B27E3F2D3540AB0AF21D235E52C0B16A8C8C392D3540A5DB7DA3245E52C02F9C4DA13A2D3540F66630A7255E52C07337CB77382D35403999D76B245E52C0DFA4F669342D354069D84A59245E52C073BCCF772E2D3540A0AC0929265E52C0332A4D4E2C2D35402B3BEF76275E52C08A6A9F322E2D3540BCC9D4C4285E52C0A5187993362D3540D151547E295E52C0F74F1D5C3A2D3540551C7A6F2A5E52C0772B35A8412D3540F5CC070F295E52C050651CAF482D354092B9D551275E52C0CF1FEC69482D3540F66630A7255E52C04B4E5B9A472D35405C7F3F1A225E52C011E1B27E3F2D35400103000000010000000A0000001F43DEE92D5E52C016F07C39492D3540EF036BFC2D5E52C0A64DF6BC422D3540B1D1C3372F5E52C0D0BC9532422D354062DB5C16305E52C0BB4300103D2D354017E5F5F4305E52C0F74F1D5C3A2D3540AB379B9F325E52C049626F403C2D35407AF827B2325E52C0A64DF6BC422D354050E8283F315E52C05935AD7E492D354073CE90ED2E5E52C0DCD1CE1D4B2D35401F43DEE92D5E52C016F07C39492D35400103000000010000000A0000008EC966303D5E52C01A9D6F1A182D3540D5B6624D3D5E52C010497F80102D3540E36B52C13D5E52C0C72E346F0B2D3540926519573F5E52C0C04ACDF1052D35407497EC95405E52C0FB908EE6082D3540814CDC09415E52C094862C3C0F2D354034AAF078405E52C0C80C54AE172D3540144011913F5E52C00F8D5FB41F2D35408EC966303D5E52C0B22E83531C2D35408EC966303D5E52C01A9D6F1A182D354001030000000100000009000000AC6E3481675E52C0162B1DDC152D35400C41C49E665E52C04F781206062D35400C41C49E665E52C04FD8E26CFF2C35405B0FA8A0695E52C0A3AAF7C3FE2C35407DF5AE1A6C5E52C0BC878F10022D3540440BFC846D5E52C0F3CC419F0C2D3540500DD2926B5E52C001949FD1192D3540BBE137BE685E52C0DDCA4B751C2D3540AC6E3481675E52C0162B1DDC152D354001030000000100000007000000419ACE556A5E52C026AFA003C82D35408EF95A36685E52C0793C0DB7C42D3540BBE137BE685E52C0C0668FC1C02D3540FB3C18836A5E52C07B202723BC2D3540C25265ED6B5E52C0DC7511CCBC2D35405F80D5CF6C5E52C025C4BA6FBF2D3540419ACE556A5E52C026AFA003C82D3540010300000001000000080000002AB69DE9655E52C0D6D24492D22D3540958A0315635E52C0AFD313CFDB2D35402D4746C8605E52C060F6D7DED52D35402D4746C8605E52C0EE587040D12D3540C874B6AA615E52C021531EF9CB2D3540214570BA625E52C026CA49A7CA2D3540B7700A8F655E52C0EE587040D12D35402AB69DE9655E52C0D6D24492D22D354001030000000100000008000000BE72E09C635E52C08D1B6828BA2D3540552F2350615E52C037CA3C7ABB2D354073A4FC9A605E52C037CA3C7ABB2D35407AA6D2A85E5E52C0DA4215E1B42D35407AA6D2A85E5E52C055C46B3DB22D35400ED26C7D615E52C0AF3B2E4DAC2D354007D0966F635E52C07C9DAC42B02D3540BE72E09C635E52C08D1B6828BA2D354001030000000100000008000000E358E716665E52C005435C10A32D35404E2D4D42635E52C04EE89C15A12D3540214570BA625E52C0A386DD1A9F2D3540214570BA625E52C05733747C9A2D3540DCE7B9E7625E52C0DFAE603A932D3540A3FD0652645E52C002334BE3932D3540E358E716665E52C05733747C9A2D3540E358E716665E52C005435C10A32D3540010300000001000000090000006B33CF6B5D5E52C07FB6358C942D3540F8ED3B115D5E52C05A1E1E209D2D3540CB055F895C5E52C0955C87BEA12D3540D60735975A5E52C06F263162A42D35409AAC54D2585E52C04EE89C15A12D3540534F9EFF585E52C03B3CCAD8972D35408FAA7EC45A5E52C0DFAE603A932D3540F8ED3B115D5E52C0022A7691922D35406B33CF6B5D5E52C07FB6358C942D3540010300000001000000590000001CE51A5EEA5D52C0DAA0646C3D2C35400E92C21CEA5D52C0040E7627502C35408D753C8FE95D52C096898F9E5F2C35408D753C8FE95D52C0DB184A45752C35401D04DB52EC5D52C0BD0B7FAC822C35407B2FDB20F25D52C00578832B932C35401A699E35F85D52C055B5B592A02C3540B669552FFD5D52C073C8C609B02C3540546A0C29025E52C0A93DD680BF2C3540A423F4C0055E52C0843BA317D32C3540FADCDB58095E52C083D7871DF52C35403AEB9E9F095E52C0C7BB4DB4082D35405CDC245F045E52C08F41BD72212D3540BEA2614AFE5D52C01B5204CA2C2D3540FA125593F15D52C0781B7A92252D35400E92C21CEA5D52C01D0AB8FB112D354085D76C91DC5D52C09160F364FE2C35409E56DA1AD55D52C0504ED274002D35400A2A6C59C55D52C0EA9F6423172D354026E2E5FDBE5D52C09FF8AFF1312D354087A822E9B85D52C01B7F5C07562D3540297D221BB35D52C0791D8BDD712D3540830A53EBAB5D52C06F04C6AB8C2D35409050B459A35D52C0867416FB962D354019DCBF3C8D5D52C03C4E8654812D3540E1A1452E825D52C0F5137D6E632D3540FD59BFD27B5D52C0BD943929392D3540544CB385805D52C06352751B162D3540F985769A865D52C07E6B1455FC2C3540E1A1452E825D52C0739B0067DD2C3540268451AD775D52C031BB5641B72C3540BBE638A96F5D52C04EA7245B992C3540AA3B14586C5D52C0FAA6BD8C7E2C354021E681AF6A5D52C0C01C80A6602C35403DFA3090695D52C06B4BBA644E2C3540376A989E6C5D52C04143A5FD4D2C3540F9BBEFD46E5D52C0B372C6056D2C3540C11F45C4705D52C0ED5240CC862C3540CE915DFA725D52C070E4633B952C3540E6758E66775D52C0376946CAA72C35407E7645607C5D52C0FCB14649B82C3540544CB385805D52C0A32345C8C82C3540B13EA738855D52C0334EF06EDE2C3540B877B353865D52C060FD7DA6E52C354001F88ED0885D52C061C2C17C012D354079A2FC27875D52C051460BD40C2D354022B00875825D52C06E06CE6A202D354086AF517B7D5D52C060715B19372D3540DA683913815D52C03DBE4B98472D3540EA135E64845D52C08F5A4B0F572D3540C822D8A4895D52C05E8D159E692D35405EEA82838D5D52C0791D8BDD712D3540F3B12D62915D52C0ED9A1115792D354054163A4B985D52C03C4E8654812D3540733377D29D5D52C0A97B4074852D3540D45E77A0A35D52C0CA8BFA93892D3540A5FBD8AAA65D52C0CA8BFA93892D3540F6B4C042AA5D52C038BE974C802D3540CA51224DAD5D52C03515BFC56E2D3540A2609C8DB25D52C022FFA0E7512D3540806F16CEB75D52C0BDB017393B2D3540D528FE65BB5D52C01B5204CA2C2D35402D1BF218C05D52C06CC321431B2D354003F15F3EC45D52C068A4FADB0D2D3540611C600CCA5D52C04FD8E26CFF2C35408DABB5C9D15D52C04AC1A80DF32C3540237360A8D55D52C04AC1A80DF32C35405874CE9BDF5D52C04AC1A80DF32C3540B79FCE69E55D52C0D9ED453DF92C3540DCF5170CEC5D52C0B3139094042D3540F3D94878F05D52C0EC5AD9EB0F2D35400ABE79E4F45D52C0A2EB532B182D354021A2AA50F95D52C099C9DE621F2D35407D949E03FE5D52C06E06CE6A202D3540CE4D869B015E52C059354333192D354097B1DB8A035E52C0BA842CC40A2D35405CDC245F045E52C0E46E3545FA2C3540DCBF9ED1035E52C0BD1E2CCEEA2C35408706B739005E52C069BE4147D92C3540364DCFA1FC5D52C0B0D024D8CA2C35401A699E35F85D52C0E9992659BA2C3540BC3D9E67F25D52C028CCB611B12C354016CBCE37EB5D52C00E3F66BAA52C3540F1748595E45D52C0F2175443962C35408B1079ACDD5D52C0F25C9E9C802C3540B201FF6BD85D52C09DF5D5FD6B2C35409E56DA1AD55D52C04DF0EB6E592C354065BF3287D25D52C0C5A27490402C35401CE51A5EEA5D52C0DAA0646C3D2C35400103000000010000000C0000007F1978A7435D52C0866C0B347E2E3540F83E806D435D52C0EA17D41C712E3540C30674C4435D52C0DAC5696C6F2E3540C30674C4435D52C0FFB12A5B6A2E35406183B033495D52C00E1910EF692E354008C887554A5D52C0B6ABEE88712E3540E9F95A944B5D52C0CD2E7DDE772E3540FAAE4A084C5D52C05BC4146D822E3540C0DA8B384A5D52C03A19918F8C2E3540A9384703455D52C06F1727DF8A2E35407F1978A7435D52C06EF4E8CD852E35407F1978A7435D52C0866C0B347E2E35400103000000010000000D00000078B8E398855D52C037BB655D472F3540FD01230F825D52C03A4D4E06482F3540E38C49C4825D52C08F0D96C93E2F3540D88A73B6845D52C039E0C535362F354054413440885D52C000E3DD4A2E2F3540859A3EF78B5D52C00D9352BC232F35400051FF808F5D52C0FF48AFD6192F354008C22CB0925D52C0F263973D132F3540E04A7D57955D52C018CA5138152F35403F1D0D75945D52C0E2A0AF18212F35402D39DC08905D52C01D213BA72B2F3540859A3EF78B5D52C0F639DD8C352F354078B8E398855D52C037BB655D472F35400103000000010000000E0000001306CF2A7E5D52C09D191BDC572F3540427F5491795D52C080075C65642F354093DEE071775D52C096ED11A26D2F3540538300AD755D52C00C1ECB9C6F2F3540DDCC3F23725D52C0DEC9253B742F3540AFE4629B715D52C03DA96C40722F35404F12D37D725D52C0AF8629F96C2F354071F8D9F7745D52C098B0A26A622F3540C6C89307765D52C06983767A5C2F3540BCC6BDF9775D52C02B194A8A562F354051F257CE7A5D52C0BC4C7BF64D2F35402C7BA8757D5D52C059DE36AF482F354095BE65C27F5D52C07C8DF0A94A2F35401306CF2A7E5D52C09D191BDC572F35400103000000010000000D000000B2750B7A6C5D52C037AA6882792F3540CBEAE4C46B5D52C09B3E1DBF822F354062A72778695D52C045E247AF882F35408C1ED7D0665D52C0F848729F8E2F3540F7F23CFC635D52C080729C8F942F35404E549FEA5F5D52C04B2667239D2F35400486BBE85C5D52C05E0EF06FA02F35409140288E5C5D52C04B2667239D2F3540A82459FA605D52C06E461343912F3540AC958629645D52C045E247AF882F35405F36FA48665D52C08D26D6B9842F354062A72778695D52C0D4B2DA777D2F3540B2750B7A6C5D52C037AA6882792F35400103000000010000000D0000005B0F4B404F5D52C0914600DDBD2F35400F474B124C5D52C044D424CDB92F3540C5DBFEB14D5D52C0857672FEAA2F35400137DF764F5D52C0B6801960A62F35404092BF3B515D52C0FD65C0C1A12F3540B84880C5545D52C0698537759E2F3540071764C7575D52C04B2667239D2F3540168A6704595D52C029564FCC9D2F3540CF2CB131595D52C0C1CAE9B1A72F354094D1D06C575D52C0B2965AA7AB2F3540E5305D4D555D52C08847CB9CAF2F3540EB32335B535D52C017DD3B92B32F35405B0F4B404F5D52C0914600DDBD2F3540	358.1
+2	2	1	2025-05-29 18:45:59.772576+00	0106000020E61000000100000001030000000100000005000000D0381DA8C3484340889607A5E6662F4004177F2C4C4A4340C837B10F44432F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40	0101000020E6100000D0381DA8C3484340C837B10F44432F40	\N	6788.4
+3	3	1	2025-05-29 18:47:48.579314+00	0106000020E6100000010000000103000000010000000500000084021CDBBE374340E0B4497C6D742F40D4F9485E6F3643409002C09245472F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F4084021CDBBE374340E0B4497C6D742F40	0101000020E6100000D4F9485E6F3643409002C09245472F40	\N	4091.0
 \.
 
 
@@ -13446,6 +13835,8 @@ COPY tracking.planting_site_notifications (id, planting_site_id, notification_ty
 --
 
 COPY tracking.planting_site_populations (planting_site_id, species_id, total_plants, plants_since_last_observation) FROM stdin;
+2	3	100	100
+3	3	100	0
 \.
 
 
@@ -13455,6 +13846,8 @@ COPY tracking.planting_site_populations (planting_site_id, species_id, total_pla
 
 COPY tracking.planting_sites (id, organization_id, name, description, boundary, created_by, created_time, modified_by, modified_time, time_zone, area_ha, project_id, exclusion, grid_origin, country_code) FROM stdin;
 1	1	Planting Site	\N	0106000020E6100000010000000103000000010000000A0000009AA10A279D5E52C02623D2801A2E3540B0A2E4BF7E5E52C01720C558172F35400D257257055E52C0E83555C52230354051849A399B5D52C03437BAEA1E303540ADEFC023285D52C000AB47E68B2F35405D68E789F35C52C075DDE42FF62D3540893021FA325D52C01631D195552C3540525064146B5E52C025E929772C2C354069731F55925E52C0C5C49FB6642C35409AA10A279D5E52C02623D2801A2E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	\N	374.1	\N	0106000020E6100000140000000103000000010000004F000000883021FA325D52C01E31D195552C354013982916395D52C0CF5E68C46A2C354079FC35FF3F5D52C0A5A3E28A842C354039BBDD50445D52C0A1D2268AA12C3540969AB179465D52C07E526589BE2C354040401611495D52C0523638FAE12C3540E6E57AA84B5D52C023D334400A2D3540B7382DF44C5D52C011DBC0E9302D3540A6A422FA4F5D52C0394F72685C2D35400384F622525D52C0292C8C67792D35407A7C0D06565D52C0C68C5FADA12D35402422729D585D52C0CEA2A373BB2D3540FDF95CA95E5D52C0276D72ABDB2D35401A98D823655D52C04167E538F22D35403736549E6B5D52C0E8AD7E9B0D2E354083811DCD705D52C088014DC5252E35401793776A765D52C0326217EF3D2E35401B18B02A7B5D52C0B264678A5C2E35404D4A369F7E5D52C082ECDB096B2E35408901F5D3865D52C0A14CE6DD8C2E3540AA9F704E8D5D52C0336401A4A62E3540F2EA397D925D52C0B70AD0BFB62E3540057AE3BDA05D52C004D50E3EE22E35401184543EAA5D52C0680A1B04FC2E3540A195AEDBAF5D52C0D9D340BC0D2F3540F565B0CAB95D52C0C410E6C8322F3540B7A990DCC25D52C09B7A84F24A2F35404BBBEA79C85D52C0ABA1E171592F3540B5A42F23D45D52C0D3AB9770762F354033227FC6DC5D52C01DDF0DC5892F354058453301E85D52C03567E0B59E2F354097812AF6F45D52C08E502A18BA2F3540BCA4DE30005E52C09E9CB241D22F3540F25B9D65085E52C02FB8BEF9E32F3540FAE0D5250D5E52C0BEF99407EC2F3540A1D09BCD145E52C03AF7D5B600303540ED679216105E52C0D3A388190B3035406D54B4480C5E52C09A54E286FA2F3540EED664A5035E52C0BEF99407EC2F3540FCE536DFFB5D52C055D5894FDA2F3540230E4CD3F55D52C021AB976CCD2F3540A590FC2FED5D52C0252D6DDFB62F35409A868BAFE35D52C089A95B27A52F35405ECFCC7ADB5D52C035EF05A8962F354028180E46D35D52C0FD8EF0EF842F3540F2604F11CB5D52C0180FD937732F35404436B2B9C35D52C0756FBF7F612F3540F8EAE88ABE5D52C099126300532F354006FABAC4B65D52C096E725733C2F3540E95B3F4AB05D52C07DFA25902F2F3540F76A1184A85D52C0A3FBA33B1C2F35404A40742CA15D52C03EEFFD11042F35402DA2F8B19A5D52C04B21F34BEA2E354054CA0DA6945D52C0FC1368F7D62E35404B45D5E58F5D52C06721FE77C82E354000FA0BB78A5D52C0C1D4ABEAB12E354070E8B119855D52C021403E6BA32E3540DBD6577C7F5D52C089EEA916902E35404AC5FDDE795D52C061084F89792E3540B7B3A341745D52C02C142CC35F2E35403EBB8C5E705D52C0D65E2CD24A2E3540C3C2757B6C5D52C00646010C312E354033B11BDE665D52C040CA34E2182E35401613A063605D52C05434B8620A2E3540820146C65A5D52C05B582CF2E62D354036B67C97555D52C0A6C053C8CE2D354090101800535D52C0CEA2A373BB2D354000FFBD624D5D52C0B0A37B83892D35408406A77F495D52C04BF39A4B692D35401193C85C4A5D52C06ADF4D77472D3540969AB179465D52C0964296F81B2D354039BBDD50445D52C0DB7E3724FA2C3540DBDB0928425D52C08AAE0425DD2C354079FC35FF3F5D52C027A230B4B92C354047CAAF8A3C5D52C09FF089189B2C354013982916395D52C0579BB1C3872C35403BC03E0A335D52C0835075E07A2C35400E8333D02E5D52C0A687F1ED702C3540883021FA325D52C01E31D195552C35400103000000010000000B000000F0FA48EC595E52C0073835051C2E3540B4215CCF585E52C0AD090C8A1C2E35402AF3343A595E52C0F25092C5192E354059F8ECB0595E52C01E61EF85172E3540B0025D9E5A5E52C0CA059472152E3540F145640E5C5E52C02867A906132E354098F029965D5E52C02843A0E90F2E3540D3C916B35E5E52C0115D06C7102E35402FF385D15D5E52C0CF2DBDED142E3540AAE35D6D5C5E52C0B5FD36B2172E3540F0FA48EC595E52C0073835051C2E35400103000000010000000A00000053DCA3DA4C5E52C0336B9498692E35406A6423944D5E52C03191A1916C2E35403525B0A64D5E52C0AD741FBB6E2E3540D4A6C9CB4D5E52C013F58B3E722E354004E63CB94D5E52C0B7182807762E3540229D30ED4C5E52C0C741B7D6762E3540CF117EE94B5E52C052C30968742E354060CFD7B14B5E52C058802CB4712E3540A1D20AFC4B5E52C01C4ED1D66C2E354053DCA3DA4C5E52C0336B9498692E3540010300000001000000090000002AEB5951335E52C0FC0E3450CB2D354083BB1361345E52C056066413C22D3540B0A3F0E8345E52C056066413C22D3540922E179E355E52C0F0544EBCC22D3540325C8780365E52C0EAA23865C32D3540ECFED0AD365E52C075845FFEC92D3540BF16F425365E52C0599CB145CF2D3540B0A3F0E8345E52C0599CB145CF2D35402AEB5951335E52C0FC0E3450CB2D35400103000000010000001700000071F933B2255E52C0751B816A222F354018297AA2245E52C065953AE1152F3540C7C9EDC1265E52C0F263973D132F3540D93CF1FE275E52C05E3180E6132F35404280AE4B2A5E52C0B1C6C5EB112F3540E2AD1E2E2B5E52C0CFDC50F60D2F354051F3B1882B5E52C072250AAF082F35404BF1DB7A2D5E52C091B4062BFA2E354095BFBF7C305E52C037BDA54AEE2E3540A732C3B9315E52C0B5E6A208E72E354083BB1361345E52C04CDB15BCE32E35405F446408375E52C0E2E5B95FE62E35405F446408375E52C004A26045F02E3540BF16F425365E52C06D57D63AF42E3540C1A79C04315E52C01888D87CFB2E3540B33499C72F5E52C0F73DC367032F35403FEF056D2F5E52C01C8322480F2F3540130729E52E5E52C005D480281B2F3540C33845E32B5E52C0A4D223502C2F354067F75DA4275E52C01BEB0B3B342F3540D1CBC3CF245E52C03F993AE9322F354009B67665235E52C06C3FAF9C2F2F354071F933B2255E52C0751B816A222F35400103000000010000000F0000005C7F3F1A225E52C011E1B27E3F2D3540AB0AF21D235E52C0B16A8C8C392D3540A5DB7DA3245E52C02F9C4DA13A2D3540F66630A7255E52C07337CB77382D35403999D76B245E52C0DFA4F669342D354069D84A59245E52C073BCCF772E2D3540A0AC0929265E52C0332A4D4E2C2D35402B3BEF76275E52C08A6A9F322E2D3540BCC9D4C4285E52C0A5187993362D3540D151547E295E52C0F74F1D5C3A2D3540551C7A6F2A5E52C0772B35A8412D3540F5CC070F295E52C050651CAF482D354092B9D551275E52C0CF1FEC69482D3540F66630A7255E52C04B4E5B9A472D35405C7F3F1A225E52C011E1B27E3F2D35400103000000010000000A0000001F43DEE92D5E52C016F07C39492D3540EF036BFC2D5E52C0A64DF6BC422D3540B1D1C3372F5E52C0D0BC9532422D354062DB5C16305E52C0BB4300103D2D354017E5F5F4305E52C0F74F1D5C3A2D3540AB379B9F325E52C049626F403C2D35407AF827B2325E52C0A64DF6BC422D354050E8283F315E52C05935AD7E492D354073CE90ED2E5E52C0DCD1CE1D4B2D35401F43DEE92D5E52C016F07C39492D35400103000000010000000A0000008EC966303D5E52C01A9D6F1A182D3540D5B6624D3D5E52C010497F80102D3540E36B52C13D5E52C0C72E346F0B2D3540926519573F5E52C0C04ACDF1052D35407497EC95405E52C0FB908EE6082D3540814CDC09415E52C094862C3C0F2D354034AAF078405E52C0C80C54AE172D3540144011913F5E52C00F8D5FB41F2D35408EC966303D5E52C0B22E83531C2D35408EC966303D5E52C01A9D6F1A182D354001030000000100000009000000AC6E3481675E52C0162B1DDC152D35400C41C49E665E52C04F781206062D35400C41C49E665E52C04FD8E26CFF2C35405B0FA8A0695E52C0A3AAF7C3FE2C35407DF5AE1A6C5E52C0BC878F10022D3540440BFC846D5E52C0F3CC419F0C2D3540500DD2926B5E52C001949FD1192D3540BBE137BE685E52C0DDCA4B751C2D3540AC6E3481675E52C0162B1DDC152D354001030000000100000007000000419ACE556A5E52C026AFA003C82D35408EF95A36685E52C0793C0DB7C42D3540BBE137BE685E52C0C0668FC1C02D3540FB3C18836A5E52C07B202723BC2D3540C25265ED6B5E52C0DC7511CCBC2D35405F80D5CF6C5E52C025C4BA6FBF2D3540419ACE556A5E52C026AFA003C82D3540010300000001000000080000002AB69DE9655E52C0D6D24492D22D3540958A0315635E52C0AFD313CFDB2D35402D4746C8605E52C060F6D7DED52D35402D4746C8605E52C0EE587040D12D3540C874B6AA615E52C021531EF9CB2D3540214570BA625E52C026CA49A7CA2D3540B7700A8F655E52C0EE587040D12D35402AB69DE9655E52C0D6D24492D22D354001030000000100000008000000BE72E09C635E52C08D1B6828BA2D3540552F2350615E52C037CA3C7ABB2D354073A4FC9A605E52C037CA3C7ABB2D35407AA6D2A85E5E52C0DA4215E1B42D35407AA6D2A85E5E52C055C46B3DB22D35400ED26C7D615E52C0AF3B2E4DAC2D354007D0966F635E52C07C9DAC42B02D3540BE72E09C635E52C08D1B6828BA2D354001030000000100000008000000E358E716665E52C005435C10A32D35404E2D4D42635E52C04EE89C15A12D3540214570BA625E52C0A386DD1A9F2D3540214570BA625E52C05733747C9A2D3540DCE7B9E7625E52C0DFAE603A932D3540A3FD0652645E52C002334BE3932D3540E358E716665E52C05733747C9A2D3540E358E716665E52C005435C10A32D3540010300000001000000090000006B33CF6B5D5E52C07FB6358C942D3540F8ED3B115D5E52C05A1E1E209D2D3540CB055F895C5E52C0955C87BEA12D3540D60735975A5E52C06F263162A42D35409AAC54D2585E52C04EE89C15A12D3540534F9EFF585E52C03B3CCAD8972D35408FAA7EC45A5E52C0DFAE603A932D3540F8ED3B115D5E52C0022A7691922D35406B33CF6B5D5E52C07FB6358C942D3540010300000001000000590000001CE51A5EEA5D52C0DAA0646C3D2C35400E92C21CEA5D52C0040E7627502C35408D753C8FE95D52C096898F9E5F2C35408D753C8FE95D52C0DB184A45752C35401D04DB52EC5D52C0BD0B7FAC822C35407B2FDB20F25D52C00578832B932C35401A699E35F85D52C055B5B592A02C3540B669552FFD5D52C073C8C609B02C3540546A0C29025E52C0A93DD680BF2C3540A423F4C0055E52C0843BA317D32C3540FADCDB58095E52C083D7871DF52C35403AEB9E9F095E52C0C7BB4DB4082D35405CDC245F045E52C08F41BD72212D3540BEA2614AFE5D52C01B5204CA2C2D3540FA125593F15D52C0781B7A92252D35400E92C21CEA5D52C01D0AB8FB112D354085D76C91DC5D52C09160F364FE2C35409E56DA1AD55D52C0504ED274002D35400A2A6C59C55D52C0EA9F6423172D354026E2E5FDBE5D52C09FF8AFF1312D354087A822E9B85D52C01B7F5C07562D3540297D221BB35D52C0791D8BDD712D3540830A53EBAB5D52C06F04C6AB8C2D35409050B459A35D52C0867416FB962D354019DCBF3C8D5D52C03C4E8654812D3540E1A1452E825D52C0F5137D6E632D3540FD59BFD27B5D52C0BD943929392D3540544CB385805D52C06352751B162D3540F985769A865D52C07E6B1455FC2C3540E1A1452E825D52C0739B0067DD2C3540268451AD775D52C031BB5641B72C3540BBE638A96F5D52C04EA7245B992C3540AA3B14586C5D52C0FAA6BD8C7E2C354021E681AF6A5D52C0C01C80A6602C35403DFA3090695D52C06B4BBA644E2C3540376A989E6C5D52C04143A5FD4D2C3540F9BBEFD46E5D52C0B372C6056D2C3540C11F45C4705D52C0ED5240CC862C3540CE915DFA725D52C070E4633B952C3540E6758E66775D52C0376946CAA72C35407E7645607C5D52C0FCB14649B82C3540544CB385805D52C0A32345C8C82C3540B13EA738855D52C0334EF06EDE2C3540B877B353865D52C060FD7DA6E52C354001F88ED0885D52C061C2C17C012D354079A2FC27875D52C051460BD40C2D354022B00875825D52C06E06CE6A202D354086AF517B7D5D52C060715B19372D3540DA683913815D52C03DBE4B98472D3540EA135E64845D52C08F5A4B0F572D3540C822D8A4895D52C05E8D159E692D35405EEA82838D5D52C0791D8BDD712D3540F3B12D62915D52C0ED9A1115792D354054163A4B985D52C03C4E8654812D3540733377D29D5D52C0A97B4074852D3540D45E77A0A35D52C0CA8BFA93892D3540A5FBD8AAA65D52C0CA8BFA93892D3540F6B4C042AA5D52C038BE974C802D3540CA51224DAD5D52C03515BFC56E2D3540A2609C8DB25D52C022FFA0E7512D3540806F16CEB75D52C0BDB017393B2D3540D528FE65BB5D52C01B5204CA2C2D35402D1BF218C05D52C06CC321431B2D354003F15F3EC45D52C068A4FADB0D2D3540611C600CCA5D52C04FD8E26CFF2C35408DABB5C9D15D52C04AC1A80DF32C3540237360A8D55D52C04AC1A80DF32C35405874CE9BDF5D52C04AC1A80DF32C3540B79FCE69E55D52C0D9ED453DF92C3540DCF5170CEC5D52C0B3139094042D3540F3D94878F05D52C0EC5AD9EB0F2D35400ABE79E4F45D52C0A2EB532B182D354021A2AA50F95D52C099C9DE621F2D35407D949E03FE5D52C06E06CE6A202D3540CE4D869B015E52C059354333192D354097B1DB8A035E52C0BA842CC40A2D35405CDC245F045E52C0E46E3545FA2C3540DCBF9ED1035E52C0BD1E2CCEEA2C35408706B739005E52C069BE4147D92C3540364DCFA1FC5D52C0B0D024D8CA2C35401A699E35F85D52C0E9992659BA2C3540BC3D9E67F25D52C028CCB611B12C354016CBCE37EB5D52C00E3F66BAA52C3540F1748595E45D52C0F2175443962C35408B1079ACDD5D52C0F25C9E9C802C3540B201FF6BD85D52C09DF5D5FD6B2C35409E56DA1AD55D52C04DF0EB6E592C354065BF3287D25D52C0C5A27490402C35401CE51A5EEA5D52C0DAA0646C3D2C35400103000000010000000C0000007F1978A7435D52C0866C0B347E2E3540F83E806D435D52C0EA17D41C712E3540C30674C4435D52C0DAC5696C6F2E3540C30674C4435D52C0FFB12A5B6A2E35406183B033495D52C00E1910EF692E354008C887554A5D52C0B6ABEE88712E3540E9F95A944B5D52C0CD2E7DDE772E3540FAAE4A084C5D52C05BC4146D822E3540C0DA8B384A5D52C03A19918F8C2E3540A9384703455D52C06F1727DF8A2E35407F1978A7435D52C06EF4E8CD852E35407F1978A7435D52C0866C0B347E2E35400103000000010000000D00000078B8E398855D52C037BB655D472F3540FD01230F825D52C03A4D4E06482F3540E38C49C4825D52C08F0D96C93E2F3540D88A73B6845D52C039E0C535362F354054413440885D52C000E3DD4A2E2F3540859A3EF78B5D52C00D9352BC232F35400051FF808F5D52C0FF48AFD6192F354008C22CB0925D52C0F263973D132F3540E04A7D57955D52C018CA5138152F35403F1D0D75945D52C0E2A0AF18212F35402D39DC08905D52C01D213BA72B2F3540859A3EF78B5D52C0F639DD8C352F354078B8E398855D52C037BB655D472F35400103000000010000000E0000001306CF2A7E5D52C09D191BDC572F3540427F5491795D52C080075C65642F354093DEE071775D52C096ED11A26D2F3540538300AD755D52C00C1ECB9C6F2F3540DDCC3F23725D52C0DEC9253B742F3540AFE4629B715D52C03DA96C40722F35404F12D37D725D52C0AF8629F96C2F354071F8D9F7745D52C098B0A26A622F3540C6C89307765D52C06983767A5C2F3540BCC6BDF9775D52C02B194A8A562F354051F257CE7A5D52C0BC4C7BF64D2F35402C7BA8757D5D52C059DE36AF482F354095BE65C27F5D52C07C8DF0A94A2F35401306CF2A7E5D52C09D191BDC572F35400103000000010000000D000000B2750B7A6C5D52C037AA6882792F3540CBEAE4C46B5D52C09B3E1DBF822F354062A72778695D52C045E247AF882F35408C1ED7D0665D52C0F848729F8E2F3540F7F23CFC635D52C080729C8F942F35404E549FEA5F5D52C04B2667239D2F35400486BBE85C5D52C05E0EF06FA02F35409140288E5C5D52C04B2667239D2F3540A82459FA605D52C06E461343912F3540AC958629645D52C045E247AF882F35405F36FA48665D52C08D26D6B9842F354062A72778695D52C0D4B2DA777D2F3540B2750B7A6C5D52C037AA6882792F35400103000000010000000D0000005B0F4B404F5D52C0914600DDBD2F35400F474B124C5D52C044D424CDB92F3540C5DBFEB14D5D52C0857672FEAA2F35400137DF764F5D52C0B6801960A62F35404092BF3B515D52C0FD65C0C1A12F3540B84880C5545D52C0698537759E2F3540071764C7575D52C04B2667239D2F3540168A6704595D52C029564FCC9D2F3540CF2CB131595D52C0C1CAE9B1A72F354094D1D06C575D52C0B2965AA7AB2F3540E5305D4D555D52C08847CB9CAF2F3540EB32335B535D52C017DD3B92B32F35405B0F4B404F5D52C0914600DDBD2F3540	0101000020E61000009AA10A279D5E52C025E929772C2C3540	\N
+2	1	PS1	\N	0106000020E61000000100000001030000000100000005000000D0381DA8C3484340889607A5E6662F4004177F2C4C4A4340C837B10F44432F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 20:34:23.36261+00	\N	6788.4	3	\N	0101000020E6100000D0381DA8C3484340C837B10F44432F40	ER
+3	1	PS2	\N	0106000020E6100000010000000103000000010000000500000084021CDBBE374340E0B4497C6D742F40D4F9485E6F3643409002C09245472F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F4084021CDBBE374340E0B4497C6D742F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 20:34:32.772807+00	\N	4091.0	3	\N	0101000020E6100000D4F9485E6F3643409002C09245472F40	ER
 \.
 
 
@@ -13467,6 +13860,11 @@ COPY tracking.planting_subzone_histories (id, planting_zone_history_id, planting
 2	1	3	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	92.8	East-North
 3	2	2	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	84.5	West-South
 4	2	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540	91.3	West-North
+5	3	5	Subzone A	Zone 01-Subzone A	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	3624.2	Zone 01-Subzone A
+6	4	6	Subzone A	Zone 02-Subzone A	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	3164.6	Zone 02-Subzone A
+7	5	7	Subzone A	Zone 01-Subzone A	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1499.0	Zone 01-Subzone A
+8	6	8	Subzone A	Zone 02-Subzone A	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	316.9	Zone 02-Subzone A
+9	7	9	Subzone A	Zone 03-Subzone A	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	2275.1	Zone 03-Subzone A
 \.
 
 
@@ -13475,6 +13873,8 @@ COPY tracking.planting_subzone_histories (id, planting_zone_history_id, planting
 --
 
 COPY tracking.planting_subzone_populations (planting_subzone_id, species_id, total_plants, plants_since_last_observation) FROM stdin;
+5	3	100	100
+7	3	100	0
 \.
 
 
@@ -13487,6 +13887,11 @@ COPY tracking.planting_subzones (id, planting_zone_id, name, full_name, boundary
 2	1	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	85.3	\N	\N	West-South
 3	2	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.0	\N	\N	East-North
 4	2	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.4	\N	\N	East-South
+5	3	Subzone A	Zone 01-Subzone A	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	2	3624.2	\N	\N	Zone 01-Subzone A
+6	4	Subzone A	Zone 02-Subzone A	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	2	3164.6	\N	\N	Zone 02-Subzone A
+9	7	Subzone A	Zone 03-Subzone A	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:29.255691+00	3	2275.1	\N	2025-05-29 18:50:29+00	Zone 03-Subzone A
+7	5	Subzone A	Zone 01-Subzone A	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:28.246998+00	3	1499.0	\N	2025-05-29 18:50:28+00	Zone 01-Subzone A
+8	6	Subzone A	Zone 02-Subzone A	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:50:28.529262+00	3	316.9	\N	2025-05-29 18:50:28+00	Zone 02-Subzone A
 \.
 
 
@@ -13509,6 +13914,11 @@ COPY tracking.planting_types (id, name) FROM stdin;
 COPY tracking.planting_zone_histories (id, planting_site_history_id, planting_zone_id, name, boundary, area_ha, stable_id) FROM stdin;
 1	1	2	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	182.2	East
 2	1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	175.8	West
+3	2	3	Zone 01	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	3624.2	Zone 01
+4	2	4	Zone 02	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	3164.6	Zone 02
+5	3	5	Zone 01	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1499.0	Zone 01
+6	3	6	Zone 02	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	316.9	Zone 02
+7	3	7	Zone 03	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	2275.1	Zone 03
 \.
 
 
@@ -13517,6 +13927,8 @@ COPY tracking.planting_zone_histories (id, planting_site_history_id, planting_zo
 --
 
 COPY tracking.planting_zone_populations (planting_zone_id, species_id, total_plants, plants_since_last_observation) FROM stdin;
+3	3	100	100
+5	3	100	0
 \.
 
 
@@ -13527,6 +13939,11 @@ COPY tracking.planting_zone_populations (planting_zone_id, species_id, total_pla
 COPY tracking.planting_zones (id, planting_site_id, name, boundary, created_by, created_time, modified_by, modified_time, variance, students_t, error_margin, num_permanent_plots, num_temporary_plots, area_ha, target_planting_density, boundary_modified_by, boundary_modified_time, stable_id) FROM stdin;
 1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	5	2	179.7	1500	1	2024-03-06 18:56:18.746285+00	West
 2	1	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	5	2	194.4	1500	1	2024-03-06 18:56:18.746285+00	East
+3	2	Zone 01	0106000020E61000000200000001030000000100000007000000D0381DA8C3484340889607A5E6662F40A4E10EBBC44843407ECCFDAECD662F40042F4ACD6D4C434068F110B2E46B2F409816629A1650434074E65B27C04D2F40B81F8361AB564340F815919EAA592F400038BABB2B514340F83E6571B5722F40D0381DA8C3484340889607A5E6662F40010300000001000000040000008756D5DBCC4843400E9433C710662F4004177F2C4C4A4340C837B10F44432F40E8A9E623524A43400E9D37DD4E432F408756D5DBCC4843400E9433C710662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	40000	1.645	100	8	3	3624.2	1500	1	2025-05-29 18:45:59.772576+00	Zone 01
+4	2	Zone 02	0106000020E61000000100000001030000000100000006000000A4E10EBBC44843407ECCFDAECD662F408756D5DBCC4843400E9433C710662F40E8A9E623524A43400E9D37DD4E432F409816629A1650434074E65B27C04D2F40042F4ACD6D4C434068F110B2E46B2F40A4E10EBBC44843407ECCFDAECD662F40	1	2025-05-29 18:45:59.772576+00	1	2025-05-29 18:45:59.772576+00	40000	1.645	100	8	3	3164.6	1500	1	2025-05-29 18:45:59.772576+00	Zone 02
+5	3	Zone 01	0106000020E61000000200000001030000000100000004000000D4F9485E6F3643409002C09245472F40ACB08F477436434098ADC79949472F40BF0284C7A5364340F2D8EB6A984E2F40D4F9485E6F3643409002C09245472F400103000000010000000B0000003FBE32D2D5364340882D38CB0F552F40183F57FAA23D4340908DBDCE3E5C2F40974FB1EB1A414340752F839505502F40C83EA43D20414340301B61F209502F405C1AD258783B434020F4AE18F6632F401F0145248139434047A107C5A66C2F4004CCF01B1A3A434098F168D6F1692F40ACC5CA905D374340B0ECFA7B22672F40D1679A57C5374340AE793CCF50742F4084021CDBBE374340E0B4497C6D742F403FBE32D2D5364340882D38CB0F552F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	1499.0	1500	1	2025-05-29 18:47:48.579314+00	Zone 01
+6	3	Zone 02	0106000020E61000000100000001030000000100000005000000ACC5CA905D374340B0ECFA7B22672F4004CCF01B1A3A434098F168D6F1692F401F0145248139434047A107C5A66C2F40D1679A57C5374340AE793CCF50742F40ACC5CA905D374340B0ECFA7B22672F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	316.9	1500	1	2025-05-29 18:47:48.579314+00	Zone 02
+7	3	Zone 03	0106000020E61000000100000001030000000100000006000000ACB08F477436434098ADC79949472F40974FB1EB1A414340752F839505502F40183F57FAA23D4340908DBDCE3E5C2F403FBE32D2D5364340882D38CB0F552F40BF0284C7A5364340F2D8EB6A984E2F40ACB08F477436434098ADC79949472F40	1	2025-05-29 18:47:48.579314+00	1	2025-05-29 18:47:48.579314+00	40000	1.645	100	8	3	2275.1	1500	1	2025-05-29 18:47:48.579314+00	Zone 03
 \.
 
 
@@ -13535,6 +13952,8 @@ COPY tracking.planting_zones (id, planting_site_id, name, boundary, created_by, 
 --
 
 COPY tracking.plantings (id, delivery_id, planting_type_id, planting_site_id, planting_subzone_id, species_id, created_by, created_time, num_plants, notes) FROM stdin;
+1	1	1	2	5	3	1	2025-05-29 18:49:06.017294+00	100	\N
+2	2	1	3	7	3	1	2025-05-29 18:49:17.969801+00	100	\N
 \.
 
 
@@ -13554,6 +13973,3719 @@ COPY tracking.recorded_plant_statuses (id, name) FROM stdin;
 --
 
 COPY tracking.recorded_plants (id, observation_id, monitoring_plot_id, certainty_id, gps_coordinates, species_id, species_name, status_id) FROM stdin;
+1	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+4	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+5	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+6	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+7	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+8	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+9	1	5162	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+10	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+11	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+12	1	5162	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+13	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+14	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+15	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+16	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+17	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+18	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+19	1	5162	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+20	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+21	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+22	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+23	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+24	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+25	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+26	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+27	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+28	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+29	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+30	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+31	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+32	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+33	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+34	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+35	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+36	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+37	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+38	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+39	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+40	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+41	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+42	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+43	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+44	1	5162	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+45	1	5162	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+46	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+47	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+48	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+49	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+50	1	5162	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+51	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+52	1	5162	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+53	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+54	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+55	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+56	1	5162	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+57	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+58	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+59	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+60	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+61	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+62	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+63	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+64	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+65	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+66	1	5162	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+67	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+68	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+69	1	5162	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+70	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+71	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+72	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+73	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+74	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+75	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+76	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+77	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+78	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+79	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+80	1	5162	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+81	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+82	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+83	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+84	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+85	1	5162	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+86	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+87	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+88	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+89	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+90	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+91	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+92	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+93	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+94	1	5163	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+95	1	5163	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+96	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+97	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+98	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+99	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+100	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+101	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+102	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+103	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+104	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+105	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+106	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+107	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+108	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+109	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+110	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+111	1	5163	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+112	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+113	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+114	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+115	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+116	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+117	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+118	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+119	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+120	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+121	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+122	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+123	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+124	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+125	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+126	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+127	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+128	1	5163	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+129	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+130	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+131	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+132	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+133	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+134	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+135	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+136	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+137	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+138	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+139	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+140	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+141	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+142	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+143	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+144	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+145	1	5163	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+146	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+147	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+148	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+149	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+150	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+151	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+152	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+153	1	5163	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+154	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+155	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+156	1	5163	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+157	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+158	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+159	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+160	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+161	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+162	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+163	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+164	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+165	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+166	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+167	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+168	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+169	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+170	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+171	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+172	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+173	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+174	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+175	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+176	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+177	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+178	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+179	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+180	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+181	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+182	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+183	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+184	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+185	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+186	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+187	1	5163	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+188	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+189	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+190	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+191	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+192	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+193	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+194	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+195	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+196	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+197	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+198	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+199	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+200	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+201	1	5163	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+202	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+203	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+204	1	5164	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+205	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+206	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+207	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+208	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+209	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+210	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+211	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+212	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+213	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+214	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+215	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+216	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+217	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+218	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+219	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+220	1	5164	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+221	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+222	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+223	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+224	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+225	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+226	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+227	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+228	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+229	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+230	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+231	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+232	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+233	1	5164	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	2
+234	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+235	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+236	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+237	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+238	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+239	1	5164	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+240	1	5164	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+241	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+242	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+243	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+244	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+245	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+246	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+247	1	5164	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+248	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+249	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+250	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+251	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+252	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+253	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+254	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+255	1	5164	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+256	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+257	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+258	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+259	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+260	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+261	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+262	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+263	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+264	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+265	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+266	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+267	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+268	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+269	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+270	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+271	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+272	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+273	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+274	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+275	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+276	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+277	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+278	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+279	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+280	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+281	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+282	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+283	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+284	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+285	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+286	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+287	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+288	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+289	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+290	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+291	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+292	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+293	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+294	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+295	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+296	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+297	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+298	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+299	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+300	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+301	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+302	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+303	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+304	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+305	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+306	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+307	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+308	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+309	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+310	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+311	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+312	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+313	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+314	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+315	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+316	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+317	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+318	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+319	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+320	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+321	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+322	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+323	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+324	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+325	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+326	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+327	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+328	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+329	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+330	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+331	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+332	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+333	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+334	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+335	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+336	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+337	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+338	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+339	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+340	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+341	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+342	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+343	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+344	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+345	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+346	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+347	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+348	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+349	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+350	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+351	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+352	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+353	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+354	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+355	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+356	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+357	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+358	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+359	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+360	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+361	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+362	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+363	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+364	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+365	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+366	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+367	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+368	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+369	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+370	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+371	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+372	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+373	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+374	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+375	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+376	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+377	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+378	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+379	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+380	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+381	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+382	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+383	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+384	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+385	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+386	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+387	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+388	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+389	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+390	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+391	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+392	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+393	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+394	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+395	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+396	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+397	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+398	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+399	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+400	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+401	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+402	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+403	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+404	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+405	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+406	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+407	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+408	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+409	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+410	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+411	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+412	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+413	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+414	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+415	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+416	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+417	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+418	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+419	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+420	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+421	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+422	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+423	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+424	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+425	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+426	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+427	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+428	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+429	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+430	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+431	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+432	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+433	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+434	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+435	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+436	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+437	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+438	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+439	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+440	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+441	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+442	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+443	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+444	1	5165	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+445	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+446	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+447	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+448	1	5165	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+449	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+450	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+451	1	5165	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+452	1	5166	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+453	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+454	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+455	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+456	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+457	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+458	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+459	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+460	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+461	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+462	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+463	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+464	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+465	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+466	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+467	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+468	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+469	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+470	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+471	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+472	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+473	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+474	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+475	1	5166	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+476	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+477	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+478	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+479	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+480	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+481	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+482	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+483	1	5166	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+484	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+485	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+486	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+487	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+488	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+489	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+490	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+491	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+492	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+493	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+494	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+495	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+496	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+497	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+498	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+499	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+500	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+501	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+502	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+503	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+504	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+505	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+506	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+507	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+508	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+509	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+510	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+511	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+512	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+513	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+514	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+515	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+516	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+517	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+518	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+519	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+520	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+521	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+522	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+523	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+524	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+525	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+526	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+527	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+528	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+529	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+530	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+531	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+532	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+533	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+534	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+535	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+536	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+537	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+538	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+539	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+540	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+541	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+542	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+543	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+544	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+545	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+546	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+547	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+548	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+549	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+550	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+551	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+552	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+553	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+554	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+555	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+556	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+557	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+558	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+559	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	3
+560	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+561	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+562	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+563	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+564	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+565	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+566	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+567	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+568	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+569	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+570	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+571	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+572	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+573	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+574	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+575	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+576	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+577	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+578	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+579	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+580	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+581	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+582	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+583	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+584	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+585	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+586	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+587	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+588	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+589	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+590	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+591	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+592	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+593	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+594	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+595	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+596	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+597	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+598	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+599	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+600	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+601	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+602	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+603	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+604	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+605	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+606	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+607	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+608	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+609	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+610	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+611	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+612	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+613	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+614	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+615	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+616	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+617	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+618	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+619	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+620	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+621	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+622	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+623	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+624	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+625	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+626	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+627	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+628	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+629	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+630	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+631	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+632	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+633	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+634	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+635	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+636	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+637	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+638	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+639	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+640	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+641	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+642	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+643	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+644	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+645	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+646	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+647	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+648	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+649	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+650	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+651	1	5167	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	3
+652	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+653	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+654	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+655	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+656	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+657	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+658	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+659	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+660	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+661	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+662	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+663	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+664	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+665	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+666	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+667	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+668	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+669	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+670	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+671	1	5167	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+672	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+673	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+674	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+675	1	5167	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+676	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+677	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+678	1	5168	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+679	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+680	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+681	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+682	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+683	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+684	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+685	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+686	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+687	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+688	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+689	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+690	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+691	1	5168	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+692	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+693	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+694	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+695	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+696	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+697	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+698	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+699	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+700	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+701	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+702	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+703	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+704	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+705	1	5168	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+706	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+707	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+708	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+709	1	5168	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+710	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+711	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+712	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+713	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+714	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+715	1	5168	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+716	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+717	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+718	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+719	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+720	1	5168	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+721	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+722	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+723	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+724	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+725	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+726	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+727	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+728	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+729	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+730	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+731	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+732	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+733	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+734	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+735	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+736	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+737	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+738	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+739	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+740	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+741	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+742	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+743	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+744	1	5168	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	2
+745	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+746	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+747	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+748	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+749	1	5168	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+750	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+751	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+752	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+753	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+754	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+755	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+756	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+757	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+758	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+759	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+760	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+761	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+762	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+763	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+764	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+765	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+766	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+767	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+768	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+769	1	5168	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+770	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+771	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+772	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+773	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+774	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+775	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+776	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+777	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+778	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+779	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+780	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+781	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+782	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+783	1	5168	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+784	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+785	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+786	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+787	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+788	1	5168	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	3
+789	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+790	1	5168	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+791	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+792	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+793	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+794	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+795	1	5168	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+796	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+797	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+798	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+799	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+800	1	5168	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+801	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+802	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+803	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+804	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+805	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+806	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+807	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+808	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+809	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+810	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+811	1	5168	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+812	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+813	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+814	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+815	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+816	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+817	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+818	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+819	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+820	1	5169	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+821	1	5169	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+822	1	5169	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+823	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+824	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+825	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+826	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+827	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+828	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+829	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+830	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+831	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+832	1	5169	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+833	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+834	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+835	1	5169	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+836	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+837	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+838	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+839	1	5169	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+840	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+841	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+842	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+843	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+844	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+845	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+846	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+847	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+848	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+849	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+850	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+851	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+852	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+853	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+854	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+855	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+856	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+857	1	5169	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+858	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+859	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+860	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+861	1	5170	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+862	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+863	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+864	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+865	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+866	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+867	1	5170	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+868	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+869	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+870	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+871	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+872	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+873	1	5170	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+874	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+875	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+876	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+877	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+878	1	5170	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+879	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+880	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+881	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+882	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+883	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+884	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+885	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+886	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+887	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+888	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+889	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+890	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+891	1	5170	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+892	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+893	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+894	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+895	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+896	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+897	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+898	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+899	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+900	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+901	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+902	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+903	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+904	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+905	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+906	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+907	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+908	1	5170	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+909	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+910	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+911	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+912	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+913	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+914	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+915	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+916	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+917	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+918	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+919	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+920	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+921	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+922	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+923	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+924	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+925	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+926	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+927	1	5170	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+928	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+929	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+930	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+931	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+932	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+933	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+934	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+935	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+936	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+937	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+938	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+939	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+940	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+941	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+942	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+943	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+944	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+945	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+946	1	5170	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+947	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+948	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+949	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+950	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+951	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+952	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+953	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+954	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+955	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+956	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+957	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+958	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+959	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+960	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+961	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+962	1	5170	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+963	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+964	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+965	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+966	1	5170	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+967	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+968	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+969	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+970	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+971	1	5171	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	2
+972	1	5171	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	2
+973	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+974	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+975	1	5171	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+976	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+977	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+978	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+979	1	5171	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+980	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+981	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+982	1	5171	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+983	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+984	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+985	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+986	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+987	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+988	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+989	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+990	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+991	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+992	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+993	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+994	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+995	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+996	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+997	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+998	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+999	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1000	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1001	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1002	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1003	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1004	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1005	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1006	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1007	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1008	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1009	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1010	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1011	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1012	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1013	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1014	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1015	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1016	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1017	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1018	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1019	1	5171	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1020	1	5171	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1021	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1022	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1023	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1024	1	5171	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1025	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1026	1	5171	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+1027	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1028	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1029	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1030	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1031	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1032	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1033	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1034	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1035	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1036	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1037	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1038	1	5171	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+1039	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1040	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1041	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1042	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1043	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1044	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1045	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1046	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1047	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1048	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1049	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1050	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1051	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1052	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1053	1	5171	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1054	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1055	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1056	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1057	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1058	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1059	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1060	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1061	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1062	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1063	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1064	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1065	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1066	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1067	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1068	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1069	1	5171	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1070	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1071	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1072	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1073	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1074	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1075	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1076	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1077	1	5171	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	3
+1078	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1079	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1080	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1081	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1082	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1083	1	5171	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1084	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1085	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1086	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1087	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1088	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1089	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1090	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1091	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1092	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1093	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1094	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1095	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1096	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1097	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1098	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1099	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1100	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1101	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1102	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1103	1	5171	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1104	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1105	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1106	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1107	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1108	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1109	1	5172	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+1110	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1111	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1112	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1113	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1114	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1115	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1116	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1117	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1118	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1119	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1120	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1121	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1122	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1123	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1124	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1125	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1126	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1127	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1128	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1129	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1130	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1131	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1132	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1133	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1134	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1135	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1136	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1137	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1138	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1139	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1140	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1141	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1142	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1143	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1144	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1145	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1146	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1147	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1148	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1149	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1150	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1151	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1152	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1153	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1154	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1155	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1156	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1157	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1158	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1159	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1160	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1161	1	5172	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+1162	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1163	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1164	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1165	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1166	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1167	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1168	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+1169	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1170	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1171	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1172	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1173	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1174	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1175	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1176	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1177	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1178	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1179	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1180	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1181	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1182	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1183	1	5172	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+1184	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1185	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1186	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1187	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1188	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1189	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1190	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1191	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1192	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1193	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1194	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1195	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1196	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1197	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1198	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1199	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1200	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1201	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1202	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1203	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1204	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1205	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1206	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1207	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1208	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1209	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1210	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1211	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1212	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1213	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1214	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1215	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1216	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1217	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1218	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1219	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1220	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1221	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1222	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1223	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1224	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1225	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1226	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1227	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1228	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1229	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1230	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1231	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1232	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1233	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1234	1	5172	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+1235	1	5172	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1236	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1237	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1238	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1239	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1240	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1241	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1242	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1243	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1244	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1245	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1246	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1247	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1248	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1249	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1250	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1251	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1252	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1253	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1254	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1255	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1256	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1257	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1258	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1259	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1260	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1261	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1262	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1263	1	5173	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1264	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1265	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1266	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1267	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1268	1	5173	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1269	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1270	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1271	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1272	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1273	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1274	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1275	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1276	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1277	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1278	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1279	1	5173	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+1280	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1281	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1282	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1283	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1284	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1285	1	5173	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+1286	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1287	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1288	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1289	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1290	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1291	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1292	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1293	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1294	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1295	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1296	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1297	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1298	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1299	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1300	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1301	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1302	1	5173	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1303	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1304	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1305	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1306	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1307	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1308	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1309	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1310	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1311	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1312	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1313	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1314	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1315	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1316	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1317	1	5173	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1318	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1319	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1320	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1321	1	5174	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+1322	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1323	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1324	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1325	1	5174	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1326	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1327	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1328	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1329	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1330	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1331	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1332	1	5174	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1333	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1334	1	5174	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1335	1	5174	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+1336	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1337	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1338	1	5174	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+1339	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1340	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1341	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1342	1	5174	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+1343	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1344	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1345	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1346	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1347	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1348	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1349	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1350	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1351	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1352	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1353	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1354	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1355	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1356	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1357	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1358	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1359	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1360	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1361	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1362	1	5174	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1363	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1364	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1365	1	5174	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+1366	1	5174	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1367	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1368	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1369	1	5174	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+1370	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1371	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1372	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1373	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1374	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1375	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1376	1	5174	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1377	1	5175	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1378	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1379	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1380	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1381	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1382	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1383	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1384	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1385	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1386	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1387	1	5175	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1388	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1389	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1390	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1391	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1392	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1393	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1394	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1395	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1396	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1397	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1398	1	5175	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1399	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1400	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1401	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1402	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1403	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1404	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1405	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1406	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1407	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1408	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1409	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1410	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1411	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1412	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1413	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1414	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1415	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1416	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1417	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1418	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1419	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1420	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1421	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1422	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1423	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1424	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1425	1	5175	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	3
+1426	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1427	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1428	1	5175	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1429	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1430	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1431	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1432	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1433	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1434	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1435	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1436	1	5175	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+1437	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1438	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1439	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1440	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1441	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1442	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1443	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1444	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1445	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1446	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1447	1	5175	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1448	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1449	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1450	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1451	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1452	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1453	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1454	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1455	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1456	1	5175	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1457	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1458	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1459	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1460	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1461	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1462	1	5175	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1463	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1464	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1465	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1466	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1467	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1468	1	5176	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+1469	1	5176	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	2
+1470	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1471	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1472	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1473	1	5176	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+1474	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1475	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1476	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1477	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1478	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1479	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1480	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1481	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1482	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1483	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1484	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1485	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1486	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1487	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1488	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1489	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1490	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1491	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1492	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1493	1	5176	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1494	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1495	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1496	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1497	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1498	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1499	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1500	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1501	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1502	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1503	1	5176	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1504	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1505	1	5176	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1506	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1507	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1508	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1509	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1510	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1511	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1512	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1513	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1514	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1515	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1516	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1517	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1518	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1519	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1520	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1521	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1522	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1523	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1524	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1525	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1526	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1527	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1528	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1529	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1530	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1531	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1532	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1533	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1534	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1535	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1536	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1537	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1538	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1539	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1540	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1541	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1542	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1543	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1544	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1545	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1546	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1547	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1548	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1549	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1550	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1551	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1552	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1553	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1554	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1555	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1556	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1557	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1558	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1559	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1560	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1561	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1562	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1563	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1564	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1565	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1566	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1567	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1568	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1569	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1570	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1571	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1572	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1573	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1574	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1575	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1576	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1577	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1578	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1579	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1580	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1581	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1582	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1583	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1584	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1585	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1586	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1587	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1588	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1589	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1590	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1591	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1592	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1593	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1594	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1595	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1596	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1597	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1598	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1599	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1600	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1601	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1602	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1603	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+1604	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1605	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1606	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1607	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1608	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1609	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1610	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1611	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1612	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1613	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1614	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1615	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1616	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	2
+1617	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1618	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1619	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1620	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1621	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1622	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1623	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1624	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1625	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1626	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1627	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1628	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1629	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1630	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1631	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1632	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1633	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1634	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1635	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1636	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	2
+1637	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1638	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1639	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1640	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1641	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1642	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1643	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1644	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1645	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1646	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1647	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1648	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1649	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1650	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1651	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1652	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1653	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1654	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1655	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1656	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1657	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1658	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1659	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1660	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1661	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1662	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1663	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1664	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1665	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1666	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1667	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1668	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1669	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1670	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1671	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1672	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+1673	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1674	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1675	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1676	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1677	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1678	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1679	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1680	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1681	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1682	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1683	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1684	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1685	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1686	1	5177	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+1687	1	5177	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1688	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1689	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1690	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1691	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1692	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1693	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1694	1	5177	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1695	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1696	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1697	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1698	1	5178	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1699	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1700	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1701	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1702	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1703	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1704	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1705	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1706	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1707	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1708	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1709	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1710	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1711	1	5178	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1712	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1713	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1714	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1715	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1716	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1717	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1718	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1719	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1720	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1721	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1722	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1723	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1724	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1725	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1726	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1727	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1728	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1729	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1730	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1731	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1732	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1733	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1734	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1735	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1736	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1737	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1738	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1739	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1740	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1741	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1742	1	5178	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1743	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1744	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1745	1	5178	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1746	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1747	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1748	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1749	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1750	1	5178	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1751	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1752	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1753	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1754	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1755	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1756	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1757	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1758	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1759	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1760	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1761	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1762	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1763	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1764	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1765	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1766	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1767	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1768	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1769	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1770	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1771	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1772	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1773	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1774	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1775	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1776	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1777	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1778	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1779	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1780	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1781	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1782	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1783	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1784	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1785	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1786	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1787	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1788	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1789	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1790	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1791	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1792	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1793	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1794	1	5178	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+1795	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1796	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1797	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1798	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1799	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1800	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1801	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1802	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1803	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1804	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1805	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1806	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1807	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1808	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1809	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1810	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1811	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1812	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1813	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1814	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1815	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1816	1	5178	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1817	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1818	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1819	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1820	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1821	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1822	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1823	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1824	1	5178	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	3
+1825	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1826	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1827	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1828	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1829	1	5178	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+1830	1	5178	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1831	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1832	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1833	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1834	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1835	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1836	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1837	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1838	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1839	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1840	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1841	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1842	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1843	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1844	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1845	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1846	1	5178	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1847	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1848	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1849	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1850	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1851	1	5178	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1852	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1853	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1854	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1855	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1856	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1857	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1858	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1859	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1860	1	5178	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1861	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1862	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1863	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1864	1	5178	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1865	1	5178	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+1866	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1867	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1868	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1869	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+1870	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1871	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1872	1	5179	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1873	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1874	1	5179	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1875	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1876	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1877	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1878	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1879	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1880	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1881	1	5179	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+1882	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1883	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1884	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1885	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1886	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1887	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1888	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1889	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1890	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+1891	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1892	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1893	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1894	1	5179	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+1895	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1896	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1897	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1898	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1899	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1900	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1901	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1902	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1903	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1904	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1905	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1906	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1907	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1908	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1909	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1910	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1911	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1912	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1913	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1914	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1915	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1916	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1917	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1918	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1919	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1920	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1921	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1922	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1923	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1924	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1925	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1926	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1927	1	5179	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1928	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1929	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+1930	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1931	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1932	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1933	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1934	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1935	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1936	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1937	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1938	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1939	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1940	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1941	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1942	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1943	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1944	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1945	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1946	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1947	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1948	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1949	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1950	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1951	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1952	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1953	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1954	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1955	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1956	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1957	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1958	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1959	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1960	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1961	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1962	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1963	1	5180	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	3
+1964	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1965	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1966	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1967	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1968	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1969	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1970	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1971	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1972	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1973	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+1974	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1975	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1976	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+1977	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1978	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1979	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1980	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+1981	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1982	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1983	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1984	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1985	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1986	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+1987	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+1988	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1989	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1990	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1991	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1992	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+1993	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1994	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1995	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+1996	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+1997	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+1998	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+1999	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2000	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2001	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2002	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+2003	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2004	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2005	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+2006	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2007	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2008	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2009	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2010	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2011	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+2012	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2013	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2014	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2015	1	5180	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	3
+2016	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2017	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2018	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2019	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2020	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2021	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2022	1	5180	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+2023	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2024	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2025	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2026	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2027	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2028	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2029	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2030	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2031	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2032	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2033	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2034	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2035	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2036	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2037	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2038	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2039	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2040	1	5180	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2041	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2042	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2043	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2044	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2045	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2046	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2047	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2048	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2049	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2050	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2051	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2052	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2053	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2054	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2055	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2056	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2057	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2058	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2059	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2060	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2061	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2062	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2063	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2064	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2065	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2066	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2067	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2068	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2069	1	5180	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2070	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2071	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2072	1	5180	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2073	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2074	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2075	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2076	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2077	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2078	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2079	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2080	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2081	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2082	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2083	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2084	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2085	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2086	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2087	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2088	1	5180	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2089	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2090	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2091	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2092	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2093	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2094	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2095	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2096	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2097	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2098	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2099	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2100	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2101	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2102	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2103	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2104	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2105	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2106	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2107	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2108	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2109	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2110	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2111	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2112	1	5181	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2113	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2114	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2115	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2116	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2117	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2118	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2119	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2120	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2121	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2122	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2123	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2124	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	2
+2125	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2126	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2127	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2128	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2129	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2130	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2131	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2132	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2133	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2134	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2135	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2136	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2137	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2138	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2139	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2140	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2141	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2142	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2143	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2144	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2145	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2146	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2147	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2148	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2149	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2150	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2151	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2152	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2153	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2154	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2155	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2156	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2157	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2158	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2159	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2160	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2161	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2162	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2163	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2164	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2165	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2166	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2167	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2168	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2169	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2170	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2171	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2172	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2173	1	5181	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2174	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2175	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2176	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2177	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2178	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2179	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2180	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2181	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	2
+2182	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2183	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2184	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2185	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2186	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2187	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2188	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2189	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2190	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2191	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2192	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2193	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+2194	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2195	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2196	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+2197	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2198	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2199	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2200	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2201	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2202	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2203	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2204	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2205	1	5181	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2206	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2207	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2208	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2209	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2210	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2211	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2212	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2213	1	5181	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2214	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2215	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2216	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2217	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2218	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2219	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2220	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2221	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2222	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2223	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2224	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2225	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2226	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2227	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	2
+2228	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	2
+2229	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2230	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2231	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2232	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2233	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2234	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2235	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2236	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2237	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2238	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2239	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2240	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2241	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2242	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2243	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2244	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2245	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2246	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2247	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2248	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2249	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2250	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2251	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2252	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2253	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2254	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2255	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2256	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2257	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2258	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2259	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2260	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2261	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2262	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2263	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2264	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2265	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2266	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2267	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2268	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2269	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2270	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2271	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2272	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+2273	1	5181	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+2274	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2275	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2276	1	5181	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2277	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2278	1	5181	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+2279	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2280	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2281	1	5181	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2282	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2283	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2284	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2285	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2286	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2287	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2288	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2289	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2290	1	5182	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2291	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2292	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2293	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2294	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2295	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2296	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2297	1	5182	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2298	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2299	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2300	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2301	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2302	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2303	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2304	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2305	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2306	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2307	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2308	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2309	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2310	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2311	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2312	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2313	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2314	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2315	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2316	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2317	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2318	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2319	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2320	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	3
+2321	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2322	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2323	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2324	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2325	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2326	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2327	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2328	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2329	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2330	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2331	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2332	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2333	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2334	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2335	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2336	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2337	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2338	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2339	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2340	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2341	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2342	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2343	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2344	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2345	1	5182	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2346	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2347	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2348	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2349	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2350	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2351	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2352	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2353	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	3
+2354	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2355	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2356	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2357	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2358	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2359	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2360	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2361	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+2362	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	3
+2363	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2364	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2365	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2366	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2367	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2368	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2369	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2370	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2371	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2372	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2373	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2374	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2375	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2376	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2377	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2378	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2379	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2380	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2381	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2382	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2383	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2384	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2385	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2386	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2387	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2388	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2389	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2390	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2391	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2392	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2393	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2394	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2395	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2396	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2397	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2398	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2399	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2400	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2401	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2402	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2403	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2404	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2405	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2406	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2407	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2408	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2409	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2410	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2411	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2412	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2413	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+2414	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2415	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2416	1	5182	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2417	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2418	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2419	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2420	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2421	1	5182	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+2422	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2423	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2424	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2425	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2426	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2427	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2428	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2429	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2430	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2431	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2432	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2433	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2434	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2435	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2436	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2437	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2438	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2439	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2440	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2441	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+2442	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2443	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2444	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2445	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2446	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2447	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2448	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2449	1	5182	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2450	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2451	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+2452	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2453	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2454	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2455	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2456	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2457	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2458	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2459	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2460	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2461	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2462	1	5182	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+2463	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2464	1	5182	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2465	1	5182	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2466	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2467	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2468	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2469	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2470	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2471	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2472	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2473	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2474	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2475	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2476	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2477	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2478	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2479	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2480	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2481	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2482	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2483	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2484	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2485	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2486	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2487	1	5183	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2488	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2489	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2490	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2491	1	5183	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2492	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2493	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2494	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2495	1	5183	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2496	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2497	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2498	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2499	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2500	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2501	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2502	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2503	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2504	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2505	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2506	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2507	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2508	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2509	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2510	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2511	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2512	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2513	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2514	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2515	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2516	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2517	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2518	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2519	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2520	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2521	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2522	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2523	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2524	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2525	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2526	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2527	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2528	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2529	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2530	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2531	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2532	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2533	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2534	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2535	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2536	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2537	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2538	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2539	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2540	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2541	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2542	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2543	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2544	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2545	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2546	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2547	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2548	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2549	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2550	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2551	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2552	1	5183	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2553	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2554	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2555	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2556	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2557	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2558	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2559	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2560	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2561	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2562	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2563	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2564	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2565	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2566	1	5183	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2567	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2568	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2569	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2570	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2571	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2572	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2573	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2574	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2575	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2576	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2577	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2578	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2579	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2580	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2581	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2582	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2583	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2584	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2585	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2586	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2587	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2588	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2589	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2590	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2591	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2592	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2593	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2594	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2595	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2596	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2597	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2598	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2599	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2600	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2601	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2602	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2603	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2604	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2605	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2606	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2607	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+2608	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2609	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2610	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2611	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2612	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2613	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2614	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2615	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2616	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2617	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2618	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2619	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2620	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2621	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2622	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2623	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2624	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2625	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2626	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2627	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2628	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2629	1	5183	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2630	1	5183	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2631	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2632	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2633	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2634	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2635	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2636	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2637	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2638	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2639	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2640	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2641	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2642	1	5184	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	2
+2643	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2644	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2645	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2646	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2647	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2648	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2649	1	5184	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+2650	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2651	1	5184	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+2652	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2653	1	5184	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2654	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2655	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2656	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2657	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2658	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2659	1	5184	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2660	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2661	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2662	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2663	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2664	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2665	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2666	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2667	1	5184	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+2668	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2669	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2670	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2671	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2672	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2673	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2674	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2675	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2676	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2677	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2678	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2679	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2680	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2681	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2682	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2683	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2684	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2685	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2686	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2687	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2688	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2689	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2690	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2691	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2692	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2693	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2694	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2695	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2696	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2697	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2698	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2699	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2700	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2701	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2702	1	5184	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2703	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2704	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2705	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2706	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2707	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2708	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2709	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2710	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2711	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2712	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2713	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2714	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2715	1	5184	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+2716	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2717	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2718	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2719	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2720	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2721	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2722	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2723	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2724	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2725	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2726	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2727	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2728	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2729	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2730	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2731	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2732	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2733	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2734	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2735	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2736	1	5184	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2737	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2738	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2739	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2740	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2741	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2742	1	5184	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2743	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2744	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2745	1	5184	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2746	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2747	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2748	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2749	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2750	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2751	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2752	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2753	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2754	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2755	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2756	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2757	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2758	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2759	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2760	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2761	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2762	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2763	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2764	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2765	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2766	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2767	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2768	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2769	1	5184	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2770	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2771	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2772	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2773	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2774	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2775	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2776	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2777	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2778	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2779	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2780	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2781	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2782	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2783	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2784	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2785	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2786	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2787	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	3
+2788	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2789	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2790	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+2791	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2792	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2793	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2794	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2795	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2796	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2797	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2798	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2799	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2800	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2801	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2802	1	5185	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2803	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2804	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2805	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2806	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2807	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2808	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2809	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2810	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2811	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2812	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+2813	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2814	1	5185	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+2815	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2816	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2817	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2818	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2819	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2820	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2821	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2822	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2823	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2824	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2825	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2826	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2827	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2828	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2829	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2830	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2831	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2832	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2833	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2834	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2835	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2836	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2837	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2838	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2839	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2840	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2841	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2842	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2843	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2844	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2845	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2846	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2847	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2848	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2849	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2850	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2851	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2852	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2853	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2854	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2855	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2856	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2857	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2858	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2859	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2860	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2861	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2862	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2863	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2864	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2865	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2866	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2867	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2868	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2869	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2870	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2871	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2872	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2873	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2874	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2875	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2876	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2877	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2878	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2879	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2880	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2881	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2882	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2883	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2884	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2885	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2886	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2887	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+2888	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2889	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2890	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2891	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2892	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2893	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2894	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2895	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2896	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2897	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2898	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2899	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2900	1	5185	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+2901	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2902	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2903	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2904	1	5185	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2905	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2906	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2907	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2908	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2909	1	5185	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2910	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2911	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2912	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2913	1	5186	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+2914	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2915	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2916	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2917	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2918	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2919	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2920	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2921	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2922	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2923	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2924	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2925	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2926	1	5186	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2927	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2928	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2929	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2930	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2931	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2932	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2933	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2934	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2935	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2936	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2937	1	5186	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2938	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2939	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2940	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2941	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2942	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2943	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2944	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2945	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2946	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2947	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2948	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2949	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2950	1	5187	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+2951	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2952	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2953	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2954	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2955	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2956	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2957	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2958	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+2959	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2960	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+2961	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2962	1	5187	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+2963	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2964	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2965	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2966	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2967	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2968	1	5187	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2969	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2970	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2971	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2972	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2973	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2974	1	5187	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+2975	1	5187	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+2976	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2977	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+2978	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+2979	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+2980	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2981	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2982	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2983	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2984	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+2985	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2986	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+2987	1	5187	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+2988	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2989	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+2990	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2991	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2992	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+2993	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2994	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2995	1	5187	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+2996	1	5187	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+2997	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+2998	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+2999	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3000	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3001	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3002	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3003	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3004	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3005	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3006	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3007	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3008	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3009	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3010	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3011	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3012	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3013	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3014	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3015	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3016	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3017	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3018	1	5187	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3019	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3020	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3021	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3022	1	5187	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+3023	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3024	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3025	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3026	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3027	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3028	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3029	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3030	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3031	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3032	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3033	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3034	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3035	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3036	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3037	1	5187	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3038	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3039	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3040	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3041	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3042	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3043	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3044	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3045	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3046	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3047	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3048	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3049	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3050	1	5188	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+3051	1	5188	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+3052	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3053	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3054	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3055	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3056	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3057	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3058	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3059	1	5188	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3060	1	5188	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3061	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3062	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3063	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3064	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3065	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3066	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3067	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3068	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3069	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3070	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3071	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3072	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3073	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3074	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3075	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3076	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3077	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3078	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3079	1	5188	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	2
+3080	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3081	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3082	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3083	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3084	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3085	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3086	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3087	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3088	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3089	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3090	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3091	1	5188	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3092	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3093	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3094	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3095	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3096	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3097	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3098	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3099	1	5188	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3100	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3101	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3102	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3103	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3104	1	5188	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3105	1	5188	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3106	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3107	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3108	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3109	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3110	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3111	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3112	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3113	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3114	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3115	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3116	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3117	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3118	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3119	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3120	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3121	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3122	1	5189	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3123	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3124	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3125	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3126	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3127	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3128	1	5189	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+3129	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3130	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3131	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3132	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3133	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3134	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3135	1	5189	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+3136	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3137	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3138	1	5189	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3139	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3140	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3141	1	5189	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3142	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3143	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3144	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3145	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3146	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3147	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3148	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3149	1	5189	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3150	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3151	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3152	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3153	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3154	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3155	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3156	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3157	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3158	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3159	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3160	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3161	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3162	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3163	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3164	1	5189	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	3
+3165	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3166	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3167	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3168	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3169	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3170	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3171	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3172	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3173	1	5189	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+3174	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3175	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3176	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3177	1	5189	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3178	1	5189	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3179	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3180	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3181	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3182	1	5190	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3183	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3184	1	5190	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3185	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3186	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3187	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3188	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3189	1	5190	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3190	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3191	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3192	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3193	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3194	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3195	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3196	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3197	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3198	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3199	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3200	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3201	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3202	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3203	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3204	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3205	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3206	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3207	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3208	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3209	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3210	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3211	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3212	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3213	1	5190	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3214	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3215	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3216	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3217	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3218	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3219	1	5190	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+3220	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3221	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3222	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3223	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3224	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3225	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3226	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3227	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3228	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3229	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3230	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3231	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3232	1	5190	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+3233	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3234	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3235	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3236	1	5190	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	1
+3237	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3238	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3239	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3240	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3241	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3242	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3243	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3244	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3245	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3246	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3247	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3248	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3249	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3250	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3251	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3252	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3253	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3254	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3255	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3256	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3257	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3258	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3259	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3260	1	5190	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3261	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3262	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3263	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3264	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3265	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3266	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3267	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3268	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3269	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3270	1	5190	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3271	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3272	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3273	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3274	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3275	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3276	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3277	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3278	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3279	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3280	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3281	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3282	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3283	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3284	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3285	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3286	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3287	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3288	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3289	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3290	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3291	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3292	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3293	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3294	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3295	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3296	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3297	1	5190	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+3298	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3299	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3300	1	5190	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+3301	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3302	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3303	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3304	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3305	1	5190	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3306	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3307	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3308	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3309	1	5190	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+3310	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3311	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3312	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3313	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3314	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3315	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3316	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3317	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3318	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3319	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3320	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3321	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3322	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3323	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3324	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3325	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3326	1	5190	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3327	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3328	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3329	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3330	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3331	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3332	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3333	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3334	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3335	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3336	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3337	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3338	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3339	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3340	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3341	1	5190	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3342	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3343	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3344	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3345	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3346	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3347	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3348	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3349	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3350	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3351	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3352	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3353	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3354	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3355	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3356	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3357	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3358	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3359	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3360	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3361	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3362	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3363	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3364	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3365	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3366	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3367	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3368	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3369	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3370	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3371	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3372	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3373	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3374	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3375	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3376	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3377	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3378	1	5191	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+3379	1	5191	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3380	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3381	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3382	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3383	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3384	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3385	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3386	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3387	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3388	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3389	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3390	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3391	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3392	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3393	1	5191	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+3394	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3395	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3396	1	5191	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3397	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3398	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3399	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3400	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3401	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3402	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3403	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3404	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3405	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3406	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3407	1	5191	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3408	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3409	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3410	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3411	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3412	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3413	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3414	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3415	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3416	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3417	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3418	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3419	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3420	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3421	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3422	1	5192	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3423	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3424	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3425	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3426	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3427	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3428	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3429	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3430	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3431	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3432	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3433	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3434	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3435	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3436	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3437	1	5192	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	3
+3438	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3439	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3440	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3441	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3442	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3443	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3444	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3445	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3446	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3447	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3448	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3449	1	5192	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3450	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3451	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3452	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3453	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3454	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3455	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3456	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3457	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3458	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3459	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3460	1	5192	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	3
+3461	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3462	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3463	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3464	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3465	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3466	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3467	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3468	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3469	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3470	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3471	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3472	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3473	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3474	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3475	1	5192	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3476	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3477	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3478	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3479	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3480	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3481	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3482	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3483	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3484	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3485	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3486	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3487	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3488	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3489	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3490	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3491	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3492	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3493	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3494	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3495	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3496	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3497	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3498	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3499	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3500	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3501	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3502	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3503	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3504	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3505	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3506	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3507	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3508	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3509	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3510	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3511	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3512	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3513	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3514	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3515	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3516	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3517	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+3518	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3519	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 4	3
+3520	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3521	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3522	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3523	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3524	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3525	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3526	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3527	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3528	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3529	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3530	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3531	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3532	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3533	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3534	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3535	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3536	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3537	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3538	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3539	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+3540	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3541	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 1	1
+3542	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3543	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3544	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3545	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3546	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3547	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3548	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3549	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3550	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3551	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3552	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3553	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3554	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3555	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3556	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3557	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3558	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3559	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3560	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3561	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3562	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3563	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3564	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+3565	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3566	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3567	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3568	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3569	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3570	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3571	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3572	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3573	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3574	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3575	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 5	1
+3576	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3577	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3578	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3579	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3580	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3581	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3582	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3583	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3584	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 3	1
+3585	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3586	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3587	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3588	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3589	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3590	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3591	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3592	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3593	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3594	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	2
+3595	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3596	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3597	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3598	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3599	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3600	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3601	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3602	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3603	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	3
+3604	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3605	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3606	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3607	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3608	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3609	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3610	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3611	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3612	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3613	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3614	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3615	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3616	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3617	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3618	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3619	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3620	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3621	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3622	1	5193	2	0101000020E6100000000000000000F03F0000000000000040	\N	Other 2	1
+3623	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3624	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3625	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3626	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3627	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3628	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3629	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3630	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3631	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3632	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3633	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3634	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+3635	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3636	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3637	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3638	1	5193	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+3639	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3640	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3641	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3642	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3643	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3644	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3645	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	2
+3646	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3647	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3648	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3649	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3650	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3651	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3652	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3653	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3654	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3655	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3656	1	5193	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3657	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3658	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3659	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3660	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3661	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3662	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3663	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3664	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3665	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3666	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3667	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3668	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3669	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3670	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3671	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3672	1	5194	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3673	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3674	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	3
+3675	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3676	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3677	1	5194	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	2
+3678	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3679	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3680	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3681	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3682	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3683	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3684	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3685	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3686	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3687	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3688	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3689	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3690	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3691	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	2
+3692	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3693	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3694	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3695	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	3
+3696	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3697	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3698	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3699	1	5194	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3700	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3701	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3702	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	4	\N	1
+3703	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	2
+3704	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3705	1	5194	3	0101000020E6100000000000000000F03F0000000000000040	\N	\N	1
+3706	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	3
+3707	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3708	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3709	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	1	\N	1
+3710	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	2	\N	1
+3711	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3712	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
+3713	1	5194	1	0101000020E6100000000000000000F03F0000000000000040	3	\N	1
 \.
 
 
@@ -13780,7 +17912,7 @@ SELECT pg_catalog.setval('funder.funding_entities_id_seq', 2, true);
 -- Name: batch_details_history_id_seq; Type: SEQUENCE SET; Schema: nursery; Owner: -
 --
 
-SELECT pg_catalog.setval('nursery.batch_details_history_id_seq', 1, false);
+SELECT pg_catalog.setval('nursery.batch_details_history_id_seq', 1, true);
 
 
 --
@@ -13794,21 +17926,21 @@ SELECT pg_catalog.setval('nursery.batch_photos_id_seq', 1, false);
 -- Name: batch_quantity_history_id_seq; Type: SEQUENCE SET; Schema: nursery; Owner: -
 --
 
-SELECT pg_catalog.setval('nursery.batch_quantity_history_id_seq', 1, false);
+SELECT pg_catalog.setval('nursery.batch_quantity_history_id_seq', 3, true);
 
 
 --
 -- Name: batches_id_seq; Type: SEQUENCE SET; Schema: nursery; Owner: -
 --
 
-SELECT pg_catalog.setval('nursery.batches_id_seq', 1, false);
+SELECT pg_catalog.setval('nursery.batches_id_seq', 1, true);
 
 
 --
 -- Name: withdrawals_id_seq; Type: SEQUENCE SET; Schema: nursery; Owner: -
 --
 
-SELECT pg_catalog.setval('nursery.withdrawals_id_seq', 1, false);
+SELECT pg_catalog.setval('nursery.withdrawals_id_seq', 2, true);
 
 
 --
@@ -13871,7 +18003,7 @@ SELECT pg_catalog.setval('public.internal_tags_id_seq', 10000, false);
 -- Name: notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.notifications_id_seq', 4, true);
+SELECT pg_catalog.setval('public.notifications_id_seq', 5, true);
 
 
 --
@@ -13913,7 +18045,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 26, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 30, true);
 
 
 --
@@ -14046,28 +18178,28 @@ SELECT pg_catalog.setval('topology.topology_id_seq', 1, false);
 -- Name: deliveries_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.deliveries_id_seq', 1, false);
+SELECT pg_catalog.setval('tracking.deliveries_id_seq', 2, true);
 
 
 --
 -- Name: draft_planting_sites_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.draft_planting_sites_id_seq', 1, false);
+SELECT pg_catalog.setval('tracking.draft_planting_sites_id_seq', 2, true);
 
 
 --
 -- Name: monitoring_plot_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.monitoring_plot_histories_id_seq', 1, false);
+SELECT pg_catalog.setval('tracking.monitoring_plot_histories_id_seq', 33, true);
 
 
 --
 -- Name: monitoring_plots_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.monitoring_plots_id_seq', 5161, true);
+SELECT pg_catalog.setval('tracking.monitoring_plots_id_seq', 5194, true);
 
 
 --
@@ -14081,7 +18213,7 @@ SELECT pg_catalog.setval('tracking.observation_biomass_species_id_seq', 1, false
 -- Name: observations_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.observations_id_seq', 1, false);
+SELECT pg_catalog.setval('tracking.observations_id_seq', 1, true);
 
 
 --
@@ -14102,7 +18234,7 @@ SELECT pg_catalog.setval('tracking.planting_seasons_id_seq', 1, false);
 -- Name: planting_site_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.planting_site_histories_id_seq', 1, true);
+SELECT pg_catalog.setval('tracking.planting_site_histories_id_seq', 3, true);
 
 
 --
@@ -14116,49 +18248,49 @@ SELECT pg_catalog.setval('tracking.planting_site_notifications_id_seq', 3, true)
 -- Name: planting_sites_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.planting_sites_id_seq', 1, true);
+SELECT pg_catalog.setval('tracking.planting_sites_id_seq', 3, true);
 
 
 --
 -- Name: planting_subzone_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.planting_subzone_histories_id_seq', 4, true);
+SELECT pg_catalog.setval('tracking.planting_subzone_histories_id_seq', 9, true);
 
 
 --
 -- Name: planting_zone_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.planting_zone_histories_id_seq', 2, true);
+SELECT pg_catalog.setval('tracking.planting_zone_histories_id_seq', 7, true);
 
 
 --
 -- Name: planting_zones_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.planting_zones_id_seq', 2, true);
+SELECT pg_catalog.setval('tracking.planting_zones_id_seq', 7, true);
 
 
 --
 -- Name: plantings_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.plantings_id_seq', 1, false);
+SELECT pg_catalog.setval('tracking.plantings_id_seq', 2, true);
 
 
 --
 -- Name: plots_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.plots_id_seq', 4, true);
+SELECT pg_catalog.setval('tracking.plots_id_seq', 9, true);
 
 
 --
 -- Name: recorded_plants_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.recorded_plants_id_seq', 1, false);
+SELECT pg_catalog.setval('tracking.recorded_plants_id_seq', 3713, true);
 
 
 --
