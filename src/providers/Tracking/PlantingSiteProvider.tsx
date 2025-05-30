@@ -17,13 +17,13 @@ import {
 } from 'src/redux/features/observations/observationsThunks';
 import {
   selectPlantingSiteHistories,
+  selectPlantingSiteList,
   selectPlantingSiteReportedPlants,
-  selectPlantingSites,
 } from 'src/redux/features/tracking/trackingSelectors';
 import {
   requestListPlantingSiteHistories,
+  requestListPlantingSites,
   requestPlantingSiteReportedPlants,
-  requestPlantingSites,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -45,7 +45,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const { selectedOrganization } = useOrganization();
   const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
   const [plantingSite, _setSelectedPlantingSite] = useState<PlantingSite>();
-  const plantingSitesResults = useAppSelector(selectPlantingSites);
+
+  const [plantingSitesRequestId, setPlantingSitesRequestId] = useState<string>('');
   const [observationsRequestId, setObservationsRequestId] = useState<string>('');
   const [resultsRequestId, setResultsRequestId] = useState<string>('');
   const [adHocObservationsRequestId, setAdHocObservationsRequestId] = useState<string>('');
@@ -54,6 +55,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const [historiesRequestId, setHistoriesRequestId] = useState<string>('');
   const [reportedPlantsRequestId, setReportedPlantsRequestId] = useState<string>('');
 
+  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const [observations, setObservations] = useState<Observation[]>();
   const [observationResults, setObservationResults] = useState<ObservationResultsPayload[]>();
   const [observationSummaries, setObservationSummaries] = useState<ObservationSummary[]>();
@@ -62,6 +64,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const [histories, setHistories] = useState<PlantingSiteHistory[]>();
   const [reportedPlants, setReportedPlants] = useState<PlantingSiteReportedPlants>();
 
+  const plantingSitesResponse = useAppSelector(selectPlantingSiteList(plantingSitesRequestId));
   const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
   const resultsResponse = useAppSelector(selectPlantingSiteObservationResultsRequest(resultsRequestId));
   const adHocObservationsResponse = useAppSelector(
@@ -88,7 +91,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const reload = useCallback(() => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;
     if (orgId) {
-      void dispatch(requestPlantingSites(orgId));
+      const request = dispatch(requestListPlantingSites(orgId));
+      setPlantingSitesRequestId(request.requestId);
       _setSelectedPlantingSite(undefined);
     }
   }, [acceleratorOrganizationId, dispatch, isAcceleratorRoute, selectedOrganization.id]);
@@ -97,15 +101,10 @@ const PlantingSiteProvider = ({ children }: Props) => {
     reload();
   }, [reload]);
 
-  const allPlantingSites = useMemo(
-    () => (plantingSitesResults && allSitesOption ? [...plantingSitesResults, allSitesOption] : []),
-    [allSitesOption, plantingSitesResults]
-  );
-
   // Function to select a planting site
   const setSelectedPlantingSite = useCallback(
     (plantingSiteId: number) => {
-      const foundSite = allPlantingSites.find((site) => site.id === plantingSiteId);
+      const foundSite = plantingSites?.find((site) => site.id === plantingSiteId);
       if (plantingSite !== foundSite) {
         _setSelectedPlantingSite(foundSite);
         setObservations(undefined);
@@ -117,7 +116,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
         setReportedPlants(undefined);
       }
     },
-    [allPlantingSites, plantingSite]
+    [plantingSites, plantingSite]
   );
 
   useEffect(() => {
@@ -142,6 +141,12 @@ const PlantingSiteProvider = ({ children }: Props) => {
       setReportedPlantsRequestId(reportedPlantsRequest.requestId);
     }
   }, [dispatch, plantingSite]);
+
+  useEffect(() => {
+    if (plantingSitesResponse?.status === 'success' && plantingSitesResponse.data) {
+      setPlantingSites(plantingSitesResponse.data);
+    }
+  }, [plantingSitesResponse]);
 
   useEffect(() => {
     if (observationsResponse?.status === 'success') {
@@ -184,6 +189,11 @@ const PlantingSiteProvider = ({ children }: Props) => {
       setReportedPlants(reportedPlantsResponse.data);
     }
   }, [reportedPlantsResponse]);
+
+  const allPlantingSites = useMemo(
+    () => (plantingSites && allSitesOption ? [...plantingSites, allSitesOption] : []),
+    [allSitesOption, plantingSites]
+  );
 
   const isLoading = useMemo(() => {
     return (
@@ -256,28 +266,27 @@ const PlantingSiteProvider = ({ children }: Props) => {
       nextObservation,
       latestResult,
       isLoading,
-      isInitiated: plantingSitesResults !== undefined,
+      isInitiated: plantingSitesResponse?.status === 'success',
       reload,
     }),
     [
       acceleratorOrganizationId,
-      setAcceleratorOrganizationId,
       allPlantingSites,
       plantingSite,
       reportedPlants,
       histories,
       adHocObservations,
       adHocObservationResults,
-      observationSummaries,
       observations,
       observationResults,
+      observationSummaries,
       setSelectedPlantingSite,
       currentObservation,
       latestObservation,
       nextObservation,
       latestResult,
       isLoading,
-      plantingSitesResults,
+      plantingSitesResponse,
       reload,
     ]
   );
