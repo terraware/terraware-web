@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 
+import defaultStrings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import { GlobalRolePermission } from 'src/utils/acl';
 
@@ -69,6 +70,7 @@ export const LocalizationContext = createContext<ProvidedLocalizationData>({
   countries: [],
   selectedLocale: 'en',
   setSelectedLocale: () => undefined,
+  strings: defaultStrings,
   supportedTimeZones: [],
   bootstrapped: false,
 });
