@@ -12,6 +12,7 @@ export default function PlantsDashbordTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
+    await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
     await page.getByRole('link', { name: 'Phase 0 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 0 Project Deal', { exact: true })).toBeVisible();
@@ -60,6 +61,7 @@ export default function PlantsDashbordTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
+    await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
     await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
@@ -105,6 +107,7 @@ export default function PlantsDashbordTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
+    await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
     await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
@@ -152,6 +155,7 @@ export default function PlantsDashbordTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
+    await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
     await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
