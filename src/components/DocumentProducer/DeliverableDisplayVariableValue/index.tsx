@@ -29,7 +29,7 @@ export default function DeliverableDisplayVariableValue({
     whiteSpace: 'break-spaces',
   };
 
-  switch (variable.type) {
+  switch (variable?.type) {
     case 'Text':
     case 'Number':
     case 'Date':
