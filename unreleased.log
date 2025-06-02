@@ -1,3 +1,4 @@
+dad006cb3ba Update dependency @babel/traverse to v7.27.4 (#4104)
 69e064215d1 SW-7027 Some document previews cause FE errors (#4106)
 b27211c3cd3 SW-6990 Used planting sites dispatch requestId (#4099)
 d523fee7154 SW-7003 Bug report form does not close after submission (#4103)
