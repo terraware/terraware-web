@@ -136,7 +136,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   );
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const getApiSearchResults = async () => {
         setFilterOptions(await NurseryWithdrawalService.getFilterOptions(selectedOrganization.id));
       };
@@ -216,7 +216,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [filters, debouncedSearchTerm]);
 
   const onApplyFilters = useCallback(async () => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const searchChildren: SearchNodePayload[] = getSearchChildren();
       const requestId = Math.random().toString();
       setRequestId('searchWithdrawals', requestId);

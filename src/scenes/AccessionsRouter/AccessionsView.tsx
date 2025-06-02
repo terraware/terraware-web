@@ -36,12 +36,12 @@ const AccessionsView = () => {
   );
 
   const setDefaults = useCallback(() => {
-    if (!isPlaceholderOrg(selectedOrganization.id)) {
+    if (!isPlaceholderOrg(selectedOrganization?.id)) {
       const savedColumns = orgPreferences.accessionsColumns ? (orgPreferences.accessionsColumns as string[]) : [];
       const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns(preferredWeightSystem).fields;
       setAccessionsDisplayColumns(defaultColumns);
     }
-  }, [orgPreferences.accessionsColumns, preferredWeightSystem, selectedOrganization.id]);
+  }, [orgPreferences.accessionsColumns, preferredWeightSystem, selectedOrganization]);
 
   useEffect(() => {
     setDefaults();
@@ -57,7 +57,7 @@ const AccessionsView = () => {
       setSearchColumns={setSeedSearchColumns}
       displayColumnNames={accessionsDisplayColumns}
       setDisplayColumnNames={setAccessionsDisplayColumns}
-      hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
+      hasSeedBanks={selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank') : false}
       hasSpecies={species.length > 0}
       reloadData={() => void reloadOrganizations()}
     />

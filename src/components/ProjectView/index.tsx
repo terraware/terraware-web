@@ -74,11 +74,11 @@ export default function ProjectView(): JSX.Element {
 
     if (projectDeleteRequest.status === 'error') {
       snackbar.toastError();
-    } else if (projectDeleteRequest.status === 'success' && selectedOrganization.id !== -1) {
+    } else if (projectDeleteRequest.status === 'success' && selectedOrganization) {
       void dispatch(requestProjects(selectedOrganization.id));
       goToProjects();
     }
-  }, [selectedOrganization.id, projectDeleteRequest, snackbar, goToProjects, dispatch]);
+  }, [selectedOrganization, projectDeleteRequest, snackbar, goToProjects, dispatch]);
 
   const rightComponent = useMemo(
     () => (

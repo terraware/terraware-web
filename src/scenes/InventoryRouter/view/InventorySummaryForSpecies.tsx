@@ -40,13 +40,13 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
       }
     };
 
-    if (speciesId !== undefined && selectedOrganization.id !== -1) {
+    if (speciesId !== undefined && selectedOrganization) {
       void populateSummary();
-      void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));
+      void dispatch(requestSpeciesProjects(selectedOrganization?.id, speciesId));
     } else {
       setSummary(undefined);
     }
-  }, [speciesId, summary, snackbar, dispatch, selectedOrganization.id]);
+  }, [speciesId, summary, snackbar, dispatch, selectedOrganization?.id]);
 
   useEffect(() => {
     reloadData();

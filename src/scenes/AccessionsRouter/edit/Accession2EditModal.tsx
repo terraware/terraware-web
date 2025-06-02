@@ -47,7 +47,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
-  const selectedSeedBank = getSeedBank(selectedOrganization, record.facilityId);
+  const selectedSeedBank = selectedOrganization ? getSeedBank(selectedOrganization, record.facilityId) : undefined;
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const timeZone = tz.id;
   const [collectedDateError, setCollectedDateError] = useState<string>();

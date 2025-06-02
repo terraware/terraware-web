@@ -49,7 +49,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
       {
         plantingSiteId,
         observationId,
-        orgId: selectedOrganization.id,
+        orgId: selectedOrganization?.id || -1,
         search: searchProps.search,
         zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
       },
@@ -58,7 +58,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   );
 
   const zoneNames = useAppSelector((state) =>
-    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
+    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization?.id || -1)
   );
 
   useEffect(() => {

@@ -49,7 +49,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     searchObservations(
       state,
       selectedPlantingSiteId,
-      selectedOrganization.id,
+      selectedOrganization?.id || -1,
       defaultTimeZone.get().id,
       searchProps.search,
       searchProps.filtersProps?.filters.zone?.values ?? [],

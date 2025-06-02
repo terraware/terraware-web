@@ -107,7 +107,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   }, [record, selectedOrganization]);
 
   useEffect(() => {
-    if (record?.facilityId) {
+    if (record?.facilityId && selectedOrganization) {
       const newFacility = getNurseryById(selectedOrganization, record.facilityId);
       if (newFacility.id.toString() !== facility?.id.toString()) {
         setFacility(newFacility);
@@ -122,11 +122,13 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   }, [tz.id, timeZone]);
 
   useEffect(() => {
-    const foundFacility = selectedOrganization.facilities?.find(
-      (f) => f.id.toString() === batch?.facilityId.toString()
-    );
-    if (foundFacility) {
-      setFacility(foundFacility);
+    if (selectedOrganization) {
+      const foundFacility = selectedOrganization.facilities?.find(
+        (f) => f.id.toString() === batch?.facilityId.toString()
+      );
+      if (foundFacility) {
+        setFacility(foundFacility);
+      }
     }
   }, [batch, setRecord, selectedOrganization]);
 

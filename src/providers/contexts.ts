@@ -28,13 +28,6 @@ export const UserContext = createContext<ProvidedUserData>({
   isAllowed: (_: GlobalRolePermission, __?: unknown) => false,
 });
 
-export const defaultSelectedOrg: Organization = {
-  id: -1,
-  name: '',
-  role: 'Contributor',
-  totalUsers: 0,
-};
-
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   organizations: [],
   orgPreferences: {},
@@ -59,7 +52,7 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     return;
   },
 
-  selectedOrganization: defaultSelectedOrg,
+  selectedOrganization: undefined,
   bootstrapped: false,
   orgPreferenceForId: -1,
 });

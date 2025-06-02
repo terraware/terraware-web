@@ -79,12 +79,12 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
 
     if (result.status === 'error') {
       snackbar.toastError();
-    } else if (result.status === 'success' && selectedOrganization.id !== -1) {
+    } else if (result.status === 'success' && selectedOrganization) {
       const { addedMonitoringPlotIds, removedMonitoringPlotIds } = result.data as ReplaceObservationPlotResponsePayload;
       setAddedPlotIds(addedMonitoringPlotIds);
       setRemovedPlotIds(removedMonitoringPlotIds);
       snackbar.toastSuccess(strings.REASSIGNMENT_REQUEST_SENT);
-      void dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization?.id || -1));
       const dispatched = dispatch(
         requestMonitoringPlots({
           plantingSiteId,
@@ -93,7 +93,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
       );
       setMonitoringPlotsRequestId(dispatched.requestId);
     }
-  }, [dispatch, result, selectedOrganization.id, snackbar, plantingSiteId]);
+  }, [dispatch, result, selectedOrganization, snackbar, plantingSiteId]);
 
   useEffect(() => {
     if (plots?.status === 'pending') {

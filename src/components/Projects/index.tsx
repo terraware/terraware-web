@@ -42,14 +42,14 @@ export default function ProjectsList(): JSX.Element {
 
   const search = useCallback(
     async (searchTerm: string) => {
-      if (selectedOrganization.id !== -1) {
+      if (selectedOrganization) {
         const projects = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
         if (projects) {
           return projects;
         }
       }
     },
-    [selectedOrganization.id]
+    [selectedOrganization]
   );
 
   useEffect(() => {

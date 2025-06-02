@@ -114,15 +114,17 @@ export function OrderPreserveableTable<T extends TableRowType>(
   );
 
   const reorderHandler = async (reorderedColumns: string[]) => {
-    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-      [getPreferenceName()]: reorderedColumns,
-    });
-    reloadOrgPreferences();
-    const columnsToSet = getTableColumns(reorderedColumns);
-    setColumns(columnsToSet);
+    if (selectedOrganization) {
+      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+        [getPreferenceName()]: reorderedColumns,
+      });
+      reloadOrgPreferences();
+      const columnsToSet = getTableColumns(reorderedColumns);
+      setColumns(columnsToSet);
 
-    if (onReorderEnd) {
-      onReorderEnd(reorderedColumns);
+      if (onReorderEnd) {
+        onReorderEnd(reorderedColumns);
+      }
     }
   };
 

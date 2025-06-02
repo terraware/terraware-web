@@ -304,7 +304,9 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='fromNursery'
-                value={getNurseryById(selectedOrganization, relatedBatch.facilityId).name || ''}
+                value={
+                  selectedOrganization ? getNurseryById(selectedOrganization, relatedBatch.facilityId).name || '' : ''
+                }
                 type='text'
                 label={strings.FROM_NURSERY}
                 display={true}

@@ -78,13 +78,15 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   useEffect(() => {
     if (accession.facilityId) {
-      const accessionSeedBank = getSeedBank(selectedOrganization, accession.facilityId);
+      const accessionSeedBank = selectedOrganization
+        ? getSeedBank(selectedOrganization, accession.facilityId)
+        : undefined;
       setSelectedSeedBank(accessionSeedBank);
     }
   }, [selectedOrganization, accession.facilityId]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const getOrgUsers = async () => {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {

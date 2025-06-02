@@ -105,7 +105,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
   const handleBatchValidation = useCallback(
     (savableRecord: SavableFormRecord) => {
-      if (selectedOrganization.id !== -1) {
+      if (selectedOrganization) {
         if (hasErrors()) {
           setValidateFields(true);
           onBatchValidated(false);
@@ -114,12 +114,12 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
         onBatchValidated({
           batch: savableRecord as SavableBatch,
-          organizationId: selectedOrganization.id,
+          organizationId: selectedOrganization?.id || -1,
           timezone: timeZone,
         });
       }
     },
-    [hasErrors, onBatchValidated, selectedOrganization.id, timeZone]
+    [hasErrors, onBatchValidated, selectedOrganization?.id, timeZone]
   );
 
   const accessionQuantity = useMemo<{ value: number; display?: string } | undefined>(() => {
@@ -146,7 +146,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     }
 
     const facility = FacilityService.getFacility({
-      organization: selectedOrganization,
+      organization: selectedOrganization!,
       facilityId,
       type: 'Nursery',
     });

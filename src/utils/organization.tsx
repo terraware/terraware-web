@@ -1,4 +1,3 @@
-import { defaultSelectedOrg } from 'src/providers/contexts';
 import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
@@ -53,7 +52,7 @@ export const getNurseryById = (organization: Organization, id: number): Facility
   return found[0];
 };
 
-export const isPlaceholderOrg = (id: number | undefined) => !id || id === defaultSelectedOrg.id;
+export const isPlaceholderOrg = (id: number | undefined) => !id;
 
 export const selectedOrgHasFacilityType = (organization: Organization, facilityType: FacilityType): boolean => {
   if (!isPlaceholderOrg(organization?.id) && organization?.facilities) {

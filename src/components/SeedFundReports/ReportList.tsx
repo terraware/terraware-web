@@ -28,7 +28,7 @@ export default function ReportList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const refreshSearch = async () => {
         const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
         setResults(reportsResults.reports || []);
@@ -36,7 +36,7 @@ export default function ReportList(): JSX.Element {
 
       void refreshSearch();
     }
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization]);
 
   return (
     <TfMain>

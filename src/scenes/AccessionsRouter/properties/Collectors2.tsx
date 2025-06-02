@@ -22,7 +22,7 @@ export default function Collectors2({ collectors = [''], onChange }: Props): JSX
   const theme = useTheme();
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const populateCollectors = async () => {
         setCollectorsOpt(await SeedBankService.getCollectors(selectedOrganization.id));
       };

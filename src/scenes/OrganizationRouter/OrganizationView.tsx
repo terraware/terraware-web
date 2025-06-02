@@ -27,10 +27,10 @@ export default function OrganizationView(): JSX.Element {
   const { countries } = useLocalization();
   const timeZones = useTimeZones();
   const utcTimeZone = getUTC(timeZones);
-  const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
+  const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization?.timeZone)?.longName;
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const populatePeople = async () => {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {
@@ -49,7 +49,7 @@ export default function OrganizationView(): JSX.Element {
   };
 
   const organizationState = () => {
-    if (countries && selectedOrganization.countryCode && selectedOrganization.countrySubdivisionCode) {
+    if (countries && selectedOrganization?.countryCode && selectedOrganization?.countrySubdivisionCode) {
       return getSubdivisionByCode(
         countries,
         selectedOrganization.countryCode,
@@ -59,7 +59,7 @@ export default function OrganizationView(): JSX.Element {
   };
 
   const getDateAdded = () => {
-    if (selectedOrganization.createdTime) {
+    if (selectedOrganization?.createdTime) {
       return getDateDisplayValue(selectedOrganization.createdTime);
     }
   };
@@ -105,7 +105,7 @@ export default function OrganizationView(): JSX.Element {
             label={strings.ORGANIZATION_NAME}
             id='name'
             type='text'
-            value={selectedOrganization.name}
+            value={selectedOrganization?.name || ''}
             display={true}
           />
         </Grid>
@@ -114,7 +114,7 @@ export default function OrganizationView(): JSX.Element {
             label={strings.DESCRIPTION}
             id='description'
             type='text'
-            value={selectedOrganization.description}
+            value={selectedOrganization?.description || ''}
             display={true}
           />
         </Grid>
@@ -127,14 +127,14 @@ export default function OrganizationView(): JSX.Element {
             id='country'
             type='text'
             value={
-              countries && selectedOrganization.countryCode
+              countries && selectedOrganization?.countryCode
                 ? getCountryByCode(countries, selectedOrganization.countryCode)?.name
                 : ''
             }
             display={true}
           />
         </Grid>
-        {selectedOrganization.countrySubdivisionCode && (
+        {selectedOrganization?.countrySubdivisionCode && (
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
             <TextField label={strings.STATE} id='state' type='text' value={organizationState()} display={true} />
           </Grid>
@@ -163,11 +163,13 @@ export default function OrganizationView(): JSX.Element {
             label={strings.ORGANIZATION_TYPE}
             id='org-type'
             type='text'
-            value={organizationTypeLabel(selectedOrganization.organizationType)}
+            value={
+              selectedOrganization?.organizationType ? organizationTypeLabel(selectedOrganization.organizationType) : ''
+            }
             display={true}
           />
         </Grid>
-        {selectedOrganization.organizationType === 'Other' && (
+        {selectedOrganization?.organizationType === 'Other' && (
           <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
             <TextField
               label={strings.ORGANIZATION_TYPE_DESCRIPTION}
@@ -183,7 +185,7 @@ export default function OrganizationView(): JSX.Element {
             label={strings.ORGANIZATION_WEBSITE}
             id='org-website'
             type='text'
-            value={selectedOrganization.website}
+            value={selectedOrganization?.website || ''}
             display={true}
           />
         </Grid>

@@ -28,7 +28,7 @@ export default function PersonDetailsView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const populatePersonData = async () => {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {
@@ -101,25 +101,27 @@ export default function PersonDetailsView(): JSX.Element {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            {isAdmin(selectedOrganization) &&
-              (isMobile ? (
-                <Button
-                  icon='iconEdit'
-                  priority='primary'
-                  size='medium'
-                  onClick={goToEditPerson}
-                  style={{ float: 'right' }}
-                />
-              ) : (
-                <Button
-                  label={strings.EDIT_PERSON}
-                  icon='iconEdit'
-                  priority='primary'
-                  size='medium'
-                  onClick={goToEditPerson}
-                  style={{ float: 'right' }}
-                />
-              ))}
+            {selectedOrganization
+              ? isAdmin(selectedOrganization)
+              : false &&
+                (isMobile ? (
+                  <Button
+                    icon='iconEdit'
+                    priority='primary'
+                    size='medium'
+                    onClick={goToEditPerson}
+                    style={{ float: 'right' }}
+                  />
+                ) : (
+                  <Button
+                    label={strings.EDIT_PERSON}
+                    icon='iconEdit'
+                    priority='primary'
+                    size='medium'
+                    onClick={goToEditPerson}
+                    style={{ float: 'right' }}
+                  />
+                ))}
           </Grid>
         </Grid>
         <Grid item xs={12}>
