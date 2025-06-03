@@ -7,7 +7,7 @@ test.beforeEach(async ({ context }, testInfo) => {
   await addCookies(context);
 });
 
-export default function PlantsDashbordTests() {
+export default function PlantsDashboardTests() {
   test('View Empty State of Plants Dashboard for project in Console', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
