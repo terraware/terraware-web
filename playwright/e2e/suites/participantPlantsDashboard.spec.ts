@@ -7,7 +7,7 @@ test.beforeEach(async ({ context }, testInfo) => {
   await addCookies(context);
 });
 
-export default function ParticipantPlantsDashbordTests() {
+export default function ParticipantPlantsDashboardTests() {
   test('Rolled-up dashboard for selected project', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
