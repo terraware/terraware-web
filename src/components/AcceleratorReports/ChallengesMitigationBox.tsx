@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
@@ -25,7 +26,7 @@ const ChallengeMitigationPlan = ({
   editing,
   onRemove,
   validateFields,
-  noTitle,
+  funderReportView,
 }: {
   challengeMitigation: ChallengeMitigation;
   setChallengeMitigation: (challengeMitigation: ChallengeMitigation) => void;
@@ -34,9 +35,10 @@ const ChallengeMitigationPlan = ({
   editing: boolean;
   onRemove: () => void;
   validateFields: boolean;
-  noTitle?: boolean;
+  funderReportView?: boolean;
 }) => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
 
   const setChallenge = (value: any) => setChallengeMitigation({ ...challengeMitigation, challenge: value });
 
@@ -44,25 +46,27 @@ const ChallengeMitigationPlan = ({
 
   return (
     <Grid item xs={12} marginBottom={1}>
-      {!noTitle && (
+      {!(funderReportView && !isMobile) && (
         <Box
           sx={{ scrollMarginTop: '50vh' }}
-          borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
+          borderBottom={funderReportView ? 'none' : `1px solid ${theme.palette.TwClrBrdrSecondary}`}
           width={'100%'}
         >
           <Grid container marginBottom={1}>
-            <Grid item xs={editing ? 5.75 : 6}>
-              <Typography fontWeight={600}>
+            <Grid item xs={funderReportView && isMobile ? 12 : editing ? 5.75 : 6}>
+              <Typography fontWeight={600} fontSize={funderReportView ? '20px' : '16px'}>
                 {strings.CHALLENGE}
                 {editing && ' *'}
               </Typography>
             </Grid>
-            <Grid item xs={editing ? 5.75 : 6}>
-              <Typography fontWeight={600}>
-                {strings.MITIGATION_PLAN}
-                {editing && ' *'}
-              </Typography>
-            </Grid>
+            {!(funderReportView && isMobile) && (
+              <Grid item xs={editing ? 5.75 : 6}>
+                <Typography fontWeight={600}>
+                  {strings.MITIGATION_PLAN}
+                  {editing && ' *'}
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </Box>
       )}
@@ -73,7 +77,7 @@ const ChallengeMitigationPlan = ({
         marginBottom={1}
         marginTop={2}
       >
-        <Grid item xs={editing ? 5.75 : 6}>
+        <Grid item xs={funderReportView && isMobile ? 12 : editing ? 5.75 : 6}>
           <Box paddingRight={theme.spacing(2)} marginBottom={1}>
             <Textfield
               type='textarea'
@@ -91,7 +95,14 @@ const ChallengeMitigationPlan = ({
             />
           </Box>
         </Grid>
-        <Grid item xs={editing ? 5.75 : 6}>
+        {funderReportView && isMobile && (
+          <Grid item xs={12}>
+            <Typography fontWeight={600} marginBottom={2} paddingTop={1} fontSize={funderReportView ? '20px' : '16px'}>
+              {strings.MITIGATION_PLAN}
+            </Typography>
+          </Grid>
+        )}
+        <Grid item xs={funderReportView && isMobile ? 12 : editing ? 5.75 : 6}>
           <Box paddingRight={editing ? 0 : theme.spacing(2)} marginBottom={1}>
             <Textfield
               type='textarea'
@@ -124,7 +135,8 @@ const ChallengeMitigationPlan = ({
 };
 
 const ChallengesMitigationBox = (props: ReportBoxProps) => {
-  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, noTitle } = props;
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
+    props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -234,7 +246,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
           onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
           setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
           validateFields={validateFields}
-          noTitle={noTitle}
+          funderReportView={funderReportView}
         />
       ))}
       {isEditing && (

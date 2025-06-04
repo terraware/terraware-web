@@ -173,7 +173,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <AchievementsBox report={selectedReport} projectId={selectedProjectId.toString()} noTitle />
+            <AchievementsBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
           </Card>
         </Box>
       )}
@@ -187,7 +187,11 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <ChallengesMitigationBox report={selectedReport} projectId={selectedProjectId.toString()} noTitle />
+            <ChallengesMitigationBox
+              report={selectedReport}
+              projectId={selectedProjectId.toString()}
+              funderReportView
+            />
           </Card>
         </Box>
       )}
