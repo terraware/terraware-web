@@ -9,8 +9,6 @@ test.beforeEach(async ({ context }, testInfo) => {
   await addCookies(context);
 });
 
-// TODO once this feature is live, delete the `user_preferences` row for `enable2025ProjectProfile` in dump.sql
-
 export default function ProjectProfileTests() {
   test('View Project Profile for project in application', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');

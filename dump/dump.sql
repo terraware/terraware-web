@@ -8884,6 +8884,7 @@ CREATE TABLE tracking.recorded_trees (
     height_m numeric,
     shrub_diameter_cm integer,
     description text,
+    gps_coordinates public.geometry(Point),
     CONSTRAINT growth_form_specific_data CHECK ((((tree_growth_form_id = 1) AND (diameter_at_breast_height_cm IS NOT NULL) AND (point_of_measurement_m IS NOT NULL) AND (shrub_diameter_cm IS NULL) AND (trunk_number = 1)) OR ((tree_growth_form_id = 2) AND (diameter_at_breast_height_cm IS NULL) AND (point_of_measurement_m IS NULL) AND (height_m IS NULL) AND (shrub_diameter_cm IS NOT NULL) AND (trunk_number = 1)) OR ((tree_growth_form_id = 3) AND (diameter_at_breast_height_cm IS NOT NULL) AND (point_of_measurement_m IS NOT NULL) AND (shrub_diameter_cm IS NULL)))),
     CONSTRAINT recorded_trees_diameter_at_breast_height_cm_check CHECK ((diameter_at_breast_height_cm >= (0)::numeric)),
     CONSTRAINT recorded_trees_height_m_check CHECK ((height_m >= (0)::numeric)),
@@ -11437,6 +11438,7 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 399	379	DeleteDuplicatedReports	SQL	0350/V379__DeleteDuplicatedReports.sql	-749812797	postgres	2025-05-20 15:36:12.895028	7	t
 400	380	MonitoringPlotsSubzoneIndex	SQL	0350/V380__MonitoringPlotsSubzoneIndex.sql	-1378642699	postgres	2025-05-21 20:40:26.381455	23	t
 401	381	FixDeletedObservedSpecies	SQL	0350/V381__FixDeletedObservedSpecies.sql	-2039396647	postgres	2025-05-29 18:35:15.26896	109	t
+402	382	RecordedTreesGps	SQL	0350/V382__RecordedTreesGps.sql	-1635447954	postgres	2025-06-04 16:46:58.261218	20	t
 \.
 
 
@@ -11543,6 +11545,7 @@ COPY public.internal_tags (id, name, description, is_system, created_by, created
 
 COPY public.jobrunr_backgroundjobservers (id, workerpoolsize, pollintervalinseconds, firstheartbeat, lastheartbeat, running, systemtotalmemory, systemfreememory, systemcpuload, processmaxmemory, processfreememory, processallocatedmemory, processcpuload, deletesucceededjobsafter, permanentlydeletejobsafter, name) FROM stdin;
 8e52595f-dc20-4aa7-afdd-96db81ccda40	128	15	2025-05-29 20:33:26.763616	2025-05-29 20:34:41.808486	1	8346034176	4019257344	0.06	2086666240	1892569152	194097088	0.06	PT36H	PT72H	e23d61ab2712
+aea97e17-e3e5-4fc8-9d5d-30eb9b30d84b	224	15	2025-06-04 16:47:01.431721	2025-06-04 16:47:31.474706	1	8217473024	1904484352	0.00	2055208960	1825396760	229812200	0.00	PT36H	PT72H	509b46419916
 \.
 
 
@@ -12045,7 +12048,7 @@ COPY public.species_successional_groups (species_id, successional_group_id) FROM
 
 COPY public.spring_session (primary_id, session_id, creation_time, last_access_time, max_inactive_interval, expiry_time, principal_name) FROM stdin;
 b57978b9-873d-4ea2-88c2-391fcdee5470	b9b00dda-c789-40cd-8c02-7ef21025c4d8	1747863920486	1747863989388	315360000	2063223962638	157cf509-d3e6-4bde-9e0d-d4ac07e2b721
-b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1748550879741	315360000	2063910879741	0d04525c-7933-4cec-9647-7b6ac2642838
+b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1749055659762	315360000	2064415659762	0d04525c-7933-4cec-9647-7b6ac2642838
 \.
 
 
@@ -12809,8 +12812,8 @@ COPY public.user_global_roles (user_id, global_role_id) FROM stdin;
 
 COPY public.user_preferences (user_id, organization_id, preferences) FROM stdin;
 4	\N	{"preferredWeightSystem": "metric"}
-1	\N	{"lastVisitedOrg": 1, "enableFundingEntities": true, "preferredWeightSystem": "metric", "enable2025ProjectProfile": true, "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
 1	1	{"plants.dashboard.lastVisitedPlantingSite": {"plantingSiteId": 1}, "plants.observations.lastVisitedPlantingSite": {"plantingSiteId": -1}}
+1	\N	{"lastVisitedOrg": 1, "enableFundingEntities": true, "preferredWeightSystem": "metric", "enable2025ProjectProfile": true, "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
 \.
 
 
@@ -12834,7 +12837,7 @@ COPY public.users (id, auth_id, email, first_name, last_name, created_time, modi
 2	DISABLED	system	Terraware	System	2022-10-25 17:51:42.24661+00	2022-10-25 17:51:42.24661+00	4	\N	f	\N	\N	\N	\N	\N	\N
 3	\N	pending@terraformation.com	\N	\N	2025-05-21 21:42:18.239617+00	2025-05-21 21:42:18.23963+00	5	\N	f	\N	\N	\N	\N	\N	\N
 4	157cf509-d3e6-4bde-9e0d-d4ac07e2b721	funder@terraformation.com	Test	Funder	2025-05-21 21:42:25.83028+00	2025-05-21 21:45:27.385204+00	5	2025-05-21 21:46:29.411+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
-1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-05-29 20:34:39.748+00	f	\N	Etc/UTC	\N	\N	t	2024-06-11 21:53:16.594086+00
+1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-06-04 16:47:39.765+00	f	\N	Etc/UTC	\N	\N	t	2024-06-11 21:53:16.594086+00
 \.
 
 
@@ -17704,7 +17707,7 @@ COPY tracking.recorded_species_certainties (id, name) FROM stdin;
 -- Data for Name: recorded_trees; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.recorded_trees (id, observation_id, monitoring_plot_id, biomass_species_id, tree_number, trunk_number, tree_growth_form_id, is_dead, diameter_at_breast_height_cm, point_of_measurement_m, height_m, shrub_diameter_cm, description) FROM stdin;
+COPY tracking.recorded_trees (id, observation_id, monitoring_plot_id, biomass_species_id, tree_number, trunk_number, tree_growth_form_id, is_dead, diameter_at_breast_height_cm, point_of_measurement_m, height_m, shrub_diameter_cm, description, gps_coordinates) FROM stdin;
 \.
 
 
@@ -18045,7 +18048,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 30, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 32, true);
 
 
 --
