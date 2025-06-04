@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Assigning and Collecting Reports' | 'Funding Entities';
+export type FeatureName = 'Show Production View' | 'Funding Entities';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Assigning and Collecting Reports',
-    preferenceName: 'enableAssigningAndCollectingReports',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Enable Assigning and Collecting Reports'],
-    disclosure: ['This is a WIP'],
   },
   {
     name: 'Funding Entities',

@@ -17,7 +17,6 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
@@ -48,7 +47,6 @@ const SingleView = () => {
   const [searchDeliverablesRequestId, setSearchDeliverablesRequestId] = useState('');
   const deliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(searchDeliverablesRequestId));
   const [hasDeliverables, setHasDeliverables] = useState(false);
-  const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
 
   useEffect(() => {
     if (project && project.cohortId) {
@@ -162,16 +160,15 @@ const SingleView = () => {
                 <div style={separatorStyles} />
               </>
             )}
-            {isReportsEnabled && (
-              <Box>
-                <Link
-                  to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
-                  style={{ fontWeight: 400 }}
-                >
-                  {strings.VIEW_REPORTS}
-                </Link>
-              </Box>
-            )}
+
+            <Box>
+              <Link
+                to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
+                style={{ fontWeight: 400 }}
+              >
+                {strings.VIEW_REPORTS}
+              </Link>
+            </Box>
           </Box>
           <Card
             style={{
