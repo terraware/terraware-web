@@ -14,6 +14,7 @@ import { getReportName } from 'src/components/AcceleratorReports/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
@@ -62,6 +63,7 @@ const ReportView = () => {
   const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
   const snackbar = useSnackbar();
   const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
+  const [publishedFunderView, setPublishedFunderView] = useState(false);
 
   const publishReport = () => {
     const request = dispatch(
@@ -256,6 +258,14 @@ const ReportView = () => {
     setBoxInEdit(isInEdit);
   };
 
+  const changeToFunderView = useCallback(() => {
+    setPublishedFunderView(true);
+  }, []);
+
+  const changeToInternalView = useCallback(() => {
+    setPublishedFunderView(false);
+  }, []);
+
   return (
     <>
       {showPublishModal && <PublishModal onClose={() => setShowPublishModal(false)} onSubmit={publishReport} />}
@@ -269,84 +279,97 @@ const ReportView = () => {
           <TitleBar
             title={`${strings.REPORT} (${reportName})`}
             subtitle={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
+            titleExtraComponent={
+              publishedFunderView ? (
+                <Link fontSize={'16px'} fontWeight={400} onClick={changeToInternalView}>
+                  {strings.VIEW_INTERNAL_REPORT_FORM}
+                </Link>
+              ) : (
+                <Link fontSize={'16px'} fontWeight={400} onClick={changeToFunderView}>
+                  {strings.VIEW_PUBLISHED_FUNDER_REPORT}
+                </Link>
+              )
+            }
           />
         }
-        rightComponent={selectedReport?.status !== 'Not Submitted' ? rightComponent : undefined}
+        rightComponent={!publishedFunderView && selectedReport?.status !== 'Not Submitted' ? rightComponent : undefined}
         crumbs={crumbs}
         hierarchicalCrumbs={false}
       >
-        <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-          {selectedReport && <ApprovedReportMessage report={selectedReport} />}
-          {selectedReport && (
-            <RejectedReportMessage report={selectedReport} showRejectDialog={() => setShowRejectDialog(true)} />
-          )}
-          <Card
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              flexGrow: 1,
-            }}
-          >
-            {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
-            {selectedReport?.startDate && selectedReport?.endDate && (
-              <Box
-                borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-                padding={theme.spacing(3, 0)}
-                marginBottom={3}
-              >
-                <Typography fontSize={14} fontStyle={'italic'}>
-                  {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
-                </Typography>
-              </Box>
+        {!publishedFunderView && (
+          <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
+            {selectedReport && <ApprovedReportMessage report={selectedReport} />}
+            {selectedReport && (
+              <RejectedReportMessage report={selectedReport} showRejectDialog={() => setShowRejectDialog(true)} />
             )}
-            <HighlightsBox
-              report={selectedReport}
-              projectId={projectId}
-              reload={reload}
-              isConsoleView={true}
-              onEditChange={onEditChange}
-              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-            />
-            {['system', 'project', 'standard'].map((type) => {
-              const metrics =
-                type === 'system'
-                  ? selectedReport?.systemMetrics
-                  : type === 'project'
-                    ? selectedReport?.projectMetrics
-                    : selectedReport?.standardMetrics;
+            <Card
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+              }}
+            >
+              {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
+              {selectedReport?.startDate && selectedReport?.endDate && (
+                <Box
+                  borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+                  padding={theme.spacing(3, 0)}
+                  marginBottom={3}
+                >
+                  <Typography fontSize={14} fontStyle={'italic'}>
+                    {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
+                  </Typography>
+                </Box>
+              )}
+              <HighlightsBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              {['system', 'project', 'standard'].map((type) => {
+                const metrics =
+                  type === 'system'
+                    ? selectedReport?.systemMetrics
+                    : type === 'project'
+                      ? selectedReport?.projectMetrics
+                      : selectedReport?.standardMetrics;
 
-              return metrics?.map((metric, index) => (
-                <MetricBox
-                  isConsoleView
-                  key={`${type}-${index}`}
-                  metric={metric}
-                  projectId={projectId}
-                  reload={reload}
-                  reportId={Number(reportId)}
-                  type={type as MetricType}
-                  onEditChange={onEditChange}
-                  canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                />
-              ));
-            })}
-            <AchievementsBox
-              report={selectedReport}
-              projectId={projectId}
-              reload={reload}
-              isConsoleView={true}
-              onEditChange={onEditChange}
-              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-            />
-            <ChallengesMitigationBox
-              report={selectedReport}
-              projectId={projectId}
-              reload={reload}
-              isConsoleView={true}
-              onEditChange={onEditChange}
-              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-            />
-          </Card>
-        </Box>
+                return metrics?.map((metric, index) => (
+                  <MetricBox
+                    isConsoleView
+                    key={`${type}-${index}`}
+                    metric={metric}
+                    projectId={projectId}
+                    reload={reload}
+                    reportId={Number(reportId)}
+                    type={type as MetricType}
+                    onEditChange={onEditChange}
+                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                  />
+                ));
+              })}
+              <AchievementsBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <ChallengesMitigationBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+            </Card>
+          </Box>
+        )}
       </Page>
     </>
   );
