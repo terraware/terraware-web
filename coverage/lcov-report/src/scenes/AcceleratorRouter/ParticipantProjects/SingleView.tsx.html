@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -422,11 +422,7 @@
 <a name='L357'></a><a href='#L357'>357</a>
 <a name='L358'></a><a href='#L358'>358</a>
 <a name='L359'></a><a href='#L359'>359</a>
-<a name='L360'></a><a href='#L360'>360</a>
-<a name='L361'></a><a href='#L361'>361</a>
-<a name='L362'></a><a href='#L362'>362</a>
-<a name='L363'></a><a href='#L363'>363</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L360'></a><a href='#L360'>360</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -466,7 +462,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -562,7 +557,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -806,7 +800,6 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
@@ -837,7 +830,6 @@ const SingleView = <span class="cstat-no" title="statement not covered" ><span c
   const [searchDeliverablesRequestId, setSearchDeliverablesRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const deliverablesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverablesSearchRequest(searchDeliverablesRequestId));</span>
   const [hasDeliverables, setHasDeliverables] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const isReportsEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Assigning and Collecting Reports');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (project &amp;&amp; project.cohortId) {</span>
@@ -951,16 +943,15 @@ const SingleView = <span class="cstat-no" title="statement not covered" ><span c
                 &lt;div style={separatorStyles} /&gt;
               &lt;/&gt;
             )}
-            {isReportsEnabled &amp;&amp; (
-              &lt;Box&gt;
-                &lt;Link
-                  to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
-                  style={{ fontWeight: 400 }}
-                &gt;
-                  {strings.VIEW_REPORTS}
-                &lt;/Link&gt;
-              &lt;/Box&gt;
-            )}
+&nbsp;
+            &lt;Box&gt;
+              &lt;Link
+                to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
+                style={{ fontWeight: 400 }}
+              &gt;
+                {strings.VIEW_REPORTS}
+              &lt;/Link&gt;
+            &lt;/Box&gt;
           &lt;/Box&gt;
           &lt;Card
             style={{
@@ -1156,7 +1147,7 @@ export default SingleView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-04T18:07:54.432Z
+                at 2025-06-04T18:16:16.498Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

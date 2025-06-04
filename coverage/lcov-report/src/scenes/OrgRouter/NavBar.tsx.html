@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
@@ -527,11 +527,7 @@
 <a name='L462'></a><a href='#L462'>462</a>
 <a name='L463'></a><a href='#L463'>463</a>
 <a name='L464'></a><a href='#L464'>464</a>
-<a name='L465'></a><a href='#L465'>465</a>
-<a name='L466'></a><a href='#L466'>466</a>
-<a name='L467'></a><a href='#L467'>467</a>
-<a name='L468'></a><a href='#L468'>468</a>
-<a name='L469'></a><a href='#L469'>469</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L465'></a><a href='#L465'>465</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -572,8 +568,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -727,9 +721,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1014,7 +1006,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -1049,7 +1040,6 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   const { isDesktop, isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
   const mixpanel = <span class="cstat-no" title="statement not covered" >useMixpanel();</span>
-  const isReportsEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Assigning and Collecting Reports');</span>
 &nbsp;
   const [orgFeaturesRequestId, setOrgFeaturesRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const orgFeatures = <span class="cstat-no" title="statement not covered" >useAppSelector(listOrganizationFeatures(orgFeaturesRequestId));</span>
@@ -1187,8 +1177,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
 &nbsp;
   const reportsMenu = <span class="cstat-no" title="statement not covered" >useMemo&lt;JSX.Element | null&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      isReportsEnabled &amp;&amp;</span>
-      isAllowed('READ_REPORTS', { organization: selectedOrganization }) &amp;&amp;
+<span class="cstat-no" title="statement not covered" >      isAllowed('READ_REPORTS', { organization: selectedOrganization }) &amp;&amp;</span>
       !!orgFeatures?.data?.reports?.enabled &amp;&amp;
       activeLocale ? (
         &lt;NavItem
@@ -1205,7 +1194,6 @@ export default function <span class="fstat-no" title="function not covered" >Nav
       activeLocale,
       closeAndNavigateTo,
       isAllowed,
-      isReportsEnabled,
       isReportsRoute,
       orgFeatures?.data?.reports?.enabled,
       selectedOrganization,
@@ -1474,7 +1462,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-04T18:07:54.432Z
+                at 2025-06-04T18:16:16.498Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
