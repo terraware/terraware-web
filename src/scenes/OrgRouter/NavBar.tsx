@@ -13,7 +13,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -48,7 +47,6 @@ export default function NavBar({
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
   const mixpanel = useMixpanel();
-  const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
 
   const [orgFeaturesRequestId, setOrgFeaturesRequestId] = useState<string>('');
   const orgFeatures = useAppSelector(listOrganizationFeatures(orgFeaturesRequestId));
@@ -186,7 +184,6 @@ export default function NavBar({
 
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
-      isReportsEnabled &&
       isAllowed('READ_REPORTS', { organization: selectedOrganization }) &&
       !!orgFeatures?.data?.reports?.enabled &&
       activeLocale ? (
@@ -204,7 +201,6 @@ export default function NavBar({
       activeLocale,
       closeAndNavigateTo,
       isAllowed,
-      isReportsEnabled,
       isReportsRoute,
       orgFeatures?.data?.reports?.enabled,
       selectedOrganization,
