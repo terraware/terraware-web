@@ -209,7 +209,7 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
                 .toString()}
               id='withdrawnQuantity'
               onChange={(value) => onChangeWithdrawnQuantity(Number(value))}
-              type='text'
+              type='number'
               value={withdrawnQuantity?.quantity.toString()}
               errorText={withdrawnQtyError}
               required={true}
