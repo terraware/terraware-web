@@ -1,11 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Assigning and Collecting Reports'
-  | 'Funding Entities'
-  | 'New Project Profile';
+export type FeatureName = 'Show Production View' | 'Assigning and Collecting Reports' | 'Funding Entities';
 
 export type Feature = {
   name: FeatureName;
@@ -56,15 +52,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     allowInternalProduction: false,
     description: ['Enable Funding Entities.'],
     disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'New Project Profile',
-    preferenceName: 'enable2025ProjectProfile',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Enable the new Project Profile page.'],
-    disclosure: ['This is a WIP', 'Disable to access old Project Details page'],
   },
 ];
 
