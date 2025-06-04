@@ -110,7 +110,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
                       year={year}
                       quarter={selectedReport?.quarter}
                       key={index}
-                      lastIndex={index === climateMetrics.length - 1}
+                      length={climateMetrics.length}
                     />
                   ))}
                 </Box>
@@ -132,7 +132,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
                       year={year}
                       quarter={selectedReport?.quarter}
                       key={index}
-                      lastIndex={index === biodiversityMetrics.length - 1}
+                      length={biodiversityMetrics.length}
                     />
                   ))}
                 </Box>
@@ -154,7 +154,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
                       year={year}
                       quarter={selectedReport?.quarter}
                       key={index}
-                      lastIndex={index === communityMetrics.length - 1}
+                      length={communityMetrics.length}
                     />
                   ))}
                 </Box>
