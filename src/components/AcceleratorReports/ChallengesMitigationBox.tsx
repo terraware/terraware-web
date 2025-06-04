@@ -145,6 +145,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
+  const { isMobile } = useDeviceInfo();
   const nonEmptyChallenges = useMemo(() => {
     return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
   }, [challengeMitigations]);
@@ -236,6 +237,22 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       onSave={onSave}
       isConsoleView={isConsoleView}
     >
+      {funderReportView && !isMobile && (
+        <Box width={'100%'}>
+          <Grid container marginBottom={1}>
+            <Grid item xs={6}>
+              <Typography fontWeight={600} fontSize={'20px'}>
+                {strings.CHALLENGE}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography fontWeight={600} fontSize={'20px'}>
+                {strings.MITIGATION_PLAN}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      )}
       {challengeMitigations?.map((challenge, index) => (
         <ChallengeMitigationPlan
           challengeMitigation={challenge}
