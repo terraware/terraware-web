@@ -21,6 +21,8 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
+import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import {
   selectPublishAcceleratorReport,
   selectReviewAcceleratorReport,
@@ -30,8 +32,9 @@ import {
   requestReviewAcceleratorReport,
 } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import strings from 'src/strings';
-import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
+import { AcceleratorReport, MetricType, PublishedReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
@@ -64,6 +67,9 @@ const ReportView = () => {
   const snackbar = useSnackbar();
   const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
   const [publishedFunderView, setPublishedFunderView] = useState(false);
+  const reportsResponse = useAppSelector(selectListFunderReports(projectId ?? ''));
+  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
+  const [selectedPublishedReport, setSelectedPublishedReport] = useState<PublishedReport>();
 
   const publishReport = () => {
     const request = dispatch(
@@ -114,6 +120,12 @@ const ReportView = () => {
   );
 
   useEffect(() => {
+    if (projectId) {
+      void dispatch(requestListFunderReports(Number(projectId)));
+    }
+  }, [dispatch, projectId]);
+
+  useEffect(() => {
     if (approveReportResponse?.status === 'error') {
       return;
     }
@@ -151,6 +163,23 @@ const ReportView = () => {
       setSelectedReport(reportSelected);
     }
   }, [reportId, reports]);
+
+  useEffect(() => {
+    console.log('reportsResponse', reportsResponse);
+    if (reportsResponse?.status === 'success') {
+      setPublishedReports(reportsResponse.data);
+    }
+  }, [reportsResponse]);
+
+  useEffect(() => {
+    if (reportId) {
+      console.log('reportId', reportId);
+      console.log('publishedReports', publishedReports);
+      const found = publishedReports?.find((r) => r.reportId.toString() === reportId);
+      console.log('found', found);
+      setSelectedPublishedReport(found);
+    }
+  }, [publishedReports, selectedPublishedReport, reportId]);
 
   const year = useMemo(() => {
     return selectedReport?.startDate.split('-')[0];
@@ -280,7 +309,8 @@ const ReportView = () => {
             title={`${strings.REPORT} (${reportName})`}
             subtitle={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
             titleExtraComponent={
-              publishedFunderView ? (
+              selectedPublishedReport &&
+              (publishedFunderView ? (
                 <Link fontSize={'16px'} fontWeight={400} onClick={changeToInternalView}>
                   {strings.VIEW_INTERNAL_REPORT_FORM}
                 </Link>
@@ -288,7 +318,7 @@ const ReportView = () => {
                 <Link fontSize={'16px'} fontWeight={400} onClick={changeToFunderView}>
                   {strings.VIEW_PUBLISHED_FUNDER_REPORT}
                 </Link>
-              )
+              ))
             }
           />
         }
@@ -296,7 +326,9 @@ const ReportView = () => {
         crumbs={crumbs}
         hierarchicalCrumbs={false}
       >
-        {!publishedFunderView && (
+        {publishedFunderView ? (
+          <FunderReportView selectedProjectId={Number(projectId)} selectedReport={selectedPublishedReport} />
+        ) : (
           <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
             {selectedReport && <ApprovedReportMessage report={selectedReport} />}
             {selectedReport && (
