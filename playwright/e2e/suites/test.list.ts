@@ -8,6 +8,7 @@ import LocationTests from './locations.spec';
 import ParticipantPlantsDashboardTests from './participantPlantsDashboard.spec';
 import PlantsDashboardTests from './plantsDashboard.spec';
 import ProjectDeliverablesTests from './projectDeliverables.spec';
+import ProjectDocumentsTests from './projectDocuments.spec';
 import ProjectProfileTests from './projectProfile.spec';
 import ProjectVariablesTests from './projectVariables.spec';
 import SpeciesTests from './species.spec';
