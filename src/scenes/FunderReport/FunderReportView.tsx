@@ -19,7 +19,7 @@ type FunderReportViewProps = {
 
 const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportViewProps) => {
   const theme = useTheme();
-  const { isDesktop, isMobile } = useDeviceInfo();
+  const { isDesktop } = useDeviceInfo();
 
   const year = useMemo(() => {
     return selectedReport?.startDate?.split('-')[0];
@@ -173,7 +173,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <AchievementsBox report={selectedReport} projectId={selectedProjectId.toString()} noTitle />
+            <AchievementsBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
           </Card>
         </Box>
       )}
@@ -190,7 +190,6 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
             <ChallengesMitigationBox
               report={selectedReport}
               projectId={selectedProjectId.toString()}
-              noTitle={!isMobile}
               funderReportView
             />
           </Card>

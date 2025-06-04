@@ -9,6 +9,5 @@ export type ReportBoxProps = {
   onChange?: (value: any) => void;
   onEditChange?: (value: boolean) => void;
   canEdit?: boolean;
-  noTitle?: boolean;
   funderReportView?: boolean;
 };
