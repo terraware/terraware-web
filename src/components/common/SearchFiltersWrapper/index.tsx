@@ -76,6 +76,7 @@ export type SearchProps = SearchInputProps & {
   featuredFilters?: FeaturedFilterConfig[];
   // If set, add an export button and call this function when it's clicked
   onExport?: () => void;
+  width?: string | number;
 };
 
 export default function SearchFiltersWrapper({
@@ -84,6 +85,7 @@ export default function SearchFiltersWrapper({
   filtersProps,
   featuredFilters,
   onExport,
+  width,
 }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
@@ -130,7 +132,7 @@ export default function SearchFiltersWrapper({
   );
 
   return (
-    <Grid container>
+    <Grid container width={width}>
       <Grid item xs={12} display='flex' alignItems='center'>
         <Box width={isMobile ? '200px' : '300px'} display='inline-flex' flexDirection='column'>
           <Textfield
