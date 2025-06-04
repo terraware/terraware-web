@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/97</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -317,7 +317,20 @@
 <a name='L252'></a><a href='#L252'>252</a>
 <a name='L253'></a><a href='#L253'>253</a>
 <a name='L254'></a><a href='#L254'>254</a>
-<a name='L255'></a><a href='#L255'>255</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -356,13 +369,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -443,6 +466,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -575,6 +599,7 @@
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
@@ -598,7 +623,7 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
   editing,
   onRemove,
   validateFields,
-  noTitle,
+  funderReportView,
 }: {
   challengeMitigation: ChallengeMitigation;
   setChallengeMitigation: (challengeMitigation: ChallengeMitigation) =&gt; void;
@@ -607,9 +632,10 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
   editing: boolean;
   onRemove: () =&gt; void;
   validateFields: boolean;
-  noTitle?: boolean;
+  funderReportView?: boolean;
 }) =&gt; {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
   const setChallenge = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >setChallengeMitigation({ ...challengeMitigation, challenge: value });</span></span>
 &nbsp;
@@ -617,25 +643,27 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid item xs={12} marginBottom={1}&gt;
-      {!noTitle &amp;&amp; (
+      {!(funderReportView &amp;&amp; !isMobile) &amp;&amp; (
         &lt;Box
           sx={{ scrollMarginTop: '50vh' }}
-          borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
+          borderBottom={funderReportView ? 'none' : `1px solid ${theme.palette.TwClrBrdrSecondary}`}
           width={'100%'}
         &gt;
           &lt;Grid container marginBottom={1}&gt;
-            &lt;Grid item xs={editing ? 5.75 : 6}&gt;
-              &lt;Typography fontWeight={600}&gt;
+            &lt;Grid item xs={funderReportView &amp;&amp; isMobile ? 12 : editing ? 5.75 : 6}&gt;
+              &lt;Typography fontWeight={600} fontSize={funderReportView ? '20px' : '16px'}&gt;
                 {strings.CHALLENGE}
                 {editing &amp;&amp; ' *'}
               &lt;/Typography&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={editing ? 5.75 : 6}&gt;
-              &lt;Typography fontWeight={600}&gt;
-                {strings.MITIGATION_PLAN}
-                {editing &amp;&amp; ' *'}
-              &lt;/Typography&gt;
-            &lt;/Grid&gt;
+            {!(funderReportView &amp;&amp; isMobile) &amp;&amp; (
+              &lt;Grid item xs={editing ? 5.75 : 6}&gt;
+                &lt;Typography fontWeight={600}&gt;
+                  {strings.MITIGATION_PLAN}
+                  {editing &amp;&amp; ' *'}
+                &lt;/Typography&gt;
+              &lt;/Grid&gt;
+            )}
           &lt;/Grid&gt;
         &lt;/Box&gt;
       )}
@@ -646,7 +674,7 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
         marginBottom={1}
         marginTop={2}
       &gt;
-        &lt;Grid item xs={editing ? 5.75 : 6}&gt;
+        &lt;Grid item xs={funderReportView &amp;&amp; isMobile ? 12 : editing ? 5.75 : 6}&gt;
           &lt;Box paddingRight={theme.spacing(2)} marginBottom={1}&gt;
             &lt;Textfield
               type='textarea'
@@ -664,7 +692,14 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
             /&gt;
           &lt;/Box&gt;
         &lt;/Grid&gt;
-        &lt;Grid item xs={editing ? 5.75 : 6}&gt;
+        {funderReportView &amp;&amp; isMobile &amp;&amp; (
+          &lt;Grid item xs={12}&gt;
+            &lt;Typography fontWeight={600} marginBottom={2} paddingTop={1} fontSize={funderReportView ? '20px' : '16px'}&gt;
+              {strings.MITIGATION_PLAN}
+            &lt;/Typography&gt;
+          &lt;/Grid&gt;
+        )}
+        &lt;Grid item xs={funderReportView &amp;&amp; isMobile ? 12 : editing ? 5.75 : 6}&gt;
           &lt;Box paddingRight={editing ? 0 : theme.spacing(2)} marginBottom={1}&gt;
             &lt;Textfield
               type='textarea'
@@ -697,7 +732,8 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
 };
 &nbsp;
 const ChallengesMitigationBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: ReportBoxProps) =&gt; {</span>
-  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, noTitle } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
+<span class="cstat-no" title="statement not covered" >    props;</span>
   const [internalEditing, setInternalEditing] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [challengeMitigations, setChallengeMitigations] = <span class="cstat-no" title="statement not covered" >useState&lt;ChallengeMitigation[]&gt;(report?.challenges || []);</span>
   const [validateFields, setValidateFields] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -807,7 +843,7 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
           onRemove={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setChallengeMitigations(challengeMitigations.filter(<span class="fstat-no" title="function not covered" >(_</span>, i) =&gt; <span class="cstat-no" title="statement not covered" >index !== i)</span>)}</span>
           setChallengeMitigation={<span class="fstat-no" title="function not covered" >(c</span>hal: ChallengeMitigation) =&gt; <span class="cstat-no" title="statement not covered" >updateChallenge(chal, index)}</span>
           validateFields={validateFields}
-          noTitle={noTitle}
+          funderReportView={funderReportView}
         /&gt;
       ))}
       {isEditing &amp;&amp; (
@@ -832,7 +868,7 @@ export default ChallengesMitigationBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-04T18:57:18.154Z
+                at 2025-06-04T19:42:20.430Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
