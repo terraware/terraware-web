@@ -7,7 +7,9 @@ import InventoryTests from './inventory.spec';
 import LocationTests from './locations.spec';
 import ParticipantPlantsDashboardTests from './participantPlantsDashboard.spec';
 import PlantsDashboardTests from './plantsDashboard.spec';
+import ProjectDeliverablesTests from './projectDeliverables.spec';
 import ProjectProfileTests from './projectProfile.spec';
+import ProjectVariablesTests from './projectVariables.spec';
 import SpeciesTests from './species.spec';
 
 test.describe(LocationTests);
@@ -18,4 +20,7 @@ test.describe(ProjectProfileTests);
 test.describe(FundingEntitiesTests);
 test.describe(FunderProjectProfileTests);
 test.describe(PlantsDashboardTests);
+test.describe(ProjectDeliverablesTests);
+test.describe(ProjectDocumentsTests);
+test.describe(ProjectVariablesTests);
 test.describe(ParticipantPlantsDashboardTests);

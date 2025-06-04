@@ -12,6 +12,7 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring';
 import { MapService } from 'src/services';
@@ -20,6 +21,7 @@ import { MapEntityId, MapSourceProperties } from 'src/types/Map';
 import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
@@ -45,6 +47,8 @@ export default function BoundariesAndZones({
   const theme = useTheme();
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const [selectedObservationType, setSelectedObservationType] = useState<ObservationType>('plantMonitoring');
+  const { activeLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter(activeLocale);
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -60,6 +64,20 @@ export default function BoundariesAndZones({
     },
     [setView]
   );
+
+  const plantingCompleteArea = useMemo(() => {
+    let total = 0;
+    if (plantingSite) {
+      plantingSite.plantingZones?.forEach((zone) => {
+        zone.plantingSubzones.forEach((subzone) => {
+          if (subzone.plantingCompleted) {
+            total += subzone.areaHa;
+          }
+        });
+      });
+    }
+    return total;
+  }, [plantingSite]);
 
   return (
     <Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}>
@@ -123,7 +141,23 @@ export default function BoundariesAndZones({
           }}
           initialView={'map'}
           onView={setViewCallback}
-          search={<Search {...searchProps} />}
+          search={
+            <Box display={'flex'} alignItems={'center'}>
+              <Search {...searchProps} width={'auto'} />
+              {(plantingSite.areaHa || 0) > 0 && view === 'map' && (
+                <Box display='flex' flexDirection='row' flex={1}>
+                  <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
+                    {strings.PLANTING_SITE_AREA}:{' '}
+                    {strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa || 0))?.toString()}
+                  </Typography>
+                  <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
+                    {strings.PLANTING_COMPLETE_AREA}:{' '}
+                    {strings.formatString(strings.X_HA, numberFormatter.format(plantingCompleteArea))?.toString()}
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+          }
           list={
             <PlantingSiteDetailsTable
               plantingSite={plantingSite}

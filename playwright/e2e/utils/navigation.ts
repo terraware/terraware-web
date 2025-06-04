@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test';
 import type { Page } from 'playwright-core';
 
 import { waitFor } from './utils';
@@ -7,6 +6,7 @@ export const navigateToProjectProfile = async (projectDealName: string, page: Pa
   await page.goto('http://127.0.0.1:3000');
   await waitFor(page, '#home');
   await page.getByRole('link', { name: 'Accelerator Console' }).click();
+  await page.waitForTimeout(1000);
   await page.getByRole('link', { name: projectDealName }).click();
 };
 
