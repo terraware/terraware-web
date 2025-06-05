@@ -55,7 +55,8 @@ type PermissionParticipantProject =
   | 'ASSIGN_PROJECT_TO_PARTICIPANT'
   | 'VIEW_PARTICIPANT_PROJECT_SCORING_VOTING'
   | 'UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING'
-  | 'EXPORT_PARTICIPANT_PROJECT';
+  | 'EXPORT_PARTICIPANT_PROJECT'
+  | 'PUBLISH_PROJECT_DETAILS';
 
 export type GlobalRolePermission =
   | PermissionAcceleratorReports
@@ -191,6 +192,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
   INVITE_FUNDER: AcceleratorAdminPlus,
   MANAGE_FUNDING_ENTITIES: AcceleratorAdminPlus,
+  PUBLISH_PROJECT_DETAILS: AcceleratorAdminPlus,
   PUBLISH_REPORTS: AcceleratorAdminPlus,
   READ_ALL_APPLICATIONS: ReadOnlyPlus,
   READ_COHORTS: TFExpertPlus,
