@@ -1,3 +1,5 @@
+8100adf90d5 SW-7049 Funder reports: Remove extra padding at top of achievements section (#4125)
+4b623543b71 SW-7046 Cannot create a new document (#4126)
 e29c6ce6484 SW-7045 Participant reports: validate number fields before submitting to the server (#4124)
 054f3c27738 SW-7041 Console: Plants dashboard does not load (#4122)
 df2ae76fb79 SW-7042 Remove checkboxes and button to delete project specific metrics (#4123)

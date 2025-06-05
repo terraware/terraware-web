@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1749138293920" clover="3.2.0">
-  <project timestamp="1749138293920" name="All files">
-    <metrics statements="30669" coveredstatements="1302" conditionals="21070" coveredconditionals="388" methods="9438" coveredmethods="211" elements="61177" coveredelements="1901" complexity="0" loc="30669" ncloc="30669" packages="263" files="1267" classes="1267"/>
+<coverage generated="1749139358794" clover="3.2.0">
+  <project timestamp="1749139358794" name="All files">
+    <metrics statements="30670" coveredstatements="1302" conditionals="21072" coveredconditionals="388" methods="9438" coveredmethods="211" elements="61180" coveredelements="1901" complexity="0" loc="30670" ncloc="30670" packages="263" files="1267" classes="1267"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -977,7 +977,7 @@
       </file>
     </package>
     <package name="src.components.AcceleratorReports">
-      <metrics statements="588" coveredstatements="0" conditionals="498" coveredconditionals="0" methods="185" coveredmethods="0"/>
+      <metrics statements="588" coveredstatements="0" conditionals="500" coveredconditionals="0" methods="185" coveredmethods="0"/>
       <file name="AcceleratorReportCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorReports/AcceleratorReportCellRenderer.tsx">
         <metrics statements="26" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
@@ -1460,7 +1460,7 @@
         <line num="61" count="0" type="stmt"/>
       </file>
       <file name="EditableReportBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorReports/EditableReportBox.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="3" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
@@ -16397,9 +16397,9 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.DocumentsAddView">
-      <metrics statements="26" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="8" coveredmethods="0"/>
+      <metrics statements="27" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentsAddView/index.tsx">
-        <metrics statements="26" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="27" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
@@ -16422,10 +16422,11 @@
         <line num="48" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.DocumentsView">
