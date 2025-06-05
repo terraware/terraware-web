@@ -63,7 +63,7 @@ const EditableReportBox = ({
             width: '100%',
           }}
         >
-          {name && (
+          {(name || canEdit) && (
             <Box
               sx={{
                 alignItems: 'center',

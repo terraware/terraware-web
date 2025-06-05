@@ -173,7 +173,12 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               borderRadius: '8px',
             }}
           >
-            <AchievementsBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
+            <AchievementsBox
+              report={selectedReport}
+              projectId={selectedProjectId.toString()}
+              funderReportView
+              canEdit={false}
+            />
           </Card>
         </Box>
       )}
