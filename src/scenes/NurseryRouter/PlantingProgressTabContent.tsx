@@ -80,7 +80,7 @@ export default function PlantingProgress(): JSX.Element {
     if (selectedOrganization) {
       void dispatch(requestObservationsResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization?.id]);
+  }, [dispatch, selectedOrganization]);
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
@@ -111,7 +111,7 @@ export default function PlantingProgress(): JSX.Element {
     if (selectedOrganization) {
       void dispatch(requestObservationsResults(selectedOrganization.id));
     }
-  }, [selectedOrganization?.id, dispatch]);
+  }, [selectedOrganization, dispatch]);
 
   const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
 

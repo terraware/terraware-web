@@ -121,7 +121,7 @@ export default function SpeciesEditView(): JSX.Element {
     if (selectedOrganization && speciesId) {
       void getSpecies();
     }
-  }, [speciesId, selectedOrganization?.id, navigate]);
+  }, [speciesId, selectedOrganization, navigate]);
 
   useEffect(() => {
     const now = DateTime.now().toISO();
