@@ -1,3 +1,4 @@
+1027fb59a89 SW-7036 Use raw enum values for searches (#4128)
 8100adf90d5 SW-7049 Funder reports: Remove extra padding at top of achievements section (#4125)
 4b623543b71 SW-7046 Cannot create a new document (#4126)
 e29c6ce6484 SW-7045 Participant reports: validate number fields before submitting to the server (#4124)
