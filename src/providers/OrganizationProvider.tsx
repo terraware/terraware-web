@@ -12,7 +12,7 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
-import { OrganizationContext, defaultSelectedOrg } from './contexts';
+import { OrganizationContext } from './contexts';
 import { useUser } from './hooks';
 
 export type OrganizationProviderProps = {
@@ -30,7 +30,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
-  const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
+  const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(-1);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<Organization[]>();
   const navigate = useSyncNavigate();
@@ -70,7 +70,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
-      if (selectedOrganization && selectedOrganization.id !== -1) {
+      if (selectedOrganization) {
         const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences) {
           setOrgPreferences(response.preferences);
@@ -99,7 +99,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     setOrganizationData((prev) => ({
       ...prev,
       redirectAndNotify,
-      selectedOrganization: selectedOrganization || defaultSelectedOrg,
+      selectedOrganization,
       organizations: organizations ?? [],
       orgPreferences,
       bootstrapped,
@@ -187,7 +187,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [orgAPIRequestStatus, isDev, isStaging, navigate]);
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
-    selectedOrganization: selectedOrganization || defaultSelectedOrg,
+    selectedOrganization,
     setSelectedOrganization,
     organizations: organizations ?? [],
     orgPreferences,

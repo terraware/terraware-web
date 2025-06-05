@@ -385,11 +385,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const onChangeFromNursery = (facilityIdSelected: string) => {
-    const foundNursery = getNurseryById(selectedOrganization, Number(facilityIdSelected));
-    setSelectedNursery(foundNursery);
+    if (selectedOrganization) {
+      const foundNursery = getNurseryById(selectedOrganization, Number(facilityIdSelected));
+      setSelectedNursery(foundNursery);
+    }
   };
 
   const nurseriesOptions = useMemo(() => {
+    if (!selectedOrganization) {
+      return [];
+    }
+
     const nurseries = batches
       .filter((batchData: SearchResponseElement) => {
         if (isOutplant) {
@@ -430,13 +436,15 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const gridSize = () => (isMobile ? 12 : 6);
 
   useEffect(() => {
-    const allNurseries = getAllNurseries(selectedOrganization);
-    const destinationNurseries = allNurseries.filter(
-      (nursery) => nursery.id.toString() !== selectedNursery?.id.toString()
-    );
-    setDestinationNurseriesOptions(
-      destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
-    );
+    if (selectedOrganization) {
+      const allNurseries = getAllNurseries(selectedOrganization);
+      const destinationNurseries = allNurseries.filter(
+        (nursery) => nursery.id.toString() !== selectedNursery?.id.toString()
+      );
+      setDestinationNurseriesOptions(
+        destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
+      );
+    }
   }, [selectedNursery, selectedOrganization, isOutplant]);
 
   useEffect(() => {

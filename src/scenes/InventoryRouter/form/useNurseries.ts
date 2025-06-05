@@ -11,7 +11,7 @@ export const useNurseries = (record?: { facilityId?: number }) => {
   const [selectedNursery, setSelectedNursery] = useState<Facility>();
 
   const initNurseries = useCallback(() => {
-    setAvailableNurseries(getAllNurseries(selectedOrganization));
+    setAvailableNurseries(selectedOrganization ? getAllNurseries(selectedOrganization) : []);
   }, [selectedOrganization]);
 
   useEffect(() => {

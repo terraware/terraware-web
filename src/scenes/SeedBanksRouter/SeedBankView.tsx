@@ -46,7 +46,7 @@ export default function SeedBankView(): JSX.Element {
     name: '',
     id: -1,
     type: 'Seed Bank',
-    organizationId: selectedOrganization.id,
+    organizationId: selectedOrganization?.id || -1,
     connectionState: 'Not Connected',
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
@@ -78,7 +78,7 @@ export default function SeedBankView(): JSX.Element {
 
   useEffect(() => {
     if (seedBankId) {
-      const seedBanks = getAllSeedBanks(selectedOrganization);
+      const seedBanks = selectedOrganization ? getAllSeedBanks(selectedOrganization) : [];
       setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
     }
   }, [seedBankId, selectedOrganization]);
@@ -88,7 +88,7 @@ export default function SeedBankView(): JSX.Element {
       name: selectedSeedBank?.name || '',
       description: selectedSeedBank?.description,
       id: selectedSeedBank?.id ?? -1,
-      organizationId: selectedOrganization.id,
+      organizationId: selectedOrganization?.id || -1,
       type: 'Seed Bank',
       connectionState: 'Not Connected',
       timeZone: selectedSeedBank?.timeZone,
@@ -99,7 +99,7 @@ export default function SeedBankView(): JSX.Element {
   }, [selectedSeedBank, setRecord, selectedOrganization]);
 
   const saveSeedBank = async () => {
-    if (selectedOrganization.id === -1) {
+    if (!selectedOrganization) {
       return;
     }
     let id = selectedSeedBank?.id;
@@ -133,7 +133,7 @@ export default function SeedBankView(): JSX.Element {
         if (editedSubLocations) {
           await SubLocationService.saveEditedSubLocations(selectedSeedBank.id, editedSubLocations);
         }
-        void reloadOrganizations(selectedOrganization.id);
+        void reloadOrganizations(selectedOrganization?.id);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -144,7 +144,7 @@ export default function SeedBankView(): JSX.Element {
         subLocationNames: editedSubLocations?.map((l) => l.name as string),
       });
       if (response.requestSucceeded) {
-        await reloadOrganizations(selectedOrganization.id);
+        await reloadOrganizations(selectedOrganization?.id);
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
         id = response.facilityId || undefined;
       } else {

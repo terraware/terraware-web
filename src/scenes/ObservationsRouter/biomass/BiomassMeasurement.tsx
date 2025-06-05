@@ -65,12 +65,12 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
 
   const exportObservationsList = useCallback(async () => {
     const content = await ObservationsService.exportBiomassObservationsCsv(
-      organization.selectedOrganization.id,
+      organization.selectedOrganization?.id || -1,
       selectedPlantingSite?.id
     );
 
     if (content !== null) {
-      const siteName = selectedPlantingSite?.name ?? organization.selectedOrganization.name;
+      const siteName = selectedPlantingSite?.name ?? organization.selectedOrganization?.name ?? 'Unknown';
       const fileName = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}.csv`);
 
       const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);

@@ -177,14 +177,16 @@ const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => 
         </PageHeaderWrapper>
       )}
 
-      <DeliverablesTable
-        extraTableFilters={extraTableFilters}
-        filterModifiers={filterModifiers}
-        organizationId={selectedOrganization.id}
-        searchAndSort={searchAndSort}
-        tableId={'participantDeliverablesTable'}
-        projectId={projectId}
-      />
+      {selectedOrganization && (
+        <DeliverablesTable
+          extraTableFilters={extraTableFilters}
+          filterModifiers={filterModifiers}
+          organizationId={selectedOrganization.id}
+          searchAndSort={searchAndSort}
+          tableId={'participantDeliverablesTable'}
+          projectId={projectId}
+        />
+      )}
     </Wrapper>
   );
 };

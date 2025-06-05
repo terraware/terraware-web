@@ -91,7 +91,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           <>
             {isApplicationPortal && (
               <>
-                <p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>
+                <p style={{ fontSize: '16px' }}>{selectedOrganization?.name}</p>
               </>
             )}
             {!isAcceleratorRoute && !isApplicationPortal && !isFunderRoute && <OrganizationsDropdown />}
@@ -106,10 +106,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
       <Box sx={rightStyles}>
         <KnowledgeBaseLink />
-        <NotificationsDropdown
-          organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
-          reloadOrganizationData={reloadOrganizations}
-        />
+        <NotificationsDropdown organizationId={selectedOrganization?.id} reloadOrganizationData={reloadOrganizations} />
         {userFundingEntity && <SettingsLink />}
         <div style={separatorStyles} />
         <UserMenu />
@@ -128,7 +125,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       }}
     >
       <Grid item xs={1} sx={leftStyles}>
-        {selectedOrganization.id !== -1 && (
+        {selectedOrganization && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
             <Icon name='iconMenu' />
           </IconButton>
@@ -150,10 +147,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
       <Grid item xs={5} sx={rightStyles}>
         <KnowledgeBaseLink />
-        <NotificationsDropdown
-          organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
-          reloadOrganizationData={reloadOrganizations}
-        />
+        <NotificationsDropdown organizationId={selectedOrganization?.id} reloadOrganizationData={reloadOrganizations} />
         {userFundingEntity && <SettingsLink />}
         <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />
       </Grid>

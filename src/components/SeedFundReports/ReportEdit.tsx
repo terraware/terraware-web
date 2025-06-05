@@ -350,7 +350,7 @@ export default function ReportEdit(): JSX.Element {
         await updateFiles();
         await updatePhotos(report.id);
         const submitResult = await SeedFundReportService.submitReport(reportIdInt);
-        if (submitResult.requestSucceeded && reportId && selectedOrganization.id !== -1) {
+        if (submitResult.requestSucceeded && reportId && selectedOrganization) {
           void reloadOrganizations(selectedOrganization.id);
           navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
         } else {

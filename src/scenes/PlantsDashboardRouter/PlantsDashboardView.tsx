@@ -74,9 +74,9 @@ export default function PlantsDashboardView({
   }, [latestResult, plantingSite]);
 
   useEffect(() => {
-    const orgId = organizationId ?? selectedOrganization.id;
+    const orgId = organizationId ?? selectedOrganization?.id ?? -1;
     setAcceleratorOrganizationId(orgId);
-  }, [dispatch, organizationId, selectedOrganization, setAcceleratorOrganizationId]);
+  }, [dispatch, organizationId, selectedOrganization?.id, setAcceleratorOrganizationId]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -349,17 +349,17 @@ export default function PlantsDashboardView({
               gap: theme.spacing(3),
             }}
           >
-            {(organizationId || selectedOrganization.id) && (
+            {(organizationId || selectedOrganization?.id) && (
               <MultiplePlantingSiteMap
                 projectId={projectId!}
-                organizationId={organizationId ?? selectedOrganization.id}
+                organizationId={organizationId ?? selectedOrganization?.id ?? -1}
               />
             )}
           </Box>
         </Grid>
       </>
     );
-  }, [theme, organizationId, selectedOrganization.id, projectId]);
+  }, [theme, organizationId, selectedOrganization?.id, projectId]);
 
   return (
     <PlantsPrimaryPage

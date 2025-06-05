@@ -111,17 +111,17 @@ export default function SpeciesEditView(): JSX.Element {
 
   useEffect(() => {
     const getSpecies = async () => {
-      const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization.id);
+      const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization?.id || -1);
       if (speciesResponse.requestSucceeded) {
         setSpecies(speciesResponse.species);
       } else {
         navigate(APP_PATHS.SPECIES);
       }
     };
-    if (selectedOrganization && selectedOrganization.id !== -1 && speciesId) {
+    if (selectedOrganization && speciesId) {
       void getSpecies();
     }
-  }, [speciesId, selectedOrganization, navigate]);
+  }, [speciesId, selectedOrganization?.id, navigate]);
 
   useEffect(() => {
     const now = DateTime.now().toISO();
@@ -141,7 +141,7 @@ export default function SpeciesEditView(): JSX.Element {
   }, [species, setRecord, selectedOrganization]);
 
   const saveSpecies = async () => {
-    if (selectedOrganization.id === -1) {
+    if (!selectedOrganization) {
       return;
     }
     if (!record.scientificName) {

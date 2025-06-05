@@ -17,7 +17,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
-  const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
+  const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization?.id || -1));
 
   const filteredPlantingSites = useMemo(() => {
     return plantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
@@ -32,14 +32,14 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
       const id = Number(newValue);
       setSelectedPlantingSiteId(isNaN(id) ? -1 : id);
       onChange(isNaN(id) ? -1 : id);
-      if (!isNaN(id) && id !== orgPreferences.lastPlantingSiteSelected) {
+      if (!isNaN(id) && id !== orgPreferences.lastPlantingSiteSelected && selectedOrganization) {
         await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
           ['lastPlantingSiteSelected']: id,
         });
         reloadOrgPreferences();
       }
     },
-    [onChange, orgPreferences.lastPlantingSiteSelected, selectedOrganization.id, reloadOrgPreferences]
+    [onChange, orgPreferences.lastPlantingSiteSelected, selectedOrganization, reloadOrgPreferences]
   );
 
   useEffect(() => {

@@ -13,7 +13,11 @@ const OrganizationRouter = () => {
       <Route
         path={'/edit'}
         element={
-          <EditOrganizationView organization={selectedOrganization} reloadOrganizationData={reloadOrganizations} />
+          selectedOrganization ? (
+            <EditOrganizationView organization={selectedOrganization} reloadOrganizationData={reloadOrganizations} />
+          ) : (
+            <div>No organization selected</div>
+          )
         }
       />
       <Route path={'/*'} element={<OrganizationView />} />

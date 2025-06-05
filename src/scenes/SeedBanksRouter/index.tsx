@@ -12,7 +12,11 @@ const SeedBanksRouter = () => {
   const { selectedOrganization } = useOrganization();
 
   const getSeedBanksView = useCallback((): JSX.Element => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')) {
+    if (
+      selectedOrganization &&
+      !isPlaceholderOrg(selectedOrganization.id) &&
+      selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+    ) {
       return <SeedBanksListView organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'SeedBanks'} />;

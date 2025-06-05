@@ -66,6 +66,8 @@ export default function PeopleListView(): JSX.Element {
 
   const search = useCallback(
     async (searchTerm: string, skipTfContact = false) => {
+      if (!selectedOrganization) return [];
+
       const { type, values } = parseSearchTerm(searchTerm);
       const searchField: OrNodePayload | null = searchTerm
         ? {
@@ -136,7 +138,7 @@ export default function PeopleListView(): JSX.Element {
       });
       return usersResults;
     },
-    [selectedOrganization.id]
+    [selectedOrganization]
   );
 
   useEffect(() => {
@@ -182,8 +184,8 @@ export default function PeopleListView(): JSX.Element {
         setCannotRemovePeopleModalOpened(true);
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
-        if (selectedOwners.length > 0 && selectedOrganization.id !== -1) {
-          const organizationRoles = await OrganizationService.getOrganizationRoles(selectedOrganization.id);
+        if (selectedOwners.length > 0 && selectedOrganization) {
+          const organizationRoles = await OrganizationService.getOrganizationRoles(selectedOrganization?.id);
           const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
@@ -212,11 +214,11 @@ export default function PeopleListView(): JSX.Element {
   };
 
   const removePeopleHandler = async () => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       let assignNewOwnerResponse;
       if (newOwner) {
         assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
-          selectedOrganization.id,
+          selectedOrganization?.id,
           newOwner.id,
           'Owner'
         );
@@ -224,7 +226,7 @@ export default function PeopleListView(): JSX.Element {
       const promises: Promise<Response>[] = [];
       if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
         selectedPeopleRows.forEach((person) => {
-          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));
+          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization?.id, person.id));
         });
       }
       const leaveOrgResponses = await Promise.all(promises);
@@ -251,7 +253,7 @@ export default function PeopleListView(): JSX.Element {
   };
 
   const deleteOrgHandler = async () => {
-    if (user && selectedOrganization.id !== -1) {
+    if (user && selectedOrganization) {
       let allRemoved = true;
       const keepOneOwnerId = selectedPeopleRows.filter((person) => person.role === 'Owner')[0].id.toString();
       const otherUsers = selectedPeopleRows.filter(
@@ -263,7 +265,7 @@ export default function PeopleListView(): JSX.Element {
       if (otherUsers.length) {
         const promises: Promise<Response>[] = [];
         otherUsers.forEach((person) => {
-          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));
+          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization?.id, person.id));
         });
         const leaveOrgResponses = await Promise.all(promises);
 
@@ -273,7 +275,7 @@ export default function PeopleListView(): JSX.Element {
           }
         });
       }
-      const deleteOrgResponse = await OrganizationService.deleteOrganization(selectedOrganization.id);
+      const deleteOrgResponse = await OrganizationService.deleteOrganization(selectedOrganization?.id);
       if (allRemoved && deleteOrgResponse.requestSucceeded) {
         if (reloadOrganizations) {
           void reloadOrganizations();
@@ -326,7 +328,7 @@ export default function PeopleListView(): JSX.Element {
             open={deleteOrgModalOpened}
             onClose={() => setDeleteOrgModalOpened(false)}
             onSubmit={() => void deleteOrgHandler()}
-            orgName={selectedOrganization.name || ''}
+            orgName={selectedOrganization?.name || ''}
           />
         </>
       )}
@@ -354,12 +356,20 @@ export default function PeopleListView(): JSX.Element {
               marginBottom: '32px',
             }}
           >
-            {isAdmin(selectedOrganization) &&
-              (isMobile ? (
-                <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
-              ) : (
-                <Button id='new-person' label={strings.ADD_PERSON} icon='plus' onClick={goToNewPerson} size='medium' />
-              ))}
+            {selectedOrganization
+              ? isAdmin(selectedOrganization)
+              : false &&
+                (isMobile ? (
+                  <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
+                ) : (
+                  <Button
+                    id='new-person'
+                    label={strings.ADD_PERSON}
+                    icon='plus'
+                    onClick={goToNewPerson}
+                    size='medium'
+                  />
+                ))}
           </Grid>
           <PageSnackbar />
         </Grid>

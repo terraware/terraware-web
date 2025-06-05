@@ -67,7 +67,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const { species } = useSpeciesData();
   const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
-  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
+  const plantingSites: PlantingSite[] | undefined = useAppSelector(
+    selectOrgPlantingSites(selectedOrganization?.id || -1)
+  );
   const projects: Project[] | undefined = useAppSelector(selectProjects);
 
   const contentStyles = {
@@ -99,27 +101,27 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const reloadProjects = useCallback(() => {
     const populateProjects = () => {
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
+      if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {
         void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
       }
     };
     populateProjects();
-  }, [selectedOrganization.id, dispatch, activeLocale]);
+  }, [selectedOrganization, dispatch, activeLocale]);
 
   const reloadPlantingSites = useCallback(() => {
     const populatePlantingSites = () => {
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
+      if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {
         void dispatch(requestPlantingSites(selectedOrganization.id));
       }
     };
     populatePlantingSites();
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization]);
 
   const setDefaults = useCallback(() => {
-    if (!isPlaceholderOrg(selectedOrganization.id)) {
+    if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {
       setWithdrawalCreated(false);
     }
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization]);
 
   useEffect(() => {
     reloadProjects();
@@ -136,12 +138,12 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const selectedOrgHasSpecies = useCallback((): boolean => species.length > 0, [species]);
 
   const selectedOrgHasSeedBanks = useCallback(
-    (): boolean => selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank'),
+    (): boolean => (selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank') : false),
     [selectedOrganization]
   );
 
   const selectedOrgHasNurseries = useCallback(
-    (): boolean => selectedOrgHasFacilityType(selectedOrganization, 'Nursery'),
+    (): boolean => (selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Nursery') : false),
     [selectedOrganization]
   );
 
@@ -217,7 +219,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               element={
                 <ProjectsRouter
                   reloadProjects={reloadProjects}
-                  isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
+                  isPlaceholderOrg={() => (selectedOrganization ? isPlaceholderOrg(selectedOrganization.id) : true)}
                   selectedOrgHasProjects={selectedOrgHasProjects}
                 />
               }

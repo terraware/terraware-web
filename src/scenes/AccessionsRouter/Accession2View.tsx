@@ -95,7 +95,7 @@ export default function Accession2View(): JSX.Element {
   const seedBankTimeZone = useMemo(() => {
     const facility = accession?.facilityId
       ? FacilityService.getFacility({
-          organization: selectedOrganization,
+          organization: selectedOrganization!,
           facilityId: accession.facilityId,
           type: 'Seed Bank',
         })
@@ -595,7 +595,7 @@ export default function Accession2View(): JSX.Element {
               title={strings.LOCATION}
               contents={
                 <Box>
-                  {getSeedBank(selectedOrganization, accession.facilityId)?.name}
+                  {selectedOrganization ? getSeedBank(selectedOrganization, accession.facilityId)?.name : undefined}
                   {accession.subLocation ? ` / ${accession.subLocation}` : ''}
                 </Box>
               }

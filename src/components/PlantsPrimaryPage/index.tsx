@@ -59,7 +59,7 @@ export default function PlantsPrimaryPage({
   const navigate = useSyncNavigate();
 
   useEffect(() => {
-    if (plantsSitePreferences && selectedOrganization.id !== -1) {
+    if (plantsSitePreferences && selectedOrganization) {
       const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
       if (!_.isEqual(response[lastVisitedPreferenceName], plantsSitePreferences)) {
         void PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
@@ -67,7 +67,7 @@ export default function PlantsPrimaryPage({
         });
       }
     }
-  }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization.id]);
+  }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization]);
 
   const plantingSitesList = useMemo((): PlantingSite[] => {
     const projectSites = projectId
@@ -96,7 +96,7 @@ export default function PlantsPrimaryPage({
     const initializePlantingSite = async () => {
       if (plantingSitesList && plantingSitesList.length) {
         let lastVisitedPlantingSite: any = {};
-        if (selectedOrganization.id !== -1 && !projectId) {
+        if (selectedOrganization && !projectId) {
           const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
           if (response[lastVisitedPreferenceName]) {
             lastVisitedPlantingSite = response[lastVisitedPreferenceName];
@@ -110,7 +110,7 @@ export default function PlantsPrimaryPage({
           plantingSitesList.find((plantingSite) => plantingSite?.id === plantingSiteIdToUse) ?? plantingSitesList[0];
         const nextPlantingSiteId = nextPlantingSite.id;
 
-        if (selectedOrganization.id !== -1 && !projectId) {
+        if (selectedOrganization && !projectId) {
           if (nextPlantingSiteId !== lastPlantingSiteId) {
             await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
               [lastVisitedPreferenceName]: { plantingSiteId: nextPlantingSiteId },
@@ -133,7 +133,7 @@ export default function PlantsPrimaryPage({
     plantingSitesList,
     plantingSiteId,
     setActivePlantingSite,
-    selectedOrganization.id,
+    selectedOrganization,
     lastVisitedPreferenceName,
     setPlantsSitePreferences,
     organizationId,

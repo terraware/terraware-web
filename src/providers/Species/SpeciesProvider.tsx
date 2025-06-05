@@ -30,8 +30,8 @@ const SpeciesProvider = ({ children }: Props) => {
   const { acceleratorOrganizationId } = usePlantingSiteData();
 
   const reload = useCallback(() => {
-    const orgId = isAcceleratorRoute ? acceleratorOrganizationId ?? selectedOrganization.id : selectedOrganization.id;
-    if (orgId > 0) {
+    const orgId = (isAcceleratorRoute ? acceleratorOrganizationId : undefined) ?? selectedOrganization?.id;
+    if (orgId && orgId > 0) {
       const speciesRequest = dispatch(requestListSpecies(orgId));
       const inUseSpeciesRequest = dispatch(requestListInUseSpecies(orgId));
 

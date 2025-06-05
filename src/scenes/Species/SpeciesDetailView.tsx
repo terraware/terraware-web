@@ -57,15 +57,15 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   }, [isMobile]);
 
   useEffect(() => {
-    const getSpecies = async () => {
-      const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization.id);
-      if (speciesResponse.requestSucceeded) {
-        setSpecies(speciesResponse.species);
-      } else {
-        navigate(APP_PATHS.SPECIES);
-      }
-    };
-    if (selectedOrganization && selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
+      const getSpecies = async () => {
+        const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization.id);
+        if (speciesResponse.requestSucceeded) {
+          setSpecies(speciesResponse.species);
+        } else {
+          navigate(APP_PATHS.SPECIES);
+        }
+      };
       void getSpecies();
     }
   }, [speciesId, selectedOrganization, navigate]);
@@ -86,7 +86,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   };
 
   const deleteSelectedSpecies = async (id: number) => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       setIsBusy(true);
       const success = await SpeciesService.deleteSpecies(id, selectedOrganization.id);
       setIsBusy(false);

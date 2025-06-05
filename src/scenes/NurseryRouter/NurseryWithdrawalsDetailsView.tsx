@@ -85,7 +85,7 @@ export default function NurseryWithdrawalsDetailsView({
         setBatches(withdrawalResponse.batches);
       }
       // get summary information
-      if (withdrawalId && selectedOrganization.id !== -1) {
+      if (withdrawalId && selectedOrganization) {
         const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(selectedOrganization.id, [
           {
             operation: 'field',

@@ -119,7 +119,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   }, [onClose, isLoading]);
 
   const onSave = useCallback(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization?.id) {
       let error = '';
       if (newApplication.projectType === 'New') {
         if ((error = validateProjectName(newApplication.projectName ?? ''))) {
@@ -130,7 +130,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
         const createProjectApplicationRequest = dispatch(
           requestCreateProjectApplication({
             projectName: newApplication.projectName ?? '',
-            organizationId: selectedOrganization.id,
+            organizationId: selectedOrganization?.id,
           })
         );
         setCreateProjectApplicationRequestId(createProjectApplicationRequest.requestId);

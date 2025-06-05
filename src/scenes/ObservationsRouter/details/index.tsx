@@ -75,7 +75,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     searchObservations(
       state,
       plantingSiteId,
-      selectedOrganization.id,
+      selectedOrganization,
       defaultTimeZone.get().id,
       searchProps.search,
       searchProps.filtersProps?.filters?.zone?.values ?? [],
@@ -97,7 +97,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       {
         plantingSiteId,
         observationId,
-        orgId: selectedOrganization.id,
+        orgId: selectedOrganization?.id || -1,
         search: searchProps.search,
         zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
       },
@@ -132,7 +132,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) =>
-    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
+    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization)
   );
 
   const title = useMemo(() => {

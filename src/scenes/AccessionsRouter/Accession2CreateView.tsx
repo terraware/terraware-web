@@ -101,7 +101,7 @@ export default function CreateAccession(): JSX.Element | null {
   }, [record, availableProjects, setRecord]);
 
   useEffect(() => {
-    if (record.facilityId) {
+    if (record.facilityId && selectedOrganization) {
       const accessionSeedBank = getSeedBank(selectedOrganization, record.facilityId);
       setSelectedSeedBank(accessionSeedBank);
     }

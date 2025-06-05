@@ -239,7 +239,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           if (uploadApi) {
             response = await uploadApi(file, facility.id.toString());
           }
-        } else if (selectedOrganization && selectedOrganization.id !== -1) {
+        } else if (selectedOrganization) {
           if (uploadApi) {
             response = await uploadApi(file, selectedOrganization.id.toString());
           }

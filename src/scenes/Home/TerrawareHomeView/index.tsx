@@ -55,11 +55,11 @@ const TerrawareHomeView = () => {
   }, [orgPreferences, showAcceleratorCard]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestObservations(selectedOrganization.id));
       void dispatch(requestObservationsResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization]);
 
   const isLoadingInitialData = useMemo(
     () => orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,
@@ -93,10 +93,12 @@ const TerrawareHomeView = () => {
   }, [isMobile, isTablet]);
 
   const dismissAcceleratorCard = async () => {
-    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-      ['showAcceleratorCard']: false,
-    });
-    reloadOrgPreferences();
+    if (selectedOrganization) {
+      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+        ['showAcceleratorCard']: false,
+      });
+      reloadOrgPreferences();
+    }
   };
 
   const organizationStatsCardRows: OrganizationStatsCardRow[] = useMemo(() => {
@@ -132,18 +134,19 @@ const TerrawareHomeView = () => {
       {
         buttonProps: isAdmin(selectedOrganization)
           ? {
-              label: selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
-                ? strings.ADD_AN_ACCESSION
-                : strings.SET_UP_SEED_BANK,
+              label:
+                selectedOrganization && selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+                  ? strings.ADD_AN_ACCESSION
+                  : strings.SET_UP_SEED_BANK,
               onClick: () =>
-                selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+                selectedOrganization && selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
                   ? navigate(APP_PATHS.ACCESSIONS2_NEW)
                   : navigate(APP_PATHS.SEED_BANKS_NEW),
             }
           : {
               label: strings.ADD_AN_ACCESSION,
               onClick: () =>
-                selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+                selectedOrganization && selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
                   ? goToNewAccession()
                   : navigate(APP_PATHS.ACCESSIONS),
             },
@@ -167,18 +170,19 @@ const TerrawareHomeView = () => {
       {
         buttonProps: isAdmin(selectedOrganization)
           ? {
-              label: selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
-                ? strings.ADD_INVENTORY
-                : strings.SET_UP_NURSERY,
+              label:
+                selectedOrganization && selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+                  ? strings.ADD_INVENTORY
+                  : strings.SET_UP_NURSERY,
               onClick: () =>
-                selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+                selectedOrganization && selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
                   ? navigate(APP_PATHS.INVENTORY_NEW)
                   : navigate(APP_PATHS.NURSERIES_NEW),
             }
           : {
               label: strings.ADD_INVENTORY,
               onClick: () =>
-                selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+                selectedOrganization && selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
                   ? navigate(APP_PATHS.INVENTORY_NEW)
                   : navigate(APP_PATHS.INVENTORY),
             },
@@ -201,7 +205,7 @@ const TerrawareHomeView = () => {
       },
     ];
 
-    if (!plantingSites?.length && isAdmin(selectedOrganization)) {
+    if (!plantingSites?.length && selectedOrganization && isAdmin(selectedOrganization)) {
       rows.push({
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,

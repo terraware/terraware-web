@@ -19,7 +19,7 @@ export default function Home({ selectedOrgHasSpecies }: { selectedOrgHasSpecies:
 
   useEffect(() => {
     const populatePeople = async () => {
-      if (isAdmin(selectedOrganization)) {
+      if (selectedOrganization && isAdmin(selectedOrganization)) {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {
           setPeople(response.users);

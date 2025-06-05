@@ -50,7 +50,7 @@ export const useDefaultTimeZone = () => {
   return useMemo(
     () => ({
       get: (forEdit?: boolean) => {
-        const orgTimeZone = getTimeZone(timeZones, selectedOrganization.timeZone);
+        const orgTimeZone = getTimeZone(timeZones, selectedOrganization?.timeZone);
         if (orgTimeZone) {
           return orgTimeZone;
         }

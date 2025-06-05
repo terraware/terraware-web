@@ -61,7 +61,10 @@ export default function InventoryForNurseryView(): JSX.Element {
               fontStyle: 'bold',
             }}
           >
-            {strings.formatString(strings.BATCHES_AT, getNurseryName(nurseryId, selectedOrganization))}
+            {strings.formatString(
+              strings.BATCHES_AT,
+              selectedOrganization ? getNurseryName(nurseryId, selectedOrganization) : ''
+            )}
           </Typography>
           <Grid item xs={12}>
             <PageSnackbar />

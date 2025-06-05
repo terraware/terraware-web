@@ -335,7 +335,9 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
         ) : (
           <Container maxWidth={false} sx={{ padding: '32px 0' }}>
             {!isMobile && <Grid item xs={12} padding={theme.spacing(3)} />}
-            {isAdmin(selectedOrganization) ? (
+            {selectedOrganization ? (
+              isAdmin(selectedOrganization)
+            ) : false ? (
               <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
             ) : (
               <EmptyMessage

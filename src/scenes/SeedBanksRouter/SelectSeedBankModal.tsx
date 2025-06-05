@@ -22,7 +22,7 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
   const { open, onClose } = props;
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
 
-  const availableFacilities = getAllSeedBanks(selectedOrganization) || [];
+  const availableFacilities = selectedOrganization ? getAllSeedBanks(selectedOrganization) : [];
 
   const onChange = (facilityName: string) => {
     setSelectedFacility(availableFacilities.find((facility) => facility?.name === facilityName));

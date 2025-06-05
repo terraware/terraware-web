@@ -56,7 +56,7 @@ const OnboardingHomeView = () => {
 
   useEffect(() => {
     const populatePeople = async () => {
-      if (isOwner(selectedOrganization)) {
+      if (selectedOrganization && isOwner(selectedOrganization)) {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {
           setPeople(response.users);
@@ -69,28 +69,34 @@ const OnboardingHomeView = () => {
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    void dispatch(requestObservations(selectedOrganization.id));
-    void dispatch(requestObservationsResults(selectedOrganization.id));
-  }, [dispatch, selectedOrganization.id]);
+    if (selectedOrganization) {
+      void dispatch(requestObservations(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
+    }
+  }, [dispatch, selectedOrganization]);
 
   const isLoadingInitialData = useMemo(
-    () => allSpecies === undefined || (isOwner(selectedOrganization) && people === undefined),
+    () => allSpecies === undefined || (selectedOrganization && isOwner(selectedOrganization) && people === undefined),
     [allSpecies, people, selectedOrganization]
   );
 
   const dismissAcceleratorCard = async () => {
-    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-      ['showAcceleratorCard']: false,
-    });
-    reloadOrgPreferences();
+    if (selectedOrganization) {
+      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+        ['showAcceleratorCard']: false,
+      });
+      reloadOrgPreferences();
+    }
   };
 
   const markAsComplete = useCallback(async () => {
-    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-      ['singlePersonOrg']: true,
-    });
-    reloadOrgPreferences();
-  }, [reloadOrgPreferences, selectedOrganization.id]);
+    if (selectedOrganization) {
+      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+        ['singlePersonOrg']: true,
+      });
+      reloadOrgPreferences();
+    }
+  }, [reloadOrgPreferences, selectedOrganization]);
 
   const onboardingCardRows: OnboardingCardRow[] = useMemo(() => {
     const rows = isOwner(selectedOrganization)

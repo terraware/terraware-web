@@ -49,7 +49,7 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
   const plantingSites = useAppSelector(selectPlantingSites);
-  const draftSites = useAppSelector(selectDraftPlantingSites(selectedOrganization.id));
+  const draftSites = useAppSelector(selectDraftPlantingSites(selectedOrganization?.id || -1));
 
   const checkErrors = useCallback(() => {
     let hasNameError = true;
@@ -75,16 +75,16 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
   }, [plantingSeasonsValid, record.name, usedNames]);
 
   useEffect(() => {
-    if (!plantingSites && selectedOrganization.id !== -1) {
+    if (!plantingSites && selectedOrganization) {
       void dispatch(requestPlantingSites(selectedOrganization.id));
     }
-  }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
+  }, [activeLocale, dispatch, plantingSites, selectedOrganization]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestSearchDrafts(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
     const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];

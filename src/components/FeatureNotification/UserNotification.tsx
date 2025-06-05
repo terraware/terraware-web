@@ -99,7 +99,7 @@ export default function UserNotification(): Notification | null {
       return {
         id: -1,
         notificationCriticality: 'Info',
-        organizationId: selectedOrganization.id,
+        organizationId: selectedOrganization?.id || -1,
         title: strings.REVIEW_YOUR_ACCOUNT_SETTING,
         body: (
           <Box>
@@ -159,7 +159,7 @@ export default function UserNotification(): Notification | null {
     unitNotification,
     timeZoneUserNotification,
     reloadUserPreferences,
-    selectedOrganization.id,
+    selectedOrganization,
     user?.userType,
     user?.locale,
     userPreferences.preferredWeightSystem,

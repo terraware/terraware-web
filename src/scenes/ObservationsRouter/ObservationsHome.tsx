@@ -116,10 +116,10 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   }, [navigate, allPlantingSites?.length]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestPlantings(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization]);
 
   const actionButton = useMemo<ButtonProps | undefined>(() => {
     if (!activeLocale || !newObservationsSchedulable || !scheduleObservationsEnabled) {
