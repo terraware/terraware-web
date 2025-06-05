@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useTheme } from '@mui/material';
 import {
@@ -139,7 +139,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
 
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
-  const getPlugins = () => {
+  const getPlugins = useCallback(() => {
     const plugins = [];
     if (type === 'pie') {
       plugins.push(emptyDoughnutPlugin);
@@ -148,7 +148,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       plugins.push(htmlLegendPlugin);
     }
     return plugins;
-  };
+  }, [customLegend, type]);
 
   useEffect(() => {
     // used to prevent double render on dev scope (react 18)
@@ -235,7 +235,20 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       };
       void createChart();
     }
-  }, [locale]);
+  }, [
+    locale,
+    chart,
+    customScales,
+    getPlugins,
+    lineColor,
+    pluginsOptions,
+    pointRadius,
+    type,
+    xAxisType,
+    yLimits?.max,
+    yLimits?.min,
+    yStepSize,
+  ]);
 
   useEffect(() => {
     const colors = elementColor ?? generateTerrawareRandomColors(theme, chartData?.labels?.length || 0);
@@ -279,7 +292,20 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       chart.options.plugins = newPlugins;
       chart.update();
     }
-  }, [chart, chartData, showLegend, barAnnotations, customTooltipTitles, barThickness, elementColor, theme]);
+  }, [
+    chart,
+    chartData,
+    showLegend,
+    barAnnotations,
+    customTooltipTitles,
+    barThickness,
+    elementColor,
+    theme,
+    customLegend,
+    customLegendContainerId,
+    customTooltipLabel,
+    pluginsOptions,
+  ]);
 
   return (
     <canvas

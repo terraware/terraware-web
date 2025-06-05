@@ -59,7 +59,7 @@ const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrappe
           goToModuleEventSession(project.id, moduleId, event.id);
         },
       })),
-    [events, goToModuleEventSession, project, moduleId]
+    [events, goToModuleEventSession, project, moduleId, mixpanel]
   );
 
   const moduleDetails = useMemo(

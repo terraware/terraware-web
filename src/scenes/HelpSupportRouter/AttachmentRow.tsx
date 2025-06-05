@@ -39,7 +39,7 @@ const AttachmentRow = ({ attachment, onChange, onRemove }: AttachmentRowProps) =
     if (newAttachment.status !== attachment.status && onChange) {
       onChange(newAttachment);
     }
-  }, [attachmentRequest, onChange]);
+  }, [attachmentRequest, onChange, attachment.status, filename, requestId]);
 
   return (
     <Grid

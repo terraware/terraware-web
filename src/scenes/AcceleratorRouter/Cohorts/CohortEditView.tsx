@@ -105,6 +105,7 @@ export default function CohortEditView(): JSX.Element {
     deleteCohortModulesRequest,
     updateCohortRequest,
     updateCohortModulesRequest,
+    isLoading,
     dispatch,
     goToCohortView,
     snackbar,

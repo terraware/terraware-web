@@ -148,6 +148,9 @@ export default function OrgObservationsListView({
   }, [activeLocale, scheduleObservationsEnabled]);
 
   const adHocColumns = useCallback((): TableColumnType[] => {
+    if (!activeLocale) {
+      return [];
+    }
     return [
       {
         key: 'plotNumber',

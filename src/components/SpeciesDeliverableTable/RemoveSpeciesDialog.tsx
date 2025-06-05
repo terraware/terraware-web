@@ -45,7 +45,7 @@ export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JS
       snackbar.toastError(strings.GENERIC_ERROR);
       onClose();
     }
-  }, [deleteRequest]);
+  }, [deleteRequest, onClose, snackbar]);
 
   if (!open) {
     return null;

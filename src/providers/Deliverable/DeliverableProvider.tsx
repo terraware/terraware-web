@@ -36,7 +36,7 @@ const DeliverableProvider = ({ children }: Props) => {
       deliverableId,
       projectId,
     });
-  }, [currentDeliverable, deliverableId]);
+  }, [currentDeliverable, deliverableId, projectId]);
 
   return <DeliverableContext.Provider value={deliverableData}>{children}</DeliverableContext.Provider>;
 };

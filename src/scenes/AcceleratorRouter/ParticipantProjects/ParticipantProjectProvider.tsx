@@ -69,7 +69,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     if (projectId !== -1) {
       void dispatch(requestGetParticipantProject(projectId));
     }
-  }, [dispatch, projectId]);
+  }, [dispatch, projectId, reloadAll]);
 
   useEffect(() => {
     if (projectId !== -1) {

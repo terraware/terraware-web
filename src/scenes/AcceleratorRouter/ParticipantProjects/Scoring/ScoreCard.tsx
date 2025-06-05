@@ -68,7 +68,7 @@ const ScoreCard = ({ score, isEditing, onChange }: ScoreCardProps) => {
         </Typography>
       );
     }
-  }, [isEditing, error, score]);
+  }, [isEditing, error, score, onChange]);
 
   const summary = useMemo(() => {
     if (isEditing) {
@@ -89,7 +89,7 @@ const ScoreCard = ({ score, isEditing, onChange }: ScoreCardProps) => {
         </Typography>
       );
     }
-  }, [activeLocale, isEditing, score]);
+  }, [activeLocale, isEditing, score, onChange]);
 
   const detailsUrl = useMemo(() => {
     if (isEditing) {
@@ -115,7 +115,7 @@ const ScoreCard = ({ score, isEditing, onChange }: ScoreCardProps) => {
         </Typography>
       );
     }
-  }, [activeLocale, isEditing, score]);
+  }, [activeLocale, isEditing, score, onChange]);
 
   return (
     <Box

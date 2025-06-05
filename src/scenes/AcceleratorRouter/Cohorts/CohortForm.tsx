@@ -76,7 +76,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     }));
   };
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     if (!localRecord.name) {
       return false;
     }
@@ -86,7 +86,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     }
 
     return true;
-  };
+  }, [localRecord.name, localRecord.phase]);
 
   const onSaveHandler = useCallback(() => {
     if (!validateForm()) {
@@ -122,7 +122,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
       [...toAdd, ...toUpdate],
       toDelete
     );
-  }, [cohortModules, localRecord, pendingCohortModules, onSave]);
+  }, [cohortModules, localRecord, pendingCohortModules, onSave, validateForm]);
 
   useEffect(() => {
     // update local record when cohort changes

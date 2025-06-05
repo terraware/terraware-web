@@ -51,7 +51,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
         });
         return goToDeliverable(deliverable.id, deliverable.projectId);
     }
-  }, [goToDeliverable, goToModuleEventSession, projectId, toDo]);
+  }, [goToDeliverable, goToModuleEventSession, projectId, toDo, mixpanel]);
 
   return (
     <Button

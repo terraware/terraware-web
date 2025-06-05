@@ -84,7 +84,7 @@ const OrganizationsView = () => {
         snackbar.toastError(strings.GENERIC_ERROR);
       }
     }
-  }, [removeOrgsRequest]);
+  }, [removeOrgsRequest, dispatchSearchRequest, snackbar]);
 
   useEffect(() => {
     if (!addOrgRequest) {
@@ -98,7 +98,7 @@ const OrganizationsView = () => {
         snackbar.toastError(strings.GENERIC_ERROR);
       }
     }
-  }, [addOrgRequest]);
+  }, [addOrgRequest, dispatchSearchRequest, snackbar]);
 
   useEffect(() => {
     if (!listRequest) {

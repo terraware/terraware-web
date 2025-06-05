@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
@@ -40,11 +40,15 @@ export default function EditSettings(): JSX.Element {
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
   const snackbar = useSnackbar();
 
+  const goToProjectReports = useCallback(() => {
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
+  }, [navigate, projectId]);
+
   useEffect(() => {
     if (projectId) {
       void dispatch(requestProjectReportConfig(projectId));
     }
-  }, [projectId]);
+  }, [projectId, dispatch]);
 
   const { isMobile } = useDeviceInfo();
 
@@ -54,7 +58,7 @@ export default function EditSettings(): JSX.Element {
     } else if (createReportConfigResponse && createReportConfigResponse.status === 'success') {
       goToProjectReports();
     }
-  }, [createReportConfigResponse]);
+  }, [createReportConfigResponse, goToProjectReports, snackbar]);
 
   useEffect(() => {
     if (updateReportConfigResponse?.status === 'error') {
@@ -62,11 +66,7 @@ export default function EditSettings(): JSX.Element {
     } else if (updateReportConfigResponse?.status === 'success') {
       goToProjectReports();
     }
-  }, [updateReportConfigResponse]);
-
-  const goToProjectReports = () => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
-  };
+  }, [updateReportConfigResponse, goToProjectReports, snackbar]);
 
   const [newConfig, , onChange] = useForm<NewAcceleratorReportConfig>({
     reportingStartDate: projectReportConfig.config?.reportingStartDate || '',
