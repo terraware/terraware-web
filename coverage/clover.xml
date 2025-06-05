@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1749154873122" clover="3.2.0">
-  <project timestamp="1749154873122" name="All files">
-    <metrics statements="30722" coveredstatements="1296" conditionals="21253" coveredconditionals="388" methods="9446" coveredmethods="211" elements="61421" coveredelements="1895" complexity="0" loc="30722" ncloc="30722" packages="263" files="1267" classes="1267"/>
+<coverage generated="1749163627901" clover="3.2.0">
+  <project timestamp="1749163627902" name="All files">
+    <metrics statements="30726" coveredstatements="1296" conditionals="21263" coveredconditionals="388" methods="9446" coveredmethods="211" elements="61435" coveredelements="1895" complexity="0" loc="30726" ncloc="30726" packages="263" files="1267" classes="1267"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11040,7 +11040,7 @@
       </file>
     </package>
     <package name="src.providers">
-      <metrics statements="238" coveredstatements="0" conditionals="149" coveredconditionals="0" methods="70" coveredmethods="0"/>
+      <metrics statements="242" coveredstatements="0" conditionals="159" coveredconditionals="0" methods="70" coveredmethods="0"/>
       <file name="DataTypes.ts" path="/home/runner/work/terraware-web/terraware-web/src/providers/DataTypes.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
@@ -11079,7 +11079,7 @@
         <line num="83" count="0" type="stmt"/>
       </file>
       <file name="LocalizationProvider.tsx" path="/home/runner/work/terraware-web/terraware-web/src/providers/LocalizationProvider.tsx">
-        <metrics statements="39" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="11" coveredmethods="0"/>
+        <metrics statements="43" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
@@ -11091,34 +11091,38 @@
         <line num="42" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="59" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="56" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
+        <line num="68" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
-        <line num="76" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="76" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
+        <line num="79" count="0" type="cond" truecount="0" falsecount="3"/>
         <line num="80" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="95" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
       </file>
       <file name="OrganizationProvider.tsx" path="/home/runner/work/terraware-web/terraware-web/src/providers/OrganizationProvider.tsx">
         <metrics statements="78" coveredstatements="0" conditionals="62" coveredconditionals="0" methods="18" coveredmethods="0"/>
