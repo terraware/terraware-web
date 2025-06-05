@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/273</span>
+                <span class='fraction'>0/277</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/236</span>
+                <span class='fraction'>0/242</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/266</span>
+                <span class='fraction'>0/270</span>
             </div>
         
             
@@ -899,7 +899,15 @@
 <a name='L834'></a><a href='#L834'>834</a>
 <a name='L835'></a><a href='#L835'>835</a>
 <a name='L836'></a><a href='#L836'>836</a>
-<a name='L837'></a><a href='#L837'>837</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L837'></a><a href='#L837'>837</a>
+<a name='L838'></a><a href='#L838'>838</a>
+<a name='L839'></a><a href='#L839'>839</a>
+<a name='L840'></a><a href='#L840'>840</a>
+<a name='L841'></a><a href='#L841'>841</a>
+<a name='L842'></a><a href='#L842'>842</a>
+<a name='L843'></a><a href='#L843'>843</a>
+<a name='L844'></a><a href='#L844'>844</a>
+<a name='L845'></a><a href='#L845'>845</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1288,9 +1296,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1334,9 +1348,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2122,11 +2138,17 @@ export default function <span class="fstat-no" title="function not covered" >Sel
   };
 &nbsp;
   const onChangeFromNursery = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>acilityIdSelected: string) =&gt; {</span>
-    const foundNursery = <span class="cstat-no" title="statement not covered" >getNurseryById(selectedOrganization, Number(facilityIdSelected));</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedNursery(foundNursery);</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+      const foundNursery = <span class="cstat-no" title="statement not covered" >getNurseryById(selectedOrganization, Number(facilityIdSelected));</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedNursery(foundNursery);</span>
+    }
   };
 &nbsp;
   const nurseriesOptions = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!selectedOrganization) {</span>
+<span class="cstat-no" title="statement not covered" >      return [];</span>
+    }
+&nbsp;
     const nurseries = <span class="cstat-no" title="statement not covered" >batches</span>
       .filter(<span class="fstat-no" title="function not covered" >(b</span>atchData: SearchResponseElement) =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (isOutplant) {</span>
@@ -2167,13 +2189,15 @@ export default function <span class="fstat-no" title="function not covered" >Sel
   const gridSize = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >isMobile ? 12 : 6)</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const allNurseries = <span class="cstat-no" title="statement not covered" >getAllNurseries(selectedOrganization);</span>
-    const destinationNurseries = <span class="cstat-no" title="statement not covered" >allNurseries.filter(</span>
-<span class="fstat-no" title="function not covered" >      (n</span>ursery) =&gt; <span class="cstat-no" title="statement not covered" >nursery.id.toString() !== selectedNursery?.id.toString()</span>
-    );
-<span class="cstat-no" title="statement not covered" >    setDestinationNurseriesOptions(</span>
-      destinationNurseries.map(<span class="fstat-no" title="function not covered" >(n</span>ursery) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: nursery.name, value: nursery.id.toString() })</span>)
-    );
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+      const allNurseries = <span class="cstat-no" title="statement not covered" >getAllNurseries(selectedOrganization);</span>
+      const destinationNurseries = <span class="cstat-no" title="statement not covered" >allNurseries.filter(</span>
+<span class="fstat-no" title="function not covered" >        (n</span>ursery) =&gt; <span class="cstat-no" title="statement not covered" >nursery.id.toString() !== selectedNursery?.id.toString()</span>
+      );
+<span class="cstat-no" title="statement not covered" >      setDestinationNurseriesOptions(</span>
+        destinationNurseries.map(<span class="fstat-no" title="function not covered" >(n</span>ursery) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: nursery.name, value: nursery.id.toString() })</span>)
+      );
+    }
   }, [selectedNursery, selectedOrganization, isOutplant]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -2578,7 +2602,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-05T19:59:43.895Z
+                at 2025-06-05T20:21:12.409Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

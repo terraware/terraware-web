@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -256,7 +256,9 @@
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
 <a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -330,6 +332,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -478,10 +482,10 @@ export default function <span class="fstat-no" title="function not covered" >Org
   const { countries } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const timeZones = <span class="cstat-no" title="statement not covered" >useTimeZones();</span>
   const utcTimeZone = <span class="cstat-no" title="statement not covered" >getUTC(timeZones);</span>
-  const currentTimeZone = <span class="cstat-no" title="statement not covered" >timeZones.find(<span class="fstat-no" title="function not covered" >(t</span>z) =&gt; <span class="cstat-no" title="statement not covered" >tz.id === selectedOrganization.timeZone)</span>?.longName;</span>
+  const currentTimeZone = <span class="cstat-no" title="statement not covered" >timeZones.find(<span class="fstat-no" title="function not covered" >(t</span>z) =&gt; <span class="cstat-no" title="statement not covered" >tz.id === selectedOrganization?.timeZone)</span>?.longName;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
       const populatePeople = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
         const response = <span class="cstat-no" title="statement not covered" >await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);</span>
 <span class="cstat-no" title="statement not covered" >        if (response.requestSucceeded) {</span>
@@ -500,7 +504,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   };
 &nbsp;
   const organizationState = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (countries &amp;&amp; selectedOrganization.countryCode &amp;&amp; selectedOrganization.countrySubdivisionCode) {</span>
+<span class="cstat-no" title="statement not covered" >    if (countries &amp;&amp; selectedOrganization?.countryCode &amp;&amp; selectedOrganization?.countrySubdivisionCode) {</span>
 <span class="cstat-no" title="statement not covered" >      return getSubdivisionByCode(</span>
         countries,
         selectedOrganization.countryCode,
@@ -510,7 +514,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   };
 &nbsp;
   const getDateAdded = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.createdTime) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization?.createdTime) {</span>
 <span class="cstat-no" title="statement not covered" >      return getDateDisplayValue(selectedOrganization.createdTime);</span>
     }
   };
@@ -556,7 +560,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             label={strings.ORGANIZATION_NAME}
             id='name'
             type='text'
-            value={selectedOrganization.name}
+            value={selectedOrganization?.name || ''}
             display={true}
           /&gt;
         &lt;/Grid&gt;
@@ -565,7 +569,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             label={strings.DESCRIPTION}
             id='description'
             type='text'
-            value={selectedOrganization.description}
+            value={selectedOrganization?.description || ''}
             display={true}
           /&gt;
         &lt;/Grid&gt;
@@ -578,14 +582,14 @@ export default function <span class="fstat-no" title="function not covered" >Org
             id='country'
             type='text'
             value={
-              countries &amp;&amp; selectedOrganization.countryCode
+              countries &amp;&amp; selectedOrganization?.countryCode
                 ? getCountryByCode(countries, selectedOrganization.countryCode)?.name
                 : ''
             }
             display={true}
           /&gt;
         &lt;/Grid&gt;
-        {selectedOrganization.countrySubdivisionCode &amp;&amp; (
+        {selectedOrganization?.countrySubdivisionCode &amp;&amp; (
           &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}&gt;
             &lt;TextField label={strings.STATE} id='state' type='text' value={organizationState()} display={true} /&gt;
           &lt;/Grid&gt;
@@ -614,11 +618,13 @@ export default function <span class="fstat-no" title="function not covered" >Org
             label={strings.ORGANIZATION_TYPE}
             id='org-type'
             type='text'
-            value={organizationTypeLabel(selectedOrganization.organizationType)}
+            value={
+              selectedOrganization?.organizationType ? organizationTypeLabel(selectedOrganization.organizationType) : ''
+            }
             display={true}
           /&gt;
         &lt;/Grid&gt;
-        {selectedOrganization.organizationType === 'Other' &amp;&amp; (
+        {selectedOrganization?.organizationType === 'Other' &amp;&amp; (
           &lt;Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}&gt;
             &lt;TextField
               label={strings.ORGANIZATION_TYPE_DESCRIPTION}
@@ -634,7 +640,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             label={strings.ORGANIZATION_WEBSITE}
             id='org-website'
             type='text'
-            value={selectedOrganization.website}
+            value={selectedOrganization?.website || ''}
             display={true}
           /&gt;
         &lt;/Grid&gt;
@@ -649,7 +655,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-05T19:59:43.895Z
+                at 2025-06-05T20:21:12.409Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

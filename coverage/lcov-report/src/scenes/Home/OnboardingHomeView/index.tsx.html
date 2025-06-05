@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -296,7 +296,13 @@
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -369,9 +375,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -380,14 +383,23 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -587,7 +599,7 @@ const OnboardingHomeView = <span class="cstat-no" title="statement not covered" 
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const populatePeople = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (isOwner(selectedOrganization)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (selectedOrganization &amp;&amp; isOwner(selectedOrganization)) {</span>
         const response = <span class="cstat-no" title="statement not covered" >await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);</span>
 <span class="cstat-no" title="statement not covered" >        if (response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >          setPeople(response.users);</span>
@@ -600,27 +612,33 @@ const OnboardingHomeView = <span class="cstat-no" title="statement not covered" 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    void dispatch(requestObservations(selectedOrganization.id));</span>
-<span class="cstat-no" title="statement not covered" >    void dispatch(requestObservationsResults(selectedOrganization.id));</span>
-  }, [dispatch, selectedOrganization.id]);
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestObservations(selectedOrganization.id));</span>
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestObservationsResults(selectedOrganization.id));</span>
+    }
+  }, [dispatch, selectedOrganization]);
 &nbsp;
   const isLoadingInitialData = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >allSpecies === undefined || (isOwner(selectedOrganization) &amp;&amp; people === undefined),</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >allSpecies === undefined || (selectedOrganization &amp;&amp; isOwner(selectedOrganization) &amp;&amp; people === undefined),</span>
     [allSpecies, people, selectedOrganization]
   );
 &nbsp;
   const dismissAcceleratorCard = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {</span>
-      ['showAcceleratorCard']: false,
-    });
-<span class="cstat-no" title="statement not covered" >    reloadOrgPreferences();</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+<span class="cstat-no" title="statement not covered" >      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {</span>
+        ['showAcceleratorCard']: false,
+      });
+<span class="cstat-no" title="statement not covered" >      reloadOrgPreferences();</span>
+    }
   };
 &nbsp;
   const markAsComplete = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {</span>
-      ['singlePersonOrg']: true,
-    });
-<span class="cstat-no" title="statement not covered" >    reloadOrgPreferences();</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+<span class="cstat-no" title="statement not covered" >      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {</span>
+        ['singlePersonOrg']: true,
+      });
+<span class="cstat-no" title="statement not covered" >      reloadOrgPreferences();</span>
+    }
   };
 &nbsp;
   const onboardingCardRows: OnboardingCardRow[] = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -769,7 +787,7 @@ export default OnboardingHomeView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-05T19:59:43.895Z
+                at 2025-06-05T20:21:12.409Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

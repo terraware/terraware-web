@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -527,7 +527,8 @@
 <a name='L462'></a><a href='#L462'>462</a>
 <a name='L463'></a><a href='#L463'>463</a>
 <a name='L464'></a><a href='#L464'>464</a>
-<a name='L465'></a><a href='#L465'>465</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -761,6 +762,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1090,12 +1092,12 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   );
 &nbsp;
   const checkNurseryWithdrawals = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >      void NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then(<span class="fstat-no" title="function not covered" >(r</span>esult: boolean) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        setShowNurseryWithdrawals(result);</span>
       });
     }
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setShowNurseryWithdrawals(false);</span>
@@ -1111,7 +1113,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1 &amp;&amp; !isContributor(selectedOrganization)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization &amp;&amp; !isContributor(selectedOrganization)) {</span>
       const request = <span class="cstat-no" title="statement not covered" >dispatch(requestOrganizationFeatures({ organizationId: selectedOrganization.id }));</span>
 <span class="cstat-no" title="statement not covered" >      setOrgFeaturesRequestId(request.requestId);</span>
     }
@@ -1202,7 +1204,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
 &nbsp;
   const seedFundReportsMenu = <span class="cstat-no" title="statement not covered" >useMemo&lt;JSX.Element | null&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      selectedOrganization.canSubmitReports &amp;&amp; !!orgFeatures?.data?.seedFundReports?.enabled &amp;&amp; activeLocale ? (</span>
+<span class="cstat-no" title="statement not covered" >      selectedOrganization?.canSubmitReports &amp;&amp; !!orgFeatures?.data?.seedFundReports?.enabled &amp;&amp; activeLocale ? (</span>
         &lt;NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
@@ -1218,7 +1220,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
       closeAndNavigateTo,
       isSeedFundReportsRoute,
       orgFeatures?.data?.seedFundReports?.enabled,
-      selectedOrganization.canSubmitReports,
+      selectedOrganization?.canSubmitReports,
     ]
   );
 &nbsp;
@@ -1226,6 +1228,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      currentParticipantProject &amp;&amp;</span>
       !!orgFeatures?.data?.modules?.enabled &amp;&amp;
+      selectedOrganization &amp;&amp;
       isManagerOrHigher(selectedOrganization) &amp;&amp;
       activeLocale ? (
         &lt;NavItem
@@ -1462,7 +1465,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-05T19:59:43.895Z
+                at 2025-06-05T20:21:12.409Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

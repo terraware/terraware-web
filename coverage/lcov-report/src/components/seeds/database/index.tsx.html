@@ -1768,10 +1768,10 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   const closeMessageSelector = <span class="cstat-no" title="statement not covered" >useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));</span>
     }
-  }, [activeLocale, dispatch, selectedOrganization.id]);
+  }, [activeLocale, dispatch, selectedOrganization]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const updatePreferences = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -1844,12 +1844,12 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 &nbsp;
   const saveSearchColumns = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    as</span>ync (columnNames?: string[]) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >      if (selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });</span>
 <span class="cstat-no" title="statement not covered" >        reloadOrgPreferences();</span>
       }
     },
-    [selectedOrganization.id, reloadOrgPreferences]
+    [selectedOrganization, reloadOrgPreferences]
   );
 &nbsp;
   const saveUpdateSearchColumns = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -1897,7 +1897,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if ((facilityId || query.has('facilityId')) &amp;&amp; selectedOrganization) {</span>
-      const seedBanks = <span class="cstat-no" title="statement not covered" >getAllSeedBanks(selectedOrganization);</span>
+      const seedBanks = <span class="cstat-no" title="statement not covered" >selectedOrganization ? getAllSeedBanks(selectedOrganization) : [];</span>
 <span class="cstat-no" title="statement not covered" >      delete newSearchCriteria.facility_name;</span>
 <span class="cstat-no" title="statement not covered" >      if (seedBanks &amp;&amp; facilityId) {</span>
         const facility = <span class="cstat-no" title="statement not covered" >seedBanks.find(<span class="fstat-no" title="function not covered" >(s</span>eedBank) =&gt; <span class="cstat-no" title="statement not covered" >seedBank?.id === parseInt(facilityId, 10))</span>;</span>
@@ -1946,7 +1946,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
       const populateUnfilteredResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
         const apiResponse: SearchResponseElementWithId[] | null = <span class="cstat-no" title="statement not covered" >await SeedBankService.searchAccessions({</span>
           organizationId: selectedOrganization.id,
@@ -1966,7 +1966,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 <span class="cstat-no" title="statement not covered" >      void populateUnfilteredResults();</span>
 <span class="cstat-no" title="statement not covered" >      void populatePendingAccessions();</span>
     }
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization]);
 &nbsp;
   const initAccessions = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const getFieldsFromSearchColumns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1980,7 +1980,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 <span class="cstat-no" title="statement not covered" >      return columnsNamesToSearch;</span>
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization &amp;&amp; selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
       const requestId = <span class="cstat-no" title="statement not covered" >setRequestId('accessions_search');</span>
 &nbsp;
       const populateSearchResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -2395,7 +2395,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-05T19:59:43.895Z
+                at 2025-06-05T20:21:12.409Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
