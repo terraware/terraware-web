@@ -76,7 +76,7 @@ export default function PlantsPrimaryPage({
     const projectSitesWithAll =
       allowAllAsSiteSelection && projectSites.length > 2 ? projectSites : projectSites.filter((site) => site.id !== -1);
     return projectSitesWithAll.toSorted((a, b) => a.id - b.id);
-  }, [plantingSitesData, allowAllAsSiteSelection, selectedOrganization, projectId]);
+  }, [plantingSitesData, allowAllAsSiteSelection, projectId]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {

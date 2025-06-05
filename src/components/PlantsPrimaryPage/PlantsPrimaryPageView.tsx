@@ -74,9 +74,9 @@ export default function PlantsPrimaryPageView({
   const hasSites = useMemo(() => {
     return (
       (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1) ||
-      (isAcceleratorRoute && (plantingSites?.length ?? 0) > 1)
+      (isAcceleratorRoute && (plantingSites?.length ?? 0) > 0)
     );
-  }, [allPlantingSites]);
+  }, [allPlantingSites, isAcceleratorRoute, plantingSites]);
 
   const plantingSiteSelected = useMemo(() => {
     return plantingSite !== undefined;
@@ -137,7 +137,7 @@ export default function PlantsPrimaryPageView({
   if (
     !plantingSites ||
     (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId) ||
-    (isAcceleratorRoute && (plantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId)
+    (isAcceleratorRoute && (plantingSites?.length ?? 0) > 0 && !selectedPlantingSiteId)
   ) {
     return (
       <TfMain>
