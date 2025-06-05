@@ -118,10 +118,10 @@ const ProjectProfileView = ({
   const lastSubmittedReport = useMemo(() => {
     if (acceleratorReports?.length > 0) {
       const submittedReports = acceleratorReports
-        .filter((r) => ['Submitted', 'Approved'].includes(r.status) && !!r.submittedTime)
+        .filter((r) => ['Submitted', 'Approved'].includes(r.status) && !!r.submittedTime && !!r.endDate)
         .toSorted((a, b) => {
-          const timeA = a.submittedTime ? new Date(a.submittedTime).getTime() : 0;
-          const timeB = b.submittedTime ? new Date(b.submittedTime).getTime() : 0;
+          const timeA = a.endDate ? new Date(a.endDate).getTime() : 0;
+          const timeB = b.endDate ? new Date(b.endDate).getTime() : 0;
           return timeB - timeA;
         });
       if (submittedReports.length > 0) {
@@ -133,8 +133,8 @@ const ProjectProfileView = ({
   const lastPublishedReport = useMemo(() => {
     if (publishedReports?.length > 0) {
       const sortedReports = publishedReports.toSorted((a, b) => {
-        const timeA = a.publishedTime ? new Date(a.publishedTime).getTime() : 0;
-        const timeB = b.publishedTime ? new Date(b.publishedTime).getTime() : 0;
+        const timeA = a.endDate ? new Date(a.endDate).getTime() : 0;
+        const timeB = b.endDate ? new Date(b.endDate).getTime() : 0;
         return timeB - timeA;
       });
       if (sortedReports.length > 0) {
