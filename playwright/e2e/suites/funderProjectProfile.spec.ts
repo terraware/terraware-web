@@ -7,7 +7,7 @@ import { addCookies, addFunderCookies, exactOptions, waitFor } from '../utils/ut
 test.setTimeout(20000);
 
 export default function FunderProjectProfileTests() {
-  test.only('Publish Project and then View Published Project', async ({ page, context }, testInfo) => {
+  test('Publish Project and then View Published Project', async ({ page, context }, testInfo) => {
     // publish project
     await addCookies(context);
     await navigateToProjectProfile('Phase 1 Project Deal', page);
