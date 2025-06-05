@@ -1,17 +1,27 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
+import { navigateToProjectProfile } from '../utils/navigation';
 import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProfile';
-import { addFunderCookies } from '../utils/utils';
+import { addCookies, addFunderCookies, exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 
 export default function FunderProjectProfileTests() {
-  test.beforeEach(async ({ context }, testInfo) => {
-    // this has to be inside the tests function or else the other beforeEach will not work correctly
-    await addFunderCookies(context);
-  });
+  test.only('Publish Project and then View Published Project', async ({ page, context }, testInfo) => {
+    // publish project
+    await addCookies(context);
+    await navigateToProjectProfile('Phase 1 Project Deal', page);
+    await page.locator('#more-options').click();
+    await page
+      .locator('li')
+      .filter({ hasText: /^Publish$/ })
+      .click();
+    await expect(page.getByText('You are about to publish to the Funder Portal.')).toBeVisible();
+    await page.getByRole('button', { name: 'Publish' }).click();
+    await expect(page.getByText('Project Profile Published', exactOptions)).toBeVisible();
 
-  test('View current project', async ({ page }, testInfo) => {
+    // view published project
+    await addFunderCookies(context);
     await page.goto('http://127.0.0.1:3000');
     await page.getByRole('tab', { name: 'Project Profile' }).click();
 
