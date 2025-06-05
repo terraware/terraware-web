@@ -47,7 +47,6 @@ export default function ReportsSettings(): JSX.Element {
   const [metrics, setMetrics] = useState<ProjectMetric[]>();
   const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
-  const [selectedRows, setSelectedRows] = useState<ProjectMetric[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<ProjectMetric>();
   const [editMetricModalOpened, setEditMetricModalOpened] = useState<boolean>(false);
   const { isAllowed } = useUser();
@@ -227,10 +226,6 @@ export default function ReportsSettings(): JSX.Element {
                 columns={columns}
                 rows={metrics}
                 orderBy='name'
-                showCheckbox={true}
-                showTopBar={true}
-                selectedRows={selectedRows}
-                setSelectedRows={setSelectedRows}
                 topBarButtons={[
                   {
                     buttonText: strings.REMOVE,
