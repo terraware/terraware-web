@@ -78,7 +78,7 @@ export default function PhotoSelectorWithPreview({
     ) : (
       previewUrl && <PhotoPreview imgUrl={previewUrl} imgAlt={''} includeTrashIcon={false} {...args} />
     );
-  }, [fileData, previewUrl, handleSetFiles]);
+  }, [fileData, previewUrl, handleSetFiles, previewAspectRatio, previewWidth]);
 
   return (
     <Box
