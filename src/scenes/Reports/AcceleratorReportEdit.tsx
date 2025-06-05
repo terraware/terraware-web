@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
@@ -27,22 +27,22 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
 
   const getReportResult = useAppSelector(selectAcceleratorReport(requestId));
 
-  const reload = () => {
+  const reload = useCallback(() => {
     if (projectId) {
       const request = dispatch(requestAcceleratorReport({ projectId, reportId, includeMetrics: true }));
       setRequestId(request.requestId);
     }
-  };
+  }, [dispatch, projectId, reportId]);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id?.toString()) {
       setCurrentParticipantProject(projectId);
     }
-  }, [currentParticipantProject?.id, projectId]);
+  }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
 
   useEffect(() => {
     reload();
-  }, [projectId, reportId]);
+  }, [reload]);
 
   useEffect(() => {
     if (getReportResult?.status === 'error') {

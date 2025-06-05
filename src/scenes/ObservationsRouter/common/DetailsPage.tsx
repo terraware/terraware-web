@@ -97,7 +97,7 @@ export default function DetailsPage({
     }
 
     return data;
-  }, [activeLocale, plantingSiteId, observation, observationId, plantingZoneName, plantingZone, observationDate]);
+  }, [plantingSiteId, observation, observationId, plantingZoneName, observationDate]);
 
   return (
     <Page crumbs={crumbs} title={title} rightComponent={rightComponent}>

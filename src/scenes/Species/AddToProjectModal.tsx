@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, SelectT } from '@terraware/web-components';
@@ -64,10 +64,10 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
     }
   };
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = useCallback(() => {
     onSubmit(projectsSpeciesAdded);
     onClose();
-  };
+  }, [onClose, onSubmit, projectsSpeciesAdded]);
 
   useEffect(() => {
     if (deliverableSearchRequest?.status === 'success') {
@@ -90,7 +90,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
     } else if (deliverableSearchRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [deliverableSearchRequest, projects]);
+  }, [deliverableSearchRequest, handleOnSubmit, projects, snackbar]);
 
   const onAddProjectSpecies = () => {
     const updatedProjects = [...projectsSpeciesAdded];

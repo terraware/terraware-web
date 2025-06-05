@@ -149,7 +149,7 @@ export default function ObservationPlantingZone(): JSX.Element {
       plantingZone?.plantingSubzones?.flatMap((subzone) =>
         subzone.monitoringPlots.map((plot) => ({ ...plot, subzoneName: subzone.name }))
       ) ?? [],
-    [getSubzoneName, plantingZone]
+    [plantingZone]
   );
 
   return (

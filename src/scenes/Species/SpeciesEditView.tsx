@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -80,15 +80,6 @@ export default function SpeciesEditView(): JSX.Element {
     });
   };
 
-  useEffect(() => {
-    if (removedResult?.status === 'success') {
-      goToSpecies(record.id);
-    }
-    if (addedResult?.status === 'success') {
-      goToSpecies(record.id);
-    }
-  }, [addedResult, removedResult]);
-
   const gridSize = () => {
     if (isMobile) {
       return 12;
@@ -96,15 +87,27 @@ export default function SpeciesEditView(): JSX.Element {
     return 4;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const goToSpecies = (id?: number) => {
-    if (speciesId) {
-      const speciesLocation = {
-        pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
-      };
-      navigate(speciesLocation);
+  const goToSpecies = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (id?: number) => {
+      if (speciesId) {
+        const speciesLocation = {
+          pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
+        };
+        navigate(speciesLocation);
+      }
+    },
+    [navigate, speciesId]
+  );
+
+  useEffect(() => {
+    if (removedResult?.status === 'success') {
+      goToSpecies(record.id);
     }
-  };
+    if (addedResult?.status === 'success') {
+      goToSpecies(record.id);
+    }
+  }, [addedResult, goToSpecies, record.id, removedResult]);
 
   useEffect(() => {
     const getSpecies = async () => {

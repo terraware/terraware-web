@@ -106,7 +106,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
         {children}
       </Grid>
     ),
-    [gridSize]
+    [gridSize, theme]
   );
 
   return (
