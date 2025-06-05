@@ -1,3 +1,6 @@
+e29c6ce6484 SW-7045 Participant reports: validate number fields before submitting to the server (#4124)
+054f3c27738 SW-7041 Console: Plants dashboard does not load (#4122)
+df2ae76fb79 SW-7042 Remove checkboxes and button to delete project specific metrics (#4123)
 80cf5c9ca61 SW-6987 Challenges and Mitigations headers not appearing (#4119)
 135a2560b8f SW-6979 Horizontal Rules in Report (#4118)
 b7ef8e7601c SW-7032 Remove Old Project Profile code (#4115)
