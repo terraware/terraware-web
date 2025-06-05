@@ -42,10 +42,10 @@ export default function LocalizationProvider({
   const timeZoneResponse = useAppSelector(selectTimezones(timeZonesRequestId));
 
   useEffect(() => {
-    if (user?.locale) {
-      setSelectedLocale(user.locale);
+    if (user) {
+      setSelectedLocale(user.locale || 'en');
     }
-  }, [user?.locale, setSelectedLocale]);
+  }, [user, setSelectedLocale]);
 
   useEffect(() => {
     if (selectedLocale) {
