@@ -7,7 +7,7 @@ import BarChart from 'src/components/common/Chart/BarChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
@@ -41,6 +41,7 @@ export default function NumberOfSpeciesPlantedCard({
 const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
   const { reportedPlants } = useProjectPlantings(projectId);
   const { species: orgSpecies } = useSpeciesData();
+  const { activeLocale } = useLocalization();
 
   const projectTotalSpecies = useMemo(() => {
     const allSpeciesIds = new Set();
@@ -52,7 +53,7 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
     return allSpeciesIds.size;
   }, [reportedPlants]);
 
-  const labels = [strings.RARE, strings.ENDANGERED, strings.OTHER];
+  const labels = useMemo(() => (activeLocale ? [strings.RARE, strings.ENDANGERED, strings.OTHER] : []), [activeLocale]);
 
   const projectSpecies = useMemo(() => {
     const speciesMap = new Map();
@@ -160,7 +161,9 @@ const SiteWithZonesCard = ({ newVersion }: NumberOfSpeciesPlantedCardProps): JSX
   const { species: orgSpecies } = useSpeciesData();
 
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);
-  const labels = [strings.RARE, strings.ENDANGERED, strings.OTHER];
+  const { activeLocale } = useLocalization();
+
+  const labels = useMemo(() => (activeLocale ? [strings.RARE, strings.ENDANGERED, strings.OTHER] : []), [activeLocale]);
 
   const values = useMemo(() => {
     if (plantingSiteReportedPlants?.species && orgSpecies) {
