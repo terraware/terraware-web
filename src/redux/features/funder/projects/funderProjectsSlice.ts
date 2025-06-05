@@ -16,10 +16,10 @@ export const funderProjectsSlice = createSlice({
   },
 });
 
-const initialPublishFunderProjct: { [key: string]: StatusT<number> } = {};
+const initialPublishFunderProject: { [key: string]: StatusT<number> } = {};
 export const publishFunderProjectSlice = createSlice({
   name: 'publishFunderProjectSlice',
-  initialState: initialPublishFunderProjct,
+  initialState: initialPublishFunderProject,
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestPublishFunderProject)(builder);
