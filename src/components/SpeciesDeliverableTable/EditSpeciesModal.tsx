@@ -47,7 +47,7 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
       reload();
       onClose();
     }
-  }, [result, snackbar]);
+  }, [result, snackbar, onClose, reload]);
 
   const save = () => {
     if (!record.participantProjectSpecies.rationale || !record?.participantProjectSpecies.speciesNativeCategory) {

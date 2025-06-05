@@ -110,7 +110,7 @@ export default function SearchFiltersWrapperV2({
           };
         })
         .filter((item: PillListItem<string> | false): item is PillListItem<string> => !!item),
-    [currentFilters, iconFilters, featuredFilters, setCurrentFilters, stickyFilters]
+    [currentFilters, iconFilters, featuredFilters, setCurrentFilters, stickyFilters, sessionFilters, setSessionFilters]
   );
 
   useEffect(() => {
@@ -143,7 +143,7 @@ export default function SearchFiltersWrapperV2({
         });
       }
     }
-  }, [sessionFilters, currentFilters, stickyFilters]);
+  }, [sessionFilters, currentFilters, stickyFilters, setCurrentFilters]);
 
   // Since we have two different places filters can exist, we need to combine them before setting in the consumer
   const setFilters = useCallback(
@@ -168,7 +168,7 @@ export default function SearchFiltersWrapperV2({
         setSessionFilters(sessionFiltersCopy);
       }
     },
-    [currentFilters, setCurrentFilters, sessionFilters, stickyFilters]
+    [currentFilters, setCurrentFilters, sessionFilters, stickyFilters, setSessionFilters]
   );
 
   return (

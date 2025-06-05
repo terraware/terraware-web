@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -37,7 +37,7 @@ export default function ReportView(): JSX.Element {
   const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
-  const reportIdValid = () => reportIdInt && reportIdInt !== -1;
+  const reportIdValid = useCallback(() => reportIdInt && reportIdInt !== -1, [reportIdInt]);
 
   useEffect(() => {
     const getReport = async () => {
@@ -52,7 +52,7 @@ export default function ReportView(): JSX.Element {
     if (reportIdValid()) {
       void getReport();
     }
-  }, [reportIdInt, snackbar]);
+  }, [reportIdInt, snackbar, reportIdValid]);
 
   const confirmEdit = async () => {
     // lock the report

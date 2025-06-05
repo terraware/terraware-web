@@ -33,7 +33,7 @@ const EditView = () => {
     if (updatePerson.succeeded) {
       goToViewPerson();
     }
-  }, [updatePerson]);
+  }, [updatePerson, goToViewPerson]);
 
   return (
     <Page title={user?.email || ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}>

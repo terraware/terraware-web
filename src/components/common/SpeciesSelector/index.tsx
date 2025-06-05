@@ -44,14 +44,14 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
         setSpeciesList(response.sort((a, b) => a.scientificName.localeCompare(b.scientificName)));
       }
     },
-    [selectedOrganization.id]
+    [selectedOrganization.id, id]
   );
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
       void populateSpecies(debouncedSearchTerm);
     }
-  }, [populateSpecies, debouncedSearchTerm]);
+  }, [populateSpecies, debouncedSearchTerm, selectedOrganization.id]);
 
   useEffect(() => {
     if (speciesId && !selectedValue) {

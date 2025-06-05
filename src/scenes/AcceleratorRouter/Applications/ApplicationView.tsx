@@ -51,7 +51,7 @@ const ApplicationView = () => {
         title={selectedApplication.internalName}
       />
     );
-  }, [selectedApplication]);
+  }, [selectedApplication, activeLocale]);
 
   const prescreenSection = useMemo(
     () => applicationSections.find((section) => section.phase === 'Pre-Screen'),

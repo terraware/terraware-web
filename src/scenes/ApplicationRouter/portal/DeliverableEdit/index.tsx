@@ -81,7 +81,7 @@ const SectionDeliverableEditWrapper = () => {
         goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id);
       }
     }
-  }, [deliverable, section, selectedApplication]);
+  }, [deliverable, section, selectedApplication, goToApplicationSectionDeliverable]);
   return (
     <ApplicationPage>
       <SectionDeliverableEditView />

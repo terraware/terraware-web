@@ -52,7 +52,7 @@ const TerrawareHomeView = () => {
     if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
       setShowAcceleratorCard(false);
     }
-  }, [orgPreferences]);
+  }, [orgPreferences, showAcceleratorCard]);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -217,6 +217,9 @@ const TerrawareHomeView = () => {
 
     return rows;
   }, [
+    goToNewAccession,
+    navigate,
+    numberFormatter,
     activeLocale,
     species,
     orgNurserySummary,

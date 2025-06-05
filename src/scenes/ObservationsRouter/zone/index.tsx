@@ -13,7 +13,6 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
@@ -67,8 +66,6 @@ export default function ObservationPlantingZone(): JSX.Element {
     ObservationMonitoringPlotResultsPayload | undefined
   >();
   const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
-
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
   const columns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {
@@ -136,13 +133,6 @@ export default function ObservationPlantingZone(): JSX.Element {
       );
     }
   }, [navigate, observationId, plantingSiteId, plantingZone]);
-
-  const getSubzoneName = useCallback(
-    (id: number) =>
-      (plantingSite?.plantingZones || []).flatMap((zone) => zone.plantingSubzones).find((subzone) => subzone.id === id)
-        ?.name,
-    [plantingSite]
-  );
 
   const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string })[] = useMemo(
     () =>

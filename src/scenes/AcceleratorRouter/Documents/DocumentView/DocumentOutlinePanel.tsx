@@ -76,7 +76,7 @@ const SectionItem = ({
 
     // scrolls to section heading with the gap
     window.scrollTo({ left: newPosition.left, top: newPosition.top + window.scrollY - headerGap, behavior: 'smooth' });
-  }, [section.id, selectedSectionId, setSelectedSectionId]);
+  }, [section.id, selectedSectionId, setSelectedSectionId, section.sectionNumber]);
 
   return (
     <Box>

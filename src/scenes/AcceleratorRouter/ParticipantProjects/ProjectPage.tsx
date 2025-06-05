@@ -120,7 +120,7 @@ const ProjectPage = () => {
         </Box>
       </Box>
     ),
-    [activeTab, goToParticipantProjectEdit, isAllowedEdit, projectData.projectId, theme]
+    [activeTab, goToParticipantProjectEdit, isAllowedEdit, projectData.projectId, theme, goToDocumentNew]
   );
 
   const projectViewTitle = (

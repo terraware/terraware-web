@@ -71,6 +71,7 @@ export default function DocumentView(): JSX.Element {
     [activeLocale]
   );
 
+  // TODO fix circular dependency in react hooks:
   const setSelectedTab = useCallback((tab: string) => {
     onTabChange(tab);
   }, []);
@@ -99,7 +100,7 @@ export default function DocumentView(): JSX.Element {
             },
           ]
         : [],
-    [activeLocale, document]
+    [activeLocale, document, setSelectedTab]
   );
 
   const { activeTab, onTabChange } = useStickyTabs({

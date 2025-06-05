@@ -43,7 +43,7 @@ const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => 
     if (projectFilter.projectId) {
       setCurrentParticipantProject(projectFilter.projectId);
     }
-  }, [projectFilter]);
+  }, [projectFilter, setCurrentParticipantProject]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
@@ -152,7 +152,7 @@ const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => 
           </Grid>
         </>
       ) : null,
-    [activeLocale, currentParticipantProject, projectFilter]
+    [activeLocale, projectFilter, moduleProjects, projectId]
   );
 
   const Wrapper = projectId ? Box : TfMain;

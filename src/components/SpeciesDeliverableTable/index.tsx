@@ -68,7 +68,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
-  }, [deliverable.projectId]);
+  }, [deliverable.projectId, dispatch]);
 
   const reload = () => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));

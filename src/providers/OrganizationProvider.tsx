@@ -84,9 +84,12 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     void getOrgPreferences();
   }, [selectedOrganization]);
 
-  const redirectAndNotify = (organization: Organization) => {
-    navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${organization.id}&newOrg=true` });
-  };
+  const redirectAndNotify = useCallback(
+    (organization: Organization) => {
+      navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${organization.id}&newOrg=true` });
+    },
+    [navigate]
+  );
 
   useEffect(() => {
     void reloadOrganizations();
@@ -103,7 +106,15 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferenceForId,
       reloadOrgPreferences,
     }));
-  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId, reloadOrgPreferences]);
+  }, [
+    selectedOrganization,
+    organizations,
+    orgPreferences,
+    bootstrapped,
+    orgPreferenceForId,
+    reloadOrgPreferences,
+    redirectAndNotify,
+  ]);
 
   useEffect(() => {
     reloadOrgPreferences();
@@ -173,7 +184,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
-  }, [orgAPIRequestStatus]);
+  }, [orgAPIRequestStatus, isDev, isStaging, navigate]);
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,

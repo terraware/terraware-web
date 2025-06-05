@@ -57,6 +57,6 @@ export const useAcceleratorOrgs = (props?: {
       isBusy: result?.status === 'pending',
       reload,
     }),
-    [result]
+    [result, reload]
   );
 };

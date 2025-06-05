@@ -52,7 +52,7 @@ const ModuleEventSessionView = () => {
     if (currentParticipantProject && currentParticipantProject.cohortId) {
       void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
     }
-  }, [currentParticipantProject, moduleId]);
+  }, [currentParticipantProject, moduleId, getCohortModule]);
 
   const eventType = event?.type ? getEventType(event.type) : '';
   const isRecordedSession = eventType === 'Recorded Session';

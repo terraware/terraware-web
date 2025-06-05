@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -63,7 +63,7 @@ export default function ReportEdit(): JSX.Element {
     }
   }, [idInView]);
 
-  const reportIdValid = () => reportIdInt && reportIdInt !== -1;
+  const reportIdValid = useCallback(() => reportIdInt && reportIdInt !== -1, [reportIdInt]);
 
   useEffect(() => {
     const getReport = async () => {
@@ -82,7 +82,7 @@ export default function ReportEdit(): JSX.Element {
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
-  }, [reportIdInt, snackbar]);
+  }, [reportIdInt, snackbar, reportIdValid]);
 
   const updateFiles = async () => {
     if (reportIdValid()) {
