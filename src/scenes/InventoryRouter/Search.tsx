@@ -84,7 +84,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
     if (selectedOrganization) {
       void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
     }
-  }, [dispatch, selectedOrganization?.id, activeLocale]);
+  }, [dispatch, activeLocale, selectedOrganization]);
 
   useEffect(() => {
     if (origin !== 'Nursery' || !species.length) {

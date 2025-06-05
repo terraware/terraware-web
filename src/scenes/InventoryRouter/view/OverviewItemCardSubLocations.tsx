@@ -47,7 +47,7 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
         setRequestId(request.requestId);
       }
     },
-    [dispatch, props.batch.subLocationIds, selectedOrganization?.id]
+    [dispatch, props.batch.subLocationIds, selectedOrganization]
   );
 
   const toggleSubLocationEdit = useCallback(() => {
