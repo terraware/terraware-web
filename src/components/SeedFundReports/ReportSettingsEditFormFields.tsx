@@ -36,10 +36,10 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
   const projects = useAppSelector(selectProjects);
 
   useEffect(() => {
-    if (!projects && selectedOrganization.id !== -1) {
+    if (!projects && selectedOrganization) {
       void dispatch(requestProjects(selectedOrganization.id));
     }
-  }, [dispatch, projects, selectedOrganization.id]);
+  }, [dispatch, projects, selectedOrganization]);
 
   const renderCheckbox = useCallback(
     ({ label, key, value, index }: ReportsSettingsCheckboxConfig) => {
@@ -97,7 +97,10 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
       </Grid>
 
       {renderCheckbox({
-        label: strings.formatString(strings.REPORTS_SETTINGS_GENERATE_FOR_ORG, selectedOrganization.name) as string,
+        label: strings.formatString(
+          strings.REPORTS_SETTINGS_GENERATE_FOR_ORG,
+          selectedOrganization?.name || ''
+        ) as string,
         key: 'organizationEnabled',
         value: reportsSettings?.organizationEnabled,
       })}

@@ -209,7 +209,9 @@ export const PlantingSiteStats = () => {
               {strings.VIEW_FULL_DASHBOARD}
             </Link>
             <Box>
-              {isAdmin(selectedOrganization) ? (
+              {selectedOrganization ? (
+                isAdmin(selectedOrganization)
+              ) : false ? (
                 <AddLink
                   disabled={false}
                   id='add-planting-site'

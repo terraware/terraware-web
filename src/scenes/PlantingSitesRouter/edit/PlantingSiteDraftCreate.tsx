@@ -16,12 +16,12 @@ export default function PlantingSiteDraftCreate(): JSX.Element {
       createdBy: -1,
       id: -1,
       name: '',
-      organizationId: selectedOrganization.id,
+      organizationId: selectedOrganization?.id || -1,
       plantingSeasons: [],
       siteEditStep: 'details',
       siteType,
     }),
-    [selectedOrganization.id, siteType]
+    [selectedOrganization, siteType]
   );
 
   return <PlantingSiteEditor site={site} />;

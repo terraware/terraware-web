@@ -57,7 +57,7 @@ export default function OrganizationNotification(): Notification | null {
 
       let orgTz: InitializedTimeZone = {};
 
-      if (selectedOrganization.id !== -1) {
+      if (selectedOrganization) {
         orgTz = await OrganizationService.initializeTimeZone(selectedOrganization, userTz.timeZone);
       }
 
@@ -74,7 +74,7 @@ export default function OrganizationNotification(): Notification | null {
   }, [reloadOrganizations, reloadUser, selectedOrganization, user, userPreferences, timeZones]);
 
   return useMemo(() => {
-    if (timeZoneOrgNotification) {
+    if (timeZoneOrgNotification && selectedOrganization) {
       return {
         id: -2,
         notificationCriticality: 'Info',
@@ -106,11 +106,5 @@ export default function OrganizationNotification(): Notification | null {
     }
 
     return null;
-  }, [
-    timeZoneOrgNotification,
-    orgTimeZone,
-    reloadUserPreferences,
-    selectedOrganization.id,
-    timeZoneOrgNotificationRead,
-  ]);
+  }, [timeZoneOrgNotification, orgTimeZone, reloadUserPreferences, selectedOrganization, timeZoneOrgNotificationRead]);
 }

@@ -18,7 +18,7 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
 
-  const facilityName = selectedOrganization.facilities?.find((f) => f.id === withdrawal?.facilityId)?.name;
+  const facilityName = selectedOrganization?.facilities?.find((f) => f.id === withdrawal?.facilityId)?.name;
   const overviewCardData = [
     {
       title: strings.DATE,

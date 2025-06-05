@@ -70,12 +70,14 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   }, [speciesId, species, batch]);
 
   useEffect(() => {
-    if (nurseryId) {
-      const nursery = getNurseryById(selectedOrganization, Number(nurseryId));
-      setInventoryNursery(nursery);
-    } else if (batch?.facilityId) {
-      const nursery = getNurseryById(selectedOrganization, Number(batch.facilityId));
-      setInventoryNursery(nursery);
+    if (selectedOrganization) {
+      if (nurseryId) {
+        const nursery = getNurseryById(selectedOrganization, Number(nurseryId));
+        setInventoryNursery(nursery);
+      } else if (batch?.facilityId) {
+        const nursery = getNurseryById(selectedOrganization, Number(batch.facilityId));
+        setInventoryNursery(nursery);
+      }
     }
   }, [nurseryId, batch, selectedOrganization]);
 

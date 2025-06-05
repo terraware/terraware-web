@@ -51,7 +51,7 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const populate = async () => {
         const searchResponse = await getSearchResults(
           selectedOrganization.id,
@@ -81,7 +81,7 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
     debouncedSearchTerm,
     getSearchResults,
     setHasEntities,
-    selectedOrganization.id,
+    selectedOrganization,
     searchSortOrder,
     filters,
     isSearchDirty,

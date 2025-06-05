@@ -44,7 +44,7 @@ export default function NurseryView(): JSX.Element {
     name: '',
     id: -1,
     type: 'Nursery',
-    organizationId: selectedOrganization.id,
+    organizationId: selectedOrganization?.id || -1,
     connectionState: 'Not Connected',
   });
   const { nurseryId } = useParams<{ nurseryId: string }>();
@@ -61,7 +61,7 @@ export default function NurseryView(): JSX.Element {
 
   useEffect(() => {
     if (nurseryId) {
-      const seedBanks = getAllNurseries(selectedOrganization);
+      const seedBanks = selectedOrganization ? getAllNurseries(selectedOrganization) : [];
       setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
     }
   }, [nurseryId, selectedOrganization]);
@@ -77,7 +77,7 @@ export default function NurseryView(): JSX.Element {
       name: selectedNursery?.name || '',
       description: selectedNursery?.description,
       id: selectedNursery?.id ?? -1,
-      organizationId: selectedOrganization.id,
+      organizationId: selectedOrganization?.id || -1,
       type: 'Nursery',
       connectionState: 'Not Connected',
       timeZone: selectedNursery?.timeZone,
@@ -128,7 +128,7 @@ export default function NurseryView(): JSX.Element {
           subLocationNames: editedSubLocations?.map((l) => l.name as string),
         });
 
-    if (response.requestSucceeded && selectedOrganization.id !== -1) {
+    if (response.requestSucceeded && selectedOrganization) {
       if (selectedNursery && editedSubLocations) {
         await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
       }

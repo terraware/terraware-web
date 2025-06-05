@@ -153,10 +153,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const closeMessageSelector = useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
     }
-  }, [activeLocale, dispatch, selectedOrganization.id]);
+  }, [activeLocale, dispatch, selectedOrganization]);
 
   useEffect(() => {
     const updatePreferences = async () => {
@@ -229,12 +229,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const saveSearchColumns = useCallback(
     async (columnNames?: string[]) => {
-      if (selectedOrganization.id !== -1) {
+      if (selectedOrganization) {
         await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
         reloadOrgPreferences();
       }
     },
-    [selectedOrganization.id, reloadOrgPreferences]
+    [selectedOrganization, reloadOrgPreferences]
   );
 
   const saveUpdateSearchColumns = useCallback(
@@ -282,7 +282,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
 
     if ((facilityId || query.has('facilityId')) && selectedOrganization) {
-      const seedBanks = getAllSeedBanks(selectedOrganization);
+      const seedBanks = selectedOrganization ? getAllSeedBanks(selectedOrganization) : [];
       delete newSearchCriteria.facility_name;
       if (seedBanks && facilityId) {
         const facility = seedBanks.find((seedBank) => seedBank?.id === parseInt(facilityId, 10));
@@ -331,7 +331,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   ]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const populateUnfilteredResults = async () => {
         const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
           organizationId: selectedOrganization.id,
@@ -351,7 +351,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       void populateUnfilteredResults();
       void populatePendingAccessions();
     }
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization]);
 
   const initAccessions = useCallback(() => {
     const getFieldsFromSearchColumns = () => {
@@ -365,7 +365,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       return columnsNamesToSearch;
     };
 
-    if (selectedOrganization && selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const requestId = setRequestId('accessions_search');
 
       const populateSearchResults = async () => {

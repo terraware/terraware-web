@@ -36,7 +36,7 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
 
   const [record, setRecord] = useForm<CreateProjectRequest>({
     name: '',
-    organizationId: selectedOrganization.id,
+    organizationId: selectedOrganization?.id || -1,
   });
 
   const [flowState, setFlowState] = useState<FlowStates>('label');

@@ -150,7 +150,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     const requestId = setRequestId('inventory-seedlings');
 
     const populateResults = async () => {
-      if (!originId || selectedOrganization.id === -1) {
+      if (!originId || !selectedOrganization) {
         return;
       }
 
@@ -179,7 +179,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     const requestId = setRequestId('inventory-seedlings-species-unfiltered');
 
     const populateSpeciesUnfilteredResults = async () => {
-      if (!originId || selectedOrganization.id === -1) {
+      if (!originId || !selectedOrganization) {
         return;
       }
 
@@ -356,12 +356,12 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 
   const batchesExport = useCallback(() => {
-    if (!originId || !getBatchesExport || selectedOrganization.id === -1) {
+    if (!originId || !getBatchesExport || !selectedOrganization) {
       return Promise.resolve([] as SearchResponseElement[]);
     }
 
     return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), searchSortOrder);
-  }, [getBatchesExport, selectedOrganization.id, originId, getSearchFields, searchSortOrder]);
+  }, [getBatchesExport, selectedOrganization, originId, getSearchFields, searchSortOrder]);
 
   const getResultsSpeciesNames = useCallback(
     (): string[] => speciesUnfilteredBatches.map((s) => s.species_scientificName as string),

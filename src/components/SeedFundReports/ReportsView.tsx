@@ -70,13 +70,13 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   );
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestReportsSettings(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const refreshSearch = async () => {
         const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
         setResults(
@@ -92,7 +92,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
 
       void refreshSearch();
     }
-  }, [selectedOrganization.id, selectedOrganization.name]);
+  }, [selectedOrganization]);
 
   const reportsToComplete = useMemo(() => results.filter((report) => report.status !== 'Submitted'), [results]);
 

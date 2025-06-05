@@ -44,7 +44,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const selectedZoneHasStats = useAppSelector((state) =>
     selectZonesHaveStatistics(
       state,
-      selectedOrganization.id,
+      selectedOrganization?.id || -1,
       { [plantingSiteId]: new Set([zoneIdSelected]) },
       defaultTimeZone.get().id
     )

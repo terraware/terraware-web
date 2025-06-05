@@ -54,6 +54,8 @@ export const useOrgTracking = () => {
   const reportedPlantsResponse = useAppSelector(selectOrganizationReportedPlants(reportedPlantsRequestId));
 
   const reload = useCallback(() => {
+    if (!selectedOrganization) return;
+
     const plantingSitesRequest = dispatch(requestListPlantingSites(selectedOrganization.id));
     const observationsRequest = dispatch(requestOrganizationObservations({ organizationId: selectedOrganization.id }));
     const resultsRequest = dispatch(requestOrganizationObservationResults({ organizationId: selectedOrganization.id }));

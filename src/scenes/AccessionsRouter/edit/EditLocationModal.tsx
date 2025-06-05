@@ -28,7 +28,11 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const { onClose, open, accession, reload } = props;
-  const seedBanks: Facility[] = getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) || [];
+  const seedBanks: Facility[] = selectedOrganization
+    ? selectedOrganization
+      ? getAllSeedBanks(selectedOrganization)
+      : [].filter((sb) => !!sb)
+    : [];
   const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
   const snackbar = useSnackbar();
 

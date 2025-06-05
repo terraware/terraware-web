@@ -38,7 +38,7 @@ export default function CheckIn(): JSX.Element {
 
   const reloadData = useCallback(() => {
     const populatePendingAccessions = async () => {
-      if (selectedOrganization && selectedOrganization.id !== -1) {
+      if (selectedOrganization) {
         setPendingAccessions(await SeedBankService.getPendingAccessions(selectedOrganization.id));
       }
     };
@@ -47,7 +47,7 @@ export default function CheckIn(): JSX.Element {
 
   useEffect(() => {
     reloadData();
-  }, [selectedOrganization, reloadData]);
+  }, [reloadData]);
 
   const checkInAccession = async (accession: Accession) => {
     if (accession) {

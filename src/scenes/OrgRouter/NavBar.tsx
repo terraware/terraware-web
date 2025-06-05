@@ -97,12 +97,12 @@ export default function NavBar({
   );
 
   const checkNurseryWithdrawals = useCallback(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
         setShowNurseryWithdrawals(result);
       });
     }
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization]);
 
   useEffect(() => {
     setShowNurseryWithdrawals(false);
@@ -118,7 +118,7 @@ export default function NavBar({
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1 && !isContributor(selectedOrganization)) {
+    if (selectedOrganization && !isContributor(selectedOrganization)) {
       const request = dispatch(requestOrganizationFeatures({ organizationId: selectedOrganization.id }));
       setOrgFeaturesRequestId(request.requestId);
     }
@@ -209,7 +209,7 @@ export default function NavBar({
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
-      selectedOrganization.canSubmitReports && !!orgFeatures?.data?.seedFundReports?.enabled && activeLocale ? (
+      selectedOrganization?.canSubmitReports && !!orgFeatures?.data?.seedFundReports?.enabled && activeLocale ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
@@ -225,7 +225,7 @@ export default function NavBar({
       closeAndNavigateTo,
       isSeedFundReportsRoute,
       orgFeatures?.data?.seedFundReports?.enabled,
-      selectedOrganization.canSubmitReports,
+      selectedOrganization?.canSubmitReports,
     ]
   );
 
@@ -233,6 +233,7 @@ export default function NavBar({
     () =>
       currentParticipantProject &&
       !!orgFeatures?.data?.modules?.enabled &&
+      selectedOrganization &&
       isManagerOrHigher(selectedOrganization) &&
       activeLocale ? (
         <NavItem

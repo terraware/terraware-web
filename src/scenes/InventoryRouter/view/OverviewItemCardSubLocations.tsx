@@ -42,12 +42,12 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
 
   const syncSubLocations = useCallback(
     (_batch: Batch) => {
-      if (!_.isEqual(props.batch.subLocationIds, _batch.subLocationIds) && selectedOrganization.id !== -1) {
+      if (!_.isEqual(props.batch.subLocationIds, _batch.subLocationIds) && selectedOrganization) {
         const request = dispatch(requestSaveBatch({ batch: _batch, organizationId: selectedOrganization.id }));
         setRequestId(request.requestId);
       }
     },
-    [dispatch, props.batch.subLocationIds, selectedOrganization.id]
+    [dispatch, props.batch.subLocationIds, selectedOrganization?.id]
   );
 
   const toggleSubLocationEdit = useCallback(() => {

@@ -37,7 +37,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     id: -1,
     adHocPlots: [],
     name: '',
-    organizationId: selectedOrganization.id,
+    organizationId: selectedOrganization?.id || -1,
     plantingSeasons: [],
   });
 
@@ -50,13 +50,13 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       description: plantingSite?.description,
       id: plantingSite?.id || -1,
       name: plantingSite?.name || '',
-      organizationId: selectedOrganization.id,
+      organizationId: selectedOrganization?.id || -1,
       plantingSeasons: plantingSite?.plantingSeasons || [],
       plantingZones: plantingSite?.plantingZones,
       projectId: plantingSite?.projectId,
       timeZone: plantingSite?.timeZone,
     });
-  }, [plantingSite, setRecord, selectedOrganization.id]);
+  }, [plantingSite, setRecord, selectedOrganization]);
 
   const goToPlantingSite = useCallback(
     (id?: number) => {

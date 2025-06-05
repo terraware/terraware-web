@@ -43,11 +43,11 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
   );
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestPlantings(selectedOrganization.id));
       void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization?.id]);
 
   useEffect(() => {
     if (activeLocale) {
