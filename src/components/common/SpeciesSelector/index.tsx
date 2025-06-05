@@ -52,7 +52,7 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
     if (selectedOrganization) {
       void populateSpecies(debouncedSearchTerm);
     }
-  }, [populateSpecies, debouncedSearchTerm]);
+  }, [populateSpecies, debouncedSearchTerm, selectedOrganization.id]);
 
   useEffect(() => {
     if (speciesId && !selectedValue) {

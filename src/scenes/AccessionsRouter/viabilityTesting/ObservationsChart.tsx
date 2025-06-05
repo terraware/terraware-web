@@ -121,7 +121,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
 
       return () => chartRef.current?.destroy();
     }
-  }, [activeLocale, observations]);
+  }, [activeLocale, observations, theme]);
 
   return <canvas id='myChart' ref={canvasRef} style={{ height: '180px' }} />;
 }

@@ -37,7 +37,7 @@ const SectionView = ({ children, section, sectionDeliverables }: SectionViewProp
         }
       }
     },
-    [selectedApplication, goToApplicationMapUpdate]
+    [selectedApplication, goToApplicationMapUpdate, goToApplicationSectionDeliverable, section.moduleId]
   );
 
   const deliverableDetails = useMemo(() => {
@@ -73,7 +73,7 @@ const SectionView = ({ children, section, sectionDeliverables }: SectionViewProp
     );
 
     return deliverables;
-  }, [section, sectionDeliverables, goToApplicationMap, goToApplicationSectionDeliverable]);
+  }, [section, sectionDeliverables, goToApplicationMap, goToApplicationSectionDeliverable, selectedApplication]);
 
   const moduleDetails = useMemo(
     () =>

@@ -43,7 +43,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
       snackbar.toastSuccess(strings.PROJECT_SPECIFIC_METRIC_SAVED);
       reload();
     }
-  }, [updateProjectMetricResponse, snackbar]);
+  }, [updateProjectMetricResponse, snackbar, onClose, reload]);
 
   const save = () => {
     if (!record.name || !record.reference) {

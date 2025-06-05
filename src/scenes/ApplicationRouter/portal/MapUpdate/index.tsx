@@ -109,7 +109,7 @@ const MapUpdateView = () => {
         toastError(strings.APPLICATION_ERROR_NO_PROJECT_BOUNDARY);
       }
     }
-  }, [selectedApplication, boundary]);
+  }, [selectedApplication, boundary, dispatch, toastError]);
 
   const navigateToApplicationPrescreen = useCallback(() => {
     if (selectedApplication) {

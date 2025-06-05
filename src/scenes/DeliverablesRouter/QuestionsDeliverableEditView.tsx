@@ -16,7 +16,7 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
     if (deliverable) {
       goToDeliverable(deliverable.id, deliverable?.projectId);
     }
-  }, [deliverable]);
+  }, [deliverable, goToDeliverable]);
 
   if (!deliverable) {
     return null;

@@ -65,7 +65,7 @@ const ReviewCard = ({ requestId, sections, setRequestId }: ReviewCardProps): JSX
         toastWarning(`${strings.GENERIC_ERROR}: ${request.data.toString()}`);
       }
     }
-  }, [request, reload, toastSuccess]);
+  }, [request, reload, toastSuccess, refreshPage, toastWarning]);
 
   const isLoading = useMemo(() => request?.status === 'pending', [request]);
 

@@ -46,7 +46,7 @@ const DeliverableView = (): JSX.Element => {
         requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
       );
     }
-  }, [deliverable]);
+  }, [deliverable, dispatch]);
 
   const submitDeliverable = useCallback(() => {
     if (deliverable?.id !== undefined) {
@@ -57,7 +57,7 @@ const DeliverableView = (): JSX.Element => {
       }
     }
     setShowSubmitDialog(false);
-  }, [deliverable, variablesWithValues]);
+  }, [deliverable, variablesWithValues, snackbar, submit]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -107,7 +107,7 @@ const DeliverableView = (): JSX.Element => {
         )}
       </Box>
     );
-  }, [activeLocale, deliverable, submitButtonDisabled]);
+  }, [activeLocale, deliverable, submitButtonDisabled, goToDeliverableEdit]);
 
   const isLoading = useMemo(() => {
     return requestStatus === 'pending';

@@ -41,7 +41,7 @@ function VariableInternalComment({ variable, update, editing, sx }: VariableInte
   const toggleDialog = useCallback(() => {
     setIsDialogOpen((prev) => !prev);
     setInternalComment(variableValue?.internalComment || '');
-  }, []);
+  }, [variableValue?.internalComment]);
 
   const handleUpdate = () => {
     update(internalComment);

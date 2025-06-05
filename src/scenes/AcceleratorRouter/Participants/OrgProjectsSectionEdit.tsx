@@ -45,11 +45,11 @@ const OrgProjectsSectionEdit = ({
     if (projectDetailsRequest?.status === 'success') {
       updateProjectDetails(section.projectId, undefined, undefined, projectDetailsRequest.data);
     }
-  }, [projectDetailsRequest]);
+  }, [projectDetailsRequest, section.projectId, updateProjectDetails]);
 
   useEffect(() => {
     onProjectSelect(section.id, Number(selectedProject));
-  }, [selectedProject]);
+  }, [selectedProject, onProjectSelect, section.id]);
 
   const onOrgChange = useCallback(
     (id: string) => {
@@ -79,7 +79,7 @@ const OrgProjectsSectionEdit = ({
       setSelectedProject(section.projectId.toString());
       void dispatch(requestGetParticipantProject(section.projectId));
     }
-  }, [section.projectId, projectOptions]);
+  }, [section.projectId, projectOptions, dispatch]);
 
   return (
     <Grid container spacing={2}>

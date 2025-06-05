@@ -48,7 +48,7 @@ export const useProjectVariableWorklow = (
         setCallback(onSuccess);
       }
     },
-    [dispatch, initialFeedback, initialInternalCommnet, initialStatus]
+    [dispatch, initialFeedback, initialInternalCommnet, initialStatus, projectId, variableWithValues.id]
   );
 
   useEffect(() => {
