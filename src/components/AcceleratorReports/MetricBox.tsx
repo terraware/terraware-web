@@ -300,13 +300,14 @@ const MetricBox = ({
             isStandardOrProjectMetric(record) && (
               <Box display={'flex'} alignItems={'center'} paddingBottom={theme.spacing(2)}>
                 <Textfield
-                  type='text'
+                  type='number'
                   label={strings.PROGRESS}
                   value={record.value}
                   id={'value'}
                   onChange={(value: any) => onChange('value', value)}
                   display={!isEditing}
                   required={true}
+                  min={0}
                 />
                 <Typography paddingTop={3} paddingLeft={0.5}>
                   / {record.target} ({strings.TARGET})
