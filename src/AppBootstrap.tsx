@@ -53,7 +53,7 @@ export type AppBootstrapProps = {
 };
 
 export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Element {
-  const [selectedLocale, setSelectedLocale] = useState('en');
+  const [selectedLocale, setSelectedLocale] = useState<string | null>(null);
   const [activeLocale, setActiveLocale] = useState<string | null>(null);
 
   return (
