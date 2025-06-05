@@ -1,3 +1,4 @@
+959dea647d8 SW-7055 Fix Last Report used for data (#4132)
 31012676d58 SW-7021 Don't download strings until locale is known (#4121)
 a1905515421 SW-7023 Stop using organization ID -1 as sentinel (#4109)
 ca9f6d269cc SW-6953 Test for Publish Project and View Published Project (#4127)
