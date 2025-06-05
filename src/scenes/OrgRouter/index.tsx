@@ -113,7 +113,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
       }
     };
     populatePlantingSites();
-  }, [dispatch, selectedOrganization.id, activeLocale]);
+  }, [dispatch, selectedOrganization.id]);
 
   const setDefaults = useCallback(() => {
     if (!isPlaceholderOrg(selectedOrganization.id)) {

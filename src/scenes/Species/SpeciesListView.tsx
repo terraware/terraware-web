@@ -211,7 +211,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         ),
       },
     ];
-  }, [activeLocale]);
+  }, [activeLocale, orgHasParticipants]);
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
@@ -240,7 +240,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     ];
 
     return activeLocale && orgHasParticipants ? _filters : [];
-  }, [activeLocale, orgHasParticipants]);
+  }, [activeLocale, orgHasParticipants, projects]);
 
   const iconFilters: FilterConfig[] = useMemo(() => {
     const _filters = filterColumns.map((filter) => ({

@@ -144,7 +144,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
     }
 
     setDescription(data);
-  }, [activeLocale, mode]);
+  }, [activeLocale, mode, site.siteType]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {

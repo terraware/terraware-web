@@ -57,7 +57,7 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
         onSelect(results);
       }
     },
-    [retrieve]
+    [retrieve, onSelect]
   );
 
   const fetchSuggestions = useCallback(

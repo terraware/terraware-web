@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -60,11 +60,21 @@ export default function SeedBankView(): JSX.Element {
     return 4;
   };
 
+  const goToSeedBank = useCallback(
+    (id?: number) => {
+      const sitesLocation = {
+        pathname: APP_PATHS.SEED_BANKS + (id ? `/${id}` : ''),
+      };
+      navigate(sitesLocation);
+    },
+    [navigate]
+  );
+
   useEffect(() => {
     if (navigateToSeedBank.navigate) {
       goToSeedBank(navigateToSeedBank.id);
     }
-  }, [selectedOrganization]);
+  }, [goToSeedBank, navigateToSeedBank, selectedOrganization]);
 
   useEffect(() => {
     if (seedBankId) {
@@ -87,13 +97,6 @@ export default function SeedBankView(): JSX.Element {
       operationStartedDate: selectedSeedBank?.operationStartedDate,
     });
   }, [selectedSeedBank, setRecord, selectedOrganization]);
-
-  const goToSeedBank = (id?: number) => {
-    const sitesLocation = {
-      pathname: APP_PATHS.SEED_BANKS + (id ? `/${id}` : ''),
-    };
-    navigate(sitesLocation);
-  };
 
   const saveSeedBank = async () => {
     if (selectedOrganization.id === -1) {
