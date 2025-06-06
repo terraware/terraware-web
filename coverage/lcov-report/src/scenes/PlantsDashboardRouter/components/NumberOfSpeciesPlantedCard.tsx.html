@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/118</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/113</span>
+                <span class='fraction'>0/115</span>
             </div>
         
             
@@ -374,7 +374,10 @@
 <a name='L309'></a><a href='#L309'>309</a>
 <a name='L310'></a><a href='#L310'>310</a>
 <a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -417,6 +420,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -536,6 +540,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -694,7 +700,7 @@ import BarChart from 'src/components/common/Chart/BarChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
@@ -728,6 +734,7 @@ export default function <span class="fstat-no" title="function not covered" >Num
 const RolledUpCard = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> projectId }: { projectId?: number }): JSX.Element =&gt; {</span>
   const { reportedPlants } = <span class="cstat-no" title="statement not covered" >useProjectPlantings(projectId);</span>
   const { species: orgSpecies } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
   const projectTotalSpecies = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const allSpeciesIds = <span class="cstat-no" title="statement not covered" >new Set();</span>
@@ -739,7 +746,7 @@ const RolledUpCard = <span class="cstat-no" title="statement not covered" ><span
 <span class="cstat-no" title="statement not covered" >    return allSpeciesIds.size;</span>
   }, [reportedPlants]);
 &nbsp;
-  const labels = <span class="cstat-no" title="statement not covered" >[strings.RARE, strings.ENDANGERED, strings.OTHER];</span>
+  const labels = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >activeLocale ? [strings.RARE, strings.ENDANGERED, strings.OTHER] : [])</span>, [activeLocale]);</span>
 &nbsp;
   const projectSpecies = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const speciesMap = <span class="cstat-no" title="statement not covered" >new Map();</span>
@@ -847,7 +854,9 @@ const SiteWithZonesCard = <span class="cstat-no" title="statement not covered" >
   const { species: orgSpecies } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
 &nbsp;
   const totalSpecies = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >plantingSiteReportedPlants?.species.length ?? 0,</span> [plantingSiteReportedPlants]);</span>
-  const labels = <span class="cstat-no" title="statement not covered" >[strings.RARE, strings.ENDANGERED, strings.OTHER];</span>
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+&nbsp;
+  const labels = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >activeLocale ? [strings.RARE, strings.ENDANGERED, strings.OTHER] : [])</span>, [activeLocale]);</span>
 &nbsp;
   const values = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (plantingSiteReportedPlants?.species &amp;&amp; orgSpecies) {</span>
@@ -1003,7 +1012,7 @@ const ChartData = <span class="cstat-no" title="statement not covered" ><span cl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-05T22:53:24.805Z
+                at 2025-06-06T13:06:16.565Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
