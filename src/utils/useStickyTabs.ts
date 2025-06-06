@@ -60,24 +60,30 @@ const useStickyTabs = ({
     [navigate, location, query, viewIdentifier, keepQuery, tab, tabsAreNewPages]
   );
 
-  const updateTabs = useCallback((tabs: Tab[]) => {
-    tabsRef.current = tabs;
-  }, []);
+  const setSessionTab = useCallback(() => {
+    // If there is a "last viewed" tab in the session, use that, otherwise send to default
+    const sessionTab = getTabFromSession(viewIdentifier);
+    if (sessionTab) {
+      onTabChange(sessionTab);
+    } else {
+      onTabChange(defaultTab);
+    }
+  }, [defaultTab, onTabChange, viewIdentifier]);
+
+  const updateTabs = useCallback(
+    (tabs: Tab[]) => {
+      tabsRef.current = tabs;
+      setSessionTab();
+    },
+    [setSessionTab]
+  );
 
   useEffect(() => {
     if (!tab) {
-      // If there is a "last viewed" tab in the session, use that, otherwise send to default
-      const sessionTab = getTabFromSession(viewIdentifier);
-      if (sessionTab) {
-        onTabChange(sessionTab);
-      } else {
-        onTabChange(defaultTab);
-      }
+      setSessionTab();
       return;
     }
-
     const validTabs = tabsRef.current;
-
     if (validTabs.some((data) => data.id === tab)) {
       setActiveTab(tab);
     } else if (validTabs.length) {
