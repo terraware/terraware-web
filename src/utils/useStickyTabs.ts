@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Tab } from '@terraware/web-components';
 
@@ -35,7 +35,7 @@ const writeTabToSession = (viewIdentifier: string, tab: string): void => {
 
 const useStickyTabs = ({
   defaultTab,
-  tabs,
+  tabs: initialTabs = [],
   viewIdentifier,
   keepQuery = true,
   tabsAreNewPages = true,
@@ -46,6 +46,7 @@ const useStickyTabs = ({
   const tab = query.get('tab');
 
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
+  const tabsRef = useRef<Tab[]>(initialTabs);
 
   const onTabChange = useCallback(
     (newTab: string) => {
@@ -59,6 +60,10 @@ const useStickyTabs = ({
     [navigate, location, query, viewIdentifier, keepQuery, tab, tabsAreNewPages]
   );
 
+  const updateTabs = useCallback((tabs: Tab[]) => {
+    tabsRef.current = tabs;
+  }, []);
+
   useEffect(() => {
     if (!tab) {
       // If there is a "last viewed" tab in the session, use that, otherwise send to default
@@ -71,16 +76,19 @@ const useStickyTabs = ({
       return;
     }
 
-    if (tabs.some((data) => data.id === tab)) {
+    const validTabs = tabsRef.current;
+
+    if (validTabs.some((data) => data.id === tab)) {
       setActiveTab(tab);
-    } else if (tabs.length) {
-      setActiveTab(tabs[0].id);
+    } else if (validTabs.length) {
+      setActiveTab(validTabs[0].id);
     }
-  }, [defaultTab, onTabChange, tab, tabs, viewIdentifier]);
+  }, [defaultTab, onTabChange, tab, viewIdentifier]);
 
   return {
     activeTab,
     onTabChange,
+    updateTabs,
     tab,
   };
 };
