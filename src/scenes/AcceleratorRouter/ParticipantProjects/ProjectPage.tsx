@@ -96,11 +96,10 @@ const ProjectPage = () => {
     ];
   }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
     tabs,
-    viewIdentifier: 'funder-home',
-    keepQuery: false,
+    viewIdentifier: 'project-profile',
   });
 
   const goToProjectEdit = useCallback(
@@ -201,7 +200,7 @@ const ProjectPage = () => {
       >
         {projectData.status === 'pending' && <BusySpinner />}
 
-        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Page>
     </>
   );

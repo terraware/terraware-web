@@ -55,8 +55,10 @@ export const useSessionFilters = (viewIdentifier?: string) => {
 
       writeFiltersToSession(viewIdentifier, mergedFilters);
 
-      writeFiltersToQuery(query, viewIdentifier, mergedFilters);
-      navigate(getLocation(location.pathname, location, query.toString()));
+      if (Object.keys(mergedFilters).length) {
+        writeFiltersToQuery(query, viewIdentifier, mergedFilters);
+        navigate(getLocation(location.pathname, location, query.toString()));
+      }
 
       setIsInitialized(true);
     }

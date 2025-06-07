@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box } from '@mui/material';
@@ -22,7 +22,9 @@ const OverviewView = () => {
     if (!activeLocale) {
       return [];
     }
+
     const canReadParticipants = isAllowed('READ_PARTICIPANTS');
+
     return [
       {
         id: 'projects',
@@ -46,21 +48,23 @@ const OverviewView = () => {
     ];
   }, [activeLocale, isAllowed]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projects',
     tabs,
     viewIdentifier: 'accelerator-overview',
-    keepQuery: false,
   });
 
-  const onTabChangeHandler = (tab: string) => {
-    if (tab !== 'projects') {
-      mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_OVERVIEW_TAB, {
-        tab,
-      });
-    }
-    onTabChange(tab);
-  };
+  const onChangeTabHandler = useCallback(
+    (tab: string) => {
+      if (tab !== 'projects') {
+        mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_OVERVIEW_TAB, {
+          tab,
+        });
+      }
+      onChangeTab(tab);
+    },
+    [mixpanel, onChangeTab]
+  );
 
   return (
     <Page title={strings.OVERVIEW} contentStyle={{ display: 'block' }}>
@@ -84,7 +88,7 @@ const OverviewView = () => {
           },
         }}
       >
-        <Tabs activeTab={activeTab} onTabChange={onTabChangeHandler} tabs={tabs} />
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTabHandler} tabs={tabs} />
       </Box>
     </Page>
   );

@@ -186,10 +186,10 @@ export default function NurseryWithdrawalsDetailsView({
     ];
   }, [species, plantingSubzoneNames, withdrawal, withdrawalSummary, delivery, batches, activeLocale]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'withdrawal',
     tabs,
-    viewIdentifier: 'nursery-withdrawal-details',
+    viewIdentifier: 'nursery-withdrawal',
   });
 
   return (
@@ -261,7 +261,7 @@ export default function NurseryWithdrawalsDetailsView({
           </Box>
         )}
         {withdrawal?.purpose === OUTPLANT && withdrawalSummary?.hasReassignments && (
-          <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
         )}
         {withdrawal?.purpose === OUTPLANT && !withdrawalSummary?.hasReassignments && (
           <Box sx={contentPanelProps}>

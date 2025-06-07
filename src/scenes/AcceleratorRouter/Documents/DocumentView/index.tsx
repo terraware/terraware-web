@@ -71,38 +71,34 @@ export default function DocumentView(): JSX.Element {
     [activeLocale]
   );
 
-  const setSelectedTab = useCallback((tab: string) => {
-    onTabChange(tab);
-  }, []);
+  const tabs: Tab[] = useMemo(() => {
+    if (!activeLocale || !document) {
+      return [];
+    }
 
-  const tabs: Tab[] = useMemo(
-    () =>
-      activeLocale && document
-        ? [
-            {
-              id: 'document',
-              label: strings.DOCUMENT,
-              icon: 'iconParchment',
-              children: <DocumentTab />,
-            },
-            {
-              id: 'variables',
-              label: strings.VARIABLES,
-              icon: 'iconModule',
-              children: <DocumentVariablesTab setSelectedTab={setSelectedTab} />,
-            },
-            {
-              id: 'history',
-              label: strings.HISTORY,
-              icon: 'iconHistory',
-              children: <DocumentHistoryTab />,
-            },
-          ]
-        : [],
-    [activeLocale, document]
-  );
+    return [
+      {
+        id: 'document',
+        label: strings.DOCUMENT,
+        icon: 'iconParchment',
+        children: <DocumentTab />,
+      },
+      {
+        id: 'variables',
+        label: strings.VARIABLES,
+        icon: 'iconModule',
+        children: <DocumentVariablesTab />,
+      },
+      {
+        id: 'history',
+        label: strings.HISTORY,
+        icon: 'iconHistory',
+        children: <DocumentHistoryTab />,
+      },
+    ];
+  }, [activeLocale, document]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'document',
     tabs,
     viewIdentifier: 'accelerator-documents',
@@ -146,7 +142,7 @@ export default function DocumentView(): JSX.Element {
       </Box>
       <Box marginTop={3} display='flex' flexDirection='row' flexGrow={1}>
         <Box display='flex' flexGrow={1}>
-          <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
         </Box>
         <Box>
           {activeTab === 'document' && <DocumentOutlinePanel open={outlinePanelOpen} setOpen={setOutlinePanelOpen} />}
