@@ -222,7 +222,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     ];
   }, [activeLocale, isOnboarded]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: InventoryListTypes.BATCHES_BY_SPECIES,
     tabs,
     viewIdentifier: 'inventory',
@@ -309,7 +309,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
         }}
       >
         {isOnboarded ? (
-          <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
         ) : (
           <Container maxWidth={false} sx={{ padding: '32px 0' }}>
             {!isMobile && <Grid item xs={12} padding={theme.spacing(3)} />}

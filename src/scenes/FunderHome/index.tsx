@@ -107,7 +107,7 @@ export default function FunderHome() {
     ];
   }, [activeLocale, projectDetails, selectedProjectId, publishedReports, selectedReport]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
     tabs,
     viewIdentifier: 'funder-home',
@@ -159,7 +159,7 @@ export default function FunderHome() {
               />
             )}
           </Box>
-          <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
         </Box>
       </Box>
     </TfMain>

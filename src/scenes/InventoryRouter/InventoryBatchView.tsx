@@ -114,7 +114,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
     ];
   }, [batch, fetchBatch, inventoryNursery]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'details',
     tabs,
     viewIdentifier: 'inventory-batch-details',
@@ -221,7 +221,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
                 },
               }}
             >
-              <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+              <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
             </Box>
           </Grid>
         )}

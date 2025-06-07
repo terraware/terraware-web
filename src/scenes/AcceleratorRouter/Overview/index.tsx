@@ -48,22 +48,22 @@ const OverviewView = () => {
     ];
   }, [activeLocale, isAllowed]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projects',
     tabs,
     viewIdentifier: 'accelerator-overview',
   });
 
-  const onTabChangeHandler = useCallback(
+  const onChangeTabHandler = useCallback(
     (tab: string) => {
       if (tab !== 'projects') {
         mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_OVERVIEW_TAB, {
           tab,
         });
       }
-      onTabChange(tab);
+      onChangeTab(tab);
     },
-    [mixpanel, onTabChange]
+    [mixpanel, onChangeTab]
   );
 
   return (
@@ -88,7 +88,7 @@ const OverviewView = () => {
           },
         }}
       >
-        <Tabs activeTab={activeTab} onTabChange={onTabChangeHandler} tabs={tabs} />
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTabHandler} tabs={tabs} />
       </Box>
     </Page>
   );

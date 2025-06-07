@@ -42,7 +42,7 @@ const ReportsView = () => {
     ];
   }, [activeLocale]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'reports',
     tabs,
     viewIdentifier: 'project-reports',
@@ -62,7 +62,7 @@ const ReportsView = () => {
       titleStyle={{ paddingTop: '16px' }}
     >
       <Box display='flex' flexDirection='column' flexGrow={1}>
-        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
     </Page>
   );

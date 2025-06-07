@@ -53,13 +53,13 @@ const SettingsPage = () => {
     ];
   }, [activeLocale, user, reloadUser, isEditingAccount, isDeleteModalOpen]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'my-account',
     tabs,
     viewIdentifier: 'settings',
   });
 
-  const onTabChangeHandler = useCallback(
+  const onChangeTabHandler = useCallback(
     (tab: string) => {
       if (tab !== 'my-account') {
         mixpanel?.track(MIXPANEL_EVENTS.SETTINGS_TAB, {
@@ -67,9 +67,9 @@ const SettingsPage = () => {
         });
       }
       setIsEditingAccount(false);
-      onTabChange(tab);
+      onChangeTab(tab);
     },
-    [mixpanel, onTabChange]
+    [mixpanel, onChangeTab]
   );
 
   const onOptionItemClick = (optionItem: DropdownItem) => {
@@ -131,7 +131,7 @@ const SettingsPage = () => {
           </Box>
         </PageHeaderWrapper>
         <Box ref={contentRef}>
-          <Tabs activeTab={activeTab} onTabChange={onTabChangeHandler} tabs={tabs} />
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTabHandler} tabs={tabs} />
         </Box>
       </Box>
     </Page>

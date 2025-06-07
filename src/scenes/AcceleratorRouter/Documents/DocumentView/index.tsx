@@ -98,7 +98,7 @@ export default function DocumentView(): JSX.Element {
     ];
   }, [activeLocale, document]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'document',
     tabs,
     viewIdentifier: 'accelerator-documents',
@@ -142,7 +142,7 @@ export default function DocumentView(): JSX.Element {
       </Box>
       <Box marginTop={3} display='flex' flexDirection='row' flexGrow={1}>
         <Box display='flex' flexGrow={1}>
-          <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
         </Box>
         <Box>
           {activeTab === 'document' && <DocumentOutlinePanel open={outlinePanelOpen} setOpen={setOutlinePanelOpen} />}

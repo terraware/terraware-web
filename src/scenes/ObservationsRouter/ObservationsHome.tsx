@@ -92,7 +92,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     ];
   }, [activeLocale, plantingSite, props]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'plantMonitoring',
     tabs,
     viewIdentifier: 'observations',
@@ -147,7 +147,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
-        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
     </PlantsPrimaryPage>
   );

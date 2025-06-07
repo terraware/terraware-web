@@ -41,7 +41,7 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
     ];
   }, [activeLocale]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'planting_progress',
     tabs,
     viewIdentifier: 'nursery-plantings-and-withdrawals',
@@ -92,7 +92,7 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
               },
             }}
           >
-            <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+            <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
           </Box>
         </Grid>
       </Box>

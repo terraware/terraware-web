@@ -66,7 +66,7 @@ export default function ModuleView(): JSX.Element {
       ]
     : [];
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'details',
     tabs,
     viewIdentifier: 'accelerator-module',
@@ -121,7 +121,7 @@ export default function ModuleView(): JSX.Element {
           },
         }}
       >
-        {moduleId && <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />}
+        {moduleId && <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />}
       </Box>
     </TfMain>
   );

@@ -52,7 +52,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<string>(tab);
   const [results, setResults] = useState<(ListReport & { organizationName?: string })[]>([]);
 
-  const onTabChange = useCallback(
+  const onChangeTab = useCallback(
     (newTab: string) => {
       setActiveTab(newTab);
 
@@ -131,7 +131,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
 
       <Tabs
         activeTab={activeTab}
-        onTabChange={onTabChange}
+        onChangeTab={onChangeTab}
         tabs={[
           {
             id: 'reports',

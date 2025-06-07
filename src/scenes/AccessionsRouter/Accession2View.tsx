@@ -388,7 +388,7 @@ export default function Accession2View(): JSX.Element {
     ];
   }, [accession, reloadData, activeLocale, themeObj, viabilityEditable, isMobile, hasPendingTests]);
 
-  const { activeTab, onTabChange, setActiveTab } = useStickyTabs({
+  const { activeTab, onChangeTab, setActiveTab } = useStickyTabs({
     defaultTab: 'detail',
     tabs,
     viewIdentifier: 'accession',
@@ -705,7 +705,7 @@ export default function Accession2View(): JSX.Element {
             : {},
         }}
       >
-        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
     </TfMain>
   );
