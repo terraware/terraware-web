@@ -17,6 +17,7 @@ const ApplicationListView = () => {
     if (!activeLocale) {
       return [];
     }
+
     return [
       {
         id: 'applications',
@@ -34,8 +35,7 @@ const ApplicationListView = () => {
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'applications',
     tabs,
-    viewIdentifier: 'accelerator-application-list',
-    keepQuery: false,
+    viewIdentifier: 'accelerator-applications',
   });
 
   return (

@@ -90,6 +90,7 @@ export default function FunderHome() {
     if (!activeLocale) {
       return [];
     }
+
     return [
       {
         id: 'projectProfile',
@@ -110,7 +111,6 @@ export default function FunderHome() {
     defaultTab: 'projectProfile',
     tabs,
     viewIdentifier: 'funder-home',
-    keepQuery: false,
   });
 
   const strippedDealName = useMemo(() => {

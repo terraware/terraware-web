@@ -69,7 +69,7 @@ export default function ModuleView(): JSX.Element {
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'details',
     tabs,
-    viewIdentifier: 'accelerator-module-view',
+    viewIdentifier: 'accelerator-module',
   });
 
   useEffect(() => {

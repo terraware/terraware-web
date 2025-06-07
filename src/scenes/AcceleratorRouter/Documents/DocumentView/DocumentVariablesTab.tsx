@@ -95,7 +95,6 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
 
 export type DocumentVariablesProps = {
   projectId?: number;
-  setSelectedTab?: (tab: string) => void;
 };
 
 const filterSearch =
@@ -112,7 +111,7 @@ const filterSearch =
     );
   };
 
-const DocumentVariablesTab = ({ projectId: projectIdProp, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
+const DocumentVariablesTab = ({ projectId: projectIdProp }: DocumentVariablesProps): JSX.Element => {
   const activeLocale = useLocalization();
   const { isAllowed } = useUser();
   const { allVariables, documentSectionVariables, getUsedSections, projectId, reload } = useDocumentProducerData();
@@ -159,22 +158,21 @@ const DocumentVariablesTab = ({ projectId: projectIdProp, setSelectedTab }: Docu
     );
   }, [documentSectionVariables, getUsedSections, variables]);
 
-  const onSectionClicked = useCallback(
-    (sectionNumber: string) => {
-      setOpenEditVariableModal(false);
-      setSelectedVariable(undefined);
+  const onSectionClicked = useCallback((sectionNumber: string) => {
+    setOpenEditVariableModal(false);
+    setSelectedVariable(undefined);
 
-      if (setSelectedTab) {
-        setSelectedTab(strings.DOCUMENT);
-        setTimeout(() => {
-          // do find and scroll async to allow tab-switching to occur first
-          const relevantSection = document.getElementById(sectionNumber);
-          relevantSection?.scrollIntoView({ behavior: 'smooth' });
-        }, 0);
-      }
-    },
-    [setSelectedTab]
-  );
+    const documentTabElement: HTMLButtonElement | null = document.querySelector('button[role="tab"]:first-child');
+    if (documentTabElement) {
+      documentTabElement.click();
+
+      setTimeout(() => {
+        // do find and scroll async after timeout to allow tab-switching to occur first
+        const relevantSection = document.getElementById(sectionNumber);
+        relevantSection?.scrollIntoView({ behavior: 'smooth' });
+      }, 400);
+    }
+  }, []);
 
   const onSearch = (str: string) => setSearchValue(str);
 

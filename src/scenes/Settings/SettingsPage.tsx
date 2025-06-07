@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, useTheme } from '@mui/material';
@@ -57,18 +57,20 @@ const SettingsPage = () => {
     defaultTab: 'my-account',
     tabs,
     viewIdentifier: 'settings',
-    keepQuery: false,
   });
 
-  const onTabChangeHandler = (tab: string) => {
-    if (tab !== 'my-account') {
-      mixpanel?.track(MIXPANEL_EVENTS.SETTINGS_TAB, {
-        tab,
-      });
-    }
-    setIsEditingAccount(false);
-    onTabChange(tab);
-  };
+  const onTabChangeHandler = useCallback(
+    (tab: string) => {
+      if (tab !== 'my-account') {
+        mixpanel?.track(MIXPANEL_EVENTS.SETTINGS_TAB, {
+          tab,
+        });
+      }
+      setIsEditingAccount(false);
+      onTabChange(tab);
+    },
+    [mixpanel, onTabChange]
+  );
 
   const onOptionItemClick = (optionItem: DropdownItem) => {
     if (optionItem.value === 'delete-account') {

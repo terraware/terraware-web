@@ -77,6 +77,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     if (!activeLocale) {
       return [];
     }
+
     return [
       {
         id: 'plantMonitoring',
@@ -94,8 +95,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'plantMonitoring',
     tabs,
-    viewIdentifier: 'accelerator-overview',
-    keepQuery: false,
+    viewIdentifier: 'observations',
   });
 
   const newObservationsSchedulable = useMemo(() => {

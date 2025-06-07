@@ -99,8 +99,7 @@ const ProjectPage = () => {
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'projectProfile',
     tabs,
-    viewIdentifier: 'funder-home',
-    keepQuery: false,
+    viewIdentifier: 'project-profile',
   });
 
   const goToProjectEdit = useCallback(

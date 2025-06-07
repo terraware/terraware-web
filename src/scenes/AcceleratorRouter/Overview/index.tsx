@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box } from '@mui/material';
@@ -22,7 +22,9 @@ const OverviewView = () => {
     if (!activeLocale) {
       return [];
     }
+
     const canReadParticipants = isAllowed('READ_PARTICIPANTS');
+
     return [
       {
         id: 'projects',
@@ -50,17 +52,19 @@ const OverviewView = () => {
     defaultTab: 'projects',
     tabs,
     viewIdentifier: 'accelerator-overview',
-    keepQuery: false,
   });
 
-  const onTabChangeHandler = (tab: string) => {
-    if (tab !== 'projects') {
-      mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_OVERVIEW_TAB, {
-        tab,
-      });
-    }
-    onTabChange(tab);
-  };
+  const onTabChangeHandler = useCallback(
+    (tab: string) => {
+      if (tab !== 'projects') {
+        mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_OVERVIEW_TAB, {
+          tab,
+        });
+      }
+      onTabChange(tab);
+    },
+    [mixpanel, onTabChange]
+  );
 
   return (
     <Page title={strings.OVERVIEW} contentStyle={{ display: 'block' }}>

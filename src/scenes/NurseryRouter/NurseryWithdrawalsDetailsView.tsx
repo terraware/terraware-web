@@ -189,7 +189,7 @@ export default function NurseryWithdrawalsDetailsView({
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'withdrawal',
     tabs,
-    viewIdentifier: 'nursery-withdrawal-details',
+    viewIdentifier: 'nursery-withdrawal',
   });
 
   return (
