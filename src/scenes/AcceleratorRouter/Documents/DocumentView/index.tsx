@@ -71,9 +71,18 @@ export default function DocumentView(): JSX.Element {
     [activeLocale]
   );
 
-  const setSelectedTab = useCallback((tab: string) => {
-    onTabChange(tab);
-  }, []);
+  const { activeTab, onTabChange, updateTabs } = useStickyTabs({
+    defaultTab: 'document',
+    tabs: [],
+    viewIdentifier: 'accelerator-documents',
+  });
+
+  const setSelectedTab = useCallback(
+    (tab: string) => {
+      onTabChange(tab);
+    },
+    [onTabChange]
+  );
 
   const tabs: Tab[] = useMemo(
     () =>
@@ -99,14 +108,12 @@ export default function DocumentView(): JSX.Element {
             },
           ]
         : [],
-    [activeLocale, document]
+    [activeLocale, document, setSelectedTab]
   );
 
-  const { activeTab, onTabChange } = useStickyTabs({
-    defaultTab: 'document',
-    tabs,
-    viewIdentifier: 'accelerator-documents',
-  });
+  useEffect(() => {
+    updateTabs(tabs);
+  }, [tabs, updateTabs]);
 
   if (!(document && documentTemplate)) {
     return <BusySpinner />;
