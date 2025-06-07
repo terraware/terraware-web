@@ -56,8 +56,6 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) =>
       const sessionTab = getTabFromSession(viewIdentifier);
       if (sessionTab) {
         onTabChange(sessionTab);
-      } else {
-        // onTabChange(defaultTab);
       }
       return;
     }
