@@ -89,13 +89,13 @@ const NewView = () => {
     } else if (searchRequest.status === 'error') {
       setEmailError(strings.USER_WITH_EMAIL_DOES_NOT_EXIST);
     }
-  }, [searchRequest]);
+  }, [searchRequest, setUserId]);
 
   useEffect(() => {
     if (updatePerson.succeeded) {
       goToPeople();
     }
-  }, [updatePerson]);
+  }, [updatePerson, goToPeople]);
 
   return (
     <Page title={strings.ADD_PERSON} contentStyle={{ display: 'flex', flexDirection: 'column' }}>

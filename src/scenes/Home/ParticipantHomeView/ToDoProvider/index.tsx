@@ -51,7 +51,7 @@ const ToDoProvider = ({ children }: Props) => {
       setDeliverablesRequestId(deliverablesRequest.requestId);
       setEventsRequestId(eventsRequest.requestId);
     }
-  }, [dispatch, currentParticipantProject]);
+  }, [dispatch, currentParticipantProject, activeLocale]);
 
   useEffect(() => {
     if (!toDoDeliverablesRequest || !toDoEventsRequest) {

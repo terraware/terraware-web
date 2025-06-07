@@ -119,7 +119,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
         setReportedPlants(undefined);
       }
     },
-    [plantingSites, plantingSite]
+    [plantingSites, plantingSite, allSitesOption]
   );
 
   useEffect(() => {

@@ -47,7 +47,7 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
       void dispatch(requestPlantings(selectedOrganization.id));
       void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization?.id]);
+  }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
     if (activeLocale) {

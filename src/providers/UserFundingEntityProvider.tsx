@@ -66,7 +66,7 @@ export default function UserFundingEntityProvider({ children }: UserFundingEntit
         navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
-  }, [entityAPIRequestStatus]);
+  }, [entityAPIRequestStatus, isDev, isStaging, navigate]);
 
   return <UserFundingEntityContext.Provider value={fundingEntityData}>{children}</UserFundingEntityContext.Provider>;
 }

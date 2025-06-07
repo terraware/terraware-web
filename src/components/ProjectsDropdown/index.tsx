@@ -63,7 +63,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
         }))
         .filter((item): item is DropdownItem => item.label !== undefined),
     ];
-  }, [activeLocale, allowUnselect, availableProjects]);
+  }, [activeLocale, allowUnselect, availableProjects, unselectLabel, unselectValue, useDealName]);
 
   return (
     <Dropdown

@@ -69,7 +69,7 @@ const ModuleView = () => {
           goToModuleEventSession(projectId, moduleId, event.id);
         },
       })),
-    [events, goToModuleEventSession, projectId, mixpanel]
+    [events, goToModuleEventSession, projectId, mixpanel, moduleId]
   );
 
   const moduleDetails = useMemo(

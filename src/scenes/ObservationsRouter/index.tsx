@@ -62,7 +62,7 @@ export default function ObservationsRouter(): JSX.Element {
       void dispatch(requestObservations(selectedOrganization.id));
       void dispatch(requestObservations(selectedOrganization.id, true));
     }
-  }, [dispatch, selectedOrganization?.id, plantingSites, dispatched]);
+  }, [dispatch, selectedOrganization, plantingSites, dispatched]);
 
   useEffect(() => {
     if (observationsResultsError || plantingSitesError) {

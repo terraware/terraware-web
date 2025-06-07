@@ -84,7 +84,7 @@ export default function useDraftPlantingSiteUpdate(): Response {
         snackbar.toastError(strings.GENERIC_ERROR);
       }
     }
-  }, [_updateDraft, draftRequest, validateDraft, validateSiteStatus, isValid]);
+  }, [_updateDraft, draftRequest, validateDraft, validateSiteStatus, isValid, snackbar, problems]);
 
   useEffect(() => {
     if (draftResult?.status === 'error') {
@@ -122,6 +122,6 @@ export default function useDraftPlantingSiteUpdate(): Response {
       updateDraftStatus: draftResult?.status,
       updatedDraft,
     }),
-    [problems, validateDraft, validateSiteStatus, updateDraft, updatedDraft, draftResult?.status]
+    [updateDraft, updatedDraft, draftResult?.status]
   );
 }

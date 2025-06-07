@@ -51,7 +51,7 @@ const useProjectScore = (projectId: number) => {
       getStatus: projectScoreRequest?.status,
       updateStatus: updateRequest?.status,
     }),
-    [updateRequest, projectScore, getProjectScore]
+    [updateRequest, projectScore, getProjectScore, projectScoreRequest?.status, updateProjectScore]
   );
 };
 

@@ -405,7 +405,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         );
       },
     }),
-    [selectedZone, setSubzonesData, subzones]
+    [mapStyles.box, mapStyles.tooltip, selectedZone, setSubzonesData, subzones]
   );
 
   const activeContext = useMemo<MapEntityOptions | undefined>(() => {

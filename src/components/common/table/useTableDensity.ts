@@ -20,10 +20,13 @@ const useTableDensity = (): Response => {
     (userPreferences.tableDensity as TableDensityType) ?? 'comfortable'
   );
 
-  const saveTableDensityToUserPreferences = (newDensity: TableDensityType) => {
-    void updateUserPreferences({ tableDensity: newDensity });
-    reloadUserPreferences();
-  };
+  const saveTableDensityToUserPreferences = useCallback(
+    (newDensity: TableDensityType) => {
+      void updateUserPreferences({ tableDensity: newDensity });
+      reloadUserPreferences();
+    },
+    [reloadUserPreferences, updateUserPreferences]
+  );
 
   useEffect(() => {
     // Load table density from userPreference. Set state if different.
@@ -31,12 +34,15 @@ const useTableDensity = (): Response => {
     if (tableDensity !== newTableDensity) {
       _setTableDensity(newTableDensity);
     }
-  }, [userPreferences.tableDensity]);
+  }, [userPreferences.tableDensity, tableDensity]);
 
-  const setTableDensity = useCallback((density: TableDensityType) => {
-    _setTableDensity(density);
-    saveTableDensityToUserPreferences(density);
-  }, []);
+  const setTableDensity = useCallback(
+    (density: TableDensityType) => {
+      _setTableDensity(density);
+      saveTableDensityToUserPreferences(density);
+    },
+    [saveTableDensityToUserPreferences]
+  );
 
   const result = useMemo<Response>(
     () => ({

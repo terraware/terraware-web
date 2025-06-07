@@ -35,7 +35,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     if (result?.status === 'success' && reloadData) {
       reloadData();
     }
-  }, [result]);
+  }, [result, reloadData]);
 
   const createLinkToSpecies = (iValue: React.ReactNode | unknown[]) => {
     return (

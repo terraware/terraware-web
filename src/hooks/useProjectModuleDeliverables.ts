@@ -29,7 +29,7 @@ const useProjectModuleDeliverables = () => {
 
       setDeliverablesRequestId(listModuleDeliverables.requestId);
     },
-    [dispatch, setDeliverablesRequestId]
+    [dispatch, setDeliverablesRequestId, activeLocale]
   );
 
   useEffect(() => {

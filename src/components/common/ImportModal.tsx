@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -93,7 +93,9 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
 
   const spacingStyles = { marginRight: theme.spacing(2) };
 
-  const warningContentSyles = { textAlign: 'left' };
+  const warningContentStyles = useMemo(() => {
+    return { textAlign: 'left' };
+  }, []);
 
   const containerStyles = {
     display: 'flex',
@@ -134,7 +136,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   useEffect(() => {
     const getErrors = () => {
       return (
-        <Box key='import-error-1' sx={warningContentSyles}>
+        <Box key='import-error-1' sx={warningContentStyles}>
           {strings.DATA_IMPORT_FAILED}
           <ul>
             {fileStatus?.details.errors?.map((err, index) => (
@@ -171,7 +173,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       clearUploadInterval();
       setWarning(true);
     }
-  }, [fileStatus, uploadInterval]);
+  }, [fileStatus, uploadInterval, warningContentStyles]);
 
   const dropHandler = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -456,7 +458,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           </Box>
         )}
         {warning && fileStatus?.details.warnings?.length && (
-          <Box sx={warningContentSyles}>
+          <Box sx={warningContentStyles}>
             <p>{strings.formatString(duplicatedLabel, fileStatus?.details.warnings?.length)}</p>
             <ul>
               {fileStatus?.details.warnings?.map((wr, index) => <li key={`duplicate-sp-${index}`}>{wr.value}</li>)}

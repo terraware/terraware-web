@@ -116,7 +116,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
     if (!isLoading) {
       onClose();
     }
-  }, [onClose]);
+  }, [onClose, isLoading]);
 
   const onSave = useCallback(() => {
     if (selectedOrganization?.id) {

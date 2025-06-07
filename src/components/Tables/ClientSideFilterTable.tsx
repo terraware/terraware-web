@@ -207,16 +207,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     }
 
     return rows;
-  }, [
-    activeLocale,
-    debouncedSearchTerm,
-    extraTableFilters,
-    filters,
-    fuzzySearchColumns,
-    getSearchPayload,
-    rows,
-    searchSortOrder,
-  ]);
+  }, [activeLocale, columns, getSearchPayload, rows, searchAndSort, searchSortOrder]);
 
   return (
     <Container disableGutters maxWidth={false} sx={{ padding: 0 }}>

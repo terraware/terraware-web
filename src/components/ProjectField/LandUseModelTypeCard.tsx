@@ -33,7 +33,7 @@ const LandUseModelTypeCard = ({ selectedTypes, modelHectares, numberFormatter }:
       output.push(`${type} (${hectaresString})`);
     }
     return output.join('/');
-  }, [modelHectares]);
+  }, [modelHectares, numberFormatter, selectedTypes]);
 
   return (
     <InvertedCard

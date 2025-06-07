@@ -37,7 +37,7 @@ const InviteView = () => {
     if (fundingEntityId) {
       goToFundingEntity(fundingEntityId);
     }
-  }, [fundingEntityId]);
+  }, [fundingEntityId, goToFundingEntity]);
 
   const onSendClick = useCallback(() => {
     if (!fundingEntityId) {
@@ -76,7 +76,7 @@ const InviteView = () => {
       snackbar.toastError();
     }
     goToFundingEntity(fundingEntityId);
-  }, [inviteFunderResponse, snackbar]);
+  }, [inviteFunderResponse, snackbar, fundingEntityId, goToFundingEntity, reloadFundingEntity]);
 
   return (
     <Page

@@ -32,10 +32,7 @@ const ApplicationProvider = ({ children }: Props) => {
   const [selectedApplication, setSelectedApplication] = useState<Application>();
 
   const { user } = useUser();
-  const isAllowedAllApplications = useMemo(
-    () => (user ? isAllowed(user, 'READ_ALL_APPLICATIONS') : false),
-    [user, isAllowed]
-  );
+  const isAllowedAllApplications = useMemo(() => (user ? isAllowed(user, 'READ_ALL_APPLICATIONS') : false), [user]);
 
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
@@ -77,7 +74,7 @@ const ApplicationProvider = ({ children }: Props) => {
       setReloadCallback(onReload);
       loadApplications();
     },
-    [dispatch, loadApplications, setReloadCallback]
+    [loadApplications, setReloadCallback]
   );
 
   const _getApplicationByProjectId = useCallback(

@@ -89,7 +89,7 @@ const DocumentHistoryTab = (): JSX.Element => {
       }
     });
     setUserIdsRequested((prev) => [...prev, ...newUserIdsRequested]);
-  }, [tableRows]);
+  }, [tableRows, dispatch, userIdsRequested]);
 
   useEffect(() => {
     // TODO should these be admin users? TF accelerator users?

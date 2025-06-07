@@ -21,7 +21,7 @@ const ScorecardEditView = () => {
     if (getStatus === 'success' && projectScore) {
       setScore(projectScore);
     }
-  }, [getStatus, projectScore]);
+  }, [getStatus, projectScore, setScore]);
 
   const onExit = useCallback(() => {
     if (project) {

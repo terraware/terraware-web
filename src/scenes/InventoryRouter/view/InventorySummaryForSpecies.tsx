@@ -46,7 +46,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
     } else {
       setSummary(undefined);
     }
-  }, [speciesId, summary, snackbar, dispatch, selectedOrganization?.id]);
+  }, [speciesId, summary, snackbar, dispatch, selectedOrganization]);
 
   useEffect(() => {
     reloadData();
