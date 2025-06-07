@@ -128,6 +128,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
+    await page.getByRole('tab', { name: 'By Batch' }).click();
     await page.getByRole('link', { name: '-2-2-004' }).click();
     await page.getByLabel('Details').getByRole('button').nth(1).click();
     await page.getByRole('spinbutton').click();
@@ -175,6 +176,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
+    await page.getByRole('tab', { name: 'By Batch' }).click();
     await page.getByRole('link', { name: '-2-2-003' }).click();
     await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
     await page.waitForTimeout(1000); //Wait for modal to load
