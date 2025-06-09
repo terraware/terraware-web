@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, DropdownItem } from '@terraware/web-components';
+import { Button, DropdownItem, Message } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
@@ -307,7 +308,17 @@ const ReportView = () => {
         title={
           <TitleBar
             title={`${strings.REPORT} (${reportName})`}
-            subtitle={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
+            header={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
+            subtitle={
+              selectedPublishedReport
+                ? strings
+                    .formatString(
+                      strings.FUNDER_REPORT_LAST_PUBLISHED,
+                      getDateDisplayValue(selectedPublishedReport.publishedTime)
+                    )
+                    .toString()
+                : ''
+            }
             titleExtraComponent={
               selectedPublishedReport &&
               (publishedFunderView ? (
@@ -327,7 +338,14 @@ const ReportView = () => {
         hierarchicalCrumbs={false}
       >
         {publishedFunderView ? (
-          <FunderReportView selectedProjectId={Number(projectId)} selectedReport={selectedPublishedReport} />
+          <>
+            <Box marginBottom={4} width={'100%'}>
+              <Message type='page' priority='info' body={strings.PUBLISHED_REPORT_CONSOLE_WARNING} />
+            </Box>
+            <Box marginBottom={4} width={'100%'}>
+              <FunderReportView selectedProjectId={Number(projectId)} selectedReport={selectedPublishedReport} />
+            </Box>
+          </>
         ) : (
           <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
             {selectedReport && <ApprovedReportMessage report={selectedReport} />}
