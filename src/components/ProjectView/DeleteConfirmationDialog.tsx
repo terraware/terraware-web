@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Typography } from '@mui/material';
 import { Confirm } from '@terraware/web-components';
 
 import strings from 'src/strings';
