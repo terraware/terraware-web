@@ -166,7 +166,6 @@ const ReportView = () => {
   }, [reportId, reports]);
 
   useEffect(() => {
-    console.log('reportsResponse', reportsResponse);
     if (reportsResponse?.status === 'success') {
       setPublishedReports(reportsResponse.data);
     }
@@ -174,10 +173,7 @@ const ReportView = () => {
 
   useEffect(() => {
     if (reportId) {
-      console.log('reportId', reportId);
-      console.log('publishedReports', publishedReports);
       const found = publishedReports?.find((r) => r.reportId.toString() === reportId);
-      console.log('found', found);
       setSelectedPublishedReport(found);
     }
   }, [publishedReports, selectedPublishedReport, reportId]);
