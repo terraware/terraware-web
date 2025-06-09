@@ -6,6 +6,7 @@ import { DropdownItem } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import CannotDeleteApplicationProject from 'src/components/ProjectView/CannotDeleteApplicationProject';
 import DeleteConfirmationDialog from 'src/components/ProjectView/DeleteConfirmationDialog';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -14,6 +15,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { requestProject, requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -30,6 +32,7 @@ export default function ProjectView(): JSX.Element {
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { allApplications } = useApplicationData();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
@@ -38,6 +41,12 @@ export default function ProjectView(): JSX.Element {
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
   const projectDeleteRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
+
+  const projectHasApplication = useMemo(() => {
+    if (projectId && allApplications !== undefined) {
+      return !!allApplications.find((application) => application.projectId === projectId);
+    }
+  }, [allApplications, projectId]);
 
   useEffect(() => {
     if (!project) {
@@ -121,11 +130,15 @@ export default function ProjectView(): JSX.Element {
           </Grid>
         </Grid>
       </Card>
-      <DeleteConfirmationDialog
-        open={isDeleteConfirmationOpen}
-        onClose={onDeleteConfirmationDialogClose}
-        onSubmit={onDeleteConfirmationDialogSubmit}
-      />
+      {projectHasApplication ? (
+        <CannotDeleteApplicationProject open={isDeleteConfirmationOpen} onClose={onDeleteConfirmationDialogClose} />
+      ) : (
+        <DeleteConfirmationDialog
+          open={isDeleteConfirmationOpen}
+          onClose={onDeleteConfirmationDialogClose}
+          onSubmit={onDeleteConfirmationDialogSubmit}
+        />
+      )}
     </Page>
   );
 }
