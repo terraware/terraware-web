@@ -18,6 +18,8 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
   const { searchCriteria, searchSortOrder, searchColumns, open, onClose } = props;
 
   const onExport = async () => {
+    if (!selectedOrganization) return null;
+
     return await SearchService.searchCsv({
       prefix: 'facilities.accessions',
       fields: [...searchColumns],

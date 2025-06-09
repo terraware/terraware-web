@@ -63,65 +63,67 @@ const EditableReportBox = ({
             width: '100%',
           }}
         >
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-apart',
-              width: '100%',
-            }}
-          >
+          {(name || canEdit) && (
             <Box
               sx={{
                 alignItems: 'center',
                 display: 'flex',
-                flexGrow: 1,
-                justifyContent: 'flex-start',
-                flexDirection: 'row',
-                marginBottom: theme.spacing(2),
+                justifyContent: 'space-apart',
+                width: '100%',
               }}
             >
-              <Typography fontWeight={600}>{name}</Typography>
-              {visibleToFunder !== undefined && (
-                <Typography
-                  fontWeight={500}
-                  fontSize={'14px'}
-                  lineHeight={'20px'}
-                  color={visibleToFunder ? theme.palette.TwClrTxtSuccess : theme.palette.TwClrTxtDanger}
-                  paddingLeft={theme.spacing(2)}
-                >
-                  {visibleToFunder ? strings.METRIC_VISIBLE_TO_FUNDER : strings.METRIC_NOT_VISIBLE_TO_FUNDER}
-                </Typography>
-              )}
-            </Box>
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  flexGrow: 1,
+                  justifyContent: 'flex-start',
+                  flexDirection: 'row',
+                  marginBottom: theme.spacing(2),
+                }}
+              >
+                <Typography fontWeight={600}>{name}</Typography>
+                {visibleToFunder !== undefined && (
+                  <Typography
+                    fontWeight={500}
+                    fontSize={'14px'}
+                    lineHeight={'20px'}
+                    color={visibleToFunder ? theme.palette.TwClrTxtSuccess : theme.palette.TwClrTxtDanger}
+                    paddingLeft={theme.spacing(2)}
+                  >
+                    {visibleToFunder ? strings.METRIC_VISIBLE_TO_FUNDER : strings.METRIC_NOT_VISIBLE_TO_FUNDER}
+                  </Typography>
+                )}
+              </Box>
 
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                flexGrow: 1,
-                justifyContent: 'flex-end',
-                position: 'relative',
-                height: 0,
-              }}
-            >
-              {!editing && (
-                <Box className='actions'>
-                  <Button
-                    id='edit'
-                    label={strings.EDIT}
-                    onClick={onEdit}
-                    icon='iconEdit'
-                    priority='secondary'
-                    className='edit-button'
-                    size='small'
-                    sx={{ '&.button': { margin: '4px' } }}
-                    type='passive'
-                  />
-                </Box>
-              )}
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  flexGrow: 1,
+                  justifyContent: 'flex-end',
+                  position: 'relative',
+                  height: 0,
+                }}
+              >
+                {!editing && (
+                  <Box className='actions'>
+                    <Button
+                      id='edit'
+                      label={strings.EDIT}
+                      onClick={onEdit}
+                      icon='iconEdit'
+                      priority='secondary'
+                      className='edit-button'
+                      size='small'
+                      sx={{ '&.button': { margin: '4px' } }}
+                      type='passive'
+                    />
+                  </Box>
+                )}
+              </Box>
             </Box>
-          </Box>
+          )}
 
           {!!description && (
             <Typography

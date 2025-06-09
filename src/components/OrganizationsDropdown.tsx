@@ -60,7 +60,7 @@ export default function OrganizationsDropdown(): JSX.Element {
         onSuccess={(organization) => void handleSuccess(organization)}
       />
       <PopoverMenu
-        anchor={<p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>}
+        anchor={<p style={{ fontSize: '16px' }}>{selectedOrganization?.name}</p>}
         menuSections={[
           organizations?.map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
           [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],

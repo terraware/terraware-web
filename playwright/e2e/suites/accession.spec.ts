@@ -123,7 +123,7 @@ export default function AccessionTests() {
       .getByText(/My New Nursery/)
       .nth(0)
       .click();
-    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('300');
+    await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('300');
     await page.getByRole('button', { name: 'Add Notes' }).click();
     await page.locator('textarea').fill('Adding some test notes here!');
     await page.locator('#saveWithdraw').click();
@@ -180,7 +180,7 @@ export default function AccessionTests() {
     await page.getByText('Soil').click();
     await page.getByPlaceholder('Select...').nth(3).click();
     await page.getByText('Soak').click();
-    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('20');
+    await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('20');
     await page.locator('#saveWithdraw').click();
     await expect(page.getByRole('main')).toContainText('75 Grams');
     await expect(page.getByRole('main')).toContainText('~75 ct');

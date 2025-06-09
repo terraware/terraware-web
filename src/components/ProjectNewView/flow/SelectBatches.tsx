@@ -89,7 +89,10 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
-  const nurseries = useMemo(() => getAllNurseries(selectedOrganization), [selectedOrganization]);
+  const nurseries = useMemo(
+    () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
+    [selectedOrganization]
+  );
 
   const getSearchResults = useCallback(
     (

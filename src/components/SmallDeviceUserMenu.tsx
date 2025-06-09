@@ -264,7 +264,7 @@ export default function SmallDeviceUserMenu({
                                 key={`item-${index}`}
                                 sx={[
                                   menuItemStyles,
-                                  selectedOrganization.id === org.id && {
+                                  selectedOrganization?.id === org.id && {
                                     backgroundColor: theme.palette.TwClrBgGhostActive,
                                   },
                                 ]}

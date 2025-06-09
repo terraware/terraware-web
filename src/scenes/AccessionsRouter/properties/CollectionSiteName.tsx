@@ -18,7 +18,7 @@ export default function CollectionSiteName({ collectionSiteName = '', onChange }
   const [options, setOptions] = useState<string[]>();
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const populateCollectionSiteNames = async () => {
         setOptions(await SeedBankService.getCollectionSiteNames(selectedOrganization.id));
       };

@@ -25,7 +25,7 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
         path={'/*'}
         element={
           <InventoryV2View
-            hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
+            hasNurseries={selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Nursery') : false}
             hasSpecies={species.length > 0}
           />
         }

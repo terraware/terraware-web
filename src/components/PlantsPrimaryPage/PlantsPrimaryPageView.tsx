@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, IconName, Message } from '@terraware/web-components';
@@ -70,13 +70,14 @@ export default function PlantsPrimaryPageView({
   const projects = useAppSelector(selectProjects);
   const dispatch = useAppDispatch();
   const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
+  const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
 
   const hasSites = useMemo(() => {
     return (
       (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1) ||
-      (isAcceleratorRoute && (plantingSites?.length ?? 0) > 1)
+      (isAcceleratorRoute && (plantingSites?.length ?? 0) > 0)
     );
-  }, [allPlantingSites]);
+  }, [allPlantingSites, isAcceleratorRoute, plantingSites]);
 
   const plantingSiteSelected = useMemo(() => {
     return plantingSite !== undefined;
@@ -87,10 +88,18 @@ export default function PlantsPrimaryPageView({
   }, [isInitiated, hasSites, plantingSiteSelected]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
     }
-  }, [activeLocale, dispatch, selectedOrganization.id]);
+  }, [activeLocale, dispatch, selectedOrganization]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDelayedIsPlantingSiteSet(isPlantingSiteSet);
+    }, 1000);
+
+    return () => clearTimeout(timer); // Cancel timeout if dependencies change
+  }, [isPlantingSiteSet]);
 
   const projectsWithPlantingSites = useMemo(() => {
     if (!allPlantingSites) {
@@ -137,7 +146,7 @@ export default function PlantsPrimaryPageView({
   if (
     !plantingSites ||
     (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId) ||
-    (isAcceleratorRoute && (plantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId)
+    (isAcceleratorRoute && (plantingSites?.length ?? 0) > 0 && !selectedPlantingSiteId)
   ) {
     return (
       <TfMain>
@@ -237,7 +246,7 @@ export default function PlantsPrimaryPageView({
                     </Typography>
                   </Box>
                 </Grid>
-                {!isPlantingSiteSet ? (
+                {!delayedIsPlantingSiteSet ? (
                   <CircularProgress sx={{ margin: 'auto' }} />
                 ) : (
                   <Grid item xs={isDesktop ? 6 : 12}>
@@ -249,7 +258,9 @@ export default function PlantsPrimaryPageView({
               </Grid>
             </Card>
           )}
-          {isEmptyState && !isAcceleratorRoute && !isLoading && isPlantingSiteSet && <PlantsDashboardEmptyMessage />}
+          {isEmptyState && !isAcceleratorRoute && !isLoading && delayedIsPlantingSiteSet && (
+            <PlantsDashboardEmptyMessage />
+          )}
         </>
       ) : (
         <PageHeaderWrapper nextElement={contentRef.current}>
@@ -316,7 +327,7 @@ export default function PlantsPrimaryPageView({
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      {newHeader && !isPlantingSiteSet ? (
+      {newHeader && (!delayedIsPlantingSiteSet || isLoading) ? (
         <CircularProgress sx={{ margin: 'auto' }} />
       ) : (
         <Box ref={contentRef} sx={style}>

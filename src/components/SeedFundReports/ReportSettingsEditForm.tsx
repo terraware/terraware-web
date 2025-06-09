@@ -28,7 +28,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
   const [isBusy, setIsBusy] = useState<boolean>(false);
 
   const onSave = useCallback(async () => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       setIsBusy(true);
       const result = await ReportSettingsService.updateSettings({
         organizationId: selectedOrganization.id,
@@ -43,7 +43,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
 
       navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
     }
-  }, [navigate, localReportsSettings, selectedOrganization.id, snackbar]);
+  }, [navigate, localReportsSettings, selectedOrganization, snackbar]);
 
   const onChange = useCallback(
     (key: string | number, value: boolean) => {

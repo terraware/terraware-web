@@ -29,7 +29,9 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
   const [record, setRecord, onChange] = useForm(accession);
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
-  const timeZoneId = useLocationTimeZone().get(getSeedBank(selectedOrganization, accession.facilityId))?.id;
+  const timeZoneId = useLocationTimeZone().get(
+    selectedOrganization ? getSeedBank(selectedOrganization, accession.facilityId) : undefined
+  )?.id;
 
   useEffect(() => {
     setRecord(accession);

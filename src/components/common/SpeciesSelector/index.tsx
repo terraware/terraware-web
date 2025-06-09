@@ -34,6 +34,7 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
 
   const populateSpecies = useCallback(
     async (searchTerm: string) => {
+      if (!selectedOrganization) return;
       const requestId = Math.random().toString();
       setRequestId(`speciesSelectorSearch${id}`, requestId);
       const response: SuggestedSpecies[] | null = await SpeciesService.suggestSpecies(
@@ -44,11 +45,11 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
         setSpeciesList(response.sort((a, b) => a.scientificName.localeCompare(b.scientificName)));
       }
     },
-    [selectedOrganization.id]
+    [selectedOrganization, id]
   );
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void populateSpecies(debouncedSearchTerm);
     }
   }, [populateSpecies, debouncedSearchTerm]);

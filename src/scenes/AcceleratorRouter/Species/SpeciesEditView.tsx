@@ -100,10 +100,13 @@ export default function SpeciesEditView(): JSX.Element {
           </Box>
           <Box marginBottom={4}>
             <Message
-              title={strings.formatString(strings.EDITING_SPECIES_DATA_FOR_ORGANIZATION, selectedOrganization.name)}
+              title={strings.formatString(
+                strings.EDITING_SPECIES_DATA_FOR_ORGANIZATION,
+                selectedOrganization?.name || ''
+              )}
               body={strings.formatString(
                 strings.EDITING_SPECIES_DATA_FOR_ORGANIZATION_WARNING,
-                selectedOrganization.name
+                selectedOrganization?.name || ''
               )}
               type='page'
               priority='warning'

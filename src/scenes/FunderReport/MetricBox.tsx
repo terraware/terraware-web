@@ -16,10 +16,10 @@ type MetricBoxProps = {
   index: number;
   year: string;
   quarter?: string;
-  lastIndex: boolean;
+  length: number;
 };
 
-const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) => {
+const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) => {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { user } = useUser();
@@ -28,18 +28,28 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
     return metric.name === 'Mortality Rate' ? '%' : '';
   }, [metric]);
 
+  const showRow = useMemo(() => {
+    if (!isDesktop) {
+      return index !== length - 1;
+    }
+
+    const isEven = length % 2 === 0;
+    if (isEven) {
+      return index < length - 2;
+    }
+
+    return index < length - 1;
+  }, [isDesktop, index, length]);
+
   return (
     <Box
       flexBasis={'calc(50% - 24px)'}
       flexShrink={0}
       marginTop={3}
-      borderRight={isDesktop ? (index % 2 !== 0 ? 'none' : `1px solid ${theme.palette.TwClrBrdrTertiary}`) : 'none'}
-      borderBottom={isDesktop || lastIndex ? 'none' : `1px solid ${theme.palette.TwClrBrdrTertiary}`}
-      marginRight={3}
-      paddingBottom={isDesktop ? 0 : 3}
-      paddingRight={isDesktop ? 3 : 0}
+      borderBottom={showRow ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
+      paddingBottom={3}
     >
-      <Box display={isMobile ? 'block' : 'flex'} alignItems={'center'}>
+      <Box display={isMobile ? 'block' : 'flex'} alignItems={'center'} paddingRight={isDesktop ? 3 : 0} marginRight={3}>
         <Box display={'flex'} alignItems={'center'} marginBottom={isMobile ? 1 : 0}>
           <Typography fontSize='20px' fontWeight={600} paddingRight={'10px'}>
             {isReportSystemMetric(metric) ? metric.metric : metric.name}
@@ -54,7 +64,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
         </Box>
         {metric.status && <MetricStatusBadge status={metric.status} />}
       </Box>
-      <Box display='flex' marginTop={1}>
+      <Box display='flex' marginTop={1} paddingRight={isDesktop ? 3 : 0} marginRight={3}>
         <Box flex='0 0 50%'>
           <Typography fontWeight={600}>
             {year} {strings.TARGET}
@@ -73,7 +83,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
         </Box>
       </Box>
       {'progressNotes' in metric && (
-        <Box>
+        <Box paddingRight={isDesktop ? 3 : 0} marginRight={3}>
           <Typography fontWeight={600} fontSize='16px' marginTop={1}>
             {strings.PROGRESS_NOTES}
           </Typography>

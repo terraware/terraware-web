@@ -31,10 +31,10 @@ export const useProjects = (record?: { projectId?: number }) => {
   }, [availableProjects, record?.projectId]);
 
   useEffect(() => {
-    if (!availableProjects && selectedOrganization.id !== -1) {
+    if (!availableProjects && selectedOrganization) {
       void dispatch(requestProjects(selectedOrganization.id));
     }
-  }, [availableProjects, dispatch, selectedOrganization.id]);
+  }, [availableProjects, dispatch, selectedOrganization]);
 
   // fetch all projects in the accelerator route
   useEffect(() => {

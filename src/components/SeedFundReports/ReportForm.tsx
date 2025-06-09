@@ -105,7 +105,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
   );
 
   useEffect(() => {
-    if (selectedOrganization && selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestObservations(selectedOrganization.id));
       void dispatch(requestObservationsResults(selectedOrganization.id));
       void dispatch(requestPlantings(selectedOrganization.id));

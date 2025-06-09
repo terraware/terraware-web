@@ -45,14 +45,14 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
 
   useEffect(() => {
     const siteId = Number(plantingSiteId);
-    if (!isNaN(siteId) && selectedOrganization.id !== -1) {
+    if (!isNaN(siteId) && selectedOrganization) {
       setSelectedPlantingSite(siteId);
 
       // This dispatch is required for a hasPlantings attribute for deleting a site
       // TODO: move plantings into usePlantingSite hook
       void dispatch(requestPlantings(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id, plantingSiteId, setSelectedPlantingSite]);
+  }, [dispatch, selectedOrganization, plantingSiteId, setSelectedPlantingSite]);
 
   // show spinner while initializing data
   if (allPlantingSites === undefined) {

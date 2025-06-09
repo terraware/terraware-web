@@ -94,7 +94,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   };
 
   const onApplyFilters = useCallback(async () => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const requestId = Math.random().toString();
       setRequestId('searchInventory', requestId);
 

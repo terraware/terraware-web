@@ -54,7 +54,7 @@ export default function PersonView(): JSX.Element {
   }, [selectedOrganization, personSelectedToEdit, setNewPerson]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const populatePeople = async () => {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (personId && response.requestSucceeded) {
@@ -94,7 +94,7 @@ export default function PersonView(): JSX.Element {
     let successMessage: string | null = null;
     let userId = -1;
 
-    if (!!personSelectedToEdit && selectedOrganization.id !== -1) {
+    if (!!personSelectedToEdit && selectedOrganization) {
       const response = await OrganizationUserService.updateOrganizationUser(
         selectedOrganization.id,
         newPerson.id,
@@ -103,7 +103,9 @@ export default function PersonView(): JSX.Element {
       successMessage = response.requestSucceeded ? strings.CHANGES_SAVED : null;
       userId = newPerson.id;
     } else {
-      const response = await OrganizationUserService.createOrganizationUser(selectedOrganization.id, { ...newPerson });
+      const response = await OrganizationUserService.createOrganizationUser(selectedOrganization?.id || -1, {
+        ...newPerson,
+      });
       if (!response.requestSucceeded) {
         if (response.errorDetails === 'PRE_EXISTING_USER') {
           setRepeatedEmail(newPerson.email);

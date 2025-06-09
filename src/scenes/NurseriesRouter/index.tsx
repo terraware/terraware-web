@@ -12,7 +12,11 @@ const NurseriesRouter = () => {
   const { selectedOrganization } = useOrganization();
 
   const getNurseriesView = useCallback((): JSX.Element => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasFacilityType(selectedOrganization, 'Nursery')) {
+    if (
+      selectedOrganization &&
+      !isPlaceholderOrg(selectedOrganization.id) &&
+      selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+    ) {
       return <NurseriesListView organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'Nurseries'} />;

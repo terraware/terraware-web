@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import DocumentMetadataEdit from 'src/components/DocumentProducer/DocumentMetadataEdit';
 import PageContent from 'src/components/DocumentProducer/PageContent';
@@ -50,6 +50,13 @@ const DocumentsAddView = (): JSX.Element => {
     saveNewDoc();
   };
 
+  const handleSetProjectId = useCallback(
+    (value: string) => {
+      setProjectId(value);
+    },
+    [setProjectId]
+  );
+
   return (
     <Page title={strings.ADD_DOCUMENT}>
       <PageForm
@@ -72,7 +79,7 @@ const DocumentsAddView = (): JSX.Element => {
             documentTemplateId={documentTemplateId}
             setDocumentTemplateId={(value: string) => setDocumentTemplateId(value)}
             projectId={projectId}
-            setProjectId={(value: string) => setProjectId(value)}
+            setProjectId={handleSetProjectId}
             formValid={formValid}
           />
         </PageContent>
