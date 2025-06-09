@@ -1,3 +1,4 @@
+6cad884d789 SW-6955: Browser back button doesn't work on some pages (#4139)
 a794f4b1c5a SW-6866 Console: Link to view Funder Report in Report Form in Project Profile (#4140)
 bcdfe8d10f5 SW-7050 Don't allow deleting applicant projects (#4136)
 ff40982c24c Update dependency slate to ^0.115.0 (#4137)

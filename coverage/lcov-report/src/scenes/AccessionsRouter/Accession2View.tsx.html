@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/154</span>
+                <span class='fraction'>0/148</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/154</span>
+                <span class='fraction'>0/148</span>
             </div>
         
             
@@ -775,19 +775,7 @@
 <a name='L710'></a><a href='#L710'>710</a>
 <a name='L711'></a><a href='#L711'>711</a>
 <a name='L712'></a><a href='#L712'>712</a>
-<a name='L713'></a><a href='#L713'>713</a>
-<a name='L714'></a><a href='#L714'>714</a>
-<a name='L715'></a><a href='#L715'>715</a>
-<a name='L716'></a><a href='#L716'>716</a>
-<a name='L717'></a><a href='#L717'>717</a>
-<a name='L718'></a><a href='#L718'>718</a>
-<a name='L719'></a><a href='#L719'>719</a>
-<a name='L720'></a><a href='#L720'>720</a>
-<a name='L721'></a><a href='#L721'>721</a>
-<a name='L722'></a><a href='#L722'>722</a>
-<a name='L723'></a><a href='#L723'>723</a>
-<a name='L724'></a><a href='#L724'>724</a>
-<a name='L725'></a><a href='#L725'>725</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L713'></a><a href='#L713'>713</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -832,12 +820,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -968,17 +950,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1189,7 +1166,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1528,7 +1504,6 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { AccessionService, FacilityService } from 'src/services';
@@ -1539,9 +1514,7 @@ import { stateName } from 'src/types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
@@ -1562,9 +1535,6 @@ export default function <span class="fstat-no" title="function not covered" >Acc
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { userPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-  const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const { accessionId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ accessionId: string }&gt;();</span>
   const [accession, setAccession] = <span class="cstat-no" title="statement not covered" >useState&lt;Accession&gt;();</span>
   const [openEditLocationModal, setOpenEditLocationModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
@@ -1690,11 +1660,6 @@ export default function <span class="fstat-no" title="function not covered" >Acc
       }
     }
   }, [accession, activeLocale, seedBankTimeZone]);
-&nbsp;
-  const handleChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewValue: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    query.set('tab', newValue);</span>
-<span class="cstat-no" title="statement not covered" >    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });</span>
-  };
 &nbsp;
   const linkStyle = <span class="cstat-no" title="statement not covered" >{</span>
     color: themeObj.palette.TwClrTxtBrand,
@@ -1912,11 +1877,10 @@ export default function <span class="fstat-no" title="function not covered" >Acc
     ];
   }, [accession, reloadData, activeLocale, themeObj, viabilityEditable, isMobile, hasPendingTests]);
 &nbsp;
-  const { activeTab, onTabChange } = <span class="cstat-no" title="statement not covered" >useStickyTabs({</span>
+  const { activeTab, onChangeTab, setActiveTab } = <span class="cstat-no" title="statement not covered" >useStickyTabs({</span>
     defaultTab: 'detail',
     tabs,
-    viewIdentifier: 'accession-view',
-    tabsAreNewPages: false,
+    viewIdentifier: 'accession',
   });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -2006,7 +1970,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
               accession={accession}
               reload={reloadData}
               setNewViabilityTestOpened={setOpenNewViabilityTest}
-              changeTab={handleChange}
+              changeTab={setActiveTab}
               title={accession?.viabilityPercent?.toString() ? strings.EDIT_VIABILITY : strings.ADD_VIABILITY}
             /&gt;
           )}
@@ -2230,7 +2194,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
             : {},
         }}
       &gt;
-        &lt;Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} /&gt;
+        &lt;Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} /&gt;
       &lt;/Box&gt;
     &lt;/TfMain&gt;
   );
@@ -2242,7 +2206,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-09T20:31:50.452Z
+                at 2025-06-09T21:07:39.467Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
