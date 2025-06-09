@@ -162,7 +162,7 @@ const DocumentVariablesTab = ({ projectId: projectIdProp }: DocumentVariablesPro
     setOpenEditVariableModal(false);
     setSelectedVariable(undefined);
 
-    const documentTabElement: HTMLButtonElement | null = document.querySelector('button[role="tab"]:first-child');
+    const documentTabElement: HTMLButtonElement | null = document.querySelector('button[role="tab"]');
     if (documentTabElement) {
       documentTabElement.click();
 
