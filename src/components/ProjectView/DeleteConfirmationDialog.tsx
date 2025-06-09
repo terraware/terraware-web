@@ -24,11 +24,7 @@ export default function DeleteConfirmationDialog({
       confirmButtonPriority='primary'
       confirmButtonText={strings.DELETE}
       confirmButtonType='destructive'
-      message={
-        <Typography fontSize='16px' fontWeight={400}>
-          {strings.DELETE_PROJECT_CONFIRM}
-        </Typography>
-      }
+      message={strings.DELETE_PROJECT_CONFIRM}
       onClose={onClose}
       onConfirm={onSubmit}
       open={open}

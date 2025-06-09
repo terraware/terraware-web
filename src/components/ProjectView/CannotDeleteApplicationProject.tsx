@@ -19,11 +19,7 @@ export default function CannotDeleteApplicationProject({
       confirmButtonId='confirmDeleteProject'
       confirmButtonPriority='primary'
       confirmButtonText={strings.CANCEL}
-      message={
-        <Typography fontSize='16px' fontWeight={400}>
-          {strings.CANNOT_DELETE_APPLICATION_PROJECT}
-        </Typography>
-      }
+      message={strings.CANNOT_DELETE_APPLICATION_PROJECT}
       onClose={onClose}
       onConfirm={onClose}
       open={open}
