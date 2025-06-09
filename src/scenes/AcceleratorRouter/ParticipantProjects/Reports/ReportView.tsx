@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, DropdownItem } from '@terraware/web-components';
+import { Button, DropdownItem, Message } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
@@ -14,12 +15,15 @@ import { getReportName } from 'src/components/AcceleratorReports/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
+import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import {
   selectPublishAcceleratorReport,
   selectReviewAcceleratorReport,
@@ -29,8 +33,9 @@ import {
   requestReviewAcceleratorReport,
 } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import strings from 'src/strings';
-import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
+import { AcceleratorReport, MetricType, PublishedReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
@@ -62,6 +67,10 @@ const ReportView = () => {
   const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
   const snackbar = useSnackbar();
   const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
+  const [publishedFunderView, setPublishedFunderView] = useState(false);
+  const reportsResponse = useAppSelector(selectListFunderReports(projectId ?? ''));
+  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
+  const [selectedPublishedReport, setSelectedPublishedReport] = useState<PublishedReport>();
 
   const publishReport = () => {
     const request = dispatch(
@@ -112,6 +121,12 @@ const ReportView = () => {
   );
 
   useEffect(() => {
+    if (projectId) {
+      void dispatch(requestListFunderReports(Number(projectId)));
+    }
+  }, [dispatch, projectId]);
+
+  useEffect(() => {
     if (approveReportResponse?.status === 'error') {
       return;
     }
@@ -149,6 +164,19 @@ const ReportView = () => {
       setSelectedReport(reportSelected);
     }
   }, [reportId, reports]);
+
+  useEffect(() => {
+    if (reportsResponse?.status === 'success') {
+      setPublishedReports(reportsResponse.data);
+    }
+  }, [reportsResponse]);
+
+  useEffect(() => {
+    if (reportId) {
+      const found = publishedReports?.find((r) => r.reportId.toString() === reportId);
+      setSelectedPublishedReport(found);
+    }
+  }, [publishedReports, reportId]);
 
   const year = useMemo(() => {
     return selectedReport?.startDate.split('-')[0];
@@ -256,6 +284,14 @@ const ReportView = () => {
     setBoxInEdit(isInEdit);
   };
 
+  const changeToFunderView = useCallback(() => {
+    setPublishedFunderView(true);
+  }, []);
+
+  const changeToInternalView = useCallback(() => {
+    setPublishedFunderView(false);
+  }, []);
+
   return (
     <>
       {showPublishModal && <PublishModal onClose={() => setShowPublishModal(false)} onSubmit={publishReport} />}
@@ -268,85 +304,118 @@ const ReportView = () => {
         title={
           <TitleBar
             title={`${strings.REPORT} (${reportName})`}
-            subtitle={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
+            header={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
+            subtitle={
+              selectedPublishedReport
+                ? strings
+                    .formatString(
+                      strings.FUNDER_REPORT_LAST_PUBLISHED,
+                      getDateDisplayValue(selectedPublishedReport.publishedTime)
+                    )
+                    .toString()
+                : ''
+            }
+            titleExtraComponent={
+              selectedPublishedReport &&
+              (publishedFunderView ? (
+                <Link fontSize={'16px'} fontWeight={400} onClick={changeToInternalView}>
+                  {strings.VIEW_INTERNAL_REPORT_FORM}
+                </Link>
+              ) : (
+                <Link fontSize={'16px'} fontWeight={400} onClick={changeToFunderView}>
+                  {strings.VIEW_PUBLISHED_FUNDER_REPORT}
+                </Link>
+              ))
+            }
           />
         }
-        rightComponent={selectedReport?.status !== 'Not Submitted' ? rightComponent : undefined}
+        rightComponent={!publishedFunderView && selectedReport?.status !== 'Not Submitted' ? rightComponent : undefined}
         crumbs={crumbs}
         hierarchicalCrumbs={false}
       >
-        <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-          {selectedReport && <ApprovedReportMessage report={selectedReport} />}
-          {selectedReport && (
-            <RejectedReportMessage report={selectedReport} showRejectDialog={() => setShowRejectDialog(true)} />
-          )}
-          <Card
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              flexGrow: 1,
-            }}
-          >
-            {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
-            {selectedReport?.startDate && selectedReport?.endDate && (
-              <Box
-                borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-                padding={theme.spacing(3, 0)}
-                marginBottom={3}
-              >
-                <Typography fontSize={14} fontStyle={'italic'}>
-                  {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
-                </Typography>
-              </Box>
+        {publishedFunderView ? (
+          <>
+            <Box marginBottom={4} width={'100%'}>
+              <Message type='page' priority='info' body={strings.PUBLISHED_REPORT_CONSOLE_WARNING} />
+            </Box>
+            <Box marginBottom={4} width={'100%'}>
+              <FunderReportView selectedProjectId={Number(projectId)} selectedReport={selectedPublishedReport} />
+            </Box>
+          </>
+        ) : (
+          <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
+            {selectedReport && <ApprovedReportMessage report={selectedReport} />}
+            {selectedReport && (
+              <RejectedReportMessage report={selectedReport} showRejectDialog={() => setShowRejectDialog(true)} />
             )}
-            <HighlightsBox
-              report={selectedReport}
-              projectId={projectId}
-              reload={reload}
-              isConsoleView={true}
-              onEditChange={onEditChange}
-              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-            />
-            {['system', 'project', 'standard'].map((type) => {
-              const metrics =
-                type === 'system'
-                  ? selectedReport?.systemMetrics
-                  : type === 'project'
-                    ? selectedReport?.projectMetrics
-                    : selectedReport?.standardMetrics;
+            <Card
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+              }}
+            >
+              {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
+              {selectedReport?.startDate && selectedReport?.endDate && (
+                <Box
+                  borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+                  padding={theme.spacing(3, 0)}
+                  marginBottom={3}
+                >
+                  <Typography fontSize={14} fontStyle={'italic'}>
+                    {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
+                  </Typography>
+                </Box>
+              )}
+              <HighlightsBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              {['system', 'project', 'standard'].map((type) => {
+                const metrics =
+                  type === 'system'
+                    ? selectedReport?.systemMetrics
+                    : type === 'project'
+                      ? selectedReport?.projectMetrics
+                      : selectedReport?.standardMetrics;
 
-              return metrics?.map((metric, index) => (
-                <MetricBox
-                  isConsoleView
-                  key={`${type}-${index}`}
-                  metric={metric}
-                  projectId={projectId}
-                  reload={reload}
-                  reportId={Number(reportId)}
-                  type={type as MetricType}
-                  onEditChange={onEditChange}
-                  canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-                />
-              ));
-            })}
-            <AchievementsBox
-              report={selectedReport}
-              projectId={projectId}
-              reload={reload}
-              isConsoleView={true}
-              onEditChange={onEditChange}
-              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-            />
-            <ChallengesMitigationBox
-              report={selectedReport}
-              projectId={projectId}
-              reload={reload}
-              isConsoleView={true}
-              onEditChange={onEditChange}
-              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
-            />
-          </Card>
-        </Box>
+                return metrics?.map((metric, index) => (
+                  <MetricBox
+                    isConsoleView
+                    key={`${type}-${index}`}
+                    metric={metric}
+                    projectId={projectId}
+                    reload={reload}
+                    reportId={Number(reportId)}
+                    type={type as MetricType}
+                    onEditChange={onEditChange}
+                    canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+                  />
+                ));
+              })}
+              <AchievementsBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <ChallengesMitigationBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+            </Card>
+          </Box>
+        )}
       </Page>
     </>
   );

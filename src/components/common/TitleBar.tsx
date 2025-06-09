@@ -1,7 +1,12 @@
 import React, { Box, Typography, useTheme } from '@mui/material';
 
-const TitleBar = (props: { header?: string; title?: string; subtitle?: string }): JSX.Element => {
-  const { header, title, subtitle } = props;
+const TitleBar = (props: {
+  header?: string;
+  title?: string;
+  subtitle?: string;
+  titleExtraComponent?: JSX.Element;
+}): JSX.Element => {
+  const { header, title, subtitle, titleExtraComponent } = props;
   const theme = useTheme();
 
   return (
@@ -16,15 +21,19 @@ const TitleBar = (props: { header?: string; title?: string; subtitle?: string })
         <Typography fontSize='14px' lineHeight='20px' fontWeight={400} color={theme.palette.TwClrTxt}>
           {header}
         </Typography>
-        <Typography
-          fontSize='24px'
-          lineHeight='32px'
-          fontWeight={600}
-          color={theme.palette.TwClrTxt}
-          margin={theme.spacing(1, 0)}
-        >
-          {title}
-        </Typography>
+        <Box display='flex'>
+          <Typography
+            fontSize='24px'
+            lineHeight='32px'
+            fontWeight={600}
+            color={theme.palette.TwClrTxt}
+            margin={theme.spacing(1, 0)}
+            paddingRight={1}
+          >
+            {title}
+          </Typography>
+          {titleExtraComponent}
+        </Box>
         <Typography fontSize='14px' lineHeight='20px' fontWeight={400} color={theme.palette.TwClrTxt}>
           {subtitle}
         </Typography>
