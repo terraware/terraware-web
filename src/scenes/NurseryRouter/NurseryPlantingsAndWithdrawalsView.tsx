@@ -1,7 +1,7 @@
 /**
  * Nursery plantings and withdrawals
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
@@ -9,14 +9,12 @@ import { Tabs } from '@terraware/web-components';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import PlantingProgress from './PlantingProgressTabContent';
@@ -25,35 +23,36 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const query = useQuery();
-  const navigate = useSyncNavigate();
-  const location = useStateLocation();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
-  const tab = query.get('tab') || 'planting_progress';
 
-  const [activeTab, setActiveTab] = useState<string>(tab);
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
 
-  const onTabChange = useCallback(
-    (newTab: string) => {
-      query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
-    },
-    [query, navigate, location]
-  );
+    return [
+      {
+        id: 'planting_progress',
+        label: strings.PLANTING_PROGRESS,
+        children: <PlantingProgress />,
+      },
+      { id: 'withdrawal_history', label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
+    ];
+  }, [activeLocale]);
+
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'planting_progress',
+    tabs,
+    viewIdentifier: 'nursery-plantings-and-withdrawals',
+  });
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestPlantings(selectedOrganization.id));
       void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id]);
-
-  useEffect(() => {
-    if (activeLocale) {
-      setActiveTab(tab);
-    }
-  }, [tab, activeLocale]);
+  }, [dispatch, selectedOrganization, selectedOrganization?.id]);
 
   return (
     <TfMain>
@@ -93,18 +92,7 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
               },
             }}
           >
-            <Tabs
-              activeTab={activeTab}
-              onTabChange={onTabChange}
-              tabs={[
-                {
-                  id: 'planting_progress',
-                  label: strings.PLANTING_PROGRESS,
-                  children: <PlantingProgress />,
-                },
-                { id: 'withdrawal_history', label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
-              ]}
-            />
+            <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
           </Box>
         </Grid>
       </Box>

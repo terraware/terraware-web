@@ -1,3 +1,4 @@
+import { paths } from 'src/api/types/generated-schema';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 
 import HttpService, { Response2, ServerData } from '../HttpService';
@@ -12,9 +13,13 @@ export type FunderProjectData = ServerData & {
 };
 
 // endpoints
-const FUNDER_PROJECTS_GET_ENDPOINT = '/api/v1/funder/projects/{projectId}';
+const FUNDER_PROJECTS_SINGLE_ENDPOINT = '/api/v1/funder/projects/{projectId}';
 
-const httpFunderProjects = HttpService.root(FUNDER_PROJECTS_GET_ENDPOINT);
+// responses
+type PublishFunderProjectResponse =
+  paths[typeof FUNDER_PROJECTS_SINGLE_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+const httpFunderProjects = HttpService.root(FUNDER_PROJECTS_SINGLE_ENDPOINT);
 
 const get = async (projectId: number): Promise<Response2<FunderProjectData>> => {
   return await httpFunderProjects.get2<FunderProjectData>({
@@ -24,8 +29,20 @@ const get = async (projectId: number): Promise<Response2<FunderProjectData>> => 
   });
 };
 
+const publish = async (
+  funderProjectDetails: FunderProjectDetails
+): Promise<Response2<PublishFunderProjectResponse>> => {
+  return await httpFunderProjects.post2<PublishFunderProjectResponse>({
+    urlReplacements: {
+      '{projectId}': funderProjectDetails.projectId.toString(),
+    },
+    entity: { details: funderProjectDetails },
+  });
+};
+
 const FunderProjectService = {
   get,
+  publish,
 };
 
 export default FunderProjectService;

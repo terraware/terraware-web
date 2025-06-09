@@ -91,12 +91,6 @@ const ContactUsForm = () => {
     requestType: supportRequestType ?? 'Contact Us',
   });
 
-  useEffect(() => {
-    if (supportRequestType) {
-      onChangeSupportRequest('requestType', supportRequestType);
-    }
-  }, [onChangeSupportRequest, supportRequestType]);
-
   const [allAttachments, setAllAttachments] = useState<AttachmentRequest[]>([]);
 
   const [errorSummary, setErrorSummary] = useState<string>('');

@@ -57,13 +57,13 @@ export default function PlantingSitesList(): JSX.Element {
    */
   const searchData = useCallback(
     async (searchFields: SearchNodePayload[]) => {
-      if (selectedOrganization.id !== -1) {
+      if (selectedOrganization) {
         const searchRequests = [
-          TrackingService.searchPlantingSites(selectedOrganization.id, searchFields, searchSortOrder),
+          TrackingService.searchPlantingSites(selectedOrganization?.id, searchFields, searchSortOrder),
         ];
 
         searchRequests.push(
-          DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
+          DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization?.id, searchFields, searchSortOrder)
         );
 
         // batch the search requests
@@ -102,7 +102,7 @@ export default function PlantingSitesList(): JSX.Element {
         return sites;
       }
     },
-    [activeLocale, defaultTimeZone, searchSortOrder, selectedOrganization.id, timeZones]
+    [activeLocale, defaultTimeZone, searchSortOrder, selectedOrganization, timeZones]
   );
 
   const onSearch = useCallback(async () => {

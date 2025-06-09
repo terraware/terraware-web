@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -19,8 +19,7 @@ import { Facility } from 'src/types/Facility';
 import { Species } from 'src/types/Species';
 import { getNurseryById } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
 import BatchDetails from './BatchDetails';
 import BatchHistory from './BatchHistory';
@@ -33,26 +32,15 @@ type InventoryBatchProps = {
   species: Species[];
 };
 
-const initializeTab = (tab: string | null): 'details' | 'history' => {
-  if (tab === 'history') {
-    return 'history';
-  }
-  return 'details';
-};
-
 export default function InventoryBatchView({ origin, species }: InventoryBatchProps) {
   const dispatch = useAppDispatch();
   const contentRef = useRef(null);
   const theme = useTheme();
-  const query = useQuery();
   const { batchId } = useParams<{ batchId: string }>();
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const batch = useAppSelector(selectBatch(batchId || -1));
-  const tab = initializeTab(query.get('tab'));
-  const [activeTab, setActiveTab] = useState<string>(tab);
   const navigate = useSyncNavigate();
-  const location = useStateLocation();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
   const { selectedOrganization } = useOrganization();
@@ -70,18 +58,16 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   }, [speciesId, species, batch]);
 
   useEffect(() => {
-    if (nurseryId) {
-      const nursery = getNurseryById(selectedOrganization, Number(nurseryId));
-      setInventoryNursery(nursery);
-    } else if (batch?.facilityId) {
-      const nursery = getNurseryById(selectedOrganization, Number(batch.facilityId));
-      setInventoryNursery(nursery);
+    if (selectedOrganization) {
+      if (nurseryId) {
+        const nursery = getNurseryById(selectedOrganization, Number(nurseryId));
+        setInventoryNursery(nursery);
+      } else if (batch?.facilityId) {
+        const nursery = getNurseryById(selectedOrganization, Number(batch.facilityId));
+        setInventoryNursery(nursery);
+      }
     }
   }, [nurseryId, batch, selectedOrganization]);
-
-  useEffect(() => {
-    setActiveTab(tab);
-  }, [tab]);
 
   const getSpeciesLabel = () => {
     const { scientificName, commonName } = inventorySpecies || {};
@@ -99,14 +85,6 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
     return inventoryNursery?.name || '';
   };
 
-  const onTabChange = useCallback(
-    (newTab: string) => {
-      query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
-    },
-    [query, navigate, location]
-  );
-
   const fetchBatch = useCallback(() => {
     if (batchId) {
       void dispatch(requestFetchBatch({ batchId }));
@@ -116,6 +94,31 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   useEffect(() => {
     fetchBatch();
   }, [batchId, fetchBatch]);
+
+  const tabs = useMemo(() => {
+    if (!batch) {
+      return [];
+    }
+
+    return [
+      {
+        id: 'details',
+        label: strings.DETAILS,
+        children: <BatchDetails batch={batch} onUpdate={fetchBatch} />,
+      },
+      {
+        id: 'history',
+        label: strings.HISTORY,
+        children: <BatchHistory batchId={batch.id} nurseryName={inventoryNursery?.name} />,
+      },
+    ];
+  }, [batch, fetchBatch, inventoryNursery]);
+
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'details',
+    tabs,
+    viewIdentifier: 'inventory-batch-details',
+  });
 
   return (
     <TfMain>
@@ -218,22 +221,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
                 },
               }}
             >
-              <Tabs
-                activeTab={activeTab}
-                onTabChange={onTabChange}
-                tabs={[
-                  {
-                    id: 'details',
-                    label: strings.DETAILS,
-                    children: <BatchDetails batch={batch} onUpdate={fetchBatch} />,
-                  },
-                  {
-                    id: 'history',
-                    label: strings.HISTORY,
-                    children: <BatchHistory batchId={batch.id} nurseryName={inventoryNursery?.name} />,
-                  },
-                ]}
-              />
+              <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
             </Box>
           </Grid>
         )}

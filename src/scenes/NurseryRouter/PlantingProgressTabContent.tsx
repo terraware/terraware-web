@@ -77,10 +77,10 @@ export default function PlantingProgress(): JSX.Element {
   );
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestObservationsResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization?.id]);
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
@@ -108,10 +108,10 @@ export default function PlantingProgress(): JSX.Element {
   );
 
   const reloadTrackingAndObservations = useCallback(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestObservationsResults(selectedOrganization.id));
     }
-  }, [selectedOrganization.id, dispatch]);
+  }, [selectedOrganization?.id, dispatch]);
 
   const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
 

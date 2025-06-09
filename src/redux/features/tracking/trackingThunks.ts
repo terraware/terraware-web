@@ -42,7 +42,7 @@ export const requestPlantingSites = createAsyncThunk(
         return;
       }
 
-      const response = await TrackingService.listPlantingSites(organizationId, true);
+      const response = await TrackingService.fetchPlantingSiteList(organizationId, true);
       if (response && response.requestSucceeded) {
         const { error, sites } = response;
         dispatch(setPlantingSitesAction({ error, plantingSites: sites, organizationId }));

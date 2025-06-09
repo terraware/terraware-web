@@ -1700,7 +1700,8 @@ export interface paths {
         /** Gets project detail information displayable to funders */
         get: operations["getProject_1"];
         put?: never;
-        post?: never;
+        /** Publishes project detail information for funders */
+        post: operations["publishProjectProfile"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1716,6 +1717,26 @@ export interface paths {
         };
         /** Get the published reports for a specific project. */
         get: operations["listPublishedReports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/gis/wfs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Forwards a WFS API request to GeoServer.
+         * @description Query string parameters are passed to GeoServer, but headers aren't. The response from GeoServer, if any, will be returned verbatim. Only available for internal users.
+         */
+        get: operations["proxyGetRequest"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5784,6 +5805,7 @@ export interface components {
             description?: string;
             /** @description Measured in centimeters. */
             diameterAtBreastHeight?: number;
+            gpsCoordinates?: components["schemas"]["Point"];
             /** @description Measured in meters. */
             height?: number;
             isDead: boolean;
@@ -7179,6 +7201,7 @@ export interface components {
             type: "Text";
         };
         NewTreePayload: {
+            gpsCoordinates?: components["schemas"]["Point"];
             growthForm: string;
             /** Format: int64 */
             speciesId?: number;
@@ -8234,6 +8257,9 @@ export interface components {
         };
         ProjectVotesPayload: {
             phases: components["schemas"]["PhaseVotes"][];
+        };
+        PublishProjectProfileRequestPayload: {
+            details: components["schemas"]["FunderProjectDetailsPayload"];
         };
         PublishedReportMetricPayload: {
             /** @enum {string} */
@@ -13861,6 +13887,41 @@ export interface operations {
             };
         };
     };
+    publishProjectProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublishProjectProfileRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     listPublishedReports: {
         parameters: {
             query?: never;
@@ -13888,6 +13949,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    proxyGetRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
                 };
             };
         };

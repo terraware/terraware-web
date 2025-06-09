@@ -11,8 +11,6 @@ interface StickyTabsProps {
   defaultTab: string;
   tabs: Tab[];
   viewIdentifier: string;
-  keepQuery?: boolean;
-  tabsAreNewPages?: boolean;
 }
 
 const makeTabSessionKey = (viewIdentifier: string) => `tab-${viewIdentifier}`;
@@ -33,55 +31,48 @@ const writeTabToSession = (viewIdentifier: string, tab: string): void => {
   }
 };
 
-const useStickyTabs = ({
-  defaultTab,
-  tabs,
-  viewIdentifier,
-  keepQuery = true,
-  tabsAreNewPages = true,
-}: StickyTabsProps) => {
+const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) => {
   const location = useStateLocation();
   const navigate = useSyncNavigate();
   const query = useQuery();
-  const tab = query.get('tab');
+  const queryTab = query.get('tab');
 
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
 
-  const onTabChange = useCallback(
+  const onChangeTab = useCallback(
     (newTab: string) => {
-      query.set('tab', newTab);
-      const emptyQuery = tab === newTab ? query.toString() : new URLSearchParams(`tab=${newTab}`);
-      navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()), {
-        replace: !tabsAreNewPages,
-      });
+      if (queryTab) {
+        navigate(getLocation(location.pathname, location), { replace: true });
+      }
+      setActiveTab(newTab);
       writeTabToSession(viewIdentifier, newTab);
     },
-    [navigate, location, query, viewIdentifier, keepQuery, tab, tabsAreNewPages]
+    [navigate, location, viewIdentifier, queryTab, defaultTab]
   );
 
   useEffect(() => {
-    if (!tab) {
+    if (!queryTab) {
       // If there is a "last viewed" tab in the session, use that, otherwise send to default
       const sessionTab = getTabFromSession(viewIdentifier);
       if (sessionTab) {
-        onTabChange(sessionTab);
-      } else {
-        onTabChange(defaultTab);
+        onChangeTab(sessionTab);
       }
+
       return;
     }
 
-    if (tabs.some((data) => data.id === tab)) {
-      setActiveTab(tab);
+    if (tabs.some((data) => data.id === queryTab)) {
+      setActiveTab(queryTab);
     } else if (tabs.length) {
       setActiveTab(tabs[0].id);
     }
-  }, [defaultTab, onTabChange, tab, tabs, viewIdentifier]);
+  }, [defaultTab, onChangeTab, queryTab, tabs, viewIdentifier]);
 
   return {
     activeTab,
-    onTabChange,
-    tab,
+    onChangeTab,
+    setActiveTab,
+    tab: queryTab,
   };
 };
 

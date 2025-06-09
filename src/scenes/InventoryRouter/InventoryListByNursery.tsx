@@ -75,7 +75,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   };
 
   const onApplyFilters = useCallback(async () => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const requestId = Math.random().toString();
       setRequestId('searchInventory', requestId);
 

@@ -90,10 +90,10 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
   }, [entitySpecificFilterConfigs, filters, projectEntityFilterConfig]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
     }
-  }, [activeLocale, dispatch, selectedOrganization.id]);
+  }, [activeLocale, dispatch, selectedOrganization]);
 
   return (
     <Grid container>

@@ -11,7 +11,7 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
 
-  const accessionsResponseData = useAppSelector(selectAccessions(selectedOrganization.id, speciesId));
+  const accessionsResponseData = useAppSelector(selectAccessions(selectedOrganization?.id || -1, speciesId));
   const availableAccessions = useMemo(
     () =>
       (accessionsResponseData &&
@@ -36,7 +36,7 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
   }, [availableAccessions, record?.accessionId]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestAccessions(selectedOrganization.id, speciesId));
     }
   }, [dispatch, selectedOrganization, speciesId]);

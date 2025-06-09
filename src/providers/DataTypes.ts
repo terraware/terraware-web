@@ -22,7 +22,7 @@ export type ProvidedUserData = {
 };
 
 export type ProvidedOrganizationData = {
-  selectedOrganization: Organization;
+  selectedOrganization: Organization | undefined;
   setSelectedOrganization: React.Dispatch<React.SetStateAction<Organization | undefined>>;
   organizations: Organization[];
   orgPreferences: PreferencesType;

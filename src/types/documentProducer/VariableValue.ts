@@ -8,7 +8,7 @@ export type VariableValueValue = VariableValuesListResponse['values'][0]['values
 
 export type DateVariableValue = components['schemas']['ExistingDateValuePayload'];
 export const isDateVariableValue = (input: unknown): input is DateVariableValue =>
-  !!(input as DateVariableValue).dateValue;
+  !!(input as DateVariableValue)?.dateValue;
 
 export type DeletedVariableValue = components['schemas']['ExistingDeletedValuePayload'];
 
@@ -17,31 +17,31 @@ export type EmailVariableValue = components['schemas']['ExistingEmailValuePayloa
 export type ImageVariableValue = components['schemas']['ExistingImageValuePayload'];
 
 export type LinkVariableValue = components['schemas']['ExistingLinkValuePayload'];
-export const isLinkVariableValue = (input: unknown): input is LinkVariableValue => !!(input as LinkVariableValue).url;
+export const isLinkVariableValue = (input: unknown): input is LinkVariableValue => !!(input as LinkVariableValue)?.url;
 
 export type NumberVariableValue = components['schemas']['ExistingNumberValuePayload'];
 export const isNumberVariableValue = (input: unknown): input is NumberVariableValue =>
-  (input as NumberVariableValue).numberValue !== undefined;
+  (input as NumberVariableValue)?.numberValue !== undefined;
 
 export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
 export const isSectionTextVariableValue = (input: unknown): input is SectionTextVariableValue =>
-  (input as SectionTextVariableValue).type === 'SectionText';
+  (input as SectionTextVariableValue)?.type === 'SectionText';
 
 export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];
 export const isSectionVariableVariableValue = (input: unknown): input is SectionVariableVariableValue =>
-  (input as SectionVariableVariableValue).type === 'SectionVariable';
+  (input as SectionVariableVariableValue)?.type === 'SectionVariable';
 
 export type SelectVariableValue = components['schemas']['ExistingSelectValuePayload'];
 export const isSelectVariableValue = (input: unknown): input is SelectVariableValue =>
-  !!(input as SelectVariableValue).optionValues;
+  !!(input as SelectVariableValue)?.optionValues;
 
 export type TableVariableValue = components['schemas']['ExistingTableValuePayload'];
 export const isTableVariableValue = (input: unknown): input is TableVariableValue =>
-  (input as TableVariableValue).type === 'Table';
+  (input as TableVariableValue)?.type === 'Table';
 
 export type TextVariableValue = components['schemas']['ExistingTextValuePayload'];
 export const isTextVariableValue = (input: unknown): input is TextVariableValue =>
-  !!(input as TextVariableValue).textValue;
+  !!(input as TextVariableValue)?.textValue;
 
 export type ExistingVariableValueUnion =
   | DateVariableValue

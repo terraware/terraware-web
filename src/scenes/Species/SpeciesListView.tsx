@@ -253,6 +253,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [activeLocale, filterColumns, filterOptions]);
 
   useEffect(() => {
+    if (!selectedOrganization) return;
+
     const getApiSearchResults = async () => {
       const searchParams: SearchRequestPayload = {
         prefix: 'species',
@@ -312,6 +314,16 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const { isMobile } = useDeviceInfo();
 
   const getParams = useCallback(() => {
+    if (!selectedOrganization) {
+      // Return empty params if no organization is selected
+      return {
+        prefix: 'species',
+        fields: [],
+        search: { operation: 'and', children: [] },
+        count: 0,
+      } as SearchRequestPayload;
+    }
+
     const params: SearchRequestPayload = {
       prefix: 'species',
       fields: [

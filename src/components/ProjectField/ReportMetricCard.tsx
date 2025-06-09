@@ -33,7 +33,7 @@ const ReportMetricCard = ({
     } else if (publishedMetrics) {
       return publishedMetrics.find((m) => m.name === metricName)?.value;
     }
-  }, [metrics, publishedMetrics]);
+  }, [metricName, metrics, publishedMetrics]);
 
   if (metrics === undefined && publishedMetrics === undefined) {
     return <></>;

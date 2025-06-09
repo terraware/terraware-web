@@ -103,7 +103,7 @@ export default function PlantingProgressList({
   const [selectedZoneIdsBySiteId, setSelectedZoneIdsBySiteId] = useState<Record<number, Set<number>>>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
   const subzonesStatisticsResult = useAppSelector((state) =>
-    selectZonesHaveStatistics(state, selectedOrganization.id, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
+    selectZonesHaveStatistics(state, selectedOrganization?.id || -1, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
   );
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);

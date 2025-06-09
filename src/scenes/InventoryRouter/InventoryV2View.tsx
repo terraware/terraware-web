@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
@@ -11,14 +11,12 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization, useUser } from 'src/providers';
-import { PreferencesService } from 'src/services';
+import { useLocalization, useOrganization } from 'src/providers';
 import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
 import DownloadReportModal from './DownloadReportModal';
 import ImportInventoryModal from './ImportInventoryModal';
@@ -119,31 +117,15 @@ type InventoryProps = {
   hasSpecies: boolean;
 };
 
-const initializeTab = (queryTab: string | null, userPrefValue: string | undefined): InventoryListType => {
-  if (Object.values(InventoryListTypes).some((val: InventoryListType) => val === queryTab)) {
-    return queryTab as InventoryListType;
-  }
-
-  if (Object.values(InventoryListTypes).some((val: InventoryListType) => val === userPrefValue)) {
-    return userPrefValue as InventoryListType;
-  }
-
-  return InventoryListTypes.BATCHES_BY_SPECIES;
-};
-
 export default function InventoryV2View(props: InventoryProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useSyncNavigate();
-  const location = useStateLocation();
   const { hasNurseries, hasSpecies } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
   const contentRef = useRef(null);
-  const { userPreferences, reloadUserPreferences } = useUser();
-  const query = useQuery();
-  const tab = initializeTab(query.get('tab'), userPreferences.inventoryListType as string);
-  const [activeTab, setActiveTab] = useState<InventoryListType>(tab);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportData, setReportData] = useState<SearchInventoryParams>();
 
@@ -153,20 +135,6 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     padding: '48px',
     width: isMobile ? 'auto' : '800px',
   };
-
-  const onTabChange = useCallback(
-    async (newTab: string) => {
-      await PreferencesService.updateUserPreferences({ inventoryListType: newTab });
-      reloadUserPreferences();
-      query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
-    },
-    [query, navigate, location, reloadUserPreferences]
-  );
-
-  useEffect(() => {
-    setActiveTab(tab);
-  }, [tab]);
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
@@ -229,6 +197,36 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
 
     return emptyState;
   };
+
+  const tabs = useMemo(() => {
+    if (!activeLocale || !isOnboarded) {
+      return [];
+    }
+
+    return [
+      {
+        id: InventoryListTypes.BATCHES_BY_SPECIES,
+        label: strings.BY_SPECIES,
+        children: <InventoryListBySpecies setReportData={setReportData} />,
+      },
+      {
+        id: InventoryListTypes.BATCHES_BY_NURSERY,
+        label: strings.BY_NURSERY,
+        children: <InventoryListByNursery setReportData={setReportData} />,
+      },
+      {
+        id: InventoryListTypes.BATCHES_BY_BATCH,
+        label: strings.BY_BATCH,
+        children: <InventoryListByBatch setReportData={setReportData} />,
+      },
+    ];
+  }, [activeLocale, isOnboarded]);
+
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: InventoryListTypes.BATCHES_BY_SPECIES,
+    tabs,
+    viewIdentifier: 'inventory',
+  });
 
   return (
     <TfMain>
@@ -311,31 +309,13 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
         }}
       >
         {isOnboarded ? (
-          <Tabs
-            activeTab={activeTab}
-            onTabChange={(newTab) => void onTabChange(newTab)}
-            tabs={[
-              {
-                id: InventoryListTypes.BATCHES_BY_SPECIES,
-                label: strings.BY_SPECIES,
-                children: <InventoryListBySpecies setReportData={setReportData} />,
-              },
-              {
-                id: InventoryListTypes.BATCHES_BY_NURSERY,
-                label: strings.BY_NURSERY,
-                children: <InventoryListByNursery setReportData={setReportData} />,
-              },
-              {
-                id: InventoryListTypes.BATCHES_BY_BATCH,
-                label: strings.BY_BATCH,
-                children: <InventoryListByBatch setReportData={setReportData} />,
-              },
-            ]}
-          />
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
         ) : (
           <Container maxWidth={false} sx={{ padding: '32px 0' }}>
             {!isMobile && <Grid item xs={12} padding={theme.spacing(3)} />}
-            {isAdmin(selectedOrganization) ? (
+            {selectedOrganization ? (
+              isAdmin(selectedOrganization)
+            ) : false ? (
               <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
             ) : (
               <EmptyMessage

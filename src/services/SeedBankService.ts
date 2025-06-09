@@ -1,5 +1,4 @@
 import { paths } from 'src/api/types/generated-schema';
-import strings from 'src/strings';
 import { AccessionState } from 'src/types/Accession';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import {
@@ -199,9 +198,9 @@ const getPendingAccessions = async (organizationId: number): Promise<SearchRespo
       [
         {
           operation: 'field',
-          field: 'state',
+          field: 'state(raw)',
           type: 'Exact',
-          values: [strings.AWAITING_CHECK_IN],
+          values: ['Awaiting Check-In'],
         },
       ],
       organizationId
@@ -314,9 +313,9 @@ const getAccessionForSpecies = (
     operation: 'not',
     child: {
       operation: 'field',
-      field: 'state',
+      field: 'state(raw)',
       type: 'Exact',
-      values: [strings.USED_UP],
+      values: ['Used Up'],
     },
   };
 

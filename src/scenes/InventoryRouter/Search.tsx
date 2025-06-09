@@ -73,7 +73,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const [availableSpecies, setAvailableSpecies] = useState<Species[]>([]);
 
   useEffect(() => {
-    setNurseries(getAllNurseries(selectedOrganization));
+    setNurseries(selectedOrganization ? getAllNurseries(selectedOrganization) : []);
   }, [selectedOrganization]);
 
   useEffect(() => {
@@ -81,10 +81,10 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [filters.facilityIds, dispatch]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
     }
-  }, [dispatch, selectedOrganization.id, activeLocale]);
+  }, [dispatch, selectedOrganization?.id, activeLocale]);
 
   useEffect(() => {
     if (origin !== 'Nursery' || !species.length) {
@@ -147,7 +147,9 @@ export default function Search(props: SearchProps): JSX.Element | null {
         data.push({
           id: 'facilityIds',
           label: strings.NURSERY,
-          value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization)).join(', ') ?? '',
+          value: selectedOrganization
+            ? filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization))?.join(', ') ?? ''
+            : '',
           emptyValue: [],
         });
       }

@@ -86,7 +86,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   useEffect(() => {
     if (accession.facilityId) {
-      const accessionSeedBank = getSeedBank(selectedOrganization, accession.facilityId);
+      const accessionSeedBank = selectedOrganization
+        ? getSeedBank(selectedOrganization, accession.facilityId)
+        : undefined;
       setSelectedSeedBank(accessionSeedBank);
     }
   }, [selectedOrganization, accession.facilityId]);
@@ -107,7 +109,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   }, [timeZone, setRecord]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const getOrgUsers = async () => {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {
@@ -290,7 +292,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 id='destinationFacilityId'
                 label={strings.DESTINATION_REQUIRED}
                 selectedValue={nurseryTransferRecord.destinationFacilityId.toString()}
-                options={getAllNurseries(selectedOrganization).map((nursery) => ({
+                options={(selectedOrganization ? getAllNurseries(selectedOrganization) : []).map((nursery) => ({
                   label: nursery.name,
                   value: nursery.id.toString(),
                 }))}

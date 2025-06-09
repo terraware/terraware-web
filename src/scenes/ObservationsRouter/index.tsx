@@ -55,14 +55,14 @@ export default function ObservationsRouter(): JSX.Element {
   const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    if (plantingSites !== undefined && !dispatched && selectedOrganization.id !== -1) {
+    if (plantingSites !== undefined && !dispatched && selectedOrganization) {
       setDispatched(true);
-      void dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization?.id));
       void dispatch(requestAdHocObservationResults(selectedOrganization.id));
       void dispatch(requestObservations(selectedOrganization.id));
       void dispatch(requestObservations(selectedOrganization.id, true));
     }
-  }, [dispatch, selectedOrganization.id, plantingSites, dispatched]);
+  }, [dispatch, selectedOrganization?.id, plantingSites, dispatched]);
 
   useEffect(() => {
     if (observationsResultsError || plantingSitesError) {
@@ -154,7 +154,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
 
   return (
     <Routes>
-      {scheduleObservationsEnabled && <Route path={'schedule/:observationId'} element={<RescheduleObservation />} />}
+      {scheduleObservationsEnabled && <Route path={'/schedule/:observationId'} element={<RescheduleObservation />} />}
       {scheduleObservationsEnabled && <Route path={'/schedule'} element={<ScheduleObservation />} />}
       <Route
         path={'/:plantingSiteId/results/:observationId/biomassMeasurements/:monitoringPlotId'}

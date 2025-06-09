@@ -2,7 +2,6 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization, useUser } from 'src/providers';
 
 import AcceleratorReportEdit from './AcceleratorReportEdit';
@@ -12,10 +11,9 @@ import AcceleratorReportsView from './AcceleratorReportsView';
 const AcceleratorReportsRouter = () => {
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
-  const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
   const isAllowedReadReports = isAllowed('READ_REPORTS', { organization: selectedOrganization });
 
-  if (!(isReportsEnabled && isAllowedReadReports)) {
+  if (!isAllowedReadReports) {
     return (
       <Routes>
         <Route path='*' element={<Navigate to={APP_PATHS.HOME} />} />

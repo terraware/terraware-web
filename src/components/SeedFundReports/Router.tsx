@@ -9,7 +9,7 @@ import { useOrganization } from 'src/providers';
 const SeedFundReportsRouter = (): JSX.Element | null => {
   const { selectedOrganization } = useOrganization();
 
-  if (!selectedOrganization.canSubmitReports) {
+  if (!selectedOrganization?.canSubmitReports) {
     return null;
   }
 

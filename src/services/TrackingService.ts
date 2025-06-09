@@ -85,7 +85,7 @@ const httpPlantingSite = HttpService.root(PLANTING_SITE_ENDPOINT);
 /**
  * List all planting sites
  */
-const listPlantingSites = async (
+const fetchPlantingSiteList = async (
   organizationId: number,
   full?: boolean,
   locale?: string | null
@@ -387,6 +387,21 @@ const getPlantingSiteHistory = async (
   ).get2<GetPlantingSiteHistoryPayload>();
 };
 
+/**
+ * List all planting sites
+ */
+const listPlantingSites = async (
+  organizationId: number,
+  full?: boolean
+): Promise<Response2<ListPlantingSitesResponsePayload>> => {
+  return await httpPlantingSites.get2<ListPlantingSitesResponsePayload>({
+    params: {
+      organizationId: organizationId.toString(),
+      full: (full || false).toString(),
+    },
+  });
+};
+
 const listPlantingSiteHistories = async (
   plantingSiteId: number
 ): Promise<Response2<ListPlantingSiteHistoriesPayload>> => {
@@ -400,6 +415,7 @@ const listPlantingSiteHistories = async (
  */
 const TrackingService = {
   createPlantingSite,
+  fetchPlantingSiteList,
   validatePlantingSite,
   deletePlantingSite,
   getDelivery,

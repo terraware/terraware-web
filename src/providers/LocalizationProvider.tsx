@@ -15,7 +15,7 @@ import { LocalizationContext } from './contexts';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
-  selectedLocale: string;
+  selectedLocale: string | null;
   setSelectedLocale: (locale: string) => void;
   activeLocale: string | null;
   setActiveLocale: (locale: string) => void;
@@ -44,61 +44,69 @@ export default function LocalizationProvider({
   const timeZoneResponse = useAppSelector(selectTimezones(timeZonesRequestId));
 
   useEffect(() => {
-    if (user?.locale) {
-      setSelectedLocale(user.locale);
+    if (user) {
+      setSelectedLocale(user.locale || 'en');
     }
-  }, [user?.locale, setSelectedLocale]);
+  }, [user, setSelectedLocale]);
 
   useEffect(() => {
-    HttpService.setDefaultHeaders({ 'Accept-Language': selectedLocale });
-    const countriesDispatched = dispatch(requestListCountries());
-    const timezoneDispatched = dispatch(requestListTimezones());
-    setCountriesRequestId(countriesDispatched.requestId);
-    setTimeZonesRequestId(timezoneDispatched.requestId);
+    if (selectedLocale) {
+      HttpService.setDefaultHeaders({ 'Accept-Language': selectedLocale });
+      const countriesDispatched = dispatch(requestListCountries());
+      const timezoneDispatched = dispatch(requestListTimezones());
+      setCountriesRequestId(countriesDispatched.requestId);
+      setTimeZonesRequestId(timezoneDispatched.requestId);
+    }
   }, [dispatch, selectedLocale]);
 
   useEffect(() => {
-    if (countriesResponse && countriesResponse.status === 'success' && countriesResponse.data) {
+    if (selectedLocale && countriesResponse && countriesResponse.status === 'success' && countriesResponse.data) {
       const countriesCopy = [...countriesResponse.data];
       setCountries(countriesCopy.sort((a, b) => a.name.localeCompare(b.name, selectedLocale)));
     }
   }, [selectedLocale, countriesResponse]);
 
   useEffect(() => {
-    if (timeZoneResponse && timeZoneResponse.status === 'success' && timeZoneResponse.data) {
+    if (selectedLocale && timeZoneResponse && timeZoneResponse.status === 'success' && timeZoneResponse.data) {
       const timezonesCopy = [...timeZoneResponse.data];
       setTimeZones(timezonesCopy.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
     }
   }, [selectedLocale, timeZoneResponse]);
 
   useEffect(() => {
-    const fetchStrings = async () => {
-      const language = selectedLocale.replace(/[-_].*/, ''); // 'en-US' => 'en'
-      const localeDetails =
-        supportedLocales.find((details) => details.id === selectedLocale) ||
-        supportedLocales.find((details) => details.id === language) ||
-        supportedLocales[0];
+    if (selectedLocale) {
+      const fetchStrings = async () => {
+        const language = selectedLocale.replace(/[-_].*/, ''); // 'en-US' => 'en'
+        const localeDetails =
+          supportedLocales.find((details) => details.id === selectedLocale) ||
+          supportedLocales.find((details) => details.id === language) ||
+          supportedLocales[0];
 
-      const localeMap: ILocalizedStringsMap = {};
-      localeMap[selectedLocale] = (await localeDetails.loadModule()).strings;
-      const localizedStrings = new LocalizedStrings(localeMap);
+        const localeMap: ILocalizedStringsMap = {};
+        localeMap[selectedLocale] = (await localeDetails.loadModule()).strings;
+        const localizedStrings = new LocalizedStrings(localeMap);
 
-      setActiveLocale(selectedLocale);
-      setStrings(localizedStrings);
+        setActiveLocale(selectedLocale);
+        setStrings(localizedStrings);
+      };
+
+      void fetchStrings();
+    }
+  }, [selectedLocale, setActiveLocale, supportedLocales]);
+
+  if (selectedLocale) {
+    const context: ProvidedLocalizationData = {
+      activeLocale,
+      countries,
+      bootstrapped: !!activeLocale,
+      selectedLocale,
+      setSelectedLocale,
+      strings,
+      supportedTimeZones: timeZones,
     };
 
-    void fetchStrings();
-  }, [selectedLocale, setActiveLocale, setStrings, supportedLocales]);
-
-  const context: ProvidedLocalizationData = {
-    activeLocale,
-    countries,
-    bootstrapped: !!activeLocale,
-    selectedLocale,
-    setSelectedLocale,
-    strings,
-    supportedTimeZones: timeZones,
-  };
-
-  return <LocalizationContext.Provider value={context}>{children}</LocalizationContext.Provider>;
+    return <LocalizationContext.Provider value={context}>{children}</LocalizationContext.Provider>;
+  } else {
+    return null;
+  }
 }

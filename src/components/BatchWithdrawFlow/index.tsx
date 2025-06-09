@@ -47,7 +47,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const navigate = useSyncNavigate();
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       const populateBatches = async () => {
         const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatches(
           selectedOrganization.id,
@@ -66,7 +66,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       };
       void populateBatches();
     }
-  }, [batchIds, snackbar, selectedOrganization.id]);
+  }, [batchIds, snackbar, selectedOrganization]);
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
     setRecord(withdrawal);

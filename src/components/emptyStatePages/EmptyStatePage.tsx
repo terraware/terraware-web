@@ -195,7 +195,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   };
 
   const pageContent = (): PageContent => {
-    const contributor = selectedOrganization && isContributor(selectedOrganization);
+    const contributor = isContributor(selectedOrganization);
 
     switch (pageName) {
       case 'Species':

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, useTheme } from '@mui/material';
@@ -53,22 +53,24 @@ const SettingsPage = () => {
     ];
   }, [activeLocale, user, reloadUser, isEditingAccount, isDeleteModalOpen]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'my-account',
     tabs,
     viewIdentifier: 'settings',
-    keepQuery: false,
   });
 
-  const onTabChangeHandler = (tab: string) => {
-    if (tab !== 'my-account') {
-      mixpanel?.track(MIXPANEL_EVENTS.SETTINGS_TAB, {
-        tab,
-      });
-    }
-    setIsEditingAccount(false);
-    onTabChange(tab);
-  };
+  const onChangeTabHandler = useCallback(
+    (tab: string) => {
+      if (tab !== 'my-account') {
+        mixpanel?.track(MIXPANEL_EVENTS.SETTINGS_TAB, {
+          tab,
+        });
+      }
+      setIsEditingAccount(false);
+      onChangeTab(tab);
+    },
+    [mixpanel, onChangeTab]
+  );
 
   const onOptionItemClick = (optionItem: DropdownItem) => {
     if (optionItem.value === 'delete-account') {
@@ -129,7 +131,7 @@ const SettingsPage = () => {
           </Box>
         </PageHeaderWrapper>
         <Box ref={contentRef}>
-          <Tabs activeTab={activeTab} onTabChange={onTabChangeHandler} tabs={tabs} />
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTabHandler} tabs={tabs} />
         </Box>
       </Box>
     </Page>

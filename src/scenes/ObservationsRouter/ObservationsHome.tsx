@@ -77,6 +77,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     if (!activeLocale) {
       return [];
     }
+
     return [
       {
         id: 'plantMonitoring',
@@ -91,11 +92,10 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     ];
   }, [activeLocale, plantingSite, props]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'plantMonitoring',
     tabs,
-    viewIdentifier: 'accelerator-overview',
-    keepQuery: false,
+    viewIdentifier: 'observations',
   });
 
   const newObservationsSchedulable = useMemo(() => {
@@ -116,10 +116,10 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   }, [navigate, allPlantingSites?.length]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization) {
       void dispatch(requestPlantings(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization]);
 
   const actionButton = useMemo<ButtonProps | undefined>(() => {
     if (!activeLocale || !newObservationsSchedulable || !scheduleObservationsEnabled) {
@@ -147,7 +147,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
-        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
     </PlantsPrimaryPage>
   );

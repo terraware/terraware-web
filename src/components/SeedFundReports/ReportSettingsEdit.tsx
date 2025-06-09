@@ -17,10 +17,10 @@ const ReportSettingsEdit = () => {
   const reportsSettings = useAppSelector(selectReportsSettings);
 
   useEffect(() => {
-    if (!reportsSettings && selectedOrganization.id !== -1) {
+    if (!reportsSettings && selectedOrganization) {
       void dispatch(requestReportsSettings(selectedOrganization.id));
     }
-  }, [dispatch, reportsSettings, selectedOrganization.id]);
+  }, [dispatch, reportsSettings, selectedOrganization]);
 
   return (
     <TfMain>
