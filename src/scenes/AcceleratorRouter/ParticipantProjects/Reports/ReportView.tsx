@@ -176,7 +176,7 @@ const ReportView = () => {
       const found = publishedReports?.find((r) => r.reportId.toString() === reportId);
       setSelectedPublishedReport(found);
     }
-  }, [publishedReports, selectedPublishedReport, reportId]);
+  }, [publishedReports, reportId]);
 
   const year = useMemo(() => {
     return selectedReport?.startDate.split('-')[0];
