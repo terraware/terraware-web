@@ -1,3 +1,4 @@
+bcdfe8d10f5 SW-7050 Don't allow deleting applicant projects (#4136)
 ff40982c24c Update dependency slate to ^0.115.0 (#4137)
 49965e06f93 SW-7058 Fix reversed project area tooltips (#4135)
 13dc0f26ab3 SW-7053 Reports in Console: Challenges & Mitigations section is uneditable (#4130)
