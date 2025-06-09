@@ -15,7 +15,6 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { AccessionService, FacilityService } from 'src/services';
@@ -26,9 +25,7 @@ import { stateName } from 'src/types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -49,9 +46,6 @@ export default function Accession2View(): JSX.Element {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const { userPreferences } = useUser();
-  const query = useQuery();
-  const navigate = useSyncNavigate();
-  const location = useStateLocation();
   const { accessionId } = useParams<{ accessionId: string }>();
   const [accession, setAccession] = useState<Accession>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
@@ -177,11 +171,6 @@ export default function Accession2View(): JSX.Element {
       }
     }
   }, [accession, activeLocale, seedBankTimeZone]);
-
-  const handleChange = (newValue: string) => {
-    query.set('tab', newValue);
-    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
-  };
 
   const linkStyle = {
     color: themeObj.palette.TwClrTxtBrand,
@@ -399,11 +388,10 @@ export default function Accession2View(): JSX.Element {
     ];
   }, [accession, reloadData, activeLocale, themeObj, viabilityEditable, isMobile, hasPendingTests]);
 
-  const { activeTab, onTabChange } = useStickyTabs({
+  const { activeTab, onChangeTab, setActiveTab } = useStickyTabs({
     defaultTab: 'detail',
     tabs,
-    viewIdentifier: 'accession-view',
-    tabsAreNewPages: false,
+    viewIdentifier: 'accession',
   });
 
   return (
@@ -493,7 +481,7 @@ export default function Accession2View(): JSX.Element {
               accession={accession}
               reload={reloadData}
               setNewViabilityTestOpened={setOpenNewViabilityTest}
-              changeTab={handleChange}
+              changeTab={setActiveTab}
               title={accession?.viabilityPercent?.toString() ? strings.EDIT_VIABILITY : strings.ADD_VIABILITY}
             />
           )}
@@ -717,7 +705,7 @@ export default function Accession2View(): JSX.Element {
             : {},
         }}
       >
-        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
     </TfMain>
   );
