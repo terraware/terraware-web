@@ -423,7 +423,7 @@ export default function SpeciesDetailsForm({
             type='textarea'
           />
         </Grid>
-        {orgHasParticipants && !isAcceleratorRoute && (
+        {orgHasParticipants && !isAcceleratorRoute && onAdd && (
           <SpeciesProjectsTable
             speciesId={record.id}
             editMode={true}
