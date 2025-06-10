@@ -92,7 +92,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
     }
   }, [projectReports]);
 
-  const columns = useCallback((): TableColumnType[] => {
+  const columns = useMemo((): TableColumnType[] => {
     return [
       {
         key: 'reportName',
