@@ -277,7 +277,7 @@ describe('cutBoundaries', () => {
             ],
           ],
         },
-        properties: { errorText: 'Zone boundary smaller than 100m x 100m', fill: true },
+        properties: { errorText: '--', fill: true },
         id: 2,
       },
       {
@@ -296,7 +296,7 @@ describe('cutBoundaries', () => {
             ],
           ],
         },
-        properties: { errorText: 'Zone boundary smaller than 100m x 100m', fill: true },
+        properties: { errorText: '--', fill: true },
         id: 2,
       },
     ]);
