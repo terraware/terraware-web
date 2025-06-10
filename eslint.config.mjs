@@ -249,7 +249,7 @@ export default fixupConfigRules([
       'no-class-assign': 'error',
       'no-compare-neg-zero': 'error',
       'no-cond-assign': 'error',
-      'no-console': 'off',
+      'no-console': 'warn',
       'no-const-assign': 'error',
       'no-constant-binary-expression': 'error',
       'no-constant-condition': 'error',
