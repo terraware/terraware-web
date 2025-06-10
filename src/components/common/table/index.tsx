@@ -165,7 +165,7 @@ export function OrderPreserveableTable<T extends TableRowType>(
  */
 export type OrderPreservedTableProps = {
   id: string;
-  columns: () => TableColumnType[];
+  columns: TableColumnType[] | (() => TableColumnType[]);
 };
 
 export type OrderPreservedTablePropsFull<T> = Omit<TableProps<T>, 'columns'> & OrderPreservedTableProps;
@@ -173,12 +173,13 @@ export type OrderPreservedTablePropsFull<T> = Omit<TableProps<T>, 'columns'> & O
 export default function OrderPreservedTable<T extends TableRowType>(
   props: OrderPreservedTablePropsFull<T>
 ): JSX.Element {
-  const { columns, ...tableProps } = props;
+  const { columns: columnsProp, ...tableProps } = props;
+  const columns = typeof columnsProp === 'function' ? columnsProp() : columnsProp;
   const { activeLocale } = useLocalization();
-  const [tableColumns, setTableColumns] = useState<TableColumnType[]>(columns());
+  const [tableColumns, setTableColumns] = useState<TableColumnType[]>(columns);
 
   useEffect(() => {
-    const sourceColumns = activeLocale ? columns() : [];
+    const sourceColumns = activeLocale ? columns : [];
     const refreshedColumns: TableColumnType[] = tableColumns
       .map((tableColumn: TableColumnType) =>
         sourceColumns.find((sourceColumn: TableColumnType) => sourceColumn.key === tableColumn.key)
@@ -188,10 +189,10 @@ export default function OrderPreservedTable<T extends TableRowType>(
     if (!_.isEqual(tableColumns, refreshedColumns)) {
       setTableColumns(refreshedColumns);
     }
-  }, [activeLocale, columns, tableColumns]);
+  }, [activeLocale, columnsProp, columns, tableColumns]);
 
   const columnsPreferenceName = useMemo<string>(() => {
-    const columnNames = columns()
+    const columnNames = columns
       .map((column) => column.key)
       .sort()
       .join('_');

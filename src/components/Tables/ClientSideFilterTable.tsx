@@ -23,7 +23,7 @@ export interface ClientSideFilterTableProps
   extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   busy?: boolean;
   clientSortedFields?: string[];
-  columns: (activeLocale: string | null) => TableColumnType[];
+  columns: TableColumnType[] | ((activeLocale: string | null) => TableColumnType[]);
   defaultSortOrder: SearchSortOrder;
   extraComponent?: React.ReactNode;
   extraTableFilters?: SearchNodePayload[];
@@ -187,7 +187,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
 
   const _filteredSortedRows = useMemo(() => {
     const search: SearchNodePayload = getSearchPayload();
-    const numberFields = columns(activeLocale)
+    const numberFields = (typeof columns === 'function' ? columns(activeLocale) : columns)
       .filter((col) => col.type === 'number')
       .map((col) => col.key);
 
@@ -209,6 +209,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     return rows;
   }, [
     activeLocale,
+    columns,
     debouncedSearchTerm,
     extraTableFilters,
     filters,
@@ -217,6 +218,11 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     rows,
     searchSortOrder,
   ]);
+
+  const tableColumns = useMemo(
+    () => (typeof columns === 'function' ? () => columns(activeLocale) : columns),
+    [activeLocale, columns]
+  );
 
   return (
     <Container disableGutters maxWidth={false} sx={{ padding: 0 }}>
@@ -240,7 +246,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
         <Grid item xs={12}>
           <OrderPreservedTable
             {...tableProps}
-            columns={() => columns(activeLocale)}
+            columns={tableColumns}
             id={id}
             isPresorted={!!searchSortOrder}
             order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
