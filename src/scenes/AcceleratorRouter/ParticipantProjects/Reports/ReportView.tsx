@@ -120,11 +120,17 @@ const ReportView = () => {
     [dispatch, projectId, reportId, selectedReport]
   );
 
-  useEffect(() => {
+  const reloadPublishedReport = useCallback(async () => {
     if (projectId) {
-      void dispatch(requestListFunderReports(Number(projectId)));
+      await dispatch(requestListFunderReports(Number(projectId)));
     }
   }, [dispatch, projectId]);
+
+  useEffect(() => {
+    if (projectId) {
+      void reloadPublishedReport();
+    }
+  }, [dispatch, projectId, reloadPublishedReport]);
 
   useEffect(() => {
     if (approveReportResponse?.status === 'error') {
@@ -153,10 +159,11 @@ const ReportView = () => {
     }
     if (publishReportResponse?.status === 'success') {
       snackbar.toastSuccess(strings.REPORT_PUBLISHED);
+      void reloadPublishedReport();
       reload();
       setShowPublishModal(false);
     }
-  }, [publishReportResponse, reload, snackbar]);
+  }, [publishReportResponse, reload, reloadPublishedReport, snackbar]);
 
   useEffect(() => {
     if (reports) {
