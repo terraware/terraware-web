@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1749503260173" clover="3.2.0">
-  <project timestamp="1749503260173" name="All files">
-    <metrics statements="30723" coveredstatements="1296" conditionals="21290" coveredconditionals="388" methods="9450" coveredmethods="211" elements="61463" coveredelements="1895" complexity="0" loc="30723" ncloc="30723" packages="263" files="1268" classes="1268"/>
+<coverage generated="1749569511193" clover="3.2.0">
+  <project timestamp="1749569511193" name="All files">
+    <metrics statements="30725" coveredstatements="1296" conditionals="21291" coveredconditionals="388" methods="9451" coveredmethods="211" elements="61467" coveredelements="1895" complexity="0" loc="30725" ncloc="30725" packages="263" files="1268" classes="1268"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -30493,7 +30493,7 @@
       </file>
     </package>
     <package name="src.scenes.Species">
-      <metrics statements="729" coveredstatements="0" conditionals="447" coveredconditionals="0" methods="211" coveredmethods="0"/>
+      <metrics statements="731" coveredstatements="0" conditionals="448" coveredconditionals="0" methods="212" coveredmethods="0"/>
       <file name="AddToProjectConfirmModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/AddToProjectConfirmModal.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -30780,7 +30780,7 @@
         <line num="320" count="0" type="stmt"/>
       </file>
       <file name="SpeciesDetailsForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/SpeciesDetailsForm.tsx">
-        <metrics statements="91" coveredstatements="0" conditionals="62" coveredconditionals="0" methods="43" coveredmethods="0"/>
+        <metrics statements="91" coveredstatements="0" conditionals="63" coveredconditionals="0" methods="43" coveredmethods="0"/>
         <line num="71" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
@@ -30954,7 +30954,7 @@
         <line num="187" count="0" type="stmt"/>
       </file>
       <file name="SpeciesListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/SpeciesListView.tsx">
-        <metrics statements="187" coveredstatements="0" conditionals="98" coveredconditionals="0" methods="44" coveredmethods="0"/>
+        <metrics statements="189" coveredstatements="0" conditionals="98" coveredconditionals="0" methods="45" coveredmethods="0"/>
         <line num="57" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
@@ -31136,12 +31136,14 @@
         <line num="590" count="0" type="stmt"/>
         <line num="591" count="0" type="stmt"/>
         <line num="601" count="0" type="stmt"/>
-        <line num="605" count="0" type="stmt"/>
-        <line num="668" count="0" type="stmt"/>
-        <line num="678" count="0" type="stmt"/>
-        <line num="695" count="0" type="stmt"/>
-        <line num="696" count="0" type="stmt"/>
-        <line num="697" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="603" count="0" type="stmt"/>
+        <line num="608" count="0" type="stmt"/>
+        <line num="612" count="0" type="stmt"/>
+        <line num="675" count="0" type="stmt"/>
+        <line num="685" count="0" type="stmt"/>
+        <line num="702" count="0" type="stmt"/>
+        <line num="703" count="0" type="stmt"/>
+        <line num="704" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="SpeciesProjectsCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/SpeciesProjectsCellRenderer.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
