@@ -23,6 +23,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import useApplicationPortal from './hooks/useApplicationPortal';
 import useFunderPortal from './hooks/useFunderPortal';
+import DisclaimerProvider from './providers/Disclaimer/Provider';
 import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
 
 // Mixpanel setup
@@ -118,18 +119,20 @@ function AppContent() {
       </TopBar>
 
       <Box sx={mainBoxStyles}>
-        <React.Suspense fallback={<BlockingSpinner />}>
-          {/* TODO: Add application console router for applciations/{id} case */}
-          {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
-            <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-          ) : isApplicationPortal ? (
-            <ApplicationPortalRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-          ) : isFunderRoute ? (
-            <FunderRouter />
-          ) : (
-            <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-          )}
-        </React.Suspense>
+        <DisclaimerProvider>
+          <React.Suspense fallback={<BlockingSpinner />}>
+            {/* TODO: Add application console router for applciations/{id} case */}
+            {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
+              <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+            ) : isApplicationPortal ? (
+              <ApplicationPortalRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+            ) : isFunderRoute ? (
+              <FunderRouter />
+            ) : (
+              <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+            )}
+          </React.Suspense>
+        </DisclaimerProvider>
       </Box>
     </StyledEngineProvider>
   );
