@@ -48,6 +48,7 @@ export default function PlantsDashboardView({
     latestResult,
     observationSummaries,
     isLoading,
+    acceleratorOrganizationId,
   } = usePlantingSiteData();
 
   const hasObservations = useMemo(() => !!latestResult, [latestResult]);
@@ -74,9 +75,21 @@ export default function PlantsDashboardView({
   }, [latestResult, plantingSite]);
 
   useEffect(() => {
-    const orgId = organizationId ?? selectedOrganization?.id ?? -1;
-    setAcceleratorOrganizationId(orgId);
-  }, [dispatch, organizationId, selectedOrganization?.id, setAcceleratorOrganizationId]);
+    if (!acceleratorOrganizationId) {
+      if (organizationId) {
+        setAcceleratorOrganizationId(organizationId);
+      } else if (selectedOrganization?.id) {
+        setAcceleratorOrganizationId(selectedOrganization?.id);
+      }
+    }
+  }, [
+    acceleratorOrganizationId,
+    dispatch,
+    isAcceleratorRoute,
+    organizationId,
+    selectedOrganization?.id,
+    setAcceleratorOrganizationId,
+  ]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
