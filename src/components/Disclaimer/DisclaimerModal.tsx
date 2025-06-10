@@ -61,7 +61,13 @@ const DisclaimerModal = ({ open, setOpen, onCancel, onConfirm }: DisclaimerModal
   const confirmButton = useMemo(() => {
     if (onConfirm && activeLocale) {
       return [
-        <Button id='disclaimer-cancel' disabled={!agreed} label={strings.CONFIRM} onClick={onConfirm} key='button-2' />,
+        <Button
+          id='disclaimer-confirm'
+          disabled={!agreed}
+          label={strings.CONFIRM}
+          onClick={onConfirm}
+          key='button-2'
+        />,
       ];
     } else {
       return [];
@@ -90,7 +96,7 @@ const DisclaimerModal = ({ open, setOpen, onCancel, onConfirm }: DisclaimerModal
           textAlign={'start'}
         >
           <Checkbox
-            id='emailNotificationsEnabled'
+            id='disclaimer-agree'
             name={strings.FUNDER_DISCLAIMER_CHECKBOX}
             label={strings.FUNDER_DISCLAIMER_CHECKBOX}
             value={agreed}

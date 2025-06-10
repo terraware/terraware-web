@@ -18,8 +18,8 @@ export const disclaimerSlice = createSlice({
 
 const initialStateAcceptDisclaimer: { [key: string]: StatusT<void> } = {};
 
-export const accpetDisclaimerSlice = createSlice({
-  name: 'accpetDisclaimerSlice',
+export const acceptDisclaimerSlice = createSlice({
+  name: 'acceptDisclaimerSlice',
   initialState: initialStateAcceptDisclaimer,
   reducers: {},
   extraReducers: (builder) => {
@@ -29,7 +29,7 @@ export const accpetDisclaimerSlice = createSlice({
 
 const disclaimersReducers = {
   disclaimer: disclaimerSlice.reducer,
-  disclaimerAccept: accpetDisclaimerSlice.reducer,
+  disclaimerAccept: acceptDisclaimerSlice.reducer,
 };
 
 export default disclaimersReducers;
