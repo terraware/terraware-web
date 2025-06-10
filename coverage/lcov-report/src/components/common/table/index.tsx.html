@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -270,7 +270,8 @@
 <a name='L205'></a><a href='#L205'>205</a>
 <a name='L206'></a><a href='#L206'>206</a>
 <a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -445,6 +446,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -644,7 +646,7 @@ export function <span class="fstat-no" title="function not covered" >OrderPreser
  */
 export type OrderPreservedTableProps = {
   id: string;
-  columns: () =&gt; TableColumnType[];
+  columns: TableColumnType[] | (() =&gt; TableColumnType[]);
 };
 &nbsp;
 export type OrderPreservedTablePropsFull&lt;T&gt; = Omit&lt;TableProps&lt;T&gt;, 'columns'&gt; &amp; OrderPreservedTableProps;
@@ -652,12 +654,13 @@ export type OrderPreservedTablePropsFull&lt;T&gt; = Omit&lt;TableProps&lt;T&gt;,
 export default function <span class="fstat-no" title="function not covered" >OrderPreservedTable&lt;</span>T extends TableRowType&gt;(
   props: OrderPreservedTablePropsFull&lt;T&gt;
 ): JSX.Element {
-  const { columns, ...tableProps } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { columns: columnsProp, ...tableProps } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const columns = <span class="cstat-no" title="statement not covered" >typeof columnsProp === 'function' ? columnsProp() : columnsProp;</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const [tableColumns, setTableColumns] = <span class="cstat-no" title="statement not covered" >useState&lt;TableColumnType[]&gt;(columns());</span>
+  const [tableColumns, setTableColumns] = <span class="cstat-no" title="statement not covered" >useState&lt;TableColumnType[]&gt;(columns);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const sourceColumns = <span class="cstat-no" title="statement not covered" >activeLocale ? columns() : [];</span>
+    const sourceColumns = <span class="cstat-no" title="statement not covered" >activeLocale ? columns : [];</span>
     const refreshedColumns: TableColumnType[] = <span class="cstat-no" title="statement not covered" >tableColumns</span>
       .map(<span class="fstat-no" title="function not covered" >(t</span>ableColumn: TableColumnType) =&gt;
 <span class="cstat-no" title="statement not covered" >        sourceColumns.find(<span class="fstat-no" title="function not covered" >(s</span>ourceColumn: TableColumnType) =&gt; <span class="cstat-no" title="statement not covered" >sourceColumn.key === tableColumn.key)</span></span>
@@ -667,10 +670,10 @@ export default function <span class="fstat-no" title="function not covered" >Ord
 <span class="cstat-no" title="statement not covered" >    if (!_.isEqual(tableColumns, refreshedColumns)) {</span>
 <span class="cstat-no" title="statement not covered" >      setTableColumns(refreshedColumns);</span>
     }
-  }, [activeLocale, columns, tableColumns]);
+  }, [activeLocale, columnsProp, columns, tableColumns]);
 &nbsp;
   const columnsPreferenceName = <span class="cstat-no" title="statement not covered" >useMemo&lt;string&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const columnNames = <span class="cstat-no" title="statement not covered" >columns()</span>
+    const columnNames = <span class="cstat-no" title="statement not covered" >columns</span>
       .map(<span class="fstat-no" title="function not covered" >(c</span>olumn) =&gt; <span class="cstat-no" title="statement not covered" >column.key)</span>
       .sort()
       .join('_');
@@ -691,7 +694,7 @@ export default function <span class="fstat-no" title="function not covered" >Ord
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-10T18:32:36.114Z
+                at 2025-06-10T19:08:22.747Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
