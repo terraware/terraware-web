@@ -22,7 +22,7 @@ import { defaultSearchNodeCreator } from '../common/SearchFiltersWrapperV2/Featu
 export interface TableWithSearchFiltersProps
   extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   busy?: boolean;
-  columns: (activeLocale: string | null) => TableColumnType[];
+  columns: TableColumnType[] | ((activeLocale: string | null) => TableColumnType[]);
   defaultSearchOrder: SearchSortOrder;
   dispatchSearchRequest: (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => void;
   extraTableFilters?: SearchNodePayload[];
@@ -190,6 +190,11 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     }
   }, [featuredFilters, sessionFilters, stickyFilters]);
 
+  const tableColumns = useMemo(
+    () => (typeof columns === 'function' ? () => columns(activeLocale) : columns),
+    [activeLocale, columns]
+  );
+
   return (
     <Container maxWidth={false} sx={{ padding: 0 }} disableGutters>
       <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
@@ -212,7 +217,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
         <Grid item xs={12}>
           <OrderPreservedTable
             {...tableProps}
-            columns={() => columns(activeLocale)}
+            columns={tableColumns}
             orderBy={searchSortOrder?.field || defaultSearchOrder.field}
             order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
             sortHandler={onSortChange}

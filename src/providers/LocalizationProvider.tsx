@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import LocalizedStrings from 'react-localization';
 
 import { requestListCountries, requestListTimezones } from 'src/redux/features/location/locationAsyncThunks';
 import { selectCountries, selectTimezones } from 'src/redux/features/location/locationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { HttpService } from 'src/services';
-import strings, { ILocalizedStringsMap } from 'src/strings';
+import defaultStrings, { ILocalizedStringsMap } from 'src/strings';
 import { Country } from 'src/types/Country';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
@@ -31,6 +32,7 @@ export default function LocalizationProvider({
 
   const [countries, setCountries] = useState<Country[]>([]);
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
+  const [strings, setStrings] = useState<typeof defaultStrings>(defaultStrings);
 
   const { user } = useUser();
   const supportedLocales = useSupportedLocales();
@@ -82,10 +84,12 @@ export default function LocalizationProvider({
 
         const localeMap: ILocalizedStringsMap = {};
         localeMap[selectedLocale] = (await localeDetails.loadModule()).strings;
-        strings.setContent(localeMap);
-        strings.setLanguage(selectedLocale);
+        defaultStrings.setContent(localeMap);
+        defaultStrings.setLanguage(selectedLocale);
+        const localizedStrings = new LocalizedStrings(localeMap);
 
         setActiveLocale(selectedLocale);
+        setStrings(localizedStrings);
       };
 
       void fetchStrings();
@@ -99,6 +103,7 @@ export default function LocalizationProvider({
       bootstrapped: !!activeLocale,
       selectedLocale,
       setSelectedLocale,
+      strings,
       supportedTimeZones: timeZones,
     };
 
