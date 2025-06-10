@@ -34,6 +34,6 @@ export interface LocaleDetails {
   inDevelopment?: boolean;
 }
 
-const strings = new LocalizedStrings({ en: english } as unknown as ILocalizedStringsMap);
+const strings = new LocalizedStrings({ _: {} } as unknown as ILocalizedStringsMap);
 
 export default strings;
