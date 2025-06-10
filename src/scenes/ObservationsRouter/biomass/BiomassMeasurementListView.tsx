@@ -44,6 +44,11 @@ export default function BiomassMeasurementList({ adHocObservationResults }: Biom
         name: strings.SPECIES,
         type: 'number',
       },
+      {
+        key: 'actionsMenu',
+        name: '',
+        type: 'string',
+      },
     ];
   };
 
