@@ -598,6 +598,13 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     );
   };
 
+  const goToEditView = useCallback(
+    (speciesSel: SpeciesSearchResultRow) => {
+      navigate(APP_PATHS.SPECIES_EDIT.replace(':speciesId', speciesSel.id.toString()));
+    },
+    [navigate]
+  );
+
   return (
     <TfMain>
       <CheckDataModal
@@ -708,6 +715,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                   reloadData={reloadDataProblemsHandler}
                   sortHandler={onSortChange}
                   isPresorted={!!searchSortOrder}
+                  onSelect={goToEditView}
                 />
               )}
             </Grid>
