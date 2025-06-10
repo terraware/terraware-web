@@ -84,6 +84,8 @@ export default function LocalizationProvider({
 
         const localeMap: ILocalizedStringsMap = {};
         localeMap[selectedLocale] = (await localeDetails.loadModule()).strings;
+        defaultStrings.setContent(localeMap);
+        defaultStrings.setLanguage(selectedLocale);
         const localizedStrings = new LocalizedStrings(localeMap);
 
         setActiveLocale(selectedLocale);
