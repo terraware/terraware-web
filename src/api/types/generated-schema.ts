@@ -1176,6 +1176,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/disclaimer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fetch current disclaimer. */
+        get: operations["getDisclaimer"];
+        put?: never;
+        /** Accept current disclaimer. */
+        post: operations["acceptDisclaimer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/document-producer/documents": {
         parameters: {
             query?: never;
@@ -5459,6 +5477,13 @@ export interface components {
              */
             lastRespondedTime?: string;
         };
+        DisclaimerPayload: {
+            /** Format: date-time */
+            acceptedOn?: string;
+            content: string;
+            /** Format: date-time */
+            effectiveOn: string;
+        };
         /** @description History entry about the creation of the document. This is always the last element in the reverse-chronological list of history events. It has the same information as the createdBy and createdTime fields in DocumentPayload. */
         DocumentHistoryCreatedPayload: Omit<WithRequired<components["schemas"]["DocumentHistoryPayload"], "createdBy" | "createdTime" | "type">, "type"> & {
             /**
@@ -6050,6 +6075,10 @@ export interface components {
         };
         GetDeviceResponsePayload: {
             device: components["schemas"]["DeviceConfig"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetDisclaimerResponse: {
+            disclaimer?: components["schemas"]["DisclaimerPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetDocumentHistoryResponsePayload: {
@@ -12719,6 +12748,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getDisclaimer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetDisclaimerResponse"];
+                };
+            };
+        };
+    };
+    acceptDisclaimer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };

@@ -1,13 +1,16 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
+import DisclaimerModal from 'src/components/Disclaimer/DisclaimerModal';
 import LocaleSelector from 'src/components/LocaleSelector';
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import Checkbox from 'src/components/common/Checkbox';
+import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageForm from 'src/components/common/PageForm';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -20,6 +23,7 @@ import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
+import { useDisclaimerData } from 'src/providers/Disclaimer/Context';
 import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
@@ -90,11 +94,13 @@ const MyAccountForm = ({
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
   const theme = useTheme();
+  const { disclaimer } = useDisclaimerData();
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const navigate = useSyncNavigate();
   const [record, setRecord, onChange] = useForm<User>(user);
   const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
+  const [openDisclaimerModal, setOpenDisclaimerModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
@@ -116,6 +122,10 @@ const MyAccountForm = ({
 
   const [localeSelected, setLocaleSelected] = useState(selectedLocale);
   const [countryCodeSelected, setCountryCodeSelected] = useState(user?.countryCode);
+
+  const openDisclaimer = useCallback(() => {
+    setOpenDisclaimerModal(true);
+  }, []);
 
   useEffect(() => {
     setLocaleSelected(selectedLocale);
@@ -361,6 +371,9 @@ const MyAccountForm = ({
           }}
         />
       )}
+      {userIsFunder && openDisclaimerModal && (
+        <DisclaimerModal open={openDisclaimerModal} setOpen={setOpenDisclaimerModal} />
+      )}
       {includeHeader && (
         <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
           <Box
@@ -533,6 +546,22 @@ const MyAccountForm = ({
                 onChange={(value) => onChange('emailNotificationsEnabled', value)}
               />
             </Grid>
+            {userIsFunder && disclaimer && (
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+                  {strings.FUNDER_DISCLAIMER_TITLE}
+                </Typography>
+                <Typography fontSize='14px' whiteSpace={'pre-line'}>
+                  {disclaimer.acceptedOn
+                    ? strings.formatString(
+                        strings.YOU_ACCEPTED_THE_TERMS_ON,
+                        getDateDisplayValue(disclaimer.acceptedOn, tz.id)
+                      )
+                    : ''}{' '}
+                  <Link onClick={openDisclaimer}> {strings.FUNDER_DISCLAIMER_REVIEW} </Link>
+                </Typography>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                 {strings.COOKIES}
