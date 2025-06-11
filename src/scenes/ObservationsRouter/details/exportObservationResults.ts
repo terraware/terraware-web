@@ -44,6 +44,38 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
       displayLabel: strings.MONITORING_PLOT_TYPE,
     },
     {
+      key: 'southwestLatitude',
+      displayLabel: strings.SOUTHWEST_CORNER_LATITUDE,
+    },
+    {
+      key: 'southwestLongitude',
+      displayLabel: strings.SOUTHWEST_CORNER_LONGITUDE,
+    },
+    {
+      key: 'northwestLatitude',
+      displayLabel: strings.NORTHWEST_CORNER_LATITUDE,
+    },
+    {
+      key: 'northwestLongitude',
+      displayLabel: strings.NORTHWEST_CORNER_LONGITUDE,
+    },
+    {
+      key: 'southeastLatitude',
+      displayLabel: strings.SOUTHEAST_CORNER_LATITUDE,
+    },
+    {
+      key: 'southeastLongitude',
+      displayLabel: strings.SOUTHEAST_CORNER_LONGITUDE,
+    },
+    {
+      key: 'northeastLatitude',
+      displayLabel: strings.NORTHEAST_CORNER_LATITUDE,
+    },
+    {
+      key: 'northeastLongitude',
+      displayLabel: strings.NORTHEAST_CORNER_LONGITUDE,
+    },
+    {
       key: 'totalPlants',
       displayLabel: strings.TOTAL_PLANTS_OBSERVED,
     },
@@ -102,13 +134,25 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
           ? getDateDisplayValue(monitoringPlot.completedTime, observationResults.timeZone)
           : '';
 
+        // Plot polygon has a single ring of coordinates. They're in order SW-SE-NE-NW-SW, with
+        // longitude first in each coordinate pair.
+        const plotCoordinates: number[][] = monitoringPlot.boundary.coordinates[0];
+
         return {
           dateObserved,
           detailsLink,
+          northeastLatitude: plotCoordinates[2][1],
+          northeastLongitude: plotCoordinates[2][0],
+          northwestLatitude: plotCoordinates[3][1],
+          northwestLongitude: plotCoordinates[3][0],
           monitoringPlotNumber: monitoringPlot.monitoringPlotNumber,
           mortalityRate: monitoringPlot.mortalityRate,
           plantingDensity: monitoringPlot.plantingDensity,
           plotType: monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY,
+          southeastLatitude: plotCoordinates[1][1],
+          southeastLongitude: plotCoordinates[1][0],
+          southwestLatitude: plotCoordinates[0][1],
+          southwestLongitude: plotCoordinates[0][0],
           status: getPlotStatus(monitoringPlot.status),
           subzoneName: subzone.name,
           totalDead,
