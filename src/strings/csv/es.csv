@@ -222,6 +222,7 @@ BIOMASS_EMPTY_STATE_MESSAGE_2,"Las observaciones para la Monitorización de la B
 BIOMASS_MEASUREMENT,Medición de biomasa,
 BIOMASS_MEASUREMENTS,Mediciones de biomasa,
 BIOMASS_MONITORING,Monitorización de la biomasa,
+BIOMASS_OBSERVATION_FILENAME_PREFIX,Observación de la biomasa,Included as part of the filename for data files with biomass observation data. Should not include whitespace.
 BOOLEAN_FALSE,falso,
 BOOLEAN_TRUE,verdadero,
 BOUNDARIES,Límites,
@@ -638,6 +639,7 @@ EXPORT_ALL_ZIP,Exportar todo (ZIP),
 EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exportar detalles del monitoreo de biomasa (CSV),
 EXPORT_LOCATIONS,Exportar ubicaciones,
 EXPORT_LOCATIONS_DISABLED_TOOLTIP,Las ubicaciones de las parcelas se determinan al comienzo de la observación,
+EXPORT_OBSERVATION_DETAILS_CSV,Exportar detalles de la observación (CSV),
 EXPORT_PROJECT_BOUNDARY,Exportar el límite del proyecto,
 EXPORT_RECORDS,Exportar los registros,
 EXPORT_RESULTS,Exportar resultados,Menu option to export the results of an observation
@@ -1510,6 +1512,7 @@ Q1_TARGET,Objetivo Q1,
 Q2_TARGET,Objetivo Q2,
 Q3_TARGET,Objetivo Q3,
 Q4_TARGET,Objetivo Q4,
+QUADRAT,Cuadrante,"Not a misspelling of ""quadrant."" A quadrat is a 1-meter-square area used for ecological surveys."
 QUALITATIVE,Cualitativo,
 QUALITATIVE_INFO,Información cualitativa,
 QUANTITY,Cantidad,
