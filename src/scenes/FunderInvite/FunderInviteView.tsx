@@ -20,7 +20,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-const InviteView = () => {
+const FunderInviteView = () => {
   const { goToFundingEntity, goToSettings } = useNavigateTo();
   const { fundingEntity, reload: reloadFundingEntity } = useFundingEntity();
   const theme = useTheme();
@@ -140,4 +140,4 @@ const InviteView = () => {
   );
 };
 
-export default InviteView;
+export default FunderInviteView;

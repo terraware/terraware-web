@@ -9,7 +9,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { FundingEntityProvider, useUser } from 'src/providers';
 import FunderHome from 'src/scenes/FunderHome';
 
-import InviteView from '../AcceleratorRouter/FundingEntities/InviteView';
+import FunderInviteView from '../FunderInvite/FunderInviteView';
 
 export default function FunderRouter() {
   const { user } = useUser();
@@ -38,7 +38,7 @@ export default function FunderRouter() {
             path={`${APP_PATHS.FUNDER_INVITE}/*`}
             element={
               <FundingEntityProvider>
-                <InviteView />
+                <FunderInviteView />
               </FundingEntityProvider>
             }
           />
