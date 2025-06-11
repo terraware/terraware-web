@@ -6,6 +6,7 @@ import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import {
@@ -61,6 +62,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
   const { isAllowed } = useUser();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [listFundersRequestId, setListFundersRequestId] = useState<string>('');
   const [deleteFundersRequestId, setDeleteFundersRequestId] = useState<string>('');
@@ -85,6 +87,8 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
     },
     [dispatch, fundingEntityId]
   );
+
+  const isClickable = useCallback(() => false, []);
 
   useEffect(() => {
     reload();
@@ -112,13 +116,18 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   }, [listFundersResponse, setFunders, snackbar]);
 
   const goToInvitePage = useCallback(
-    () => navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITY_INVITE.replace(':fundingEntityId', fundingEntityId.toString())),
-    [fundingEntityId, navigate]
+    () =>
+      navigate(
+        isAcceleratorRoute
+          ? APP_PATHS.ACCELERATOR_FUNDING_ENTITY_INVITE.replace(':fundingEntityId', fundingEntityId.toString())
+          : APP_PATHS.FUNDER_INVITE.replace(':fundingEntityId', fundingEntityId.toString())
+      ),
+    [fundingEntityId, isAcceleratorRoute, navigate]
   );
 
   const rightComponent = useMemo(
     () =>
-      isAllowed('INVITE_FUNDER') ? (
+      isAllowed('INVITE_FUNDER') || !isAcceleratorRoute ? (
         <Button
           label={strings.INVITE_FUNDER}
           icon='plus'
@@ -130,7 +139,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       ) : (
         ''
       ),
-    [goToInvitePage, isAllowed]
+    [goToInvitePage, isAcceleratorRoute, isAllowed]
   );
 
   return (
@@ -139,10 +148,10 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       defaultSortOrder={defaultSortOrder}
       fuzzySearchColumns={fuzzySearchColumns}
       id={'fundersTable'}
-      isClickable={() => false}
+      isClickable={isClickable}
       selectedRows={selectedRows}
       setSelectedRows={setSelectedRows}
-      showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES')}
+      showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES') || true}
       showTopBar
       Renderer={FunderCellRenderer}
       rows={funders}

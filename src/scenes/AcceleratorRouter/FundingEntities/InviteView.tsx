@@ -8,6 +8,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { EMAIL_REGEX } from 'src/constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity } from 'src/providers';
 import { requestFundingEntityInviteFunder } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
@@ -20,12 +21,13 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 const InviteView = () => {
-  const { goToFundingEntity } = useNavigateTo();
+  const { goToFundingEntity, goToSettings } = useNavigateTo();
   const { fundingEntity, reload: reloadFundingEntity } = useFundingEntity();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ fundingEntityId: string }>();
   const fundingEntityId = Number(pathParams.fundingEntityId);
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const [record, , onChange] = useForm<Partial<Funder>>({});
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
@@ -34,10 +36,14 @@ const InviteView = () => {
   const inviteFunderResponse = useAppSelector(inviteFunderRequest(requestId));
 
   const onCancel = useCallback(() => {
-    if (fundingEntityId) {
-      goToFundingEntity(fundingEntityId);
+    if (isAcceleratorRoute) {
+      if (fundingEntityId) {
+        goToFundingEntity(fundingEntityId);
+      }
+    } else {
+      goToSettings();
     }
-  }, [fundingEntityId]);
+  }, [fundingEntityId, goToFundingEntity, goToSettings, isAcceleratorRoute]);
 
   const onSendClick = useCallback(() => {
     if (!fundingEntityId) {
@@ -59,6 +65,8 @@ const InviteView = () => {
     setRequestId(request.requestId);
   }, [dispatch, snackbar, record.email, fundingEntityId]);
 
+  const onChangeEmail = useCallback((value: unknown) => onChange('email', value), [onChange]);
+
   useEffect(() => {
     if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') {
       return;
@@ -76,7 +84,7 @@ const InviteView = () => {
       snackbar.toastError();
     }
     goToFundingEntity(fundingEntityId);
-  }, [inviteFunderResponse, snackbar]);
+  }, [fundingEntityId, goToFundingEntity, inviteFunderResponse, reloadFundingEntity, snackbar]);
 
   return (
     <Page
@@ -113,7 +121,7 @@ const InviteView = () => {
                 id='email'
                 label={strings.EMAIL}
                 type='text'
-                onChange={(value) => onChange('email', value)}
+                onChange={onChangeEmail}
                 value={record.email}
                 required={true}
                 errorText={emailError}
