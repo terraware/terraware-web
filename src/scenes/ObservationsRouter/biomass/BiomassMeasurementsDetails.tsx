@@ -187,7 +187,11 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     }
   }, [biomassMeasurements, setShowPageMessage, setUnrecognizedSpecies]);
 
-  const exportAllCsvs = useExportBiomassDetailsZip(observation, plantingSite);
+  const exportAllCsvs = useExportBiomassDetailsZip(
+    observation?.observationId,
+    observation?.plantingSiteId,
+    observation?.startDate
+  );
 
   const onSaveMergedSpecies = useOnSaveMergedSpecies({
     observationId,
