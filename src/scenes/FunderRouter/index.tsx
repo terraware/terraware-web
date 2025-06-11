@@ -35,7 +35,7 @@ export default function FunderRouter() {
         <Routes>
           <Route path={APP_PATHS.FUNDER_HOME} element={<FunderHome />} />
           <Route
-            path={`${APP_PATHS.FUNDER_INVITE}/*`}
+            path={`${APP_PATHS.FUNDER_INVITE}`}
             element={
               <FundingEntityProvider>
                 <FunderInviteView />
