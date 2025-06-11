@@ -83,6 +83,7 @@ jobs:
           TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
       - name: Install Playwright Browsers
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
         run: yarn playwright install --with-deps
 
       - name: Run end-to-end playwright tests
