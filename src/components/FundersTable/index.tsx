@@ -127,7 +127,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
 
   const rightComponent = useMemo(
     () =>
-      isAllowed('INVITE_FUNDER') || !isAcceleratorRoute ? (
+      isAllowed('INVITE_FUNDER') ? (
         <Button
           label={strings.INVITE_FUNDER}
           icon='plus'
@@ -139,7 +139,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       ) : (
         ''
       ),
-    [goToInvitePage, isAcceleratorRoute, isAllowed]
+    [goToInvitePage, isAllowed]
   );
 
   return (
@@ -151,7 +151,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       isClickable={isClickable}
       selectedRows={selectedRows}
       setSelectedRows={setSelectedRows}
-      showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES') || true}
+      showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES')}
       showTopBar
       Renderer={FunderCellRenderer}
       rows={funders}

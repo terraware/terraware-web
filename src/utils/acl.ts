@@ -174,6 +174,20 @@ const isAllowedUpdateReportsTargets: PermissionCheckFn<UpdateReportsTargetsMetad
 };
 
 /**
+ * Function related to funder invites
+ */
+const isAllowedInviteFunders: PermissionCheckFn = (user: User): boolean => {
+  return isAcceleratorAdmin(user) || user?.userType === 'Funder';
+};
+
+/**
+ * Function related to managing funding entities
+ */
+const isAllowedManageFundingEntities: PermissionCheckFn = (user: User): boolean => {
+  return isAcceleratorAdmin(user) || user?.userType === 'Funder';
+};
+
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -190,8 +204,8 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   EDIT_REPORTS: AcceleratorAdminPlus,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
-  INVITE_FUNDER: AcceleratorAdminPlus,
-  MANAGE_FUNDING_ENTITIES: AcceleratorAdminPlus,
+  INVITE_FUNDER: isAllowedInviteFunders,
+  MANAGE_FUNDING_ENTITIES: isAllowedManageFundingEntities,
   PUBLISH_PROJECT_DETAILS: AcceleratorAdminPlus,
   PUBLISH_REPORTS: AcceleratorAdminPlus,
   READ_ALL_APPLICATIONS: ReadOnlyPlus,
