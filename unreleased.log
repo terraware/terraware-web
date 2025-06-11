@@ -1,3 +1,4 @@
+e13d465a5b5 SW-6844 Export biomass details from list view (#4150)
 fedc251e25d SW-6844 Rename biomass CSVs; only allow zip export (#4148)
 8a1093b69af SW-7068 Console plants dashboard does not fetch statistics if non-console org has not been loaded (#4147)
 6463dcd846d Updated translations from Phrase (#4149)
