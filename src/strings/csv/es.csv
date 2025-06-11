@@ -222,7 +222,7 @@ BIOMASS_EMPTY_STATE_MESSAGE_2,"Las observaciones para la Monitorización de la B
 BIOMASS_MEASUREMENT,Medición de biomasa,
 BIOMASS_MEASUREMENTS,Mediciones de biomasa,
 BIOMASS_MONITORING,Monitorización de la biomasa,
-BIOMASS_OBSERVATION_FILENAME_PREFIX,Observación de la biomasa,Included as part of the filename for data files with biomass observation data. Should not include whitespace.
+BIOMASS_OBSERVATION_FILENAME_PREFIX,Observación-de-la-biomasa,Included as part of the filename for data files with biomass observation data. Should not include whitespace.
 BOOLEAN_FALSE,falso,
 BOOLEAN_TRUE,verdadero,
 BOUNDARIES,Límites,
