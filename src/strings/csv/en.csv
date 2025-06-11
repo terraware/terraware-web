@@ -1907,6 +1907,7 @@ SPECIES_CARD_DESCRIPTION,View the Species that are referenced by your Seed and P
 SPECIES_CATEGORIES,Species Categories,
 SPECIES_CATEGORIES_NUMBER,Species Categories ({0}),
 SPECIES_CATEGORIES_TOOLTIP,"Species Categories shows the percentage of total plants planted that are Rare and Endangered, based on the species.",
+SPECIES_CLASSIFICATION,Species Classification,
 SPECIES_DESCRIPTION,"Manage your organization’s species list for planning, operation and reporting.",
 SPECIES_EMPTY_MSG_BODY,Enter species that you collect or plant now to simplify your experience when you’re out in the field.,
 SPECIES_IMPORT_COMPLETE,Species data import complete!,

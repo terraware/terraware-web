@@ -171,7 +171,7 @@ const exportBiomassPlotCsv = async (observationId: number): Promise<any> => {
   });
 };
 
-const exportBiomassQuadratCsv = async (observationId: number): Promise<any> => {
+const exportBiomassSpeciesCsv = async (observationId: number): Promise<any> => {
   return SearchService.searchCsv({
     prefix: 'plantingSites.observations.observationPlots.biomassDetails.species',
     fields: ['name', 'quadratSpecies_position', 'quadratSpecies_abundancePercent', 'isInvasive', 'isThreatened'],
@@ -464,7 +464,7 @@ const listAdHocObservationResults = async (
 const ObservationsService = {
   exportBiomassObservationsCsv,
   exportBiomassPlotCsv,
-  exportBiomassQuadratCsv,
+  exportBiomassSpeciesCsv,
   exportBiomassTreesShrubsCsv,
   exportCsv,
   exportGpx,
