@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
-import sanitize from 'sanitize-filename';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -19,14 +18,13 @@ import { useAppSelector } from 'src/redux/store';
 import LiveTreesPerSpecies from 'src/scenes/ObservationsRouter/biomass/LiveTreesPerSpecies';
 import QuadratSpeciesTable from 'src/scenes/ObservationsRouter/biomass/QuadratSpeciesTable';
 import TreesAndShrubsTable from 'src/scenes/ObservationsRouter/biomass/TreesAndShrubsTable';
+import useExportBiomassDetailsZip from 'src/scenes/ObservationsRouter/biomass/useExportBiomassDetailsZip';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
-import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
-import downloadZipFile from 'src/utils/downloadZipFile';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type BiomassMeasurementDetailsProps = {
@@ -189,60 +187,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     }
   }, [biomassMeasurements, setShowPageMessage, setUnrecognizedSpecies]);
 
-  const downloadCsv = useCallback(
-    async (fileNameSuffix: string, fetchContent: (observationId: number) => Promise<string | null>) => {
-      if (observation) {
-        const content = await fetchContent(observation.observationId);
-
-        if (content !== null && plantingSite) {
-          const fileName = sanitize(`${plantingSite.name}-${observation?.startDate}-${fileNameSuffix}.csv`);
-
-          const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
-
-          const link = document.createElement('a');
-          link.setAttribute('href', encodedUri);
-          link.setAttribute('download', fileName);
-          link.click();
-        }
-      }
-    },
-    [observation, plantingSite]
-  );
-
-  const exportDetailsCsv = useCallback(async () => {
-    await downloadCsv(strings.BIOMASS_MONITORING, ObservationsService.exportBiomassDetailsCsv);
-  }, [downloadCsv]);
-
-  const exportSpeciesCsv = useCallback(async () => {
-    await downloadCsv(strings.SPECIES, ObservationsService.exportBiomassSpeciesCsv);
-  }, [downloadCsv]);
-
-  const exportTreesShrubsCsv = useCallback(async () => {
-    await downloadCsv(strings.TREES_AND_SHRUBS, ObservationsService.exportBiomassTreesShrubsCsv);
-  }, [downloadCsv]);
-
-  const exportAllCsvs = useCallback(async () => {
-    if (observation && plantingSite) {
-      await downloadZipFile({
-        dirName: sanitize(`${plantingSite.name}-${observation.startDate}`),
-        files: [
-          {
-            fileName: strings.BIOMASS_MONITORING,
-            content: () => ObservationsService.exportBiomassDetailsCsv(observation.observationId),
-          },
-          {
-            fileName: strings.SPECIES,
-            content: () => ObservationsService.exportBiomassSpeciesCsv(observation.observationId),
-          },
-          {
-            fileName: strings.TREES_AND_SHRUBS,
-            content: () => ObservationsService.exportBiomassTreesShrubsCsv(observation.observationId),
-          },
-        ],
-        suffix: '.csv',
-      });
-    }
-  }, [observation, plantingSite]);
+  const exportAllCsvs = useExportBiomassDetailsZip(observation, plantingSite);
 
   const onSaveMergedSpecies = useOnSaveMergedSpecies({
     observationId,
@@ -259,24 +204,9 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
         <OptionsMenu
           optionItems={[
             {
-              label: strings.EXPORT_ALL_ZIP,
+              label: strings.EXPORT_OBSERVATION_DETAILS_CSV,
               value: 'exportAll',
               onClick: () => void exportAllCsvs(),
-            },
-            {
-              label: strings.EXPORT_BIOMASS_MONITORING_DETAILS_CSV,
-              value: 'exportDetails',
-              onClick: () => void exportDetailsCsv(),
-            },
-            {
-              label: strings.EXPORT_SPECIES_CSV,
-              value: 'exportSpecies',
-              onClick: () => void exportSpeciesCsv(),
-            },
-            {
-              label: strings.EXPORT_TREES_AND_SHRUBS_CSV,
-              value: 'exportTreesAndShrubs',
-              onClick: () => void exportTreesShrubsCsv(),
             },
             {
               label: strings.MATCH_UNRECOGNIZED_SPECIES,
