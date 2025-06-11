@@ -87,13 +87,14 @@ export default function Accession2View(): JSX.Element {
   };
 
   const seedBankTimeZone = useMemo(() => {
-    const facility = accession?.facilityId
-      ? FacilityService.getFacility({
-          organization: selectedOrganization!,
-          facilityId: accession.facilityId,
-          type: 'Seed Bank',
-        })
-      : undefined;
+    const facility =
+      accession?.facilityId && selectedOrganization
+        ? FacilityService.getFacility({
+            organization: selectedOrganization,
+            facilityId: accession.facilityId,
+            type: 'Seed Bank',
+          })
+        : undefined;
     const tz = locationTimeZone.get(facility);
     return tz.id;
   }, [accession?.facilityId, selectedOrganization, locationTimeZone]);
