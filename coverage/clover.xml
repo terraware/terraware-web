@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1749749084825" clover="3.2.0">
-  <project timestamp="1749749084825" name="All files">
-    <metrics statements="30813" coveredstatements="1296" conditionals="21345" coveredconditionals="388" methods="9477" coveredmethods="211" elements="61635" coveredelements="1895" complexity="0" loc="30813" ncloc="30813" packages="266" files="1278" classes="1278"/>
+<coverage generated="1749749804005" clover="3.2.0">
+  <project timestamp="1749749804005" name="All files">
+    <metrics statements="30815" coveredstatements="1296" conditionals="21347" coveredconditionals="388" methods="9477" coveredmethods="211" elements="61639" coveredelements="1895" complexity="0" loc="30815" ncloc="30815" packages="266" files="1278" classes="1278"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5615,7 +5615,7 @@
       </file>
     </package>
     <package name="src.components.ProjectField">
-      <metrics statements="221" coveredstatements="0" conditionals="158" coveredconditionals="0" methods="76" coveredmethods="0"/>
+      <metrics statements="223" coveredstatements="0" conditionals="160" coveredconditionals="0" methods="76" coveredmethods="0"/>
       <file name="ApplicationStatusLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/ApplicationStatusLink.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -5703,14 +5703,16 @@
         <line num="19" count="0" type="stmt"/>
       </file>
       <file name="Link.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/Link.tsx">
-        <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="9" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
       </file>
       <file name="MinMaxCarbonTextfield.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/MinMaxCarbonTextfield.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
