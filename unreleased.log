@@ -1,3 +1,4 @@
+b8c8a5c128f Removed funding entities feature flag (#4165)
 13b0e304620 SW-7067 Fix geometry message link showing in console but not in participant side (#4164)
 e1f951a1bb3 Updated translations from Phrase (#4163)
 f8510ec1a38 Remove unused selectors (#4161)
