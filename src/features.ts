@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Funding Entities';
+export type FeatureName = 'Show Production View';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Funding Entities',
-    preferenceName: 'enableFundingEntities',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Enable Funding Entities.'],
-    disclosure: ['This is a WIP'],
   },
 ];
 

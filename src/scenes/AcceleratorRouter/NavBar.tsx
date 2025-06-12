@@ -9,7 +9,6 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUser } from 'src/providers';
@@ -37,8 +36,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isPeopleRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PEOPLE, end: false });
   const isScoringRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_SCORES, end: false });
   const isVotingRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_VOTES, end: false });
-
-  const isFundingEntitiesEnabled = isEnabled('Funding Entities');
 
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
   const isAllowedViewFundingEntities = isAllowed('READ_FUNDING_ENTITIES');
@@ -145,7 +142,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         selected={!!isModuleContentRoute}
       />
 
-      {isFundingEntitiesEnabled && isAllowedViewFundingEntities && (
+      {isAllowedViewFundingEntities && (
         <NavItem
           icon='iconCoinInHand'
           id='funding-entities'
