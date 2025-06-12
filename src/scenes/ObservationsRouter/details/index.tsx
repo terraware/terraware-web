@@ -72,7 +72,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [query]);
 
   const observationsResults = useAppSelector((state) =>
-    !selectedOrganization?.id
+    !selectedOrganization
       ? undefined
       : searchObservations(
           state,
@@ -94,7 +94,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [observationsResults, observationId]);
 
   const details = useAppSelector((state) =>
-    !selectedOrganization?.id
+    !selectedOrganization
       ? undefined
       : searchObservationDetails(
           state,
@@ -136,9 +136,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) =>
-    !selectedOrganization?.id
-      ? []
-      : selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
+    !selectedOrganization ? [] : selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
   );
 
   const title = useMemo(() => {
