@@ -56,7 +56,7 @@ const OnboardingHomeView = () => {
 
   useEffect(() => {
     const populatePeople = async () => {
-      if (selectedOrganization && isOwner(selectedOrganization)) {
+      if (isOwner(selectedOrganization)) {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {
           setPeople(response.users);
@@ -76,7 +76,7 @@ const OnboardingHomeView = () => {
   }, [dispatch, selectedOrganization]);
 
   const isLoadingInitialData = useMemo(
-    () => allSpecies === undefined || (selectedOrganization && isOwner(selectedOrganization) && people === undefined),
+    () => allSpecies === undefined || (isOwner(selectedOrganization) && people === undefined),
     [allSpecies, people, selectedOrganization]
   );
 

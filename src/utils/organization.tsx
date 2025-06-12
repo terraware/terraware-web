@@ -20,19 +20,18 @@ export const getSeedBank = (organization: Organization, facilityId: number): Fac
   return getAllSeedBanks(organization).find((sb) => sb?.id === facilityId);
 };
 
-export const isOwner = (organization: Organization | undefined) => {
+export const isOwner = <T extends Organization>(organization: T | undefined): organization is T => {
   return organization?.role === 'Owner';
 };
 
-export const isAdmin = (organization: Organization | undefined) => {
-  return HighOrganizationRolesValues.includes(organization?.role || '');
-};
+export const isAdmin = <T extends Organization>(organization: T | undefined): organization is T =>
+  HighOrganizationRolesValues.includes(organization?.role || '');
 
-export const isManagerOrHigher = (organization: Organization | undefined) => {
+export const isManagerOrHigher = <T extends Organization>(organization: T | undefined): organization is T => {
   return organization?.role === 'Manager' || isAdmin(organization);
 };
 
-export const isMember = (organization: Organization | undefined) => {
+export const isMember = <T extends Organization>(organization: T | undefined): organization is T => {
   return !!organization;
 };
 

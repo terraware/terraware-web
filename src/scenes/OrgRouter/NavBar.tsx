@@ -233,7 +233,6 @@ export default function NavBar({
     () =>
       currentParticipantProject &&
       !!orgFeatures?.data?.modules?.enabled &&
-      selectedOrganization &&
       isManagerOrHigher(selectedOrganization) &&
       activeLocale ? (
         <NavItem

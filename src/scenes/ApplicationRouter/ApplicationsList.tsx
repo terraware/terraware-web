@@ -21,7 +21,7 @@ const ApplicationListView = () => {
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (selectedOrganization && isAdmin(selectedOrganization) && allApplications && allApplications.length === 0) {
+    if (isAdmin(selectedOrganization) && allApplications && allApplications.length === 0) {
       setIsNewApplicationModalOpen(true);
     }
   }, [allApplications, selectedOrganization, setIsNewApplicationModalOpen]);

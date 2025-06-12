@@ -205,7 +205,7 @@ const TerrawareHomeView = () => {
       },
     ];
 
-    if (!plantingSites?.length && selectedOrganization && isAdmin(selectedOrganization)) {
+    if (!plantingSites?.length && isAdmin(selectedOrganization)) {
       rows.push({
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
