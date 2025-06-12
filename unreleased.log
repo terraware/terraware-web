@@ -1,3 +1,5 @@
+d14338532ce SW-7020 Show live plant counts in species graphs (#4156)
+59edb472d8c SW-6995 Include plot coordinates in observation CSV (#4155)
 267fdeb16fa SW-6844 Rename biomass species CSV (#4153)
 275c45e814c Fix E2E Tests (#4158)
 00aa572c81a SW-7071: Zone & Plot level observation detail views are not accessible (#4157)
