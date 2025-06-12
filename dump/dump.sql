@@ -247,10 +247,14 @@ COMMENT ON EXTENSION vector IS 'vector data type and ivfflat and hnsw access met
 
 CREATE FUNCTION docprod.reject_delete() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RAISE 'This table does not allow deletes.';
-END;
+    AS $$
+
+BEGIN
+
+    RAISE 'This table does not allow deletes.';
+
+END;
+
 $$;
 
 
@@ -260,15 +264,24 @@ $$;
 
 CREATE FUNCTION docprod.reject_delete_value() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM documents WHERE id = OLD.document_id) THEN
-        RAISE 'This table does not allow deletes.';
-    ELSE
-        -- The entire document is being deleted.
-        RETURN OLD;
-    END IF;
-END;
+    AS $$
+
+BEGIN
+
+    IF EXISTS (SELECT 1 FROM documents WHERE id = OLD.document_id) THEN
+
+        RAISE 'This table does not allow deletes.';
+
+    ELSE
+
+        -- The entire document is being deleted.
+
+        RETURN OLD;
+
+    END IF;
+
+END;
+
 $$;
 
 
@@ -285,14 +298,22 @@ COMMENT ON FUNCTION docprod.reject_delete_value() IS 'Trigger function that reje
 
 CREATE FUNCTION docprod.reject_delete_value_child() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM variable_values WHERE id = OLD.variable_value_id) THEN
-        RAISE 'This table does not allow deletes.';
-    ELSE
-        RETURN OLD;
-    END IF;
-END;
+    AS $$
+
+BEGIN
+
+    IF EXISTS (SELECT 1 FROM variable_values WHERE id = OLD.variable_value_id) THEN
+
+        RAISE 'This table does not allow deletes.';
+
+    ELSE
+
+        RETURN OLD;
+
+    END IF;
+
+END;
+
 $$;
 
 
@@ -302,10 +323,14 @@ $$;
 
 CREATE FUNCTION docprod.reject_update() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RAISE 'This table does not allow updates.';
-END;
+    AS $$
+
+BEGIN
+
+    RAISE 'This table does not allow updates.';
+
+END;
+
 $$;
 
 
@@ -315,19 +340,32 @@ $$;
 
 CREATE FUNCTION docprod.reject_update_value() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF (OLD.created_by != -1 AND NEW.created_by = -1
-        AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.created_by))
-        OR (OLD.verified_by != -1 AND NEW.verified_by = -1
-            AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.verified_by))
-    THEN
-        RAISE 'This table does not allow updates.';
-    ELSE
-        -- This is an update triggered by a user being deleted.
-        RETURN NEW;
-    END IF;
-END;
+    AS $$
+
+BEGIN
+
+    IF (OLD.created_by != -1 AND NEW.created_by = -1
+
+        AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.created_by))
+
+        OR (OLD.verified_by != -1 AND NEW.verified_by = -1
+
+            AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.verified_by))
+
+    THEN
+
+        RAISE 'This table does not allow updates.';
+
+    ELSE
+
+        -- This is an update triggered by a user being deleted.
+
+        RETURN NEW;
+
+    END IF;
+
+END;
+
 $$;
 
 
@@ -337,22 +375,38 @@ $$;
 
 CREATE FUNCTION public.column_exists(ptable text, pcolumn text) RETURNS boolean
     LANGUAGE sql STABLE STRICT
-    AS $$
-
-    -- does the requested table.column exist in schema?
-
-SELECT EXISTS
-
-           (SELECT NULL
-
-            FROM information_schema.columns
-
-            WHERE table_name = ptable
-
-              AND column_name = pcolumn
-
-           );
-
+    AS $$
+
+
+
+    -- does the requested table.column exist in schema?
+
+
+
+SELECT EXISTS
+
+
+
+           (SELECT NULL
+
+
+
+            FROM information_schema.columns
+
+
+
+            WHERE table_name = ptable
+
+
+
+              AND column_name = pcolumn
+
+
+
+           );
+
+
+
 $$;
 
 
@@ -362,22 +416,38 @@ $$;
 
 CREATE FUNCTION public.rename_column_if_exists(ptable text, pcolumn text, new_name text) RETURNS void
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-    -- Rename the column if it exists.
-
-    IF column_exists(ptable, pcolumn) THEN
-
-        EXECUTE FORMAT('ALTER TABLE %I RENAME COLUMN %I TO %I;',
-
-                       ptable, pcolumn, new_name);
-
-    END IF;
-
-END
-
+    AS $$
+
+
+
+BEGIN
+
+
+
+    -- Rename the column if it exists.
+
+
+
+    IF column_exists(ptable, pcolumn) THEN
+
+
+
+        EXECUTE FORMAT('ALTER TABLE %I RENAME COLUMN %I TO %I;',
+
+
+
+                       ptable, pcolumn, new_name);
+
+
+
+    END IF;
+
+
+
+END
+
+
+
 $$;
 
 
@@ -12837,7 +12907,7 @@ COPY public.users (id, auth_id, email, first_name, last_name, created_time, modi
 2	DISABLED	system	Terraware	System	2022-10-25 17:51:42.24661+00	2022-10-25 17:51:42.24661+00	4	\N	f	\N	\N	\N	\N	\N	\N
 3	\N	pending@terraformation.com	\N	\N	2025-05-21 21:42:18.239617+00	2025-05-21 21:42:18.23963+00	5	\N	f	\N	\N	\N	\N	\N	\N
 4	157cf509-d3e6-4bde-9e0d-d4ac07e2b721	funder@terraformation.com	Test	Funder	2025-05-21 21:42:25.83028+00	2025-05-21 21:45:27.385204+00	5	2025-05-21 21:46:29.411+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
-1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-06-04 16:47:39.765+00	f	\N	Etc/UTC	\N	\N	t	2024-06-11 21:53:16.594086+00
+1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-06-04 16:47:39.765+00	f	\N	Etc/UTC	\N	\N	t	2025-06-11 21:53:16.594086+00
 \.
 
 
