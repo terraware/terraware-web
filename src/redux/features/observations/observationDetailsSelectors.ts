@@ -35,7 +35,11 @@ export const selectObservationDetails = createSelector(
     observationsResults?.find((observation: ObservationResults) => observation.observationId === params.observationId)
 );
 
-export const searchObservationDetails = createCachedSelector(
+export const searchObservationDetails: (
+  state: RootState,
+  params: DetailsSearchParams,
+  defaultTimeZone: string
+) => ObservationResults | undefined = createCachedSelector(
   selectObservationDetails,
   (state: RootState, params: DetailsSearchParams, defaultTimeZone: string) => params,
   (observation, params) => searchResultZones(params.search, params.zoneNames, observation)
@@ -47,7 +51,12 @@ export const searchObservationDetails = createCachedSelector(
 );
 
 // get zone names in observation result
-export const selectDetailsZoneNames = createCachedSelector(
+export const selectDetailsZoneNames: (
+  state: RootState,
+  plantingSiteId: number,
+  observationId: number,
+  organizationId: number
+) => string[] = createCachedSelector(
   (state: RootState, plantingSiteId: number, observationId: number, orgId: number) =>
     selectObservationDetails(state, { plantingSiteId, observationId, orgId, search: '', zoneNames: [] }, ''),
   (details) =>
