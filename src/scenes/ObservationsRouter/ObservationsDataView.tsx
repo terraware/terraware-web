@@ -73,20 +73,29 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   }, [allAdHocObservationResults, selectedPlantingSite]);
 
   const zoneNames = useAppSelector((state) =>
-    selectObservationsZoneNames(state, selectedPlantingSiteId, searchProps.filtersProps?.filters.status?.values)
+    selectedOrganization
+      ? selectObservationsZoneNames(
+          state,
+          selectedPlantingSiteId,
+          selectedOrganization.id,
+          searchProps.filtersProps?.filters.status?.values
+        )
+      : undefined
   );
 
   useEffect(() => {
-    setFilterOptions({
-      zone: {
-        partial: false,
-        values: zoneNames,
-      },
-      status: {
-        partial: false,
-        values: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
-      },
-    });
+    if (zoneNames !== undefined) {
+      setFilterOptions({
+        zone: {
+          partial: false,
+          values: zoneNames,
+        },
+        status: {
+          partial: false,
+          values: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
+        },
+      });
+    }
   }, [setFilterOptions, zoneNames]);
 
   return (
