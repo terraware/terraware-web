@@ -16,8 +16,8 @@ const ProjectFieldLink = ({ label, value }: ProjectFieldProps) => {
       window.open(value as string, '_blank');
     } else {
       void navigate(value as string);
+      window.scroll(0, 0);
     }
-    window.scroll(0, 0);
   }, [navigate, value]);
 
   return (
