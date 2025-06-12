@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1749750176985" clover="3.2.0">
-  <project timestamp="1749750176985" name="All files">
-    <metrics statements="30816" coveredstatements="1296" conditionals="21351" coveredconditionals="388" methods="9477" coveredmethods="211" elements="61644" coveredelements="1895" complexity="0" loc="30816" ncloc="30816" packages="266" files="1278" classes="1278"/>
+<coverage generated="1749753083603" clover="3.2.0">
+  <project timestamp="1749753083603" name="All files">
+    <metrics statements="30816" coveredstatements="1296" conditionals="21343" coveredconditionals="388" methods="9477" coveredmethods="211" elements="61636" coveredelements="1895" complexity="0" loc="30816" ncloc="30816" packages="266" files="1278" classes="1278"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -22734,7 +22734,7 @@
       </file>
     </package>
     <package name="src.scenes.Home.TerrawareHomeView">
-      <metrics statements="112" coveredstatements="0" conditionals="182" coveredconditionals="0" methods="42" coveredmethods="0"/>
+      <metrics statements="112" coveredstatements="0" conditionals="180" coveredconditionals="0" methods="42" coveredmethods="0"/>
       <file name="OrganizationStatsCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/OrganizationStatsCard.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
@@ -22745,7 +22745,7 @@
         <line num="44" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteStats.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/PlantingSiteStats.tsx">
-        <metrics statements="32" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="32" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
@@ -22777,7 +22777,7 @@
         <line num="131" count="0" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
         <line num="205" count="0" type="stmt"/>
-        <line num="220" count="0" type="stmt"/>
+        <line num="218" count="0" type="stmt"/>
       </file>
       <file name="StatsCardItem.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/StatsCardItem.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -22861,7 +22861,7 @@
       </file>
     </package>
     <package name="src.scenes.InventoryRouter">
-      <metrics statements="829" coveredstatements="0" conditionals="754" coveredconditionals="0" methods="257" coveredmethods="0"/>
+      <metrics statements="829" coveredstatements="0" conditionals="752" coveredconditionals="0" methods="257" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/BatchDetails.tsx">
         <metrics statements="26" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
@@ -23581,7 +23581,7 @@
         <line num="202" count="0" type="stmt"/>
       </file>
       <file name="InventoryV2View.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/InventoryV2View.tsx">
-        <metrics statements="47" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="15" coveredmethods="0"/>
+        <metrics statements="47" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="15" coveredmethods="0"/>
         <line num="27" count="0" type="stmt"/>
         <line num="121" count="0" type="stmt"/>
         <line num="122" count="0" type="stmt"/>
@@ -27589,7 +27589,7 @@
       </file>
     </package>
     <package name="src.scenes.PeopleRouter">
-      <metrics statements="265" coveredstatements="0" conditionals="176" coveredconditionals="0" methods="68" coveredmethods="0"/>
+      <metrics statements="265" coveredstatements="0" conditionals="172" coveredconditionals="0" methods="68" coveredmethods="0"/>
       <file name="CannotRemovePeopleModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PeopleRouter/CannotRemovePeopleModal.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -27689,7 +27689,7 @@
         <line num="241" count="0" type="stmt"/>
       </file>
       <file name="PeopleListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PeopleRouter/PeopleListView.tsx">
-        <metrics statements="134" coveredstatements="0" conditionals="81" coveredconditionals="0" methods="38" coveredmethods="0"/>
+        <metrics statements="134" coveredstatements="0" conditionals="79" coveredconditionals="0" methods="38" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
@@ -27821,12 +27821,12 @@
         <line num="324" count="0" type="stmt"/>
         <line num="329" count="0" type="stmt"/>
         <line num="330" count="0" type="stmt"/>
-        <line num="393" count="0" type="stmt"/>
-        <line num="413" count="0" type="stmt"/>
-        <line num="422" count="0" type="stmt"/>
+        <line num="385" count="0" type="stmt"/>
+        <line num="405" count="0" type="stmt"/>
+        <line num="414" count="0" type="stmt"/>
       </file>
       <file name="PersonDetailsView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PeopleRouter/PersonDetailsView.tsx">
-        <metrics statements="28" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="28" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
