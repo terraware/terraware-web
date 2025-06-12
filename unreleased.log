@@ -1,3 +1,5 @@
+13b0e304620 SW-7067 Fix geometry message link showing in console but not in participant side (#4164)
+e1f951a1bb3 Updated translations from Phrase (#4163)
 f8510ec1a38 Remove unused selectors (#4161)
 f8a830ea63e Fix malformed organization ternary expressions (#4162)
 9201b5e6752 Declare cached selector types; fix missing parameter (#4160)
