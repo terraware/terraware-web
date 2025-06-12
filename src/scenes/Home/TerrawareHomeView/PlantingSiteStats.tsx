@@ -209,9 +209,7 @@ export const PlantingSiteStats = () => {
               {strings.VIEW_FULL_DASHBOARD}
             </Link>
             <Box>
-              {selectedOrganization ? (
-                isAdmin(selectedOrganization)
-              ) : false ? (
+              {isAdmin(selectedOrganization) && (
                 <AddLink
                   disabled={false}
                   id='add-planting-site'
@@ -221,7 +219,7 @@ export const PlantingSiteStats = () => {
                   }}
                   text={strings.ADD_PLANTING_SITE}
                 />
-              ) : null}
+              )}
             </Box>
           </Grid>
         </Grid>
