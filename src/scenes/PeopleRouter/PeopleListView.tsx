@@ -356,20 +356,12 @@ export default function PeopleListView(): JSX.Element {
               marginBottom: '32px',
             }}
           >
-            {selectedOrganization
-              ? isAdmin(selectedOrganization)
-              : false &&
-                (isMobile ? (
-                  <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
-                ) : (
-                  <Button
-                    id='new-person'
-                    label={strings.ADD_PERSON}
-                    icon='plus'
-                    onClick={goToNewPerson}
-                    size='medium'
-                  />
-                ))}
+            {isAdmin(selectedOrganization) &&
+              (isMobile ? (
+                <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
+              ) : (
+                <Button id='new-person' label={strings.ADD_PERSON} icon='plus' onClick={goToNewPerson} size='medium' />
+              ))}
           </Grid>
           <PageSnackbar />
         </Grid>
