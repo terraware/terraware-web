@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
@@ -339,7 +339,11 @@
 <a name='L274'></a><a href='#L274'>274</a>
 <a name='L275'></a><a href='#L275'>275</a>
 <a name='L276'></a><a href='#L276'>276</a>
-<a name='L277'></a><a href='#L277'>277</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -424,6 +428,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -434,6 +440,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -689,15 +697,17 @@ export default function <span class="fstat-no" title="function not covered" >Obs
   }, [query]);
 &nbsp;
   const observationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    searchObservations(</span>
-      state,
-      plantingSiteId,
-      selectedOrganization,
-      defaultTimeZone.get().id,
-      searchProps.search,
-      searchProps.filtersProps?.filters?.zone?.values ?? [],
-      status
-    )
+<span class="cstat-no" title="statement not covered" >    !selectedOrganization</span>
+      ? undefined
+      : searchObservations(
+          state,
+          plantingSiteId,
+          selectedOrganization.id,
+          defaultTimeZone.get().id,
+          searchProps.search,
+          searchProps.filtersProps?.filters?.zone?.values ?? [],
+          status
+        )
   );
 &nbsp;
   const selectedObservationResults = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -709,17 +719,19 @@ export default function <span class="fstat-no" title="function not covered" >Obs
   }, [observationsResults, observationId]);
 &nbsp;
   const details = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    searchObservationDetails(</span>
-      state,
-      {
-        plantingSiteId,
-        observationId,
-        orgId: selectedOrganization?.id || -1,
-        search: searchProps.search,
-        zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
-      },
-      defaultTimeZone.get().id
-    )
+<span class="cstat-no" title="statement not covered" >    !selectedOrganization</span>
+      ? undefined
+      : searchObservationDetails(
+          state,
+          {
+            plantingSiteId,
+            observationId,
+            orgId: selectedOrganization.id,
+            search: searchProps.search,
+            zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
+          },
+          defaultTimeZone.get().id
+        )
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -749,7 +761,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
   const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectObservation(state, plantingSiteId, observationId))</span>;</span>
   const zoneNames = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization)</span>
+<span class="cstat-no" title="statement not covered" >    !selectedOrganization ? [] : selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)</span>
   );
 &nbsp;
   const title = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -898,7 +910,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-11T18:17:56.299Z
+                at 2025-06-12T01:52:10.205Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
