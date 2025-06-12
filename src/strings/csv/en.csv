@@ -1199,6 +1199,7 @@ OBSERVATION_PERIOD_WARN,Observation period cannot exceed two months.,
 OBSERVATION_RECENCY,Observation Recency,
 OBSERVATION_RESCHEDULED,Observation rescheduled!,
 OBSERVATION_SCHEDULED,Observation scheduled!,
+OBSERVATION_SMALL_SITE_WARNING,"You are scheduling an Observation for a site that is potentially too small for the assignment of monitoring plots. You will be notified if there are problems with assigning the monitoring plots and starting the Observation. Alternatively, you can conduct an Ad Hoc Plot Observation for this site.",
 OBSERVATION_START_DATE,Observation Start Date,
 OBSERVATION_STATUS,Observation Status,
 OBSERVATION_STATUS_OUTSTANDING,Outstanding,Remaining to be done

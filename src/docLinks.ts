@@ -2,6 +2,7 @@ import { useLocalization } from 'src/providers';
 import { SupportedLocaleId } from 'src/strings/locales';
 
 export type DocType =
+  | 'ad_hoc_plots'
   | 'cookie_policy'
   | 'planting_site_create_boundary_instructions_video'
   | 'planting_site_create_exclusions_boundary_instructions_video'
@@ -18,6 +19,7 @@ type DocLink = Record<DocType, string>;
 
 const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
   en: {
+    ad_hoc_plots: 'https://knowledge.terraformation.com/hc/en-us/articles/36389038050708-Ad-Hoc-Plot-Observations',
     cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
@@ -37,6 +39,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
   },
   es: {
+    ad_hoc_plots: 'https://knowledge.terraformation.com/hc/en-us/articles/36389038050708-Ad-Hoc-Plot-Observations',
     cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
@@ -56,6 +59,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
   },
   fr: {
+    ad_hoc_plots: 'https://knowledge.terraformation.com/hc/en-us/articles/36389038050708-Ad-Hoc-Plot-Observations',
     cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
