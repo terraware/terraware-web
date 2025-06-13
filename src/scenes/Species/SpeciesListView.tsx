@@ -253,8 +253,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [activeLocale, filterColumns, filterOptions]);
 
   useEffect(() => {
-    if (!selectedOrganization) return;
-
+    if (!selectedOrganization) {
+      return;
+    }
     const getApiSearchResults = async () => {
       const searchParams: SearchRequestPayload = {
         prefix: 'species',
