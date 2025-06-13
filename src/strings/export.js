@@ -165,4 +165,21 @@ function generateGibberish(english) {
   return { ...gibberish, ...overrides };
 }
 
-module.exports = { convertCsvFile, generateGibberish };
+/**
+ * Converts the CSV files for all locales to JavaScript source files that export a symbol
+ * "strings." The list of locales is determined by the presence of CSV files.
+ */
+async function convertAllLocales(csvDir, stringsDir) {
+  const files = await fs.readdir(csvDir);
+  const conversions = files.map(async (filename) => {
+    if (filename.endsWith('.csv')) {
+      // eslint-disable no-console
+      console.log(`Converting ${filename} to JavaScript`);
+      await convertCsvFile(`${csvDir}/${filename}`, stringsDir);
+    }
+  });
+
+  await Promise.resolve(Promise.all(conversions));
+}
+
+module.exports = { convertAllLocales };
