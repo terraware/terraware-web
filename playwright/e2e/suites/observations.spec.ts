@@ -11,6 +11,11 @@ export default function ObservationsTests() {
   test('Schedule Observation', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
+
+    await page.getByRole('button', { name: 'My New Org-' }).click();
+    await page.getByRole('menuitem', { name: 'Terraformation (staging)' }).click();
+    await waitFor(page, '#home');
+
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
