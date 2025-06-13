@@ -121,7 +121,7 @@ export default function ScheduleObservationForm({
     }
 
     const _showSmallSiteWarning =
-      plantingSite && plantingSite.areaHa !== undefined && plantingSite.areaHa < WARN_IF_SITE_LESS_THAN_HECTARES;
+      plantingSite?.areaHa !== undefined && plantingSite.areaHa < WARN_IF_SITE_LESS_THAN_HECTARES;
 
     setStartDateError(_startDateError);
     setEndDateError(_endDateError);
