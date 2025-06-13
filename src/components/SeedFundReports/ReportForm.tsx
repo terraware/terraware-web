@@ -171,7 +171,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <OverviewItemCard
           isEditable={false}
           title={strings.SEED_BANKS}
-          contents={`${draftReport?.seedBanks?.filter((sb) => sb.selected)?.length}` ?? '0'}
+          contents={`${draftReport?.seedBanks?.filter((sb) => sb.selected)?.length}` || '0'}
           sx={infoCardStyle}
         />
       </Grid>
@@ -179,7 +179,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <OverviewItemCard
           isEditable={false}
           title={strings.NURSERIES}
-          contents={`${draftReport?.nurseries?.filter((n) => n.selected)?.length}` ?? '0'}
+          contents={`${draftReport?.nurseries?.filter((n) => n.selected)?.length}` || '0'}
           sx={infoCardStyle}
         />
       </Grid>
@@ -187,7 +187,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <OverviewItemCard
           isEditable={false}
           title={strings.PLANTING_SITES}
-          contents={`${draftReport?.plantingSites?.filter((ps) => ps.selected)?.length}` ?? '0'}
+          contents={`${draftReport?.plantingSites?.filter((ps) => ps.selected)?.length}` || '0'}
           sx={infoCardStyle}
         />
       </Grid>
