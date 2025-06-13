@@ -10,7 +10,9 @@ export type PersonData = {
 
 // default values pointing to nothing
 export const PersonContext = createContext<PersonData>({
-  setUserId: () => {},
+  setUserId: () => {
+    // no op for default
+  },
   userId: -1,
 });
 
