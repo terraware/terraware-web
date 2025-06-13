@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import _ from 'lodash';
@@ -112,6 +112,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       fontWeight={600}
       color={theme.palette.TwClrTxt}
       margin={theme.spacing(marginTop ?? 3, 0, marginBottom ?? 2)}
+      width='fit-content'
     >
       {text}
     </Typography>
@@ -193,7 +194,9 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
                 </Grid>
               ))}
             </Grid>
-            {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
+            <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
+              {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
+            </Tooltip>
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlot?.species} />
             </Box>

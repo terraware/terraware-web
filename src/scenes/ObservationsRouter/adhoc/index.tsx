@@ -174,6 +174,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       fontWeight={600}
       color={theme.palette.TwClrTxt}
       margin={theme.spacing(marginTop ?? 3, 0, marginBottom ?? 2)}
+      width='fit-content'
     >
       {text}
     </Typography>
@@ -278,7 +279,9 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
                 </Grid>
               )}
             </Grid>
-            {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
+            <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
+              {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
+            </Tooltip>
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlotSpecies} />
             </Box>
