@@ -207,17 +207,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     }
 
     return rows;
-  }, [
-    activeLocale,
-    columns,
-    debouncedSearchTerm,
-    extraTableFilters,
-    filters,
-    fuzzySearchColumns,
-    getSearchPayload,
-    rows,
-    searchSortOrder,
-  ]);
+  }, [activeLocale, columns, getSearchPayload, rows, searchAndSort, searchSortOrder]);
 
   const tableColumns = useMemo(
     () => (typeof columns === 'function' ? () => columns(activeLocale) : columns),
