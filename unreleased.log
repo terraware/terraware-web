@@ -1,3 +1,4 @@
+0bd09839828 SW-6800 Warn when scheduling observation of small site (#4168)
 d8e595a9033 Updated translations from Phrase (#4171)
 a5d0ce8b5c4 Convert strings CSV files for all locales on edit (#4169)
 6bacecb9c26 SW-7020 Tooltip for live plants graph titles (#4167)
