@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1749832485127" clover="3.2.0">
-  <project timestamp="1749832485127" name="All files">
-    <metrics statements="30786" coveredstatements="1296" conditionals="21321" coveredconditionals="388" methods="9459" coveredmethods="211" elements="61566" coveredelements="1895" complexity="0" loc="30786" ncloc="30786" packages="266" files="1278" classes="1278"/>
+<coverage generated="1749844659929" clover="3.2.0">
+  <project timestamp="1749844659930" name="All files">
+    <metrics statements="30792" coveredstatements="1296" conditionals="21323" coveredconditionals="388" methods="9461" coveredmethods="211" elements="61576" coveredelements="1895" complexity="0" loc="30792" ncloc="30792" packages="266" files="1278" classes="1278"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -33848,9 +33848,9 @@
       </file>
     </package>
     <package name="src.strings">
-      <metrics statements="68" coveredstatements="1" conditionals="21" coveredconditionals="0" methods="20" coveredmethods="0"/>
+      <metrics statements="74" coveredstatements="1" conditionals="23" coveredconditionals="0" methods="22" coveredmethods="0"/>
       <file name="export.js" path="/home/runner/work/terraware-web/terraware-web/src/strings/export.js">
-        <metrics statements="53" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="59" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -33903,7 +33903,13 @@
         <line num="159" count="0" type="stmt"/>
         <line num="162" count="0" type="stmt"/>
         <line num="165" count="0" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="175" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="178" count="0" type="stmt"/>
+        <line num="182" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/strings/index.tsx">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
