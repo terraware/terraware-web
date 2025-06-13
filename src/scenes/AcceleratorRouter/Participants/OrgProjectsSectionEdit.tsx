@@ -40,12 +40,14 @@ const OrgProjectsSectionEdit = ({
   const [selectedProject, setSelectedProject] = useState<string>(section.projectId?.toString());
   const dispatch = useAppDispatch();
   const projectDetailsRequest = useAppSelector(selectParticipantProjectRequest(Number(selectedProject)));
+  const [projectDetailsUpdated, setProjectDetailsUpdated] = useState<boolean>(false);
 
   useEffect(() => {
-    if (projectDetailsRequest?.status === 'success') {
+    if (projectDetailsRequest?.status === 'success' && !projectDetailsUpdated) {
       updateProjectDetails(section.projectId, undefined, undefined, projectDetailsRequest.data);
+      setProjectDetailsUpdated(true);
     }
-  }, [projectDetailsRequest, section.projectId, updateProjectDetails]);
+  }, [projectDetailsRequest, section.projectId, updateProjectDetails, projectDetailsUpdated]);
 
   useEffect(() => {
     onProjectSelect(section.id, Number(selectedProject));
