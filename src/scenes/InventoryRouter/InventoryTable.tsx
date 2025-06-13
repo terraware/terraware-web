@@ -113,9 +113,10 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         return selectedRows.some((row) => row.species_id && hasWithdrawableQuantity(row));
       case 'Nursery':
         return selectedRows.length === 1 && selectedRows.some((row) => hasWithdrawableQuantity(row));
-      case 'Batches':
+      case 'Batches': {
         const nurseries = new Set(selectedRows.map((row) => row.facility_id));
         return nurseries.size === 1 && selectedRows.some((row) => row.species_id && hasWithdrawableQuantity(row));
+      }
     }
   };
 

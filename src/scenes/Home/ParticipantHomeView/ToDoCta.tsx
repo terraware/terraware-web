@@ -30,7 +30,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
       case 'Workshop':
       case 'One-on-One Session':
       case 'Live Session':
-      case 'Recorded Session':
+      case 'Recorded Session': {
         const event = toDo as EventToDoItem;
 
         mixpanel?.track(MIXPANEL_EVENTS.PART_EX_TO_DO_UPCOMING_VIEW_EVENT, {
@@ -40,7 +40,8 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
           moduleId: event.moduleId,
         });
         return goToModuleEventSession(projectId, event.moduleId, event.id);
-      case 'Deliverable':
+      }
+      case 'Deliverable': {
         const deliverable = toDo as DeliverableToDoItem;
         mixpanel?.track(MIXPANEL_EVENTS.PART_EX_TO_DO_UPCOMING_VIEW_DELIVERABLE, {
           id: deliverable.id,
@@ -50,6 +51,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
           moduleId: deliverable.moduleId,
         });
         return goToDeliverable(deliverable.id, deliverable.projectId);
+      }
     }
   }, [goToDeliverable, goToModuleEventSession, projectId, toDo, mixpanel]);
 
