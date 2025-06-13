@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 import { RendererProps } from '@terraware/web-components/components/table/types';
@@ -77,19 +77,19 @@ const DocumentHistoryTab = (): JSX.Element => {
   const history = useAppSelector((state) => searchHistory(state, documentId, searchValue));
   useSelectorProcessor(history, setTableRows);
 
-  const [userIdsRequested, setUserIdsRequested] = useState<number[]>([]);
+  const userIdsRequested = useRef<number[]>([]);
 
   useEffect(() => {
     const newUserIdsRequested: number[] = [];
     const userIds = tableRows.map((row) => row.createdBy);
     userIds.forEach((userId) => {
-      if (!userIdsRequested.includes(userId) && !newUserIdsRequested.includes(userId)) {
+      if (!userIdsRequested.current.includes(userId) && !newUserIdsRequested.includes(userId)) {
         void dispatch(requestGetUser(userId));
         newUserIdsRequested.push(userId);
       }
     });
-    setUserIdsRequested((prev) => [...prev, ...newUserIdsRequested]);
-  }, [tableRows, dispatch, userIdsRequested]);
+    userIdsRequested.current = [...userIdsRequested.current, ...newUserIdsRequested];
+  }, [tableRows, dispatch]);
 
   useEffect(() => {
     // TODO should these be admin users? TF accelerator users?
