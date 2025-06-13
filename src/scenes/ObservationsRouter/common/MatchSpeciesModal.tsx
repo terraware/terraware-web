@@ -106,7 +106,7 @@ function MatchSpeciesRow(props: MatchSpeciesRowProps): JSX.Element {
       prevCopy.splice(found, 1);
       return [...prevCopy, record];
     });
-  }, [record]);
+  }, [record, setRecords]);
 
   return (
     <>

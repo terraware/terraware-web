@@ -153,7 +153,7 @@ const ModuleDetailsCard = ({
 
   const contents = useMemo(
     () => (module ? MODULE_CONTENTS(module, (type) => goToModuleContent(projectId, module.id, type)) : []),
-    [module, goToModuleContent]
+    [module, goToModuleContent, projectId]
   );
 
   return (

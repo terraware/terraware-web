@@ -35,7 +35,7 @@ const Metadata = (props: MetadataProps): JSX.Element => {
       reload();
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
-  }, [reviewAcceleratorReportResponse, snackbar]);
+  }, [reviewAcceleratorReportResponse, snackbar, reload]);
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string, status: AcceleratorReportStatus) => {
@@ -52,7 +52,7 @@ const Metadata = (props: MetadataProps): JSX.Element => {
       );
       setRequestId(request.requestId);
     },
-    [report]
+    [report, dispatch, projectId]
   );
 
   return (

@@ -63,13 +63,13 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
     if (saveReportResponse?.status === 'success') {
       goToAcceleratorReport(Number(reportId), Number(projectId));
     }
-  }, [projectId, reportId, saveReportResponse]);
+  }, [goToAcceleratorReport, projectId, reportId, saveReportResponse, snackbar]);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id?.toString()) {
       setCurrentParticipantProject(projectId);
     }
-  }, [currentParticipantProject?.id, projectId]);
+  }, [currentParticipantProject?.id, projectId, setCurrentParticipantProject]);
 
   const onChangeMetric = useCallback(
     (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) => {
@@ -84,7 +84,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
       });
       onChange(key, updatedMetrics);
     },
-    [onChange]
+    [onChange, record]
   );
 
   return (

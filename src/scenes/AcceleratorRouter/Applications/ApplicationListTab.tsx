@@ -141,7 +141,7 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
           }))
       );
     }
-  }, [result, setApplications, allFilterValues, snackbar]);
+  }, [result, setApplications, allFilterValues, snackbar, countries]);
 
   const searchAndSort: SearchAndSortFn<Application> = useCallback(
     (results: Application[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {

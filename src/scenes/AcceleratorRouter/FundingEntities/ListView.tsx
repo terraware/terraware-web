@@ -50,7 +50,7 @@ const FundingEntitiesListView = () => {
       const request = dispatch(requestFundingEntities());
       setListRequestId(request.requestId);
     }
-  }, [activeLocale]);
+  }, [activeLocale, dispatch]);
 
   useEffect(() => {
     if (!listRequest) {
@@ -95,7 +95,7 @@ const FundingEntitiesListView = () => {
         renderOption: (id: string | number) => allProjects[id] || '',
       },
     ],
-    [allProjects, fundingEntities]
+    [allProjects, activeLocale]
   );
 
   const actionMenus = useMemo<ReactNode | null>(() => {

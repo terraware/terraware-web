@@ -68,10 +68,10 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   }, [eventToEdit, availableCohorts]);
 
   useEffect(() => {
-    if (module?.id) {
+    if (moduleId) {
       void dispatch(requestListModuleCohorts(moduleId.toString()));
     }
-  }, [module?.id]);
+  }, [dispatch, moduleId]);
 
   useEffect(() => {
     if (result?.status === 'success' && !availableCohorts) {
@@ -83,7 +83,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
       setAvailableCohorts(cohortsToSelect);
     }
-  }, [result, projectsSections]);
+  }, [result, projectsSections, availableCohorts]);
 
   const theme = useTheme();
 
