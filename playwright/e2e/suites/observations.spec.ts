@@ -53,7 +53,7 @@ export default function ObservationsTests() {
     await page.getByRole('button', { name: 'Observations' }).click();
 
     // wait for table rows to load
-    await waitFor(page, '#row2');
+    await waitFor(page, '#row1');
 
     // open action menu
     await page
