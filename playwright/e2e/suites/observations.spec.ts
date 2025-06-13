@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-import { navigateToProjectProfile } from '../utils/navigation';
 import { addCookies, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
@@ -22,7 +21,6 @@ export default function ObservationsTests() {
 
     // select planting site & zones
     await page.locator('#site').click();
-    // await page.locator('li').filter({ hasText: 'PS1' }).click();
     await page.locator('li.select-value').first().click();
     await page.getByLabel('Select All').click();
 
@@ -45,6 +43,7 @@ export default function ObservationsTests() {
   test('Reschedule Observation', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
+
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
@@ -52,7 +51,6 @@ export default function ObservationsTests() {
     await waitFor(page, '#row2');
 
     // open action menu
-    // await page.locator('tr').filter({ hasText: 'In Progress' }).first().locator('td button').click();
     await page
       .locator('tr')
       .filter({ hasText: 'In Progress' })
@@ -60,7 +58,6 @@ export default function ObservationsTests() {
       .getByLabel('More Options')
       .getByRole('button')
       .click();
-    // await page.getByRole('row', { name: 'June 2025 In Progress PS2' }).getByLabel('More Options').getByRole('button');
 
     // click reschedule
     await page.getByRole('menuitem', { name: 'Reschedule' }).click();
@@ -85,6 +82,7 @@ export default function ObservationsTests() {
   test('End Observation', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
+
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
