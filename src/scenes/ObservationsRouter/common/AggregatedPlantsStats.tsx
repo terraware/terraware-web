@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Tooltip } from '@terraware/web-components';
+import { Icon, Tooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
@@ -34,6 +34,7 @@ export default function AggregatedPlantsStats({
   const { isMobile } = useDeviceInfo();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
+  const theme = useTheme();
 
   const handleMissingData = (num?: number) => (!completedTime && !num ? '' : num);
 
@@ -66,9 +67,14 @@ export default function AggregatedPlantsStats({
         <Grid item xs={chartGridSize}>
           <ChartWrapper
             title={
-              <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
-                <>{strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}</>
-              </Tooltip>
+              <Box display='flex'>
+                {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+                <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
+                  <Box display='flex' marginLeft={1}>
+                    <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                  </Box>
+                </Tooltip>
+              </Box>
             }
           >
             <SpeciesTotalPlantsChart species={species} minHeight='170px' />

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
@@ -167,14 +167,13 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
     ];
   }, [activeLocale, defaultTimeZone, monitoringPlotResult, plantingSite, plantingZone, plantingSubzone]);
 
-  const title = (text: string, marginTop?: number, marginBottom?: number) => (
+  const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
     <Typography
       fontSize='20px'
       lineHeight='28px'
       fontWeight={600}
       color={theme.palette.TwClrTxt}
       margin={theme.spacing(marginTop ?? 3, 0, marginBottom ?? 2)}
-      width='fit-content'
     >
       {text}
     </Typography>
@@ -279,9 +278,16 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
                 </Grid>
               )}
             </Grid>
-            <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
-              {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
-            </Tooltip>
+            {title(
+              <Box display='flex'>
+                {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+                <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
+                  <Box display='flex' marginLeft={1}>
+                    <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='medium' />
+                  </Box>
+                </Tooltip>
+              </Box>
+            )}
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlotSpecies} />
             </Box>
