@@ -34,7 +34,9 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
 
   const populateSpecies = useCallback(
     async (searchTerm: string) => {
-      if (!selectedOrganization) {return;}
+      if (!selectedOrganization) {
+        return;
+      }
       const requestId = Math.random().toString();
       setRequestId(`speciesSelectorSearch${id}`, requestId);
       const response: SuggestedSpecies[] | null = await SpeciesService.suggestSpecies(
