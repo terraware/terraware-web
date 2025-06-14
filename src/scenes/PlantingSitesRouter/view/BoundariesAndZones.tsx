@@ -308,7 +308,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
 
   return (
     <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
-      <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
+      <PlantingSiteMapLegend options={['site', 'zone', 'subzone']} />
       {mapData && plantingSite && (
         <PlantingSiteMap
           mapData={mapData}
@@ -330,7 +330,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
           topRightMapControl={
             <MapLayerSelect
               initialSelection={includedLayers}
-              onUpdateSelection={(selection) => setIncludedLayers(selection)}
+              onUpdateSelection={setIncludedLayers}
               menuSections={[
                 layerOptions.map((opt) => ({
                   label: layerOptionLabels[opt],
