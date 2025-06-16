@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { IconTooltip, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import _ from 'lodash';
 
@@ -105,14 +105,13 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     ];
   }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
 
-  const title = (text: string, marginTop?: number, marginBottom?: number) => (
+  const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
     <Typography
       fontSize='20px'
       lineHeight='28px'
       fontWeight={600}
       color={theme.palette.TwClrTxt}
       margin={theme.spacing(marginTop ?? 3, 0, marginBottom ?? 2)}
-      width='fit-content'
     >
       {text}
     </Typography>
@@ -194,9 +193,12 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
                 </Grid>
               ))}
             </Grid>
-            <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
-              {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
-            </Tooltip>
+            {title(
+              <Box display={'flex'}>
+                {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+                <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
+              </Box>
+            )}
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlot?.species} />
             </Box>
