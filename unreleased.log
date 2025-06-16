@@ -1,3 +1,4 @@
+0c08a53725c Add organization existence check to BatchDetailsForm (#4172)
 e84a2f2e59d Update node version on docs.yml (#4183)
 5009558f7b3 SW-7081 UI button/link placement is off in application when the project name is long (#4182)
 4261a8b55ac Update dependency jest to v30 (#4178)

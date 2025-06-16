@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1750088458262" clover="3.2.0">
-  <project timestamp="1750088458262" name="All files">
-    <metrics statements="30804" coveredstatements="1296" conditionals="21331" coveredconditionals="388" methods="9464" coveredmethods="211" elements="61599" coveredelements="1895" complexity="0" loc="30804" ncloc="30804" packages="266" files="1279" classes="1279"/>
+<coverage generated="1750090688748" clover="3.2.0">
+  <project timestamp="1750090688748" name="All files">
+    <metrics statements="30804" coveredstatements="1296" conditionals="21333" coveredconditionals="388" methods="9464" coveredmethods="211" elements="61601" coveredelements="1895" complexity="0" loc="30804" ncloc="30804" packages="266" files="1279" classes="1279"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -23735,7 +23735,7 @@
       </file>
     </package>
     <package name="src.scenes.InventoryRouter.form">
-      <metrics statements="195" coveredstatements="0" conditionals="186" coveredconditionals="0" methods="67" coveredmethods="0"/>
+      <metrics statements="195" coveredstatements="0" conditionals="188" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="AccessionsDropdown.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/AccessionsDropdown.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -23745,7 +23745,7 @@
         <line num="37" count="0" type="stmt"/>
       </file>
       <file name="BatchDetailsForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/BatchDetailsForm.tsx">
-        <metrics statements="116" coveredstatements="0" conditionals="122" coveredconditionals="0" methods="27" coveredmethods="0"/>
+        <metrics statements="116" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="27" coveredmethods="0"/>
         <line num="42" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
@@ -23794,7 +23794,7 @@
         <line num="131" count="0" type="stmt"/>
         <line num="137" count="0" type="stmt"/>
         <line num="143" count="0" type="stmt"/>
-        <line num="144" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="144" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="145" count="0" type="stmt"/>
         <line num="148" count="0" type="stmt"/>
         <line num="154" count="0" type="stmt"/>
