@@ -98,7 +98,13 @@ export default function ObservationsTests() {
     await waitFor(page, '#row1');
 
     // open action menu
-    await page.locator('tr').filter({ hasText: 'Overdue' }).first().locator('td button').click();
+    await page
+      .locator('tr')
+      .filter({ hasText: 'Overdue' })
+      .first()
+      .getByLabel('More Options')
+      .getByRole('button')
+      .click();
 
     // click reschedule
     await page.getByRole('menuitem', { name: 'End Observation' }).click();
