@@ -18,7 +18,7 @@ import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
-import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
+import { PlantingSiteHistory } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -29,26 +29,20 @@ import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
 export type ObservationType = 'plantMonitoring' | 'biomassMeasurements';
 
 type BoundariesAndZonesProps = {
-  plantingSite: PlantingSite;
   search?: string;
   setSearch: (query: string) => void;
   setView?: (view: View) => void;
   view?: View;
 };
 
-export default function BoundariesAndZones({
-  plantingSite,
-  search,
-  setSearch,
-  setView,
-  view,
-}: BoundariesAndZonesProps): JSX.Element {
+export default function BoundariesAndZones({ search, setSearch, setView, view }: BoundariesAndZonesProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
-  const [selectedObservationType, setSelectedObservationType] = useState<ObservationType>('plantMonitoring');
+  const [selectedPlotSelection, setSelectedPlotSelection] = useState('assigned');
+  const [selectedObservationType, setSelectedObservationType] = useState('plantMonitoring');
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter(activeLocale);
+  const { plantingSite } = usePlantingSiteData();
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -103,7 +97,7 @@ export default function BoundariesAndZones({
                 <Dropdown
                   placeholder={strings.SELECT}
                   id='plot-selection-selector'
-                  onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
+                  onChange={setSelectedPlotSelection}
                   options={[
                     { label: strings.ASSIGNED, value: 'assigned' },
                     { label: strings.AD_HOC, value: 'adHoc' },
@@ -121,7 +115,7 @@ export default function BoundariesAndZones({
               <Dropdown
                 placeholder={strings.SELECT}
                 id='observation-type-selector'
-                onChange={(newValue) => setSelectedObservationType(newValue as ObservationType)}
+                onChange={setSelectedObservationType}
                 options={[
                   { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
                   { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
@@ -133,7 +127,7 @@ export default function BoundariesAndZones({
           </Box>
         )}
       </Box>
-      {plantingSite.boundary && (
+      {plantingSite?.boundary && (
         <ListMapView
           style={{
             padding: isMobile ? theme.spacing(0, 3, 3) : 0,
@@ -161,8 +155,8 @@ export default function BoundariesAndZones({
           list={
             <PlantingSiteDetailsTable
               plantingSite={plantingSite}
-              plotSelection={selectedPlotSelection}
-              observationType={selectedObservationType}
+              plotSelection={selectedPlotSelection as PlotSelectionType}
+              observationType={selectedObservationType as ObservationType}
             />
           }
           map={<PlantingSiteMapView search={search ? search.trim() : ''} />}
@@ -211,8 +205,12 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
   };
 
   const mapData = useMemo(() => {
-    if (plantingSite && selectedHistory) {
-      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, selectedHistory);
+    if (plantingSite) {
+      if (selectedHistory) {
+        return MapService.getMapDataFromPlantingSiteHistory(plantingSite, selectedHistory);
+      } else {
+        return MapService.getMapDataFromPlantingSite(plantingSite);
+      }
     }
   }, [plantingSite, selectedHistory]);
 
