@@ -183,7 +183,9 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
   }, [plantingSiteHistories]);
 
   useEffect(() => {
-    if (!selectedHistory && plantingSiteHistories?.length) {
+    if (!plantingSiteHistories?.length) {
+      setSelectedHistory(undefined);
+    } else if (plantingSiteHistories.find((history) => history.id === selectedHistory?.id) === undefined) {
       setSelectedHistory(plantingSiteHistories[0]);
     }
   }, [plantingSiteHistories, selectedHistory]);
