@@ -1,3 +1,8 @@
+e84a2f2e59d Update node version on docs.yml (#4183)
+5009558f7b3 SW-7081 UI button/link placement is off in application when the project name is long (#4182)
+4261a8b55ac Update dependency jest to v30 (#4178)
+e5a43a3dee3 SW-7082 Plants Dashboard in Console does not load correctly if I viewed another project's plants dashboard in the same session (#4181)
+45f43dce741 Update dependency eslint-plugin-jsdoc to v51 (#4180)
 bd07848c1eb Update dependency slate-react to ^0.116.0 (#4177)
 b2368031306 Update dependency slate-dom to ^0.116.0 (#4174)
 87f35a73118 Update dependency slate to ^0.117.0 (#4173)
