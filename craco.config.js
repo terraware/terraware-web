@@ -1,7 +1,7 @@
 const chokidar = require('chokidar');
-const { convertCsvFile } = require('./src/strings/export');
 const fs = require('fs');
 const { whenDev } = require('@craco/craco');
+const { convertAllLocales } = require('./src/strings/export');
 
 module.exports = {
   devServer: (devServerConfig, { paths }) => ({
@@ -16,7 +16,7 @@ module.exports = {
       // change; the JS edits will be picked up by Webpack. The "add" event is fired when Chokidar
       // first discovers each file, which will cause JS to be generated as part of server
       // initialization.
-      const convert = (path) => convertCsvFile(path, 'src/strings');
+      const convert = () => convertAllLocales('src/strings/csv', 'src/strings');
       chokidar.watch('src/strings/csv/*.csv').on('add', convert).on('change', convert);
 
       if (fs.existsSync(paths.proxySetup)) {

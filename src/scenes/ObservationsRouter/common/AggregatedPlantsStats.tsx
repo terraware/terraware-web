@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Tooltip } from '@terraware/web-components';
+import { IconTooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
@@ -66,9 +66,10 @@ export default function AggregatedPlantsStats({
         <Grid item xs={chartGridSize}>
           <ChartWrapper
             title={
-              <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
-                <>{strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}</>
-              </Tooltip>
+              <Box display='flex'>
+                {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+                <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
+              </Box>
             }
           >
             <SpeciesTotalPlantsChart species={species} minHeight='170px' />
