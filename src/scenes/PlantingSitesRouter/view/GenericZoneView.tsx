@@ -36,11 +36,6 @@ const columns = (): TableColumnType[] => [
     type: 'number',
   },
   {
-    key: 'monitoringPlots',
-    name: strings.MONITORING_PLOTS,
-    type: 'number',
-  },
-  {
     key: 'latestObservationCompletedTime',
     name: strings.LAST_OBSERVED,
     type: 'string',
@@ -111,7 +106,7 @@ const DetailsRenderer =
   (timeZone: string) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
-    const { column, row, value } = props;
+    const { column, value } = props;
 
     const textStyles = {
       fontSize: '16px',
@@ -119,11 +114,6 @@ const DetailsRenderer =
         fontSize: '16px',
       },
     };
-
-    if (column.key === 'monitoringPlots') {
-      const numMonitoringPlots = row.monitoringPlots?.length;
-      return <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} sx={textStyles} />;
-    }
 
     if (column.key === 'areaHa') {
       return <CellRenderer {...props} value={value || ''} sx={textStyles} />;

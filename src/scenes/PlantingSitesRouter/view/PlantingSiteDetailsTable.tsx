@@ -56,11 +56,6 @@ const columns = (): TableColumnType[] => [
     type: 'number',
   },
   {
-    key: 'numPermanentPlots',
-    name: strings.MONITORING_PLOTS,
-    type: 'number',
-  },
-  {
     key: 'latestObservationCompletedTime',
     name: strings.LAST_OBSERVED,
     type: 'string',
