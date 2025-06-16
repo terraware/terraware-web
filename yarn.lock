@@ -14921,10 +14921,10 @@ slashes@^3.0.12:
   resolved "https://registry.yarnpkg.com/slashes/-/slashes-3.0.12.tgz#3d664c877ad542dc1509eaf2c50f38d483a6435a"
   integrity sha512-Q9VME8WyGkc7pJf6QEkj3wE+2CnvZMI+XJhwdTPR8Z/kWQRXi7boAWLDibRPyHRTUTPx5FaU7MsyrjI3yLB4HA==
 
-slate-dom@^0.114.0:
-  version "0.114.0"
-  resolved "https://registry.yarnpkg.com/slate-dom/-/slate-dom-0.114.0.tgz#7ea930db0d1b5c734fe6942ba20ac0dcb5cf3925"
-  integrity sha512-3LWIfiDPNQSY+SCPsvMTErCkx2gXTViLoWISisw6uM+unwiOkEF9ZmpHp88/SSmcq6k3P4aIquehUNeNUlkdiA==
+slate-dom@^0.116.0:
+  version "0.116.0"
+  resolved "https://registry.yarnpkg.com/slate-dom/-/slate-dom-0.116.0.tgz#d194e7487cdda092b6efdedd829e1d001f17933a"
+  integrity sha512-ZyyPdT4zY4d/P/gfqMWBaAWWqV3N2BbAiDqEfOtZwPLcy7vvC02PsVvSZLaGun7DvaM2EIqdN7tTq3REbQkYgA==
   dependencies:
     "@juggle/resize-observer" "^3.4.0"
     direction "^1.0.4"
