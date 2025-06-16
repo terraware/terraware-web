@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1750103924233" clover="3.2.0">
-  <project timestamp="1750103924233" name="All files">
-    <metrics statements="30802" coveredstatements="1296" conditionals="21333" coveredconditionals="388" methods="9464" coveredmethods="211" elements="61599" coveredelements="1895" complexity="0" loc="30802" ncloc="30802" packages="266" files="1279" classes="1279"/>
+<coverage generated="1750104858846" clover="3.2.0">
+  <project timestamp="1750104858846" name="All files">
+    <metrics statements="30801" coveredstatements="1296" conditionals="21333" coveredconditionals="388" methods="9463" coveredmethods="211" elements="61597" coveredelements="1895" complexity="0" loc="30801" ncloc="30801" packages="266" files="1279" classes="1279"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -28991,9 +28991,9 @@
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.view">
-      <metrics statements="416" coveredstatements="0" conditionals="393" coveredconditionals="0" methods="138" coveredmethods="0"/>
+      <metrics statements="415" coveredstatements="0" conditionals="393" coveredconditionals="0" methods="137" coveredmethods="0"/>
       <file name="BoundariesAndZones.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/view/BoundariesAndZones.tsx">
-        <metrics statements="82" coveredstatements="0" conditionals="97" coveredconditionals="0" methods="32" coveredmethods="0"/>
+        <metrics statements="81" coveredstatements="0" conditionals="97" coveredconditionals="0" methods="31" coveredmethods="0"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
@@ -29074,7 +29074,6 @@
         <line num="305" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="306" count="0" type="stmt"/>
         <line num="309" count="0" type="stmt"/>
-        <line num="333" count="0" type="stmt"/>
         <line num="335" count="0" type="stmt"/>
       </file>
       <file name="DraftPlantingSiteDetailsTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/view/DraftPlantingSiteDetailsTable.tsx">
