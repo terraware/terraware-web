@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
-import { Icon, Textfield } from '@terraware/web-components';
+import { Icon, IconTooltip, Textfield } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import Card from 'src/components/common/Card';
@@ -281,11 +281,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
             {title(
               <Box display='flex'>
                 {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
-                <Tooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
-                  <Box display='flex' marginLeft={1}>
-                    <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='medium' />
-                  </Box>
-                </Tooltip>
+                <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
               </Box>
             )}
             <Box height='360px'>
