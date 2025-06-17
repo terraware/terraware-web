@@ -151,7 +151,7 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
           topRightMapControl={
             <MapLayerSelect
               initialSelection={includedLayers}
-              onUpdateSelection={(selection) => setIncludedLayers(selection)}
+              onUpdateSelection={setIncludedLayers}
               menuSections={[
                 layerOptions.map((opt) => ({
                   label: layerOptionLabels[opt],
