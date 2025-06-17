@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
@@ -452,13 +452,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -519,7 +513,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -537,7 +530,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -607,6 +601,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -629,6 +625,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -785,7 +785,7 @@ import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
-import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
+import { PlantingSiteHistory } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -796,26 +796,20 @@ import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
 export type ObservationType = 'plantMonitoring' | 'biomassMeasurements';
 &nbsp;
 type BoundariesAndZonesProps = {
-  plantingSite: PlantingSite;
   search?: string;
   setSearch: (query: string) =&gt; void;
   setView?: (view: View) =&gt; void;
   view?: View;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >BoundariesAndZones(</span>{
-  plantingSite,
-  search,
-  setSearch,
-  setView,
-  view,
-}: BoundariesAndZonesProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >BoundariesAndZones(</span>{ search, setSearch, setView, view }: BoundariesAndZonesProps): JSX.Element {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const [selectedPlotSelection, setSelectedPlotSelection] = <span class="cstat-no" title="statement not covered" >useState&lt;PlotSelectionType&gt;('assigned');</span>
-  const [selectedObservationType, setSelectedObservationType] = <span class="cstat-no" title="statement not covered" >useState&lt;ObservationType&gt;('plantMonitoring');</span>
+  const [selectedPlotSelection, setSelectedPlotSelection] = <span class="cstat-no" title="statement not covered" >useState('assigned');</span>
+  const [selectedObservationType, setSelectedObservationType] = <span class="cstat-no" title="statement not covered" >useState('plantMonitoring');</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(activeLocale);</span>
+  const { plantingSite } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
 &nbsp;
   const searchProps = <span class="cstat-no" title="statement not covered" >useMemo&lt;SearchProps&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
@@ -870,7 +864,7 @@ export default function <span class="fstat-no" title="function not covered" >Bou
                 &lt;Dropdown
                   placeholder={strings.SELECT}
                   id='plot-selection-selector'
-                  onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setSelectedPlotSelection(newValue as PlotSelectionType)}</span>
+                  onChange={setSelectedPlotSelection}
                   options={[
                     { label: strings.ASSIGNED, value: 'assigned' },
                     { label: strings.AD_HOC, value: 'adHoc' },
@@ -888,7 +882,7 @@ export default function <span class="fstat-no" title="function not covered" >Bou
               &lt;Dropdown
                 placeholder={strings.SELECT}
                 id='observation-type-selector'
-                onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setSelectedObservationType(newValue as ObservationType)}</span>
+                onChange={setSelectedObservationType}
                 options={[
                   { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
                   { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
@@ -900,7 +894,7 @@ export default function <span class="fstat-no" title="function not covered" >Bou
           &lt;/Box&gt;
         )}
       &lt;/Box&gt;
-      {plantingSite.boundary &amp;&amp; (
+      {plantingSite?.boundary &amp;&amp; (
         &lt;ListMapView
           style={{
             padding: isMobile ? theme.spacing(0, 3, 3) : 0,
@@ -928,8 +922,8 @@ export default function <span class="fstat-no" title="function not covered" >Bou
           list={
             &lt;PlantingSiteDetailsTable
               plantingSite={plantingSite}
-              plotSelection={selectedPlotSelection}
-              observationType={selectedObservationType}
+              plotSelection={selectedPlotSelection as PlotSelectionType}
+              observationType={selectedObservationType as ObservationType}
             /&gt;
           }
           map={&lt;PlantingSiteMapView search={search ? search.trim() : ''} /&gt;}
@@ -956,7 +950,9 @@ function <span class="fstat-no" title="function not covered" >PlantingSiteMapVie
   }, [plantingSiteHistories]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!selectedHistory &amp;&amp; plantingSiteHistories?.length) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!plantingSiteHistories?.length) {</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedHistory(undefined);</span>
+    } else <span class="cstat-no" title="statement not covered" >if (plantingSiteHistories.find(<span class="fstat-no" title="function not covered" >(h</span>istory) =&gt; <span class="cstat-no" title="statement not covered" >history.id === selectedHistory?.id)</span> === undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedHistory(plantingSiteHistories[0]);</span>
     }
   }, [plantingSiteHistories, selectedHistory]);
@@ -978,8 +974,12 @@ function <span class="fstat-no" title="function not covered" >PlantingSiteMapVie
   };
 &nbsp;
   const mapData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (plantingSite &amp;&amp; selectedHistory) {</span>
-<span class="cstat-no" title="statement not covered" >      return MapService.getMapDataFromPlantingSiteHistory(plantingSite, selectedHistory);</span>
+<span class="cstat-no" title="statement not covered" >    if (plantingSite) {</span>
+<span class="cstat-no" title="statement not covered" >      if (selectedHistory) {</span>
+<span class="cstat-no" title="statement not covered" >        return MapService.getMapDataFromPlantingSiteHistory(plantingSite, selectedHistory);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        return MapService.getMapDataFromPlantingSite(plantingSite);</span>
+      }
     }
   }, [plantingSite, selectedHistory]);
 &nbsp;
@@ -1123,7 +1123,7 @@ function <span class="fstat-no" title="function not covered" >PlantingSiteMapVie
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-16T21:40:08.305Z
+                at 2025-06-17T19:27:01.829Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
