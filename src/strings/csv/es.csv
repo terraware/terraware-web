@@ -423,7 +423,7 @@ DELETE_PLANTING_SITE_MESSAGE,Está a punto de borrar el sitio de plantación {0}
 DELETE_PROJECT,Borrar proyecto,
 DELETE_PROJECT_CONFIRM,¿Está seguro de que quiere borrar este proyecto? Se eliminará toda la categorización del proyecto.,
 DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas,
-DELETE_SEEDLINGS_BATCHES_MSG,¿Está seguro de que desea eliminar los lotes de plántulas?,
+DELETE_SEEDLINGS_BATCHES_MSG,Eliminar lotes establecerá sus cantidades restantes en 0 (se considerarán vacíos) y los retirará del inventario. Los retiros anteriores seguirán apareciendo en el historial de retiros.,
 DELETE_SPECIES,Borrar Especie,
 DELETE_STATISTICS,Eliminar estadísticas,
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,
@@ -1200,6 +1200,7 @@ OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos mese
 OBSERVATION_RECENCY,Recencia de la observación,
 OBSERVATION_RESCHEDULED,Observación reprogramada,
 OBSERVATION_SCHEDULED,Observación programada,
+OBSERVATION_SMALL_SITE_WARNING,Está programando una Observación para un lugar que posiblemente sea demasiado pequeño para la asignación de zonas de seguimiento. Se le notificará si hay problemas con la asignación de las zonas de seguimiento y el inicio de la Observación. También puede realizar una Observación de zona ad hoc para este lugar.,
 OBSERVATION_START_DATE,Fecha de inicio de la observación,
 OBSERVATION_STATUS,Estado de la observación,
 OBSERVATION_STATUS_OUTSTANDING,Pendiente,Remaining to be done
