@@ -29,7 +29,7 @@ export default function ObservationDetailsTests() {
     await expect(page.getByText('Mortality Rate').first()).toBeVisible();
 
     // charts
-    await expect(page.getByText('Number of Live Plants per')).toBeVisible();
+    await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
     await expect(page.locator('#observationsTotalPlantsBySpecies')).toBeVisible();
     await expect(page.getByText('Mortality Rate per Species')).toBeVisible();
     await expect(page.locator('#observationsMortalityRateBySpecies')).toBeVisible();
