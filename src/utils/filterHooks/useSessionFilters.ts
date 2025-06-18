@@ -6,7 +6,6 @@ import {
   getFiltersFromQuery,
   getFiltersFromSession,
   resetQuery,
-  writeFiltersToQuery,
   writeFiltersToSession,
 } from 'src/utils/filterHooks';
 import useQuery from 'src/utils/useQuery';
@@ -29,7 +28,6 @@ export const useSessionFilters = (viewIdentifier?: string) => {
         writeFiltersToSession(viewIdentifier, filters);
 
         resetQuery(query, viewIdentifier);
-        writeFiltersToQuery(query, viewIdentifier, filters);
         navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
     },
@@ -55,9 +53,9 @@ export const useSessionFilters = (viewIdentifier?: string) => {
 
       writeFiltersToSession(viewIdentifier, mergedFilters);
 
-      if (Object.keys(mergedFilters).length) {
-        writeFiltersToQuery(query, viewIdentifier, mergedFilters);
-        navigate(getLocation(location.pathname, location, query.toString()));
+      if (Object.keys(currentQueryFilters).length) {
+        resetQuery(query, viewIdentifier);
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
 
       setIsInitialized(true);
