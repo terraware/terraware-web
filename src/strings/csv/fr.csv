@@ -423,7 +423,7 @@ DELETE_PLANTING_SITE_MESSAGE,Vous êtes sur le point de supprimer le site de pla
 DELETE_PROJECT,Supprimer le projet,
 DELETE_PROJECT_CONFIRM,Êtes-vous sûr de vouloir supprimer ce projet ? Toutes les catégories du projet seront supprimées.,
 DELETE_SEEDLINGS_BATCHES,Supprimer les lots de semis,
-DELETE_SEEDLINGS_BATCHES_MSG,La suppression de lots mettra leurs quantités restantes à 0 (ils seront considérés comme vides) et les retirera de l'inventaire. Les retraits antérieurs continueront d'apparaître dans l'historique des retraits.,
+DELETE_SEEDLINGS_BATCHES_MSG,La suppression de lots sans retraits les supprimera complètement. La suppression de lots avec retraits mettra leurs quantités restantes à 0 et les retirera de l'inventaire. Les retraits antérieurs continueront d'apparaître dans l'historique des retraits.,
 DELETE_SPECIES,Supprimer l'espèce,
 DELETE_STATISTICS,Supprimer les statistiques,
 DELETE_VIABILITY_TEST,Supprimer le test de viabilité,
