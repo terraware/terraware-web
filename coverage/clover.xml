@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1750268275186" clover="3.2.0">
-  <project timestamp="1750268275186" name="All files">
-    <metrics statements="30800" coveredstatements="1296" conditionals="21329" coveredconditionals="388" methods="9461" coveredmethods="211" elements="61590" coveredelements="1895" complexity="0" loc="30800" ncloc="30800" packages="266" files="1279" classes="1279"/>
+<coverage generated="1750273782768" clover="3.2.0">
+  <project timestamp="1750273782768" name="All files">
+    <metrics statements="30799" coveredstatements="1296" conditionals="21329" coveredconditionals="388" methods="9461" coveredmethods="211" elements="61589" coveredelements="1895" complexity="0" loc="30799" ncloc="30799" packages="266" files="1279" classes="1279"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -35285,7 +35285,7 @@
       </file>
     </package>
     <package name="src.utils.filterHooks">
-      <metrics statements="93" coveredstatements="31" conditionals="50" coveredconditionals="23" methods="27" coveredmethods="10"/>
+      <metrics statements="92" coveredstatements="31" conditionals="50" coveredconditionals="23" methods="27" coveredmethods="10"/>
       <file name="index.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/filterHooks/index.ts">
         <metrics statements="61" coveredstatements="31" conditionals="40" coveredconditionals="23" methods="23" coveredmethods="10"/>
         <line num="10" count="1" type="stmt"/>
@@ -35351,39 +35351,38 @@
         <line num="120" count="0" type="stmt"/>
       </file>
       <file name="useSessionFilters.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/filterHooks/useSessionFilters.ts">
-        <metrics statements="32" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="31" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.utils.useMapboxToken">
