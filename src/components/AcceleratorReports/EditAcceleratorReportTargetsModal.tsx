@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid, Typography } from '@mui/material';
-import _ from 'lodash';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -10,25 +9,17 @@ import Button from 'src/components/common/button/Button';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useUser } from 'src/providers/hooks';
-import {
-  selectReviewManyAcceleratorReportMetrics,
-  selectUpdateManyAcceleratorReports,
-} from 'src/redux/features/reports/reportsSelectors';
-import {
-  requestReviewManyAcceleratorReportMetrics,
-  requestUpdateManyAcceleratorReports,
-} from 'src/redux/features/reports/reportsThunks';
+import { selectUpdateAcceleratorReportTargets } from 'src/redux/features/reports/reportsSelectors';
+import { requestUpdateAcceleratorReportTargets } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { AcceleratorReport, SystemMetricName } from 'src/types/AcceleratorReport';
 import {
-  AcceleratorReport,
-  ReportProjectMetricEntries,
-  ReportStandardMetricEntries,
-  ReportSystemMetricEntries,
-  ReviewAcceleratorReportMetricsRequest,
-  ReviewManyAcceleratorReportMetricsRequest,
-  SystemMetricName,
-} from 'src/types/AcceleratorReport';
+  ReportMetricTargets,
+  UpdateProjectMetricTargets,
+  UpdateStandardMetricTargets,
+  UpdateSystemMetricTargets,
+} from 'src/types/Report';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -56,11 +47,9 @@ export default function EditAcceleratorReportTargetsModal({
   const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id;
 
   const [record, , onChange] = useForm<RowMetric>(row);
-  const [reviewRequestId, setReviewRequestId] = useState<string>('');
   const [updateRequestId, setUpdateRequestId] = useState<string>('');
 
-  const updateReportMetricsResponse = useAppSelector(selectReviewManyAcceleratorReportMetrics(reviewRequestId));
-  const updateReportsResponse = useAppSelector(selectUpdateManyAcceleratorReports(updateRequestId));
+  const updateResponse = useAppSelector(selectUpdateAcceleratorReportTargets(updateRequestId));
 
   const isAllowedReviewReportTargets = useMemo(() => isAllowed('REVIEW_REPORTS_TARGETS'), [isAllowed]);
 
@@ -73,142 +62,79 @@ export default function EditAcceleratorReportTargetsModal({
   }, [reports]);
 
   useEffect(() => {
-    if (updateReportMetricsResponse?.status === 'error') {
-      snackbar.toastError();
-    } else if (updateReportMetricsResponse?.status === 'success') {
-      onClose();
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reload();
+    if (updateResponse) {
+      if (updateResponse.status === 'error') {
+        snackbar.toastError();
+      } else if (updateResponse.status === 'success') {
+        onClose();
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+        reload();
+      }
     }
-  }, [updateReportMetricsResponse, snackbar, onClose, reload]);
+  }, [updateResponse, snackbar, onClose, reload]);
 
-  useEffect(() => {
-    if (updateReportsResponse?.status === 'error') {
-      snackbar.toastError();
-    } else if (updateReportsResponse?.status === 'success') {
-      onClose();
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reload();
-    }
-  }, [updateReportsResponse, snackbar, onClose, reload]);
-
-  const save = () => {
+  const save = useCallback(() => {
     if (!projectId) {
       return;
     }
 
-    const getUpdateBody = (quarter: 'q1' | 'q2' | 'q3' | 'q4' | 'annual') => {
-      const propToRead: 'q1Target' | 'q2Target' | 'q3Target' | 'q4Target' | 'annualTarget' = `${quarter}Target`;
-      if (row.metricType === 'system') {
-        return {
-          systemMetrics: [
-            {
-              metric: row.name as SystemMetricName,
-              target: record[propToRead],
-            },
-          ],
-          projectMetrics: [],
-          standardMetrics: [],
-        };
-      } else if (row.metricType === 'project') {
-        return { projectMetrics: [{ id: row.id, target: record[propToRead] }], systemMetrics: [], standardMetrics: [] };
-      } else {
-        return { standardMetrics: [{ id: row.id, target: record[propToRead] }], projectMetrics: [], systemMetrics: [] };
-      }
-    };
+    const targets: ReportMetricTargets[] = [];
 
-    const requests: ReviewAcceleratorReportMetricsRequest[] = [];
     if (row.annualReportId) {
-      requests.push({ ...getUpdateBody('annual'), reportId: row.annualReportId });
+      targets.push({ reportId: row.annualReportId, target: record.annualTarget });
     }
     if (row.q1ReportId) {
-      requests.push({ ...getUpdateBody('q1'), reportId: row.q1ReportId });
+      targets.push({ reportId: row.q1ReportId, target: record.q1Target });
     }
     if (row.q2ReportId) {
-      requests.push({ ...getUpdateBody('q2'), reportId: row.q2ReportId });
+      targets.push({ reportId: row.q2ReportId, target: record.q2Target });
     }
     if (row.q3ReportId) {
-      requests.push({ ...getUpdateBody('q3'), reportId: row.q3ReportId });
+      targets.push({ reportId: row.q3ReportId, target: record.q3Target });
     }
     if (row.q4ReportId) {
-      requests.push({ ...getUpdateBody('q4'), reportId: row.q4ReportId });
+      targets.push({ reportId: row.q4ReportId, target: record.q4Target });
     }
 
-    const requestPayload: ReviewManyAcceleratorReportMetricsRequest = {
-      requests,
-      projectId,
-    };
+    let metric: UpdateProjectMetricTargets | UpdateStandardMetricTargets | UpdateSystemMetricTargets;
+    switch (row.metricType) {
+      case 'project':
+        metric = {
+          type: 'project',
+          metricId: row.id,
+          targets,
+        };
+        break;
+      case 'standard':
+        metric = {
+          type: 'standard',
+          metricId: row.id,
+          targets,
+        };
+        break;
+      case 'system':
+        metric = {
+          type: 'system',
+          metric: row.name as SystemMetricName,
+          targets,
+        };
+        break;
+    }
 
-    if (isAllowedReviewReportTargets) {
-      const reviewRequest = dispatch(requestReviewManyAcceleratorReportMetrics(requestPayload));
-      setReviewRequestId(reviewRequest.requestId);
-    } else {
-      const updateManyReportsRequests = requests
-        .map((request) => {
-          const report = reportsById[request.reportId];
-          const reportClone = _.cloneDeep(report);
-
-          ['projectMetrics', 'standardMetrics', 'systemMetrics'].forEach((metricType) => {
-            const reportMetrics = reportClone?.[metricType as keyof AcceleratorReport] as (
-              | ReportProjectMetricEntries
-              | ReportStandardMetricEntries
-              | ReportSystemMetricEntries
-            )[];
-            const requestMetrics = request[metricType as keyof ReviewAcceleratorReportMetricsRequest];
-            if (!Array.isArray(reportMetrics) || !Array.isArray(requestMetrics)) {
-              return;
-            }
-
-            requestMetrics.forEach((metric) => {
-              const reportMetricIndex =
-                metricType === 'systemMetrics'
-                  ? reportMetrics.findIndex(
-                      (m) => (m as ReportSystemMetricEntries).metric === (metric as ReportSystemMetricEntries).metric
-                    )
-                  : reportMetrics.findIndex(
-                      (m) => (m as ReportStandardMetricEntries).id === (metric as ReportStandardMetricEntries).id
-                    );
-              const reportMetric = reportMetrics[reportMetricIndex];
-              if (typeof reportMetric !== 'object' || typeof metric !== 'object') {
-                return;
-              }
-
-              // if target value is unchanged, we don't need to update
-              if (metric.target === reportMetric.target) {
-                return;
-              }
-
-              const reportMetricUpdate = {
-                ...reportMetric,
-                ...metric,
-              };
-              reportMetrics[reportMetricIndex] = reportMetricUpdate;
-            });
-          });
-
-          return {
-            projectId,
-            report: reportClone,
-            reportId: request.reportId,
-          };
+    if (metric) {
+      const request = dispatch(
+        requestUpdateAcceleratorReportTargets({
+          payload: { metric },
+          projectId,
+          updateSubmitted: isAllowedReviewReportTargets,
         })
-        .filter((request) => {
-          const report = reportsById[request.reportId];
-          // if request.report is unchanged, we don't need to update
-          if (report && _.isEqual(report, request.report)) {
-            return false;
-          }
-          return true;
-        });
+      );
 
-      if (!updateManyReportsRequests.length) {
-        onClose();
-      } else {
-        const updateRequest = dispatch(requestUpdateManyAcceleratorReports({ requests: updateManyReportsRequests }));
-        setUpdateRequestId(updateRequest.requestId);
-      }
+      setUpdateRequestId(request.requestId);
+    } else {
+      onClose();
     }
-  };
+  }, [dispatch, isAllowedReviewReportTargets, onClose, projectId, record, row]);
 
   const isFieldDisabled = useCallback(
     (reportId?: number) => {

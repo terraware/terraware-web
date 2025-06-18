@@ -795,6 +795,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports/targets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update project metric targets. */
+        post: operations["updateProjectMetricTargets"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports/{reportId}": {
         parameters: {
             query?: never;
@@ -8222,7 +8239,9 @@ export interface components {
             perHectareBudget?: number;
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+            plantingSitesCql?: string;
             projectArea?: number;
+            projectBoundariesCql?: string;
             /** Format: int64 */
             projectHighlightPhotoValueId?: number;
             /** Format: int64 */
@@ -8484,6 +8503,12 @@ export interface components {
         ReportChallengePayload: {
             challenge: string;
             mitigationPlan: string;
+        };
+        ReportMetricTargetPayload: {
+            /** Format: int64 */
+            reportId: number;
+            /** Format: int32 */
+            target?: number;
         };
         ReportProjectMetricEntriesPayload: {
             /** Format: int64 */
@@ -9353,6 +9378,13 @@ export interface components {
         UpdateGlobalRolesRequestPayload: {
             globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
         };
+        UpdateMetricTargetsPayload: {
+            targets: components["schemas"]["ReportMetricTargetPayload"][];
+            type: string;
+        };
+        UpdateMetricTargetsRequestPayload: {
+            metric: components["schemas"]["UpdateProjectMetricTargetsPayload"] | components["schemas"]["UpdateStandardMetricTargetsPayload"] | components["schemas"]["UpdateSystemMetricTargetsPayload"];
+        };
         UpdateModuleEventProjectsRequestPayload: {
             addProjects?: number[];
             removeProjects?: number[];
@@ -9512,6 +9544,16 @@ export interface components {
         UpdateProjectMetricRequestPayload: {
             metric: components["schemas"]["ExistingProjectMetricPayload"];
         };
+        UpdateProjectMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+            /** Format: int64 */
+            metricId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "project";
+        };
         UpdateProjectOverallScorePayload: {
             /** Format: uri */
             detailsUrl?: string;
@@ -9543,6 +9585,16 @@ export interface components {
         UpdateStandardMetricRequestPayload: {
             metric: components["schemas"]["ExistingStandardMetricPayload"];
         };
+        UpdateStandardMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+            /** Format: int64 */
+            metricId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "standard";
+        };
         UpdateSubLocationRequestPayload: {
             name: string;
         };
@@ -9551,6 +9603,16 @@ export interface components {
             internalComment?: string;
             /** @enum {string} */
             status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
+        };
+        UpdateSystemMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+            /** @enum {string} */
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "system";
         };
         UpdateUserCookieConsentRequestPayload: {
             /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
@@ -11769,6 +11831,35 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["UpdateProjectMetricRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    updateProjectMetricTargets: {
+        parameters: {
+            query?: {
+                /** @description Update targets for submitted reports. Require TF Experts privileges. */
+                updateSubmitted?: boolean;
+            };
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMetricTargetsRequestPayload"];
             };
         };
         responses: {

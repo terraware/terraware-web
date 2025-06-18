@@ -10,12 +10,11 @@ import {
   PublishAcceleratorReportRequest,
   RefreshAcceleratorReportSystemMetricsRequest,
   ReviewAcceleratorReportMetricRequest,
-  ReviewAcceleratorReportMetricsRequest,
   ReviewAcceleratorReportRequest,
-  ReviewManyAcceleratorReportMetricsRequest,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
+import { UpdateReportMetricTargets } from 'src/types/Report';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 import { setProjectReportConfigAction } from './reportsSlice';
@@ -181,32 +180,31 @@ export const requestListAcceleratorReports = createAsyncThunk(
   }
 );
 
-type UpdateManyAcceleratorReportsRequest = {
-  requests: UpdateAcceleratorReportParams[];
-};
-
-export const requestUpdateManyAcceleratorReports = createAsyncThunk(
-  'reviewAcceleratorReportMetrics',
-  async (request: UpdateManyAcceleratorReportsRequest, { rejectWithValue }) => {
-    const { requests } = request;
-
-    const promises = requests.map((iRequest: UpdateAcceleratorReportParams) => {
-      return AcceleratorReportService.updateAcceleratorReport(iRequest);
-    });
-
-    const results = await Promise.all(promises);
-
-    if (results.every((result) => result && result?.requestSucceeded)) {
-      return true;
-    }
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestUpdateAcceleratorReport = createAsyncThunk(
   'updateProjectMetric',
   async (request: UpdateAcceleratorReportParams, { rejectWithValue }) => {
     const response = await AcceleratorReportService.updateAcceleratorReport(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);
+
+type UpdateAcceleratorReportTargetsRequest = {
+  payload: UpdateReportMetricTargets;
+  projectId: number;
+  updateSubmitted?: boolean;
+};
+
+export const requestUpdateAcceleratorReportTargets = createAsyncThunk(
+  'updateAcceleratorReportTargets',
+  async (request: UpdateAcceleratorReportTargetsRequest, { rejectWithValue }) => {
+    const { payload, projectId, updateSubmitted } = request;
+
+    const response = await AcceleratorReportService.updateMetricTargets(payload, projectId, updateSubmitted);
 
     if (response && response.requestSucceeded) {
       return response.data;
@@ -225,25 +223,6 @@ export const requestUpdateProjectMetric = createAsyncThunk(
       return response.data;
     }
 
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestReviewManyAcceleratorReportMetrics = createAsyncThunk(
-  'reviewAcceleratorReportMetrics',
-  async (request: ReviewManyAcceleratorReportMetricsRequest, { rejectWithValue }) => {
-    const { projectId, requests } = request;
-
-    const promises = requests.map((iRequest: ReviewAcceleratorReportMetricsRequest) => {
-      const { reportId, ...rest } = iRequest;
-      return AcceleratorReportService.reviewAcceleratorReportMetrics(rest, projectId, reportId);
-    });
-
-    const results = await Promise.all(promises);
-
-    if (results.every((result) => result && result.requestSucceeded)) {
-      return true;
-    }
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
