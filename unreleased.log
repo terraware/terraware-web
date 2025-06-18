@@ -1,3 +1,4 @@
+edbdc1b26ad SW-7052 Used update report target endpoints instead of using many calls (#4192)
 389e07c7029 Updated translations from Phrase (#4194)
 3831ec10488 SW-6955: Browser back button doesn't work on some pages (#4190)
 ee8afd5bfad SW-7057 Further refine batch delete confirmation (#4193)
