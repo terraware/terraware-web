@@ -259,7 +259,7 @@ const updateMetricTargets = async (
   const queryParams = { updateSubmitted };
   const endpoint = addQueryParams(UPDATE_REPORT_TARGET_ENDPOINT, queryParams);
   return HttpService.root(endpoint.replace('{projectId}', projectId.toString())).post2<UpdateReportTargetResponse>({
-    entity: { metric: request },
+    entity: request,
   });
 };
 
