@@ -42,6 +42,15 @@ export default function ObservationDetailsTests() {
     await expect(page.getByRole('columnheader', { name: 'Species' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Planting Density' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Mortality Rate' })).toBeVisible();
+
+    // table row values
+    await expect(page.locator('#row1-plantingZoneName a:has-text("Zone 01")')).toBeVisible();
+    await expect(page.locator('#row1-completedDate p:has-text("2025-05-29")')).toBeVisible();
+    await expect(page.locator('#row1-status p:has-text("Completed")')).toBeVisible();
+    await expect(page.locator('#row1-totalPlants p:has-text("944")')).toBeVisible();
+    await expect(page.locator('#row1-totalSpecies p:has-text("9")')).toBeVisible();
+    await expect(page.locator('#row1-plantingDensity p:has-text("852")')).toBeVisible();
+    await expect(page.locator('#row1-mortalityRate p:has-text("10%")')).toBeVisible();
   });
 
   test('Zone level observation detail view, including statistics and charts', async ({ page }, testInfo) => {
@@ -87,6 +96,17 @@ export default function ObservationDetailsTests() {
     await expect(page.getByRole('columnheader', { name: 'Species' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Planting Density' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Mortality Rate' })).toBeVisible();
+
+    // table row values
+    await expect(page.locator('#row1-monitoringPlotNumber a:has-text("1")')).toBeVisible();
+    await expect(page.locator('#row1-subzoneName p:has-text("Subzone A")')).toBeVisible();
+    await expect(page.locator('#row1-completedDate p:has-text("2025-05-29")')).toBeVisible();
+    await expect(page.locator('#row1-status p:has-text("Completed")')).toBeVisible();
+    await expect(page.locator('#row1-isPermanent p:has-text("Permanent")')).toBeVisible();
+    await expect(page.locator('#row1-totalPlants p:has-text("85")')).toBeVisible();
+    await expect(page.locator('#row1-totalSpecies p:has-text("7")')).toBeVisible();
+    await expect(page.locator('#row1-plantingDensity p:has-text("756")')).toBeVisible();
+    await expect(page.locator('#row1-mortalityRate p:has-text("13%")')).toBeVisible();
   });
 
   test('Plot level observation detail view, including statistics, charts, and photos', async ({ page }, testInfo) => {
