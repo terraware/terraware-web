@@ -423,7 +423,7 @@ DELETE_PLANTING_SITE_MESSAGE,Está a punto de borrar el sitio de plantación {0}
 DELETE_PROJECT,Borrar proyecto,
 DELETE_PROJECT_CONFIRM,¿Está seguro de que quiere borrar este proyecto? Se eliminará toda la categorización del proyecto.,
 DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas,
-DELETE_SEEDLINGS_BATCHES_MSG,Eliminar lotes establecerá sus cantidades restantes en 0 (se considerarán vacíos) y los retirará del inventario. Los retiros anteriores seguirán apareciendo en el historial de retiros.,
+DELETE_SEEDLINGS_BATCHES_MSG,Eliminar lotes que no han tenido retiros los eliminará por completo. Eliminar los lotes con retiros fijará sus cantidades restantes en 0 y los eliminará del inventario. Los retiros anteriores seguirán apareciendo en el historial de retiros.,
 DELETE_SPECIES,Borrar Especie,
 DELETE_STATISTICS,Eliminar estadísticas,
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,
