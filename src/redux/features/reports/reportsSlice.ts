@@ -21,9 +21,9 @@ import {
   requestRefreshAcceleratorReportSystemMetrics,
   requestReviewAcceleratorReport,
   requestReviewAcceleratorReportMetric,
-  requestReviewManyAcceleratorReportMetrics,
   requestSubmitAcceleratorReport,
   requestUpdateAcceleratorReport,
+  requestUpdateAcceleratorReportTargets,
   requestUpdateProjectMetric,
   requestUpdateReportConfig,
 } from './reportsThunks';
@@ -164,20 +164,6 @@ const projectMetricUpdateSlice = createSlice({
 });
 
 /**
- * Update Accelerator Report Metrics
- */
-const initialReviewManyAcceleratorReportMetrics: { [key: string]: StatusT<number> } = {};
-
-const reviewManyAcceleratorReportMetricsSlice = createSlice({
-  name: 'reviewManyAcceleratorReportMetricsSlice',
-  initialState: initialReviewManyAcceleratorReportMetrics,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestReviewManyAcceleratorReportMetrics)(builder);
-  },
-});
-
-/**
  * Update Accelerator Report Metric
  */
 const initialReviewAcceleratorReportMetric: { [key: string]: StatusT<number> } = {};
@@ -192,16 +178,16 @@ const reviewAcceleratorReportMetricSlice = createSlice({
 });
 
 /**
- * Update Accelerator Reports
+ * Update Accelerator Report Targets
  */
-const initialUpdateManyAcceleratorReports: { [key: string]: StatusT<number> } = {};
+const initialStateUpdateAcceleratorReportTargets: { [key: string]: StatusT<number> } = {};
 
-const updateManyAcceleratorReportsSlice = createSlice({
-  name: 'updateManyAcceleratorReportsSlice',
-  initialState: initialUpdateManyAcceleratorReports,
+const updateAcceleratorReportTargetsSlice = createSlice({
+  name: 'updateAcceleratorReportTargetsSlice',
+  initialState: initialStateUpdateAcceleratorReportTargets,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestReviewManyAcceleratorReportMetrics)(builder);
+    buildReducers(requestUpdateAcceleratorReportTargets)(builder);
   },
 });
 
@@ -275,23 +261,22 @@ const publishAcceleratorReportSlice = createSlice({
 
 const reportsReducers = {
   getAcceleratorReport: getAcceleratorReportSlice.reducer,
-  projectReportConfig: projectReportConfigSlice.reducer,
-  projectReportConfigCreate: createReportConfigSlice.reducer,
-  projectReportConfigUpdate: updateReportConfigSlice.reducer,
+  listAcceleratorReports: listAcceleratorReportsSlice.reducer,
   listProjectMetrics: listProjectMetricsSlice.reducer,
   listStandardMetrics: listStandardMetricsSlice.reducer,
   listSystemMetrics: listSystemMetricsSlice.reducer,
   projectMetricCreate: projectMetricCreateSlice.reducer,
-  listAcceleratorReports: listAcceleratorReportsSlice.reducer,
   projectMetricUpdate: projectMetricUpdateSlice.reducer,
-  reviewManyAcceleratorReportMetrics: reviewManyAcceleratorReportMetricsSlice.reducer,
-  reviewAcceleratorReportMetric: reviewAcceleratorReportMetricSlice.reducer,
+  projectReportConfig: projectReportConfigSlice.reducer,
+  projectReportConfigCreate: createReportConfigSlice.reducer,
+  projectReportConfigUpdate: updateReportConfigSlice.reducer,
+  publishAcceleratorReport: publishAcceleratorReportSlice.reducer,
   reviewAcceleratorReport: reviewAcceleratorReportSlice.reducer,
+  reviewAcceleratorReportMetric: reviewAcceleratorReportMetricSlice.reducer,
   refreshAcceleratorReportSystemMetrics: refreshAcceleratorReportSystemMetricsSlice.reducer,
   submitAcceleratorReport: submitAcceleratorReportSlice.reducer,
   updateAcceleratorReport: updateAcceleratorReportSlice.reducer,
-  updateManyAcceleratorReports: updateManyAcceleratorReportsSlice.reducer,
-  publishAcceleratorReport: publishAcceleratorReportSlice.reducer,
+  updateAcceleratorReportTargets: updateAcceleratorReportTargetsSlice.reducer,
 };
 
 export default reportsReducers;

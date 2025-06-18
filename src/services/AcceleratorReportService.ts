@@ -12,6 +12,7 @@ import {
   UpdateAcceleratorReportRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
+import { UpdateReportMetricTargets } from 'src/types/Report';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
@@ -55,6 +56,7 @@ const REVIEW_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projec
 const SUBMIT_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/submit';
 const ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}';
 const PUBLISH_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/publish';
+const UPDATE_REPORT_TARGET_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/targets';
 
 type GetAcceleratorReportResponsePayload =
   paths[typeof ACCELERATOR_REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -95,6 +97,8 @@ type ReviewAcceleratorReportResponse =
 
 export type ListAcceleratorReportsRequestParams = paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['parameters']['query'];
 
+export type UpdateReportTargetResponse =
+  paths[typeof UPDATE_REPORT_TARGET_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 /**
  * Get project reports config
  */
@@ -247,6 +251,18 @@ const updateProjectMetric = async (
   });
 };
 
+const updateMetricTargets = async (
+  request: UpdateReportMetricTargets,
+  projectId: number,
+  updateSubmitted: boolean = false
+): Promise<Response2<UpdateReportTargetResponse>> => {
+  const queryParams = { updateSubmitted };
+  const endpoint = addQueryParams(UPDATE_REPORT_TARGET_ENDPOINT, queryParams);
+  return HttpService.root(endpoint.replace('{projectId}', projectId.toString())).post2<UpdateReportTargetResponse>({
+    entity: { metric: request },
+  });
+};
+
 const reviewAcceleratorReportMetrics = async (
   request: ReviewAcceleratorReportMetricsRequestPayload,
   projectId: number,
@@ -326,6 +342,7 @@ const ReportService = {
   createProjectMetric,
   listAcceleratorReports,
   updateAcceleratorReport,
+  updateMetricTargets,
   updateProjectMetric,
   reviewAcceleratorReportMetrics,
   reviewAcceleratorReport,
