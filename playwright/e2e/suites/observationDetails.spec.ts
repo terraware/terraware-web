@@ -122,7 +122,6 @@ export default function ObservationDetailsTests() {
     await expect(page.getByText('Date')).toBeVisible();
     await expect(page.getByText('Time')).toBeVisible();
     await expect(page.getByText('Observer')).toBeVisible();
-    await expect(page.getByText('Time')).toBeVisible();
     await expect(page.getByText('Zone', { exact: true })).toBeVisible();
     await expect(page.getByText('Subzone', { exact: true })).toBeVisible();
     await expect(page.getByText('Monitoring Plot Type')).toBeVisible();
