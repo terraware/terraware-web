@@ -139,20 +139,68 @@ export default function ObservationDetailsTests() {
 
     // details
     await expect(page.getByText('Details')).toBeVisible();
-    await expect(page.getByText('Date')).toBeVisible();
-    await expect(page.getByText('Time')).toBeVisible();
-    await expect(page.getByText('Observer')).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Date")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Date") + p.textfield-value--display:has-text("2025-05-29")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Time")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Time") + p.textfield-value--display:has-text("6:50 PM")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Observer")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Observer") + p.textfield-value--display:has-text("Test User")')
+    ).toBeVisible();
     await expect(page.getByText('Zone', { exact: true })).toBeVisible();
-    await expect(page.getByText('Subzone', { exact: true })).toBeVisible();
-    await expect(page.getByText('Monitoring Plot Type')).toBeVisible();
-    await expect(page.getByRole('main').getByText('Plants', { exact: true })).toBeVisible();
-    await expect(page.getByRole('main').getByText('Species', { exact: true })).toBeVisible();
-    await expect(page.getByText('Planting Density')).toBeVisible();
-    await expect(page.getByText('Mortality Rate', { exact: true })).toBeVisible();
-    await expect(page.getByText('Number of Photos')).toBeVisible();
-    await expect(page.getByText('Plot Conditions')).toBeVisible();
-    await expect(page.getByText('Field Notes')).toBeVisible();
-    await expect(page.getByText('Plot Location')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Zone") + p.textfield-value--display:has-text("Zone 01")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Subzone")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Subzone") + p.textfield-value--display:has-text("Subzone A")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Monitoring Plot Type")')).toBeVisible();
+    await expect(
+      page.locator(
+        'label.textfield-label:has-text("Monitoring Plot Type") + p.textfield-value--display:has-text("Permanent")'
+      )
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Plants")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Plants") + p.textfield-value--display:has-text("85")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Species")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Species") + p.textfield-value--display:has-text("7")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Planting Density")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Planting Density") + p.textfield-value--display:has-text("756")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Mortality Rate")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Mortality Rate") + p.textfield-value--display:has-text("13")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Number of Photos")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Number of Photos") + p.textfield-value--display:has-text("0")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Plot Conditions")')).toBeVisible();
+    await expect(
+      page.locator('label.textfield-label:has-text("Plot Conditions") + p.textfield-value--display:has-text("- -")')
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Field Notes")')).toBeVisible();
+    await expect(
+      page.locator(
+        'label.textfield-label:has-text("Field Notes") + p.textfield-value--display:has-text("Notes for plot 5162")'
+      )
+    ).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Plot Location")')).toBeVisible();
+    await expect(
+      page.locator(
+        'label.textfield-label:has-text("Plot Location") + p.textfield-value--display:has-text("SW Corner Latitude: 38.44150597 SW Corner Longitude: 15.6977629")'
+      )
+    ).toBeVisible();
 
     // charts
     await expect(page.getByText('Number of Live Plants per Species')).toBeVisible();
