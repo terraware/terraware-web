@@ -1,3 +1,4 @@
+3b9b5aabc1b SW-7070: E2E tests for observation detail views (#4191)
 edbdc1b26ad SW-7052 Used update report target endpoints instead of using many calls (#4192)
 389e07c7029 Updated translations from Phrase (#4194)
 3831ec10488 SW-6955: Browser back button doesn't work on some pages (#4190)
