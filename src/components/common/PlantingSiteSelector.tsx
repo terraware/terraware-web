@@ -3,8 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown } from '@terraware/web-components';
 
 import { useOrganization } from 'src/providers';
-import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 
@@ -17,21 +16,18 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
-  const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization?.id || -1));
+  const { allPlantingSites } = usePlantingSiteData();
 
   const filteredPlantingSites = useMemo(() => {
-    return plantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
-  }, [plantingSites, hideNoBoundary]);
+    return allPlantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
+  }, [allPlantingSites, hideNoBoundary]);
 
   const options = useMemo(() => {
     return filteredPlantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
   }, [filteredPlantingSites]);
 
-  const updateSelection = useCallback(
-    async (newValue: any) => {
-      const id = Number(newValue);
-      setSelectedPlantingSiteId(isNaN(id) ? -1 : id);
-      onChange(isNaN(id) ? -1 : id);
+  const updateAndReloadLastSelectedSite = useCallback(
+    async (id: number) => {
       if (!isNaN(id) && id !== orgPreferences.lastPlantingSiteSelected && selectedOrganization) {
         await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
           ['lastPlantingSiteSelected']: id,
@@ -39,23 +35,33 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
         reloadOrgPreferences();
       }
     },
-    [onChange, orgPreferences.lastPlantingSiteSelected, selectedOrganization]
+    [orgPreferences.lastPlantingSiteSelected, reloadOrgPreferences, selectedOrganization]
+  );
+
+  const updateSelection = useCallback(
+    (newValue: any) => {
+      const id = Number(newValue);
+      setSelectedPlantingSiteId(isNaN(id) ? -1 : id);
+      onChange(isNaN(id) ? -1 : id);
+      void updateAndReloadLastSelectedSite(id);
+    },
+    [onChange, updateAndReloadLastSelectedSite]
   );
 
   useEffect(() => {
-    if (plantingSites && (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {
+    if (allPlantingSites && (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {
       if (orgPreferences.lastPlantingSiteSelected) {
-        void updateSelection(orgPreferences.lastPlantingSiteSelected);
+        updateSelection(orgPreferences.lastPlantingSiteSelected);
       } else {
-        void updateSelection(plantingSites[0]?.id);
+        updateSelection(allPlantingSites[0]?.id);
       }
     }
-  }, [plantingSites, selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected]);
+  }, [selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected, allPlantingSites]);
 
   return (
     <Dropdown
       placeholder={strings.SELECT}
-      onChange={(newValue) => void updateSelection(newValue)}
+      onChange={updateSelection}
       options={options}
       selectedValue={selectedPlantingSiteId}
     />
