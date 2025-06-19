@@ -1,19 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Statuses } from 'src/redux/features/asyncUtils';
+import { StatusT } from 'src/redux/features/asyncUtils';
 import { selectPlantingSiteValidate } from 'src/redux/features/plantingSite/plantingSiteSelectors';
 import { validatePlantingSite } from 'src/redux/features/plantingSite/plantingSiteThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { DraftPlantingSite, PlantingSiteProblem } from 'src/types/PlantingSite';
+import { CreatePlantingSiteRequestPayload, ValidatePlantingSiteResponsePayload } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
-  validateDraft?: DraftPlantingSite;
-  validateSite: (draft: DraftPlantingSite) => void;
-  validateSiteStatus: Statuses;
-  isValid?: boolean;
-  problems?: PlantingSiteProblem[];
+  validate: (site: CreatePlantingSiteRequestPayload) => void;
+  result: StatusT<ValidatePlantingSiteResponsePayload>;
 };
 
 /**
@@ -23,33 +20,30 @@ export default function usePlantingSiteValidate(): Response {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
-  const [currentDraft, setCurrentDraft] = useState<DraftPlantingSite>();
   const [requestId, setRequestId] = useState<string>('');
-  const validateResult = useAppSelector(selectPlantingSiteValidate(requestId));
+  const result = useAppSelector(selectPlantingSiteValidate(requestId));
 
-  const validateSite = useCallback(
-    (draft: DraftPlantingSite) => {
-      setCurrentDraft(draft);
-      const dispatched = dispatch(validatePlantingSite(draft));
+  const validate = useCallback(
+    (site: CreatePlantingSiteRequestPayload) => {
+      const dispatched = dispatch(validatePlantingSite(site));
       setRequestId(dispatched.requestId);
     },
     [dispatch]
   );
 
   useEffect(() => {
-    if (validateResult?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
+    if (result) {
+      if (result.status === 'error') {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
     }
-  }, [validateResult?.status, snackbar]);
+  }, [result, snackbar]);
 
   return useMemo<Response>(
     () => ({
-      validateDraft: currentDraft,
-      validateSite,
-      validateSiteStatus: validateResult?.status,
-      isValid: validateResult?.data?.isValid,
-      problems: validateResult?.data?.problems,
+      validate,
+      result,
     }),
-    [currentDraft, validateSite, validateResult]
+    [validate, result]
   );
 }

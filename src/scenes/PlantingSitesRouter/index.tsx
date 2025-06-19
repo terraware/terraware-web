@@ -20,22 +20,18 @@ import PlantingSitesList from './view/PlantingSitesList';
 /**
  * This page will route to the correct component based on url params
  */
-export type PlantingSitesProps = {
-  reloadTracking: () => void;
-};
-
-export default function PlantingSites({ reloadTracking }: PlantingSitesProps): JSX.Element {
+export default function PlantingSites(): JSX.Element {
   return (
     <Routes>
-      <Route path={'/new'} element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />} />
+      <Route path={'/new'} element={<PlantingSiteCreate />} />
       <Route path={'/draft/*'} element={<PlantingSitesDraftRouter />} />
-      <Route path={'/:plantingSiteId/*'} element={<PlantingSitesRouter reloadTracking={reloadTracking} />} />
+      <Route path={'/:plantingSiteId/*'} element={<PlantingSitesRouter />} />
       <Route path={'*'} element={<PlantingSitesList />} />
     </Routes>
   );
 }
 
-export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX.Element {
+export function PlantingSitesRouter(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
 
@@ -66,7 +62,7 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
   return (
     <Routes>
       <Route path={'/zone/:zoneId'} element={<PlantingSiteZoneView />} />
-      <Route path={'/edit'} element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />} />
+      <Route path={'/edit'} element={<PlantingSiteCreate plantingSiteId={Number(plantingSiteId)} />} />
       <Route path={'*'} element={<PlantingSiteView />} />
     </Routes>
   );

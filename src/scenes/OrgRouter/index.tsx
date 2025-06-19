@@ -17,7 +17,6 @@ import { selectHasObservationsResults } from 'src/redux/features/observations/ob
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import ApplicationRouter from 'src/scenes/ApplicationRouter';
@@ -108,15 +107,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     populateProjects();
   }, [selectedOrganization, dispatch, activeLocale]);
 
-  const reloadPlantingSites = useCallback(() => {
-    const populatePlantingSites = () => {
-      if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestPlantingSites(selectedOrganization.id));
-      }
-    };
-    populatePlantingSites();
-  }, [dispatch, selectedOrganization]);
-
   const setDefaults = useCallback(() => {
     if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {
       setWithdrawalCreated(false);
@@ -126,10 +116,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   useEffect(() => {
     reloadProjects();
   }, [reloadProjects]);
-
-  useEffect(() => {
-    reloadPlantingSites();
-  }, [reloadPlantingSites]);
 
   useEffect(() => {
     setDefaults();
@@ -235,10 +221,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               path={APP_PATHS.BATCH_WITHDRAW}
               element={<BatchBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
             />
-            <Route
-              path={APP_PATHS.PLANTING_SITES + '/*'}
-              element={<PlantingSites reloadTracking={reloadPlantingSites} />}
-            />
+            <Route path={APP_PATHS.PLANTING_SITES + '/*'} element={<PlantingSites />} />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
