@@ -17,6 +17,7 @@ import {
   requestObservations,
   requestObservationsResults,
 } from 'src/redux/features/observations/observationsThunks';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import BiomassMeasurementsDetails from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementsDetails';
 import strings from 'src/strings';
@@ -31,7 +32,6 @@ import AdHocObservationDetails from './adhoc/AdHocObservationDetails';
 import ObservationDetails from './details';
 import { RescheduleObservation, ScheduleObservation } from './schedule';
 import ObservationPlantingZoneDetails from './zone';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 
 /**
  * This page will route to the correct component based on url params
@@ -75,7 +75,7 @@ export default function ObservationsRouter(): JSX.Element {
   }, [reloadSpecies]);
 
   // show spinner while initializing data
-  if (observationsResults === undefined && !(observationsResultsError)) {
+  if (observationsResults === undefined && !observationsResultsError) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
