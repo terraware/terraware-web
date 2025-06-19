@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
 import { Box, Slide, useTheme } from '@mui/material';
@@ -7,16 +7,15 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import { APP_PATHS } from 'src/constants';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
 import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
-import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import ApplicationRouter from 'src/scenes/ApplicationRouter';
@@ -42,7 +41,6 @@ import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import SpeciesRouter from 'src/scenes/Species';
 import { Project } from 'src/types/Project';
-import { PlantingSite } from 'src/types/Tracking';
 import { getRgbaFromHex } from 'src/utils/color';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -65,11 +63,12 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const theme = useTheme();
 
   const { species } = useSpeciesData();
-  const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
-  const plantingSites: PlantingSite[] | undefined = useAppSelector(
-    selectOrgPlantingSites(selectedOrganization?.id || -1)
-  );
+  const { plantingSites, observationResults } = useOrgTracking();
   const projects: Project[] | undefined = useAppSelector(selectProjects);
+
+  const hasObservationsResults = useMemo(() => {
+    return observationResults.length > 0;
+  }, [observationResults.length]);
 
   const contentStyles = {
     height: '100%',
