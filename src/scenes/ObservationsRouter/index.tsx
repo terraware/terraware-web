@@ -17,7 +17,6 @@ import {
   requestObservations,
   requestObservationsResults,
 } from 'src/redux/features/observations/observationsThunks';
-import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import BiomassMeasurementsDetails from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementsDetails';
 import strings from 'src/strings';
@@ -32,6 +31,7 @@ import AdHocObservationDetails from './adhoc/AdHocObservationDetails';
 import ObservationDetails from './details';
 import { RescheduleObservation, ScheduleObservation } from './schedule';
 import ObservationPlantingZoneDetails from './zone';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 
 /**
  * This page will route to the correct component based on url params
@@ -49,26 +49,25 @@ export default function ObservationsRouter(): JSX.Element {
 
   // listen for error
   const observationsResultsError = useAppSelector(selectObservationsResultsError);
-  const plantingSitesError = useAppSelector(selectPlantingSitesError);
   // listen for data
   const observationsResults = useAppSelector(selectObservationsResults);
-  const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    if (plantingSites !== undefined && !dispatched && selectedOrganization) {
+    if (!dispatched && selectedOrganization) {
       setDispatched(true);
-      void dispatch(requestObservationsResults(selectedOrganization?.id));
+      void dispatch(requestPlantingSites(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
       void dispatch(requestAdHocObservationResults(selectedOrganization.id));
       void dispatch(requestObservations(selectedOrganization.id));
       void dispatch(requestObservations(selectedOrganization.id, true));
     }
-  }, [dispatch, selectedOrganization, plantingSites, dispatched]);
+  }, [dispatch, dispatched, selectedOrganization]);
 
   useEffect(() => {
-    if (observationsResultsError || plantingSitesError) {
+    if (observationsResultsError) {
       snackbar.toastError();
     }
-  }, [snackbar, observationsResultsError, plantingSitesError]);
+  }, [snackbar, observationsResultsError]);
 
   const reload = useCallback(() => {
     reloadSpecies();
@@ -76,7 +75,7 @@ export default function ObservationsRouter(): JSX.Element {
   }, [reloadSpecies]);
 
   // show spinner while initializing data
-  if (observationsResults === undefined && !(observationsResultsError || plantingSitesError)) {
+  if (observationsResults === undefined && !(observationsResultsError)) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
