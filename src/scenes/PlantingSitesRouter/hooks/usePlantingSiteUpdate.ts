@@ -14,7 +14,7 @@ export type Response = {
 /**
  * Hook to create a planting site
  */
-export default function usePlantingSiteCreate(): Response {
+export default function usePlantingSiteUpdate(): Response {
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectPlantingSiteUpdate(requestId));
