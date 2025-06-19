@@ -1400,6 +1400,7 @@ PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION,This video shows how to
 PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE,Drawing Exclusion Area Boundaries,
 PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,This video shows how to use the drawing {0} tool to draw the boundary of the planting site.,
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Drawing Site Boundaries,
+PLANTING_SITE_CREATED,Planting site created!,
 PLANTING_SITE_DELETED,Planting site deleted!,
 PLANTING_SITE_PROGRESS,Planting Site Progress,
 PLANTING_SITE_SAVED,Planting Site Saved,

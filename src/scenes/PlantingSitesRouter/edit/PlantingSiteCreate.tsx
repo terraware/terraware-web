@@ -6,35 +6,38 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
-import TrackingService, { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
+import { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import usePlantingSiteCreate from '../hooks/usePlantingSiteCreate';
+import usePlantingSiteUpdate from '../hooks/usePlantingSiteUpdate';
 import DetailsInputForm from './DetailsInputForm';
 
 type CreatePlantingSiteProps = {
-  reloadPlantingSites: () => void;
+  plantingSiteId?: number;
 };
 
-export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
+export default function CreatePlantingSite({ plantingSiteId }: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const { reloadPlantingSites } = props;
-  const navigate = useSyncNavigate();
+  const { goToPlantingSiteView } = useNavigateTo();
   const snackbar = useSnackbar();
-  const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
 
-  const { isLoading, plantingSite } = usePlantingSiteData();
+  const [hasErrors, setHasErrors] = useState<boolean>();
+  const { create, result: createResult } = usePlantingSiteCreate();
+  const { update, result: updateResult } = usePlantingSiteUpdate();
+
+  const { isLoading, reload, setSelectedPlantingSite, plantingSite } = usePlantingSiteData();
 
   const defaultPlantingSite = (): PlantingSite => ({
-    id: -1,
+    id: plantingSiteId ?? -1,
     adHocPlots: [],
     name: '',
     organizationId: selectedOrganization?.id || -1,
@@ -44,93 +47,86 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const [record, setRecord, onChange] = useForm<PlantingSite>(defaultPlantingSite());
 
   useEffect(() => {
-    setRecord({
-      adHocPlots: plantingSite?.adHocPlots || [],
-      boundary: plantingSite?.boundary,
-      description: plantingSite?.description,
-      id: plantingSite?.id || -1,
-      name: plantingSite?.name || '',
-      organizationId: selectedOrganization?.id || -1,
-      plantingSeasons: plantingSite?.plantingSeasons || [],
-      plantingZones: plantingSite?.plantingZones,
-      projectId: plantingSite?.projectId,
-      timeZone: plantingSite?.timeZone,
-    });
-  }, [plantingSite, setRecord, selectedOrganization]);
-
-  const goToPlantingSite = useCallback(
-    (id?: number) => {
-      const plantingSitesLocation = {
-        pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
-      };
-      navigate(plantingSitesLocation);
-    },
-    [navigate]
-  );
-
-  const onSave = () =>
-    new Promise((resolve) => {
-      setOnValidate(() => async (hasErrors: boolean) => {
-        if (hasErrors) {
-          setOnValidate(undefined);
-          resolve(false);
-          return;
-        }
-        const saved = await savePlantingSite();
-        if (!saved) {
-          setOnValidate(undefined);
-          resolve(false);
-        }
+    if (plantingSiteId) {
+      setRecord({
+        adHocPlots: plantingSite?.adHocPlots || [],
+        boundary: plantingSite?.boundary,
+        description: plantingSite?.description,
+        id: plantingSite?.id || -1,
+        name: plantingSite?.name || '',
+        organizationId: selectedOrganization?.id || -1,
+        plantingSeasons: plantingSite?.plantingSeasons || [],
+        plantingZones: plantingSite?.plantingZones,
+        projectId: plantingSite?.projectId,
+        timeZone: plantingSite?.timeZone,
       });
-    });
-
-  const savePlantingSite = async (): Promise<boolean> => {
-    let response;
-    let id = record.id;
-    if (record.id === -1) {
-      const newPlantingSite: PlantingSitePostRequestBody = {
-        boundary: record.boundary,
-        description: record.description,
-        name: record.name,
-        organizationId: record.organizationId,
-        plantingSeasons,
-        projectId: record.projectId,
-        timeZone: record.timeZone,
-      };
-      // TODO use redux here
-      response = await TrackingService.createPlantingSite(newPlantingSite);
-      id = response.data?.id || -1;
-    } else {
-      const updatedPlantingSite: PlantingSitePutRequestBody = {
-        boundary: record.boundary,
-        description: record.description,
-        name: record.name,
-        plantingSeasons,
-        projectId: record.projectId,
-        timeZone: record.timeZone,
-      };
-      // TODO use redux here
-      response = await TrackingService.updatePlantingSite(record.id, updatedPlantingSite);
     }
+  }, [plantingSite, plantingSiteId, setRecord, selectedOrganization]);
 
-    if (response.requestSucceeded) {
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reloadPlantingSites();
-      goToPlantingSite(id);
-      return true;
-    } else {
-      snackbar.toastError();
-      return false;
+  const goBack = useCallback(() => {
+    if (plantingSiteId) {
+      goToPlantingSiteView(plantingSiteId);
     }
-  };
+  }, [goToPlantingSiteView, plantingSiteId]);
+
+  const savePlantingSite = useCallback(() => {
+    if (!hasErrors) {
+      if (record.id === -1) {
+        const newPlantingSite: PlantingSitePostRequestBody = {
+          boundary: record.boundary,
+          description: record.description,
+          name: record.name,
+          organizationId: record.organizationId,
+          plantingSeasons,
+          projectId: record.projectId,
+          timeZone: record.timeZone,
+        };
+        create(newPlantingSite);
+      } else {
+        const updatedPlantingSite: PlantingSitePutRequestBody = {
+          boundary: record.boundary,
+          description: record.description,
+          name: record.name,
+          plantingSeasons,
+          projectId: record.projectId,
+          timeZone: record.timeZone,
+        };
+        update(record.id, updatedPlantingSite);
+      }
+    }
+  }, [create, hasErrors, plantingSeasons, record, update]);
+
+  useEffect(() => {
+    if (updateResult) {
+      if (updateResult.status === 'success' && updateResult.data) {
+        reload();
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+        goBack();
+      }
+    }
+  }, [goBack, plantingSiteId, reload, setSelectedPlantingSite, snackbar, updateResult]);
+
+  useEffect(() => {
+    if (createResult) {
+      if (createResult.status === 'success') {
+        reload();
+        snackbar.toastSuccess(strings.PLANTING_SITE_CREATED);
+        if (createResult.data) {
+          goToPlantingSiteView(createResult.data);
+        } else {
+          goBack();
+        }
+      }
+    }
+  }, [createResult, goBack, goToPlantingSiteView, reload, snackbar, updateResult]);
 
   return (
     <TfMain>
       <PageForm
         cancelID='cancelCreatePlantingSite'
         saveID='saveCreatePlantingSite'
-        onCancel={() => goToPlantingSite(record.id)}
-        onSave={() => void onSave()}
+        onCancel={goBack}
+        onSave={savePlantingSite}
         style={{
           display: 'flex',
           flexGrow: 1,
@@ -154,7 +150,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                 <Card flushMobile style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <DetailsInputForm<PlantingSite>
                     onChange={onChange}
-                    onValidate={onValidate}
+                    onValidate={setHasErrors}
                     plantingSeasons={plantingSeasons}
                     record={record}
                     setPlantingSeasons={setPlantingSeasons}
