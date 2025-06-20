@@ -6,13 +6,13 @@ import ListMapView from 'src/components/ListMapView';
 import Card from 'src/components/common/Card';
 import { FilterField } from 'src/components/common/FilterGroup';
 import { View } from 'src/components/common/ListMapSelector';
-import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
+import PlantingSiteDropdown from 'src/components/common/PlantingSiteDropdown';
 import Search, { FeaturedFilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useLocalization, useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { selectPlantingSite, selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -38,8 +38,8 @@ export default function PlantingProgress(): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(selectedPlantingSiteId)));
+
+  const { allPlantingSites, plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
 
   const getProjectName = useCallback(
     (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
@@ -117,8 +117,6 @@ export default function PlantingProgress(): JSX.Element {
     }
   }, [selectedOrganization, dispatch]);
 
-  const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
-
   useEffect(() => {
     setFilterOptions({
       plantingCompleted: {
@@ -127,10 +125,14 @@ export default function PlantingProgress(): JSX.Element {
       },
       siteName: {
         partial: false,
-        values: plantingSitesNames ? plantingSitesNames : [],
+        values: allPlantingSites?.map((site) => site.name) ?? [],
       },
     });
-  }, [activeLocale, plantingSitesNames]);
+  }, [allPlantingSites]);
+
+  if (!plantingSite) {
+    return <></>;
+  }
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
@@ -155,15 +157,13 @@ export default function PlantingProgress(): JSX.Element {
         search={
           <SearchComponent
             view={activeView}
-            onChangePlantingSite={setSelectedPlantingSiteId}
+            onChangePlantingSite={setSelectedPlantingSite}
             featuredFilters={featuredFilters}
             {...searchProps}
           />
         }
         list={<PlantingProgressList filters={filters} search={search} reloadTracking={reloadTrackingAndObservations} />}
-        map={
-          <PlantingProgressMap plantingSiteId={selectedPlantingSiteId} reloadTracking={reloadTrackingAndObservations} />
-        }
+        map={<PlantingProgressMap plantingSiteId={plantingSite?.id} reloadTracking={reloadTrackingAndObservations} />}
       />
     </Card>
   );
@@ -178,13 +178,28 @@ type SearchComponentProps = SearchProps & {
 function SearchComponent(props: SearchComponentProps): JSX.Element {
   const { search, onSearch, filtersProps, view, onChangePlantingSite, featuredFilters } = props;
 
+  const { allPlantingSites } = usePlantingSiteData();
+
+  const onChange = useCallback(
+    (plantingSiteId: number | 'all') => {
+      if (plantingSiteId !== 'all') {
+        onChangePlantingSite(plantingSiteId);
+      }
+    },
+    [onChangePlantingSite]
+  );
+
   return (
     <>
       <div style={{ display: view === 'list' ? 'flex' : 'none' }}>
         <Search search={search} onSearch={onSearch} filtersProps={filtersProps} featuredFilters={featuredFilters} />
       </div>
       <div style={{ display: view === 'map' ? 'flex' : 'none' }}>
-        <PlantingSiteSelector onChange={onChangePlantingSite} />
+        <PlantingSiteDropdown
+          onChange={onChange}
+          plantingSites={allPlantingSites ?? []}
+          preferenceKey='lastPlantingSiteSelected'
+        />
       </div>
     </>
   );

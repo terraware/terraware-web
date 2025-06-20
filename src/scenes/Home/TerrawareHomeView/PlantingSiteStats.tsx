@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -6,7 +6,7 @@ import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/ut
 
 import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
-import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
+import PlantingSiteDropdown from 'src/components/common/PlantingSiteDropdown';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -31,6 +31,10 @@ export const PlantingSiteStats = () => {
   const { allPlantingSites, plantingSite, setSelectedPlantingSite, latestResult, plantingSiteReportedPlants } =
     usePlantingSiteData();
   const { countries } = useLocalization();
+
+  const plantingSitesWithBoundaries = useMemo(() => {
+    return allPlantingSites?.filter((site) => site.boundary !== undefined) ?? [];
+  }, [allPlantingSites]);
 
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
 
@@ -59,9 +63,14 @@ export const PlantingSiteStats = () => {
   const totalPlants = useMemo(() => plantingSiteReportedPlants?.totalPlants ?? 0, [plantingSiteReportedPlants]);
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species?.length ?? 0, [plantingSiteReportedPlants]);
 
-  if (!allPlantingSites?.length) {
-    return <></>;
-  }
+  const onPlantingSiteSelected = useCallback(
+    (plantingSiteId: number | 'all') => {
+      if (plantingSiteId !== 'all') {
+        setSelectedPlantingSite(plantingSiteId);
+      }
+    },
+    [setSelectedPlantingSite]
+  );
 
   return (
     <Box
@@ -126,11 +135,10 @@ export const PlantingSiteStats = () => {
             >
               {strings.PLANTING_SITE}
             </Typography>
-            <PlantingSiteSelector
-              onChange={(plantingSiteId) => {
-                setSelectedPlantingSite(plantingSiteId);
-              }}
-              hideNoBoundary
+            <PlantingSiteDropdown
+              onChange={onPlantingSiteSelected}
+              plantingSites={plantingSitesWithBoundaries}
+              preferenceKey='lastPlantingSiteSelected'
             />
           </Grid>
 

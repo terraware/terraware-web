@@ -26,11 +26,10 @@ import {
   requestPlantingSiteReportedPlants,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
 import { Observation, ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteHistory, PlantingSiteReportedPlants } from 'src/types/Tracking';
 
-import { useLocalization, useOrganization } from '../hooks';
+import { useOrganization } from '../hooks';
 import { PlantingSiteContext, PlantingSiteData } from './PlantingSiteContext';
 
 export type Props = {
@@ -40,7 +39,6 @@ export type Props = {
 const PlantingSiteProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { activeLocale } = useLocalization();
 
   const { selectedOrganization } = useOrganization();
   const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
@@ -75,19 +73,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const historiesResponse = useAppSelector(selectPlantingSiteHistories(historiesRequestId));
   const reportedPlantsResponse = useAppSelector(selectPlantingSiteReportedPlants(reportedPlantsRequestId));
 
-  const allSitesOption = useMemo(() => {
-    const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization?.id;
-    if (activeLocale && orgId) {
-      return {
-        name: strings.ALL_PLANTING_SITES,
-        id: -1,
-        adHocPlots: [],
-        organizationId: orgId,
-        plantingSeasons: [],
-      };
-    }
-  }, [activeLocale, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization]);
-
   const reload = useCallback(() => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization?.id;
     if (orgId) {
@@ -103,10 +88,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
   // Function to select a planting site
   const setSelectedPlantingSite = useCallback(
     (plantingSiteId?: number) => {
-      let foundSite = plantingSites?.find((site) => site.id === plantingSiteId);
-      if (plantingSiteId === -1) {
-        foundSite = allSitesOption;
-      }
+      const foundSite = plantingSites?.find((site) => site.id === plantingSiteId);
       if (plantingSite !== foundSite) {
         setPlantingSite(foundSite);
         setObservations(undefined);
@@ -118,7 +100,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
         setReportedPlants(undefined);
       }
     },
-    [plantingSites, plantingSite, allSitesOption]
+    [plantingSites, plantingSite]
   );
 
   useEffect(() => {
@@ -197,11 +179,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
     }
   }, [reportedPlantsResponse]);
 
-  const allPlantingSites = useMemo(
-    () => (plantingSites && allSitesOption ? [...plantingSites, allSitesOption] : []),
-    [allSitesOption, plantingSites]
-  );
-
   const isLoading = useMemo(() => {
     return (
       plantingSitesResponse?.status === 'pending' ||
@@ -260,7 +237,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
     (): PlantingSiteData => ({
       acceleratorOrganizationId,
       setAcceleratorOrganizationId,
-      allPlantingSites,
+      allPlantingSites: plantingSites,
       plantingSite,
       plantingSiteReportedPlants: reportedPlants,
       plantingSiteHistories: histories,
@@ -280,8 +257,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
     }),
     [
       acceleratorOrganizationId,
-      allPlantingSites,
       plantingSite,
+      plantingSites,
       reportedPlants,
       histories,
       adHocObservations,

@@ -36,7 +36,6 @@ import ObservationPlantingZoneDetails from './zone';
 /**
  * This page will route to the correct component based on url params
  * eg. /observations or /observations/<planting-site-id> goes to <ObservationsHome />
- *     /observations/<planting-site-id>/<observation-id> will go to drilled down components (TODO)
  * Having this wrapper component allows us to pre-request data for all the views without being redundant.
  */
 export default function ObservationsRouter(): JSX.Element {
