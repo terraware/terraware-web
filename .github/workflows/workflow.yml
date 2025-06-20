@@ -107,7 +107,7 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-      
+
       - name: Install Vercel CLI
         run: npm install -g vercel
 
