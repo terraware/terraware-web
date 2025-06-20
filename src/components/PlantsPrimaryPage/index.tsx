@@ -4,8 +4,9 @@ import { useParams } from 'react-router';
 import _ from 'lodash';
 
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { CachedUserService, PreferencesService } from 'src/services';
+import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
 import PlantsPrimaryPageView, { ButtonProps } from './PlantsPrimaryPageView';
@@ -53,6 +54,7 @@ export default function PlantsPrimaryPage({
   onSelect,
   onSelectProjectId,
 }: PlantsPrimaryPageProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
@@ -69,14 +71,23 @@ export default function PlantsPrimaryPage({
     }
   }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization]);
 
+  const allSitesOption = useMemo((): PlantingSite => {
+    return {
+      name: activeLocale ? strings.ALL_PLANTING_SITES : 'ALL',
+      id: -1,
+      adHocPlots: [],
+      organizationId: organizationId ?? -1,
+      plantingSeasons: [],
+    };
+  }, [activeLocale, organizationId]);
+
   const plantingSitesList = useMemo((): PlantingSite[] => {
     const projectSites = projectId
-      ? plantingSitesData.filter((site) => site.projectId === projectId || site.id === -1)
+      ? plantingSitesData.filter((site) => site.projectId === projectId)
       : plantingSitesData;
-    const projectSitesWithAll =
-      allowAllAsSiteSelection && projectSites.length > 2 ? projectSites : projectSites.filter((site) => site.id !== -1);
+    const projectSitesWithAll = allowAllAsSiteSelection ? [...projectSites, allSitesOption] : projectSites;
     return projectSitesWithAll.toSorted((a, b) => a.id - b.id);
-  }, [plantingSitesData, allowAllAsSiteSelection, projectId]);
+  }, [projectId, plantingSitesData, allowAllAsSiteSelection, allSitesOption]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
