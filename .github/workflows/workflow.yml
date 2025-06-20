@@ -122,8 +122,19 @@ jobs:
       - name: Build for Vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy to Vercel (prebuilt)
+        id: vercel_deploy
+        run: |
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "deployment_url=${url}" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with Preview URL
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ✅ Vercel Preview URL: [${{ steps.vercel_deploy.outputs.deployment_url }}](${{ steps.vercel_deploy.outputs.deployment_url }})
 
       - name: build
         run: yarn build
