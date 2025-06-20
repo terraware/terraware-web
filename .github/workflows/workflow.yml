@@ -107,6 +107,23 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+      
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Authenticate with Vercel
+        run: vercel login --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Create Vercel project file for Terraware Web Preview
+        run: |
+          mkdir -p .vercel
+          echo "{\"projectId\":\"${{ secrets.VERCEL_PROJECT_ID_TERRAWARE_WEB_PREVIEW }}\",\"orgId\":\"${{ secrets.VERCEL_ORG_ID }}\"}" > .vercel/project.json
+
+      - name: Pull Vercel project settings for "preview" environment
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build & Deploy to Vercel
+        run: vercel --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: build
         run: yarn build
