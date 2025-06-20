@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 
 import { GenericMap } from 'src/components/Map';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestGetCountryBoundary } from 'src/redux/features/location/locationAsyncThunks';
 import { selectCountryBoundary } from 'src/redux/features/location/locationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -19,13 +22,15 @@ type ProjectMapProps = {
   countryCode?: string;
   md?: number;
   includeLabel?: boolean;
+  projectId?: number;
 };
 
-const ProjectMap = ({ application, countryCode, md, includeLabel }: ProjectMapProps) => {
+const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: ProjectMapProps) => {
   const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
   const dispatch = useAppDispatch();
   const countryBoundaryResult = useAppSelector(selectCountryBoundary(countryCode ?? ''));
+  const navigate = useSyncNavigate();
 
   useEffect(() => {
     if (countryCode) {
@@ -102,8 +107,35 @@ const ProjectMap = ({ application, countryCode, md, includeLabel }: ProjectMapPr
     }
   }, [appBoundaryMapOptions, application?.boundary, countryCode, countryMapOptions, includeLabel, theme]);
 
+  const goToGisMapsView = useCallback(() => {
+    console.log('projectId', projectId);
+    if (projectId) {
+      navigate(APP_PATHS.ACCELERATOR_PROJECT_GIS_MAPS_VIEW.replace(':projectId', projectId.toString()));
+    }
+  }, [projectId, navigate]);
+
   return (
     <Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)}>
+      <Box
+        sx={{
+          position: 'absolute',
+          right: '5%',
+          zIndex: 10,
+          width: 28,
+          height: 28,
+          backgroundColor: `${theme.palette.TwClrBaseWhite}`,
+          borderRadius: '4px',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <button
+          style={{ background: 'none', border: 'none', cursor: 'pointer', height: '18px' }}
+          onClick={goToGisMapsView}
+        >
+          <Icon name='iconFullScreen' />
+        </button>
+      </Box>
       <Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignContent: 'center' }}>
         {mapElement}
       </Box>

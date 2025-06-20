@@ -8,6 +8,7 @@ import ProjectProvider from 'src/providers/Project/ProjectProvider';
 import ProjectProfileEdit from './EditView/ProjectProfileEdit';
 import ParticipantProjectProvider from './ParticipantProjectProvider';
 import ProjectPage from './ProjectPage';
+import ProjectProfileMap from './ProjectProfileMap';
 import Reports from './Reports';
 import Scoring from './Scoring';
 import Voting from './Voting';
@@ -22,6 +23,7 @@ const ParticipantProjectsRouter = () => {
             <Routes>
               <Route path={'edit'} element={<ProjectProfileEdit />} />
               <Route path={''} element={<ProjectPage />} />
+              <Route path={'maps/*'} element={<ProjectProfileMap />} />
               <Route path={'votes/*'} element={<Voting />} />
               <Route path={'scores/*'} element={<Scoring />} />
               <Route path={'reports/*'} element={<Reports />} />

@@ -240,6 +240,7 @@ const ProjectProfileView = ({
             countryCode={projectDetails?.countryCode}
             includeLabel={!funderView}
             md={isMobile || isTablet ? 12 : projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
+            projectId={project?.id}
           />
         )}
       </Grid>

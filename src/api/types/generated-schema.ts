@@ -8222,7 +8222,9 @@ export interface components {
             perHectareBudget?: number;
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+            plantingSitesCql?: string;
             projectArea?: number;
+            projectBoundariesCql?: string;
             /** Format: int64 */
             projectHighlightPhotoValueId?: number;
             /** Format: int64 */

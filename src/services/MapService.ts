@@ -1,3 +1,5 @@
+import union from '@turf/union';
+import { Feature, FeatureCollection, Polygon } from 'geojson';
 import { DateTime } from 'luxon';
 
 import { paths } from 'src/api/types/generated-schema';
@@ -414,6 +416,180 @@ const getMapEntityGeometry = (entity: MapEntity): MapGeometry => {
   return multiPolygons;
 };
 
+const getMapDataFromGisPlantingSites = (gisPlantingSiteData: FeatureCollection<MultiPolygon>): MapData => {
+  const siteData = extractPlantingSitesFromGis(gisPlantingSiteData);
+  const zoneData = extractZonesFromGis(gisPlantingSiteData);
+  const subzoneData = extractSubzonesFromGis(gisPlantingSiteData);
+
+  return {
+    site: siteData,
+    zone: zoneData,
+    subzone: subzoneData,
+    permanentPlot: undefined,
+    temporaryPlot: undefined,
+    adHocPlot: undefined,
+  };
+};
+
+const extractPlantingSitesFromGis = (gisPlantingSiteData: FeatureCollection<MultiPolygon>): MapSourceBaseData => {
+  const plantingSitesData: {
+    properties: {
+      id: number;
+      name: any;
+      type: string;
+    };
+    boundary: MapGeometry;
+    id: number;
+  }[] = [];
+
+  const groupedByPlantingSite = gisPlantingSiteData.features.reduce((groups: { [key: string]: any[] }, feature) => {
+    const site = feature.properties?.site;
+    if (site) {
+      if (!groups[site]) {
+        groups[site] = [];
+      }
+      groups[site].push(feature);
+    }
+    return groups;
+  }, {});
+
+  if (Object.keys(groupedByPlantingSite).length > 0) {
+    Object.keys(groupedByPlantingSite).forEach((site) => {
+      const features = groupedByPlantingSite[site] as Feature<MultiPolygon>[];
+
+      let unionedFeature: Feature<Polygon | MultiPolygon> = features[0];
+
+      for (let i = 1; i < features.length; i++) {
+        const result = union(unionedFeature, features[i]);
+        if (result) {
+          unionedFeature = result;
+        }
+      }
+
+      const unionedBoundary = unionedFeature.geometry;
+      const boundaryCoordinates = getPolygons(unionedBoundary as MultiPolygon);
+
+      const firstFeature = groupedByPlantingSite[site][0];
+      plantingSitesData.push({
+        properties: {
+          id: firstFeature.properties?.site,
+          name: firstFeature.properties?.site,
+          type: 'site',
+        },
+        boundary: boundaryCoordinates,
+        id: firstFeature.properties?.site,
+      });
+    });
+  } else {
+    const allFeatures = gisPlantingSiteData.features;
+    let unionedFeature: Feature<Polygon | MultiPolygon> = allFeatures[0];
+
+    for (let i = 1; i < allFeatures.length; i++) {
+      const result = union(unionedFeature, allFeatures[i]);
+      if (result) {
+        unionedFeature = result;
+      }
+    }
+    const unionedBoundary = unionedFeature.geometry;
+    const boundaryCoordinates = getPolygons(unionedBoundary as MultiPolygon);
+    const firstFeature = gisPlantingSiteData.features[0];
+
+    plantingSitesData.push({
+      properties: {
+        id: firstFeature.properties?.site,
+        name: firstFeature.properties?.site,
+        type: 'site',
+      },
+      boundary: boundaryCoordinates,
+      id: firstFeature.properties?.site,
+    });
+  }
+
+  return {
+    entities: plantingSitesData,
+    id: 'sites',
+  };
+};
+
+const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceBaseData => {
+  const zonesData: {
+    properties: {
+      id: number;
+      name: any;
+      type: string;
+    };
+    boundary: MapGeometry;
+    id: number;
+  }[] = [];
+
+  const groupedByStrata = gisPlantingSiteData.features.reduce((groups: { [key: string]: any[] }, feature) => {
+    const strata = feature.properties?.strata;
+    if (strata) {
+      if (!groups[strata]) {
+        groups[strata] = [];
+      }
+      groups[strata].push(feature);
+    }
+    return groups;
+  }, {});
+
+  Object.keys(groupedByStrata).forEach((strata) => {
+    const features = groupedByStrata[strata] as Feature<MultiPolygon>[];
+
+    // Start with the first feature, then union with the rest
+    let unionedFeature: Feature<Polygon | MultiPolygon> = features[0];
+
+    for (let i = 1; i < features.length; i++) {
+      const result = union(unionedFeature, features[i]);
+      if (result) {
+        unionedFeature = result;
+      }
+    }
+
+    const unionedGeometry = unionedFeature.geometry;
+    const boundaryCoordinates = getPolygons(unionedGeometry as MultiPolygon);
+
+    const firstFeature = groupedByStrata[strata][0];
+    zonesData.push({
+      properties: {
+        id: firstFeature.properties?.strata,
+        name: firstFeature.properties?.strata,
+        type: 'zone',
+      },
+      boundary: boundaryCoordinates,
+      id: firstFeature.properties?.strata,
+    });
+  });
+
+  return {
+    entities: zonesData,
+    id: 'zones',
+  };
+};
+
+const extractSubzonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceBaseData => {
+  const allPlantingSubzonesData =
+    gisPlantingSiteData.features.map((subzone) => {
+      const { properties, geometry } = subzone;
+      return {
+        properties: {
+          id: Number(properties?.fid),
+          name: properties?.substrata,
+          fullName: properties?.substrata,
+          type: 'subzone',
+          zoneId: properties?.strata,
+        },
+        boundary: getPolygons(geometry as MultiPolygon),
+        id: Number(properties?.fid),
+      };
+    }) || [];
+
+  return {
+    entities: allPlantingSubzonesData,
+    id: 'subzones',
+  };
+};
+
 /**
  * Extract Planting Sites, Zones, Subzones from planting sites data
  */
@@ -624,6 +800,7 @@ const getMonitoringPlotMapData = (
 const MapService = {
   getMapboxToken,
   getBoundingBox,
+  getMapDataFromGisPlantingSites,
   getMapDataFromPlantingSite,
   getMapDataFromPlantingSites,
   getMapDataFromPlantingSiteHistory,
