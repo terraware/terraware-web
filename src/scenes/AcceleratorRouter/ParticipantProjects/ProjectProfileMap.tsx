@@ -1,14 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { FeatureCollection } from 'geojson';
 
+import { Crumb } from 'src/components/BreadCrumbs';
 import { PlantingSiteMap } from 'src/components/Map';
+import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
 import { requestGetGis } from 'src/redux/features/gis/gisAsyncThunks';
 import { selectGisRequest } from 'src/redux/features/gis/gisSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
+import strings from 'src/strings';
 import { MultiPolygon } from 'src/types/Tracking';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
@@ -23,6 +28,7 @@ const ProjectProfileMap = () => {
   const dispatch = useAppDispatch();
   const [plantingSitesData, setPlantingSitesData] = useState<string>('');
   const [boundariesData, setBoundariesData] = useState<string>('');
+  const { activeLocale } = useLocalization();
 
   useEffect(() => {
     // if (projectDetails && 'plantingSitesCql' in projectDetails && projectDetails.plantingSitesCql) {
@@ -31,7 +37,7 @@ const ProjectProfileMap = () => {
       requestGetGis({
         cqlFilter: 'project_no=2',
         typeNames: 'tf_accelerator:project_boundaries',
-        propertyName: 'fid,geom',
+        propertyName: 'fid,geom,boundary_name',
       })
     );
     setBoundariesRequestId(requestBoundaries.requestId);
@@ -70,33 +76,66 @@ const ProjectProfileMap = () => {
     }
   }, [boundariesData]);
 
+  // construct the bread crumbs back to originating context
+  const crumbs: Crumb[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            {
+              name: strings.PROJECTS,
+              to: APP_PATHS.ACCELERATOR_OVERVIEW,
+            },
+            {
+              name: projectData?.project?.name ?? '--',
+              to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectData.projectId}`),
+            },
+          ]
+        : [],
+    [activeLocale, projectData]
+  );
+
+  const projectViewTitle = (
+    <Box paddingLeft={1}>
+      <Typography fontSize={'24px'} fontWeight={600}>
+        {strings.MAPS_FOR} {projectData.participantProject?.dealName}
+      </Typography>
+    </Box>
+  );
+
   return (
-    <Card
-      flushMobile
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-        marginBottom: theme.spacing(3),
-        padding: `${theme.spacing(2, 1)}`,
-        borderRadius: theme.spacing(1),
-      }}
+    <Page
+      title={projectViewTitle}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      description={strings.MAPS_GIS_DESCRIPTION}
     >
-      {plantingSitesData && plantingMapData && (
-        <PlantingSiteMap
-          mapData={plantingMapData}
-          style={{ width: '100%', borderRadius: '24px' }}
-          layers={['Planting Site', 'Zones', 'Sub-Zones']}
-        />
-      )}
-      {boundariesData && boundariesMapData && (
-        <PlantingSiteMap
-          mapData={boundariesMapData}
-          style={{ width: '100%', borderRadius: '24px' }}
-          layers={['Planting Site']}
-        />
-      )}
-    </Card>
+      <Card
+        flushMobile
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          marginBottom: theme.spacing(3),
+          padding: `${theme.spacing(2, 1)}`,
+          borderRadius: theme.spacing(1),
+        }}
+      >
+        {plantingSitesData && plantingMapData && (
+          <PlantingSiteMap
+            mapData={plantingMapData}
+            style={{ width: '100%', borderRadius: '24px' }}
+            layers={['Planting Site', 'Zones', 'Sub-Zones']}
+          />
+        )}
+        {boundariesData && boundariesMapData && (
+          <PlantingSiteMap
+            mapData={boundariesMapData}
+            style={{ width: '100%', borderRadius: '24px' }}
+            layers={['Planting Site']}
+          />
+        )}
+      </Card>
+    </Page>
   );
 };
 
