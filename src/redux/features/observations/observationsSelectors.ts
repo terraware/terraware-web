@@ -24,10 +24,6 @@ export const selectObservationsResults = (state: RootState) => state.observation
 export const selectOrgObservationsResults = (orgId: number) => (state: RootState) =>
   state.observationsResults?.[orgId]?.data?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
-export const selectHasObservationsResults = (state: RootState) => {
-  const results = selectObservationsResults(state);
-  return results !== undefined && results.filter((result) => result.state !== 'Upcoming').length > 0;
-};
 export const selectHasCompletedObservations = (state: RootState, plantingSiteId: number) => {
   const results = selectObservationsResults(state);
   return (

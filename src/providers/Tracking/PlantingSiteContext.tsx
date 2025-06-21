@@ -12,7 +12,7 @@ export type PlantingSiteData = {
   plantingSite?: PlantingSite;
   plantingSiteReportedPlants?: PlantingSiteReportedPlants;
   plantingSiteHistories?: PlantingSiteHistory[];
-  setSelectedPlantingSite: (plantingSiteId: number) => void;
+  setSelectedPlantingSite: (plantingSiteId?: number) => void;
 
   adHocObservations?: Observation[];
   adHocObservationResults?: ObservationResultsPayload[];
