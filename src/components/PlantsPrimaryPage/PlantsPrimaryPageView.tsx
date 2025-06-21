@@ -6,8 +6,12 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import PlantingSiteDropdown from 'src/components/common/PlantingSiteDropdown';
 import TfMain from 'src/components/common/TfMain';
+import PlantsDashboardEmptyMessage from 'src/components/emptyStatePages/PlantsDashboardEmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -16,11 +20,8 @@ import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { Project } from 'src/types/Project';
 import { PlantingSite } from 'src/types/Tracking';
-
-import FormattedNumber from '../common/FormattedNumber';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import PlantsDashboardEmptyMessage from '../emptyStatePages/PlantsDashboardEmptyMessage';
 
 export type ButtonProps = {
   title: string;
@@ -30,23 +31,29 @@ export type ButtonProps = {
 
 export type PlantsPrimaryPageViewProps = {
   actionButton?: ButtonProps;
+  allowAllAsSiteSelection?: boolean; // whether to support 'All' as a planting site selection
   children: React.ReactNode; // primary content for this page
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
-  onSelect: (plantingSite?: PlantingSite) => void; // planting site selected, id of -1 refers to All
+  lastVisitedPreferenceName?: string; // optional preference name to store last selection
+  selectedPlantingSiteId: number | 'all' | undefined;
+  onSelect: (plantingSiteId: number | 'all' | undefined) => void; // planting site selected
   plantingSites: PlantingSite[] | undefined;
-  selectedPlantingSiteId?: number;
   style?: Record<string, string | number>;
   text?: string; // optional text to show at the bottom of the header
   title: string;
   newHeader?: boolean;
   showGeometryNote?: boolean;
   latestObservationId?: number;
+  organizationId?: number;
   projectId?: number;
-  onSelectProjectId?: (projectId: number) => void;
+  onSelectProjectId?: (projectId?: number) => void;
 };
 
 export default function PlantsPrimaryPageView({
+  actionButton,
+  allowAllAsSiteSelection,
   children,
+  lastVisitedPreferenceName,
   onSelect,
   plantingSites,
   selectedPlantingSiteId,
@@ -54,12 +61,12 @@ export default function PlantsPrimaryPageView({
   text,
   showGeometryNote,
   latestObservationId,
+  organizationId,
   projectId,
   isEmptyState,
   onSelectProjectId,
   newHeader,
   title,
-  actionButton,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
@@ -69,7 +76,7 @@ export default function PlantsPrimaryPageView({
   const { activeLocale } = useLocalization();
   const projects = useAppSelector(selectProjects);
   const dispatch = useAppDispatch();
-  const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
+  const { allPlantingSites, isLoading, isInitiated } = usePlantingSiteData();
   const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
 
   const hasSites = useMemo(() => {
@@ -80,8 +87,8 @@ export default function PlantsPrimaryPageView({
   }, [allPlantingSites, isAcceleratorRoute, plantingSites]);
 
   const plantingSiteSelected = useMemo(() => {
-    return plantingSite !== undefined;
-  }, [plantingSite]);
+    return selectedPlantingSiteId !== undefined;
+  }, [selectedPlantingSiteId]);
 
   const isPlantingSiteSet = useMemo(() => {
     return isInitiated && ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected));
@@ -102,52 +109,46 @@ export default function PlantsPrimaryPageView({
   }, [isPlantingSiteSet]);
 
   const projectsWithPlantingSites = useMemo(() => {
-    if (!allPlantingSites) {
+    if (!allPlantingSites || !projects) {
       return [];
     }
 
-    const projectIds = allPlantingSites.map((ps) => ps.projectId);
+    const projectIds = allPlantingSites.map((site) => site.projectId).filter((id): id is number => id !== undefined);
+
     const uniqueProjectIds = Array.from(new Set(projectIds));
 
-    return uniqueProjectIds;
-  }, [allPlantingSites]);
+    const _projects = uniqueProjectIds
+      .map((id) => projects.find((_project) => _project.id === id))
+      .filter((_project): _project is Project => _project !== undefined);
+
+    return _projects;
+  }, [allPlantingSites, projects]);
 
   const projectsOptions = useMemo(() => {
-    const iOptions = projects
-      ?.filter((p) => projectsWithPlantingSites.includes(p.id))
-      .map((proj) => ({ label: proj.name, value: proj.id }));
-    iOptions?.unshift({ label: strings.NO_PROJECT, value: -1 });
-    return iOptions;
-  }, [projects, projectsWithPlantingSites]);
+    const _options = projectsWithPlantingSites.map((project) => ({ label: project.name, value: project.id }));
+    return [{ label: strings.NO_PROJECT, value: undefined }, ..._options];
+  }, [projectsWithPlantingSites]);
 
-  const isRolledUpView = useMemo(() => {
-    return projectId !== undefined && selectedPlantingSiteId === -1;
-  }, [projectId, selectedPlantingSiteId]);
-
-  const onChangePlantingSiteId = useCallback(
-    (siteId: number) => {
-      const selectedPlantingSite = plantingSites?.find((ps) => ps.id === siteId);
-      if (selectedPlantingSite) {
-        onSelect(selectedPlantingSite);
+  const onProjectChange = useCallback(
+    (value: any) => {
+      if (value === undefined) {
+        onSelectProjectId?.(undefined);
+      } else {
+        onSelectProjectId?.(Number(value));
       }
     },
-    [onSelect, plantingSites]
+    [onSelectProjectId]
   );
 
-  const options = useMemo(
-    () => plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [],
-    [plantingSites]
-  );
+  const isRolledUpView = useMemo(() => {
+    return projectId !== undefined && selectedPlantingSiteId === 'all';
+  }, [projectId, selectedPlantingSiteId]);
 
   const totalArea = useMemo(() => {
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
   }, [plantingSites]);
 
-  if (
-    !plantingSites ||
-    (!isAcceleratorRoute && (allPlantingSites?.length ?? 0) > 1 && !selectedPlantingSiteId) ||
-    (isAcceleratorRoute && (plantingSites?.length ?? 0) > 0 && !selectedPlantingSiteId)
-  ) {
+  if (!plantingSites) {
     return (
       <TfMain>
         <CircularProgress sx={{ margin: 'auto' }} />
@@ -197,7 +198,7 @@ export default function PlantsPrimaryPageView({
               />
             </Box>
           )}
-          {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && isPlantingSiteSet && (
+          {(isAcceleratorRoute || (!isAcceleratorRoute && plantingSites.length > 0)) && (
             <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
               <Grid container alignItems={'center'} spacing={4}>
                 <Grid item xs={isDesktop ? 3 : 12}>
@@ -206,28 +207,22 @@ export default function PlantsPrimaryPageView({
                       <Dropdown
                         placeholder={strings.NO_PROJECT_SELECTED}
                         id='project-selector'
-                        onChange={(newValue) => onSelectProjectId(Number(newValue))}
+                        onChange={onProjectChange}
                         options={projectsOptions}
                         selectedValue={projectId}
                         fullWidth
                       />
                     </Box>
                   )}
-                  {isAcceleratorRoute && options.length === 1 ? (
-                    <Typography fontSize={'20px'} fontWeight={600}>
-                      {options[0].label}
-                    </Typography>
-                  ) : (
-                    <Dropdown
-                      placeholder={strings.SELECT}
-                      id='planting-site-selector'
-                      onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
-                      options={options}
-                      selectedValue={selectedPlantingSiteId}
-                      fullWidth
-                      disabled={isAcceleratorRoute && options.length === 0}
-                    />
-                  )}
+                  <PlantingSiteDropdown
+                    canSelectAll={allowAllAsSiteSelection}
+                    fullWidth
+                    onChange={onSelect}
+                    organizationId={organizationId}
+                    plantingSites={plantingSites}
+                    preferenceKey={lastVisitedPreferenceName}
+                    selectedPlantingSiteId={selectedPlantingSiteId}
+                  />
                 </Grid>
                 <Grid item xs={isDesktop ? 3 : 12}>
                   <Box>
@@ -246,9 +241,7 @@ export default function PlantsPrimaryPageView({
                     </Typography>
                   </Box>
                 </Grid>
-                {!delayedIsPlantingSiteSet ? (
-                  <CircularProgress sx={{ margin: 'auto' }} />
-                ) : (
+                {text && (
                   <Grid item xs={isDesktop ? 6 : 12}>
                     <Typography fontSize='16px' marginTop={theme.spacing(1)}>
                       {text}
@@ -295,12 +288,14 @@ export default function PlantsPrimaryPageView({
                     <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
                       {strings.PLANTING_SITE}
                     </Typography>
-                    <Dropdown
-                      placeholder={strings.SELECT}
-                      id='planting-site-selector'
-                      onChange={(newValue: string) => onChangePlantingSiteId(Number(newValue))}
-                      options={options}
-                      selectedValue={selectedPlantingSiteId}
+                    <PlantingSiteDropdown
+                      canSelectAll={allowAllAsSiteSelection}
+                      fullWidth
+                      onChange={onSelect}
+                      organizationId={organizationId}
+                      plantingSites={plantingSites}
+                      preferenceKey={lastVisitedPreferenceName}
+                      selectedPlantingSiteId={selectedPlantingSiteId}
                     />
                   </Box>
                 </>

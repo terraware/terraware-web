@@ -15,7 +15,13 @@ import { PlantingSite } from 'src/types/Tracking';
 import NumberOfSpeciesPlantedCard from './NumberOfSpeciesPlantedCard';
 import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
 
-export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number }): JSX.Element {
+export default function PlantsAndSpeciesCard({
+  projectId,
+  rolledUp,
+}: {
+  projectId?: number;
+  rolledUp: boolean;
+}): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -50,8 +56,8 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
   }, [plantingSites]);
 
   const totalArea = useMemo(() => {
-    return plantingSite && plantingSite?.id === -1 ? totalAreaRolledUp : plantingSite?.areaHa ?? 0;
-  }, [plantingSite, totalAreaRolledUp]);
+    return rolledUp ? totalAreaRolledUp : plantingSite?.areaHa ?? 0;
+  }, [plantingSite, rolledUp, totalAreaRolledUp]);
 
   const calculatePlantingSitePlantedArea = (iPlantingSite: PlantingSite) => {
     return (
@@ -67,14 +73,14 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
     }, 0) || 0;
 
   const totalPlantedArea = useMemo(() => {
-    if (plantingSite && plantingSite.id !== -1) {
+    if (plantingSite && !rolledUp) {
       return calculatePlantingSitePlantedArea(plantingSite);
     }
-    if (plantingSite?.id === -1) {
+    if (rolledUp) {
       return projectTotalPlanted;
     }
     return 0;
-  }, [plantingSite, projectTotalPlanted]);
+  }, [plantingSite, projectTotalPlanted, rolledUp]);
 
   const percentagePlanted = useMemo(() => {
     return totalArea > 0 ? Math.round(((totalPlantedArea || 0) / totalArea) * 100) : 0;
@@ -91,7 +97,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
               </Typography>
               <Tooltip
                 title={
-                  plantingSite?.id === -1
+                  rolledUp
                     ? strings.PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP
                     : strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP
                 }
@@ -133,7 +139,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {plantingSite && plantingSite?.id !== -1 ? (
+                {plantingSite && !rolledUp ? (
                   plantingSiteReportedPlants ? (
                     <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
                   ) : (
@@ -147,11 +153,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                 {strings.PLANTS}
               </Typography>
               <Tooltip
-                title={
-                  plantingSite?.id === -1
-                    ? strings.TOTAL_PLANTS_PLANTED_ROLLED_UP_TOOLTIP
-                    : strings.TOTAL_PLANTS_PLANTED_TOOLTIP
-                }
+                title={rolledUp ? strings.TOTAL_PLANTS_PLANTED_ROLLED_UP_TOOLTIP : strings.TOTAL_PLANTS_PLANTED_TOOLTIP}
               >
                 <Box display='flex'>
                   <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
@@ -169,7 +171,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
           <Box>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {plantingSite && plantingSite?.id !== -1 ? (
+                {plantingSite && !rolledUp ? (
                   <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
                 ) : (
                   <FormattedNumber value={projectTotalSpecies} />
@@ -178,9 +180,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
               </Typography>
               <Tooltip
                 title={
-                  plantingSite?.id === -1
-                    ? strings.TOTAL_SPECIES_PLANTED_ROLLED_UP_TOOLTIP
-                    : strings.TOTAL_SPECIES_PLANTED_TOOLTIP
+                  rolledUp ? strings.TOTAL_SPECIES_PLANTED_ROLLED_UP_TOOLTIP : strings.TOTAL_SPECIES_PLANTED_TOOLTIP
                 }
               >
                 <Box display='flex'>
@@ -199,11 +199,11 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
       <Grid item xs={12}>
         <Card radius='8px' style={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
           <Box flexBasis='100%'>
-            <PlantsReportedPerSpeciesCard newVersion projectId={projectId} />
+            <PlantsReportedPerSpeciesCard newVersion rolledUp={rolledUp} projectId={projectId} />
           </Box>
           <div style={separatorStyles} />
           <Box flexBasis='100%'>
-            <NumberOfSpeciesPlantedCard newVersion projectId={projectId} />
+            <NumberOfSpeciesPlantedCard newVersion rolledUp={rolledUp} projectId={projectId} />
           </Box>
         </Card>
       </Grid>

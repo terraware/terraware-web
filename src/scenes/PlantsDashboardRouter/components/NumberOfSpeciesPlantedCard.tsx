@@ -17,25 +17,27 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type NumberOfSpeciesPlantedCardProps = {
   newVersion?: boolean;
+  rolledUp: boolean;
   projectId?: number;
 };
 
 export default function NumberOfSpeciesPlantedCard({
   newVersion,
+  rolledUp,
   projectId,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
   const { plantingSite } = usePlantingSiteData();
 
-  if (projectId && plantingSite?.id === -1) {
+  if (projectId && rolledUp) {
     return <RolledUpCard projectId={projectId} />;
   }
 
   if (!plantingSite) {
     return <RolledUpCard projectId={projectId} />;
   } else if (!plantingSite.plantingZones?.length) {
-    return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
+    return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} rolledUp={rolledUp} />;
   } else {
-    return <SiteWithZonesCard newVersion={newVersion} />;
+    return <SiteWithZonesCard newVersion={newVersion} rolledUp={rolledUp} />;
   }
 }
 const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {

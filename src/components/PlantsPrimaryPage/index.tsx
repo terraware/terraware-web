@@ -1,12 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import React, { useEffect, useMemo } from 'react';
 
-import _ from 'lodash';
-
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { CachedUserService, PreferencesService } from 'src/services';
-import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
 import PlantsPrimaryPageView, { ButtonProps } from './PlantsPrimaryPageView';
@@ -17,10 +10,7 @@ export type PlantsPrimaryPageProps = {
   children: React.ReactNode; // primary content for this page
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   lastVisitedPreferenceName: string;
-  pagePath: string;
-  plantsSitePreferences?: Record<string, unknown>;
   plantingSitesData: PlantingSite[];
-  setPlantsSitePreferences: (preferences: Record<string, unknown>) => void;
   style?: Record<string, string | number>;
   title: string;
   text?: string;
@@ -29,8 +19,9 @@ export type PlantsPrimaryPageProps = {
   latestObservationId?: number;
   projectId?: number;
   organizationId?: number;
-  onSelect: (plantingSiteId: number) => void;
-  onSelectProjectId?: (projectId: number) => void;
+  selectedPlantingSiteId: number | 'all' | undefined;
+  onSelect: (plantingSiteId: number | 'all' | undefined) => void;
+  onSelectProjectId?: (projectId?: number) => void;
 };
 
 export default function PlantsPrimaryPage({
@@ -39,10 +30,7 @@ export default function PlantsPrimaryPage({
   children,
   isEmptyState,
   lastVisitedPreferenceName,
-  pagePath,
-  plantsSitePreferences,
   plantingSitesData,
-  setPlantsSitePreferences,
   style,
   title,
   text,
@@ -51,128 +39,45 @@ export default function PlantsPrimaryPage({
   latestObservationId,
   projectId,
   organizationId,
+  selectedPlantingSiteId,
   onSelect,
   onSelectProjectId,
 }: PlantsPrimaryPageProps): JSX.Element {
-  const { activeLocale } = useLocalization();
-  const { selectedOrganization } = useOrganization();
-  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
-  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const navigate = useSyncNavigate();
-
-  useEffect(() => {
-    if (plantsSitePreferences && selectedOrganization) {
-      const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
-      if (!_.isEqual(response[lastVisitedPreferenceName], plantsSitePreferences)) {
-        void PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-          [lastVisitedPreferenceName]: plantsSitePreferences,
-        });
-      }
-    }
-  }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization]);
-
-  const allSitesOption = useMemo((): PlantingSite => {
-    return {
-      name: activeLocale ? strings.ALL_PLANTING_SITES : 'ALL',
-      id: -1,
-      adHocPlots: [],
-      organizationId: organizationId ?? -1,
-      plantingSeasons: [],
-    };
-  }, [activeLocale, organizationId]);
-
   const plantingSitesList = useMemo((): PlantingSite[] => {
     const projectSites = projectId
       ? plantingSitesData.filter((site) => site.projectId === projectId)
       : plantingSitesData;
-    const projectSitesWithAll = allowAllAsSiteSelection ? [...projectSites, allSitesOption] : projectSites;
-    return projectSitesWithAll.toSorted((a, b) => a.id - b.id);
-  }, [projectId, plantingSitesData, allowAllAsSiteSelection, allSitesOption]);
-
-  const setActivePlantingSite = useCallback(
-    (site: PlantingSite | undefined) => {
-      if (site) {
-        setSelectedPlantingSite(site);
-        if (projectId === undefined) {
-          navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
-        }
-      } else {
-        setSelectedPlantingSite(undefined);
-      }
-    },
-    [navigate, pagePath, projectId, setSelectedPlantingSite]
-  );
+    return projectSites.toSorted((a, b) => a.id - b.id);
+  }, [projectId, plantingSitesData]);
 
   useEffect(() => {
-    const initializePlantingSite = async () => {
-      if (plantingSitesList && plantingSitesList.length) {
-        let lastVisitedPlantingSite: any = {};
-        if (selectedOrganization && !projectId) {
-          const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
-          if (response[lastVisitedPreferenceName]) {
-            lastVisitedPlantingSite = response[lastVisitedPreferenceName];
-          }
-        }
-        const lastPlantingSiteId = Number(lastVisitedPlantingSite.plantingSiteId);
-        const paramPlantingSiteId = plantingSiteId ? Number(plantingSiteId) : undefined;
-
-        const plantingSiteIdToUse = !projectId ? paramPlantingSiteId ?? lastPlantingSiteId : lastPlantingSiteId;
-        const nextPlantingSite =
-          plantingSitesList.find((plantingSite) => plantingSite?.id === plantingSiteIdToUse) ?? plantingSitesList[0];
-        const nextPlantingSiteId = nextPlantingSite.id;
-
-        if (selectedOrganization && !projectId) {
-          if (nextPlantingSiteId !== lastPlantingSiteId) {
-            await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-              [lastVisitedPreferenceName]: { plantingSiteId: nextPlantingSiteId },
-            });
-          }
-          setPlantsSitePreferences({ plantingSiteId: nextPlantingSiteId });
-        }
-
-        if (nextPlantingSiteId === plantingSiteIdToUse) {
-          setSelectedPlantingSite(nextPlantingSite);
-        } else {
-          setActivePlantingSite(nextPlantingSite);
-        }
+    if (selectedPlantingSiteId !== 'all' && plantingSitesList.length > 0) {
+      if (plantingSitesList.find((site) => site.id === selectedPlantingSiteId) === undefined) {
+        onSelect(plantingSitesList[0].id);
       }
-    };
-
-    void initializePlantingSite();
-  }, [
-    projectId,
-    plantingSitesList,
-    plantingSiteId,
-    setActivePlantingSite,
-    selectedOrganization,
-    lastVisitedPreferenceName,
-    setPlantsSitePreferences,
-    organizationId,
-  ]);
-
-  useEffect(() => {
-    if (selectedPlantingSite) {
-      onSelect(selectedPlantingSite.id);
     }
-  }, [selectedPlantingSite, onSelect]);
+  }, [onSelect, plantingSitesList, selectedPlantingSiteId]);
 
   return (
     <PlantsPrimaryPageView
       actionButton={actionButton}
-      // eslint-disable-next-line react/no-children-prop
-      children={children}
+      allowAllAsSiteSelection={allowAllAsSiteSelection}
       isEmptyState={isEmptyState}
-      onSelect={setActivePlantingSite}
+      lastVisitedPreferenceName={lastVisitedPreferenceName}
+      onSelect={onSelect}
       plantingSites={plantingSitesList}
-      selectedPlantingSiteId={selectedPlantingSite?.id}
+      selectedPlantingSiteId={selectedPlantingSiteId}
       style={style}
       title={title}
       text={text}
       newHeader={newHeader}
       showGeometryNote={showGeometryNote}
       latestObservationId={latestObservationId}
+      organizationId={organizationId}
       projectId={projectId}
       onSelectProjectId={onSelectProjectId}
-    />
+    >
+      {children}
+    </PlantsPrimaryPageView>
   );
 }

@@ -13,9 +13,10 @@ import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 
 type PlantingDensityCardProps = {
   hasObservations: boolean;
+  rolledUp: boolean;
 };
 
-export default function PlantingDensityCard({ hasObservations }: PlantingDensityCardProps): JSX.Element {
+export default function PlantingDensityCard({ hasObservations, rolledUp }: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { plantingSite } = usePlantingSiteData();
@@ -33,7 +34,7 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >
-      {plantingSite && plantingSite.id !== -1 && (
+      {plantingSite && !rolledUp && (
         <>
           {hasObservations && (
             <>

@@ -18,16 +18,18 @@ const MAX_SPECIES_NAME_LENGTH = 20;
 
 type PlantsReportedPerSpeciesCardProps = {
   newVersion?: boolean;
+  rolledUp: boolean;
   projectId?: number;
 };
 
 export default function PlantsReportedPerSpeciesCard({
   newVersion,
+  rolledUp,
   projectId,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
   const { plantingSite } = usePlantingSiteData();
 
-  if (projectId && plantingSite?.id === -1) {
+  if (projectId && rolledUp) {
     return <RolledUpCard projectId={projectId} />;
   }
 
@@ -107,9 +109,7 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
     setTooltipTitles(Object.keys(speciesQuantities));
   }, [speciesQuantities]);
 
-  return (
-    <ChartData plantingSiteId={-1} tooltipTitles={tooltipTitles} labels={labels} values={values} newVersion={true} />
-  );
+  return <ChartData tooltipTitles={tooltipTitles} labels={labels} values={values} newVersion={true} />;
 };
 
 const SiteWithoutZonesCard = ({
@@ -200,7 +200,7 @@ const SiteWithZonesCard = ({
 };
 
 type ChartDataProps = {
-  plantingSiteId: number;
+  plantingSiteId?: number;
   tooltipTitles?: string[];
   labels?: string[];
   values?: number[];
@@ -245,7 +245,7 @@ const ChartData = ({
       </Box>
       <Box height={'250px'} marginTop={3} marginBottom={6}>
         <PieChart
-          key={`${plantingSiteId}_${values?.length}`}
+          key={`${plantingSiteId ?? 'rolledUp'}_${values?.length}`}
           chartId='plantsBySpecies'
           chartData={chartData}
           maxWidth='100%'
