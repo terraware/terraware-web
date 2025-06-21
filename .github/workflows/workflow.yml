@@ -20,6 +20,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  pull-requests: read
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -139,11 +140,11 @@ jobs:
         run: echo "Found PR \#${{ steps.find_pr.outputs.pr_number }}"
 
       - name: Comment on PR with Preview URL
-        if: steps.find_pr.outputs.pr_number != ''
+        if: github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ steps.find_pr.outputs.pr_number }}
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             ✅ Vercel Preview URL: [${{ steps.vercel_deploy.outputs.preview_url }}](${{ steps.vercel_deploy.outputs.preview_url }})
 
