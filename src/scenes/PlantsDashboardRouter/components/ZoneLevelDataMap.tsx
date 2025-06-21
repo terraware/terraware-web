@@ -277,14 +277,15 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         );
       },
     [
-      latestResultSiteHistory,
-      latestResult,
+      latestResultSiteHistory?.plantingZones,
+      latestResult?.plantingZones,
       zonesStats,
       zonesProgress,
       findZoneArea,
-      latestSummary,
-      plantingSite,
+      latestSummary?.plantingZones,
+      plantingSite?.plantingZones,
       timeZone,
+      theme,
     ]
   );
 

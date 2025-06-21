@@ -133,7 +133,7 @@ export default function OrgObservationsListView({
       snackbar.toastError();
       setSelectedObservation(undefined);
     }
-  }, [abandonObservationResponse]);
+  }, [abandonObservationResponse, activeLocale, reload, selectedObservation, snackbar]);
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
     selectPlantingSiteObservations(state, plantingSiteId)
@@ -145,9 +145,12 @@ export default function OrgObservationsListView({
     }
 
     return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
-  }, [activeLocale, scheduleObservationsEnabled, selectedPlotSelection]);
+  }, [activeLocale, scheduleObservationsEnabled]);
 
   const adHocColumns = useCallback((): TableColumnType[] => {
+    if (!activeLocale) {
+      return [];
+    }
     return [
       {
         key: 'plotNumber',

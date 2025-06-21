@@ -124,7 +124,7 @@ const SectionDeliverableWrapper = () => {
         />
       </Box>
     );
-  }, [activeLocale, applicationId, deliverableId, sectionId]);
+  }, [activeLocale, applicationId, deliverableId, sectionId, goToApplicationSectionDeliverableEdit]);
 
   return (
     <ApplicationPage rightComponent={showEditButton ? actionMenu : undefined} crumbs={crumbs}>

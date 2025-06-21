@@ -215,7 +215,7 @@ const DataRow = ({ leftChild, rightChild, projectId }: Props): JSX.Element => {
     if (projectId) {
       void dispatch(requestGetParticipantProject(projectId));
     }
-  }, [projectId]);
+  }, [projectId, dispatch]);
 
   useEffect(() => {
     if (projectDetailsRequest?.status === 'success') {

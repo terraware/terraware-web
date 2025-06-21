@@ -104,7 +104,7 @@ export default function BiomassMeasurementMapView({
     } else {
       setRequestId('');
     }
-  }, [observationData]);
+  }, [dispatch, observationData, selectedPlantingSite.id]);
 
   const plantingSiteMapData: MapSourceBaseData | undefined = useMemo(
     () => MapService.getMapDataFromPlantingSite(selectedPlantingSite)?.site,

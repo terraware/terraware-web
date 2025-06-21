@@ -39,7 +39,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
         reloadOrgPreferences();
       }
     },
-    [onChange, orgPreferences.lastPlantingSiteSelected, selectedOrganization]
+    [onChange, orgPreferences.lastPlantingSiteSelected, reloadOrgPreferences, selectedOrganization]
   );
 
   useEffect(() => {

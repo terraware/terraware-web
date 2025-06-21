@@ -38,16 +38,15 @@ export default function HelpSupportHome(): JSX.Element {
   const { goToContactUsForm } = useNavigateTo();
   const { types } = useSupportData();
 
-  const knowledgeBaseItem: ListItemContent = useMemo(
-    () => ({
+  const knowledgeBaseItem: ListItemContent = useMemo(() => {
+    return {
       icon: 'iconLibrary',
-      title: strings.KNOWLEDGE_BASE,
-      description: strings.DESCRIPTION_KNOWLEDGE_BASE,
-      buttonText: strings.KNOWLEDGE_BASE,
+      title: activeLocale ? strings.KNOWLEDGE_BASE : '',
+      description: activeLocale ? strings.DESCRIPTION_KNOWLEDGE_BASE : '',
+      buttonText: activeLocale ? strings.KNOWLEDGE_BASE : '',
       onClick: () => window.open(docLinks.knowledge_base),
-    }),
-    [activeLocale]
-  );
+    };
+  }, [activeLocale, docLinks.knowledge_base]);
 
   const jiraListItems = useMemo(() => {
     return ORDERED_SUPPORT_REQUEST_TYPES.filter((type) => (types ?? []).includes(type)).map(
@@ -59,7 +58,7 @@ export default function HelpSupportHome(): JSX.Element {
         onClick: () => goToContactUsForm(type),
       })
     );
-  }, [activeLocale, types]);
+  }, [types, goToContactUsForm]);
 
   const listItemContent = useMemo(() => [knowledgeBaseItem, ...jiraListItems], [jiraListItems, knowledgeBaseItem]);
 

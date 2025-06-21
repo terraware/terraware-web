@@ -105,7 +105,7 @@ export const useMultiSelectorProcessor = (
     if (!shallowEqual(lastData, nextLastData)) {
       setLastData(nextLastData);
     }
-  }, [lastData, lastStatus, results]);
+  }, [lastData, lastStatus, results, snackbar]);
 
   return useMemo(() => {
     const statuses = Object.values(lastStatus);

@@ -27,7 +27,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, isLoading, righ
     if (allApplications) {
       setSelectedApplication(applicationId);
     }
-  }, [allApplications, applicationId, selectedApplication]);
+  }, [allApplications, applicationId, selectedApplication, setSelectedApplication]);
 
   return (
     <Page

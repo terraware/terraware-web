@@ -24,7 +24,7 @@ export const PRESCREEN_MODULE_ID = 2;
 const PrescreenView = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication, applicationDeliverables, applicationSections, reload } = useApplicationData();
-  const { goToApplication, goToApplicationPrescreenResult } = useNavigateTo();
+  const { goToApplicationPrescreenResult } = useNavigateTo();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -77,7 +77,7 @@ const PrescreenView = () => {
       const dispatched = dispatch(requestSubmitApplication({ applicationId: selectedApplication.id }));
       setSubmitRequestId(dispatched.requestId);
     }
-  }, [dispatch, selectedApplication, setIsLoading, setRestartRequestId]);
+  }, [dispatch, selectedApplication, setIsLoading]);
 
   const handleConfirm = useCallback(() => {
     if (!selectedApplication) {
@@ -107,7 +107,7 @@ const PrescreenView = () => {
         setRestartRequestId('');
       }
     },
-    [selectedApplication, goToApplication, goToApplicationPrescreenResult, setIsLoading, setIsConfirmModalOpen]
+    [selectedApplication, goToApplicationPrescreenResult, setIsLoading, setIsConfirmModalOpen]
   );
 
   useEffect(() => {
@@ -115,7 +115,7 @@ const PrescreenView = () => {
     if ((restartResult && restartResult.status === 'success' && restartResult.data) || submitResultSuccess) {
       reload(() => onReload(submitResultSuccess));
     }
-  }, [restartResult, submitResult, onReload]);
+  }, [restartResult, submitResult, onReload, reload]);
 
   const { modalTitle, modalBody } = useMemo(() => {
     if (!activeLocale || !selectedApplication) {

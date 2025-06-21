@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
@@ -47,11 +47,15 @@ export default function NewProjectSpecificMetric(): JSX.Element {
   const createProjectMetricResponse = useAppSelector(selectCreateProjectMetric(requestId));
   const [validate, setValidate] = useState(false);
 
+  const goToProjectReports = useCallback(() => {
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
+  }, [navigate, projectId]);
+
   useEffect(() => {
     if (projectId) {
       void dispatch(requestProjectReportConfig(projectId));
     }
-  }, [projectId]);
+  }, [projectId, dispatch]);
 
   const { isMobile } = useDeviceInfo();
 
@@ -59,11 +63,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
     if (createProjectMetricResponse?.status === 'success') {
       goToProjectReports();
     }
-  }, [createProjectMetricResponse]);
-
-  const goToProjectReports = () => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
-  };
+  }, [createProjectMetricResponse, goToProjectReports]);
 
   const [newMetric, , onChange] = useForm<NewMetric>({
     component: 'Biodiversity',

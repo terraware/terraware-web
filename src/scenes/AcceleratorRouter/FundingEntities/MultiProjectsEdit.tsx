@@ -27,7 +27,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
     if (!rows.length) {
       setRows(projects);
     }
-  }, [projects]);
+  }, [projects, rows.length]);
 
   const onAddProject = () => {
     setRows(rows.concat([{ projectId: -1 }]));
@@ -39,7 +39,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
       setRows(filteredRows);
       setProjects(filteredRows as ProjectsEditOption[]);
     },
-    [rows, setRows]
+    [rows, setRows, setProjects]
   );
 
   const selectProject = useCallback(
@@ -50,7 +50,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
       setRows(updatedRows);
       setProjects(updatedRows as ProjectsEditOption[]);
     },
-    [rows, setRows]
+    [rows, setRows, setProjects]
   );
 
   return (

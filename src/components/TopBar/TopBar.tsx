@@ -29,7 +29,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
     } else {
       return undefined;
     }
-  }, [isAcceleratorRoute, isFunderRoute]);
+  }, [isAcceleratorRoute, isFunderRoute, theme, user?.userType]);
 
   return (
     <AppBar

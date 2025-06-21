@@ -32,7 +32,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
 
   const onReviewSubmitted = useCallback(() => {
     reload(() => navigate(0));
-  }, [application, reload]);
+  }, [reload, navigate]);
 
   return (
     <>

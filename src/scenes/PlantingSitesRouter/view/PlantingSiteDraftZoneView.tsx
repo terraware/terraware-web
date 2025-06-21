@@ -55,7 +55,7 @@ export default function PlantingSiteDraftZoneView(): JSX.Element | undefined {
         to: `/draft/${plantingSiteId}`,
       },
     ],
-    [site?.name, plantingSiteId]
+    [activeLocale, site?.name, plantingSiteId]
   );
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function PlantingSiteDraftZoneView(): JSX.Element | undefined {
     } else if (!plantingZone) {
       navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', plantingSiteId));
     }
-  }, [status, site, plantingSiteId, plantingZone]);
+  }, [status, site, plantingSiteId, plantingZone, navigate]);
 
   if (status === 'pending' || !site || !plantingZone) {
     return <BusySpinner />;

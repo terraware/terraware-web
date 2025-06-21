@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -66,11 +66,21 @@ export default function NurseryView(): JSX.Element {
     }
   }, [nurseryId, selectedOrganization]);
 
+  const goToNursery = useCallback(
+    (id?: number) => {
+      const nurseriesLocation = {
+        pathname: APP_PATHS.NURSERIES + (id ? `/${id}` : ''),
+      };
+      navigate(nurseriesLocation);
+    },
+    [navigate]
+  );
+
   useEffect(() => {
     if (navigateToNursery.navigate) {
       goToNursery(navigateToNursery.id);
     }
-  }, [selectedOrganization]);
+  }, [selectedOrganization, goToNursery, navigateToNursery.id, navigateToNursery.navigate]);
 
   useEffect(() => {
     setRecord({
@@ -87,13 +97,6 @@ export default function NurseryView(): JSX.Element {
       capacity: selectedNursery?.capacity,
     });
   }, [selectedNursery, setRecord, selectedOrganization]);
-
-  const goToNursery = (id?: number) => {
-    const nurseriesLocation = {
-      pathname: APP_PATHS.NURSERIES + (id ? `/${id}` : ''),
-    };
-    navigate(nurseriesLocation);
-  };
 
   const saveNursery = async () => {
     if (

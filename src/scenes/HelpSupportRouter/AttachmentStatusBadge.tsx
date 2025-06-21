@@ -37,7 +37,10 @@ const getStatusColors = (status: Statuses, theme: Theme): StatusColors => {
   }
 };
 
-const getStatusText = (status: Statuses): string => {
+const getStatusText = (activeLocale: string | null, status: Statuses): string => {
+  if (!activeLocale) {
+    return '';
+  }
   switch (status) {
     case 'pending':
       return strings.IN_PROGRESS;
@@ -57,7 +60,7 @@ const AttachmentStatusBadge = ({ status }: AttachmentStatusBadgeProps) => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const statusColors = useMemo(() => getStatusColors(status, theme), [status, theme]);
-  const statusText = useMemo(() => getStatusText(status), [status, activeLocale]);
+  const statusText = useMemo(() => getStatusText(activeLocale, status), [status, activeLocale]);
 
   return (
     <Box

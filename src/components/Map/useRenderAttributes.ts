@@ -101,13 +101,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
           };
       }
     },
-    [
-      theme.palette.TwClrBaseGreen300,
-      theme.palette.TwClrBaseLightGreen300,
-      theme.palette.TwClrBaseBlue300,
-      theme.palette.TwClrBasePink300,
-      theme.palette.TwClrBaseYellow300,
-    ]
+    [theme]
   );
 
   return getRenderAttributes;

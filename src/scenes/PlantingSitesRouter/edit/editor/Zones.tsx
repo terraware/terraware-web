@@ -336,7 +336,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
         );
       },
     }),
-    [setZonesData, zones]
+    [mapStyles.box, mapStyles.tooltip, setZonesData, zones]
   );
 
   return (

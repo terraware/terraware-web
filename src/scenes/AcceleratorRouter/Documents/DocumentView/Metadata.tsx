@@ -38,7 +38,7 @@ const Metadata = ({ disabled }: { disabled: boolean }): JSX.Element => {
         setRequestId(request.requestId);
       }
     },
-    [document]
+    [document, dispatch]
   );
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const Metadata = ({ disabled }: { disabled: boolean }): JSX.Element => {
     } else if (selector?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [selector, snackbar]);
+  }, [selector, snackbar, reloadDocument]);
 
   return (
     <Box display='flex' flexDirection='column'>

@@ -65,13 +65,13 @@ const PrescreenResultView = ({
 
     setIsConfirmModalOpen(false);
     goToApplicationPrescreen(selectedApplication.id);
-  }, [selectedApplication, goToApplication, setIsConfirmModalOpen]);
+  }, [selectedApplication, setIsConfirmModalOpen, goToApplicationPrescreen]);
 
   useEffect(() => {
     if (restartResult && restartResult.status === 'success' && restartResult.data) {
       reload(onReload);
     }
-  }, [restartResult, onReload]);
+  }, [restartResult, onReload, reload]);
 
   if (!selectedApplication) {
     return;

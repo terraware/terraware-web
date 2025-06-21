@@ -106,7 +106,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
       }
     };
     populateProjects();
-  }, [selectedOrganization?.id, dispatch, activeLocale]);
+  }, [selectedOrganization, dispatch, activeLocale]);
 
   const reloadPlantingSites = useCallback(() => {
     const populatePlantingSites = () => {
@@ -115,7 +115,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
       }
     };
     populatePlantingSites();
-  }, [dispatch, selectedOrganization, activeLocale]);
+  }, [dispatch, selectedOrganization]);
 
   const setDefaults = useCallback(() => {
     if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {

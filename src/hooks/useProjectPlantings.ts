@@ -39,7 +39,7 @@ export const useProjectPlantings = (projectId?: number) => {
     } else {
       setReportedPlantsRequestId('');
     }
-  }, [acceleratorOrganizationId]);
+  }, [acceleratorOrganizationId, dispatch]);
 
   return useMemo(
     () => ({

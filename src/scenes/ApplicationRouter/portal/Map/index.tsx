@@ -27,7 +27,7 @@ const MapViewWrapper = () => {
     if (!selectedApplication.boundary) {
       goToApplicationPrescreen(selectedApplication.id);
     }
-  }, [selectedApplication]);
+  }, [selectedApplication, goToApplicationPrescreen]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
