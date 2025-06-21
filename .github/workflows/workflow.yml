@@ -128,11 +128,10 @@ jobs:
           preview_url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
 
-      - name: Comment on PR with Preview URL
-        uses: peter-evans/create-or-update-comment@v4
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v3
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
+          message: |
             ✅ Vercel Preview URL: [${{ steps.vercel_deploy.outputs.preview_url }}](${{ steps.vercel_deploy.outputs.preview_url }})
 
       - name: build
