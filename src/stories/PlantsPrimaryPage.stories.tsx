@@ -7,10 +7,10 @@ import PlantsPrimaryPageView, {
 } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
 
 const PlantsPrimaryPageViewTemplate: Story<Omit<PlantsPrimaryPageViewProps, 'onSelect'>> = (args) => {
-  const [id, setId] = useState<number | undefined>(args.selectedPlantingSiteId);
+  const [id, setId] = useState<number | 'all' | undefined>(args.selectedPlantingSiteId);
 
   return (
-    <PlantsPrimaryPageView {...args} onSelect={(site) => setId(site?.id)} selectedPlantingSiteId={id}>
+    <PlantsPrimaryPageView {...args} onSelect={setId} selectedPlantingSiteId={id}>
       <div>Selected {id}</div>
     </PlantsPrimaryPageView>
   );

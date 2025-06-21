@@ -9,6 +9,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useAppDispatch } from 'src/redux/store';
@@ -35,9 +36,10 @@ export default function PlantsDashboardView({
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
-  const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const navigate = useSyncNavigate();
+  const [rolledUp, setRolledUp] = useState(false);
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
 
   const {
@@ -52,11 +54,6 @@ export default function PlantsDashboardView({
   } = usePlantingSiteData();
 
   const hasObservations = useMemo(() => !!latestResult, [latestResult]);
-
-  const onPreferences = useCallback(
-    (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
-    [setPlantsDashboardPreferences]
-  );
 
   const latestResultId = useMemo(() => {
     return latestResult?.observationId;
@@ -153,26 +150,29 @@ export default function PlantsDashboardView({
     [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
   );
 
-  const renderTotalPlantsAndSpecies = () => (
-    <>
-      <Grid item xs={12}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: isMobile ? 'flex-start' : 'center',
-            flexDirection: isMobile ? 'column' : 'row',
-            paddingLeft: theme.spacing(3),
-          }}
-        >
-          <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {plantingSite?.id === -1 ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <PlantsAndSpeciesCard projectId={projectId} />
-      </Grid>
-    </>
+  const renderTotalPlantsAndSpecies = useCallback(
+    () => (
+      <>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+              paddingLeft: theme.spacing(3),
+            }}
+          >
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {rolledUp ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <PlantsAndSpeciesCard projectId={projectId} rolledUp={rolledUp} />
+        </Grid>
+      </>
+    ),
+    [isMobile, projectId, rolledUp, theme]
   );
 
   const renderPlantingProgressAndDensity = useCallback(
@@ -197,11 +197,11 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <PlantingDensityCard hasObservations={hasObservations} />
+            <PlantingDensityCard hasObservations={hasObservations} rolledUp={rolledUp} />
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink, theme]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink, rolledUp, theme]
   );
 
   const renderPlantingSiteTrends = useCallback(
@@ -341,10 +341,21 @@ export default function PlantsDashboardView({
   }, [plantingSite, observationSummaries, observationHectares, renderLatestObservationLink, summariesHectares]);
 
   const onSelect = useCallback(
-    (plantingSiteId: number) => {
-      setSelectedPlantingSite(plantingSiteId);
+    (plantingSiteId: number | 'all' | undefined) => {
+      if (plantingSiteId) {
+        if (plantingSiteId !== 'all') {
+          setSelectedPlantingSite(plantingSiteId);
+          setRolledUp(false);
+          if (!isAcceleratorRoute) {
+            navigate(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', plantingSiteId.toString()));
+          }
+        } else {
+          setSelectedPlantingSite(undefined);
+          setRolledUp(true);
+        }
+      }
     },
-    [setSelectedPlantingSite]
+    [isAcceleratorRoute, navigate, setSelectedPlantingSite]
   );
 
   const renderMapWithSites = useCallback(() => {
@@ -376,7 +387,7 @@ export default function PlantsDashboardView({
     <PlantsPrimaryPage
       title={isAcceleratorRoute ? '' : strings.PLANTS_DASHBOARD}
       text={
-        plantingSite?.id !== -1
+        !rolledUp
           ? plantingSite
             ? latestResultId
               ? getDashboardSubhead()
@@ -384,33 +395,27 @@ export default function PlantsDashboardView({
             : getDashboardSubhead()
           : undefined
       }
-      pagePath={
-        projectId
-          ? APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
-          : APP_PATHS.PLANTING_SITE_DASHBOARD
-      }
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
       plantingSitesData={allPlantingSites ?? []}
-      plantsSitePreferences={plantsDashboardPreferences}
-      setPlantsSitePreferences={onPreferences}
       newHeader={true}
       showGeometryNote={geometryChangedNote}
       latestObservationId={latestResultId}
       projectId={projectId}
-      onSelectProjectId={(newProjectId: number) => setProjectId(newProjectId === -1 ? undefined : newProjectId)}
+      onSelectProjectId={setProjectId}
       organizationId={organizationId}
       isEmptyState={isLoading ? false : (allPlantingSites?.length ?? 0) <= 1}
       onSelect={onSelect}
+      selectedPlantingSiteId={rolledUp ? 'all' : plantingSite?.id}
       allowAllAsSiteSelection={isAcceleratorRoute || projectId !== undefined}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
-        {hasObservations && plantingSite?.id !== -1 && renderPlantingSiteTrends()}
-        {plantingSite?.id !== -1 && hasObservations && renderPlantingProgressAndDensity()}
-        {hasObservations && plantingSite?.id !== -1 && renderMortalityRate()}
-        {plantingSite?.id !== -1 && hasPlantingZones && renderZoneLevelData()}
-        {plantingSite?.id !== -1 && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
-        {(plantingSite?.id === -1 || !plantingSite) && renderMapWithSites()}
+        {hasObservations && !rolledUp && renderPlantingSiteTrends()}
+        {!rolledUp && hasObservations && renderPlantingProgressAndDensity()}
+        {hasObservations && !rolledUp && renderMortalityRate()}
+        {!rolledUp && hasPlantingZones && renderZoneLevelData()}
+        {!rolledUp && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        {rolledUp && renderMapWithSites()}
       </Grid>
     </PlantsPrimaryPage>
   );

@@ -155,6 +155,7 @@ export default function PlantingProgress(): JSX.Element {
             view={activeView}
             onChangePlantingSite={setSelectedPlantingSite}
             featuredFilters={featuredFilters}
+            selectedPlantingSiteId={plantingSite?.id}
             {...searchProps}
           />
         }
@@ -169,12 +170,14 @@ type SearchComponentProps = SearchProps & {
   view: View;
   onChangePlantingSite: (newSiteId: number) => void;
   featuredFilters?: FeaturedFilterConfig[];
+  selectedPlantingSiteId: number | undefined;
 };
 
 function SearchComponent(props: SearchComponentProps): JSX.Element {
-  const { search, onSearch, filtersProps, view, onChangePlantingSite, featuredFilters } = props;
+  const { search, onSearch, filtersProps, view, onChangePlantingSite, featuredFilters, selectedPlantingSiteId } = props;
 
   const { allPlantingSites } = usePlantingSiteData();
+  const { selectedOrganization } = useOrganization();
 
   const onChange = useCallback(
     (plantingSiteId: number | 'all') => {
@@ -193,8 +196,10 @@ function SearchComponent(props: SearchComponentProps): JSX.Element {
       <div style={{ display: view === 'map' ? 'flex' : 'none' }}>
         <PlantingSiteDropdown
           onChange={onChange}
+          organizationId={selectedOrganization?.id}
           plantingSites={allPlantingSites ?? []}
           preferenceKey='lastPlantingSiteSelected'
+          selectedPlantingSiteId={selectedPlantingSiteId}
         />
       </div>
     </>
