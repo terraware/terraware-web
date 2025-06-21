@@ -1,30 +1,33 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
-import { useLocalization, useOrganization } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { PreferencesService } from 'src/services';
+import { CachedUserService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
 type PlantingSiteDropdownProps = {
   canSelectAll?: boolean;
+  fullWidth?: boolean;
   onChange: (plantingSiteId: number | 'all') => void;
+  organizationId?: number;
   plantingSites: PlantingSite[];
   preferenceKey?: string;
+  selectedPlantingSiteId: number | 'all' | undefined;
 };
 
 export default function PlantingSiteDropdown({
   canSelectAll,
+  fullWidth,
   onChange,
+  organizationId,
   plantingSites,
   preferenceKey,
+  selectedPlantingSiteId,
 }: PlantingSiteDropdownProps): JSX.Element {
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | 'all'>();
-
   const { activeLocale } = useLocalization();
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { allPlantingSites } = usePlantingSiteData();
 
   const allSiteOption = useMemo((): DropdownItem => {
@@ -45,42 +48,50 @@ export default function PlantingSiteDropdown({
 
   const updateAndReloadLastSelectedSite = useCallback(
     async (id: number | 'all') => {
-      if (preferenceKey && id !== orgPreferences[preferenceKey] && selectedOrganization) {
-        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-          [preferenceKey]: id,
-        });
-        reloadOrgPreferences();
+      if (organizationId !== undefined) {
+        const preferences = CachedUserService.getUserOrgPreferences(organizationId);
+        if (preferenceKey && id !== preferences[preferenceKey]) {
+          await PreferencesService.updateUserOrgPreferences(organizationId, {
+            [preferenceKey]: id,
+          });
+        }
       }
     },
-    [orgPreferences, preferenceKey, reloadOrgPreferences, selectedOrganization]
+    [preferenceKey, organizationId]
   );
 
   const updateSelection = useCallback(
     (newValue: any) => {
-      void updateAndReloadLastSelectedSite(newValue);
-      if (newValue !== 'all') {
-        const id = Number(newValue);
-        setSelectedPlantingSiteId(id);
-        onChange(id);
-      } else {
-        onChange('all');
+      if (newValue !== undefined) {
+        void updateAndReloadLastSelectedSite(newValue);
+        if (newValue !== 'all') {
+          const id = Number(newValue);
+          onChange(id);
+        } else {
+          onChange('all');
+        }
       }
     },
     [onChange, updateAndReloadLastSelectedSite]
   );
 
   useEffect(() => {
-    if (allPlantingSites && selectedPlantingSiteId === undefined && preferenceKey) {
-      if (orgPreferences[preferenceKey]) {
-        updateSelection(orgPreferences[preferenceKey]);
-      } else {
-        updateSelection(allPlantingSites[0]?.id);
+    if (allPlantingSites && selectedPlantingSiteId === undefined) {
+      if (organizationId && preferenceKey) {
+        const preferences = CachedUserService.getUserOrgPreferences(organizationId);
+        const storedPreference = preferences[preferenceKey];
+        if (storedPreference && (storedPreference === 'all' || typeof storedPreference === 'number')) {
+          updateSelection(storedPreference);
+          return;
+        }
       }
+      updateSelection(allPlantingSites[0]?.id);
     }
-  }, [selectedPlantingSiteId, updateSelection, allPlantingSites, preferenceKey, orgPreferences]);
+  }, [selectedPlantingSiteId, updateSelection, allPlantingSites, preferenceKey, organizationId]);
 
   return (
     <Dropdown
+      fullWidth={fullWidth}
       placeholder={strings.SELECT}
       onChange={updateSelection}
       options={options}

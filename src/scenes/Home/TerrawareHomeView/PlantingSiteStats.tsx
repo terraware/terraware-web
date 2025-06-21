@@ -137,8 +137,10 @@ export const PlantingSiteStats = () => {
             </Typography>
             <PlantingSiteDropdown
               onChange={onPlantingSiteSelected}
+              organizationId={selectedOrganization?.id}
               plantingSites={plantingSitesWithBoundaries}
               preferenceKey='lastPlantingSiteSelected'
+              selectedPlantingSiteId={plantingSite?.id}
             />
           </Grid>
 
