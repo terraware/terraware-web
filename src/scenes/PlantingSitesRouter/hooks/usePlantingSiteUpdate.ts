@@ -12,7 +12,7 @@ export type Response = {
 };
 
 /**
- * Hook to create a planting site
+ * Hook to update a planting site
  */
 export default function usePlantingSiteUpdate(): Response {
   const dispatch = useAppDispatch();

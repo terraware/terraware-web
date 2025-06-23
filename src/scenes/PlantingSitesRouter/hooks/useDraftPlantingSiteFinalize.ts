@@ -77,13 +77,11 @@ export default function useDraftPlantingSiteFinalize(
   }, [_createFromDraft, draft, onError, snackbar, validateResult]);
 
   useEffect(() => {
-    if (createResult) {
-      if (createResult.status === 'error') {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      } else if (createResult.status === 'success') {
-        if (draft) {
-          _deleteDraft(draft);
-        }
+    if (createResult?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    } else if (createResult?.status === 'success') {
+      if (draft) {
+        _deleteDraft(draft);
       }
     }
   }, [_createFromDraft, draft, onError, createResult, _deleteDraft, snackbar]);

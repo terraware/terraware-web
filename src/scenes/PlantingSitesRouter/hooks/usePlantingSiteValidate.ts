@@ -32,10 +32,8 @@ export default function usePlantingSiteValidate(): Response {
   );
 
   useEffect(() => {
-    if (result) {
-      if (result.status === 'error') {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      }
+    if (result?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [result, snackbar]);
 
