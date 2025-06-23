@@ -130,10 +130,6 @@ export default function PlantingProgress(): JSX.Element {
     });
   }, [allPlantingSites]);
 
-  if (!plantingSite) {
-    return <></>;
-  }
-
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
@@ -164,7 +160,11 @@ export default function PlantingProgress(): JSX.Element {
           />
         }
         list={<PlantingProgressList filters={filters} search={search} reloadTracking={reloadTrackingAndObservations} />}
-        map={<PlantingProgressMap plantingSiteId={plantingSite?.id} reloadTracking={reloadTrackingAndObservations} />}
+        map={
+          plantingSite && (
+            <PlantingProgressMap plantingSiteId={plantingSite.id} reloadTracking={reloadTrackingAndObservations} />
+          )
+        }
       />
     </Card>
   );
