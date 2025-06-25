@@ -60,8 +60,10 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   } = usePlantingSiteData();
 
   useEffect(() => {
-    setSelectedPlantingSite(location.id);
-  }, [location, setSelectedPlantingSite]);
+    if (!plantingSite) {
+      setSelectedPlantingSite(location.id);
+    }
+  }, [location, plantingSite, setSelectedPlantingSite]);
 
   const { species: allSpecies } = useSpeciesData();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
