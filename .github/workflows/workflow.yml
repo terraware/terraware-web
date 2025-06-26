@@ -68,9 +68,24 @@ jobs:
       - name: Generate strings
         run: yarn generate-strings
 
-      # Disable the linter since it will not pass in its current state. Remove the jsx-no-bind rule because it has lots of errors currently
-      # - name: Run linter
-      #   run: yarn lint --rule "react/jsx-no-bind: 0"
+      # Remove the jsx-no-bind rule because it has lots of errors currently
+      # The rest of the rules should be fixed and then removed from this list of rules to disable
+      - name: Run linter
+        run: >
+          yarn lint --rule "react/jsx-no-bind: 0"
+          --rule "@typescript-eslint/await-thenable: 0"
+          --rule "@typescript-eslint/unbound-method: 0"
+          --rule "@typescript-eslint/no-redundant-type-constituents: 0"
+          --rule "@typescript-eslint/no-empty-function: 0"
+          --rule "eqeqeq: 0"
+          --rule "prefer-arrow/prefer-arrow-functions: 0"
+          --rule "no-constant-binary-expression: 0"
+          --rule "no-case-declarations: 0"
+          --rule "curly: 0"
+          --rule "jsdoc/check-indentation: 0"
+          --rule "no-redeclare: 0"
+          --rule "max-classes-per-file: 0"
+          --rule "react-hooks/exhaustive-deps: 0"
 
       - name: Do typescript check
         run: yarn ts
