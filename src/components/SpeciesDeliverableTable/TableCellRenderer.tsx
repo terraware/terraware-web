@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@terraware/web-components';
 
@@ -55,6 +55,8 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     }
   };
 
+  const closeEditSpeciesModal = useCallback(() => setOpenedEditSpeciesModal(false), []);
+
   if (column.key === 'species_scientificName') {
     return (
       <CellRenderer
@@ -65,7 +67,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
           <>
             {openedEditSpeciesModal && reloadData && (
               <EditSpeciesModal
-                onClose={() => setOpenedEditSpeciesModal(false)}
+                onClose={closeEditSpeciesModal}
                 reload={reloadData}
                 projectSpecies={row as SpeciesForParticipantProject}
               />
