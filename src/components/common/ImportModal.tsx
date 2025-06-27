@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -56,6 +56,10 @@ export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>
   link.click();
 };
 
+const warningContentStyles = {
+  textAlign: 'left',
+};
+
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const {
@@ -92,10 +96,6 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const snackbar = useSnackbar();
 
   const spacingStyles = { marginRight: theme.spacing(2) };
-
-  const warningContentStyles = useMemo(() => {
-    return { textAlign: 'left' };
-  }, []);
 
   const containerStyles = {
     display: 'flex',
@@ -173,7 +173,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       clearUploadInterval();
       setWarning(true);
     }
-  }, [fileStatus, uploadInterval, warningContentStyles]);
+  }, [fileStatus, uploadInterval]);
 
   const dropHandler = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();

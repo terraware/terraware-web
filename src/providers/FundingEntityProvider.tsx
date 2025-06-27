@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
@@ -38,25 +38,25 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
     },
   });
 
-  const pathParamExists = useCallback(
+  const pathParamExists = useMemo(
     () => !isNaN(pathFundingEntityId) && pathFundingEntityId !== -1,
     [pathFundingEntityId]
   );
 
   const reload = useCallback(() => {
-    if (pathParamExists()) {
+    if (pathParamExists) {
       void dispatch(requestFundingEntity(pathFundingEntityId));
     }
   }, [dispatch, pathFundingEntityId, pathParamExists]);
 
   useEffect(() => {
-    if (pathParamExists()) {
+    if (pathParamExists) {
       void dispatch(requestFundingEntity(pathFundingEntityId));
     }
   }, [pathFundingEntityId, dispatch, pathParamExists]);
 
   useEffect(() => {
-    if (!pathParamExists() || !getFundingEntityRequest) {
+    if (!pathParamExists || !getFundingEntityRequest) {
       return;
     }
 
