@@ -1,3 +1,4 @@
+d11d0e10cd0 Update dependency jest-mock-extended to v4 (#4201)
 aa9431c56ef Update dependency @types/jest to v30 (#4200)
 f88f5fbf7b9 Update dependency slate-react to ^0.117.0 (#4199)
 a976bd15a88 Enable lint in CI, disable rules not yet fixed (#4204)
