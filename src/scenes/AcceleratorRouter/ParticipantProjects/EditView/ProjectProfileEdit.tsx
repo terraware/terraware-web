@@ -56,6 +56,16 @@ const variableStableIds = [
   carbonCertificationsStableId,
 ];
 
+const EXTERNAL_LINK_KEYS = [
+  'googleFolderUrl',
+  'verraLink',
+  'clickUpLink',
+  'hubSpotUrl',
+  'riskTrackerLink',
+  'slackLink',
+  'gisReportsLink',
+] as const;
+
 const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -239,6 +249,14 @@ const ProjectProfileEdit = () => {
     };
 
     const updatedRecord = { ...participantProjectRecord } as ParticipantProject;
+
+    EXTERNAL_LINK_KEYS.forEach((key) => {
+      const value = updatedRecord[key];
+      if (value && !/^https?:\/\//.test(`${value}`)) {
+        updatedRecord[key] = `https://${value}`;
+      }
+    });
+
     const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(
       (type) => !(updatedRecord.landUseModelTypes as string[]).includes(type)
     );
