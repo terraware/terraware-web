@@ -257,7 +257,7 @@ const ProjectProfileGisMaps = () => {
             <PlantingSiteMap
               mapData={filteredZoneData}
               style={{ width: '100%', borderRadius: '24px' }}
-              layers={['Planting Site']}
+              layers={['Project Zones']}
             />
           )}
         </Box>

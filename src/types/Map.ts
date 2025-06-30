@@ -188,7 +188,8 @@ export type RenderableObject =
   | 'draft-zone'
   | 'draft-subzone'
   | 'boundary'
-  | 'countryBoundary';
+  | 'countryBoundary'
+  | 'projectZonesBoundary';
 
 export type MapDrawingLayer = {
   id: string;
