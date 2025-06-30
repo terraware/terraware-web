@@ -83,7 +83,6 @@ jobs:
           --rule "no-case-declarations: 0"
           --rule "curly: 0"
           --rule "jsdoc/check-indentation: 0"
-          --rule "no-redeclare: 0"
           --rule "max-classes-per-file: 0"
 
       - name: Do typescript check
