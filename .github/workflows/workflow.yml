@@ -76,7 +76,6 @@ jobs:
           --rule "@typescript-eslint/await-thenable: 0"
           --rule "@typescript-eslint/unbound-method: 0"
           --rule "@typescript-eslint/no-redundant-type-constituents: 0"
-          --rule "@typescript-eslint/no-empty-function: 0"
           --rule "eqeqeq: 0"
           --rule "prefer-arrow/prefer-arrow-functions: 0"
           --rule "no-constant-binary-expression: 0"
