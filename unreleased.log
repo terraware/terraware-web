@@ -1,1 +1,7 @@
+aa9431c56ef Update dependency @types/jest to v30 (#4200)
+f88f5fbf7b9 Update dependency slate-react to ^0.117.0 (#4199)
+a976bd15a88 Enable lint in CI, disable rules not yet fixed (#4204)
+2224187ef11 Update nginx Docker tag to v1.29 (#4206)
+3989b9c04b2 Update dependency @babel/traverse to v7.27.7 (#4207)
+b15215ad0fe Update Node.js to v22.17.0 (#4205)
 e3c030572c8 Remove decimal when total planted under 999 in project profile (#4195)
