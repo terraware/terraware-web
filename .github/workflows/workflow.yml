@@ -74,7 +74,6 @@ jobs:
         run: >
           yarn lint --rule "react/jsx-no-bind: 0"
           --rule "@typescript-eslint/await-thenable: 0"
-          --rule "@typescript-eslint/unbound-method: 0"
           --rule "@typescript-eslint/no-redundant-type-constituents: 0"
           --rule "@typescript-eslint/no-empty-function: 0"
           --rule "eqeqeq: 0"
