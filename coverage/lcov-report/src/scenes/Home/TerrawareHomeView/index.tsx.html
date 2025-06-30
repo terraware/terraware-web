@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -471,19 +471,7 @@
 <a name='L406'></a><a href='#L406'>406</a>
 <a name='L407'></a><a href='#L407'>407</a>
 <a name='L408'></a><a href='#L408'>408</a>
-<a name='L409'></a><a href='#L409'>409</a>
-<a name='L410'></a><a href='#L410'>410</a>
-<a name='L411'></a><a href='#L411'>411</a>
-<a name='L412'></a><a href='#L412'>412</a>
-<a name='L413'></a><a href='#L413'>413</a>
-<a name='L414'></a><a href='#L414'>414</a>
-<a name='L415'></a><a href='#L415'>415</a>
-<a name='L416'></a><a href='#L416'>416</a>
-<a name='L417'></a><a href='#L417'>417</a>
-<a name='L418'></a><a href='#L418'>418</a>
-<a name='L419'></a><a href='#L419'>419</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L409'></a><a href='#L409'>409</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -526,18 +514,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -918,9 +898,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
@@ -939,28 +917,20 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
   const { isTablet, isMobile, isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const mixpanel = <span class="cstat-no" title="statement not covered" >useMixpanel();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { goToNewAccession } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
-  const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
   const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
   const seedBankSummary = <span class="cstat-no" title="statement not covered" >useSeedBankSummary();</span>
   const orgNurserySummary = <span class="cstat-no" title="statement not covered" >useOrgNurserySummary();</span>
   const [showAcceleratorCard, setShowAcceleratorCard] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
 &nbsp;
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+  const { allPlantingSites } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (orgPreferences.showAcceleratorCard === false &amp;&amp; showAcceleratorCard) {</span>
 <span class="cstat-no" title="statement not covered" >      setShowAcceleratorCard(false);</span>
     }
   }, [orgPreferences, showAcceleratorCard]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestObservations(selectedOrganization.id));</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestObservationsResults(selectedOrganization.id));</span>
-    }
-  }, [dispatch, selectedOrganization]);
 &nbsp;
   const isLoadingInitialData = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,</span>
@@ -1106,7 +1076,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
       },
     ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!plantingSites?.length &amp;&amp; isAdmin(selectedOrganization)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!allPlantingSites?.length &amp;&amp; isAdmin(selectedOrganization)) {</span>
 <span class="cstat-no" title="statement not covered" >      rows.push({</span>
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
@@ -1126,12 +1096,12 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
     navigate,
     numberFormatter,
     activeLocale,
-    species,
-    orgNurserySummary,
-    plantingSites,
-    seedBankSummary,
     selectedOrganization,
+    species.length,
     speciesLastModifiedDate,
+    seedBankSummary,
+    orgNurserySummary,
+    allPlantingSites,
   ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -1324,7 +1294,7 @@ export default TerrawareHomeView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T21:43:59.040Z
+                at 2025-06-30T21:58:44.876Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

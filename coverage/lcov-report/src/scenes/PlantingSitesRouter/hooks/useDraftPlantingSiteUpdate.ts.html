@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -185,12 +185,8 @@
 <a name='L120'></a><a href='#L120'>120</a>
 <a name='L121'></a><a href='#L121'>121</a>
 <a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L123'></a><a href='#L123'>123</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,26 +245,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -287,10 +267,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -327,6 +317,7 @@ import { requestUpdateDraft } from 'src/redux/features/draftPlantingSite/draftPl
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep, SiteEditStep } from 'src/types/PlantingSite';
+import { fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import usePlantingSiteValidate from './usePlantingSiteValidate';
@@ -335,11 +326,11 @@ import usePlantingSiteValidate from './usePlantingSiteValidate';
  * Data type for request and response in hook functions.
  * Also is a container to pass state data back to client.
  * @param draft
- *  The draft planting site to be created
+ * The draft planting site to be created
  * @param nextStep
- *  Next step to use in the flow if update was successful.
+ * Next step to use in the flow if update was successful.
  * @param optionalSteps
- *  Dictionary of optional steps that were completed if update was successful.
+ * Dictionary of optional steps that were completed if update was successful.
  */
 export type Data = {
   draft: DraftPlantingSite;
@@ -371,14 +362,7 @@ export default function <span class="fstat-no" title="function not covered" >use
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const draftResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDraftPlantingSiteEdit(requestId));</span>
 &nbsp;
-  const { validateDraft, validateSite, validateSiteStatus, isValid, problems } = <span class="cstat-no" title="statement not covered" >usePlantingSiteValidate();</span>
-&nbsp;
-  const _validateDraft = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (r</span>equest: Data) =&gt; {
-<span class="cstat-no" title="statement not covered" >      validateSite(request.draft);</span>
-    },
-    [validateSite]
-  );
+  const { validate, result: validateResult } = <span class="cstat-no" title="statement not covered" >usePlantingSiteValidate();</span>
 &nbsp;
   const _updateDraft = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (r</span>equest: Data) =&gt; {
@@ -388,22 +372,19 @@ export default function <span class="fstat-no" title="function not covered" >use
     [dispatch]
   );
 &nbsp;
+  const _validateDraft = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (r</span>equest: Data) =&gt; {
+      const site = <span class="cstat-no" title="statement not covered" >fromDraftToCreate(request.draft);</span>
+<span class="cstat-no" title="statement not covered" >      validate(site);</span>
+    },
+    [validate]
+  );
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (draftRequest &amp;&amp; validateDraft === draftRequest.draft) {</span>
-<span class="cstat-no" title="statement not covered" >      if (validateSiteStatus === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >        if (isValid) {</span>
-<span class="cstat-no" title="statement not covered" >          _updateDraft(draftRequest);</span>
-        } else {
-          // TODO: Show detailed erros on map according to designs
-<span class="cstat-no" title="statement not covered" >          snackbar.toastError('Failed to validate planting site.');</span>
-          // TODO: Remove debug logs
-<span class="cstat-no" title="statement not covered" >          console.log('Server responded with problems during validation: ', problems);</span>
-        }
-      } else <span class="cstat-no" title="statement not covered" >if (validateSiteStatus === 'error') {</span>
-<span class="cstat-no" title="statement not covered" >        snackbar.toastError(strings.GENERIC_ERROR);</span>
-      }
+<span class="cstat-no" title="statement not covered" >    if (validateResult?.status === 'success' &amp;&amp; draftRequest) {</span>
+<span class="cstat-no" title="statement not covered" >      _updateDraft(draftRequest);</span>
     }
-  }, [_updateDraft, draftRequest, validateDraft, validateSiteStatus, isValid, snackbar, problems]);
+  }, [draftRequest, _updateDraft, validateResult]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (draftResult?.status === 'error') {</span>
@@ -412,15 +393,19 @@ export default function <span class="fstat-no" title="function not covered" >use
   }, [draftResult?.status, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (draftResult?.status === 'success' &amp;&amp; draftRequest) {</span>
-<span class="cstat-no" title="statement not covered" >      if (redirect) {</span>
-<span class="cstat-no" title="statement not covered" >        snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);</span>
-<span class="cstat-no" title="statement not covered" >        navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));</span>
-      } else {
-<span class="cstat-no" title="statement not covered" >        setUpdatedDraft(draftRequest);</span>
+<span class="cstat-no" title="statement not covered" >    if (draftResult) {</span>
+<span class="cstat-no" title="statement not covered" >      if (draftResult.status === 'error') {</span>
+<span class="cstat-no" title="statement not covered" >        snackbar.toastError(strings.GENERIC_ERROR);</span>
+      } else <span class="cstat-no" title="statement not covered" >if (draftResult?.status === 'success' &amp;&amp; draftRequest) {</span>
+<span class="cstat-no" title="statement not covered" >        if (redirect) {</span>
+<span class="cstat-no" title="statement not covered" >          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);</span>
+<span class="cstat-no" title="statement not covered" >          navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          setUpdatedDraft(draftRequest);</span>
+        }
       }
     }
-  }, [draftRequest, draftResult?.status, navigate, redirect, snackbar]);
+  }, [draftRequest, draftResult, navigate, redirect, snackbar]);
 &nbsp;
   const updateDraft = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (r</span>equest: Data, redirectToDraft: boolean) =&gt; {
@@ -451,7 +436,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T21:43:59.040Z
+                at 2025-06-30T21:58:44.876Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

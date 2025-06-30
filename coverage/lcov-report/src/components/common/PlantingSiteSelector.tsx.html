@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -126,8 +126,13 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,9 +164,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -171,10 +173,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,7 +195,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,8 +206,7 @@
 import { Dropdown } from '@terraware/web-components';
 &nbsp;
 import { useOrganization } from 'src/providers';
-import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 &nbsp;
@@ -208,21 +219,18 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = <span class="cstat-no" title="statement not covered" >useState&lt;number | undefined&gt;();</span>
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectOrgPlantingSites(selectedOrganization?.id || -1));</span>
+  const { allPlantingSites } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
 &nbsp;
   const filteredPlantingSites = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return plantingSites?.filter(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; (<span class="cstat-no" title="statement not covered" >hideNoBoundary ? !!ps.boundary : true)</span>);</span>
-  }, [plantingSites, hideNoBoundary]);
+<span class="cstat-no" title="statement not covered" >    return allPlantingSites?.filter(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; (<span class="cstat-no" title="statement not covered" >hideNoBoundary ? !!ps.boundary : true)</span>);</span>
+  }, [allPlantingSites, hideNoBoundary]);
 &nbsp;
   const options = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return filteredPlantingSites?.map(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: site.name, value: site.id })</span>) ?? [];</span>
   }, [filteredPlantingSites]);
 &nbsp;
-  const updateSelection = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    as</span>ync (newValue: any) =&gt; {
-      const id = <span class="cstat-no" title="statement not covered" >Number(newValue);</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedPlantingSiteId(isNaN(id) ? -1 : id);</span>
-<span class="cstat-no" title="statement not covered" >      onChange(isNaN(id) ? -1 : id);</span>
+  const updateAndReloadLastSelectedSite = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    as</span>ync (id: number) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (!isNaN(id) &amp;&amp; id !== orgPreferences.lastPlantingSiteSelected &amp;&amp; selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {</span>
           ['lastPlantingSiteSelected']: id,
@@ -230,23 +238,33 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >        reloadOrgPreferences();</span>
       }
     },
-    [onChange, orgPreferences.lastPlantingSiteSelected, reloadOrgPreferences, selectedOrganization]
+    [orgPreferences.lastPlantingSiteSelected, reloadOrgPreferences, selectedOrganization]
+  );
+&nbsp;
+  const updateSelection = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (n</span>ewValue: any) =&gt; {
+      const id = <span class="cstat-no" title="statement not covered" >Number(newValue);</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedPlantingSiteId(isNaN(id) ? -1 : id);</span>
+<span class="cstat-no" title="statement not covered" >      onChange(isNaN(id) ? -1 : id);</span>
+<span class="cstat-no" title="statement not covered" >      void updateAndReloadLastSelectedSite(id);</span>
+    },
+    [onChange, updateAndReloadLastSelectedSite]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (plantingSites &amp;&amp; (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (allPlantingSites &amp;&amp; (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {</span>
 <span class="cstat-no" title="statement not covered" >      if (orgPreferences.lastPlantingSiteSelected) {</span>
-<span class="cstat-no" title="statement not covered" >        void updateSelection(orgPreferences.lastPlantingSiteSelected);</span>
+<span class="cstat-no" title="statement not covered" >        updateSelection(orgPreferences.lastPlantingSiteSelected);</span>
       } else {
-<span class="cstat-no" title="statement not covered" >        void updateSelection(plantingSites[0]?.id);</span>
+<span class="cstat-no" title="statement not covered" >        updateSelection(allPlantingSites[0]?.id);</span>
       }
     }
-  }, [plantingSites, selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected]);
+  }, [selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected, allPlantingSites]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Dropdown
       placeholder={strings.SELECT}
-      onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >void updateSelection(newValue)}</span>
+      onChange={updateSelection}
       options={options}
       selectedValue={selectedPlantingSiteId}
     /&gt;
@@ -259,7 +277,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T21:43:59.040Z
+                at 2025-06-30T21:58:44.876Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

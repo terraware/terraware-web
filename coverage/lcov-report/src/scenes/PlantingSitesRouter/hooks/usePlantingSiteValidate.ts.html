@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -110,18 +110,7 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -145,11 +134,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,9 +151,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,20 +159,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
 &nbsp;
-import { Statuses } from 'src/redux/features/asyncUtils';
+import { StatusT } from 'src/redux/features/asyncUtils';
 import { selectPlantingSiteValidate } from 'src/redux/features/plantingSite/plantingSiteSelectors';
 import { validatePlantingSite } from 'src/redux/features/plantingSite/plantingSiteThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { DraftPlantingSite, PlantingSiteProblem } from 'src/types/PlantingSite';
+import { CreatePlantingSiteRequestPayload, ValidatePlantingSiteResponsePayload } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 export type Response = {
-  validateDraft?: DraftPlantingSite;
-  validateSite: (draft: DraftPlantingSite) =&gt; void;
-  validateSiteStatus: Statuses;
-  isValid?: boolean;
-  problems?: PlantingSiteProblem[];
+  validate: (site: CreatePlantingSiteRequestPayload) =&gt; void;
+  result: StatusT&lt;ValidatePlantingSiteResponsePayload&gt;;
 };
 &nbsp;
 /**
@@ -198,34 +179,29 @@ export default function <span class="fstat-no" title="function not covered" >use
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
-  const [currentDraft, setCurrentDraft] = <span class="cstat-no" title="statement not covered" >useState&lt;DraftPlantingSite&gt;();</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const validateResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSiteValidate(requestId));</span>
+  const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSiteValidate(requestId));</span>
 &nbsp;
-  const validateSite = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (d</span>raft: DraftPlantingSite) =&gt; {
-<span class="cstat-no" title="statement not covered" >      setCurrentDraft(draft);</span>
-      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(validatePlantingSite(draft));</span>
+  const validate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (s</span>ite: CreatePlantingSiteRequestPayload) =&gt; {
+      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(validatePlantingSite(site));</span>
 <span class="cstat-no" title="statement not covered" >      setRequestId(dispatched.requestId);</span>
     },
     [dispatch]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (validateResult?.status === 'error') {</span>
+<span class="cstat-no" title="statement not covered" >    if (result?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }
-  }, [validateResult?.status, snackbar]);
+  }, [result, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo&lt;Response&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      validateDraft: currentDraft,
-      validateSite,
-      validateSiteStatus: validateResult?.status,
-      isValid: validateResult?.data?.isValid,
-      problems: validateResult?.data?.problems,
+      validate,
+      result,
     }),
-    [currentDraft, validateSite, validateResult]
+    [validate, result]
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -235,7 +211,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T21:43:59.040Z
+                at 2025-06-30T21:58:44.876Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

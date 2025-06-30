@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/117</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/115</span>
+                <span class='fraction'>0/116</span>
             </div>
         
             
@@ -363,7 +363,13 @@
 <a name='L298'></a><a href='#L298'>298</a>
 <a name='L299'></a><a href='#L299'>299</a>
 <a name='L300'></a><a href='#L300'>300</a>
-<a name='L301'></a><a href='#L301'>301</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -458,7 +464,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -510,9 +515,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -565,6 +575,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -709,7 +721,7 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
 &nbsp;
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const [acceleratorOrganizationId, setAcceleratorOrganizationId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
-  const [plantingSite, _setSelectedPlantingSite] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSite&gt;();</span>
+  const [plantingSite, setPlantingSite] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSite&gt;();</span>
 &nbsp;
   const [plantingSitesRequestId, setPlantingSitesRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [observationsRequestId, setObservationsRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -758,7 +770,6 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >    if (orgId) {</span>
       const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListPlantingSites(orgId));</span>
 <span class="cstat-no" title="statement not covered" >      setPlantingSitesRequestId(request.requestId);</span>
-<span class="cstat-no" title="statement not covered" >      _setSelectedPlantingSite(undefined);</span>
     }
   }, [acceleratorOrganizationId, dispatch, isAcceleratorRoute, selectedOrganization?.id]);
 &nbsp;
@@ -768,13 +779,13 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
 &nbsp;
   // Function to select a planting site
   const setSelectedPlantingSite = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (p</span>lantingSiteId: number) =&gt; {
+<span class="fstat-no" title="function not covered" >    (p</span>lantingSiteId?: number) =&gt; {
       let foundSite = <span class="cstat-no" title="statement not covered" >plantingSites?.find(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; <span class="cstat-no" title="statement not covered" >site.id === plantingSiteId)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (plantingSiteId === -1) {</span>
 <span class="cstat-no" title="statement not covered" >        foundSite = allSitesOption;</span>
       }
 <span class="cstat-no" title="statement not covered" >      if (plantingSite !== foundSite) {</span>
-<span class="cstat-no" title="statement not covered" >        _setSelectedPlantingSite(foundSite);</span>
+<span class="cstat-no" title="statement not covered" >        setPlantingSite(foundSite);</span>
 <span class="cstat-no" title="statement not covered" >        setObservations(undefined);</span>
 <span class="cstat-no" title="statement not covered" >        setObservationResults(undefined);</span>
 <span class="cstat-no" title="statement not covered" >        setObservationSummaries(undefined);</span>
@@ -813,8 +824,13 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (plantingSitesResponse?.status === 'success' &amp;&amp; plantingSitesResponse.data) {</span>
 <span class="cstat-no" title="statement not covered" >      setPlantingSites(plantingSitesResponse.data);</span>
+&nbsp;
+      // Look up already selected planting site
+<span class="cstat-no" title="statement not covered" >      if (plantingSite) {</span>
+<span class="cstat-no" title="statement not covered" >        setSelectedPlantingSite(plantingSite?.id);</span>
+      }
     }
-  }, [plantingSitesResponse]);
+  }, [plantingSite, plantingSitesResponse, setSelectedPlantingSite]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (observationsResponse?.status === 'success') {</span>
@@ -865,6 +881,7 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
 &nbsp;
   const isLoading = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
+      plantingSitesResponse?.status === 'pending' ||
       observationsResponse?.status === 'pending' ||
       resultsResponse?.status === 'pending' ||
       adHocObservationsResponse?.status === 'pending' ||
@@ -878,6 +895,7 @@ const PlantingSiteProvider = <span class="cstat-no" title="statement not covered
     adHocResultsResponse?.status,
     historiesResponse?.status,
     observationsResponse?.status,
+    plantingSitesResponse?.status,
     reportedPlantsResponse?.status,
     resultsResponse?.status,
     summariesResponse?.status,
@@ -970,7 +988,7 @@ export default PlantingSiteProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T21:43:59.040Z
+                at 2025-06-30T21:58:44.876Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
@@ -251,8 +251,7 @@
 <a name='L186'></a><a href='#L186'>186</a>
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L189'></a><a href='#L189'>189</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,11 +302,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -460,7 +458,7 @@ import {
   requestObservations,
   requestObservationsResults,
 } from 'src/redux/features/observations/observationsThunks';
-import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import BiomassMeasurementsDetails from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementsDetails';
 import strings from 'src/strings';
@@ -492,26 +490,25 @@ export default function <span class="fstat-no" title="function not covered" >Obs
 &nbsp;
   // listen for error
   const observationsResultsError = <span class="cstat-no" title="statement not covered" >useAppSelector(selectObservationsResultsError);</span>
-  const plantingSitesError = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSitesError);</span>
   // listen for data
   const observationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectObservationsResults);</span>
-  const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (plantingSites !== undefined &amp;&amp; !dispatched &amp;&amp; selectedOrganization) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!dispatched &amp;&amp; selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >      setDispatched(true);</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestObservationsResults(selectedOrganization?.id));</span>
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestPlantingSites(selectedOrganization.id));</span>
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestObservationsResults(selectedOrganization.id));</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestAdHocObservationResults(selectedOrganization.id));</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestObservations(selectedOrganization.id));</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestObservations(selectedOrganization.id, true));</span>
     }
-  }, [dispatch, selectedOrganization, plantingSites, dispatched]);
+  }, [dispatch, dispatched, selectedOrganization]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (observationsResultsError || plantingSitesError) {</span>
+<span class="cstat-no" title="statement not covered" >    if (observationsResultsError) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     }
-  }, [snackbar, observationsResultsError, plantingSitesError]);
+  }, [snackbar, observationsResultsError]);
 &nbsp;
   const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    reloadSpecies();</span>
@@ -519,7 +516,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
   }, [reloadSpecies]);
 &nbsp;
   // show spinner while initializing data
-<span class="cstat-no" title="statement not covered" >  if (observationsResults === undefined &amp;&amp; !(observationsResultsError || plantingSitesError)) {</span>
+<span class="cstat-no" title="statement not covered" >  if (observationsResults === undefined &amp;&amp; !observationsResultsError) {</span>
 <span class="cstat-no" title="statement not covered" >    return &lt;CircularProgress sx={{ margin: 'auto' }} /&gt;;</span>
   }
 &nbsp;
@@ -637,7 +634,7 @@ const ObservationsInnerRouter = <span class="cstat-no" title="statement not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T21:43:59.040Z
+                at 2025-06-30T21:58:44.876Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
