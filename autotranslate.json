@@ -1,0 +1,18 @@
+{
+  "instructions": "src/strings/csv/instructions.txt",
+  "source": {
+    "file": "src/strings/csv/en.csv"
+  },
+  "targets": [
+    {
+      "language": "French",
+      "file": "src/strings/csv/fr.csv",
+      "instructions": "src/strings/csv/instructions-fr.txt"
+    },
+    {
+      "language": "Spanish",
+      "file": "src/strings/csv/es.csv",
+      "instructions": "src/strings/csv/instructions-es.txt"
+    }
+  ]
+}
