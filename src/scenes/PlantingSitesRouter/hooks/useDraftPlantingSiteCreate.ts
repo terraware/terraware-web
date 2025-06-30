@@ -14,9 +14,9 @@ import useSnackbar from 'src/utils/useSnackbar';
  * Data type for request and response in hook functions.
  * Also is a container to pass state data back to client.
  * @param draft
- *  The draft planting site to be created
+ * The draft planting site to be created
  * @param nextStep
- *  Next step to use in the flow if create was successful.
+ * Next step to use in the flow if create was successful.
  */
 export type Data = {
   draft: DraftPlantingSite;

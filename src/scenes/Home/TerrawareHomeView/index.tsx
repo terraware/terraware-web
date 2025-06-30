@@ -17,9 +17,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
@@ -38,28 +36,20 @@ const TerrawareHomeView = () => {
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
   const { goToNewAccession } = useNavigateTo();
-  const plantingSites = useAppSelector(selectPlantingSites);
   const { species } = useSpeciesData();
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
+  const { allPlantingSites } = usePlantingSiteData();
 
   useEffect(() => {
     if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
       setShowAcceleratorCard(false);
     }
   }, [orgPreferences, showAcceleratorCard]);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestObservations(selectedOrganization.id));
-      void dispatch(requestObservationsResults(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization]);
 
   const isLoadingInitialData = useMemo(
     () => orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,
@@ -205,7 +195,7 @@ const TerrawareHomeView = () => {
       },
     ];
 
-    if (!plantingSites?.length && isAdmin(selectedOrganization)) {
+    if (!allPlantingSites?.length && isAdmin(selectedOrganization)) {
       rows.push({
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
@@ -225,12 +215,12 @@ const TerrawareHomeView = () => {
     navigate,
     numberFormatter,
     activeLocale,
-    species,
-    orgNurserySummary,
-    plantingSites,
-    seedBankSummary,
     selectedOrganization,
+    species.length,
     speciesLastModifiedDate,
+    seedBankSummary,
+    orgNurserySummary,
+    allPlantingSites,
   ]);
 
   return (

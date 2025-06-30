@@ -10,8 +10,10 @@ import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import Search, { FeaturedFilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { selectPlantingSite, selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -109,7 +111,9 @@ export default function PlantingProgress(): JSX.Element {
 
   const reloadTrackingAndObservations = useCallback(() => {
     if (selectedOrganization) {
+      void dispatch(requestPlantingSites(selectedOrganization.id));
       void dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [selectedOrganization, dispatch]);
 

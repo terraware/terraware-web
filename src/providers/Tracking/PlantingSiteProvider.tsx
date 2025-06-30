@@ -44,7 +44,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   const { selectedOrganization } = useOrganization();
   const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
-  const [plantingSite, _setSelectedPlantingSite] = useState<PlantingSite>();
+  const [plantingSite, setPlantingSite] = useState<PlantingSite>();
 
   const [plantingSitesRequestId, setPlantingSitesRequestId] = useState<string>('');
   const [observationsRequestId, setObservationsRequestId] = useState<string>('');
@@ -93,7 +93,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
     if (orgId) {
       const request = dispatch(requestListPlantingSites(orgId));
       setPlantingSitesRequestId(request.requestId);
-      _setSelectedPlantingSite(undefined);
     }
   }, [acceleratorOrganizationId, dispatch, isAcceleratorRoute, selectedOrganization?.id]);
 
@@ -103,13 +102,13 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   // Function to select a planting site
   const setSelectedPlantingSite = useCallback(
-    (plantingSiteId: number) => {
+    (plantingSiteId?: number) => {
       let foundSite = plantingSites?.find((site) => site.id === plantingSiteId);
       if (plantingSiteId === -1) {
         foundSite = allSitesOption;
       }
       if (plantingSite !== foundSite) {
-        _setSelectedPlantingSite(foundSite);
+        setPlantingSite(foundSite);
         setObservations(undefined);
         setObservationResults(undefined);
         setObservationSummaries(undefined);
@@ -148,8 +147,13 @@ const PlantingSiteProvider = ({ children }: Props) => {
   useEffect(() => {
     if (plantingSitesResponse?.status === 'success' && plantingSitesResponse.data) {
       setPlantingSites(plantingSitesResponse.data);
+
+      // Look up already selected planting site
+      if (plantingSite) {
+        setSelectedPlantingSite(plantingSite?.id);
+      }
     }
-  }, [plantingSitesResponse]);
+  }, [plantingSite, plantingSitesResponse, setSelectedPlantingSite]);
 
   useEffect(() => {
     if (observationsResponse?.status === 'success') {
@@ -200,6 +204,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   const isLoading = useMemo(() => {
     return (
+      plantingSitesResponse?.status === 'pending' ||
       observationsResponse?.status === 'pending' ||
       resultsResponse?.status === 'pending' ||
       adHocObservationsResponse?.status === 'pending' ||
@@ -213,6 +218,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
     adHocResultsResponse?.status,
     historiesResponse?.status,
     observationsResponse?.status,
+    plantingSitesResponse?.status,
     reportedPlantsResponse?.status,
     resultsResponse?.status,
     summariesResponse?.status,
