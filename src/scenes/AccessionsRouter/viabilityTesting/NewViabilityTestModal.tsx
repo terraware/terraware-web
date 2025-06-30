@@ -340,6 +340,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       if (testCompleted && !readOnly) {
         record.endDate = getTodaysDateFormatted(tz.id);
       }
+      const validSubstrates = getSubstratesAccordingToType(record.testType);
+      if (!validSubstrates.find((substrate) => substrate.value === record.substrate)) {
+        record.substrate = undefined;
+      }
       let response;
       if (record.id === -1) {
         response = await AccessionService.createViabilityTest(record, accession.id);
