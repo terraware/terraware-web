@@ -291,9 +291,11 @@ export const useProjectVariablesUpdate = (
 
   const setVariableHasError = useCallback(
     (variableId: number, hasError: boolean) => {
-      // Consider using es2015 or above so we can spread iterators and interact with Map a bit better
-      const nextVariableHasErrorMap = new Map(variableHasErrorMap).set(variableId, hasError);
-      setVariableHasErrorMap(nextVariableHasErrorMap);
+      if (variableHasErrorMap.get(variableId) !== hasError) {
+        // Consider using es2015 or above so we can spread iterators and interact with Map a bit better
+        const nextVariableHasErrorMap = new Map(variableHasErrorMap).set(variableId, hasError);
+        setVariableHasErrorMap(nextVariableHasErrorMap);
+      }
     },
     [variableHasErrorMap]
   );
