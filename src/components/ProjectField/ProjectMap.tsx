@@ -108,7 +108,6 @@ const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: P
   }, [appBoundaryMapOptions, application?.boundary, countryCode, countryMapOptions, includeLabel, theme]);
 
   const goToGisMapsView = useCallback(() => {
-    console.log('projectId', projectId);
     if (projectId) {
       navigate(APP_PATHS.ACCELERATOR_PROJECT_GIS_MAPS_VIEW.replace(':projectId', projectId.toString()));
     }

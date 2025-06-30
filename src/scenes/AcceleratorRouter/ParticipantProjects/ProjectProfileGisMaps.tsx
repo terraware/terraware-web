@@ -39,25 +39,28 @@ const ProjectProfileGisMaps = () => {
   const { isDesktop } = useDeviceInfo();
 
   useEffect(() => {
-    // if (projectDetails && 'plantingSitesCql' in projectDetails && projectDetails.plantingSitesCql) {
-    // const request = dispatch(requestGetGis(projectDetails.plantingSitesCql));
-    const requestBoundaries = dispatch(
-      requestGetGis({
-        cqlFilter: 'project_no=2',
-        typeNames: 'tf_accelerator:project_boundaries',
-        propertyName: 'fid,geom,boundary_name',
-      })
-    );
-    setBoundariesRequestId(requestBoundaries.requestId);
-    const requestPlantingSites = dispatch(
-      requestGetGis({
-        cqlFilter: 'project_no=2',
-        typeNames: 'tf_accelerator:planting_sites',
-        propertyName: 'fid,strata,substrata,site,geom',
-      })
-    );
-    setPlantingSitesRequestId(requestPlantingSites.requestId);
-    // }
+    const projectDetails = projectData.participantProject;
+    if (projectDetails && 'projectBoundariesCql' in projectDetails && projectDetails.projectBoundariesCql) {
+      const requestBoundaries = dispatch(
+        requestGetGis({
+          cqlFilter: projectDetails.projectBoundariesCql,
+          typeNames: 'tf_accelerator:project_boundaries',
+          propertyName: 'fid,geom,boundary_name',
+        })
+      );
+      setBoundariesRequestId(requestBoundaries.requestId);
+    }
+
+    if (projectDetails && 'plantingSitesCql' in projectDetails && projectDetails.plantingSitesCql) {
+      const requestPlantingSites = dispatch(
+        requestGetGis({
+          cqlFilter: projectDetails.plantingSitesCql,
+          typeNames: 'tf_accelerator:planting_sites',
+          propertyName: 'fid,strata,substrata,site,geom',
+        })
+      );
+      setPlantingSitesRequestId(requestPlantingSites.requestId);
+    }
   }, [dispatch, projectData]);
 
   useEffect(() => {
