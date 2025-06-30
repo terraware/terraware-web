@@ -2,12 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FeatureCollection } from 'geojson';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { PlantingSiteMap } from 'src/components/Map';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { requestGetGis } from 'src/redux/features/gis/gisAsyncThunks';
@@ -34,6 +36,7 @@ const ProjectProfileGisMaps = () => {
   const [zoneOrSite, setZoneOrSite] = useState<ZoneOrSiteOption>();
   const [showSiteMap, setShowSiteMap] = useState(false);
   const [showBoundaryMap, setShowBoundaryMap] = useState(false);
+  const { isDesktop } = useDeviceInfo();
 
   useEffect(() => {
     // if (projectDetails && 'plantingSitesCql' in projectDetails && projectDetails.plantingSitesCql) {
@@ -245,7 +248,8 @@ const ProjectProfileGisMaps = () => {
             </Typography>
           </Box>
         )}
-        <Box>
+        <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
+          <PlantingSiteMapLegend options={['site', 'zone', 'subzone']} />
           {plantingSitesData && plantingMapData && showSiteMap && filteredSiteData && (
             <PlantingSiteMap
               mapData={filteredSiteData}
