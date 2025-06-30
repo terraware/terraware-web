@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
@@ -177,6 +177,21 @@ const ProjectProfileGisMaps = () => {
     }
   }, [uniqueSites, uniqueZones, zoneOrSite, zonesAndSites]);
 
+  const labelHandler = useCallback((iZoneOrSite: ZoneOrSiteOption) => iZoneOrSite?.name, []);
+  const isEqualHandler = useCallback(
+    (zoneOrSiteA: ZoneOrSiteOption, zoneOrSiteB: ZoneOrSiteOption) =>
+      zoneOrSiteA.name === zoneOrSiteB.name && zoneOrSiteA.type === zoneOrSiteB.type,
+    []
+  );
+  const renderOptionHandler = useCallback((iZoneOrSite: ZoneOrSiteOption) => iZoneOrSite?.name, []);
+  const toTHandler = useCallback(
+    (input: string) =>
+      ({
+        name: input,
+      }) as ZoneOrSiteOption,
+    []
+  );
+
   const zonesAndSitesDropdown = (
     <SelectT
       id='zoneOrSite'
@@ -186,16 +201,10 @@ const ProjectProfileGisMaps = () => {
       placeholder={''}
       selectedValue={zoneOrSite}
       selectStyles={{ optionsContainer: { textAlign: 'left' } }}
-      displayLabel={(iZoneOrSite: ZoneOrSiteOption) => iZoneOrSite?.name}
-      isEqual={(zoneOrSiteA: ZoneOrSiteOption, zoneOrSiteB: ZoneOrSiteOption) =>
-        zoneOrSiteA.name === zoneOrSiteB.name && zoneOrSiteA.type === zoneOrSiteB.type
-      }
-      renderOption={(iZoneOrSite: ZoneOrSiteOption) => iZoneOrSite?.name}
-      toT={(input: string) =>
-        ({
-          name: input,
-        }) as ZoneOrSiteOption
-      }
+      displayLabel={labelHandler}
+      isEqual={isEqualHandler}
+      renderOption={renderOptionHandler}
+      toT={toTHandler}
     />
   );
 
