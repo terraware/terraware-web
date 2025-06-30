@@ -11,6 +11,34 @@ import CurrentTimeline from './CurrentTimeline';
 import ListModulesContent from './ListModulesContent';
 import ListViewHeader from './ListViewHeader';
 
+const phases = [
+  {
+    name: 'Phase 0 - Due Diligence',
+    description:
+      'Submit project-relevant documentation that prove that the statements provided in the ' +
+      'application are truthful and accurate.',
+  },
+  {
+    name: 'Phase 1 - Feasibility Study',
+    description:
+      'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
+      'by submitting key information that will also be used to create a Feasibility Study document.',
+  },
+  {
+    name: 'Phase 2 - PDD Writing & Registration',
+    description:
+      'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development & Full).',
+  },
+  {
+    name: 'Phase 3 - Implement and Monitor',
+    description: 'Mock description',
+  },
+  {
+    name: 'Phase 4 - Should not be visible',
+    description: 'Mock description',
+  },
+];
+
 export default function ListView(): JSX.Element {
   const theme = useTheme();
 
@@ -29,40 +57,9 @@ export default function ListView(): JSX.Element {
   const dueDiligencePhaseDescription =
     'Terraformation conducts due diligence to help the company identify and verify potential partners. Terraformation may be required by law to collect certain information to meet its international compliance obligations. In other instances, Terraformation may be required by investors to collect certain information before they will invest in the project. Finally, some information is required in order to register the project with Verra or another carbon registry.';
 
-  const phases = useMemo(
-    () => [
-      {
-        name: 'Phase 0 - Due Diligence',
-        description:
-          'Submit project-relevant documentation that prove that the statements provided in the ' +
-          'application are truthful and accurate.',
-      },
-      {
-        name: 'Phase 1 - Feasibility Study',
-        description:
-          'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
-          'by submitting key information that will also be used to create a Feasibility Study document.',
-      },
-      {
-        name: 'Phase 2 - PDD Writing & Registration',
-        description:
-          'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development & Full).',
-      },
-      {
-        name: 'Phase 3 - Implement and Monitor',
-        description: 'Mock description',
-      },
-      {
-        name: 'Phase 4 - Should not be visible',
-        description: 'Mock description',
-      },
-    ],
-    []
-  );
-
   const currentPhaseIndex = useMemo(
     () => phases.findIndex((phase) => phase.name === currentParticipant?.cohortPhase),
-    [currentParticipant, phases]
+    [currentParticipant]
   );
 
   return (
