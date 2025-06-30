@@ -351,14 +351,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -384,6 +379,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -450,24 +450,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -497,6 +479,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -527,7 +527,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
@@ -581,11 +581,15 @@ export default function <span class="fstat-no" title="function not covered" >Eve
   const responseDelete = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeleteManyEvents(deleteEventRequestId));</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
+  const goToEvent = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));</span>
+  }, [navigate, moduleId]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (responseProjects?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     }
-  }, [responseProjects]);
+  }, [responseProjects, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (reponseCreate?.status === 'error') {</span>
@@ -594,7 +598,7 @@ export default function <span class="fstat-no" title="function not covered" >Eve
 <span class="cstat-no" title="statement not covered" >    if (reponseCreate?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      goToEvent();</span>
     }
-  }, [reponseCreate]);
+  }, [reponseCreate, goToEvent, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (reponseUpdate?.status === 'error') {</span>
@@ -603,7 +607,7 @@ export default function <span class="fstat-no" title="function not covered" >Eve
 <span class="cstat-no" title="statement not covered" >    if (reponseUpdate?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      goToEvent();</span>
     }
-  }, [reponseUpdate]);
+  }, [reponseUpdate, goToEvent, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (responseDelete?.status === 'error') {</span>
@@ -612,11 +616,7 @@ export default function <span class="fstat-no" title="function not covered" >Eve
 <span class="cstat-no" title="statement not covered" >    if (responseDelete?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      goToEvent();</span>
     }
-  }, [responseDelete]);
-&nbsp;
-  const goToEvent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));</span>
-  };
+  }, [responseDelete, goToEvent, snackbar]);
 &nbsp;
   const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const allEventIdsToDelete = <span class="cstat-no" title="statement not covered" >eventsToDelete?.map(<span class="fstat-no" title="function not covered" >(e</span>td) =&gt; <span class="cstat-no" title="statement not covered" >etd.id)</span>;</span>
@@ -766,7 +766,7 @@ export default function <span class="fstat-no" title="function not covered" >Eve
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T12:58:19.836Z
+                at 2025-06-30T18:43:37.971Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

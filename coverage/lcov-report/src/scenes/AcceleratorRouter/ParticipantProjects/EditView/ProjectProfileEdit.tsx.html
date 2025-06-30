@@ -741,7 +741,20 @@
 <a name='L676'></a><a href='#L676'>676</a>
 <a name='L677'></a><a href='#L677'>677</a>
 <a name='L678'></a><a href='#L678'>678</a>
-<a name='L679'></a><a href='#L679'>679</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L679'></a><a href='#L679'>679</a>
+<a name='L680'></a><a href='#L680'>680</a>
+<a name='L681'></a><a href='#L681'>681</a>
+<a name='L682'></a><a href='#L682'>682</a>
+<a name='L683'></a><a href='#L683'>683</a>
+<a name='L684'></a><a href='#L684'>684</a>
+<a name='L685'></a><a href='#L685'>685</a>
+<a name='L686'></a><a href='#L686'>686</a>
+<a name='L687'></a><a href='#L687'>687</a>
+<a name='L688'></a><a href='#L688'>688</a>
+<a name='L689'></a><a href='#L689'>689</a>
+<a name='L690'></a><a href='#L690'>690</a>
+<a name='L691'></a><a href='#L691'>691</a>
+<a name='L692'></a><a href='#L692'>692</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -897,6 +910,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1030,6 +1045,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1573,6 +1599,8 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
     uploadImagesResponse,
     requestsInProgress,
     initiatedRequests,
+    redirectToProjectView,
+    snackbar,
   ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1591,7 +1619,7 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
 <span class="cstat-no" title="statement not covered" >      setUploadImagesRequestId('');</span>
     }
-  }, [uploadImagesResponse]);
+  }, [uploadImagesResponse, redirectToProjectView, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const tfContactSelected = <span class="cstat-no" title="statement not covered" >globalUsersOptions?.find(</span>
@@ -1610,7 +1638,7 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
       })
     );
 <span class="cstat-no" title="statement not covered" >    setListUsersRequestId(request.requestId);</span>
-  }, [activeLocale, dispatch]);
+  }, [activeLocale, dispatch, projectId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (listUsersRequest?.status === 'success') {</span>
@@ -1708,7 +1736,18 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    setInitiatedRequests(newInitiatedRequests);</span>
-  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, stableToVariable, saveTFContact]);
+  }, [
+    participantProjectRecord,
+    dispatch,
+    projectId,
+    mainPhoto,
+    mapPhoto,
+    stableToVariable,
+    saveTFContact,
+    redirectToProjectView,
+    snackbar,
+    tfContact,
+  ]);
 &nbsp;
   const handleOnCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToParticipantProject(projectId),</span> [goToParticipantProject, projectId]);</span>
 &nbsp;
@@ -1735,7 +1774,7 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
       const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListOrganizationUsers({ organizationId: organization.id }));</span>
 <span class="cstat-no" title="statement not covered" >      setOrganizationUsersRequestId(request.requestId);</span>
     }
-  }, [organization]);
+  }, [organization, dispatch]);
 &nbsp;
   const onChangeLandUseHectares = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>ype: string, hectares: string) =&gt; {</span>
     const updated = <span class="cstat-no" title="statement not covered" >{ ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };</span>
@@ -2104,7 +2143,7 @@ export default ProjectProfileEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T12:58:19.836Z
+                at 2025-06-30T18:43:37.971Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -283,7 +283,10 @@
 <a name='L218'></a><a href='#L218'>218</a>
 <a name='L219'></a><a href='#L219'>219</a>
 <a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -370,23 +373,26 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -503,7 +509,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
@@ -585,15 +591,6 @@ export default function <span class="fstat-no" title="function not covered" >Spe
     });
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (removedResult?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      goToSpecies(record.id);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    if (addedResult?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      goToSpecies(record.id);</span>
-    }
-  }, [addedResult, removedResult]);
-&nbsp;
   const gridSize = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isMobile) {</span>
 <span class="cstat-no" title="statement not covered" >      return 12;</span>
@@ -601,15 +598,27 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 <span class="cstat-no" title="statement not covered" >    return 4;</span>
   };
 &nbsp;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const goToSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d?: number) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (speciesId) {</span>
-      const speciesLocation = <span class="cstat-no" title="statement not covered" >{</span>
-        pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
-      };
-<span class="cstat-no" title="statement not covered" >      navigate(speciesLocation);</span>
+  const goToSpecies = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+<span class="fstat-no" title="function not covered" >    (i</span>d?: number) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (speciesId) {</span>
+        const speciesLocation = <span class="cstat-no" title="statement not covered" >{</span>
+          pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
+        };
+<span class="cstat-no" title="statement not covered" >        navigate(speciesLocation);</span>
+      }
+    },
+    [navigate, speciesId]
+  );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (removedResult?.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >      goToSpecies(record.id);</span>
     }
-  };
+<span class="cstat-no" title="statement not covered" >    if (addedResult?.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >      goToSpecies(record.id);</span>
+    }
+  }, [addedResult, goToSpecies, record.id, removedResult]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const getSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -623,7 +632,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization &amp;&amp; speciesId) {</span>
 <span class="cstat-no" title="statement not covered" >      void getSpecies();</span>
     }
-  }, [speciesId, selectedOrganization?.id, navigate]);
+  }, [speciesId, selectedOrganization, navigate]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const now = <span class="cstat-no" title="statement not covered" >DateTime.now().toISO();</span>
@@ -730,7 +739,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T12:58:19.836Z
+                at 2025-06-30T18:43:37.971Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

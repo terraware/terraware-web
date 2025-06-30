@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -147,7 +147,10 @@
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,9 +191,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -206,6 +206,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -231,7 +237,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
@@ -271,22 +277,25 @@ export default function <span class="fstat-no" title="function not covered" >Fun
     },
   });
 &nbsp;
-  const pathParamExists = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >!isNaN(pathFundingEntityId) &amp;&amp; pathFundingEntityId !== -1;</span></span>
+  const pathParamExists = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >!isNaN(pathFundingEntityId) &amp;&amp; pathFundingEntityId !== -1,</span>
+    [pathFundingEntityId]
+  );
 &nbsp;
   const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (pathParamExists()) {</span>
+<span class="cstat-no" title="statement not covered" >    if (pathParamExists) {</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestFundingEntity(pathFundingEntityId));</span>
     }
-  }, [dispatch, pathFundingEntityId]);
+  }, [dispatch, pathFundingEntityId, pathParamExists]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (pathParamExists()) {</span>
+<span class="cstat-no" title="statement not covered" >    if (pathParamExists) {</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestFundingEntity(pathFundingEntityId));</span>
     }
-  }, [pathFundingEntityId, dispatch]);
+  }, [pathFundingEntityId, dispatch, pathParamExists]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!pathParamExists() || !getFundingEntityRequest) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!pathParamExists || !getFundingEntityRequest) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
@@ -299,7 +308,7 @@ export default function <span class="fstat-no" title="function not covered" >Fun
     } else <span class="cstat-no" title="statement not covered" >if (getFundingEntityRequest.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      setEntityAPIRequestStatus(APIRequestStatus.FAILED);</span>
     }
-  }, [pathFundingEntityId, getFundingEntityRequest, reload]);
+  }, [pathFundingEntityId, getFundingEntityRequest, reload, pathParamExists]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (entityAPIRequestStatus === APIRequestStatus.FAILED) {</span>
@@ -311,7 +320,7 @@ export default function <span class="fstat-no" title="function not covered" >Fun
 <span class="cstat-no" title="statement not covered" >        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);</span>
       }
     }
-  }, [entityAPIRequestStatus]);
+  }, [entityAPIRequestStatus, isDev, isStaging, navigate]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return &lt;FundingEntityContext.Provider value={fundingEntityData}&gt;{children}&lt;/FundingEntityContext.Provider&gt;;</span>
 }
@@ -322,7 +331,7 @@ export default function <span class="fstat-no" title="function not covered" >Fun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T12:58:19.836Z
+                at 2025-06-30T18:43:37.971Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

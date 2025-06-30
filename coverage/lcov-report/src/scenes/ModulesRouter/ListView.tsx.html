@@ -163,24 +163,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,6 +190,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -250,6 +250,34 @@ import CurrentTimeline from './CurrentTimeline';
 import ListModulesContent from './ListModulesContent';
 import ListViewHeader from './ListViewHeader';
 &nbsp;
+const phases = <span class="cstat-no" title="statement not covered" >[</span>
+  {
+    name: 'Phase 0 - Due Diligence',
+    description:
+      'Submit project-relevant documentation that prove that the statements provided in the ' +
+      'application are truthful and accurate.',
+  },
+  {
+    name: 'Phase 1 - Feasibility Study',
+    description:
+      'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
+      'by submitting key information that will also be used to create a Feasibility Study document.',
+  },
+  {
+    name: 'Phase 2 - PDD Writing &amp; Registration',
+    description:
+      'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development &amp; Full).',
+  },
+  {
+    name: 'Phase 3 - Implement and Monitor',
+    description: 'Mock description',
+  },
+  {
+    name: 'Phase 4 - Should not be visible',
+    description: 'Mock description',
+  },
+];
+&nbsp;
 export default function <span class="fstat-no" title="function not covered" >ListView(</span>): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
@@ -267,34 +295,6 @@ export default function <span class="fstat-no" title="function not covered" >Lis
 &nbsp;
   const dueDiligencePhaseDescription =
 <span class="cstat-no" title="statement not covered" >    'Terraformation conducts due diligence to help the company identify and verify potential partners. Terraformation may be required by law to collect certain information to meet its international compliance obligations. In other instances, Terraformation may be required by investors to collect certain information before they will invest in the project. Finally, some information is required in order to register the project with Verra or another carbon registry.';</span>
-&nbsp;
-  const phases = <span class="cstat-no" title="statement not covered" >[</span>
-    {
-      name: 'Phase 0 - Due Diligence',
-      description:
-        'Submit project-relevant documentation that prove that the statements provided in the ' +
-        'application are truthful and accurate.',
-    },
-    {
-      name: 'Phase 1 - Feasibility Study',
-      description:
-        'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
-        'by submitting key information that will also be used to create a Feasibility Study document.',
-    },
-    {
-      name: 'Phase 2 - PDD Writing &amp; Registration',
-      description:
-        'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development &amp; Full).',
-    },
-    {
-      name: 'Phase 3 - Implement and Monitor',
-      description: 'Mock desription',
-    },
-    {
-      name: 'Phase 4 - Should not be visible',
-      description: 'Mock desription',
-    },
-  ];
 &nbsp;
   const currentPhaseIndex = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >phases.findIndex(<span class="fstat-no" title="function not covered" >(p</span>hase) =&gt; <span class="cstat-no" title="statement not covered" >phase.name === currentParticipant?.cohortPhase)</span>,</span>
@@ -331,7 +331,7 @@ export default function <span class="fstat-no" title="function not covered" >Lis
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T12:58:19.836Z
+                at 2025-06-30T18:43:37.971Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

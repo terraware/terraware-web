@@ -115,7 +115,13 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,21 +144,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -189,10 +201,13 @@ const useTableDensity = <span class="cstat-no" title="statement not covered" ><s
     (userPreferences.tableDensity as TableDensityType) ?? 'comfortable'
   );
 &nbsp;
-  const saveTableDensityToUserPreferences = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewDensity: TableDensityType) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    void updateUserPreferences({ tableDensity: newDensity });</span>
-<span class="cstat-no" title="statement not covered" >    reloadUserPreferences();</span>
-  };
+  const saveTableDensityToUserPreferences = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (n</span>ewDensity: TableDensityType) =&gt; {
+<span class="cstat-no" title="statement not covered" >      void updateUserPreferences({ tableDensity: newDensity });</span>
+<span class="cstat-no" title="statement not covered" >      reloadUserPreferences();</span>
+    },
+    [reloadUserPreferences, updateUserPreferences]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     // Load table density from userPreference. Set state if different.
@@ -200,12 +215,15 @@ const useTableDensity = <span class="cstat-no" title="statement not covered" ><s
 <span class="cstat-no" title="statement not covered" >    if (tableDensity !== newTableDensity) {</span>
 <span class="cstat-no" title="statement not covered" >      _setTableDensity(newTableDensity);</span>
     }
-  }, [userPreferences.tableDensity]);
+  }, [userPreferences.tableDensity, tableDensity]);
 &nbsp;
-  const setTableDensity = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(d</span>ensity: TableDensityType) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    _setTableDensity(density);</span>
-<span class="cstat-no" title="statement not covered" >    saveTableDensityToUserPreferences(density);</span>
-  }, []);
+  const setTableDensity = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (d</span>ensity: TableDensityType) =&gt; {
+<span class="cstat-no" title="statement not covered" >      _setTableDensity(density);</span>
+<span class="cstat-no" title="statement not covered" >      saveTableDensityToUserPreferences(density);</span>
+    },
+    [saveTableDensityToUserPreferences]
+  );
 &nbsp;
   const result = <span class="cstat-no" title="statement not covered" >useMemo&lt;Response&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
@@ -226,7 +244,7 @@ export default useTableDensity;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T12:58:19.836Z
+                at 2025-06-30T18:43:37.971Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
