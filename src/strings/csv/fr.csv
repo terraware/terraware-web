@@ -1400,6 +1400,7 @@ PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre com
 PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE,Dessiner les limites des zones d'exclusion,
 PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil de dessin {0} pour tracer les limites du site de plantation.,
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Dessiner les limites du site,
+PLANTING_SITE_CREATED,Site de plantation créé !,
 PLANTING_SITE_DELETED,Site de plantation supprimé !,
 PLANTING_SITE_PROGRESS,État d'avancement du site de plantation,
 PLANTING_SITE_SAVED,Site de plantation sauvegardé,
