@@ -99,8 +99,6 @@ const ProjectProfileGisMaps = () => {
   }, [plantingSitesData, showSiteMap, zoneOrSite]);
 
   const filteredZoneData = useMemo(() => {
-    console.log('entra aca');
-    console.log('zoneOrSite', zoneOrSite);
     if (boundariesData) {
       if (
         showBoundaryMap &&
@@ -228,20 +226,32 @@ const ProjectProfileGisMaps = () => {
           borderRadius: theme.spacing(1),
         }}
       >
-        {plantingSitesData && plantingMapData && showSiteMap && filteredSiteData && (
-          <PlantingSiteMap
-            mapData={filteredSiteData}
-            style={{ width: '100%', borderRadius: '24px' }}
-            layers={['Planting Site', 'Zones', 'Sub-Zones']}
-          />
+        {zoneOrSite?.name && (
+          <Box display='flex' alignItems='center' paddingBottom={2}>
+            <Typography fontSize={'20px'} fontWeight={600} paddingRight={1}>
+              {zoneOrSite.name}
+            </Typography>
+            <Typography fontSize={'16px'} fontWeight={400}>
+              {strings.FROM_GIS_DATABASE}
+            </Typography>
+          </Box>
         )}
-        {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (
-          <PlantingSiteMap
-            mapData={filteredZoneData}
-            style={{ width: '100%', borderRadius: '24px' }}
-            layers={['Planting Site']}
-          />
-        )}
+        <Box>
+          {plantingSitesData && plantingMapData && showSiteMap && filteredSiteData && (
+            <PlantingSiteMap
+              mapData={filteredSiteData}
+              style={{ width: '100%', borderRadius: '24px' }}
+              layers={['Planting Site', 'Zones', 'Sub-Zones']}
+            />
+          )}
+          {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (
+            <PlantingSiteMap
+              mapData={filteredZoneData}
+              style={{ width: '100%', borderRadius: '24px' }}
+              layers={['Planting Site']}
+            />
+          )}
+        </Box>
       </Card>
     </Page>
   );
