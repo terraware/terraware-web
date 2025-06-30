@@ -12,7 +12,6 @@ import { IconName } from 'src/components/common/icon/icons';
 import { useDocLinks } from 'src/docLinks';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
 import {
   ORDERED_SUPPORT_REQUEST_TYPES,
   getSupportRequestDescription,
@@ -31,7 +30,7 @@ type ListItemContent = {
   onClick: () => void;
 };
 export default function HelpSupportHome(): JSX.Element {
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const { isMobile, isDesktop } = useDeviceInfo();
   const docLinks = useDocLinks();
   const theme = useTheme();
@@ -41,12 +40,12 @@ export default function HelpSupportHome(): JSX.Element {
   const knowledgeBaseItem: ListItemContent = useMemo(() => {
     return {
       icon: 'iconLibrary',
-      title: activeLocale ? strings.KNOWLEDGE_BASE : '',
-      description: activeLocale ? strings.DESCRIPTION_KNOWLEDGE_BASE : '',
-      buttonText: activeLocale ? strings.KNOWLEDGE_BASE : '',
+      title: strings.KNOWLEDGE_BASE,
+      description: strings.DESCRIPTION_KNOWLEDGE_BASE,
+      buttonText: strings.KNOWLEDGE_BASE,
       onClick: () => window.open(docLinks.knowledge_base),
     };
-  }, [activeLocale, docLinks.knowledge_base]);
+  }, [strings, docLinks.knowledge_base]);
 
   const jiraListItems = useMemo(() => {
     return ORDERED_SUPPORT_REQUEST_TYPES.filter((type) => (types ?? []).includes(type)).map(
