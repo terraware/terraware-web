@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import DocumentProducerProvider from 'src/providers/DocumentProducer/Provider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
@@ -15,6 +16,7 @@ import Voting from './Voting';
 import VotingProvider from './Voting/VotingProvider';
 
 const ParticipantProjectsRouter = () => {
+  const isGisMapsEnabled = isEnabled('GIS Maps');
   return (
     <ProjectProvider>
       <VotingProvider>
@@ -23,7 +25,7 @@ const ParticipantProjectsRouter = () => {
             <Routes>
               <Route path={'edit'} element={<ProjectProfileEdit />} />
               <Route path={''} element={<ProjectPage />} />
-              <Route path={'maps/*'} element={<ProjectProfileGisMaps />} />
+              {isGisMapsEnabled && <Route path={'maps/*'} element={<ProjectProfileGisMaps />} />}
               <Route path={'votes/*'} element={<Voting />} />
               <Route path={'scores/*'} element={<Scoring />} />
               <Route path={'reports/*'} element={<Reports />} />
