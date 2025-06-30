@@ -1,3 +1,4 @@
+34da7e11787 SW-7092 Don't save invalid substrate type (#4209)
 b3d49f0e8cc Fix all remaining Exhaustive Deps errors (#4131)
 d11d0e10cd0 Update dependency jest-mock-extended to v4 (#4201)
 aa9431c56ef Update dependency @types/jest to v30 (#4200)
