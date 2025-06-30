@@ -85,7 +85,6 @@ jobs:
           --rule "jsdoc/check-indentation: 0"
           --rule "no-redeclare: 0"
           --rule "max-classes-per-file: 0"
-          --rule "react-hooks/exhaustive-deps: 0"
 
       - name: Do typescript check
         run: yarn ts
