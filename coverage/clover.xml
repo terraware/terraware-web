@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1751321371765" clover="3.2.0">
-  <project timestamp="1751321371765" name="All files">
-    <metrics statements="30774" coveredstatements="1296" conditionals="21332" coveredconditionals="388" methods="9440" coveredmethods="211" elements="61546" coveredelements="1895" complexity="0" loc="30774" ncloc="30774" packages="266" files="1281" classes="1281"/>
+<coverage generated="1751322886711" clover="3.2.0">
+  <project timestamp="1751322886711" name="All files">
+    <metrics statements="30774" coveredstatements="1296" conditionals="21336" coveredconditionals="388" methods="9440" coveredmethods="211" elements="61550" coveredelements="1895" complexity="0" loc="30774" ncloc="30774" packages="266" files="1281" classes="1281"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -26270,9 +26270,9 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.common">
-      <metrics statements="122" coveredstatements="0" conditionals="69" coveredconditionals="0" methods="46" coveredmethods="0"/>
+      <metrics statements="122" coveredstatements="0" conditionals="73" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="AggregatedPlantsStats.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/common/AggregatedPlantsStats.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -26280,9 +26280,9 @@
         <line num="40" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
         <line num="96" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
       </file>
       <file name="DetailsPage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/common/DetailsPage.tsx">
         <metrics statements="32" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="8" coveredmethods="0"/>
