@@ -23,7 +23,7 @@ const NewView = () => {
     if (createFundingEntity.succeeded && createFundingEntity.data) {
       goToFundingEntity(createFundingEntity.data.id);
     }
-  }, [createFundingEntity]);
+  }, [createFundingEntity, goToFundingEntity]);
 
   return (
     <Page title={strings.ADD_FUNDING_ENTITY} contentStyle={{ display: 'flex', flexDirection: 'column' }}>

@@ -72,7 +72,7 @@ export default function usePlantingSiteCreate(): Response {
         snackbar.toastError(strings.GENERIC_ERROR);
       }
     }
-  }, [_createSite, createRequest, validateDraft, validateSiteStatus, isValid]);
+  }, [_createSite, createRequest, validateDraft, validateSiteStatus, isValid, snackbar, problems]);
 
   const createSite = useCallback(
     (draft: DraftPlantingSite) => {

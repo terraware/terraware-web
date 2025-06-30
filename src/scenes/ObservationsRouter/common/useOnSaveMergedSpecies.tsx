@@ -65,6 +65,6 @@ export function useOnSaveMergedSpecies(
 
       setShowMatchSpeciesModal(false);
     },
-    [observationId, dispatch, species]
+    [observationId, setShowMatchSpeciesModal, species, dispatch]
   );
 }

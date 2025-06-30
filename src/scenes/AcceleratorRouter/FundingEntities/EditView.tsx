@@ -17,7 +17,7 @@ const EditView = () => {
   const goToViewFundingEntity = useCallback(() => {
     reload();
     goToFundingEntity(String(fundingEntity?.id));
-  }, [fundingEntity]);
+  }, [fundingEntity, goToFundingEntity, reload]);
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
@@ -30,7 +30,7 @@ const EditView = () => {
     if (updateFundingEntity.succeeded) {
       goToViewFundingEntity();
     }
-  }, [updateFundingEntity]);
+  }, [updateFundingEntity, goToViewFundingEntity]);
 
   return (
     <Page

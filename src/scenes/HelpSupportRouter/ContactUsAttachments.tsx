@@ -28,7 +28,7 @@ const ContactUsAttachments = ({ maxFiles, onChange }: AttachmentsProps): JSX.Ele
       });
       setAttachments([...attachments, ...newAttachments]);
     },
-    [attachments]
+    [attachments, dispatch]
   );
 
   const removeAttachment = useCallback(

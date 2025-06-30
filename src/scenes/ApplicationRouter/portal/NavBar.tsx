@@ -27,11 +27,11 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isOverviewRoute = useMatch({ path: APP_PATHS.APPLICATION_OVERVIEW, end: true });
   const isReviewRoute = useMatch({ path: APP_PATHS.APPLICATION_REVIEW, end: true });
 
-  const closeNavBar = () => {
+  const closeNavBar = useCallback(() => {
     if (!isDesktop) {
       setShowNavBar(false);
     }
-  };
+  }, [isDesktop, setShowNavBar]);
 
   const closeAndNavigateTo = useCallback(
     (path: string) => {
@@ -40,7 +40,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         navigate(path.replace(':applicationId', `${selectedApplication.id}`));
       }
     },
-    [selectedApplication]
+    [selectedApplication, closeNavBar, navigate]
   );
 
   const isApplicationEnabled = useMemo(() => {
@@ -80,7 +80,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
           );
         }) ?? []
     );
-  }, [applicationSections, isApplicationEnabled, selectedApplication, location.pathname]);
+  }, [applicationSections, isApplicationEnabled, selectedApplication, closeAndNavigateTo]);
 
   const prescreenNavItems = useMemo(() => {
     if (!selectedApplication) {
@@ -120,7 +120,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
           );
         }) ?? []
     );
-  }, [applicationSections, selectedApplication, location.pathname]);
+  }, [applicationSections, selectedApplication, closeAndNavigateTo]);
 
   return (
     <Navbar

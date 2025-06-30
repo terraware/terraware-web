@@ -152,6 +152,8 @@ const ProjectProfileEdit = () => {
     uploadImagesResponse,
     requestsInProgress,
     initiatedRequests,
+    redirectToProjectView,
+    snackbar,
   ]);
 
   useEffect(() => {
@@ -170,7 +172,7 @@ const ProjectProfileEdit = () => {
       snackbar.toastError();
       setUploadImagesRequestId('');
     }
-  }, [uploadImagesResponse]);
+  }, [uploadImagesResponse, redirectToProjectView, snackbar]);
 
   useEffect(() => {
     const tfContactSelected = globalUsersOptions?.find(
@@ -189,7 +191,7 @@ const ProjectProfileEdit = () => {
       })
     );
     setListUsersRequestId(request.requestId);
-  }, [activeLocale, dispatch]);
+  }, [activeLocale, dispatch, projectId]);
 
   useEffect(() => {
     if (listUsersRequest?.status === 'success') {
@@ -287,7 +289,18 @@ const ProjectProfileEdit = () => {
     }
 
     setInitiatedRequests(newInitiatedRequests);
-  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, stableToVariable, saveTFContact]);
+  }, [
+    participantProjectRecord,
+    dispatch,
+    projectId,
+    mainPhoto,
+    mapPhoto,
+    stableToVariable,
+    saveTFContact,
+    redirectToProjectView,
+    snackbar,
+    tfContact,
+  ]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -314,7 +327,7 @@ const ProjectProfileEdit = () => {
       const request = dispatch(requestListOrganizationUsers({ organizationId: organization.id }));
       setOrganizationUsersRequestId(request.requestId);
     }
-  }, [organization]);
+  }, [organization, dispatch]);
 
   const onChangeLandUseHectares = (type: string, hectares: string) => {
     const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };

@@ -165,7 +165,15 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
         text: true,
       },
     ];
-  }, [activeLocale, defaultTimeZone, monitoringPlotResult, plantingSite, plantingZone, plantingSubzone]);
+  }, [
+    monitoringPlotResult,
+    result?.completedTime,
+    plantingSite?.timeZone,
+    activeLocale,
+    defaultTimeZone,
+    plantingZone?.name,
+    plantingSubzone?.name,
+  ]);
 
   const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
     <Typography

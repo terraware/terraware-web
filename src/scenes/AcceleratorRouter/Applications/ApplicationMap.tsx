@@ -35,7 +35,7 @@ const ApplicationMap = () => {
         subtitle={strings.PROPOSED_PROJECT_BOUNDARY}
       />
     );
-  }, [selectedApplication]);
+  }, [selectedApplication, activeLocale]);
 
   const crumbs: Crumb[] = useMemo(
     () =>
@@ -70,7 +70,7 @@ const ApplicationMap = () => {
       return undefined;
     }
     return <Button label={strings.EXPORT_PROJECT_BOUNDARY} onClick={() => void onExport()} />;
-  }, [activeLocale, selectedApplication]);
+  }, [activeLocale, selectedApplication, onExport]);
 
   if (!selectedApplication) {
     return <Page isLoading={true} />;

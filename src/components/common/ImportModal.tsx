@@ -56,6 +56,10 @@ export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>
   link.click();
 };
 
+const warningContentStyles = {
+  textAlign: 'left',
+};
+
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const {
@@ -92,8 +96,6 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const snackbar = useSnackbar();
 
   const spacingStyles = { marginRight: theme.spacing(2) };
-
-  const warningContentSyles = { textAlign: 'left' };
 
   const containerStyles = {
     display: 'flex',
@@ -134,7 +136,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   useEffect(() => {
     const getErrors = () => {
       return (
-        <Box key='import-error-1' sx={warningContentSyles}>
+        <Box key='import-error-1' sx={warningContentStyles}>
           {strings.DATA_IMPORT_FAILED}
           <ul>
             {fileStatus?.details.errors?.map((err, index) => (
@@ -456,7 +458,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           </Box>
         )}
         {warning && fileStatus?.details.warnings?.length && (
-          <Box sx={warningContentSyles}>
+          <Box sx={warningContentStyles}>
             <p>{strings.formatString(duplicatedLabel, fileStatus?.details.warnings?.length)}</p>
             <ul>
               {fileStatus?.details.warnings?.map((wr, index) => <li key={`duplicate-sp-${index}`}>{wr.value}</li>)}

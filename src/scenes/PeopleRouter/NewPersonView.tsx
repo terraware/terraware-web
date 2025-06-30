@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, useTheme } from '@mui/material';
@@ -70,9 +70,9 @@ export default function PersonView(): JSX.Element {
     onChange('role', newRole);
   };
 
-  const goToPeople = () => {
+  const goToPeople = useCallback(() => {
     navigate({ pathname: APP_PATHS.PEOPLE });
-  };
+  }, [navigate]);
 
   const goToViewPerson = (userId: string) => {
     navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });

@@ -34,7 +34,7 @@ const AcceleratorReportsView = () => {
     if (projectFilter.projectId) {
       setCurrentParticipantProject(projectFilter.projectId);
     }
-  }, [projectFilter?.projectId]);
+  }, [projectFilter.projectId, setCurrentParticipantProject]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -53,7 +53,7 @@ const AcceleratorReportsView = () => {
         children: <AcceleratorReportTargetsTable />,
       },
     ];
-  }, [activeLocale, projectFilter?.projectId]);
+  }, [activeLocale]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'reports',
@@ -91,7 +91,7 @@ const AcceleratorReportsView = () => {
           </Grid>
         </>
       ) : undefined,
-    [activeLocale, moduleProjects, projectFilter?.projectId]
+    [activeLocale, moduleProjects, projectFilter]
   );
 
   return (

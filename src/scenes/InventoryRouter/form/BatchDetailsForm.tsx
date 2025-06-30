@@ -119,7 +119,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
         });
       }
     },
-    [hasErrors, onBatchValidated, selectedOrganization?.id, timeZone]
+    [hasErrors, onBatchValidated, selectedOrganization, timeZone]
   );
 
   const accessionQuantity = useMemo<{ value: number; display?: string } | undefined>(() => {

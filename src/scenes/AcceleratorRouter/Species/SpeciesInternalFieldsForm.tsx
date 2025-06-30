@@ -30,7 +30,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
     ({ children }: { children: JSX.Element }) => (
       <GridItemWrapper props={{ paddingRight: theme.spacing(1), xs: 12, md: 4 }}>{children}</GridItemWrapper>
     ),
-    [theme]
+    [theme, GridItemWrapper]
   );
 
   return (

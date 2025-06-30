@@ -40,16 +40,18 @@ const OrgProjectsSectionEdit = ({
   const [selectedProject, setSelectedProject] = useState<string>(section.projectId?.toString());
   const dispatch = useAppDispatch();
   const projectDetailsRequest = useAppSelector(selectParticipantProjectRequest(Number(selectedProject)));
+  const [projectDetailsUpdated, setProjectDetailsUpdated] = useState<boolean>(false);
 
   useEffect(() => {
-    if (projectDetailsRequest?.status === 'success') {
+    if (projectDetailsRequest?.status === 'success' && !projectDetailsUpdated) {
       updateProjectDetails(section.projectId, undefined, undefined, projectDetailsRequest.data);
+      setProjectDetailsUpdated(true);
     }
-  }, [projectDetailsRequest]);
+  }, [projectDetailsRequest, section.projectId, updateProjectDetails, projectDetailsUpdated]);
 
   useEffect(() => {
     onProjectSelect(section.id, Number(selectedProject));
-  }, [selectedProject]);
+  }, [selectedProject, onProjectSelect, section.id]);
 
   const onOrgChange = useCallback(
     (id: string) => {
@@ -79,7 +81,7 @@ const OrgProjectsSectionEdit = ({
       setSelectedProject(section.projectId.toString());
       void dispatch(requestGetParticipantProject(section.projectId));
     }
-  }, [section.projectId, projectOptions]);
+  }, [section.projectId, projectOptions, dispatch]);
 
   return (
     <Grid container spacing={2}>

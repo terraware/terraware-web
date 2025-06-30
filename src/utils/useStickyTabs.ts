@@ -47,7 +47,7 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) =>
       setActiveTab(newTab);
       writeTabToSession(viewIdentifier, newTab);
     },
-    [navigate, location, viewIdentifier, queryTab, defaultTab]
+    [navigate, location, viewIdentifier, queryTab]
   );
 
   useEffect(() => {

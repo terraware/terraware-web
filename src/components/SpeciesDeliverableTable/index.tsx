@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { TableColumnType, TableRowType } from '@terraware/web-components';
@@ -68,23 +68,31 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
-  }, [deliverable.projectId]);
+  }, [deliverable.projectId, dispatch]);
 
-  const reload = () => {
+  const reload = useCallback(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
     reloadSpeciesDeliverableSearch();
-  };
+  }, [deliverable.projectId, dispatch, reloadSpeciesDeliverableSearch]);
 
-  const onCloseRemoveSpecies = (_reload?: boolean) => {
-    setShowConfirmDialog(false);
-    if (_reload) {
-      reload();
-    }
-  };
+  const onCloseRemoveSpecies = useCallback(
+    (_reload?: boolean) => {
+      setShowConfirmDialog(false);
+      if (_reload) {
+        reload();
+      }
+    },
+    [reload]
+  );
 
-  const onAcceleratorSpeciesClick = (row: any) => {
-    goToParticipantProjectSpecies(deliverable.id, row.project.id, row.participantProjectSpecies.id);
-  };
+  const onAcceleratorSpeciesClick = useCallback(
+    (row: any) => {
+      goToParticipantProjectSpecies(deliverable.id, row.project.id, row.participantProjectSpecies.id);
+    },
+    [deliverable.id, goToParticipantProjectSpecies]
+  );
+
+  const closeAddSpeciesModal = useCallback(() => setOpenedAddSpeciesModal(false), []);
 
   return (
     <>
@@ -98,7 +106,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
 
           {openedAddSpeciesModal && (
             <AddSpeciesModal
-              onClose={() => setOpenedAddSpeciesModal(false)}
+              onClose={closeAddSpeciesModal}
               participantProjectSpecies={participantProjectSpecies?.data || []}
               reload={reload}
               projectId={deliverable.projectId}

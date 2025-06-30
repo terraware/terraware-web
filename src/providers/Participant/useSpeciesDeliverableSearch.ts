@@ -89,7 +89,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
       })
     );
     setRecentDeliverableSearchRequestId(deliverableRequest.requestId);
-  }, [currentParticipantProject, isParticipantDataLoading, modules]);
+  }, [currentParticipantProject, isParticipantDataLoading, modules, activeLocale, dispatch]);
 
   // Initialize the hook
   useEffect(() => {
@@ -104,6 +104,6 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
       isLoading: recentDeliverablesSearchRequest?.status === 'pending' || isParticipantDataLoading,
       reload,
     }),
-    [recentDeliverablesSearchRequest, activeDeliverables, speciesDeliverables, reload]
+    [recentDeliverablesSearchRequest, activeDeliverables, speciesDeliverables, reload, isParticipantDataLoading]
   );
 };
