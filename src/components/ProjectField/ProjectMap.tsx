@@ -115,25 +115,31 @@ const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: P
   }, [projectId, navigate]);
 
   return (
-    <Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)}>
+    <Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)} position={'relative'}>
       <Box
         sx={{
           position: 'absolute',
-          right: '5%',
+          right: '20px',
+          top: '12px',
           zIndex: 10,
-          width: 28,
-          height: 28,
           backgroundColor: `${theme.palette.TwClrBaseWhite}`,
-          borderRadius: '4px',
+          borderRadius: '8px',
           display: 'flex',
           alignItems: 'center',
         }}
       >
         <button
-          style={{ background: 'none', border: 'none', cursor: 'pointer', height: '18px' }}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '8px',
+            borderRadius: '8px',
+            display: 'flex',
+          }}
           onClick={goToGisMapsView}
         >
-          <Icon name='iconFullScreen' />
+          <Icon name='iconExternalLink' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
         </button>
       </Box>
       <Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignContent: 'center' }}>
