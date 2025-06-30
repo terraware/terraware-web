@@ -63,7 +63,7 @@ export default function AggregatedPlantsStats({
         ))}
       </Grid>
       <Grid container spacing={3}>
-        <Grid item xs={chartGridSize}>
+        <Grid item xs={hasObservedPermanentPlots ? chartGridSize : chartGridSize * 2}>
           <ChartWrapper
             title={
               <Box display='flex'>
@@ -75,11 +75,13 @@ export default function AggregatedPlantsStats({
             <SpeciesTotalPlantsChart species={species} minHeight='170px' />
           </ChartWrapper>
         </Grid>
-        <Grid item xs={chartGridSize}>
-          <ChartWrapper title={strings.MORTALITY_RATE_PER_SPECIES}>
-            <SpeciesMortalityRateChart species={species} minHeight='170px' />
-          </ChartWrapper>
-        </Grid>
+        {hasObservedPermanentPlots && (
+          <Grid item xs={chartGridSize}>
+            <ChartWrapper title={strings.MORTALITY_RATE_PER_SPECIES}>
+              <SpeciesMortalityRateChart species={species} minHeight='170px' />
+            </ChartWrapper>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );
