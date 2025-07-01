@@ -5781,6 +5781,7 @@ export interface components {
             reference: string;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+            unit?: string;
         };
         ExistingSectionTextValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
             textValue: string;
@@ -7146,6 +7147,7 @@ export interface components {
             reference: string;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+            unit?: string;
         };
         NewNumberValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             citation?: string;
@@ -8323,6 +8325,7 @@ export interface components {
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
             underperformanceJustification?: string;
+            unit?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -8539,6 +8542,7 @@ export interface components {
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
             underperformanceJustification?: string;
+            unit?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -11841,6 +11845,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };

@@ -71,6 +71,7 @@ const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) => 
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
             {metric.target !== undefined && numberFormatter.format(metric.target)} {metric.target ? addPercentSign : ''}
+            {metric.target ? metric.unit : ''}
           </Typography>
         </Box>
         <Box flex='0 0 50%'>
@@ -79,6 +80,7 @@ const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) => 
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
             {metric.value !== undefined && numberFormatter.format(metric.value)} {metric.value ? addPercentSign : ''}
+            {metric.value ? metric.unit : ''}
           </Typography>
         </Box>
       </Box>
