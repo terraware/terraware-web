@@ -40,7 +40,7 @@ const ProjectProfileGisMaps = () => {
 
   useEffect(() => {
     const projectDetails = projectData.participantProject;
-    if (projectDetails && 'projectBoundariesCql' in projectDetails && projectDetails.projectBoundariesCql) {
+    if (projectDetails && projectDetails.projectBoundariesCql) {
       const requestBoundaries = dispatch(
         requestGetGis({
           cqlFilter: projectDetails.projectBoundariesCql,
@@ -51,7 +51,7 @@ const ProjectProfileGisMaps = () => {
       setBoundariesRequestId(requestBoundaries.requestId);
     }
 
-    if (projectDetails && 'plantingSitesCql' in projectDetails && projectDetails.plantingSitesCql) {
+    if (projectDetails && projectDetails.plantingSitesCql) {
       const requestPlantingSites = dispatch(
         requestGetGis({
           cqlFilter: projectDetails.plantingSitesCql,
@@ -105,23 +105,24 @@ const ProjectProfileGisMaps = () => {
   }, [plantingSitesData, showSiteMap, zoneOrSite]);
 
   const filteredZoneData = useMemo(() => {
-    if (boundariesData) {
-      if (
-        showBoundaryMap &&
-        zoneOrSite &&
-        zoneOrSite.type === 'zone' &&
-        zoneOrSite.name !== strings.ALL_PROJECT_ZONES
-      ) {
-        const filteredBoundaryData = {
-          ...boundariesData,
-          features: boundariesData.features.filter((f) => f.properties?.boundary_name === zoneOrSite.name),
-        };
-        if (filteredBoundaryData.features) {
-          return MapService.getMapDataFromGisPlantingSites(
-            filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
-          );
-        }
+    if (
+      boundariesData &&
+      showBoundaryMap &&
+      zoneOrSite &&
+      zoneOrSite.type === 'zone' &&
+      zoneOrSite.name !== strings.ALL_PROJECT_ZONES
+    ) {
+      const filteredBoundaryData = {
+        ...boundariesData,
+        features: boundariesData.features.filter((f) => f.properties?.boundary_name === zoneOrSite.name),
+      };
+      if (filteredBoundaryData.features) {
+        return MapService.getMapDataFromGisPlantingSites(
+          filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
+        );
       }
+    }
+    if (boundariesData) {
       return MapService.getMapDataFromGisPlantingSites(boundariesData);
     }
   }, [boundariesData, showBoundaryMap, zoneOrSite]);

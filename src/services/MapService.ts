@@ -431,6 +431,31 @@ const getMapDataFromGisPlantingSites = (gisPlantingSiteData: FeatureCollection<M
   };
 };
 
+const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string) => {
+  let unionedFeature: Feature<Polygon | MultiPolygon> = features[0];
+
+  for (let i = 1; i < features.length; i++) {
+    const result = union(unionedFeature, features[i]);
+    if (result) {
+      unionedFeature = result;
+    }
+  }
+
+  const unionedBoundary = unionedFeature.geometry;
+  const boundaryCoordinates = getPolygons(unionedBoundary as MultiPolygon);
+  const firstFeature = features[0];
+
+  return {
+    properties: {
+      id: siteId || firstFeature.properties?.site,
+      name: siteId || firstFeature.properties?.site,
+      type: 'site',
+    },
+    boundary: boundaryCoordinates,
+    id: siteId || firstFeature.properties?.site,
+  };
+};
+
 const extractPlantingSitesFromGis = (gisPlantingSiteData: FeatureCollection<MultiPolygon>): MapSourceBaseData => {
   const plantingSitesData: {
     properties: {
@@ -456,53 +481,11 @@ const extractPlantingSitesFromGis = (gisPlantingSiteData: FeatureCollection<Mult
   if (Object.keys(groupedByPlantingSite).length > 0) {
     Object.keys(groupedByPlantingSite).forEach((site) => {
       const features = groupedByPlantingSite[site] as Feature<MultiPolygon>[];
-
-      let unionedFeature: Feature<Polygon | MultiPolygon> = features[0];
-
-      for (let i = 1; i < features.length; i++) {
-        const result = union(unionedFeature, features[i]);
-        if (result) {
-          unionedFeature = result;
-        }
-      }
-
-      const unionedBoundary = unionedFeature.geometry;
-      const boundaryCoordinates = getPolygons(unionedBoundary as MultiPolygon);
-
-      const firstFeature = groupedByPlantingSite[site][0];
-      plantingSitesData.push({
-        properties: {
-          id: firstFeature.properties?.site,
-          name: firstFeature.properties?.site,
-          type: 'site',
-        },
-        boundary: boundaryCoordinates,
-        id: firstFeature.properties?.site,
-      });
+      plantingSitesData.push(processFeatures(features, site));
     });
   } else {
     const allFeatures = gisPlantingSiteData.features;
-    let unionedFeature: Feature<Polygon | MultiPolygon> = allFeatures[0];
-
-    for (let i = 1; i < allFeatures.length; i++) {
-      const result = union(unionedFeature, allFeatures[i]);
-      if (result) {
-        unionedFeature = result;
-      }
-    }
-    const unionedBoundary = unionedFeature.geometry;
-    const boundaryCoordinates = getPolygons(unionedBoundary as MultiPolygon);
-    const firstFeature = gisPlantingSiteData.features[0];
-
-    plantingSitesData.push({
-      properties: {
-        id: firstFeature.properties?.site,
-        name: firstFeature.properties?.site,
-        type: 'site',
-      },
-      boundary: boundaryCoordinates,
-      id: firstFeature.properties?.site,
-    });
+    plantingSitesData.push(processFeatures(allFeatures));
   }
 
   return {
