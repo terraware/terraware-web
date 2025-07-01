@@ -114,7 +114,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='unit'
             label={strings.UNIT}
             type='text'
-            maxLength={30}
+            maxLength={25}
             onChange={(value) => onChange('unit', value)}
             value={record.unit}
           />
