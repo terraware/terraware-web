@@ -461,8 +461,8 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string) => 
 };
 
 const calculateAreaFromGisData = (gisPlantingSiteData: FeatureCollection<MultiPolygon>) => {
-  const processedFetures = processFeatures(gisPlantingSiteData.features);
-  return processedFetures.totalArea;
+  const processedFeatures = processFeatures(gisPlantingSiteData.features);
+  return processedFeatures.totalArea;
 };
 
 const extractPlantingSitesFromGis = (gisPlantingSiteData: FeatureCollection<MultiPolygon>): MapSourceBaseData => {
