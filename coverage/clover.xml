@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1751377159994" clover="3.2.0">
-  <project timestamp="1751377159994" name="All files">
-    <metrics statements="30774" coveredstatements="1296" conditionals="21336" coveredconditionals="388" methods="9440" coveredmethods="211" elements="61550" coveredelements="1895" complexity="0" loc="30774" ncloc="30774" packages="266" files="1281" classes="1281"/>
+<coverage generated="1751383543349" clover="3.2.0">
+  <project timestamp="1751383543349" name="All files">
+    <metrics statements="30775" coveredstatements="1296" conditionals="21338" coveredconditionals="388" methods="9440" coveredmethods="211" elements="61553" coveredelements="1895" complexity="0" loc="30775" ncloc="30775" packages="266" files="1281" classes="1281"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -10866,9 +10866,9 @@
       </file>
     </package>
     <package name="src.hooks.useProjectVariablesUpdate">
-      <metrics statements="187" coveredstatements="0" conditionals="104" coveredconditionals="0" methods="45" coveredmethods="0"/>
+      <metrics statements="188" coveredstatements="0" conditionals="106" coveredconditionals="0" methods="45" coveredmethods="0"/>
       <file name="index.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useProjectVariablesUpdate/index.ts">
-        <metrics statements="103" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="32" coveredmethods="0"/>
+        <metrics statements="104" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="32" coveredmethods="0"/>
         <line num="44" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
@@ -10968,10 +10968,11 @@
         <line num="287" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="289" count="0" type="stmt"/>
         <line num="292" count="0" type="stmt"/>
-        <line num="295" count="0" type="stmt"/>
+        <line num="294" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="296" count="0" type="stmt"/>
-        <line num="301" count="0" type="stmt"/>
-        <line num="302" count="0" type="stmt"/>
+        <line num="297" count="0" type="stmt"/>
+        <line num="303" count="0" type="stmt"/>
+        <line num="304" count="0" type="stmt"/>
       </file>
       <file name="util.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useProjectVariablesUpdate/util.ts">
         <metrics statements="84" coveredstatements="0" conditionals="76" coveredconditionals="0" methods="13" coveredmethods="0"/>
