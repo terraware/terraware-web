@@ -1,3 +1,5 @@
+5e584afa97a Fix max-classes-per-file lint error (#4224)
+5fc9ea68777 SW-6774 Show empty mortality rate chart (#4225)
 ab52e6d5bec Fix no-constant-binary-expression lint error (#4217)
 8611c354809 Fix await-thenable lint error (#4221)
 29c57238663 Disable jsdoc/check-indentation lint error (#4219)
