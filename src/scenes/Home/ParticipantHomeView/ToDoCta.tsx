@@ -8,7 +8,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import strings from 'src/strings';
-import { DeliverableToDoItem, EventToDoItem, ToDoItem } from 'src/types/ProjectToDo';
+import { DeliverableToDoItem } from 'src/types/DeliverableToDoItem';
+import { EventToDoItem, ToDoItem } from 'src/types/ProjectToDo';
 
 import { useToDoData } from './ToDoProvider/Context';
 

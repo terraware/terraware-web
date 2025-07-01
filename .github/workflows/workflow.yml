@@ -76,7 +76,6 @@ jobs:
           --rule "@typescript-eslint/no-redundant-type-constituents: 0"
           --rule "eqeqeq: 0"
           --rule "prefer-arrow/prefer-arrow-functions: 0"
-          --rule "max-classes-per-file: 0"
 
       - name: Do typescript check
         run: yarn ts

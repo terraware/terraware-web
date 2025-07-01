@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { DeliverableToDoItem, EventToDoItem } from 'src/types/ProjectToDo';
+import { DeliverableToDoItem } from 'src/types/DeliverableToDoItem';
+import { EventToDoItem } from 'src/types/ProjectToDo';
 
 import { requestProjectToDoDeliverables, requestProjectToDoEvents } from './projectToDoAsyncThunk';
 

@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import ToDoService from 'src/services/ToDoService';
-import { DeliverableToDoItem, EventToDoItem } from 'src/types/ProjectToDo';
+import { DeliverableToDoItem } from 'src/types/DeliverableToDoItem';
+import { EventToDoItem } from 'src/types/ProjectToDo';
 
 export const requestProjectToDoDeliverables = createAsyncThunk(
   'projectToDoList/getDeliverables',
