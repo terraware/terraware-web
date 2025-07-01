@@ -80,7 +80,6 @@ jobs:
           --rule "eqeqeq: 0"
           --rule "prefer-arrow/prefer-arrow-functions: 0"
           --rule "no-constant-binary-expression: 0"
-          --rule "no-case-declarations: 0"
           --rule "jsdoc/check-indentation: 0"
           --rule "max-classes-per-file: 0"
 
