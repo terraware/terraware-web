@@ -1,3 +1,4 @@
+import area from '@turf/area';
 import union from '@turf/union';
 import { Feature, FeatureCollection, Polygon } from 'geojson';
 import { DateTime } from 'luxon';
@@ -445,6 +446,8 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string) => 
   const boundaryCoordinates = getPolygons(unionedBoundary as MultiPolygon);
   const firstFeature = features[0];
 
+  const totalArea = (area(unionedFeature) / 10_000).toFixed(2);
+
   return {
     properties: {
       id: siteId || firstFeature.properties?.site,
@@ -453,7 +456,13 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string) => 
     },
     boundary: boundaryCoordinates,
     id: siteId || firstFeature.properties?.site,
+    totalArea,
   };
+};
+
+const calculateAreaFromGisData = (gisPlantingSiteData: FeatureCollection<MultiPolygon>) => {
+  const processedFetures = processFeatures(gisPlantingSiteData.features);
+  return processedFetures.totalArea;
 };
 
 const extractPlantingSitesFromGis = (gisPlantingSiteData: FeatureCollection<MultiPolygon>): MapSourceBaseData => {
@@ -797,6 +806,7 @@ const MapService = {
   extractPlantingZonesFromHistory,
   extractSubzones,
   extractSubzonesFromHistory,
+  calculateAreaFromGisData,
 };
 
 export default MapService;

@@ -34,6 +34,7 @@ const ProjectProfileGisMaps = () => {
   const [boundariesData, setBoundariesData] = useState<FeatureCollection<MultiPolygon>>();
   const { activeLocale } = useLocalization();
   const [zoneOrSite, setZoneOrSite] = useState<ZoneOrSiteOption>();
+  const [selectedArea, setSelectedArea] = useState<string>();
   const [showSiteMap, setShowSiteMap] = useState(false);
   const [showBoundaryMap, setShowBoundaryMap] = useState(false);
   const { isDesktop } = useDeviceInfo();
@@ -88,6 +89,7 @@ const ProjectProfileGisMaps = () => {
   }, [boundariesData]);
 
   const filteredSiteData = useMemo(() => {
+    let totalArea = '';
     if (plantingSitesData) {
       if (showSiteMap && zoneOrSite && zoneOrSite.type === 'site') {
         const filteredPlantingSitesData = {
@@ -95,6 +97,10 @@ const ProjectProfileGisMaps = () => {
           features: plantingSitesData.features.filter((f) => f.properties?.site === zoneOrSite.name),
         };
         if (filteredPlantingSitesData.features) {
+          totalArea = MapService.calculateAreaFromGisData(
+            filteredPlantingSitesData as unknown as FeatureCollection<MultiPolygon>
+          );
+          setSelectedArea(totalArea);
           return MapService.getMapDataFromGisPlantingSites(
             filteredPlantingSitesData as unknown as FeatureCollection<MultiPolygon>
           );
@@ -105,6 +111,7 @@ const ProjectProfileGisMaps = () => {
   }, [plantingSitesData, showSiteMap, zoneOrSite]);
 
   const filteredZoneData = useMemo(() => {
+    let totalArea = '';
     if (
       boundariesData &&
       showBoundaryMap &&
@@ -117,10 +124,18 @@ const ProjectProfileGisMaps = () => {
         features: boundariesData.features.filter((f) => f.properties?.boundary_name === zoneOrSite.name),
       };
       if (filteredBoundaryData.features) {
+        totalArea = MapService.calculateAreaFromGisData(
+          filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
+        );
+        setSelectedArea(totalArea);
         return MapService.getMapDataFromGisPlantingSites(
           filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
         );
       }
+    }
+    if (boundariesData && zoneOrSite?.name === strings.ALL_PROJECT_ZONES) {
+      totalArea = MapService.calculateAreaFromGisData(boundariesData as unknown as FeatureCollection<MultiPolygon>);
+      setSelectedArea(totalArea);
     }
     if (boundariesData) {
       return MapService.getMapDataFromGisPlantingSites(boundariesData);
@@ -247,9 +262,14 @@ const ProjectProfileGisMaps = () => {
             <Typography fontSize={'20px'} fontWeight={600} paddingRight={1}>
               {zoneOrSite.name}
             </Typography>
-            <Typography fontSize={'16px'} fontWeight={400}>
+            <Typography fontSize={'16px'} fontWeight={400} paddingRight={1}>
               {strings.FROM_GIS_DATABASE}
             </Typography>
+            {selectedArea && (
+              <Typography fontSize={'20px'} fontWeight={600}>
+                {strings.formatString(strings.X_HA, selectedArea)}
+              </Typography>
+            )}
           </Box>
         )}
         <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
