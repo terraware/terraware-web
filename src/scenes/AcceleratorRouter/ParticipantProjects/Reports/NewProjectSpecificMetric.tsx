@@ -150,6 +150,16 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                 />
               </Grid>
               <Grid item xs={12}>
+                <TextField
+                  id='unit'
+                  label={strings.UNIT}
+                  type='text'
+                  maxLength={25}
+                  onChange={(value) => onChange('unit', value)}
+                  value={newMetric.unit}
+                />
+              </Grid>
+              <Grid item xs={12}>
                 <Dropdown
                   id='component'
                   label={strings.COMPONENT}

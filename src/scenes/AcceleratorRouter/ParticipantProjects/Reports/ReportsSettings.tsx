@@ -147,6 +147,11 @@ export default function ReportsSettings(): JSX.Element {
       type: 'string',
     },
     {
+      key: 'unit',
+      name: strings.UNIT,
+      type: 'string',
+    },
+    {
       key: 'isPublishable',
       name: strings.PUBLISH,
       type: 'boolean',

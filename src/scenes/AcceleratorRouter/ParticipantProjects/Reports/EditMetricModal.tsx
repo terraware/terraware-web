@@ -111,6 +111,16 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
         </Grid>
         <Grid item xs={12}>
           <TextField
+            id='unit'
+            label={strings.UNIT}
+            type='text'
+            maxLength={25}
+            onChange={(value) => onChange('unit', value)}
+            value={record.unit}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
             id='reference'
             label={strings.REFERENCE}
             type='text'
