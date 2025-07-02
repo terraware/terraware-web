@@ -64,6 +64,8 @@ export default function PlantsDashboardTests() {
     await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
     await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
+    await page.getByPlaceholder('Select...').click();
+    await page.getByText('All Planting Sites').click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('10,879.4 ha').first()).toBeVisible();
