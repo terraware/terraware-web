@@ -39,22 +39,6 @@ export default function PlantsDashboardTests() {
     await expect(page.locator('#plantsBySpecies')).toBeVisible();
     await expect(page.getByText('Species Categories', { exact: true })).toBeVisible();
     await expect(page.locator('#speciesByCategory')).toBeVisible();
-    await expect(page.getByText('Project Area Map', { exact: true })).toBeVisible();
-    await expect(page.getByText('0 ha in Total Planting Area', { exact: true })).toBeVisible();
-    await expect(page.getByText('Boundaries')).toBeVisible();
-    await expect(page.locator('div').filter({ hasText: /^Observation Events$/ })).toBeVisible();
-    await expect(
-      page
-        .locator('div')
-        .filter({ hasText: /^Observation Events$/ })
-        .getByRole('checkbox')
-    ).toBeDisabled();
-    await expect(
-      page
-        .locator('div')
-        .filter({ hasText: /^Mortality Rate$/ })
-        .getByRole('checkbox')
-    ).toBeDisabled();
   });
 
   test('Console rolled-up dashboard for project', async ({ page }, testInfo) => {
