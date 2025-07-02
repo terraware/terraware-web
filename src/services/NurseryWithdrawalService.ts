@@ -138,12 +138,14 @@ const listNurseryWithdrawals = async (
         (batchWithdrawals || deletedSpecies).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
       );
 
-      const projectNames = new Set(batchWithdrawals.map((batchWithdrawal) => batchWithdrawal.batch_project_name));
+      const projectNames = batchWithdrawals
+        ? Array.from(new Set(batchWithdrawals.map((batchWithdrawal) => batchWithdrawal.batch_project_name))).sort()
+        : [];
 
       return {
         ...remaining,
         speciesScientificNames: Array.from(speciesScientificNames).sort(),
-        project_names: Array.from(projectNames).sort(),
+        project_names: projectNames,
       };
     });
   }
