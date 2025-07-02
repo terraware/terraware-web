@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -127,7 +127,14 @@
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,6 +148,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,13 +201,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 &nbsp;
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 &nbsp;
 import './index.css';
@@ -205,6 +218,9 @@ import './index.css';
 const DocumentsEmptyPage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: JSX.Element =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { goToDocumentNew } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+&nbsp;
+  const canAddDocument = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >isAllowed('CREATE_DOCUMENTS'),</span> [isAllowed]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page title={strings.DOCUMENTS}&gt;
@@ -239,16 +255,18 @@ const DocumentsEmptyPage = <span class="cstat-no" title="statement not covered" 
           &lt;Icon name='blobbyIconParchment' className={'blobby-icon-parchment'} /&gt;
         &lt;/Box&gt;
 &nbsp;
-        &lt;Box&gt;
-          &lt;Button
-            onClick={goToDocumentNew}
-            icon={'plus'}
-            type='productive'
-            priority='primary'
-            size='medium'
-            label={strings.ADD_DOCUMENT}
-          /&gt;
-        &lt;/Box&gt;
+        {canAddDocument &amp;&amp; (
+          &lt;Box&gt;
+            &lt;Button
+              onClick={goToDocumentNew}
+              icon={'plus'}
+              type='productive'
+              priority='primary'
+              size='medium'
+              label={strings.ADD_DOCUMENT}
+            /&gt;
+          &lt;/Box&gt;
+        )}
       &lt;/Box&gt;
     &lt;/Page&gt;
   );
@@ -262,7 +280,7 @@ export default DocumentsEmptyPage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-02T18:45:46.174Z
+                at 2025-07-02T23:49:46.863Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

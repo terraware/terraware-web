@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -167,7 +167,13 @@
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,6 +197,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,6 +266,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,7 +293,7 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -295,6 +307,8 @@ export default function <span class="fstat-no" title="function not covered" >Doc
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { availableParticipants } = <span class="cstat-no" title="statement not covered" >useParticipants();</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+  const canAddDocument = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >isAllowed('CREATE_DOCUMENTS'),</span> [isAllowed]);</span>
 &nbsp;
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
 &nbsp;
@@ -364,11 +378,15 @@ export default function <span class="fstat-no" title="function not covered" >Doc
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page
       leftComponent={PageHeaderLeftComponent}
-      primaryButton={{
-        icon: 'plus' as IconName,
-        onClick: goToDocumentNew,
-        title: strings.ADD_DOCUMENT,
-      }}
+      primaryButton={
+        canAddDocument
+          ? {
+              icon: 'plus' as IconName,
+              onClick: goToDocumentNew,
+              title: strings.ADD_DOCUMENT,
+            }
+          : undefined
+      }
       title={strings.DOCUMENTS}
     &gt;
       &lt;DocumentsTable /&gt;
@@ -382,7 +400,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-02T18:45:46.174Z
+                at 2025-07-02T23:49:46.863Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
