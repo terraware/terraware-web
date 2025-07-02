@@ -200,6 +200,21 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         });
       }
 
+      if (mapData.site && (layers === undefined || layers?.includes('Project Zones'))) {
+        sources.push({
+          ...mapData.site,
+          isInteractive: isFirstLayerAdded(),
+          annotation: isFirstLayerAdded()
+            ? {
+                textField: 'name',
+                textColor: theme.palette.TwClrBaseWhite as string,
+                textSize: 16,
+              }
+            : undefined,
+          ...getRenderAttributes('projectZonesBoundary'),
+        });
+      }
+
       const newMapOptions = {
         bbox: MapService.getPlantingSiteBoundingBox(mapData),
         sources,
