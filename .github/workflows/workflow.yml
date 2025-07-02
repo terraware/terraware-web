@@ -73,7 +73,6 @@ jobs:
       - name: Run linter
         run: >
           yarn lint --rule "react/jsx-no-bind: 0"
-          --rule "@typescript-eslint/no-redundant-type-constituents: 0"
           --rule "eqeqeq: 0"
           --rule "prefer-arrow/prefer-arrow-functions: 0"
 

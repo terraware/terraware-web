@@ -173,7 +173,7 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
 };
 
 // Try to get the `*(raw)` field if it exists, otherwise fall back to the regular field
-const getRawField = <T extends Record<string, unknown>>(result: T, field: string): unknown | undefined => {
+const getRawField = <T extends Record<string, unknown>>(result: T, field: string): unknown => {
   const fallback = [result[`${field}(raw)`], result[field], 0];
   for (const value of fallback) {
     if (value !== undefined) {

@@ -44,10 +44,7 @@ export const ApplicationStatusOrder: { [key in ApplicationStatus]: number } = {
   Waitlist: 15,
 };
 
-export const getApplicationStatusColor = (
-  status: ApplicationStatus,
-  theme: Theme
-): Property.Color | string | undefined => {
+export const getApplicationStatusColor = (status: ApplicationStatus, theme: Theme): Property.Color | undefined => {
   switch (status) {
     case 'Accepted':
       return theme.palette.TwClrTxtSuccess;
