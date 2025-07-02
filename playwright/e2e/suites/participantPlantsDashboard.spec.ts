@@ -16,7 +16,8 @@ export default function ParticipantPlantsDashboardTests() {
 
     await page.getByPlaceholder('No Project Selected').click();
     await page.getByText('Phase 1 Project', { exact: true }).click();
-
+    await page.getByPlaceholder('Select...').click();
+    await page.getByText('All Planting Sites').click();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('10,879.4 ha').first()).toBeVisible();
     await expect(page.getByText('Project Area Totals', { exact: true })).toBeVisible();
@@ -231,7 +232,6 @@ export default function ParticipantPlantsDashboardTests() {
     await expect(page.locator('#plantsBySpecies')).toBeVisible();
     await expect(page.getByText('Species Categories', { exact: true })).toBeVisible();
     await expect(page.locator('#speciesByCategory')).toBeVisible();
-    await expect(page.getByText('Project Area Map', { exact: true })).toBeVisible();
     await expect(page.getByText('0 ha in Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('Boundaries')).toBeVisible();
     await expect(page.locator('div').filter({ hasText: /^Observation Events$/ })).toBeVisible();

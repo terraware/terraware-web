@@ -39,8 +39,8 @@ export default function PlantingSiteDropdown({
 
   const options = useMemo(() => {
     const _options = plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
-    if (canSelectAll) {
-      return [..._options, allSiteOption];
+    if (_options.length > 0 && canSelectAll) {
+      return [allSiteOption, ..._options];
     } else {
       return _options;
     }
