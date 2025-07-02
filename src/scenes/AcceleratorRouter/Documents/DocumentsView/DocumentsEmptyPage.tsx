@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 
 import './index.css';
@@ -12,6 +13,9 @@ import './index.css';
 const DocumentsEmptyPage = (): JSX.Element => {
   const theme = useTheme();
   const { goToDocumentNew } = useNavigateTo();
+  const { isAllowed } = useUser();
+
+  const canAddDocument = useMemo(() => isAllowed('CREATE_DOCUMENTS'), [isAllowed]);
 
   return (
     <Page title={strings.DOCUMENTS}>
@@ -46,16 +50,18 @@ const DocumentsEmptyPage = (): JSX.Element => {
           <Icon name='blobbyIconParchment' className={'blobby-icon-parchment'} />
         </Box>
 
-        <Box>
-          <Button
-            onClick={goToDocumentNew}
-            icon={'plus'}
-            type='productive'
-            priority='primary'
-            size='medium'
-            label={strings.ADD_DOCUMENT}
-          />
-        </Box>
+        {canAddDocument && (
+          <Box>
+            <Button
+              onClick={goToDocumentNew}
+              icon={'plus'}
+              type='productive'
+              priority='primary'
+              size='medium'
+              label={strings.ADD_DOCUMENT}
+            />
+          </Box>
+        )}
       </Box>
     </Page>
   );
