@@ -9,6 +9,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import { PlantingSiteMap } from 'src/components/Map';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -38,6 +39,7 @@ const ProjectProfileGisMaps = () => {
   const [showSiteMap, setShowSiteMap] = useState(false);
   const [showBoundaryMap, setShowBoundaryMap] = useState(false);
   const { isDesktop } = useDeviceInfo();
+  const [selectedLayer, setSelectedLayer] = useState<MapLayer>();
 
   useEffect(() => {
     const projectDetails = projectData.participantProject;
@@ -189,12 +191,15 @@ const ProjectProfileGisMaps = () => {
       if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
         setShowBoundaryMap(true);
         setShowSiteMap(false);
+        setSelectedLayer(undefined);
       } else if (zoneOrSite.type === 'site' && uniqueSites.includes(zoneOrSite.name)) {
         setShowSiteMap(true);
         setShowBoundaryMap(false);
+        setSelectedLayer('Planting Site');
       } else if (zoneOrSite.type === 'zone' && uniqueZones.includes(zoneOrSite.name)) {
         setShowBoundaryMap(true);
         setShowSiteMap(false);
+        setSelectedLayer(undefined);
       }
     }
   }, [uniqueSites, uniqueZones, zoneOrSite, zonesAndSites]);
@@ -238,6 +243,10 @@ const ProjectProfileGisMaps = () => {
     </Box>
   );
 
+  const onChangeLayerHandler = useCallback((layer: string) => {
+    setSelectedLayer(layer as MapLayer);
+  }, []);
+
   return (
     <Page
       title={projectViewTitle}
@@ -273,12 +282,16 @@ const ProjectProfileGisMaps = () => {
           </Box>
         )}
         <Box display='flex' flexDirection={isDesktop ? 'row' : 'column-reverse'} flexGrow={1}>
-          <PlantingSiteMapLegend options={['site', 'zone', 'subzone']} />
+          <PlantingSiteMapLegend
+            options={['site', 'zone', 'subzone']}
+            onChangeLayer={showSiteMap ? onChangeLayerHandler : undefined}
+            selectedLayer={selectedLayer || 'Project Zones'}
+          />
           {plantingSitesData && plantingMapData && showSiteMap && filteredSiteData && (
             <PlantingSiteMap
               mapData={filteredSiteData}
               style={{ width: '100%', borderRadius: '24px' }}
-              layers={['Planting Site', 'Zones', 'Sub-Zones']}
+              layers={[selectedLayer || 'Planting Site']}
             />
           )}
           {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (

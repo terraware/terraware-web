@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -30,9 +30,11 @@ export type MapLegendGroup = {
 type MapLegendProps = {
   legends: MapLegendGroup[];
   setLegends?: React.Dispatch<React.SetStateAction<MapLegendGroup[]>>;
+  onChangeLayer?: (layer: string) => void;
+  selectedLayer?: string;
 };
 
-export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.Element {
+export default function MapLegend({ legends, setLegends, onChangeLayer, selectedLayer }: MapLegendProps): JSX.Element {
   const theme = useTheme();
   const { isMobile, isDesktop } = useDeviceInfo();
 
@@ -42,7 +44,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
       justifyItems='flex-start'
       border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
       borderRadius='8px'
-      padding={theme.spacing(2)}
+      padding={selectedLayer ? theme.spacing(2, 1) : theme.spacing(2)}
       flexDirection={'column'}
       maxWidth={isDesktop ? '184px' : '100%'}
       width={isDesktop ? 'auto' : '100%'}
@@ -80,7 +82,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
                 fontWeight={600}
                 width={isMobile ? '100%' : undefined}
                 marginRight={isMobile ? 0 : theme.spacing(4)}
-                paddingLeft={legend.switch ? theme.spacing(1) : 0}
+                paddingLeft={legend.switch ? theme.spacing(1) : theme.spacing(0)}
               >
                 {legend.title}
                 {legend.tooltip && (
@@ -99,7 +101,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
             <Box>
               {legend.items.map((item) => (
                 <Box key={`${legend.title}-${item.label}`} paddingRight={1} paddingTop={1}>
-                  <LabeledSwatch {...item} />
+                  <LabeledSwatch {...item} onChangeLayer={onChangeLayer} selectedLayer={selectedLayer} />
                 </Box>
               ))}
             </Box>
@@ -110,7 +112,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
   );
 }
 
-type LabeledSwatchProps = MapLegendItem;
+type LabeledSwatchProps = MapLegendItem & { onChangeLayer?: (layer: string) => void; selectedLayer?: string };
 
 function LabeledSwatch({
   borderColor,
@@ -120,26 +122,58 @@ function LabeledSwatch({
   opacity,
   height,
   isDisabled,
+  onChangeLayer,
+  selectedLayer,
 }: LabeledSwatchProps): JSX.Element {
   const theme = useTheme();
 
+  const onLegendClickHandler = useCallback(() => {
+    if (onChangeLayer) {
+      onChangeLayer(label);
+    }
+  }, [label, onChangeLayer]);
+
   return (
-    <Box display='flex' alignItems='center'>
-      <Box
-        sx={{
-          border: `2px solid ${borderColor}`,
-          backgroundColor: fillColor,
-          backgroundImage: fillPatternUrl ? `url("${fillPatternUrl}")` : undefined,
-          backgroundRepeat: 'repeat',
-          opacity: isDisabled ? 0.7 : opacity,
-          height: height ? height : '16px',
-          width: '24px',
-          marginRight: theme.spacing(1),
-        }}
-      />
-      <Typography fontSize='14px' fontWeight={400}>
-        {label}
-      </Typography>
+    <Box
+      onClick={onLegendClickHandler}
+      display='flex'
+      alignItems='center'
+      sx={{
+        cursor: onChangeLayer ? 'pointer' : 'default',
+        background: selectedLayer && selectedLayer === label ? theme.palette.TwClrBgSecondary : 'none',
+        borderRadius: selectedLayer && selectedLayer === label ? '4px' : 'none',
+        padding: selectedLayer ? '4px 8px' : 0,
+        opacity: selectedLayer && selectedLayer !== label ? '0.5' : 1,
+      }}
+      justifyContent={'space-between'}
+    >
+      <Box display='flex' alignItems='center' paddingRight={onChangeLayer ? theme.spacing(1) : 0}>
+        <Box
+          sx={{
+            border: `2px solid ${borderColor}`,
+            backgroundColor: fillColor,
+            backgroundImage: fillPatternUrl ? `url("${fillPatternUrl}")` : undefined,
+            backgroundRepeat: 'repeat',
+            opacity: isDisabled ? 0.7 : opacity,
+            height: height ? height : '16px',
+            width: '24px',
+            marginRight: theme.spacing(1),
+          }}
+        />
+        <Typography fontSize='14px' fontWeight={400}>
+          {label}
+        </Typography>
+      </Box>
+      {onChangeLayer && (
+        <Box
+          display='flex'
+          sx={{
+            visibility: selectedLayer && selectedLayer === label ? 'visible' : 'hidden',
+          }}
+        >
+          <Icon name='checkmark' />
+        </Box>
+      )}
     </Box>
   );
 }
