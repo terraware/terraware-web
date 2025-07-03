@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.01% </span>
+                <span class="strong">34.76% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>97/277</span>
+                <span class='fraction'>97/279</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32.03% </span>
+                <span class="strong">30.59% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>41/128</span>
+                <span class='fraction'>41/134</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36.19% </span>
+                <span class="strong">35.92% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>97/268</span>
+                <span class='fraction'>97/270</span>
             </div>
         
             
@@ -875,7 +875,11 @@
 <a name='L810'></a><a href='#L810'>810</a>
 <a name='L811'></a><a href='#L811'>811</a>
 <a name='L812'></a><a href='#L812'>812</a>
-<a name='L813'></a><a href='#L813'>813</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L813'></a><a href='#L813'>813</a>
+<a name='L814'></a><a href='#L814'>814</a>
+<a name='L815'></a><a href='#L815'>815</a>
+<a name='L816'></a><a href='#L816'>816</a>
+<a name='L817'></a><a href='#L817'>817</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1372,6 +1376,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1404,22 +1410,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2165,7 +2173,7 @@ const extractPlantingSitesFromGis = <span class="fstat-no" title="function not c
     id: number;
   }[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-  const groupedByPlantingSite = <span class="cstat-no" title="statement not covered" >gisPlantingSiteData.features.reduce(<span class="fstat-no" title="function not covered" >(g</span>roups: { [key: string]: any[] }, feature) =&gt; {</span>
+  const groupedByPlantingSite = <span class="cstat-no" title="statement not covered" >gisPlantingSiteData.features?.reduce(<span class="fstat-no" title="function not covered" >(g</span>roups: { [key: string]: any[] }, feature) =&gt; {</span>
     const site = <span class="cstat-no" title="statement not covered" >feature.properties?.site;</span>
 <span class="cstat-no" title="statement not covered" >    if (site) {</span>
 <span class="cstat-no" title="statement not covered" >      if (!groups[site]) {</span>
@@ -2176,14 +2184,16 @@ const extractPlantingSitesFromGis = <span class="fstat-no" title="function not c
 <span class="cstat-no" title="statement not covered" >    return groups;</span>
   }, {});
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (Object.keys(groupedByPlantingSite).length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >  if (groupedByPlantingSite &amp;&amp; Object.keys(groupedByPlantingSite).length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    Object.keys(groupedByPlantingSite).forEach(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; {</span>
       const features = <span class="cstat-no" title="statement not covered" >groupedByPlantingSite[site] as Feature&lt;MultiPolygon&gt;[];</span>
 <span class="cstat-no" title="statement not covered" >      plantingSitesData.push(processFeatures(features, site));</span>
     });
   } else {
     const allFeatures = <span class="cstat-no" title="statement not covered" >gisPlantingSiteData.features;</span>
-<span class="cstat-no" title="statement not covered" >    plantingSitesData.push(processFeatures(allFeatures));</span>
+<span class="cstat-no" title="statement not covered" >    if (allFeatures) {</span>
+<span class="cstat-no" title="statement not covered" >      plantingSitesData.push(processFeatures(allFeatures));</span>
+    }
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
@@ -2203,7 +2213,7 @@ const extractZonesFromGis = <span class="fstat-no" title="function not covered" 
     id: number;
   }[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-  const groupedByStrata = <span class="cstat-no" title="statement not covered" >gisPlantingSiteData.features.reduce(<span class="fstat-no" title="function not covered" >(g</span>roups: { [key: string]: any[] }, feature) =&gt; {</span>
+  const groupedByStrata = <span class="cstat-no" title="statement not covered" >gisPlantingSiteData.features?.reduce(<span class="fstat-no" title="function not covered" >(g</span>roups: { [key: string]: any[] }, feature) =&gt; {</span>
     const strata = <span class="cstat-no" title="statement not covered" >feature.properties?.strata;</span>
 <span class="cstat-no" title="statement not covered" >    if (strata) {</span>
 <span class="cstat-no" title="statement not covered" >      if (!groups[strata]) {</span>
@@ -2214,33 +2224,35 @@ const extractZonesFromGis = <span class="fstat-no" title="function not covered" 
 <span class="cstat-no" title="statement not covered" >    return groups;</span>
   }, {});
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  Object.keys(groupedByStrata).forEach(<span class="fstat-no" title="function not covered" >(s</span>trata) =&gt; {</span>
-    const features = <span class="cstat-no" title="statement not covered" >groupedByStrata[strata] as Feature&lt;MultiPolygon&gt;[];</span>
+<span class="cstat-no" title="statement not covered" >  if (groupedByStrata) {</span>
+<span class="cstat-no" title="statement not covered" >    Object.keys(groupedByStrata).forEach(<span class="fstat-no" title="function not covered" >(s</span>trata) =&gt; {</span>
+      const features = <span class="cstat-no" title="statement not covered" >groupedByStrata[strata] as Feature&lt;MultiPolygon&gt;[];</span>
 &nbsp;
-    // Start with the first feature, then union with the rest
-    let unionedFeature: Feature&lt;Polygon | MultiPolygon&gt; = <span class="cstat-no" title="statement not covered" >features[0];</span>
+      // Start with the first feature, then union with the rest
+      let unionedFeature: Feature&lt;Polygon | MultiPolygon&gt; = <span class="cstat-no" title="statement not covered" >features[0];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >1;</span> i &lt; features.length; i++) {</span>
-      const result = <span class="cstat-no" title="statement not covered" >union(unionedFeature, features[i]);</span>
-<span class="cstat-no" title="statement not covered" >      if (result) {</span>
-<span class="cstat-no" title="statement not covered" >        unionedFeature = result;</span>
+<span class="cstat-no" title="statement not covered" >      for (let i = <span class="cstat-no" title="statement not covered" >1;</span> i &lt; features.length; i++) {</span>
+        const result = <span class="cstat-no" title="statement not covered" >union(unionedFeature, features[i]);</span>
+<span class="cstat-no" title="statement not covered" >        if (result) {</span>
+<span class="cstat-no" title="statement not covered" >          unionedFeature = result;</span>
+        }
       }
-    }
 &nbsp;
-    const unionedGeometry = <span class="cstat-no" title="statement not covered" >unionedFeature.geometry;</span>
-    const boundaryCoordinates = <span class="cstat-no" title="statement not covered" >getPolygons(unionedGeometry as MultiPolygon);</span>
+      const unionedGeometry = <span class="cstat-no" title="statement not covered" >unionedFeature.geometry;</span>
+      const boundaryCoordinates = <span class="cstat-no" title="statement not covered" >getPolygons(unionedGeometry as MultiPolygon);</span>
 &nbsp;
-    const firstFeature = <span class="cstat-no" title="statement not covered" >groupedByStrata[strata][0];</span>
-<span class="cstat-no" title="statement not covered" >    zonesData.push({</span>
-      properties: {
+      const firstFeature = <span class="cstat-no" title="statement not covered" >groupedByStrata[strata][0];</span>
+<span class="cstat-no" title="statement not covered" >      zonesData.push({</span>
+        properties: {
+          id: firstFeature.properties?.strata,
+          name: firstFeature.properties?.strata,
+          type: 'zone',
+        },
+        boundary: boundaryCoordinates,
         id: firstFeature.properties?.strata,
-        name: firstFeature.properties?.strata,
-        type: 'zone',
-      },
-      boundary: boundaryCoordinates,
-      id: firstFeature.properties?.strata,
+      });
     });
-  });
+  }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
     entities: zonesData,
@@ -2250,7 +2262,7 @@ const extractZonesFromGis = <span class="fstat-no" title="function not covered" 
 &nbsp;
 const extractSubzonesFromGis = <span class="fstat-no" title="function not covered" >(g</span>isPlantingSiteData: FeatureCollection): MapSourceBaseData =&gt; {
   const allPlantingSubzonesData =
-<span class="cstat-no" title="statement not covered" >    gisPlantingSiteData.features.map(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    gisPlantingSiteData.features?.map(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; {</span>
       const { properties, geometry } = <span class="cstat-no" title="statement not covered" >subzone;</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         properties: {
@@ -2506,7 +2518,7 @@ export default MapService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-03T17:45:42.347Z
+                at 2025-07-03T17:54:55.255Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
