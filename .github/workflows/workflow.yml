@@ -140,7 +140,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ✅ Vercel Preview URL: [${{ steps.vercel_deploy.outputs.preview_url }}](${{ steps.vercel_deploy.outputs.preview_url }})
+            ✅ Deployed to Vercel - Preview (`tree-location-web`): [View deployment](${{ steps.vercel_deploy.outputs.preview_url }})
 
       # - name: Set commit status with preview URL
       #   if: github.event_name == 'pull_request'
