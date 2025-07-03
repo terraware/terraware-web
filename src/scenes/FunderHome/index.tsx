@@ -15,6 +15,7 @@ import { selectFunderProjects } from 'src/redux/features/funder/projects/funderP
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import { PublishedReport } from 'src/types/AcceleratorReport';
+import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -35,7 +36,9 @@ export default function FunderHome() {
   const { isMobile } = useDeviceInfo();
   const [fundingEntityProjectIds, setFundingEntityProjectIds] = useState<number[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
-  const funderProjects = useAppSelector(selectFunderProjects(fundingEntityProjectIds));
+  const funderProjects: Record<number, FunderProjectDetails> = useAppSelector(
+    selectFunderProjects(fundingEntityProjectIds)
+  );
   const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
   const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
@@ -43,11 +46,14 @@ export default function FunderHome() {
   useEffect(() => {
     if (userFundingEntity?.projects) {
       setFundingEntityProjectIds(userFundingEntity.projects.map((p) => p.projectId));
-      if (userFundingEntity.projects.length === 1) {
-        setSelectedProjectId(userFundingEntity?.projects?.[0].projectId);
-      }
     }
-  }, [query, userFundingEntity]);
+  }, [userFundingEntity?.projects]);
+
+  useEffect(() => {
+    if (!selectedProjectId && Object.keys(funderProjects).length === 1) {
+      setSelectedProjectId(Number(Object.keys(funderProjects)[0]));
+    }
+  }, [funderProjects, selectedProjectId]);
 
   useEffect(() => {
     if (fundingEntityProjectIds.length) {
@@ -118,13 +124,16 @@ export default function FunderHome() {
   }, [projectDetails?.dealName]);
 
   const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: strings.ALL_PROJECTS,
-        onClick: () => setSelectedProjectId(undefined),
-      },
-    ],
-    [strings]
+    () =>
+      Object.keys(funderProjects).length > 1
+        ? [
+            {
+              name: strings.ALL_PROJECTS,
+              onClick: () => setSelectedProjectId(undefined),
+            },
+          ]
+        : [],
+    [strings, funderProjects]
   );
 
   if (!selectedProjectId) {
