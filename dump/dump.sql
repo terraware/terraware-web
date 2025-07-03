@@ -1367,8 +1367,7 @@ CREATE TABLE accelerator.project_metrics (
     name text NOT NULL,
     description text,
     reference text NOT NULL COLLATE public.natural_numeric,
-    is_publishable boolean NOT NULL,
-    unit text
+    is_publishable boolean NOT NULL
 );
 
 
@@ -9532,7 +9531,7 @@ COPY accelerator.project_accelerator_details (project_id, pipeline_id, deal_stag
 -- Data for Name: project_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
-COPY accelerator.project_metrics (id, project_id, type_id, component_id, name, description, reference, is_publishable, unit) FROM stdin;
+COPY accelerator.project_metrics (id, project_id, type_id, component_id, name, description, reference, is_publishable) FROM stdin;
 \.
 
 
@@ -10597,7 +10596,6 @@ COPY funder.published_project_carbon_certs (project_id, carbon_certification) FR
 --
 
 COPY funder.published_project_details (project_id, accumulation_rate, annual_carbon, country_code, deal_description, deal_name, methodology_number, min_project_area, num_native_species, per_hectare_estimated_budget, project_area, project_highlight_photo_value_id, project_zone_figure_value_id, standard, tf_reforestable_land, total_expansion_potential, total_vcu, verra_link, published_by, published_time) FROM stdin;
-3	200	\N	AR	This is the phase 1 project overview.	Phase 1 Project Deal	VM0047	4000	35	12345	3000	87	88	VCS & CCB	2000	1200	2400	https://example.com/Verra1	1	2025-07-03 20:30:24.416055+00
 \.
 
 
@@ -10606,8 +10604,6 @@ COPY funder.published_project_details (project_id, accumulation_rate, annual_car
 --
 
 COPY funder.published_project_land_use (project_id, land_use_model_type_id, land_use_model_hectares) FROM stdin;
-3	4	1000
-3	5	10000
 \.
 
 
@@ -10616,9 +10612,6 @@ COPY funder.published_project_land_use (project_id, land_use_model_type_id, land
 --
 
 COPY funder.published_project_sdg (project_id, sdg_number) FROM stdin;
-3	6
-3	4
-3	5
 \.
 
 
@@ -11700,7 +11693,6 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 405	385	ProjectCqlFilters	SQL	0350/V385__ProjectCqlFilters.sql	-1485047630	postgres	2025-06-16 21:42:33.138523	1	t
 406	386	ProjectOrganizationCascade	SQL	0350/V386__ProjectOrganizationCascade.sql	386241640	postgres	2025-06-16 21:42:33.146253	3	t
 407	\N	Comments	SQL	R__Comments.sql	-932965786	postgres	2025-06-16 21:42:33.15374	72	t
-408	387	ProjectMetricsUnit	SQL	0350/V387__ProjectMetricsUnit.sql	-1277078266	postgres	2025-07-03 20:28:19.80456	6	t
 \.
 
 
