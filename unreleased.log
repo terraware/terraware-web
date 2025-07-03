@@ -1,2 +1,4 @@
+a09ab46ec1b SW-7073 Added padding to scrollable dialog box (#4232)
+e47cb2fb568 SW-7037 Fix withdrawal log with deleted batches (#4231)
 f66bee3aea4 Updated translations from Phrase (#4229)
 ec5a8bf0660 SW-7115 Hide "Add Document" button for Read-Only users (#4233)
