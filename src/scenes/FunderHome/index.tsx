@@ -9,7 +9,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUserFundingEntity } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { requestGetFunderProject } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
+import { requestGetFunderProjects } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
 import { selectFunderProjectRequest } from 'src/redux/features/funder/projects/funderProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
@@ -35,6 +35,7 @@ export default function FunderHome() {
   const location = useStateLocation();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
+  const [fundingEntityProjectIds, setFundingEntityProjectIds] = useState<number[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
   const [projectDetails, setProjectDetails] = useState<FunderProjectDetails>();
   const getFunderProjectResult = useAppSelector(selectFunderProjectRequest(selectedProjectId || -1));
@@ -55,14 +56,22 @@ export default function FunderHome() {
   }, [getFunderProjectResult, snackbar]);
 
   useEffect(() => {
-    if ((userFundingEntity?.projects?.length ?? 0) > 0) {
-      setSelectedProjectId(userFundingEntity?.projects?.[0].projectId);
+    if (userFundingEntity?.projects) {
+      setFundingEntityProjectIds(userFundingEntity.projects.map((p) => p.projectId));
+      if (userFundingEntity.projects.length === 1) {
+        setSelectedProjectId(userFundingEntity?.projects?.[0].projectId);
+      }
     }
   }, [userFundingEntity]);
 
   useEffect(() => {
+    if (fundingEntityProjectIds.length) {
+      void dispatch(requestGetFunderProjects(fundingEntityProjectIds));
+    }
+  }, [fundingEntityProjectIds, dispatch]);
+
+  useEffect(() => {
     if (selectedProjectId && selectedProjectId !== -1) {
-      void dispatch(requestGetFunderProject(selectedProjectId));
       void dispatch(requestListFunderReports(selectedProjectId));
     }
   }, [dispatch, selectedProjectId]);
@@ -121,12 +130,15 @@ export default function FunderHome() {
     }
   }, [projectDetails?.dealName]);
 
+  // if (userFundingEntity?.projects && userFundingEntity.projects.length > 1) {
+  //   return <MultiProjectView projects={userFundingEntity.projects} />;
+  // }
+
   return (
     <TfMain>
       <Box
         component='main'
         sx={{
-          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
         }}
