@@ -4,32 +4,30 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUserFundingEntity } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { requestGetFunderProjects } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
-import { selectFunderProjectRequest } from 'src/redux/features/funder/projects/funderProjectsSelectors';
+import { selectFunderProjects } from 'src/redux/features/funder/projects/funderProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
-import strings from 'src/strings';
 import { PublishedReport } from 'src/types/AcceleratorReport';
-import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
-import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ProjectProfileView from '../AcceleratorRouter/ParticipantProjects/ProjectProfileView';
+import MultiProjectView from './MultiProjectView';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
 
 export default function FunderHome() {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const dispatch = useAppDispatch();
-  const snackbar = useSnackbar();
   const { userFundingEntity } = useUserFundingEntity();
   const query = useQuery();
   const location = useStateLocation();
@@ -37,23 +35,10 @@ export default function FunderHome() {
   const { isMobile } = useDeviceInfo();
   const [fundingEntityProjectIds, setFundingEntityProjectIds] = useState<number[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
-  const [projectDetails, setProjectDetails] = useState<FunderProjectDetails>();
-  const getFunderProjectResult = useAppSelector(selectFunderProjectRequest(selectedProjectId || -1));
+  const funderProjects = useAppSelector(selectFunderProjects(fundingEntityProjectIds));
   const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
   const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
-
-  useEffect(() => {
-    if (!getFunderProjectResult) {
-      return;
-    }
-
-    if (getFunderProjectResult.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (getFunderProjectResult.status === 'success' && getFunderProjectResult.data) {
-      setProjectDetails(getFunderProjectResult.data);
-    }
-  }, [getFunderProjectResult, snackbar]);
 
   useEffect(() => {
     if (userFundingEntity?.projects) {
@@ -62,7 +47,7 @@ export default function FunderHome() {
         setSelectedProjectId(userFundingEntity?.projects?.[0].projectId);
       }
     }
-  }, [userFundingEntity]);
+  }, [query, userFundingEntity]);
 
   useEffect(() => {
     if (fundingEntityProjectIds.length) {
@@ -95,11 +80,13 @@ export default function FunderHome() {
     }
   }, [location, navigate, query, publishedReports, selectedReport]);
 
-  const tabs = useMemo(() => {
-    if (!activeLocale) {
-      return [];
+  const projectDetails = useMemo(() => {
+    if (selectedProjectId) {
+      return funderProjects[selectedProjectId];
     }
+  }, [selectedProjectId, funderProjects]);
 
+  const tabs = useMemo(() => {
     return [
       {
         id: 'projectProfile',
@@ -114,7 +101,7 @@ export default function FunderHome() {
         children: <FunderReportView selectedProjectId={selectedProjectId} selectedReport={selectedReport} />,
       },
     ];
-  }, [activeLocale, projectDetails, selectedProjectId, publishedReports, selectedReport]);
+  }, [strings, projectDetails, selectedProjectId, publishedReports, selectedReport]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
@@ -130,12 +117,23 @@ export default function FunderHome() {
     }
   }, [projectDetails?.dealName]);
 
-  // if (userFundingEntity?.projects && userFundingEntity.projects.length > 1) {
-  //   return <MultiProjectView projects={userFundingEntity.projects} />;
-  // }
+  const crumbs: Crumb[] = useMemo(
+    () => [
+      {
+        name: strings.ALL_PROJECTS,
+        onClick: () => setSelectedProjectId(undefined),
+      },
+    ],
+    [strings]
+  );
+
+  if (!selectedProjectId) {
+    return <MultiProjectView projects={Object.values(funderProjects)} selectProject={setSelectedProjectId} />;
+  }
 
   return (
     <TfMain>
+      <>{crumbs && <BreadCrumbs crumbs={crumbs} />}</>
       <Box
         component='main'
         sx={{

@@ -5,7 +5,7 @@ import { FunderProjectDetails } from 'src/types/FunderProject';
 
 import { requestGetFunderProjects, requestPublishFunderProject } from './funderProjectsAsyncThunks';
 
-const initialStateFunderProject: { [key: string]: StatusT<FunderProjectDetails> } = {};
+const initialStateFunderProject: { [key: string]: FunderProjectDetails } = {};
 
 export const funderProjectsSlice = createSlice({
   name: 'funderProjectSlice',
@@ -18,7 +18,7 @@ export const funderProjectsSlice = createSlice({
         setStatus('success')(state, action);
 
         action.payload?.forEach((project) => {
-          state[project.projectId] = { status: 'success', data: project };
+          state[project.projectId] = project;
         });
       })
       .addCase(requestGetFunderProjects.rejected, setStatus('error'));
