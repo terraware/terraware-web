@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -54,27 +54,27 @@ export default function ReportsSettings(): JSX.Element {
   useEffect(() => {
     const dispatched = dispatch(requestListStandardMetrics());
     setStandardRequestId(dispatched.requestId);
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const dispatched = dispatch(requestListSystemMetrics());
     setSystemRequestId(dispatched.requestId);
-  }, []);
+  }, [dispatch]);
 
-  const reloadSpecificMetrics = () => {
+  const reloadSpecificMetrics = useCallback(() => {
     const dispatched = dispatch(requestListProjectMetrics({ projectId }));
     setRequestId(dispatched.requestId);
-  };
+  }, [dispatch, projectId]);
 
   useEffect(() => {
     reloadSpecificMetrics();
-  }, [projectId]);
+  }, [projectId, reloadSpecificMetrics]);
 
   useEffect(() => {
     if (projectId) {
       void dispatch(requestProjectReportConfig(projectId));
     }
-  }, [projectId]);
+  }, [projectId, dispatch]);
 
   useEffect(() => {
     if (specificMetricsResponse && specificMetricsResponse.status === 'success') {
@@ -144,6 +144,11 @@ export default function ReportsSettings(): JSX.Element {
     {
       key: 'component',
       name: strings.COMPONENT,
+      type: 'string',
+    },
+    {
+      key: 'unit',
+      name: strings.UNIT,
       type: 'string',
     },
     {

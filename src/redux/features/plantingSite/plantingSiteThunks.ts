@@ -3,14 +3,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { TrackingService } from 'src/services';
 import { PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import strings from 'src/strings';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
+import { CreatePlantingSiteRequestPayload } from 'src/types/PlantingSite';
 
 export const createPlantingSite = createAsyncThunk(
   'createPlantingSite',
-  async (draft: DraftPlantingSite, { rejectWithValue }) => {
-    const payload = fromDraftToCreate(draft);
-    const response = await TrackingService.createPlantingSite(payload);
+  async (site: CreatePlantingSiteRequestPayload, { rejectWithValue }) => {
+    const response = await TrackingService.createPlantingSite(site);
 
     if (response && response.requestSucceeded && response.data) {
       return response.data.id;
@@ -22,9 +20,8 @@ export const createPlantingSite = createAsyncThunk(
 
 export const validatePlantingSite = createAsyncThunk(
   'validatePlantingSite',
-  async (draft: DraftPlantingSite, { rejectWithValue }) => {
-    const payload = fromDraftToCreate(draft);
-    const response = await TrackingService.validatePlantingSite(payload);
+  async (site: CreatePlantingSiteRequestPayload, { rejectWithValue }) => {
+    const response = await TrackingService.validatePlantingSite(site);
 
     if (response && response.requestSucceeded && response.data) {
       return response.data;

@@ -269,7 +269,7 @@ export const VariableHistoryTable = ({ projectId, variableId }: VariableHistoryT
         return newRows;
       })
       .toReversed();
-  }, [dispatch, historyResponse]);
+  }, [historyResponse]);
 
   if (!historyResponse || historyResponse.status === 'pending') {
     return <BusySpinner />;

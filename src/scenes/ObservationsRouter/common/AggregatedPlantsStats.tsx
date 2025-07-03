@@ -77,7 +77,7 @@ export default function AggregatedPlantsStats({
         </Grid>
         <Grid item xs={chartGridSize}>
           <ChartWrapper title={strings.MORTALITY_RATE_PER_SPECIES}>
-            <SpeciesMortalityRateChart species={species} minHeight='170px' />
+            <SpeciesMortalityRateChart species={hasObservedPermanentPlots ? species : []} minHeight='170px' />
           </ChartWrapper>
         </Grid>
       </Grid>

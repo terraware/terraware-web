@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 
 import { GenericMap } from 'src/components/Map';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
+import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestGetCountryBoundary } from 'src/redux/features/location/locationAsyncThunks';
 import { selectCountryBoundary } from 'src/redux/features/location/locationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -19,13 +23,16 @@ type ProjectMapProps = {
   countryCode?: string;
   md?: number;
   includeLabel?: boolean;
+  projectId?: number;
 };
 
-const ProjectMap = ({ application, countryCode, md, includeLabel }: ProjectMapProps) => {
+const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: ProjectMapProps) => {
   const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
   const dispatch = useAppDispatch();
   const countryBoundaryResult = useAppSelector(selectCountryBoundary(countryCode ?? ''));
+  const navigate = useSyncNavigate();
+  const isGisMapsEnabled = isEnabled('GIS Maps');
 
   useEffect(() => {
     if (countryCode) {
@@ -102,8 +109,42 @@ const ProjectMap = ({ application, countryCode, md, includeLabel }: ProjectMapPr
     }
   }, [appBoundaryMapOptions, application?.boundary, countryCode, countryMapOptions, includeLabel, theme]);
 
+  const goToGisMapsView = useCallback(() => {
+    if (projectId) {
+      navigate(APP_PATHS.ACCELERATOR_PROJECT_GIS_MAPS_VIEW.replace(':projectId', projectId.toString()));
+    }
+  }, [projectId, navigate]);
+
   return (
-    <Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)}>
+    <Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)} position={'relative'}>
+      {isGisMapsEnabled && (
+        <Box
+          sx={{
+            position: 'absolute',
+            right: '20px',
+            top: '12px',
+            zIndex: 10,
+            backgroundColor: `${theme.palette.TwClrBaseWhite}`,
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <button
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '8px',
+              borderRadius: '8px',
+              display: 'flex',
+            }}
+            onClick={goToGisMapsView}
+          >
+            <Icon name='iconExternalLink' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+          </button>
+        </Box>
+      )}
       <Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignContent: 'center' }}>
         {mapElement}
       </Box>

@@ -59,7 +59,7 @@ export default function NoOrgApplicationLandingPage(): JSX.Element {
       goToApplication(result.data);
       void reloadOrganizations();
     }
-  }, [activeLocale, result, goToApplication]);
+  }, [activeLocale, result, goToApplication, reloadOrganizations, toastSuccess]);
 
   return (
     <Box

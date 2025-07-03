@@ -61,7 +61,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     });
 
     return { ...observation?.adHocPlot, species: speciesToUse };
-  }, [observation?.adHocPlot]);
+  }, [observation?.adHocPlot, species]);
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
@@ -103,7 +103,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
         text: true,
       },
     ];
-  }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
+  }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite?.timeZone, timeZone]);
 
   const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
     <Typography

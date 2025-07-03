@@ -10,9 +10,15 @@ export type PlantingSiteMapLegendOption = 'site' | 'zone' | 'subzone' | 'permane
 
 export type PlantingSiteMapLegendProps = {
   options: PlantingSiteMapLegendOption[];
+  onChangeLayer?: (layer: string) => void;
+  selectedLayer?: string;
 };
 
-export default function PlantingSiteMapLegend({ options }: PlantingSiteMapLegendProps): JSX.Element {
+export default function PlantingSiteMapLegend({
+  options,
+  onChangeLayer,
+  selectedLayer,
+}: PlantingSiteMapLegendProps): JSX.Element {
   const theme = useTheme();
   const hasSite = !!options.find((opt) => opt === 'site');
   const hasZone = !!options.find((opt) => opt === 'zone');
@@ -82,7 +88,7 @@ export default function PlantingSiteMapLegend({ options }: PlantingSiteMapLegend
 
   return (
     <Box display='flex'>
-      <MapLegend legends={legends} />
+      <MapLegend legends={legends} onChangeLayer={onChangeLayer} selectedLayer={selectedLayer} />
     </Box>
   );
 }

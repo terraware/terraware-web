@@ -53,7 +53,7 @@ export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps):
     if (module?.id) {
       void dispatch(requestListModuleCohorts(moduleId));
     }
-  }, [module?.id]);
+  }, [module?.id, dispatch, moduleId]);
 
   useEffect(() => {
     if (result?.status === 'success') {

@@ -89,6 +89,15 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
             lineColor: theme.palette.TwClrBaseGreen300 as string,
             lineWidth: 2,
           };
+        case 'projectZonesBoundary':
+          return {
+            fillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
+            hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
+            selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
+            highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
+            lineColor: '#E6D763',
+            lineWidth: 2,
+          };
         default:
           // temporary plot
           return {
@@ -101,13 +110,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
           };
       }
     },
-    [
-      theme.palette.TwClrBaseGreen300,
-      theme.palette.TwClrBaseLightGreen300,
-      theme.palette.TwClrBaseBlue300,
-      theme.palette.TwClrBasePink300,
-      theme.palette.TwClrBaseYellow300,
-    ]
+    [theme]
   );
 
   return getRenderAttributes;

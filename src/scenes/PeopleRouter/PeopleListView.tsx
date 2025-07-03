@@ -66,8 +66,9 @@ export default function PeopleListView(): JSX.Element {
 
   const search = useCallback(
     async (searchTerm: string, skipTfContact = false) => {
-      if (!selectedOrganization) return [];
-
+      if (!selectedOrganization) {
+        return [];
+      }
       const { type, values } = parseSearchTerm(searchTerm);
       const searchField: OrNodePayload | null = searchTerm
         ? {

@@ -8,7 +8,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import strings from 'src/strings';
-import { DeliverableToDoItem, EventToDoItem, ToDoItem } from 'src/types/ProjectToDo';
+import { DeliverableToDoItem } from 'src/types/DeliverableToDoItem';
+import { EventToDoItem, ToDoItem } from 'src/types/ProjectToDo';
 
 import { useToDoData } from './ToDoProvider/Context';
 
@@ -30,7 +31,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
       case 'Workshop':
       case 'One-on-One Session':
       case 'Live Session':
-      case 'Recorded Session':
+      case 'Recorded Session': {
         const event = toDo as EventToDoItem;
 
         mixpanel?.track(MIXPANEL_EVENTS.PART_EX_TO_DO_UPCOMING_VIEW_EVENT, {
@@ -40,7 +41,8 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
           moduleId: event.moduleId,
         });
         return goToModuleEventSession(projectId, event.moduleId, event.id);
-      case 'Deliverable':
+      }
+      case 'Deliverable': {
         const deliverable = toDo as DeliverableToDoItem;
         mixpanel?.track(MIXPANEL_EVENTS.PART_EX_TO_DO_UPCOMING_VIEW_DELIVERABLE, {
           id: deliverable.id,
@@ -50,8 +52,9 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
           moduleId: deliverable.moduleId,
         });
         return goToDeliverable(deliverable.id, deliverable.projectId);
+      }
     }
-  }, [goToDeliverable, goToModuleEventSession, projectId, toDo]);
+  }, [goToDeliverable, goToModuleEventSession, projectId, toDo, mixpanel]);
 
   return (
     <Button

@@ -36,10 +36,6 @@ export default function DetailsPage({
     }
   }, [plantingSite, plantingSiteId, setSelectedPlantingSite]);
 
-  const plantingZone = useMemo(() => {
-    return plantingSite?.plantingZones?.find((zone) => zone.name === plantingZoneName);
-  }, [plantingSite, plantingZoneName]);
-
   const observation = useMemo(() => {
     return observations?.find((item) => item.id === observationId);
   }, [observations, observationId]);
@@ -61,6 +57,9 @@ export default function DetailsPage({
   }, [plantingSite, observation, result]);
 
   const crumbs: Crumb[] = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
     const data: Crumb[] = [];
 
     if (plantingSiteId) {
@@ -97,7 +96,7 @@ export default function DetailsPage({
     }
 
     return data;
-  }, [activeLocale, plantingSiteId, observation, observationId, plantingZoneName, plantingZone, observationDate]);
+  }, [activeLocale, plantingSiteId, observation, observationId, plantingZoneName, observationDate]);
 
   return (
     <Page crumbs={crumbs} title={title} rightComponent={rightComponent}>

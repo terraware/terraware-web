@@ -5,7 +5,7 @@ import { TextField as MUITextField, SxProps } from '@mui/material';
 export interface Props {
   id: string;
   autoFocus?: boolean;
-  value: unknown | null;
+  value: unknown;
   onChange: (id: string, value: unknown) => void;
   type?: React.InputHTMLAttributes<unknown>['type'];
   label: React.ReactNode;

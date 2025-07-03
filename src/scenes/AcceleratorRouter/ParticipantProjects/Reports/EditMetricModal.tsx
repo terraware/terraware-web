@@ -43,7 +43,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
       snackbar.toastSuccess(strings.PROJECT_SPECIFIC_METRIC_SAVED);
       reload();
     }
-  }, [updateProjectMetricResponse, snackbar]);
+  }, [updateProjectMetricResponse, snackbar, onClose, reload]);
 
   const save = () => {
     if (!record.name || !record.reference) {
@@ -107,6 +107,16 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             options={metricTypeOptions()}
             selectedValue={record.type}
             fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id='unit'
+            label={strings.UNIT}
+            type='text'
+            maxLength={25}
+            onChange={(value) => onChange('unit', value)}
+            value={record.unit}
           />
         </Grid>
         <Grid item xs={12}>

@@ -8,7 +8,7 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -22,6 +22,8 @@ export default function DocumentsView(): JSX.Element | null {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { availableParticipants } = useParticipants();
+  const { isAllowed } = useUser();
+  const canAddDocument = useMemo(() => isAllowed('CREATE_DOCUMENTS'), [isAllowed]);
 
   const query = useQuery();
 
@@ -91,11 +93,15 @@ export default function DocumentsView(): JSX.Element | null {
   return (
     <Page
       leftComponent={PageHeaderLeftComponent}
-      primaryButton={{
-        icon: 'plus' as IconName,
-        onClick: goToDocumentNew,
-        title: strings.ADD_DOCUMENT,
-      }}
+      primaryButton={
+        canAddDocument
+          ? {
+              icon: 'plus' as IconName,
+              onClick: goToDocumentNew,
+              title: strings.ADD_DOCUMENT,
+            }
+          : undefined
+      }
       title={strings.DOCUMENTS}
     >
       <DocumentsTable />

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
@@ -38,22 +38,25 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
     },
   });
 
-  const pathParamExists = () => !isNaN(pathFundingEntityId) && pathFundingEntityId !== -1;
+  const pathParamExists = useMemo(
+    () => !isNaN(pathFundingEntityId) && pathFundingEntityId !== -1,
+    [pathFundingEntityId]
+  );
 
   const reload = useCallback(() => {
-    if (pathParamExists()) {
+    if (pathParamExists) {
       void dispatch(requestFundingEntity(pathFundingEntityId));
     }
-  }, [dispatch, pathFundingEntityId]);
+  }, [dispatch, pathFundingEntityId, pathParamExists]);
 
   useEffect(() => {
-    if (pathParamExists()) {
+    if (pathParamExists) {
       void dispatch(requestFundingEntity(pathFundingEntityId));
     }
-  }, [pathFundingEntityId, dispatch]);
+  }, [pathFundingEntityId, dispatch, pathParamExists]);
 
   useEffect(() => {
-    if (!pathParamExists() || !getFundingEntityRequest) {
+    if (!pathParamExists || !getFundingEntityRequest) {
       return;
     }
 
@@ -66,7 +69,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
     } else if (getFundingEntityRequest.status === 'error') {
       setEntityAPIRequestStatus(APIRequestStatus.FAILED);
     }
-  }, [pathFundingEntityId, getFundingEntityRequest, reload]);
+  }, [pathFundingEntityId, getFundingEntityRequest, reload, pathParamExists]);
 
   useEffect(() => {
     if (entityAPIRequestStatus === APIRequestStatus.FAILED) {
@@ -78,7 +81,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
         navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
-  }, [entityAPIRequestStatus]);
+  }, [entityAPIRequestStatus, isDev, isStaging, navigate]);
 
   return <FundingEntityContext.Provider value={fundingEntityData}>{children}</FundingEntityContext.Provider>;
 }

@@ -67,14 +67,14 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       reload();
       onClose();
     }
-  }, [result, snackbar]);
+  }, [result, snackbar, onClose, reload]);
 
   useEffect(() => {
     setRecord((prev) => ({
       ...prev,
       projectId,
     }));
-  }, []);
+  }, [projectId, setRecord]);
 
   const save = () => {
     const payload: CreateParticipantProjectSpeciesRequestPayload = {

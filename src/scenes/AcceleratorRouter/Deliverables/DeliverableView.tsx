@@ -49,7 +49,7 @@ const DeliverableView = () => {
       query.delete('source');
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
-  }, [query]);
+  }, [query, location, navigate]);
 
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
@@ -156,7 +156,7 @@ const DeliverableView = () => {
         </>
       )
     );
-  }, [deliverable?.status, isAllowed, theme]);
+  }, [deliverable?.status, isAllowed]);
 
   const optionsMenu = useMemo(
     () => (
@@ -166,7 +166,7 @@ const DeliverableView = () => {
         )}
       </>
     ),
-    [isAllowed, onOptionItemClick, optionItems, deliverable]
+    [isAllowed, onOptionItemClick, optionItems]
   );
 
   const rightComponent = useMemo(
@@ -176,7 +176,7 @@ const DeliverableView = () => {
         {optionsMenu}
       </Box>
     ),
-    [callToAction, optionsMenu]
+    [callToAction, optionsMenu, theme]
   );
 
   const crumbs: Crumb[] = useMemo(() => {

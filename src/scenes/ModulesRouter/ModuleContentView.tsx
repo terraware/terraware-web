@@ -52,7 +52,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     if (currentParticipantProject && currentParticipantProject.cohortId) {
       void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
     }
-  }, [currentParticipantProject, moduleId]);
+  }, [currentParticipantProject, moduleId, getCohortModule]);
 
   const [content, setContent] = useState('');
 
@@ -85,10 +85,10 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
 
   useEffect(() => {
     const nextContent = (cohortModule || {})[contentType];
-    if (module && nextContent) {
+    if (cohortModule && nextContent) {
       setContent(addBlankTargetToHtmlAHref(nextContent));
     }
-  }, [cohortModule]);
+  }, [cohortModule, contentType]);
 
   if (!cohortModule) {
     return null;

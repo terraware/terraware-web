@@ -164,7 +164,7 @@ export default function ListView(): JSX.Element {
         optionItems={[{ label: strings.EXPORT, value: 'export' }]}
       />
     );
-  }, [activeLocale, isAllowed]);
+  }, [activeLocale, isAllowed, mixpanel]);
 
   return (
     <>
