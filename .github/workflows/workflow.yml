@@ -69,11 +69,9 @@ jobs:
         run: yarn generate-strings
 
       # Remove the jsx-no-bind rule because it has lots of errors currently
-      # The rest of the rules should be fixed and then removed from this list of rules to disable
       - name: Run linter
         run: >
           yarn lint --rule "react/jsx-no-bind: 0"
-          --rule "prefer-arrow/prefer-arrow-functions: 0"
 
       - name: Do typescript check
         run: yarn ts
