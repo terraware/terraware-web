@@ -72,6 +72,7 @@ export type MapEntity = {
   properties: MapSourceProperties;
   boundary: MapGeometry;
   id: number;
+  totalArea?: number;
 };
 
 export type MapSourceBaseData = {
