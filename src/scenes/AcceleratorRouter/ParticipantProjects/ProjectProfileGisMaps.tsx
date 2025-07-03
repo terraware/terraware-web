@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 import { FeatureCollection } from 'geojson';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -59,7 +59,7 @@ const ProjectProfileGisMaps = () => {
         requestGetGis({
           cqlFilter: projectDetails.plantingSitesCql,
           typeNames: 'tf_accelerator:planting_sites',
-          propertyName: 'fid,strata,substrata,site,geom',
+          propertyName: 'fid,strata,substrata,site,geom,created_at',
         })
       );
       setPlantingSitesRequestId(requestPlantingSites.requestId);
@@ -163,7 +163,7 @@ const ProjectProfileGisMaps = () => {
   );
 
   const uniqueZones = useMemo(() => {
-    const iUniqueZones = Array.from(new Set(boundariesData?.features.map((f) => f.properties?.boundary_name)));
+    const iUniqueZones = Array.from(new Set(boundariesData?.features?.map((f) => f.properties?.boundary_name)));
     if (iUniqueZones.length > 1) {
       iUniqueZones.unshift(strings.ALL_PROJECT_ZONES);
     }
@@ -171,12 +171,12 @@ const ProjectProfileGisMaps = () => {
   }, [boundariesData]);
 
   const uniqueSites = useMemo(() => {
-    return Array.from(new Set(plantingSitesData?.features.map((f) => f.properties?.site)));
+    return Array.from(new Set(plantingSitesData?.features?.map((f) => f.properties?.site)));
   }, [plantingSitesData]);
 
   const zonesAndSites = useMemo(() => {
-    const zones = uniqueZones.map((z) => ({ name: z, type: 'zone' }) as ZoneOrSiteOption);
-    const sites = uniqueSites.map((s) => ({ name: s, type: 'site' }) as ZoneOrSiteOption);
+    const zones = uniqueZones?.map((z) => ({ name: z, type: 'zone' }) as ZoneOrSiteOption);
+    const sites = uniqueSites?.map((s) => ({ name: s, type: 'site' }) as ZoneOrSiteOption);
     return [...zones, ...sites];
   }, [uniqueZones, uniqueSites]);
 
@@ -247,6 +247,13 @@ const ProjectProfileGisMaps = () => {
     setSelectedLayer(layer as MapLayer);
   }, []);
 
+  const lastUpdatedDate = useMemo(() => {
+    const allDates = plantingSitesData?.features?.map((f) => f.properties?.created_at);
+    const validDates = allDates?.filter((date) => date)?.map((date) => new Date(date).getTime());
+    const lastUpdated = validDates?.length ? new Date(Math.max(...validDates)) : null;
+    return lastUpdated;
+  }, [plantingSitesData]);
+
   return (
     <Page
       title={projectViewTitle}
@@ -274,6 +281,11 @@ const ProjectProfileGisMaps = () => {
             <Typography fontSize={'16px'} fontWeight={400} paddingRight={1}>
               {strings.FROM_GIS_DATABASE}
             </Typography>
+            {lastUpdatedDate && (
+              <Typography fontSize={'16px'} fontWeight={400} paddingRight={1}>
+                {strings.LAST_UPDATED} {getDateDisplayValue(lastUpdatedDate)}
+              </Typography>
+            )}
             {selectedArea && (
               <Typography fontSize={'20px'} fontWeight={600}>
                 {strings.formatString(strings.X_HA, selectedArea)}
