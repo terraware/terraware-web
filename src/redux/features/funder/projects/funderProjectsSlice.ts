@@ -1,18 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
+import { StatusT, buildReducers, setStatus } from 'src/redux/features/asyncUtils';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 
-import { requestGetFunderProject, requestPublishFunderProject } from './funderProjectsAsyncThunks';
+import { requestGetFunderProjects, requestPublishFunderProject } from './funderProjectsAsyncThunks';
 
-const initialStateFunderProject: { [key: string]: StatusT<FunderProjectDetails> } = {};
+const initialStateFunderProject: { [key: string]: FunderProjectDetails } = {};
 
 export const funderProjectsSlice = createSlice({
   name: 'funderProjectSlice',
   initialState: initialStateFunderProject,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestGetFunderProject, true)(builder);
+    builder
+      .addCase(requestGetFunderProjects.pending, setStatus('pending'))
+      .addCase(requestGetFunderProjects.fulfilled, (state, action) => {
+        setStatus('success')(state, action);
+
+        action.payload?.forEach((project) => {
+          state[project.projectId] = project;
+        });
+      })
+      .addCase(requestGetFunderProjects.rejected, setStatus('error'));
   },
 });
 
@@ -27,7 +36,7 @@ export const publishFunderProjectSlice = createSlice({
 });
 
 const funderProjectsReducers = {
-  funderProject: funderProjectsSlice.reducer,
+  funderProjects: funderProjectsSlice.reducer,
   publishFunderProject: publishFunderProjectSlice.reducer,
 };
 

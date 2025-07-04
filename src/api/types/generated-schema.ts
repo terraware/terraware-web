@@ -1725,6 +1725,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/projects/{projectIds}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get published project details displayable to funders */
+        get: operations["getProjects"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/projects/{projectId}": {
         parameters: {
             query?: never;
@@ -1732,8 +1749,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Gets project detail information displayable to funders */
-        get: operations["getProject_1"];
+        get?: never;
         put?: never;
         /** Publishes project detail information for funders */
         post: operations["publishProjectProfile"];
@@ -6129,7 +6145,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         GetFundingProjectResponsePayload: {
-            details: components["schemas"]["FunderProjectDetailsPayload"];
+            details?: components["schemas"]["FunderProjectDetailsPayload"];
+            projects: components["schemas"]["FunderProjectDetailsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         GetMapboxTokenResponsePayload: {
@@ -14038,12 +14055,12 @@ export interface operations {
             };
         };
     };
-    getProject_1: {
+    getProjects: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                projectId: number;
+                projectIds: number[];
             };
             cookie?: never;
         };

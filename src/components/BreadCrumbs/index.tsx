@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent, SyntheticEvent } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -7,7 +7,8 @@ import Link from 'src/components/common/Link';
 
 export type Crumb = {
   name: string; // name of crumb
-  to: string; // link to url/path
+  to?: string; // link to url/path
+  onClick?: (e?: MouseEvent | SyntheticEvent) => void;
 };
 
 export type BreadCrumbsProps = {
@@ -34,9 +35,9 @@ export default function BreadCrumbs({ hierarchical, crumbs }: BreadCrumbsProps):
       {breadCrumbs.map((crumb: Crumb, index: number) => (
         <Box key={index} display='inline-flex' alignItems='center'>
           {index === 0 ? (
-            <BackToLink id={`crumb_${index}`} to={crumb.to} name={crumb.name} />
+            <BackToLink id={`crumb_${index}`} to={crumb.to} onClick={crumb.onClick} name={crumb.name} />
           ) : (
-            <Link id={`crumb_${index}`} to={crumb.to}>
+            <Link id={`crumb_${index}`} to={crumb.to} onClick={crumb.onClick}>
               {crumb.name}
             </Link>
           )}

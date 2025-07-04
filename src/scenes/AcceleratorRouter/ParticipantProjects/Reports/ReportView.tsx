@@ -190,7 +190,7 @@ const ReportView = () => {
   }, [selectedReport]);
 
   const crumbs: Crumb[] = useMemo(() => {
-    let crumbsList = [
+    let crumbsList: Crumb[] = [
       {
         name: activeLocale ? strings.REPORTS : '',
         to: year
