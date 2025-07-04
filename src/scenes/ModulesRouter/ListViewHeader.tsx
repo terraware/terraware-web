@@ -38,7 +38,7 @@ const ListViewHeader = () => {
     <Dropdown
       onChange={(id) => {
         const projectId = +id;
-        if (projectId != currentParticipantProject?.id) {
+        if (projectId !== currentParticipantProject?.id) {
           setCurrentParticipantProject(projectId);
           goToModules(projectId);
         }

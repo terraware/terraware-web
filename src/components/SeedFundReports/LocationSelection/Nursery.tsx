@@ -28,6 +28,7 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
           editable={editable}
           onChange={(value) => onUpdateLocation('capacity', transformNumericValue(value, { min: 0 }))}
           type='text'
+          /* eslint-disable-next-line eqeqeq */
           errorText={validate && (location as ReportNursery).capacity == null ? strings.REQUIRED_FIELD : ''}
           tooltipTitle={strings.REPORT_NURSERY_CAPACITY_INFO}
         />

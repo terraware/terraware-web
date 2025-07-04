@@ -70,6 +70,7 @@ type TableCellInputProps = {
 function TableCellInput(props: TableCellInputProps): JSX.Element {
   const { id, initialValue, isPercentage, onConfirmEdit, className, sx, validate } = props;
   const [inputValue, setInputValue] = useState(initialValue);
+  /* eslint-disable-next-line eqeqeq */
   const inputInvalid = inputValue == null || inputValue === '';
 
   return (

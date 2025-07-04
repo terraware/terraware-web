@@ -59,6 +59,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
         return variable.dependencyValue.toLowerCase() === `${rawDependsOnValue as string}`.toLowerCase();
       }
 
+      /* eslint-disable-next-line eqeqeq */
       return variable.dependencyValue == rawDependsOnValue;
     case 'gt':
       return Number(rawDependsOnValue) > Number(variable.dependencyValue);
@@ -82,6 +83,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
         }
       }
 
+      /* eslint-disable-next-line eqeqeq */
       return variable.dependencyValue != rawDependsOnValue;
   }
 };
