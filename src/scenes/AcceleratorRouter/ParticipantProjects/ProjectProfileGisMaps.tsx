@@ -7,6 +7,7 @@ import { FeatureCollection } from 'geojson';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { PlantingSiteMap } from 'src/components/Map';
+import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { MapLayer } from 'src/components/common/MapLayerSelect';
@@ -18,6 +19,7 @@ import { selectGisRequest } from 'src/redux/features/gis/gisSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
+import { MapSourceProperties } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
@@ -254,6 +256,44 @@ const ProjectProfileGisMaps = () => {
     return lastUpdated;
   }, [plantingSitesData]);
 
+  const contextRenderer = useCallback(
+    (properties: MapSourceProperties): JSX.Element | null => {
+      const tooltipProperties: TooltipProperty[] = [{ key: strings.TYPE, value: properties.type }];
+
+      if (properties.type === 'subzone') {
+        const selectedSubZone = filteredSiteData?.subzone?.entities?.find((ent) => ent.id === properties.id);
+        tooltipProperties.push({
+          key: strings.ZONE,
+          value: filteredSiteData?.subzone?.entities?.[0].properties.zoneId,
+        });
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: selectedSubZone?.totalArea?.toString() || '',
+        });
+      }
+
+      if (properties.type === 'zone') {
+        const selectedZone = filteredSiteData?.zone?.entities?.find((ent) => ent.id === properties.id);
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: selectedZone?.totalArea?.toString() || '',
+        });
+      }
+
+      if (properties.type === 'site') {
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: filteredSiteData?.site?.entities?.[0].totalArea?.toString() || '',
+        });
+      }
+
+      return (
+        <MapTooltip title={properties.name} subtitleColor={theme.palette.TwClrTxt} properties={tooltipProperties} />
+      );
+    },
+    [filteredSiteData, theme.palette]
+  );
+
   return (
     <Page
       title={projectViewTitle}
@@ -304,6 +344,17 @@ const ProjectProfileGisMaps = () => {
               mapData={filteredSiteData}
               style={{ width: '100%', borderRadius: '24px' }}
               layers={[selectedLayer || 'Planting Site']}
+              contextRenderer={{
+                render: contextRenderer,
+                sx: {
+                  '.mapboxgl-popup': {
+                    maxWidth: '324px !important', // !important to override a default mapbox style
+                  },
+                  '.mapboxgl-popup .mapboxgl-popup-content': {
+                    padding: '0px !important',
+                  },
+                },
+              }}
             />
           )}
           {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (

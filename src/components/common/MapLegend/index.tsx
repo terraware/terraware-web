@@ -5,6 +5,7 @@ import { Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { AntSwitch } from 'src/components/Switch/AntSwitch';
+import strings from 'src/strings';
 
 type MapLegendItem = {
   borderColor: string;
@@ -129,7 +130,11 @@ function LabeledSwatch({
 
   const onLegendClickHandler = useCallback(() => {
     if (onChangeLayer) {
-      onChangeLayer(label);
+      if (label === strings.SUBZONES) {
+        onChangeLayer('Sub-Zones');
+      } else {
+        onChangeLayer(label);
+      }
     }
   }, [label, onChangeLayer]);
 
