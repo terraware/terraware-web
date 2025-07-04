@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -58,6 +58,12 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     });
   }, [allAdHocObservationResults, selectedPlantingSite]);
 
+  const selectPlotType = useCallback((value: string) => {
+    if (value === 'assigned' || value === 'adHoc') {
+      setSelectedPlotSelection(value);
+    }
+  }, []);
+
   return (
     <Card>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -89,7 +95,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
               <Dropdown
                 placeholder={strings.SELECT}
                 id='plot-selection-selector'
-                onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
+                onChange={selectPlotType}
                 options={[
                   { label: strings.ASSIGNED, value: 'assigned' },
                   { label: strings.AD_HOC, value: 'adHoc' },
