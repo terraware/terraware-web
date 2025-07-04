@@ -514,6 +514,7 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
     };
     boundary: MapGeometry;
     id: number;
+    totalArea: number;
   }[] = [];
 
   const groupedByStrata = gisPlantingSiteData.features?.reduce((groups: { [key: string]: any[] }, feature) => {
@@ -543,6 +544,7 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
 
       const unionedGeometry = unionedFeature.geometry;
       const boundaryCoordinates = getPolygons(unionedGeometry as MultiPolygon);
+      const totalArea = (area(unionedFeature) / 10_000).toFixed(2);
 
       const firstFeature = groupedByStrata[strata][0];
       zonesData.push({
@@ -553,6 +555,7 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
         },
         boundary: boundaryCoordinates,
         id: firstFeature.properties?.strata,
+        totalArea: Number(totalArea),
       });
     });
   }
@@ -567,6 +570,7 @@ const extractSubzonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSour
   const allPlantingSubzonesData =
     gisPlantingSiteData.features?.map((subzone) => {
       const { properties, geometry } = subzone;
+      const totalArea = (area(subzone) / 10_000).toFixed(2);
       return {
         properties: {
           id: Number(properties?.fid),
@@ -577,6 +581,7 @@ const extractSubzonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSour
         },
         boundary: getPolygons(geometry as MultiPolygon),
         id: Number(properties?.fid),
+        totalArea: Number(totalArea),
       };
     }) || [];
 

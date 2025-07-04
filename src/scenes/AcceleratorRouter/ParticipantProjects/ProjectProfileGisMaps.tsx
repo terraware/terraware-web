@@ -258,15 +258,32 @@ const ProjectProfileGisMaps = () => {
 
   const contextRenderer = useCallback(
     (properties: MapSourceProperties): JSX.Element | null => {
-      const tooltipProperties: TooltipProperty[] = [
-        { key: strings.TYPE, value: properties.type },
-        { key: strings.AREA_HA, value: filteredSiteData?.site?.entities?.[0].totalArea },
-      ];
+      const tooltipProperties: TooltipProperty[] = [{ key: strings.TYPE, value: properties.type }];
 
       if (properties.type === 'subzone') {
+        const selectedSubZone = filteredSiteData?.subzone?.entities?.find((ent) => ent.id === properties.id);
         tooltipProperties.push({
           key: strings.ZONE,
           value: filteredSiteData?.subzone?.entities?.[0].properties.zoneId,
+        });
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: selectedSubZone?.totalArea?.toString() || '',
+        });
+      }
+
+      if (properties.type === 'zone') {
+        const selectedZone = filteredSiteData?.zone?.entities?.find((ent) => ent.id === properties.id);
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: selectedZone?.totalArea?.toString() || '',
+        });
+      }
+
+      if (properties.type === 'site') {
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: filteredSiteData?.site?.entities?.[0].totalArea?.toString() || '',
         });
       }
 
