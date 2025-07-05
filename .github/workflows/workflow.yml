@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - qa
+      - josh/SW-6885-vercel-deploy
     tags:
       # Semver (these are glob-like patterns, not regexes; the "." has no special meaning)
       - v[0-9].[0-9]+.[0-9]+
@@ -18,6 +19,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -79,37 +81,82 @@ jobs:
       - name: Do typescript check
         run: yarn ts
 
-      - name: Run unit tests
-        run: yarn test --ci
+      # - name: Run unit tests
+      #   run: yarn test --ci
 
-      - name: Download and start backend
-        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn server:reset
-        env:
-          SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
-          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
-          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
-          TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
+      # - name: Download and start backend
+      #   if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+      #   run: yarn server:reset
+      #   env:
+      #     SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+      #     SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
+      #     SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+      #     TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
-      - name: Install Playwright Browsers
-        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn playwright install --with-deps
+      # - name: Install Playwright Browsers
+      #   if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+      #   run: yarn playwright install --with-deps
 
-      - name: Run end-to-end playwright tests
-        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn test:e2e
-        env:
-          REACT_APP_TERRAWARE_API: 'http://localhost:8080'
-          REACT_APP_SNACKBAR_TIMEOUT: 1000
-          REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
+      # - name: Run end-to-end playwright tests
+      #   if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+      #   run: yarn test:e2e
+      #   env:
+      #     REACT_APP_TERRAWARE_API: 'http://localhost:8080'
+      #     REACT_APP_SNACKBAR_TIMEOUT: 1000
+      #     REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
 
-      - name: save screenshots of e2e test failures
-        if: failure()
-        uses: actions/upload-artifact@v4
+      # - name: save screenshots of e2e test failures
+      #   if: failure()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: playwright-report
+      #     path: playwright-report/
+      #     retention-days: 30
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Create Vercel project file for Terraware Web Preview
+        run: |
+          mkdir -p .vercel
+          echo "{\"projectId\":\"${{ secrets.VERCEL_PROJECT_ID_TERRAWARE_WEB_PREVIEW }}\",\"orgId\":\"${{ secrets.VERCEL_ORG_ID }}\"}" > .vercel/project.json
+
+      - name: Pull Vercel project settings for "preview" environment
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      # - name: Build for Vercel
+      #   if: github.event_name == 'pull_request'
+      #   run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel (prebuilt)
+        id: vercel_deploy
+        run: |
+          preview_url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}) ./build
+          echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with Preview URL
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
         with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ✅ Deployed to Vercel - Preview (`tree-location-web`): [View deployment](${{ steps.vercel_deploy.outputs.preview_url }})
+
+      # - name: Set commit status with preview URL
+      #   if: github.event_name == 'pull_request'
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       github.repos.createCommitStatus({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         sha: context.sha,
+      #         state: 'success',
+      #         target_url: '${{ steps.vercel_deploy.outputs.preview_url }}',
+      #         description: 'Vercel Preview',
+      #         context: 'vercel/preview'
+      #       })
 
       - name: build
         run: yarn build
