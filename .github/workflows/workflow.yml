@@ -129,6 +129,7 @@ jobs:
           desc: Deploying to Vercel
           env: Preview (Staging)
           step: start
+          task: vercel_deploy_preview
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build for Vercel
