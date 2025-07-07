@@ -45,6 +45,8 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const [orgProjectsSections, setOrgProjectsSections] = useState<OrgProjectsSection[]>([]);
   // orgs available for selection in the dropdowns, does not included already selected orgs
   const [availableOrgs, setAvailableOrgs] = useState<AcceleratorOrg[]>([]);
+  // ensures org sections don't update each other after deleting and adding a section
+  const [sectionSeq, setSectionSeq] = useState<number>(0);
 
   const acceleratorOrgs = useMemo<AcceleratorOrg[]>(() => {
     const orgs = (allAcceleratorOrgs || [])
@@ -184,9 +186,10 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const addOrgProjectsSection = useCallback(() => {
     setOrgProjectsSections((prev) => [
       ...prev,
-      { id: prev.length + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] }, isNew: true },
+      { id: sectionSeq + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] }, isNew: true },
     ]);
-  }, []);
+    setSectionSeq((prev) => prev + 1);
+  }, [sectionSeq]);
 
   // initialize sections for participant that already had project ids (edit use-case)
   useEffect(() => {
@@ -216,6 +219,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
         },
       ]);
     }
+    setSectionSeq(sections.length || 1);
   }, [acceleratorOrgs, activeLocale, localRecord.projectIds, modified]);
 
   useEffect(() => {
