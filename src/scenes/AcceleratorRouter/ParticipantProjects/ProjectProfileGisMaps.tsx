@@ -355,6 +355,7 @@ const ProjectProfileGisMaps = () => {
                   },
                 },
               }}
+              showSiteMarker
             />
           )}
           {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (

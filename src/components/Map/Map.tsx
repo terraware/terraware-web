@@ -4,6 +4,7 @@ import ReactMapGL, {
   FullscreenControl,
   Layer,
   MapRef,
+  Marker,
   NavigationControl,
   Popup,
   Source,
@@ -11,6 +12,7 @@ import ReactMapGL, {
 
 import { Box, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
+import centroid from '@turf/centroid';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -69,6 +71,7 @@ export type MapProps = {
   // entity options
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
+  showSiteMarker?: boolean;
 } & MapControl;
 
 export default function Map(props: MapProps): JSX.Element {
@@ -89,6 +92,7 @@ export default function Map(props: MapProps): JSX.Element {
     hideAllControls,
     disableZoom,
     mapViewStyle: initialMapViewStyle,
+    showSiteMarker,
   } = props;
   const theme = useTheme();
   const [geoData, setGeoData] = useState<any[]>();
@@ -379,13 +383,47 @@ export default function Map(props: MapProps): JSX.Element {
         {geo.patternFill && (
           <Layer {...geo.patternFill} beforeId={geo.textAnnotation ? geo.textAnnotation.id : undefined} />
         )}
-        {geo.textAnnotation && <Layer {...geo.textAnnotation} beforeId={geo.layerOutline.id} />}
+        {geo.textAnnotation &&
+          (!showSiteMarker || (showSiteMarker && geo.textAnnotation.id !== 'sites-annotation')) && (
+            <Layer {...geo.textAnnotation} beforeId={geo.layerOutline.id} />
+          )}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
       </Source>
     ));
 
     return sources;
-  }, [mapImages, geoData, loadImages]);
+  }, [mapImages, geoData, loadImages, showSiteMarker]);
+
+  const annotationMarker = useMemo(() => {
+    if (!geoData || !showSiteMarker) {
+      return null;
+    }
+    const geo = geoData[0];
+    const center = centroid(geo.data);
+    const [longitude, latitude] = center.geometry.coordinates;
+    if (geo.textAnnotation.id === 'sites-annotation') {
+      return (
+        <Marker key={0} longitude={longitude} latitude={latitude} anchor='center'>
+          <div
+            style={{
+              background: 'rgba(255, 255, 255, 0.9)',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              fontSize: '12px',
+              fontWeight: 'bold',
+              color: '#000000',
+              whiteSpace: 'nowrap',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              backdropFilter: 'blur(2px)', // Optional: adds blur effect
+            }}
+          >
+            {geo.data.features?.[0]?.properties?.id}
+          </div>
+        </Marker>
+      );
+    }
+  }, [geoData, showSiteMarker]);
 
   useEffect(() => {
     if (entityOptions?.highlight) {
@@ -468,6 +506,7 @@ export default function Map(props: MapProps): JSX.Element {
           doubleClickZoom={!disableZoom}
         >
           {mapSources}
+          {annotationMarker}
           {!hideAllControls && (
             <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
           )}
