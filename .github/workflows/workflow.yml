@@ -127,7 +127,7 @@ jobs:
         id: deployment
         with:
           desc: Deploying to Vercel
-          env: release
+          env: staging
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
 
