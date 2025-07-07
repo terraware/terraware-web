@@ -121,6 +121,15 @@ jobs:
       - name: Pull Vercel project settings for "preview" environment
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
+      - name: Start GitHub Deployment for Vercel Deploy
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          desc: Deploying to Vercel
+          env: release
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build for Vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
