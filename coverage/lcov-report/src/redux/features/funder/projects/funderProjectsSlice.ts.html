@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -97,7 +97,16 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -112,6 +121,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -133,19 +151,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice } from '@reduxjs/toolkit';
 &nbsp;
-import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
+import { StatusT, buildReducers, setStatus } from 'src/redux/features/asyncUtils';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 &nbsp;
-import { requestGetFunderProject, requestPublishFunderProject } from './funderProjectsAsyncThunks';
+import { requestGetFunderProjects, requestPublishFunderProject } from './funderProjectsAsyncThunks';
 &nbsp;
-const initialStateFunderProject: { [key: string]: StatusT&lt;FunderProjectDetails&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
+const initialStateFunderProject: { [key: string]: FunderProjectDetails } = <span class="cstat-no" title="statement not covered" >{};</span>
 &nbsp;
 export const funderProjectsSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
   name: 'funderProjectSlice',
   initialState: initialStateFunderProject,
   reducers: {},
   extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    buildReducers(requestGetFunderProject, true)(builder);</span>
+<span class="cstat-no" title="statement not covered" >    builder</span>
+      .addCase(requestGetFunderProjects.pending, setStatus('pending'))
+      .addCase(requestGetFunderProjects.fulfilled, <span class="fstat-no" title="function not covered" >(s</span>tate, action) =&gt; {
+<span class="cstat-no" title="statement not covered" >        setStatus('success')(state, action);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        action.payload?.forEach(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          state[project.projectId] = project;</span>
+        });
+      })
+      .addCase(requestGetFunderProjects.rejected, setStatus('error'));
   },
 });
 &nbsp;
@@ -160,7 +187,7 @@ export const publishFunderProjectSlice = <span class="cstat-no" title="statement
 });
 &nbsp;
 const funderProjectsReducers = <span class="cstat-no" title="statement not covered" >{</span>
-  funderProject: funderProjectsSlice.reducer,
+  funderProjects: funderProjectsSlice.reducer,
   publishFunderProject: publishFunderProjectSlice.reducer,
 };
 &nbsp;
@@ -172,7 +199,7 @@ export default funderProjectsReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-07T15:16:49.815Z
+                at 2025-07-07T15:35:48.057Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
