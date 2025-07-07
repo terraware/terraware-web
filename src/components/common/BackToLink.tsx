@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, MouseEvent, SyntheticEvent } from 'react';
 
 import { useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -8,19 +8,29 @@ import Link from './Link';
 type BackToLinkProps = {
   id: string;
   name: string;
-  to: string;
+  to?: string;
+  onClick?: (e?: MouseEvent | SyntheticEvent) => void;
   className?: string;
   replace?: boolean;
   style?: CSSProperties;
 };
 
-export default function BackToLink({ id, name, to, className, replace, style = {} }: BackToLinkProps): JSX.Element {
+export default function BackToLink({
+  id,
+  name,
+  to,
+  className,
+  replace,
+  onClick,
+  style = {},
+}: BackToLinkProps): JSX.Element {
   const theme = useTheme();
 
   return (
     <Link
       id={id}
       to={to}
+      onClick={onClick}
       className={className}
       replace={replace}
       style={{
