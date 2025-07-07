@@ -2,11 +2,11 @@
 
 export const emptyDoughnutPlugin = {
   id: 'emptyDoughnut',
-  afterDraw(
+  afterDraw: (
     chart: { data?: any; chartArea?: any; ctx?: any },
     args: any,
     options: { color: any; width: any; radiusDecrease: any }
-  ) {
+  ) => {
     const { datasets } = chart.data;
     const { color, width, radiusDecrease } = options;
     let hasData = false;

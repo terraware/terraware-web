@@ -5,13 +5,13 @@ import FunderProjectService, { FunderProjectData } from 'src/services/funder/Fun
 import strings from 'src/strings';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 
-export const requestGetFunderProject = createAsyncThunk(
-  'funderProjects/get-one',
-  async (projectId: number, { rejectWithValue }) => {
-    const response: Response2<FunderProjectData> = await FunderProjectService.get(projectId);
+export const requestGetFunderProjects = createAsyncThunk(
+  'funderProjects/get',
+  async (projectIds: number[], { rejectWithValue }) => {
+    const response: Response2<FunderProjectData> = await FunderProjectService.get(projectIds);
 
     if (response && response.requestSucceeded) {
-      return response.data?.details;
+      return response.data?.projects;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
