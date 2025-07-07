@@ -18817,7 +18817,7 @@ SELECT pg_catalog.setval('public.uploads_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 5, true);
+SELECT pg_catalog.setval('public.users_id_seq', 4, true);
 
 
 --
