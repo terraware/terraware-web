@@ -184,7 +184,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const addOrgProjectsSection = useCallback(() => {
     setOrgProjectsSections((prev) => [
       ...prev,
-      { id: prev.length + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] } },
+      { id: prev.length + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] }, isNew: true },
     ]);
   }, []);
 
@@ -207,7 +207,14 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section?.org?.id === org.id)));
     } else if (acceleratorOrgs.length) {
       // allow initial selection
-      setOrgProjectsSections([{ id: 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] } }]);
+      setOrgProjectsSections([
+        {
+          id: 1,
+          projectId: -1,
+          projectDetails: { projectId: -1, landUseModelTypes: [] },
+          isNew: true,
+        },
+      ]);
     }
   }, [acceleratorOrgs, activeLocale, localRecord.projectIds, modified]);
 
@@ -322,27 +329,29 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
               updateProjectDetails={updateProjectDetails}
               validateFields={validateFields}
             />
-            <Box display='flex' marginTop={theme.spacing(2)}>
-              <Link
-                onClick={() => removeOrgProjectsSection(index)}
-                fontSize='16px'
-                disabled={orgProjectsSections.length === 1}
-              >
-                <Box display='flex' alignItems='center'>
-                  <Icon
-                    name='iconSubtract'
-                    style={{
-                      fill: theme.palette.TwClrIcnSecondary,
-                      height: '20px',
-                      width: '20px',
-                    }}
-                  />
-                  <Typography fontWeight={500} color={theme.palette.TwClrIcnSecondary}>
-                    &nbsp;{strings.REMOVE_PROJECT}
-                  </Typography>
-                </Box>
-              </Link>
-            </Box>
+            {orgProjectsSections.length > 1 && (
+              <Box display='flex' marginTop={theme.spacing(2)}>
+                <Link
+                  onClick={() => removeOrgProjectsSection(index)}
+                  fontSize='16px'
+                  disabled={orgProjectsSections.length === 1}
+                >
+                  <Box display='flex' alignItems='center'>
+                    <Icon
+                      name='iconSubtract'
+                      style={{
+                        fill: theme.palette.TwClrIcnSecondary,
+                        height: '20px',
+                        width: '20px',
+                      }}
+                    />
+                    <Typography fontWeight={500} color={theme.palette.TwClrIcnSecondary}>
+                      &nbsp;{strings.REMOVE_PROJECT}
+                    </Typography>
+                  </Box>
+                </Link>
+              </Box>
+            )}
           </Box>
         ))}
         {acceleratorOrgs.length > 0 && (

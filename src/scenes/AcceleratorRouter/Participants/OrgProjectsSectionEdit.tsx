@@ -16,6 +16,7 @@ export type OrgProjectsSection = {
   org?: AcceleratorOrg;
   projectId: number;
   projectDetails: ParticipantProject;
+  isNew?: boolean;
 };
 
 export type OrgProjectsSectionEditProps = {
@@ -95,6 +96,7 @@ const OrgProjectsSectionEdit = ({
           tooltipTitle={strings.ACCELERATOR_ORGS_TOOLTIP}
           required
           errorText={validateFields && (!section.org?.id || section.org.id === -1) ? strings.REQUIRED_FIELD : ''}
+          disabled={!section.isNew}
         />
       </Grid>
       <Grid item xs={6}>
