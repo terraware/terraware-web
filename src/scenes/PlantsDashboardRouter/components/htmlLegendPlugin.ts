@@ -24,7 +24,7 @@ export const getOrCreateLegendList = (chart: any, id: string) => {
 export const htmlLegendPlugin = {
   id: 'htmlLegend',
   // See how this get called here https://www.chartjs.org/docs/latest/developers/plugins.html
-  afterUpdate(chart: Chart, args: any, options: { containerID: string }) {
+  afterUpdate: (chart: Chart, args: any, options: { containerID: string }) => {
     const ul = getOrCreateLegendList(chart, options.containerID);
 
     // Remove old legend items

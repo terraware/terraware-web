@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 import { FeatureCollection } from 'geojson';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { PlantingSiteMap } from 'src/components/Map';
+import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { MapLayer } from 'src/components/common/MapLayerSelect';
@@ -18,6 +19,7 @@ import { selectGisRequest } from 'src/redux/features/gis/gisSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
+import { MapSourceProperties } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
@@ -59,7 +61,7 @@ const ProjectProfileGisMaps = () => {
         requestGetGis({
           cqlFilter: projectDetails.plantingSitesCql,
           typeNames: 'tf_accelerator:planting_sites',
-          propertyName: 'fid,strata,substrata,site,geom',
+          propertyName: 'fid,strata,substrata,site,geom,created_at',
         })
       );
       setPlantingSitesRequestId(requestPlantingSites.requestId);
@@ -163,7 +165,7 @@ const ProjectProfileGisMaps = () => {
   );
 
   const uniqueZones = useMemo(() => {
-    const iUniqueZones = Array.from(new Set(boundariesData?.features.map((f) => f.properties?.boundary_name)));
+    const iUniqueZones = Array.from(new Set(boundariesData?.features?.map((f) => f.properties?.boundary_name)));
     if (iUniqueZones.length > 1) {
       iUniqueZones.unshift(strings.ALL_PROJECT_ZONES);
     }
@@ -171,12 +173,12 @@ const ProjectProfileGisMaps = () => {
   }, [boundariesData]);
 
   const uniqueSites = useMemo(() => {
-    return Array.from(new Set(plantingSitesData?.features.map((f) => f.properties?.site)));
+    return Array.from(new Set(plantingSitesData?.features?.map((f) => f.properties?.site)));
   }, [plantingSitesData]);
 
   const zonesAndSites = useMemo(() => {
-    const zones = uniqueZones.map((z) => ({ name: z, type: 'zone' }) as ZoneOrSiteOption);
-    const sites = uniqueSites.map((s) => ({ name: s, type: 'site' }) as ZoneOrSiteOption);
+    const zones = uniqueZones?.map((z) => ({ name: z, type: 'zone' }) as ZoneOrSiteOption);
+    const sites = uniqueSites?.map((s) => ({ name: s, type: 'site' }) as ZoneOrSiteOption);
     return [...zones, ...sites];
   }, [uniqueZones, uniqueSites]);
 
@@ -247,6 +249,51 @@ const ProjectProfileGisMaps = () => {
     setSelectedLayer(layer as MapLayer);
   }, []);
 
+  const lastUpdatedDate = useMemo(() => {
+    const allDates = plantingSitesData?.features?.map((f) => f.properties?.created_at);
+    const validDates = allDates?.filter((date) => date)?.map((date) => new Date(date).getTime());
+    const lastUpdated = validDates?.length ? new Date(Math.max(...validDates)) : null;
+    return lastUpdated;
+  }, [plantingSitesData]);
+
+  const contextRenderer = useCallback(
+    (properties: MapSourceProperties): JSX.Element | null => {
+      const tooltipProperties: TooltipProperty[] = [{ key: strings.TYPE, value: properties.type }];
+
+      if (properties.type === 'subzone') {
+        const selectedSubZone = filteredSiteData?.subzone?.entities?.find((ent) => ent.id === properties.id);
+        tooltipProperties.push({
+          key: strings.ZONE,
+          value: filteredSiteData?.subzone?.entities?.[0].properties.zoneId,
+        });
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: selectedSubZone?.totalArea?.toString() || '',
+        });
+      }
+
+      if (properties.type === 'zone') {
+        const selectedZone = filteredSiteData?.zone?.entities?.find((ent) => ent.id === properties.id);
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: selectedZone?.totalArea?.toString() || '',
+        });
+      }
+
+      if (properties.type === 'site') {
+        tooltipProperties.push({
+          key: strings.AREA_HA,
+          value: filteredSiteData?.site?.entities?.[0].totalArea?.toString() || '',
+        });
+      }
+
+      return (
+        <MapTooltip title={properties.name} subtitleColor={theme.palette.TwClrTxt} properties={tooltipProperties} />
+      );
+    },
+    [filteredSiteData, theme.palette]
+  );
+
   return (
     <Page
       title={projectViewTitle}
@@ -274,6 +321,11 @@ const ProjectProfileGisMaps = () => {
             <Typography fontSize={'16px'} fontWeight={400} paddingRight={1}>
               {strings.FROM_GIS_DATABASE}
             </Typography>
+            {lastUpdatedDate && (
+              <Typography fontSize={'16px'} fontWeight={400} paddingRight={1}>
+                {strings.LAST_UPDATED} {getDateDisplayValue(lastUpdatedDate)}
+              </Typography>
+            )}
             {selectedArea && (
               <Typography fontSize={'20px'} fontWeight={600}>
                 {strings.formatString(strings.X_HA, selectedArea)}
@@ -292,6 +344,18 @@ const ProjectProfileGisMaps = () => {
               mapData={filteredSiteData}
               style={{ width: '100%', borderRadius: '24px' }}
               layers={[selectedLayer || 'Planting Site']}
+              contextRenderer={{
+                render: contextRenderer,
+                sx: {
+                  '.mapboxgl-popup': {
+                    maxWidth: '324px !important', // !important to override a default mapbox style
+                  },
+                  '.mapboxgl-popup .mapboxgl-popup-content': {
+                    padding: '0px !important',
+                  },
+                },
+              }}
+              showSiteMarker
             />
           )}
           {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (

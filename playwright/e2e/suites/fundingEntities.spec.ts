@@ -9,8 +9,6 @@ test.beforeEach(async ({ context }, testInfo) => {
   await addCookies(context);
 });
 
-// TODO once this feature is live, delete the `user_preferences` row for `enableFundingEntities` in dump.sql
-
 type Funder = {
   name: string;
   email: string;
