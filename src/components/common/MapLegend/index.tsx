@@ -7,6 +7,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { AntSwitch } from 'src/components/Switch/AntSwitch';
 import strings from 'src/strings';
 
+import { MapLayer } from '../MapLayerSelect';
+
 type MapLegendItem = {
   borderColor: string;
   fillColor: string;
@@ -115,6 +117,13 @@ export default function MapLegend({ legends, setLegends, onChangeLayer, selected
 
 type LabeledSwatchProps = MapLegendItem & { onChangeLayer?: (layer: string) => void; selectedLayer?: string };
 
+const getLayerFromLabel = (label: string): MapLayer => {
+  if (label === 'Subzones') {
+    return 'Sub-Zones';
+  }
+  return label as MapLayer;
+};
+
 function LabeledSwatch({
   borderColor,
   fillColor,
@@ -145,10 +154,11 @@ function LabeledSwatch({
       alignItems='center'
       sx={{
         cursor: onChangeLayer ? 'pointer' : 'default',
-        background: selectedLayer && selectedLayer === label ? theme.palette.TwClrBgSecondary : 'none',
-        borderRadius: selectedLayer && selectedLayer === label ? '4px' : 'none',
+        background:
+          selectedLayer && selectedLayer === getLayerFromLabel(label) ? theme.palette.TwClrBgSecondary : 'none',
+        borderRadius: selectedLayer && selectedLayer === getLayerFromLabel(label) ? '4px' : 'none',
         padding: selectedLayer ? '4px 8px' : 0,
-        opacity: selectedLayer && selectedLayer !== label ? '0.5' : 1,
+        opacity: selectedLayer && selectedLayer !== getLayerFromLabel(label) ? '0.5' : 1,
       }}
       justifyContent={'space-between'}
     >
@@ -173,7 +183,7 @@ function LabeledSwatch({
         <Box
           display='flex'
           sx={{
-            visibility: selectedLayer && selectedLayer === label ? 'visible' : 'hidden',
+            visibility: selectedLayer && selectedLayer === getLayerFromLabel(label) ? 'visible' : 'hidden',
           }}
         >
           <Icon name='checkmark' />

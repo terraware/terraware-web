@@ -53,6 +53,7 @@ export type PlantingSiteMapProps = {
   showRecencyFill?: boolean;
   zoneInteractive?: boolean;
   subzoneInteractive?: boolean;
+  showSiteMarker?: boolean;
 } & MapControl;
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
@@ -67,6 +68,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     showRecencyFill,
     zoneInteractive,
     subzoneInteractive,
+    showSiteMarker,
   } = props;
   const { ...controlProps }: MapControl = props;
   const theme = useTheme();
@@ -263,6 +265,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         style={style}
         entityOptions={entityOptions}
         mapImages={mapImages}
+        showSiteMarker={showSiteMarker}
         {...controlProps}
       />
     </Box>
