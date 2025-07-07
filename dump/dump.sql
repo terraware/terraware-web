@@ -1367,7 +1367,8 @@ CREATE TABLE accelerator.project_metrics (
     name text NOT NULL,
     description text,
     reference text NOT NULL COLLATE public.natural_numeric,
-    is_publishable boolean NOT NULL
+    is_publishable boolean NOT NULL,
+    unit text
 );
 
 
@@ -9531,7 +9532,7 @@ COPY accelerator.project_accelerator_details (project_id, pipeline_id, deal_stag
 -- Data for Name: project_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
-COPY accelerator.project_metrics (id, project_id, type_id, component_id, name, description, reference, is_publishable) FROM stdin;
+COPY accelerator.project_metrics (id, project_id, type_id, component_id, name, description, reference, is_publishable, unit) FROM stdin;
 \.
 
 
@@ -11693,6 +11694,7 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 405	385	ProjectCqlFilters	SQL	0350/V385__ProjectCqlFilters.sql	-1485047630	postgres	2025-06-16 21:42:33.138523	1	t
 406	386	ProjectOrganizationCascade	SQL	0350/V386__ProjectOrganizationCascade.sql	386241640	postgres	2025-06-16 21:42:33.146253	3	t
 407	\N	Comments	SQL	R__Comments.sql	-932965786	postgres	2025-06-16 21:42:33.15374	72	t
+408	387	ProjectMetricsUnit	SQL	0350/V387__ProjectMetricsUnit.sql	-1277078266	postgres	2025-07-07 17:17:35.419821	7	t
 \.
 
 
@@ -13074,7 +13076,7 @@ COPY public.user_global_roles (user_id, global_role_id) FROM stdin;
 COPY public.user_preferences (user_id, organization_id, preferences) FROM stdin;
 4	\N	{"preferredWeightSystem": "metric"}
 1	1	{"plants.dashboard.lastVisitedPlantingSite": {"plantingSiteId": 1}, "plants.observations.lastVisitedPlantingSite": {"plantingSiteId": -1}}
-1	\N	{"lastVisitedOrg": 1, "enableFundingEntities": true, "preferredWeightSystem": "metric", "enable2025ProjectProfile": true, "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
+1	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric", "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
 \.
 
 
@@ -18766,7 +18768,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 36, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 38, true);
 
 
 --
@@ -18815,7 +18817,7 @@ SELECT pg_catalog.setval('public.uploads_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 4, true);
+SELECT pg_catalog.setval('public.users_id_seq', 5, true);
 
 
 --
