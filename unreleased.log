@@ -1,3 +1,5 @@
+94fdd4c4879 Remove old user prefs from dump.sql (#4242)
+7b010a78e8a Updated translations from Phrase (#4243)
 61cc06468e3 SW-7105 Funder Portal - Multiple Projects View (#4235)
 0dd04cd7547 Fix prefer-arrow-functions lint errors (#4237)
 92146eae3a0 Fix eqeqeq lint errors (#4238)
