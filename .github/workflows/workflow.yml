@@ -124,10 +124,10 @@ jobs:
 
       - name: Start GitHub Deployment for Vercel Deploy
         uses: bobheadxi/deployments@v1
-        id: deployment
+        id: vercel_deployment
         with:
           desc: Deploying to Vercel
-          env: staging
+          env: Preview (Staging)
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
 
