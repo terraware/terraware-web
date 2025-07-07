@@ -121,9 +121,8 @@ jobs:
       - name: Pull Vercel project settings for "preview" environment
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
-      # - name: Build for Vercel
-      #   if: github.event_name == 'pull_request'
-      #   run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build for Vercel
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Vercel (prebuilt)
         id: vercel_deploy
