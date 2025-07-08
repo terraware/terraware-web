@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/131</span>
+                <span class='fraction'>0/133</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/108</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/120</span>
+                <span class='fraction'>0/123</span>
             </div>
         
             
@@ -437,7 +437,24 @@
 <a name='L372'></a><a href='#L372'>372</a>
 <a name='L373'></a><a href='#L373'>373</a>
 <a name='L374'></a><a href='#L374'>374</a>
-<a name='L375'></a><a href='#L375'>375</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -619,6 +636,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -649,9 +669,23 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -837,7 +871,7 @@ import { MultiPolygon } from 'src/types/Tracking';
 &nbsp;
 import { useParticipantProjectData } from './ParticipantProjectContext';
 &nbsp;
-type ZoneOrSiteOption = { name: string; type: 'zone' | 'site' };
+type ZoneOrSiteOption = { name: string; type: 'zone' | 'site'; showSeparator?: boolean };
 const ProjectProfileGisMaps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const projectData = <span class="cstat-no" title="statement not covered" >useParticipantProjectData();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -992,6 +1026,9 @@ const ProjectProfileGisMaps = <span class="cstat-no" title="statement not covere
   const zonesAndSites = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const zones = <span class="cstat-no" title="statement not covered" >uniqueZones?.map(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >({ name: z, type: 'zone' }) as ZoneOrSiteOption)</span>;</span>
     const sites = <span class="cstat-no" title="statement not covered" >uniqueSites?.map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >({ name: s, type: 'site' }) as ZoneOrSiteOption)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    if (zones.length &gt; 0 &amp;&amp; sites[0]) {</span>
+<span class="cstat-no" title="statement not covered" >      sites[0].showSeparator = true;</span>
+    }
 <span class="cstat-no" title="statement not covered" >    return [...zones, ...sites];</span>
   }, [uniqueZones, uniqueSites]);
 &nbsp;
@@ -1025,7 +1062,21 @@ const ProjectProfileGisMaps = <span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" >      zoneOrSiteA.name === zoneOrSiteB.name &amp;&amp; zoneOrSiteA.type === zoneOrSiteB.type,</span>
     []
   );
-  const renderOptionHandler = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(i</span>ZoneOrSite: ZoneOrSiteOption) =&gt; <span class="cstat-no" title="statement not covered" >iZoneOrSite?.name,</span> []);</span>
+&nbsp;
+  const renderOptionHandler = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(i</span>ZoneOrSite: ZoneOrSiteOption) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Typography
+        component='div'
+        sx={{
+          borderTop: iZoneOrSite.showSeparator ? '1px solid' : 'none',
+          padding: '8px 16px',
+        }}
+      &gt;
+        {iZoneOrSite.name}
+      &lt;/Typography&gt;
+    );
+  }, []);
+&nbsp;
   const toTHandler = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (i</span>nput: string) =&gt;
 <span class="cstat-no" title="statement not covered" >      ({</span>
@@ -1042,7 +1093,7 @@ const ProjectProfileGisMaps = <span class="cstat-no" title="statement not covere
       options={zonesAndSites}
       placeholder={''}
       selectedValue={zoneOrSite}
-      selectStyles={{ optionsContainer: { textAlign: 'left' } }}
+      selectStyles={{ optionsContainer: { textAlign: 'left' }, optionContainer: { padding: 0 } }}
       displayLabel={labelHandler}
       isEqual={isEqualHandler}
       renderOption={renderOptionHandler}
@@ -1192,7 +1243,7 @@ export default ProjectProfileGisMaps;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-08T03:05:46.822Z
+                at 2025-07-08T15:32:52.651Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
