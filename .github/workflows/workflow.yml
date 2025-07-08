@@ -122,15 +122,12 @@ jobs:
       - name: Pull Vercel project settings for "preview" environment
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Start GitHub Deployment for Vercel Deploy
-        uses: bobheadxi/deployments@v1
+      - name: Create GitHub deployment for Vercel Deploy
+        uses: chrnorm/deployment-action@v2
         id: vercel_deployment
         with:
-          desc: Deploying to Vercel
-          env: Preview (Staging)
-          step: start
-          task: vercel_deploy_preview
-          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: Preview (Staging)
+          token: '${{ github.token }}'
 
       - name: Build for Vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
@@ -160,6 +157,24 @@ jobs:
           status: ${{ job.status }}
           step: finish
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
+          environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
+          state: 'success'
+          token: ${{ github.GITHUB_TOKEN }}
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
+          environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
+          state: 'failure'
+          token: ${{ github.GITHUB_TOKEN }}
 
       # - name: Set commit status with preview URL
       #   if: github.event_name == 'pull_request'
