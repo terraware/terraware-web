@@ -62,7 +62,8 @@ const OrgProjectsSectionEdit = ({
 
   const orgOptions = useMemo(() => {
     const orgs = [...availableOrgs];
-    if (section.org) {
+    const orgIds = orgs.map((org) => org.id);
+    if (section.org && !orgIds.includes(section.org.id)) {
       orgs.push(section.org);
     }
     return orgs
@@ -96,7 +97,7 @@ const OrgProjectsSectionEdit = ({
           required
           errorText={validateFields && (!section.org?.id || section.org.id === -1) ? strings.REQUIRED_FIELD : ''}
           disabled={!section.isNew}
-          autocomplete={!section.isNew}
+          autocomplete={section.isNew}
         />
       </Grid>
       <Grid item xs={6}>

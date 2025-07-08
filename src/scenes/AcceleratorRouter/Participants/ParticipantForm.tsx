@@ -256,21 +256,12 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
 
   // orgs available for selection in the dropdowns, excludes selected orgs with no other projects
   const availableOrgs = useMemo(() => {
-    const selectedProjectsByOrg = new Map<number, Set<number>>();
-    orgProjectsSections.forEach((section) => {
-      if (!section.org?.id) {
-        return;
-      }
-      if (!selectedProjectsByOrg.has(section.org.id)) {
-        selectedProjectsByOrg.set(section.org.id, new Set());
-      }
-      selectedProjectsByOrg.get(section.org.id)!.add(section.projectId);
-    });
+    return (acceleratorOrgs || []).filter((org) => {
+      const selectedProjectIds = orgProjectsSections
+        .filter((section) => section.org?.id === org.id)
+        .map((section) => section.projectId);
 
-    return (acceleratorOrgs || []).filter((availableOrg) => {
-      const selectedProjects = selectedProjectsByOrg.get(availableOrg.id) || new Set();
-
-      return availableOrg.projects.some((project) => !selectedProjects.has(project.id));
+      return org.projects.some((project) => !selectedProjectIds.includes(project.id));
     });
   }, [acceleratorOrgs, orgProjectsSections]);
 
