@@ -88,6 +88,7 @@ export enum APP_PATHS {
   ERROR_FAILED_TO_FETCH_ORG_DATA = '/error/cannot-fetch-org-data',
   FUNDER = '/funder',
   FUNDER_HOME = '/funder/home',
+  FUNDER_INVITE = '/funder/invite/:fundingEntityId',
   HELP_SUPPORT = '/help-support',
   HELP_SUPPORT_FORM = '/help-support/:requestType',
   HOME = '/home',
