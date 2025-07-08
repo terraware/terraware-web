@@ -75,6 +75,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
                 const _project = setFn({ projectId: -1 });
                 selectProject(index, _project.projectId);
               }}
+              autoComplete
             />
           </Grid>
           <Grid item xs={1} display={'flex'} flexDirection={'column-reverse'}>
