@@ -122,30 +122,13 @@ jobs:
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Create GitHub deployment for Vercel Deploy
-        uses: actions/github-script@v7
+        uses: chrnorm/deployment-action@v2
         id: vercel_deployment
         with:
-          github-token: ${{ github.token }}
-          script: |
-            const deployment = await github.rest.repos.createDeployment({
-              auto_merge: false,
-              environment: 'Vercel - Preview (tree-location-web)',
-              owner: context.repo.owner,
-              ref: context.sha,
-              repo: context.repo.repo,
-              required_contexts: [],
-              task: 'vercel_deploy',
-            });
-
-            await github.rest.repos.createDeploymentStatus({
-              deployment_id: deployment.data.id,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'in_progress',
-            });
-
-            core.setOutput('deployment_id', deployment.data.id);
-            return deployment.data.id;
+          environment: Vercel - Preview (tree-location-web)
+          initial-status: 'in_progress'
+          task: 'vercel_deploy'
+          token: '${{ github.token }}'
 
       - name: Build for Vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
@@ -156,20 +139,23 @@ jobs:
           preview_url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
 
-      - name: Update deployment status
-        if: always()
-        uses: actions/github-script@v7
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
         with:
-          github-token: ${{ github.token }}
-          script: |
-            const state = '${{ job.status }}' === 'success' ? 'success' : 'failure';
-            await github.rest.repos.createDeploymentStatus({
-              deployment_id: '${{ steps.vercel_deployment.outputs.deployment_id }}',
-              environment_url: '${{ steps.vercel_deploy.outputs.preview_url }}',
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: state,
-            });
+          deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
+          environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
+          state: 'success'
+          token: '${{ github.token }}'
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
+          environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
+          state: 'failure'
+          token: '${{ github.token }}'
 
       - name: build
         run: yarn build
