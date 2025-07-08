@@ -131,6 +131,8 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     );
   };
 
+  // todo fix issue where fields are empty?
+
   /**
    * The orgProjectsSection is an array of org/projects sections
    * ordered by the section id. The id is also the index into the array
@@ -153,6 +155,8 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
                 selectedProjects: [],
               }
         );
+        // todo only filter out orgs that have no projects left to select
+        // todo also change to useEffect whenever orgProjectsSections changes
         setAvailableOrgs((acceleratorOrgs || []).filter((o) => !updated.some((data) => data.org?.id === o.id)));
         return updated;
       });
@@ -239,29 +243,35 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     value?: string,
     allDetails?: ParticipantProjectType
   ) => {
-    const sectionToUpdate = orgProjectsSections.find((section) => section.projectId === projectId);
-    let newDetails: ParticipantProjectType = { landUseModelTypes: [], projectId };
+    setOrgProjectsSections((prev) => {
+      const sectionToUpdate = prev.find((section) => section.projectId === projectId);
 
-    if (sectionToUpdate) {
+      if (!sectionToUpdate) {
+        return prev;
+      }
+
+      let newDetails: ParticipantProjectType = { landUseModelTypes: [], projectId };
+
       if (field && value !== undefined) {
-        newDetails = { ...sectionToUpdate?.projectDetails, [field]: value };
+        newDetails = { ...sectionToUpdate.projectDetails, [field]: value };
       } else if (allDetails) {
         newDetails = allDetails;
       }
 
-      setOrgProjectsSections((prev) => {
-        const updated = [...prev].map((section) =>
-          section.projectId === projectId
-            ? {
-                ...section,
-                projectDetails: { ...newDetails, landUseModelTypes: newDetails.landUseModelTypes || [], projectId },
-              }
-            : section
-        );
-
-        return updated;
-      });
-    }
+      return prev.map((section) =>
+        section.projectId === projectId
+          ? {
+              ...section,
+              projectDetails: {
+                ...newDetails,
+                landUseModelTypes: newDetails.landUseModelTypes || [],
+                projectId,
+              },
+              isPopulated: true,
+            }
+          : section
+      );
+    });
   };
 
   return (
