@@ -23,7 +23,11 @@ export const selectObservationPlantingZone = createSelector(
   }
 );
 
-export const searchObservationPlantingZone = createCachedSelector(
+export const searchObservationPlantingZone: (
+  state: RootState,
+  params: ZoneSearchParams,
+  defaultTimeZone: string
+) => ObservationPlantingZoneResults | undefined = createCachedSelector(
   selectObservationPlantingZone,
   (state: RootState, params: ZoneSearchParams, defaultTimeZone: string) => params,
   (plantingZone, params) => searchResultPlots(params.search, params.plotType, plantingZone)

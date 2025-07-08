@@ -247,10 +247,14 @@ COMMENT ON EXTENSION vector IS 'vector data type and ivfflat and hnsw access met
 
 CREATE FUNCTION docprod.reject_delete() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RAISE 'This table does not allow deletes.';
-END;
+    AS $$
+
+BEGIN
+
+    RAISE 'This table does not allow deletes.';
+
+END;
+
 $$;
 
 
@@ -260,15 +264,24 @@ $$;
 
 CREATE FUNCTION docprod.reject_delete_value() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM documents WHERE id = OLD.document_id) THEN
-        RAISE 'This table does not allow deletes.';
-    ELSE
-        -- The entire document is being deleted.
-        RETURN OLD;
-    END IF;
-END;
+    AS $$
+
+BEGIN
+
+    IF EXISTS (SELECT 1 FROM documents WHERE id = OLD.document_id) THEN
+
+        RAISE 'This table does not allow deletes.';
+
+    ELSE
+
+        -- The entire document is being deleted.
+
+        RETURN OLD;
+
+    END IF;
+
+END;
+
 $$;
 
 
@@ -285,14 +298,22 @@ COMMENT ON FUNCTION docprod.reject_delete_value() IS 'Trigger function that reje
 
 CREATE FUNCTION docprod.reject_delete_value_child() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM variable_values WHERE id = OLD.variable_value_id) THEN
-        RAISE 'This table does not allow deletes.';
-    ELSE
-        RETURN OLD;
-    END IF;
-END;
+    AS $$
+
+BEGIN
+
+    IF EXISTS (SELECT 1 FROM variable_values WHERE id = OLD.variable_value_id) THEN
+
+        RAISE 'This table does not allow deletes.';
+
+    ELSE
+
+        RETURN OLD;
+
+    END IF;
+
+END;
+
 $$;
 
 
@@ -302,10 +323,14 @@ $$;
 
 CREATE FUNCTION docprod.reject_update() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    RAISE 'This table does not allow updates.';
-END;
+    AS $$
+
+BEGIN
+
+    RAISE 'This table does not allow updates.';
+
+END;
+
 $$;
 
 
@@ -315,19 +340,32 @@ $$;
 
 CREATE FUNCTION docprod.reject_update_value() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF (OLD.created_by != -1 AND NEW.created_by = -1
-        AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.created_by))
-        OR (OLD.verified_by != -1 AND NEW.verified_by = -1
-            AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.verified_by))
-    THEN
-        RAISE 'This table does not allow updates.';
-    ELSE
-        -- This is an update triggered by a user being deleted.
-        RETURN NEW;
-    END IF;
-END;
+    AS $$
+
+BEGIN
+
+    IF (OLD.created_by != -1 AND NEW.created_by = -1
+
+        AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.created_by))
+
+        OR (OLD.verified_by != -1 AND NEW.verified_by = -1
+
+            AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.verified_by))
+
+    THEN
+
+        RAISE 'This table does not allow updates.';
+
+    ELSE
+
+        -- This is an update triggered by a user being deleted.
+
+        RETURN NEW;
+
+    END IF;
+
+END;
+
 $$;
 
 
@@ -337,22 +375,38 @@ $$;
 
 CREATE FUNCTION public.column_exists(ptable text, pcolumn text) RETURNS boolean
     LANGUAGE sql STABLE STRICT
-    AS $$
-
-    -- does the requested table.column exist in schema?
-
-SELECT EXISTS
-
-           (SELECT NULL
-
-            FROM information_schema.columns
-
-            WHERE table_name = ptable
-
-              AND column_name = pcolumn
-
-           );
-
+    AS $$
+
+
+
+    -- does the requested table.column exist in schema?
+
+
+
+SELECT EXISTS
+
+
+
+           (SELECT NULL
+
+
+
+            FROM information_schema.columns
+
+
+
+            WHERE table_name = ptable
+
+
+
+              AND column_name = pcolumn
+
+
+
+           );
+
+
+
 $$;
 
 
@@ -362,22 +416,38 @@ $$;
 
 CREATE FUNCTION public.rename_column_if_exists(ptable text, pcolumn text, new_name text) RETURNS void
     LANGUAGE plpgsql
-    AS $$
-
-BEGIN
-
-    -- Rename the column if it exists.
-
-    IF column_exists(ptable, pcolumn) THEN
-
-        EXECUTE FORMAT('ALTER TABLE %I RENAME COLUMN %I TO %I;',
-
-                       ptable, pcolumn, new_name);
-
-    END IF;
-
-END
-
+    AS $$
+
+
+
+BEGIN
+
+
+
+    -- Rename the column if it exists.
+
+
+
+    IF column_exists(ptable, pcolumn) THEN
+
+
+
+        EXECUTE FORMAT('ALTER TABLE %I RENAME COLUMN %I TO %I;',
+
+
+
+                       ptable, pcolumn, new_name);
+
+
+
+    END IF;
+
+
+
+END
+
+
+
 $$;
 
 
@@ -1171,7 +1241,9 @@ CREATE TABLE accelerator.project_accelerator_details (
     total_carbon numeric,
     hubspot_url text,
     deal_name text,
-    logframe_url text
+    logframe_url text,
+    planting_sites_cql text,
+    project_boundaries_cql text
 );
 
 
@@ -1295,7 +1367,8 @@ CREATE TABLE accelerator.project_metrics (
     name text NOT NULL,
     description text,
     reference text NOT NULL COLLATE public.natural_numeric,
-    is_publishable boolean NOT NULL
+    is_publishable boolean NOT NULL,
+    unit text
 );
 
 
@@ -2873,6 +2946,93 @@ CREATE TABLE funder.funding_entity_users (
 --
 
 COMMENT ON TABLE funder.funding_entity_users IS 'Funding Entity membership.';
+
+
+--
+-- Name: published_project_carbon_certs; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_project_carbon_certs (
+    project_id bigint NOT NULL,
+    carbon_certification text NOT NULL
+);
+
+
+--
+-- Name: TABLE published_project_carbon_certs; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_project_carbon_certs IS 'Carbon Certifications for published projects.';
+
+
+--
+-- Name: published_project_details; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_project_details (
+    project_id bigint NOT NULL,
+    accumulation_rate numeric,
+    annual_carbon numeric,
+    country_code text,
+    deal_description text,
+    deal_name text,
+    methodology_number text,
+    min_project_area numeric,
+    num_native_species integer,
+    per_hectare_estimated_budget numeric,
+    project_area numeric,
+    project_highlight_photo_value_id bigint,
+    project_zone_figure_value_id bigint,
+    standard text,
+    tf_reforestable_land numeric,
+    total_expansion_potential numeric,
+    total_vcu numeric,
+    verra_link text,
+    published_by bigint NOT NULL,
+    published_time timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE published_project_details; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_project_details IS 'Published Project Data visible to funders.';
+
+
+--
+-- Name: published_project_land_use; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_project_land_use (
+    project_id bigint NOT NULL,
+    land_use_model_type_id integer NOT NULL,
+    land_use_model_hectares numeric
+);
+
+
+--
+-- Name: TABLE published_project_land_use; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_project_land_use IS 'Land Use Model Types and hectares of each for published projects.';
+
+
+--
+-- Name: published_project_sdg; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_project_sdg (
+    project_id bigint NOT NULL,
+    sdg_number integer NOT NULL
+);
+
+
+--
+-- Name: TABLE published_project_sdg; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_project_sdg IS 'Sustainable Development Goals for published projects.';
 
 
 --
@@ -4769,6 +4929,38 @@ ALTER TABLE public.device_templates ALTER COLUMN id ADD GENERATED BY DEFAULT AS 
 
 
 --
+-- Name: disclaimers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.disclaimers (
+    id bigint NOT NULL,
+    content text NOT NULL,
+    effective_on timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE disclaimers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.disclaimers IS 'Disclaimers content and effective dates.';
+
+
+--
+-- Name: disclaimers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.disclaimers ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.disclaimers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: ecosystem_types; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6483,6 +6675,24 @@ ALTER TABLE public.uploads ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY 
     NO MAXVALUE
     CACHE 1
 );
+
+
+--
+-- Name: user_disclaimers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_disclaimers (
+    disclaimer_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    accepted_on timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE user_disclaimers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.user_disclaimers IS 'Records of user acceptance of disclaimers.';
 
 
 --
@@ -9310,11 +9520,11 @@ COPY accelerator.pipelines (id, name) FROM stdin;
 -- Data for Name: project_accelerator_details; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
-COPY accelerator.project_accelerator_details (project_id, pipeline_id, deal_stage_id, application_reforestable_land, confirmed_reforestable_land, total_expansion_potential, num_native_species, min_carbon_accumulation, max_carbon_accumulation, per_hectare_budget, num_communities, investment_thesis, failure_risk, what_needs_to_be_true, deal_description, project_lead, file_naming, dropbox_folder_path, google_folder_url, carbon_capacity, annual_carbon, total_carbon, hubspot_url, deal_name, logframe_url) FROM stdin;
-1	\N	\N	18647.0	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	COL_Terraformation (staging)	\N	https://drive.google.com/drive/folders/1	\N	\N	\N	\N	COL_Terraformation (staging)	\N
-4	\N	\N	\N	30000	6000	30	1000	2000	16	\N	\N	\N	\N	This is the phase 2 project overview.	\N	FileName2	Dropbox2	https://drive.google.com/drive/folders/4	\N	\N	\N	https://example.com/hubspot2	Phase 2 Project Deal	\N
-2	\N	\N	\N	1000	1000	25	100	200	3500	\N	\N	\N	\N	This is the phase 0 project overview.	\N	FileName	DropboxUrl	https://drive.google.com/drive/folders/2	\N	\N	\N	https://example.com/HubSpot	Phase 0 Project Deal	\N
-3	\N	\N	\N	2000	1200	35	110	220	12345	\N	\N	\N	\N	This is the phase 1 project overview.	\N	FileName1	Dropbox1	https://drive.google.com/drive/folders/3	\N	\N	\N	https://example.com/HubSpot1	Phase 1 Project Deal	\N
+COPY accelerator.project_accelerator_details (project_id, pipeline_id, deal_stage_id, application_reforestable_land, confirmed_reforestable_land, total_expansion_potential, num_native_species, min_carbon_accumulation, max_carbon_accumulation, per_hectare_budget, num_communities, investment_thesis, failure_risk, what_needs_to_be_true, deal_description, project_lead, file_naming, dropbox_folder_path, google_folder_url, carbon_capacity, annual_carbon, total_carbon, hubspot_url, deal_name, logframe_url, planting_sites_cql, project_boundaries_cql) FROM stdin;
+1	\N	\N	18647.0	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	COL_Terraformation (staging)	\N	https://drive.google.com/drive/folders/1	\N	\N	\N	\N	COL_Terraformation (staging)	\N	\N	\N
+4	\N	\N	\N	30000	6000	30	1000	2000	16	\N	\N	\N	\N	This is the phase 2 project overview.	\N	FileName2	Dropbox2	https://drive.google.com/drive/folders/4	\N	\N	\N	https://example.com/hubspot2	Phase 2 Project Deal	\N	\N	\N
+2	\N	\N	\N	1000	1000	25	100	200	3500	\N	\N	\N	\N	This is the phase 0 project overview.	\N	FileName	DropboxUrl	https://drive.google.com/drive/folders/2	\N	\N	\N	https://example.com/HubSpot	Phase 0 Project Deal	\N	\N	\N
+3	\N	\N	\N	2000	1200	35	110	220	12345	\N	\N	\N	\N	This is the phase 1 project overview.	\N	FileName1	Dropbox1	https://drive.google.com/drive/folders/3	\N	\N	\N	https://example.com/HubSpot1	Phase 1 Project Deal	\N	\N	\N
 \.
 
 
@@ -9322,7 +9532,7 @@ COPY accelerator.project_accelerator_details (project_id, pipeline_id, deal_stag
 -- Data for Name: project_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
-COPY accelerator.project_metrics (id, project_id, type_id, component_id, name, description, reference, is_publishable) FROM stdin;
+COPY accelerator.project_metrics (id, project_id, type_id, component_id, name, description, reference, is_publishable, unit) FROM stdin;
 \.
 
 
@@ -10375,6 +10585,38 @@ COPY funder.funding_entity_users (user_id, funding_entity_id) FROM stdin;
 
 
 --
+-- Data for Name: published_project_carbon_certs; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_project_carbon_certs (project_id, carbon_certification) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_project_details; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_project_details (project_id, accumulation_rate, annual_carbon, country_code, deal_description, deal_name, methodology_number, min_project_area, num_native_species, per_hectare_estimated_budget, project_area, project_highlight_photo_value_id, project_zone_figure_value_id, standard, tf_reforestable_land, total_expansion_potential, total_vcu, verra_link, published_by, published_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_project_land_use; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_project_land_use (project_id, land_use_model_type_id, land_use_model_hectares) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_project_sdg; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_project_sdg (project_id, sdg_number) FROM stdin;
+\.
+
+
+--
 -- Data for Name: published_report_achievements; Type: TABLE DATA; Schema: funder; Owner: -
 --
 
@@ -10961,6 +11203,14 @@ COPY public.devices (id, facility_id, name, device_type, make, model, protocol, 
 
 
 --
+-- Data for Name: disclaimers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.disclaimers (id, content, effective_on) FROM stdin;
+\.
+
+
+--
 -- Data for Name: ecosystem_types; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -10987,10 +11237,10 @@ COPY public.ecosystem_types (id, name) FROM stdin;
 --
 
 COPY public.facilities (id, type_id, name, created_time, modified_time, created_by, modified_by, max_idle_minutes, last_timeseries_time, idle_after_time, idle_since_time, description, connection_state_id, organization_id, time_zone, last_notification_date, next_notification_time, build_started_date, build_completed_date, operation_started_date, capacity, facility_number) FROM stdin;
-100	1	Seed Bank	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-29	2025-05-30 00:01:00+00	\N	\N	\N	\N	1
-101	1	garage	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-29	2025-05-30 00:01:00+00	\N	\N	\N	\N	2
-102	1	Test facility	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-29	2025-05-30 00:01:00+00	\N	\N	\N	\N	3
-103	4	Nursery	2024-03-05 04:06:31.354789+00	2024-03-05 04:06:31.354802+00	1	1	30	\N	\N	\N	My First Nursery!	1	1	\N	2025-05-29	2025-05-30 00:01:00+00	\N	\N	\N	\N	1
+100	1	Seed Bank	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-06-16	2025-06-17 00:01:00+00	\N	\N	\N	\N	1
+101	1	garage	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-06-16	2025-06-17 00:01:00+00	\N	\N	\N	\N	2
+102	1	Test facility	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-06-16	2025-06-17 00:01:00+00	\N	\N	\N	\N	3
+103	4	Nursery	2024-03-05 04:06:31.354789+00	2024-03-05 04:06:31.354802+00	1	1	30	\N	\N	\N	My First Nursery!	1	1	\N	2025-06-16	2025-06-17 00:01:00+00	\N	\N	\N	\N	1
 \.
 
 
@@ -11439,6 +11689,12 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 400	380	MonitoringPlotsSubzoneIndex	SQL	0350/V380__MonitoringPlotsSubzoneIndex.sql	-1378642699	postgres	2025-05-21 20:40:26.381455	23	t
 401	381	FixDeletedObservedSpecies	SQL	0350/V381__FixDeletedObservedSpecies.sql	-2039396647	postgres	2025-05-29 18:35:15.26896	109	t
 402	382	RecordedTreesGps	SQL	0350/V382__RecordedTreesGps.sql	-1635447954	postgres	2025-06-04 16:46:58.261218	20	t
+403	383	PublishedProjectDetails	SQL	0350/V383__PublishedProjectDetails.sql	-1323845828	postgres	2025-06-16 21:42:33.091287	19	t
+404	384	FunderDisclaimer	SQL	0350/V384__FunderDisclaimer.sql	17669378	postgres	2025-06-16 21:42:33.125254	7	t
+405	385	ProjectCqlFilters	SQL	0350/V385__ProjectCqlFilters.sql	-1485047630	postgres	2025-06-16 21:42:33.138523	1	t
+406	386	ProjectOrganizationCascade	SQL	0350/V386__ProjectOrganizationCascade.sql	386241640	postgres	2025-06-16 21:42:33.146253	3	t
+407	\N	Comments	SQL	R__Comments.sql	-932965786	postgres	2025-06-16 21:42:33.15374	72	t
+408	387	ProjectMetricsUnit	SQL	0350/V387__ProjectMetricsUnit.sql	-1277078266	postgres	2025-07-07 17:17:35.419821	7	t
 \.
 
 
@@ -11523,7 +11779,7 @@ COPY public.growth_forms (id, name) FROM stdin;
 
 COPY public.identifier_sequences (organization_id, prefix, next_value) FROM stdin;
 1	25-2-	1
-1	PlotNumber	33
+1	PlotNumber	51
 \.
 
 
@@ -11544,8 +11800,6 @@ COPY public.internal_tags (id, name, description, is_system, created_by, created
 --
 
 COPY public.jobrunr_backgroundjobservers (id, workerpoolsize, pollintervalinseconds, firstheartbeat, lastheartbeat, running, systemtotalmemory, systemfreememory, systemcpuload, processmaxmemory, processfreememory, processallocatedmemory, processcpuload, deletesucceededjobsafter, permanentlydeletejobsafter, name) FROM stdin;
-8e52595f-dc20-4aa7-afdd-96db81ccda40	128	15	2025-05-29 20:33:26.763616	2025-05-29 20:34:41.808486	1	8346034176	4019257344	0.06	2086666240	1892569152	194097088	0.06	PT36H	PT72H	e23d61ab2712
-aea97e17-e3e5-4fc8-9d5d-30eb9b30d84b	224	15	2025-06-04 16:47:01.431721	2025-06-04 16:47:31.474706	1	8217473024	1904484352	0.00	2055208960	1825396760	229812200	0.00	PT36H	PT72H	509b46419916
 \.
 
 
@@ -11554,55 +11808,51 @@ aea97e17-e3e5-4fc8-9d5d-30eb9b30d84b	224	15	2025-06-04 16:47:01.431721	2025-06-0
 --
 
 COPY public.jobrunr_jobs (id, version, jobasjson, jobsignature, state, createdat, updatedat, scheduledat, recurringjobid) FROM stdin;
-01971d5d-8c99-713d-931d-eaeb3d7df751	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5d-8c99-713d-931d-eaeb3d7df751","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:45:59.577946800Z","scheduledAt":"2025-05-29T18:46:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:45:59.587344300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:46:14.399447900Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:46:14.399447900Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:46:14.406034200Z","latencyDuration":14.812103600,"processDuration":0.006580400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:45:59.577947	2025-05-29 18:46:14.406034	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d56-32bb-7938-bdc0-6ae844cc9658	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d56-32bb-7938-bdc0-6ae844cc9658","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.819177600Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831286300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725827700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725827700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.737117400Z","latencyDuration":14.894541400,"processDuration":0.011281200}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:37:57.819178	2025-05-29 18:38:12.737117	\N	FacilityService.scanForIdleFacilities
-01971d56-32bd-7d55-bbcf-105f4c22db57	4	{"version":4,"jobSignature":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","jobName":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","labels":[],"jobDetails":{"className":"com.terraformation.backend.device.TimeseriesPruner","methodName":"pruneTimeseriesValues","jobParameters":[],"cacheable":true},"id":"01971d56-32bd-7d55-bbcf-105f4c22db57","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.821407400Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"pruneTimeseriesValues","reason":"Scheduled by recurring job 'com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831295400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725844400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725844400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.748840200Z","latencyDuration":14.894549000,"processDuration":0.022989000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"pruneTimeseriesValues"}	com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()	SUCCEEDED	2025-05-29 18:37:57.821407	2025-05-29 18:38:12.74884	\N	pruneTimeseriesValues
-01971d57-1d87-75b9-9b06-6e27df7aa007	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d57-1d87-75b9-9b06-6e27df7aa007","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:38:57.927895500Z","scheduledAt":"2025-05-29T18:39:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:38:57.942680200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:39:12.816211800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:39:12.816211800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:39:12.828502400Z","latencyDuration":14.873531600,"processDuration":0.012277600}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:38:57.927896	2025-05-29 18:39:12.828502	\N	FacilityService.scanForIdleFacilities
-01971d5d-8c9b-7d91-91fe-f0d9d70effd6	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5d-8c9b-7d91-91fe-f0d9d70effd6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:45:59.579556900Z","scheduledAt":"2025-05-29T18:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:45:59.587360900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:46:14.399473700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:46:14.399473700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:46:14.406803200Z","latencyDuration":14.812112800,"processDuration":0.007323300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:45:59.579557	2025-05-29 18:46:14.406803	\N	FacilityService.scanForIdleFacilities
-01971d56-32b9-7477-acf9-5bf11998407e	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d56-32b9-7477-acf9-5bf11998407e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.817591800Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831267600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725727100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725727100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.736477100Z","latencyDuration":14.894459500,"processDuration":0.010735400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:37:57.817592	2025-05-29 18:38:12.736477	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d59-e33a-7403-acb6-e3bab3e22d0f	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d59-e33a-7403-acb6-e3bab3e22d0f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:41:59.609649500Z","scheduledAt":"2025-05-29T18:42:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:41:59.641747900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:42:14.562425700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:42:14.562425700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:42:14.579715900Z","latencyDuration":14.920677800,"processDuration":0.017256200}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:41:59.60965	2025-05-29 18:42:14.579716	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d5a-cd95-75e6-8ffb-70c4823673c8	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5a-cd95-75e6-8ffb-70c4823673c8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:42:59.605350200Z","scheduledAt":"2025-05-29T18:43:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:42:59.613932600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:43:14.507496300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:43:14.507496300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:43:14.519129600Z","latencyDuration":14.893563700,"processDuration":0.011620300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:42:59.60535	2025-05-29 18:43:14.51913	\N	FacilityService.scanForIdleFacilities
-01971d57-1d85-7f8f-b9ec-3c80a8f4b0f3	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d57-1d85-7f8f-b9ec-3c80a8f4b0f3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:38:57.925495800Z","scheduledAt":"2025-05-29T18:39:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:38:57.942662Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:39:12.816191Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:39:12.816191Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:39:12.826768800Z","latencyDuration":14.873529000,"processDuration":0.010565200}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:38:57.925496	2025-05-29 18:39:12.826769	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d5e-76e6-77e0-82d8-e89ec1074686	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5e-76e6-77e0-82d8-e89ec1074686","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:46:59.558694Z","scheduledAt":"2025-05-29T18:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:46:59.581762900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:47:14.428125100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:47:14.428125100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:47:14.437303100Z","latencyDuration":14.846362200,"processDuration":0.009167300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:46:59.558694	2025-05-29 18:47:14.437303	\N	FacilityService.scanForIdleFacilities
-01971d5e-76e4-78f9-a7d2-81708a2badb5	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5e-76e4-78f9-a7d2-81708a2badb5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:46:59.556719800Z","scheduledAt":"2025-05-29T18:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:46:59.581744300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:47:14.428086200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:47:14.428086200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:47:14.436916Z","latencyDuration":14.846341900,"processDuration":0.008811700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:46:59.55672	2025-05-29 18:47:14.436916	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d5f-613d-7934-a763-680169b6f855	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5f-613d-7934-a763-680169b6f855","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:47:59.549079400Z","scheduledAt":"2025-05-29T18:48:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:47:59.563236200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:48:14.381124400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:48:14.381124400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:48:14.397983500Z","latencyDuration":14.817888200,"processDuration":0.016848700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:47:59.549079	2025-05-29 18:48:14.397984	\N	FacilityService.scanForIdleFacilities
-01971d58-f8f4-7785-9a07-b68a32a6a6c2	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d58-f8f4-7785-9a07-b68a32a6a6c2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.636290700Z","scheduledAt":"2025-05-29T18:40:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649932900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606806600Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606806600Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.618378500Z","latencyDuration":14.956873700,"processDuration":0.011559300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:40:59.636291	2025-05-29 18:41:14.618379	\N	FacilityService.scanForIdleFacilities
-01971d58-f8f3-72ae-a503-c3c87ac021eb	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d58-f8f3-72ae-a503-c3c87ac021eb","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.635209100Z","scheduledAt":"2025-05-29T18:40:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649909800Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606772400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606772400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.618749600Z","latencyDuration":14.956862600,"processDuration":0.011970900}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:40:59.635209	2025-05-29 18:41:14.61875	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d58-f8f4-7785-9a07-b68a32a6a6c3	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d58-f8f4-7785-9a07-b68a32a6a6c3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.636394200Z","scheduledAt":"2025-05-29T18:41:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649944700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606820800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606820800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.624983800Z","latencyDuration":14.956876100,"processDuration":0.018150400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:40:59.636394	2025-05-29 18:41:14.624984	\N	FacilityService.scanForIdleFacilities
-01971d59-e33f-7a50-b9a3-88677d6f3e8e	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d59-e33f-7a50-b9a3-88677d6f3e8e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:41:59.615076900Z","scheduledAt":"2025-05-29T18:42:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:41:59.641762300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:42:14.562435500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:42:14.562435500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:42:14.580918700Z","latencyDuration":14.920673200,"processDuration":0.018470000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:41:59.615077	2025-05-29 18:42:14.580919	\N	FacilityService.scanForIdleFacilities
-01971d58-f8f3-72ae-a503-c3c87ac021ec	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d58-f8f3-72ae-a503-c3c87ac021ec","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.635411600Z","scheduledAt":"2025-05-29T18:41:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649924900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606791700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606791700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.621517800Z","latencyDuration":14.956866800,"processDuration":0.014666600}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:40:59.635412	2025-05-29 18:41:14.621518	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d5f-613c-7ea0-8b87-7eb3f9eb0181	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5f-613c-7ea0-8b87-7eb3f9eb0181","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:47:59.548060200Z","scheduledAt":"2025-05-29T18:48:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:47:59.563217900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:48:14.381107700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:48:14.381107700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:48:14.396537800Z","latencyDuration":14.817889800,"processDuration":0.015419300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:47:59.54806	2025-05-29 18:48:14.396538	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d5a-cd92-79ee-9593-93415eab6641	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5a-cd92-79ee-9593-93415eab6641","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:42:59.602061500Z","scheduledAt":"2025-05-29T18:43:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:42:59.613911300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:43:14.507478400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:43:14.507478400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:43:14.521113800Z","latencyDuration":14.893567100,"processDuration":0.013626500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:42:59.602062	2025-05-29 18:43:14.521114	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d5b-b7ce-7a43-8116-f5a05d541ff5	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5b-b7ce-7a43-8116-f5a05d541ff5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:43:59.566407700Z","scheduledAt":"2025-05-29T18:44:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:43:59.579955200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:44:14.471050200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:44:14.471050200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:44:14.478721700Z","latencyDuration":14.891095000,"processDuration":0.007662500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:43:59.566408	2025-05-29 18:44:14.478722	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d60-4b7b-7a32-82d6-2aba9040d139	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d60-4b7b-7a32-82d6-2aba9040d139","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:48:59.515912400Z","scheduledAt":"2025-05-29T18:49:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:48:59.524806500Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:49:14.339722800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:49:14.339722800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:49:14.345307900Z","latencyDuration":14.814916300,"processDuration":0.005578800}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:48:59.515912	2025-05-29 18:49:14.345308	\N	FacilityService.scanForIdleFacilities
-01971d5b-b7d0-74c4-bdbc-0b4ee6eae69f	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5b-b7d0-74c4-bdbc-0b4ee6eae69f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:43:59.568222400Z","scheduledAt":"2025-05-29T18:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:43:59.579967700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:44:14.471065100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:44:14.471065100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:44:14.479794100Z","latencyDuration":14.891097400,"processDuration":0.008720700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:43:59.568222	2025-05-29 18:44:14.479794	\N	FacilityService.scanForIdleFacilities
-01971d5c-a243-7dc5-b1d4-c1004a0fdea2	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"01971d5c-a243-7dc5-b1d4-c1004a0fdea2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.587211600Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614114Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437068500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437068500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.468674300Z","latencyDuration":14.822954500,"processDuration":0.031599500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	SUCCEEDED	2025-05-29 18:44:59.587212	2025-05-29 18:45:14.468674	\N	MonitoringPlotElevationScheduler
-01971d5c-a245-785e-b00f-0b0500aa83e9	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"01971d5c-a245-785e-b00f-0b0500aa83e9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.589349300Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614126600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437086200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437086200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.508400400Z","latencyDuration":14.822959600,"processDuration":0.071305000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2025-05-29 18:44:59.589349	2025-05-29 18:45:14.5084	\N	ObservationScheduler
-01971d60-4b7b-7a32-82d6-2aba9040d138	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d60-4b7b-7a32-82d6-2aba9040d138","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:48:59.515042700Z","scheduledAt":"2025-05-29T18:49:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:48:59.524789400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:49:14.339711300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:49:14.339711300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:49:14.345561900Z","latencyDuration":14.814921900,"processDuration":0.005840800}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:48:59.515043	2025-05-29 18:49:14.345562	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d5c-a23f-74cc-9e99-0304cdb629b6	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5c-a23f-74cc-9e99-0304cdb629b6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.582571Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614091300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437044900Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437044900Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.455515300Z","latencyDuration":14.822953600,"processDuration":0.018438300}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:44:59.582571	2025-05-29 18:45:14.455515	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d5c-a242-769d-974a-b2d1000ef198	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5c-a242-769d-974a-b2d1000ef198","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.586163Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614106900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437061500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437061500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.455515300Z","latencyDuration":14.822954600,"processDuration":0.018421700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:44:59.586163	2025-05-29 18:45:14.455515	\N	FacilityService.scanForIdleFacilities
-01971d61-35c5-74f7-9b1b-3f23bb2a763f	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d61-35c5-74f7-9b1b-3f23bb2a763f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:49:59.493476400Z","scheduledAt":"2025-05-29T18:50:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:49:59.508699700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:50:14.294021Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:50:14.294021Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:50:14.301509800Z","latencyDuration":14.785321300,"processDuration":0.007481000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:49:59.493476	2025-05-29 18:50:14.30151	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d61-35c7-7723-91b3-fdebf29c6def	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d61-35c7-7723-91b3-fdebf29c6def","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:49:59.495088100Z","scheduledAt":"2025-05-29T18:50:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:49:59.508716400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:50:14.294039300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:50:14.294039300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:50:14.303285600Z","latencyDuration":14.785322900,"processDuration":0.009236700}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:49:59.495088	2025-05-29 18:50:14.303286	\N	FacilityService.scanForIdleFacilities
-01971d5c-a246-7b0f-a60e-62af7a5af49d	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"01971d5c-a246-7b0f-a60e-62af7a5af49d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.590397400Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614134100Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437095700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437095700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.524118700Z","latencyDuration":14.822961600,"processDuration":0.087015200}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2025-05-29 18:44:59.590397	2025-05-29 18:45:14.524119	\N	PlantingSeasonScheduler
-01971d5c-a244-72d7-96c8-c1bf7e0e2008	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"01971d5c-a244-72d7-96c8-c1bf7e0e2008","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.588264300Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614121100Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437077400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437077400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.536386500Z","latencyDuration":14.822956300,"processDuration":0.099299400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2025-05-29 18:44:59.588264	2025-05-29 18:45:14.536387	\N	NotificationScanner
-0196f4d0-607a-7aaa-a519-00e2ada2113f	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4d0-607a-7aaa-a519-00e2ada2113f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:46:59.066423211Z","scheduledAt":"2025-05-21T21:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:46:59.079443252Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:36:27.743615Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:36:27.743615Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:36:27.806997700Z","latencyDuration":679768.664171748,"processDuration":0.063370100}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-21 21:46:59.066423	2025-05-29 18:36:27.806998	\N	FacilityService.scanForIdleFacilities
-0196f4cf-75e9-7bfd-afce-4253b1a0c9ef	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cf-75e9-7bfd-afce-4253b1a0c9ef","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:45:59.017581752Z","scheduledAt":"2025-05-21T21:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:45:59.028506169Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:46:13.875276968Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:46:13.875276968Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:46:13.887590093Z","latencyDuration":14.846770799,"processDuration":0.012300166},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879245700Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:45:59.017582	2025-05-29 18:36:27.879246	\N	FacilityService.scanForIdleFacilities
-0196f4d0-6078-7c19-81cd-b4301d65c18d	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4d0-6078-7c19-81cd-b4301d65c18d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:46:59.064684586Z","scheduledAt":"2025-05-21T21:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:46:59.079433252Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:36:27.742732400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:36:27.742732400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:36:27.803251500Z","latencyDuration":679768.663299148,"processDuration":0.060049900}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-21 21:46:59.064685	2025-05-29 18:36:27.803252	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f493-c3d7-7c09-b352-7b4584163078	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f493-c3d7-7c09-b352-7b4584163078","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T20:40:46.807389303Z","scheduledAt":"2025-05-21T20:41:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T20:40:46.825746262Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T20:41:01.792955129Z","serverId":"0fa4b11f-575c-4ad8-b680-81ddc33abca2","serverName":"a0543195eb2a","updatedAt":"2025-05-21T20:41:01.792955129Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T20:41:01.848768171Z","latencyDuration":14.967208867,"processDuration":0.055808792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.878974300Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 20:40:46.807389	2025-05-29 18:36:27.878974	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f493-c3db-79e1-a67f-f420c64855e6	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f493-c3db-79e1-a67f-f420c64855e6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T20:40:46.811735637Z","scheduledAt":"2025-05-21T20:41:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T20:40:46.825766887Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T20:41:01.792974463Z","serverId":"0fa4b11f-575c-4ad8-b680-81ddc33abca2","serverName":"a0543195eb2a","updatedAt":"2025-05-21T20:41:01.792974463Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T20:41:01.849309671Z","latencyDuration":14.967207576,"processDuration":0.056333541},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879025400Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 20:40:46.811736	2025-05-29 18:36:27.879025	\N	FacilityService.scanForIdleFacilities
-0196f4cc-b613-78a3-a8d9-69fc54f2c2f2	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cc-b613-78a3-a8d9-69fc54f2c2f2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:42:58.835815961Z","scheduledAt":"2025-05-21T21:43:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:42:58.884033627Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:43:13.741432634Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:43:13.741432634Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:43:13.774446468Z","latencyDuration":14.857399007,"processDuration":0.032864625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879045700Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:42:58.835816	2025-05-29 18:36:27.879046	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4cc-b615-790d-b46a-219f81eeefe3	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cc-b615-790d-b46a-219f81eeefe3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:42:58.837843086Z","scheduledAt":"2025-05-21T21:43:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:42:58.884739211Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:43:13.741451968Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:43:13.741451968Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:43:13.774590384Z","latencyDuration":14.856712757,"processDuration":0.033136583},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879063900Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:42:58.837843	2025-05-29 18:36:27.879064	\N	FacilityService.scanForIdleFacilities
-0196f4cd-a0c5-7606-918c-96bef2fbe58a	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cd-a0c5-7606-918c-96bef2fbe58a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:43:58.916858794Z","scheduledAt":"2025-05-21T21:44:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:43:58.932653919Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:44:13.786080676Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:44:13.786080676Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:44:13.796639551Z","latencyDuration":14.853426757,"processDuration":0.010556208},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879082100Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:43:58.916859	2025-05-29 18:36:27.879082	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4cd-a0c7-7f68-a96c-f59c2e77d6c9	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4cd-a0c7-7f68-a96c-f59c2e77d6c9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:43:58.919230086Z","scheduledAt":"2025-05-21T21:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:43:58.932669294Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:44:13.786089593Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:44:13.786089593Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:44:13.796868926Z","latencyDuration":14.853420299,"processDuration":0.010777375},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879100Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:43:58.91923	2025-05-29 18:36:27.8791	\N	FacilityService.scanForIdleFacilities
-0196f4ce-8b52-7ce1-8f77-f47d7e937242	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b52-7ce1-8f77-f47d7e937242","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.962063377Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982034794Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825233301Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825233301Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.839842759Z","latencyDuration":14.843198507,"processDuration":0.014606792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879117900Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:44:58.962063	2025-05-29 18:36:27.879118	\N	RateLimitedEventPublisher.scanPendingEvents
-0196f4ce-8b54-70d4-8242-66c0d07f79d4	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b54-70d4-8242-66c0d07f79d4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.964250627Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982043461Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825258593Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825258593Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.840349884Z","latencyDuration":14.843215132,"processDuration":0.015089333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879135800Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:44:58.964251	2025-05-29 18:36:27.879136	\N	FacilityService.scanForIdleFacilities
-0196f4ce-8b55-7581-bdee-6d36d85dce65	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"0196f4ce-8b55-7581-bdee-6d36d85dce65","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.964997961Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982044711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825262218Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825262218Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.852491384Z","latencyDuration":14.843217507,"processDuration":0.027223458},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879153700Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	DELETED	2025-05-21 21:44:58.964998	2025-05-29 18:36:27.879154	\N	MonitoringPlotElevationScheduler
-0196f4ce-8b56-7862-9c42-d7ac0950f3e2	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b56-7862-9c42-d7ac0950f3e2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.966270669Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982046711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825266384Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825266384Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.880981968Z","latencyDuration":14.843219673,"processDuration":0.055713084},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879171600Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2025-05-21 21:44:58.966271	2025-05-29 18:36:27.879172	\N	ObservationScheduler
-0196f4ce-8b57-77d8-b4de-8bc55d315183	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b57-77d8-b4de-8bc55d315183","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.967038002Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982047669Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825268426Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825268426Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.882963884Z","latencyDuration":14.843220757,"processDuration":0.057694000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879189400Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2025-05-21 21:44:58.967038	2025-05-29 18:36:27.879189	\N	PlantingSeasonScheduler
-0196f4ce-8b55-7581-bdee-6d36d85dce66	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0196f4ce-8b55-7581-bdee-6d36d85dce66","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:44:58.965502002Z","scheduledAt":"2025-05-21T21:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:44:58.982045711Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:45:13.825264384Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:45:13.825264384Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:45:13.890141676Z","latencyDuration":14.843218673,"processDuration":0.064874917},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879209700Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2025-05-21 21:44:58.965502	2025-05-29 18:36:27.87921	\N	NotificationScanner
-0196f4cf-75e7-7706-8c3b-050e821fb253	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4cf-75e7-7706-8c3b-050e821fb253","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:45:59.015353502Z","scheduledAt":"2025-05-21T21:46:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:45:59.028497127Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-21T21:46:13.875245926Z","serverId":"267dc6c0-d4d3-4d76-bcc2-bc8310d7a833","serverName":"6c15c44a6eae","updatedAt":"2025-05-21T21:46:13.875245926Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-21T21:46:13.885532551Z","latencyDuration":14.846748799,"processDuration":0.010268792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-29T18:36:27.879228100Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:45:59.015354	2025-05-29 18:36:27.879228	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d55-486a-7c71-858c-6cc3291cb79c	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d55-486a-7c71-858c-6cc3291cb79c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:36:57.834656900Z","scheduledAt":"2025-05-29T18:37:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:36:57.849889400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:37:12.760492400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:37:12.760492400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:37:12.768693700Z","latencyDuration":14.910603000,"processDuration":0.008194500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-29 18:36:57.834657	2025-05-29 18:37:12.768694	\N	RateLimitedEventPublisher.scanPendingEvents
-01971d55-486d-78b2-a1f5-f75fcafcbfe2	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d55-486d-78b2-a1f5-f75fcafcbfe2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:36:57.837178900Z","scheduledAt":"2025-05-29T18:37:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:36:57.849909700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:37:12.760514200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:37:12.760514200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:37:12.768928200Z","latencyDuration":14.910604500,"processDuration":0.008406400}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-29 18:36:57.837179	2025-05-29 18:37:12.768928	\N	FacilityService.scanForIdleFacilities
+01977ab2-e5cc-7c5d-ba2f-e5728cd6e177	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01977ab2-e5cc-7c5d-ba2f-e5728cd6e177","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:43:54.060132052Z","scheduledAt":"2025-06-16T21:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:43:54.067672760Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:44:08.912850669Z","serverId":"7a909926-e20b-4ebd-88cb-e1bd260acba9","serverName":"c9e60ad4e1c0","updatedAt":"2025-06-16T21:44:08.912850669Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:44:08.945433003Z","latencyDuration":14.845177909,"processDuration":0.032577250}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-06-16 21:43:54.060132	2025-06-16 21:44:08.945433	\N	FacilityService.scanForIdleFacilities
+01977ab2-e5c8-7fde-844f-dd6c547b79c6	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01977ab2-e5c8-7fde-844f-dd6c547b79c6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:43:54.056608302Z","scheduledAt":"2025-06-16T21:44:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:43:54.067660260Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:44:08.912837503Z","serverId":"7a909926-e20b-4ebd-88cb-e1bd260acba9","serverName":"c9e60ad4e1c0","updatedAt":"2025-06-16T21:44:08.912837503Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:44:08.946526544Z","latencyDuration":14.845177243,"processDuration":0.033686666}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-06-16 21:43:54.056608	2025-06-16 21:44:08.946527	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d55-486d-78b2-a1f5-f75fcafcbfe2	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d55-486d-78b2-a1f5-f75fcafcbfe2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:36:57.837178900Z","scheduledAt":"2025-05-29T18:37:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:36:57.849909700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:37:12.760514200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:37:12.760514200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:37:12.768928200Z","latencyDuration":14.910604500,"processDuration":0.008406400},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091018670Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:36:57.837179	2025-06-16 21:43:39.091019	\N	FacilityService.scanForIdleFacilities
+0196f4d0-6078-7c19-81cd-b4301d65c18d	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196f4d0-6078-7c19-81cd-b4301d65c18d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:46:59.064684586Z","scheduledAt":"2025-05-21T21:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:46:59.079433252Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:36:27.742732400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:36:27.742732400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:36:27.803251500Z","latencyDuration":679768.663299148,"processDuration":0.060049900},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.090449753Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-21 21:46:59.064685	2025-06-16 21:43:39.09045	\N	RateLimitedEventPublisher.scanPendingEvents
+0196f4d0-607a-7aaa-a519-00e2ada2113f	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196f4d0-607a-7aaa-a519-00e2ada2113f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-21T21:46:59.066423211Z","scheduledAt":"2025-05-21T21:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-21T21:46:59.079443252Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:36:27.743615Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:36:27.743615Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:36:27.806997700Z","latencyDuration":679768.664171748,"processDuration":0.063370100},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091010086Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-21 21:46:59.066423	2025-06-16 21:43:39.09101	\N	FacilityService.scanForIdleFacilities
+01971d55-486a-7c71-858c-6cc3291cb79c	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d55-486a-7c71-858c-6cc3291cb79c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:36:57.834656900Z","scheduledAt":"2025-05-29T18:37:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:36:57.849889400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:37:12.760492400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:37:12.760492400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:37:12.768693700Z","latencyDuration":14.910603000,"processDuration":0.008194500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091015420Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:36:57.834657	2025-06-16 21:43:39.091015	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d56-32b9-7477-acf9-5bf11998407e	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d56-32b9-7477-acf9-5bf11998407e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.817591800Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831267600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725727100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725727100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.736477100Z","latencyDuration":14.894459500,"processDuration":0.010735400},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091034253Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:37:57.817592	2025-06-16 21:43:39.091034	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d56-32bb-7938-bdc0-6ae844cc9658	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d56-32bb-7938-bdc0-6ae844cc9658","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.819177600Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831286300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725827700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725827700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.737117400Z","latencyDuration":14.894541400,"processDuration":0.011281200},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091037670Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:37:57.819178	2025-06-16 21:43:39.091038	\N	FacilityService.scanForIdleFacilities
+01971d56-32bd-7d55-bbcf-105f4c22db57	5	{"version":5,"jobSignature":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","jobName":"com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()","labels":[],"jobDetails":{"className":"com.terraformation.backend.device.TimeseriesPruner","methodName":"pruneTimeseriesValues","jobParameters":[],"cacheable":true},"id":"01971d56-32bd-7d55-bbcf-105f4c22db57","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:37:57.821407400Z","scheduledAt":"2025-05-29T18:38:00Z","recurringJobId":"pruneTimeseriesValues","reason":"Scheduled by recurring job 'com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:37:57.831295400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:38:12.725844400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:38:12.725844400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:38:12.748840200Z","latencyDuration":14.894549000,"processDuration":0.022989000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091040628Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"pruneTimeseriesValues"}	com.terraformation.backend.device.TimeseriesPruner.pruneTimeseriesValues()	DELETED	2025-05-29 18:37:57.821407	2025-06-16 21:43:39.091041	\N	pruneTimeseriesValues
+01971d57-1d85-7f8f-b9ec-3c80a8f4b0f3	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d57-1d85-7f8f-b9ec-3c80a8f4b0f3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:38:57.925495800Z","scheduledAt":"2025-05-29T18:39:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:38:57.942662Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:39:12.816191Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:39:12.816191Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:39:12.826768800Z","latencyDuration":14.873529000,"processDuration":0.010565200},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091043461Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:38:57.925496	2025-06-16 21:43:39.091043	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d57-1d87-75b9-9b06-6e27df7aa007	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d57-1d87-75b9-9b06-6e27df7aa007","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:38:57.927895500Z","scheduledAt":"2025-05-29T18:39:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:38:57.942680200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:39:12.816211800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:39:12.816211800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:39:12.828502400Z","latencyDuration":14.873531600,"processDuration":0.012277600},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091046461Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:38:57.927896	2025-06-16 21:43:39.091046	\N	FacilityService.scanForIdleFacilities
+01971d58-f8f4-7785-9a07-b68a32a6a6c2	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d58-f8f4-7785-9a07-b68a32a6a6c2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.636290700Z","scheduledAt":"2025-05-29T18:40:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649932900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606806600Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606806600Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.618378500Z","latencyDuration":14.956873700,"processDuration":0.011559300},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091049586Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:40:59.636291	2025-06-16 21:43:39.09105	\N	FacilityService.scanForIdleFacilities
+01971d58-f8f3-72ae-a503-c3c87ac021eb	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d58-f8f3-72ae-a503-c3c87ac021eb","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.635209100Z","scheduledAt":"2025-05-29T18:40:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649909800Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606772400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606772400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.618749600Z","latencyDuration":14.956862600,"processDuration":0.011970900},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091052461Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:40:59.635209	2025-06-16 21:43:39.091052	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d58-f8f3-72ae-a503-c3c87ac021ec	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d58-f8f3-72ae-a503-c3c87ac021ec","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.635411600Z","scheduledAt":"2025-05-29T18:41:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649924900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606791700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606791700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.621517800Z","latencyDuration":14.956866800,"processDuration":0.014666600},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091055378Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:40:59.635412	2025-06-16 21:43:39.091055	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d58-f8f4-7785-9a07-b68a32a6a6c3	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d58-f8f4-7785-9a07-b68a32a6a6c3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:40:59.636394200Z","scheduledAt":"2025-05-29T18:41:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:40:59.649944700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:41:14.606820800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:41:14.606820800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:41:14.624983800Z","latencyDuration":14.956876100,"processDuration":0.018150400},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091058336Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:40:59.636394	2025-06-16 21:43:39.091058	\N	FacilityService.scanForIdleFacilities
+01971d59-e33a-7403-acb6-e3bab3e22d0f	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d59-e33a-7403-acb6-e3bab3e22d0f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:41:59.609649500Z","scheduledAt":"2025-05-29T18:42:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:41:59.641747900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:42:14.562425700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:42:14.562425700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:42:14.579715900Z","latencyDuration":14.920677800,"processDuration":0.017256200},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091069628Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:41:59.60965	2025-06-16 21:43:39.09107	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d59-e33f-7a50-b9a3-88677d6f3e8e	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d59-e33f-7a50-b9a3-88677d6f3e8e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:41:59.615076900Z","scheduledAt":"2025-05-29T18:42:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:41:59.641762300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:42:14.562435500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:42:14.562435500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:42:14.580918700Z","latencyDuration":14.920673200,"processDuration":0.018470000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091075628Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:41:59.615077	2025-06-16 21:43:39.091076	\N	FacilityService.scanForIdleFacilities
+01971d5a-cd95-75e6-8ffb-70c4823673c8	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5a-cd95-75e6-8ffb-70c4823673c8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:42:59.605350200Z","scheduledAt":"2025-05-29T18:43:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:42:59.613932600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:43:14.507496300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:43:14.507496300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:43:14.519129600Z","latencyDuration":14.893563700,"processDuration":0.011620300},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091078586Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:42:59.60535	2025-06-16 21:43:39.091079	\N	FacilityService.scanForIdleFacilities
+01971d5a-cd92-79ee-9593-93415eab6641	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5a-cd92-79ee-9593-93415eab6641","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:42:59.602061500Z","scheduledAt":"2025-05-29T18:43:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:42:59.613911300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:43:14.507478400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:43:14.507478400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:43:14.521113800Z","latencyDuration":14.893567100,"processDuration":0.013626500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091081628Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:42:59.602062	2025-06-16 21:43:39.091082	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5b-b7ce-7a43-8116-f5a05d541ff5	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5b-b7ce-7a43-8116-f5a05d541ff5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:43:59.566407700Z","scheduledAt":"2025-05-29T18:44:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:43:59.579955200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:44:14.471050200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:44:14.471050200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:44:14.478721700Z","latencyDuration":14.891095000,"processDuration":0.007662500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091084461Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:43:59.566408	2025-06-16 21:43:39.091084	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5b-b7d0-74c4-bdbc-0b4ee6eae69f	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5b-b7d0-74c4-bdbc-0b4ee6eae69f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:43:59.568222400Z","scheduledAt":"2025-05-29T18:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:43:59.579967700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:44:14.471065100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:44:14.471065100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:44:14.479794100Z","latencyDuration":14.891097400,"processDuration":0.008720700},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091087336Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:43:59.568222	2025-06-16 21:43:39.091087	\N	FacilityService.scanForIdleFacilities
+01971d5c-a23f-74cc-9e99-0304cdb629b6	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5c-a23f-74cc-9e99-0304cdb629b6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.582571Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614091300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437044900Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437044900Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.455515300Z","latencyDuration":14.822953600,"processDuration":0.018438300},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091090253Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:44:59.582571	2025-06-16 21:43:39.09109	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5c-a242-769d-974a-b2d1000ef198	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5c-a242-769d-974a-b2d1000ef198","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.586163Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614106900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437061500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437061500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.455515300Z","latencyDuration":14.822954600,"processDuration":0.018421700},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091093253Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:44:59.586163	2025-06-16 21:43:39.091093	\N	FacilityService.scanForIdleFacilities
+01971d5c-a243-7dc5-b1d4-c1004a0fdea2	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"01971d5c-a243-7dc5-b1d4-c1004a0fdea2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.587211600Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614114Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437068500Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437068500Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.468674300Z","latencyDuration":14.822954500,"processDuration":0.031599500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091096045Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	DELETED	2025-05-29 18:44:59.587212	2025-06-16 21:43:39.091096	\N	MonitoringPlotElevationScheduler
+01971d5c-a245-785e-b00f-0b0500aa83e9	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"01971d5c-a245-785e-b00f-0b0500aa83e9","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.589349300Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614126600Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437086200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437086200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.508400400Z","latencyDuration":14.822959600,"processDuration":0.071305000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091098920Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2025-05-29 18:44:59.589349	2025-06-16 21:43:39.091099	\N	ObservationScheduler
+01971d5c-a246-7b0f-a60e-62af7a5af49d	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"01971d5c-a246-7b0f-a60e-62af7a5af49d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.590397400Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614134100Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437095700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437095700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.524118700Z","latencyDuration":14.822961600,"processDuration":0.087015200},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091101920Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2025-05-29 18:44:59.590397	2025-06-16 21:43:39.091102	\N	PlantingSeasonScheduler
+01971d5c-a244-72d7-96c8-c1bf7e0e2008	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"01971d5c-a244-72d7-96c8-c1bf7e0e2008","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:44:59.588264300Z","scheduledAt":"2025-05-29T18:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:44:59.614121100Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:45:14.437077400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:45:14.437077400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:45:14.536386500Z","latencyDuration":14.822956300,"processDuration":0.099299400},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091104711Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2025-05-29 18:44:59.588264	2025-06-16 21:43:39.091105	\N	NotificationScanner
+01971d5d-8c99-713d-931d-eaeb3d7df751	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5d-8c99-713d-931d-eaeb3d7df751","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:45:59.577946800Z","scheduledAt":"2025-05-29T18:46:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:45:59.587344300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:46:14.399447900Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:46:14.399447900Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:46:14.406034200Z","latencyDuration":14.812103600,"processDuration":0.006580400},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091110420Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:45:59.577947	2025-06-16 21:43:39.09111	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5d-8c9b-7d91-91fe-f0d9d70effd6	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5d-8c9b-7d91-91fe-f0d9d70effd6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:45:59.579556900Z","scheduledAt":"2025-05-29T18:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:45:59.587360900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:46:14.399473700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:46:14.399473700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:46:14.406803200Z","latencyDuration":14.812112800,"processDuration":0.007323300},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091124586Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:45:59.579557	2025-06-16 21:43:39.091125	\N	FacilityService.scanForIdleFacilities
+01971d5e-76e4-78f9-a7d2-81708a2badb5	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5e-76e4-78f9-a7d2-81708a2badb5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:46:59.556719800Z","scheduledAt":"2025-05-29T18:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:46:59.581744300Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:47:14.428086200Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:47:14.428086200Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:47:14.436916Z","latencyDuration":14.846341900,"processDuration":0.008811700},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091127878Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:46:59.55672	2025-06-16 21:43:39.091128	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5e-76e6-77e0-82d8-e89ec1074686	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5e-76e6-77e0-82d8-e89ec1074686","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:46:59.558694Z","scheduledAt":"2025-05-29T18:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:46:59.581762900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:47:14.428125100Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:47:14.428125100Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:47:14.437303100Z","latencyDuration":14.846362200,"processDuration":0.009167300},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091130711Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:46:59.558694	2025-06-16 21:43:39.091131	\N	FacilityService.scanForIdleFacilities
+01971d5f-613c-7ea0-8b87-7eb3f9eb0181	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d5f-613c-7ea0-8b87-7eb3f9eb0181","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:47:59.548060200Z","scheduledAt":"2025-05-29T18:48:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:47:59.563217900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:48:14.381107700Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:48:14.381107700Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:48:14.396537800Z","latencyDuration":14.817889800,"processDuration":0.015419300},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091133545Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:47:59.54806	2025-06-16 21:43:39.091134	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d5f-613d-7934-a763-680169b6f855	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d5f-613d-7934-a763-680169b6f855","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:47:59.549079400Z","scheduledAt":"2025-05-29T18:48:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:47:59.563236200Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:48:14.381124400Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:48:14.381124400Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:48:14.397983500Z","latencyDuration":14.817888200,"processDuration":0.016848700},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091136295Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:47:59.549079	2025-06-16 21:43:39.091136	\N	FacilityService.scanForIdleFacilities
+01971d60-4b7b-7a32-82d6-2aba9040d139	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d60-4b7b-7a32-82d6-2aba9040d139","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:48:59.515912400Z","scheduledAt":"2025-05-29T18:49:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:48:59.524806500Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:49:14.339722800Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:49:14.339722800Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:49:14.345307900Z","latencyDuration":14.814916300,"processDuration":0.005578800},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091139086Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:48:59.515912	2025-06-16 21:43:39.091139	\N	FacilityService.scanForIdleFacilities
+01971d60-4b7b-7a32-82d6-2aba9040d138	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d60-4b7b-7a32-82d6-2aba9040d138","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:48:59.515042700Z","scheduledAt":"2025-05-29T18:49:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:48:59.524789400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:49:14.339711300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:49:14.339711300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:49:14.345561900Z","latencyDuration":14.814921900,"processDuration":0.005840800},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091141836Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:48:59.515043	2025-06-16 21:43:39.091142	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d61-35c5-74f7-9b1b-3f23bb2a763f	5	{"version":5,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01971d61-35c5-74f7-9b1b-3f23bb2a763f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:49:59.493476400Z","scheduledAt":"2025-05-29T18:50:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:49:59.508699700Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:50:14.294021Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:50:14.294021Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:50:14.301509800Z","latencyDuration":14.785321300,"processDuration":0.007481000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091144461Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	DELETED	2025-05-29 18:49:59.493476	2025-06-16 21:43:39.091144	\N	RateLimitedEventPublisher.scanPendingEvents
+01971d61-35c7-7723-91b3-fdebf29c6def	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01971d61-35c7-7723-91b3-fdebf29c6def","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-29T18:49:59.495088100Z","scheduledAt":"2025-05-29T18:50:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-29T18:49:59.508716400Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-29T18:50:14.294039300Z","serverId":"01a1c48e-69c4-40c6-8f04-79aaf92b5477","serverName":"1d89a4a1fb62","updatedAt":"2025-05-29T18:50:14.294039300Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-29T18:50:14.303285600Z","latencyDuration":14.785322900,"processDuration":0.009236700},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-06-16T21:43:39.091147336Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2025-05-29 18:49:59.495088	2025-06-16 21:43:39.091147	\N	FacilityService.scanForIdleFacilities
+01977ab3-d065-76be-a02e-ab9a4cb381cf	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"01977ab3-d065-76be-a02e-ab9a4cb381cf","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:44:54.116931510Z","scheduledAt":"2025-06-16T21:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:44:54.131770510Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:46:26.546872803Z","serverId":"e4284869-959d-4c8e-a5b3-49f40cc7aa83","serverName":"1f2963d03c18","updatedAt":"2025-06-16T21:46:26.546872803Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:46:26.626773970Z","latencyDuration":92.415102293,"processDuration":0.079898250}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2025-06-16 21:44:54.116932	2025-06-16 21:46:26.626774	\N	NotificationScanner
+01977ab3-d065-76be-a02e-ab9a4cb381d0	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"01977ab3-d065-76be-a02e-ab9a4cb381d0","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:44:54.117835760Z","scheduledAt":"2025-06-16T21:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:44:54.131771968Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:46:26.546874178Z","serverId":"e4284869-959d-4c8e-a5b3-49f40cc7aa83","serverName":"1f2963d03c18","updatedAt":"2025-06-16T21:46:26.546874178Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:46:26.667493345Z","latencyDuration":92.415102210,"processDuration":0.120616708}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2025-06-16 21:44:54.117836	2025-06-16 21:46:26.667493	\N	ObservationScheduler
+01977ab3-d063-78a9-affb-f504090f7b22	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"01977ab3-d063-78a9-affb-f504090f7b22","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:44:54.115505968Z","scheduledAt":"2025-06-16T21:45:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:44:54.131769052Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:46:26.546870761Z","serverId":"e4284869-959d-4c8e-a5b3-49f40cc7aa83","serverName":"1f2963d03c18","updatedAt":"2025-06-16T21:46:26.546870761Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:46:30.025730013Z","latencyDuration":92.415101709,"processDuration":3.478839877}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	SUCCEEDED	2025-06-16 21:44:54.115506	2025-06-16 21:46:30.02573	\N	MonitoringPlotElevationScheduler
+01977ab3-d062-756f-9734-6613b016433a	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01977ab3-d062-756f-9734-6613b016433a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:44:54.113999218Z","scheduledAt":"2025-06-16T21:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:44:54.131767093Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:46:26.546867386Z","serverId":"e4284869-959d-4c8e-a5b3-49f40cc7aa83","serverName":"1f2963d03c18","updatedAt":"2025-06-16T21:46:26.546867386Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:46:26.579071595Z","latencyDuration":92.415100293,"processDuration":0.032031792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-06-16 21:44:54.113999	2025-06-16 21:46:26.579072	\N	FacilityService.scanForIdleFacilities
+01977ab3-d066-7873-a0c2-da8e09f84471	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"01977ab3-d066-7873-a0c2-da8e09f84471","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:44:54.118607260Z","scheduledAt":"2025-06-16T21:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:44:54.131773427Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:46:26.546875428Z","serverId":"e4284869-959d-4c8e-a5b3-49f40cc7aa83","serverName":"1f2963d03c18","updatedAt":"2025-06-16T21:46:26.546875428Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:46:26.666061428Z","latencyDuration":92.415102001,"processDuration":0.119183250}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2025-06-16 21:44:54.118607	2025-06-16 21:46:26.666061	\N	PlantingSeasonScheduler
+01977ab3-d060-7d6b-910a-53fc9f448749	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01977ab3-d060-7d6b-910a-53fc9f448749","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:44:54.112130260Z","scheduledAt":"2025-06-16T21:45:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:44:54.131751718Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:46:26.546377553Z","serverId":"e4284869-959d-4c8e-a5b3-49f40cc7aa83","serverName":"1f2963d03c18","updatedAt":"2025-06-16T21:46:26.546377553Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:46:26.579880136Z","latencyDuration":92.414625835,"processDuration":0.033499750}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-06-16 21:44:54.11213	2025-06-16 21:46:26.57988	\N	RateLimitedEventPublisher.scanPendingEvents
+01977ab5-aec9-7b40-a21b-bc90c12a4521	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01977ab5-aec9-7b40-a21b-bc90c12a4521","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:46:56.585735970Z","scheduledAt":"2025-06-16T21:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:46:56.602688386Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:47:11.644043921Z","serverId":"e4284869-959d-4c8e-a5b3-49f40cc7aa83","serverName":"1f2963d03c18","updatedAt":"2025-06-16T21:47:11.644043921Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:47:11.650961504Z","latencyDuration":15.041355535,"processDuration":0.006912875}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-06-16 21:46:56.585736	2025-06-16 21:47:11.650962	\N	FacilityService.scanForIdleFacilities
+01977ab5-aec4-752e-acc7-33eb03fffbf3	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"01977ab5-aec4-752e-acc7-33eb03fffbf3","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-06-16T21:46:56.579983219Z","scheduledAt":"2025-06-16T21:47:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-06-16T21:46:56.602668886Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-06-16T21:47:11.643990046Z","serverId":"e4284869-959d-4c8e-a5b3-49f40cc7aa83","serverName":"1f2963d03c18","updatedAt":"2025-06-16T21:47:11.643990046Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-06-16T21:47:11.652574546Z","latencyDuration":15.041321160,"processDuration":0.008578750}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-06-16 21:46:56.579983	2025-06-16 21:47:11.652575	\N	RateLimitedEventPublisher.scanPendingEvents
 \.
 
 
@@ -11730,6 +11980,11 @@ COPY public.notifications (id, notification_type_id, user_id, organization_id, t
 3	26	1	1	View a deliverable's status	A submitted deliverable was reviewed and its status was updated.	/deliverables/102/submissions/1	2025-05-13 17:30:16.362677+00	f
 4	26	1	1	View a deliverable's status	A submitted deliverable was reviewed and its status was updated.	/deliverables/102/submissions/1	2025-05-13 20:43:57.938703+00	f
 5	18	1	1	It is time to monitor your plantings!	Observations of your plantings need to be completed this month.	/observations/3?organizationId=1	2025-05-29 18:50:08.077234+00	f
+6	18	1	1	It is time to monitor your plantings!	Observations of your plantings need to be completed this month.	/observations/3?organizationId=1	2025-06-16 21:44:02.413106+00	f
+7	18	1	1	It is time to monitor your plantings!	Observations of your plantings need to be completed this month.	/observations/3?organizationId=1	2025-06-16 21:44:04.323481+00	f
+8	23	1	1	Add your next planting season	It's time to schedule your next planting season	/planting-sites/2	2025-06-16 21:46:26.635564+00	f
+9	19	1	1	Schedule an observation	It's time to schedule an observation for your planting site	/observations/2?organizationId=1	2025-06-16 21:46:26.647616+00	f
+10	23	1	1	Add your next planting season	It's time to schedule your next planting season	/planting-sites/3	2025-06-16 21:46:26.653696+00	f
 \.
 
 
@@ -12048,7 +12303,7 @@ COPY public.species_successional_groups (species_id, successional_group_id) FROM
 
 COPY public.spring_session (primary_id, session_id, creation_time, last_access_time, max_inactive_interval, expiry_time, principal_name) FROM stdin;
 b57978b9-873d-4ea2-88c2-391fcdee5470	b9b00dda-c789-40cd-8c02-7ef21025c4d8	1747863920486	1747863989388	315360000	2063223962638	157cf509-d3e6-4bde-9e0d-d4ac07e2b721
-b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1749055659762	315360000	2064415659762	0d04525c-7933-4cec-9647-7b6ac2642838
+b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1750110438348	315360000	2065470438348	0d04525c-7933-4cec-9647-7b6ac2642838
 \.
 
 
@@ -12798,6 +13053,14 @@ COPY public.uploads (id, created_by, created_time, filename, storage_url, conten
 
 
 --
+-- Data for Name: user_disclaimers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.user_disclaimers (disclaimer_id, user_id, accepted_on) FROM stdin;
+\.
+
+
+--
 -- Data for Name: user_global_roles; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -12813,7 +13076,7 @@ COPY public.user_global_roles (user_id, global_role_id) FROM stdin;
 COPY public.user_preferences (user_id, organization_id, preferences) FROM stdin;
 4	\N	{"preferredWeightSystem": "metric"}
 1	1	{"plants.dashboard.lastVisitedPlantingSite": {"plantingSiteId": 1}, "plants.observations.lastVisitedPlantingSite": {"plantingSiteId": -1}}
-1	\N	{"lastVisitedOrg": 1, "enableFundingEntities": true, "preferredWeightSystem": "metric", "enable2025ProjectProfile": true, "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
+1	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric", "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
 \.
 
 
@@ -12837,7 +13100,7 @@ COPY public.users (id, auth_id, email, first_name, last_name, created_time, modi
 2	DISABLED	system	Terraware	System	2022-10-25 17:51:42.24661+00	2022-10-25 17:51:42.24661+00	4	\N	f	\N	\N	\N	\N	\N	\N
 3	\N	pending@terraformation.com	\N	\N	2025-05-21 21:42:18.239617+00	2025-05-21 21:42:18.23963+00	5	\N	f	\N	\N	\N	\N	\N	\N
 4	157cf509-d3e6-4bde-9e0d-d4ac07e2b721	funder@terraformation.com	Test	Funder	2025-05-21 21:42:25.83028+00	2025-05-21 21:45:27.385204+00	5	2025-05-21 21:46:29.411+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
-1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-06-04 16:47:39.765+00	f	\N	Etc/UTC	\N	\N	t	2024-06-11 21:53:16.594086+00
+1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-06-16 21:47:18.359+00	f	\N	Etc/UTC	\N	\N	t	2025-06-11 21:53:16.594086+00
 \.
 
 
@@ -13191,6 +13454,24 @@ COPY tracking.monitoring_plot_histories (id, monitoring_plot_id, planting_subzon
 31	5192	9	3	9	3	1	2025-05-29 18:50:07.957077+00
 32	5193	9	3	9	3	1	2025-05-29 18:50:07.975396+00
 33	5194	9	3	9	3	1	2025-05-29 18:50:08.002837+00
+34	5195	7	3	7	3	1	2025-06-16 21:44:02.21858+00
+35	5196	7	3	7	3	1	2025-06-16 21:44:02.237017+00
+36	5197	7	3	7	3	1	2025-06-16 21:44:02.248099+00
+37	5198	8	3	8	3	1	2025-06-16 21:44:02.287353+00
+38	5199	8	3	8	3	1	2025-06-16 21:44:02.29822+00
+39	5200	8	3	8	3	1	2025-06-16 21:44:02.308233+00
+40	5201	9	3	9	3	1	2025-06-16 21:44:02.339132+00
+41	5202	9	3	9	3	1	2025-06-16 21:44:02.351778+00
+42	5203	9	3	9	3	1	2025-06-16 21:44:02.364665+00
+43	5204	7	3	7	3	1	2025-06-16 21:44:04.201923+00
+44	5205	7	3	7	3	1	2025-06-16 21:44:04.211919+00
+45	5206	7	3	7	3	1	2025-06-16 21:44:04.220568+00
+46	5207	8	3	8	3	1	2025-06-16 21:44:04.245542+00
+47	5208	8	3	8	3	1	2025-06-16 21:44:04.254634+00
+48	5209	8	3	8	3	1	2025-06-16 21:44:04.262575+00
+49	5210	9	3	9	3	1	2025-06-16 21:44:04.285352+00
+50	5211	9	3	9	3	1	2025-06-16 21:44:04.293898+00
+51	5212	9	3	9	3	1	2025-06-16 21:44:04.301864+00
 \.
 
 
@@ -13208,38 +13489,56 @@ COPY tracking.monitoring_plot_overlaps (monitoring_plot_id, overlaps_plot_id) FR
 
 COPY tracking.monitoring_plots (id, planting_subzone_id, created_by, created_time, modified_by, modified_time, boundary, permanent_index, is_available, size_meters, planting_site_id, is_ad_hoc, organization_id, plot_number, elevation_meters) FROM stdin;
 5162	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E6100000010000000500000006648944833843402BD0DA2D41652F40940D3B708C3843402BD0DA2D41652F40940D3B708C384340053ED8B664652F400664894483384340053ED8B664652F4006648944833843402BD0DA2D41652F40	1	t	30	3	f	1	1	\N
-5163	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000213FD4BD4D3A434058BE1290DE5E2F40536361E9563A434058BE1290DE5E2F40536361E9563A43401DD31219025F2F40213FD4BD4D3A43401DD31219025F2F40213FD4BD4D3A434058BE1290DE5E2F40	2	t	30	3	f	1	2	\N
-5164	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E6100000010000000500000044969A3E4F3C43405F460D24345D2F40E1341E6A583C43405F460D24345D2F40E1341E6A583C43402D0C0EAD575D2F4044969A3E4F3C43402D0C0EAD575D2F4044969A3E4F3C43405F460D24345D2F40	3	t	30	3	f	1	3	\N
-5165	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000E0178735053B43401A85E409B3642F401C9435610E3B43401A85E409B3642F401C9435610E3B4340072EE292D6642F40E0178735053B4340072EE292D6642F40E0178735053B43401A85E409B3642F40	4	t	30	3	f	1	4	\N
-5166	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E6100000010000000500000009B776DEE8394340D29A1207BB5E2F401410030AF2394340D29A1207BB5E2F401410030AF239434056BE1290DE5E2F4009B776DEE839434056BE1290DE5E2F4009B776DEE8394340D29A1207BB5E2F40	5	t	30	3	f	1	5	\N
-5167	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E610000001000000050000005B2D543EE13B4340256611611E602F401E76E869EA3B4340256611611E602F401E76E869EA3B43401EF610EA41602F405B2D543EE13B43401EF610EA41602F405B2D543EE13B4340256611611E602F40	6	t	30	3	f	1	6	\N
-5168	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E610000001000000050000004542D03F0B3743408ECDB8A95F572F40D391326B143743408ECDB8A95F572F40D391326B14374340B4FEBB3283572F404542D03F0B374340B4FEBB3283572F404542D03F0B3743408ECDB8A95F572F40	7	t	30	3	f	1	7	\N
-5169	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000B9D07C8C173B43406BCDE6808F642F40A3812AB8203B43406BCDE6808F642F40A3812AB8203B43401C85E409B3642F40B9D07C8C173B43401C85E409B3642F40B9D07C8C173B43406BCDE6808F642F40	8	t	30	3	f	1	8	\N
-5170	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000B56D2DAECC3843409F6CE0BF716D2F4019FB0DDAD53843409F6CE0BF716D2F4019FB0DDAD5384340FE72DA48956D2F40B56D2DAECC384340FE72DA48956D2F40B56D2DAECC3843409F6CE0BF716D2F40	1	t	30	3	f	1	9	\N
-5171	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E610000001000000050000004D513D98273843407957E6364E6D2F4020131DC4303843407957E6364E6D2F4020131DC4303843409F6CE0BF716D2F404D513D98273843409F6CE0BF716D2F404D513D98273843407957E6364E6D2F40	2	t	30	3	f	1	10	\N
-5172	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000BD808CDECB374340B28467D6D5692F409B62580AD5374340B28467D6D5692F409B62580AD5374340360B635FF9692F40BD808CDECB374340360B635FF9692F40BD808CDECB374340B28467D6D5692F40	3	t	30	3	f	1	11	\N
-5173	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000A772044B83384340EBEB5971406A2F40F1B6D2768C384340EBEB5971406A2F40F1B6D2768C3843401F4655FA636A2F40A772044B833843401F4655FA636A2F40A772044B83384340EBEB5971406A2F40	4	t	30	3	f	1	12	\N
-5174	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E6100000010000000500000065A3D685B93743402417917C72682F40C5929AB1C23743402417917C72682F40C5929AB1C23743405F318D0596682F4065A3D685B93743405F318D0596682F4065A3D685B93743402417917C72682F40	5	t	30	3	f	1	13	\N
-5175	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E6100000010000000500000091DF85BA3A394340529A13EF316C2F40F9445FE643394340529A13EF316C2F40F9445FE643394340B1250E78556C2F4091DF85BA3A394340B1250E78556C2F4091DF85BA3A394340529A13EF316C2F40	6	t	30	3	f	1	14	\N
-5176	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000CD4B026E9639434034CE4B0CAB6A2F408DF2D2999F39434034CE4B0CAB6A2F408DF2D2999F39434013FC4695CE6A2F40CD4B026E9639434013FC4695CE6A2F40CD4B026E9639434034CE4B0CAB6A2F40	7	t	30	3	f	1	15	\N
-5177	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000C6EA931584394340EBEB5971406A2F40102F62418D394340EBEB5971406A2F40102F62418D3943401F4655FA636A2F40C6EA9315843943401F4655FA636A2F40C6EA931584394340EBEB5971406A2F40	8	t	30	3	f	1	16	\N
-5178	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000E458B6081F39434022E0D56F92502F400AD5F1332839434022E0D56F92502F400AD5F1332839434053E3DBF8B5502F40E458B6081F39434053E3DBF8B5502F40E458B6081F39434022E0D56F92502F40	1	t	30	3	f	1	17	\N
-5179	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E6100000010000000500000075FC1B86063D43401F028E3DB5552F40FEC874B10F3D43401F028E3DB5552F40FEC874B10F3D434026E491C6D8552F4075FC1B86063D434026E491C6D8552F4075FC1B86063D43401F028E3DB5552F40	2	t	30	3	f	1	18	\N
-5180	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E610000001000000050000007D33C37182374340580364E351542F404713149D8B374340580364E351542F404713149D8B374340BF78686C75542F407D33C37182374340BF78686C75542F407D33C37182374340580364E351542F40	3	t	30	3	f	1	19	\N
-5181	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E6100000010000000500000080E8D9AAB43D434023C1FE2E8B512F40FBEF1AD6BD3D434023C1FE2E8B512F40FBEF1AD6BD3D4340335D04B8AE512F4080E8D9AAB43D4340335D04B8AE512F4080E8D9AAB43D434023C1FE2E8B512F40	4	t	30	3	f	1	20	\N
-5182	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000585CC7EB183D4340F33FE02751592F407AC53417223D4340F33FE02751592F407AC53417223D4340B0A2E2B074592F40585CC7EB183D4340B0A2E2B074592F40585CC7EB183D4340F33FE02751592F40	5	t	30	3	f	1	21	\N
-5183	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000E7E8B53E453B4340AC8DB5203C572F40856D176A4E3B4340AC8DB5203C572F40856D176A4E3B43408CCDB8A95F572F40E7E8B53E453B43408CCDB8A95F572F40E7E8B53E453B4340AC8DB5203C572F40	6	t	30	3	f	1	22	\N
-5184	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000FE77721FA737434081807507E0542F403B83C64AB037434081807507E0542F403B83C64AB0374340F4BA799003552F40FE77721FA7374340F4BA799003552F40FE77721FA737434081807507E0542F40	7	t	30	3	f	1	23	\N
-5185	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E610000001000000050000003FE47254853B4340E0F08F8C0B4F2F4067AAA57F8E3B4340E0F08F8C0B4F2F4067AAA57F8E3B4340189696152F4F2F403FE47254853B4340189696152F4F2F403FE47254853B4340E0F08F8C0B4F2F40	8	t	30	3	f	1	24	\N
-5186	7	1	2025-05-29 18:50:07.725735+00	1	2025-05-29 18:50:07.725735+00	0103000020E610000001000000050000005B606645423743406E72E94BDF592F4082F5D6704B3743406E72E94BDF592F4082F5D6704B374340329AEBD4025A2F405B60664542374340329AEBD4025A2F405B606645423743406E72E94BDF592F40	\N	t	30	3	f	1	25	\N
-5187	7	1	2025-05-29 18:50:07.747218+00	1	2025-05-29 18:50:07.747218+00	0103000020E61000000100000005000000F4D9A239153843405682BE87A4662F4016755C651E3843405682BE87A4662F4016755C651E3843408B5CBB10C8662F40F4D9A239153843408B5CBB10C8662F40F4D9A239153843405682BE87A4662F40	\N	t	30	3	f	1	26	\N
-5188	7	1	2025-05-29 18:50:07.767445+00	1	2025-05-29 18:50:07.767445+00	0103000020E610000001000000050000003F068ED043394340EB19124FD75F2F40A2B820FC4C394340EB19124FD75F2F40A2B820FC4C39434068C711D8FA5F2F403F068ED04339434068C711D8FA5F2F403F068ED043394340EB19124FD75F2F40	\N	t	30	3	f	1	27	\N
-5189	8	1	2025-05-29 18:50:07.842821+00	1	2025-05-29 18:50:07.842821+00	0103000020E6100000010000000500000088B47CDDCB3743405D318D0596682F40576F4109D53743405D318D0596682F40576F4109D5374340D13C898EB9682F4088B47CDDCB374340D13C898EB9682F4088B47CDDCB3743405D318D0596682F40	\N	t	30	3	f	1	28	\N
-5190	8	1	2025-05-29 18:50:07.872472+00	1	2025-05-29 18:50:07.872472+00	0103000020E610000001000000050000000D73AA2FE83843402E0019660E6C2F40EC0C835BF13843402E0019660E6C2F40EC0C835BF1384340549A13EF316C2F400D73AA2FE8384340549A13EF316C2F400D73AA2FE83843402E0019660E6C2F40	\N	t	30	3	f	1	29	\N
-5191	8	1	2025-05-29 18:50:07.892117+00	1	2025-05-29 18:50:07.892117+00	0103000020E610000001000000050000005F470ECE9E384340370B635FF9692F40B5F4DAF9A7384340370B635FF9692F40B5F4DAF9A7384340F6825EE81C6A2F405F470ECE9E384340F6825EE81C6A2F405F470ECE9E384340370B635FF9692F40	\N	t	30	3	f	1	30	\N
-5192	9	1	2025-05-29 18:50:07.941462+00	1	2025-05-29 18:50:07.941462+00	0103000020E6100000010000000500000017746DF3AC3F43408494ED9320512F40431BAC1EB63F43408494ED9320512F40431BAC1EB63F4340CA5CF31C44512F4017746DF3AC3F4340CA5CF31C44512F4017746DF3AC3F43408494ED9320512F40	\N	t	30	3	f	1	31	\N
-5193	9	1	2025-05-29 18:50:07.959631+00	1	2025-05-29 18:50:07.959631+00	0103000020E61000000100000005000000B56B073A0B3743407457FAC81A482F40959F1265143743407457FAC81A482F40959F126514374340C2DC03523E482F40B56B073A0B374340C2DC03523E482F40B56B073A0B3743407457FAC81A482F40	\N	t	30	3	f	1	32	\N
-5194	9	1	2025-05-29 18:50:07.978125+00	1	2025-05-29 18:50:07.978125+00	0103000020E6100000010000000500000005B5BBAD7A39434039EB9C6B9A4A2F40A826D5D88339434039EB9C6B9A4A2F40A826D5D8833943409A67A5F4BD4A2F4005B5BBAD7A3943409A67A5F4BD4A2F4005B5BBAD7A39434039EB9C6B9A4A2F40	\N	t	30	3	f	1	33	\N
+5212	9	1	2025-06-16 21:44:04.295093+00	1	2025-06-16 21:44:04.295093+00	0103000020E6100000010000000500000098B5A005B1384340B1453E9B35532F40AB3EEB30BA384340B1453E9B35532F40AB3EEB30BA384340FA30432459532F4098B5A005B1384340FA30432459532F4098B5A005B1384340B1453E9B35532F40	\N	t	30	3	f	1	51	1049.4
+5211	9	1	2025-06-16 21:44:04.286711+00	1	2025-06-16 21:44:04.286711+00	0103000020E61000000100000005000000BEBBE2F64F3D43401253F70AD85A2F4016DE5822593D43401253F70AD85A2F4016DE5822593D43409A13F993FB5A2F40BEBBE2F64F3D43409A13F993FB5A2F40BEBBE2F64F3D43401253F70AD85A2F40	\N	t	30	3	f	1	50	1672.8
+5210	9	1	2025-06-16 21:44:04.276925+00	1	2025-06-16 21:44:04.276925+00	0103000020E61000000100000005000000D58F3D8CAF36434029F4FED7444C2F40B18060B7B836434029F4FED7444C2F40B18060B7B8364340E2BF0661684C2F40D58F3D8CAF364340E2BF0661684C2F40D58F3D8CAF36434029F4FED7444C2F40	\N	t	30	3	f	1	49	1409.7
+5209	8	1	2025-06-16 21:44:04.255848+00	1	2025-06-16 21:44:04.255848+00	0103000020E610000001000000050000002338ABFEA73843409F6CE0BF716D2F4087C58B2AB13843409F6CE0BF716D2F4087C58B2AB1384340FE72DA48956D2F402338ABFEA7384340FE72DA48956D2F402338ABFEA73843409F6CE0BF716D2F40	\N	t	30	3	f	1	48	1208.6
+5208	8	1	2025-06-16 21:44:04.247058+00	1	2025-06-16 21:44:04.247058+00	0103000020E6100000010000000500000070CCD3B83A394340142D3830396B2F4030A1A7E443394340142D3830396B2F4030A1A7E443394340DD1F33B95C6B2F4070CCD3B83A394340DD1F33B95C6B2F4070CCD3B83A394340142D3830396B2F40	\N	t	30	3	f	1	47	1252.6
+5207	8	1	2025-06-16 21:44:04.237485+00	1	2025-06-16 21:44:04.237485+00	0103000020E61000000100000005000000F549787155384340E2032E42806B2F40BCB54D9D5E384340E2032E42806B2F40BCB54D9D5E3843401FD928CBA36B2F40F5497871553843401FD928CBA36B2F40F549787155384340E2032E42806B2F40	\N	t	30	3	f	1	46	1311.4
+5206	7	1	2025-06-16 21:44:04.213343+00	1	2025-06-16 21:44:04.213343+00	0103000020E61000000100000005000000BDE30E40323A4340AEE80D97F3602F40B8EFA76B3B3A4340AEE80D97F3602F40B8EFA76B3B3A43401E200D2017612F40BDE30E40323A43401E200D2017612F40BDE30E40323A4340AEE80D97F3602F40	\N	t	30	3	f	1	45	1709.0
+5205	7	1	2025-06-16 21:44:04.203697+00	1	2025-06-16 21:44:04.203697+00	0103000020E610000001000000050000009C952CB230384340868E0B12ED5C2F40039EAEDD39384340868E0B12ED5C2F40039EAEDD39384340D2710C9B105D2F409C952CB230384340D2710C9B105D2F409C952CB230384340868E0B12ED5C2F40	\N	t	30	3	f	1	44	1492.1
+5204	7	1	2025-06-16 21:44:04.192841+00	1	2025-06-16 21:44:04.192841+00	0103000020E61000000100000005000000BA8CC677B9374340AFE1AE0EF5562F40797B26A3C2374340AFE1AE0EF5562F40797B26A3C23743400D3FB29718572F40BA8CC677B93743400D3FB29718572F40BA8CC677B9374340AFE1AE0EF5562F40	\N	t	30	3	f	1	43	1287.9
+5203	9	1	2025-06-16 21:44:02.35374+00	1	2025-06-16 21:44:02.35374+00	0103000020E6100000010000000500000052EFCFA367384340A0DD2C0E1A4D2F4001A0F7CE70384340A0DD2C0E1A4D2F4001A0F7CE70384340FE5034973D4D2F4052EFCFA367384340FE5034973D4D2F4052EFCFA367384340A0DD2C0E1A4D2F40	\N	t	30	3	f	1	42	1197.4
+5202	9	1	2025-06-16 21:44:02.340894+00	1	2025-06-16 21:44:02.340894+00	0103000020E61000000100000005000000E737AEA1603B4340A0DD2C0E1A4D2F4096E8D5CC693B4340A0DD2C0E1A4D2F4096E8D5CC693B4340FE5034973D4D2F40E737AEA1603B4340FE5034973D4D2F40E737AEA1603B4340A0DD2C0E1A4D2F40	\N	t	30	3	f	1	41	1379.2
+5201	9	1	2025-06-16 21:44:02.328271+00	1	2025-06-16 21:44:02.328271+00	0103000020E610000001000000050000007C7E89C28D3A4340CA524A32A84D2F40CB59B4ED963A4340CA524A32A84D2F40CB59B4ED963A4340468B51BBCB4D2F407C7E89C28D3A4340468B51BBCB4D2F407C7E89C28D3A4340CA524A32A84D2F40	\N	t	30	3	f	1	40	1183.6
+5200	8	1	2025-06-16 21:44:02.29991+00	1	2025-06-16 21:44:02.29991+00	0103000020E610000001000000050000001DC250F8A738434080398517DD682F40CC131724B138434080398517DD682F40CC131724B1384340672781A000692F401DC250F8A7384340672781A000692F401DC250F8A738434080398517DD682F40	\N	t	30	3	f	1	39	1493.5
+5199	8	1	2025-06-16 21:44:02.289268+00	1	2025-06-16 21:44:02.289268+00	0103000020E61000000100000005000000FFF8E61743384340B28467D6D5692F40DDDAB2434C384340B28467D6D5692F40DDDAB2434C384340360B635FF9692F40FFF8E61743384340360B635FF9692F40FFF8E61743384340B28467D6D5692F40	\N	t	30	3	f	1	38	1360.6
+5198	8	1	2025-06-16 21:44:02.277437+00	1	2025-06-16 21:44:02.277437+00	0103000020E610000001000000050000008ED809BA3A39434045571EDDEA6B2F40E6A6E1E54339434045571EDDEA6B2F40E6A6E1E5433943402E0019660E6C2F408ED809BA3A3943402E0019660E6C2F408ED809BA3A39434045571EDDEA6B2F40	\N	t	30	3	f	1	37	1217.9
+5197	7	1	2025-06-16 21:44:02.238697+00	1	2025-06-16 21:44:02.238697+00	0103000020E610000001000000050000004D100895E93A434033B3ED5D265A2F407D3B7AC0F23A434033B3ED5D265A2F407D3B7AC0F23A434077BDEFE6495A2F404D100895E93A434077BDEFE6495A2F404D100895E93A434033B3ED5D265A2F40	\N	t	30	3	f	1	36	1805.0
+5196	7	1	2025-06-16 21:44:02.227247+00	1	2025-06-16 21:44:02.227247+00	0103000020E6100000010000000500000091820D5EB33B4340327911E32C5E2F4009AF9689BC3B4340327911E32C5E2F4009AF9689BC3B4340BED7116C505E2F4091820D5EB33B4340BED7116C505E2F4091820D5EB33B4340327911E32C5E2F40	\N	t	30	3	f	1	35	1799.3
+5195	7	1	2025-06-16 21:44:02.166928+00	1	2025-06-16 21:44:02.166928+00	0103000020E61000000100000005000000EB23FD28973A43406BCDE6808F642F40D5D4AA54A03A43406BCDE6808F642F40D5D4AA54A03A43401C85E409B3642F40EB23FD28973A43401C85E409B3642F40EB23FD28973A43406BCDE6808F642F40	\N	t	30	3	f	1	34	1614.1
+5194	9	1	2025-05-29 18:50:07.978125+00	1	2025-05-29 18:50:07.978125+00	0103000020E6100000010000000500000005B5BBAD7A39434039EB9C6B9A4A2F40A826D5D88339434039EB9C6B9A4A2F40A826D5D8833943409A67A5F4BD4A2F4005B5BBAD7A3943409A67A5F4BD4A2F4005B5BBAD7A39434039EB9C6B9A4A2F40	\N	t	30	3	f	1	33	995.3
+5193	9	1	2025-05-29 18:50:07.959631+00	1	2025-05-29 18:50:07.959631+00	0103000020E61000000100000005000000B56B073A0B3743407457FAC81A482F40959F1265143743407457FAC81A482F40959F126514374340C2DC03523E482F40B56B073A0B374340C2DC03523E482F40B56B073A0B3743407457FAC81A482F40	\N	t	30	3	f	1	32	1446.9
+5192	9	1	2025-05-29 18:50:07.941462+00	1	2025-05-29 18:50:07.941462+00	0103000020E6100000010000000500000017746DF3AC3F43408494ED9320512F40431BAC1EB63F43408494ED9320512F40431BAC1EB63F4340CA5CF31C44512F4017746DF3AC3F4340CA5CF31C44512F4017746DF3AC3F43408494ED9320512F40	\N	t	30	3	f	1	31	1898.0
+5191	8	1	2025-05-29 18:50:07.892117+00	1	2025-05-29 18:50:07.892117+00	0103000020E610000001000000050000005F470ECE9E384340370B635FF9692F40B5F4DAF9A7384340370B635FF9692F40B5F4DAF9A7384340F6825EE81C6A2F405F470ECE9E384340F6825EE81C6A2F405F470ECE9E384340370B635FF9692F40	\N	t	30	3	f	1	30	1426.0
+5190	8	1	2025-05-29 18:50:07.872472+00	1	2025-05-29 18:50:07.872472+00	0103000020E610000001000000050000000D73AA2FE83843402E0019660E6C2F40EC0C835BF13843402E0019660E6C2F40EC0C835BF1384340549A13EF316C2F400D73AA2FE8384340549A13EF316C2F400D73AA2FE83843402E0019660E6C2F40	\N	t	30	3	f	1	29	1276.3
+5189	8	1	2025-05-29 18:50:07.842821+00	1	2025-05-29 18:50:07.842821+00	0103000020E6100000010000000500000088B47CDDCB3743405D318D0596682F40576F4109D53743405D318D0596682F40576F4109D5374340D13C898EB9682F4088B47CDDCB374340D13C898EB9682F4088B47CDDCB3743405D318D0596682F40	\N	t	30	3	f	1	28	1572.6
+5188	7	1	2025-05-29 18:50:07.767445+00	1	2025-05-29 18:50:07.767445+00	0103000020E610000001000000050000003F068ED043394340EB19124FD75F2F40A2B820FC4C394340EB19124FD75F2F40A2B820FC4C39434068C711D8FA5F2F403F068ED04339434068C711D8FA5F2F403F068ED043394340EB19124FD75F2F40	\N	t	30	3	f	1	27	1762.8
+5187	7	1	2025-05-29 18:50:07.747218+00	1	2025-05-29 18:50:07.747218+00	0103000020E61000000100000005000000F4D9A239153843405682BE87A4662F4016755C651E3843405682BE87A4662F4016755C651E3843408B5CBB10C8662F40F4D9A239153843408B5CBB10C8662F40F4D9A239153843405682BE87A4662F40	\N	t	30	3	f	1	26	1599.6
+5186	7	1	2025-05-29 18:50:07.725735+00	1	2025-05-29 18:50:07.725735+00	0103000020E610000001000000050000005B606645423743406E72E94BDF592F4082F5D6704B3743406E72E94BDF592F4082F5D6704B374340329AEBD4025A2F405B60664542374340329AEBD4025A2F405B606645423743406E72E94BDF592F40	\N	t	30	3	f	1	25	1683.1
+5185	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E610000001000000050000003FE47254853B4340E0F08F8C0B4F2F4067AAA57F8E3B4340E0F08F8C0B4F2F4067AAA57F8E3B4340189696152F4F2F403FE47254853B4340189696152F4F2F403FE47254853B4340E0F08F8C0B4F2F40	8	t	30	3	f	1	24	1566.9
+5184	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000FE77721FA737434081807507E0542F403B83C64AB037434081807507E0542F403B83C64AB0374340F4BA799003552F40FE77721FA7374340F4BA799003552F40FE77721FA737434081807507E0542F40	7	t	30	3	f	1	23	1181.8
+5183	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000E7E8B53E453B4340AC8DB5203C572F40856D176A4E3B4340AC8DB5203C572F40856D176A4E3B43408CCDB8A95F572F40E7E8B53E453B43408CCDB8A95F572F40E7E8B53E453B4340AC8DB5203C572F40	6	t	30	3	f	1	22	1643.4
+5182	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000585CC7EB183D4340F33FE02751592F407AC53417223D4340F33FE02751592F407AC53417223D4340B0A2E2B074592F40585CC7EB183D4340B0A2E2B074592F40585CC7EB183D4340F33FE02751592F40	5	t	30	3	f	1	21	1658.6
+5181	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E6100000010000000500000080E8D9AAB43D434023C1FE2E8B512F40FBEF1AD6BD3D434023C1FE2E8B512F40FBEF1AD6BD3D4340335D04B8AE512F4080E8D9AAB43D4340335D04B8AE512F4080E8D9AAB43D434023C1FE2E8B512F40	4	t	30	3	f	1	20	1777.2
+5180	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E610000001000000050000007D33C37182374340580364E351542F404713149D8B374340580364E351542F404713149D8B374340BF78686C75542F407D33C37182374340BF78686C75542F407D33C37182374340580364E351542F40	3	t	30	3	f	1	19	1221.4
+5179	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E6100000010000000500000075FC1B86063D43401F028E3DB5552F40FEC874B10F3D43401F028E3DB5552F40FEC874B10F3D434026E491C6D8552F4075FC1B86063D434026E491C6D8552F4075FC1B86063D43401F028E3DB5552F40	2	t	30	3	f	1	18	1704.3
+5178	9	1	2025-05-29 18:50:07.571168+00	1	2025-05-29 18:50:07.571168+00	0103000020E61000000100000005000000E458B6081F39434022E0D56F92502F400AD5F1332839434022E0D56F92502F400AD5F1332839434053E3DBF8B5502F40E458B6081F39434053E3DBF8B5502F40E458B6081F39434022E0D56F92502F40	1	t	30	3	f	1	17	1034.3
+5177	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000C6EA931584394340EBEB5971406A2F40102F62418D394340EBEB5971406A2F40102F62418D3943401F4655FA636A2F40C6EA9315843943401F4655FA636A2F40C6EA931584394340EBEB5971406A2F40	8	t	30	3	f	1	16	1261.3
+5176	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000CD4B026E9639434034CE4B0CAB6A2F408DF2D2999F39434034CE4B0CAB6A2F408DF2D2999F39434013FC4695CE6A2F40CD4B026E9639434013FC4695CE6A2F40CD4B026E9639434034CE4B0CAB6A2F40	7	t	30	3	f	1	15	1222.2
+5175	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E6100000010000000500000091DF85BA3A394340529A13EF316C2F40F9445FE643394340529A13EF316C2F40F9445FE643394340B1250E78556C2F4091DF85BA3A394340B1250E78556C2F4091DF85BA3A394340529A13EF316C2F40	6	t	30	3	f	1	14	1210.1
+5174	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E6100000010000000500000065A3D685B93743402417917C72682F40C5929AB1C23743402417917C72682F40C5929AB1C23743405F318D0596682F4065A3D685B93743405F318D0596682F4065A3D685B93743402417917C72682F40	5	t	30	3	f	1	13	1580.0
+5173	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000A772044B83384340EBEB5971406A2F40F1B6D2768C384340EBEB5971406A2F40F1B6D2768C3843401F4655FA636A2F40A772044B833843401F4655FA636A2F40A772044B83384340EBEB5971406A2F40	4	t	30	3	f	1	12	1419.8
+5172	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000BD808CDECB374340B28467D6D5692F409B62580AD5374340B28467D6D5692F409B62580AD5374340360B635FF9692F40BD808CDECB374340360B635FF9692F40BD808CDECB374340B28467D6D5692F40	3	t	30	3	f	1	11	1433.1
+5171	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E610000001000000050000004D513D98273843407957E6364E6D2F4020131DC4303843407957E6364E6D2F4020131DC4303843409F6CE0BF716D2F404D513D98273843409F6CE0BF716D2F404D513D98273843407957E6364E6D2F40	2	t	30	3	f	1	10	1237.4
+5170	8	1	2025-05-29 18:50:07.503738+00	1	2025-05-29 18:50:07.503738+00	0103000020E61000000100000005000000B56D2DAECC3843409F6CE0BF716D2F4019FB0DDAD53843409F6CE0BF716D2F4019FB0DDAD5384340FE72DA48956D2F40B56D2DAECC384340FE72DA48956D2F40B56D2DAECC3843409F6CE0BF716D2F40	1	t	30	3	f	1	9	1207.2
+5169	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000B9D07C8C173B43406BCDE6808F642F40A3812AB8203B43406BCDE6808F642F40A3812AB8203B43401C85E409B3642F40B9D07C8C173B43401C85E409B3642F40B9D07C8C173B43406BCDE6808F642F40	8	t	30	3	f	1	8	1660.5
+5168	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E610000001000000050000004542D03F0B3743408ECDB8A95F572F40D391326B143743408ECDB8A95F572F40D391326B14374340B4FEBB3283572F404542D03F0B374340B4FEBB3283572F404542D03F0B3743408ECDB8A95F572F40	7	t	30	3	f	1	7	1551.2
+5167	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E610000001000000050000005B2D543EE13B4340256611611E602F401E76E869EA3B4340256611611E602F401E76E869EA3B43401EF610EA41602F405B2D543EE13B43401EF610EA41602F405B2D543EE13B4340256611611E602F40	6	t	30	3	f	1	6	1754.3
+5166	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E6100000010000000500000009B776DEE8394340D29A1207BB5E2F401410030AF2394340D29A1207BB5E2F401410030AF239434056BE1290DE5E2F4009B776DEE839434056BE1290DE5E2F4009B776DEE8394340D29A1207BB5E2F40	5	t	30	3	f	1	5	1754.6
+5165	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000E0178735053B43401A85E409B3642F401C9435610E3B43401A85E409B3642F401C9435610E3B4340072EE292D6642F40E0178735053B4340072EE292D6642F40E0178735053B43401A85E409B3642F40	4	t	30	3	f	1	4	1657.2
+5164	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E6100000010000000500000044969A3E4F3C43405F460D24345D2F40E1341E6A583C43405F460D24345D2F40E1341E6A583C43402D0C0EAD575D2F4044969A3E4F3C43402D0C0EAD575D2F4044969A3E4F3C43405F460D24345D2F40	3	t	30	3	f	1	3	1803.1
+5163	7	1	2025-05-29 18:50:07.377632+00	1	2025-05-29 18:50:07.377632+00	0103000020E61000000100000005000000213FD4BD4D3A434058BE1290DE5E2F40536361E9563A434058BE1290DE5E2F40536361E9563A43401DD31219025F2F40213FD4BD4D3A43401DD31219025F2F40213FD4BD4D3A434058BE1290DE5E2F40	2	t	30	3	f	1	2	1764.6
 \.
 
 
@@ -13379,6 +13678,72 @@ COPY tracking.observation_plots (observation_id, monitoring_plot_id, claimed_by,
 1	5192	1	2025-05-29 18:50:28.89741+00	1	2025-05-29 18:50:28.997598+00	1	2025-05-29 18:50:08.024321+00	f	1	2025-05-29 18:50:08.024321+00	2025-05-29 18:50:28+00	Notes for plot 5192	3	31
 1	5193	1	2025-05-29 18:50:29.017594+00	1	2025-05-29 18:50:29.25423+00	1	2025-05-29 18:50:08.024321+00	f	1	2025-05-29 18:50:08.024321+00	2025-05-29 18:50:29+00	Notes for plot 5193	3	32
 1	5194	1	2025-05-29 18:50:29.27518+00	1	2025-05-29 18:50:29.365383+00	1	2025-05-29 18:50:08.024321+00	f	1	2025-05-29 18:50:08.024321+00	2025-05-29 18:50:29+00	Notes for plot 5194	3	33
+2	5162	\N	\N	\N	\N	1	2025-06-16 21:44:02.255935+00	t	1	2025-06-16 21:44:02.255935+00	\N	\N	1	1
+2	5163	\N	\N	\N	\N	1	2025-06-16 21:44:02.255935+00	t	1	2025-06-16 21:44:02.255935+00	\N	\N	1	2
+2	5164	\N	\N	\N	\N	1	2025-06-16 21:44:02.255935+00	t	1	2025-06-16 21:44:02.255935+00	\N	\N	1	3
+2	5165	\N	\N	\N	\N	1	2025-06-16 21:44:02.255935+00	t	1	2025-06-16 21:44:02.255935+00	\N	\N	1	4
+2	5166	\N	\N	\N	\N	1	2025-06-16 21:44:02.255935+00	t	1	2025-06-16 21:44:02.255935+00	\N	\N	1	5
+2	5167	\N	\N	\N	\N	1	2025-06-16 21:44:02.255935+00	t	1	2025-06-16 21:44:02.255935+00	\N	\N	1	6
+2	5168	\N	\N	\N	\N	1	2025-06-16 21:44:02.255935+00	t	1	2025-06-16 21:44:02.255935+00	\N	\N	1	7
+2	5169	\N	\N	\N	\N	1	2025-06-16 21:44:02.255935+00	t	1	2025-06-16 21:44:02.255935+00	\N	\N	1	8
+2	5195	\N	\N	\N	\N	1	2025-06-16 21:44:02.265322+00	f	1	2025-06-16 21:44:02.265322+00	\N	\N	1	34
+2	5196	\N	\N	\N	\N	1	2025-06-16 21:44:02.265322+00	f	1	2025-06-16 21:44:02.265322+00	\N	\N	1	35
+2	5197	\N	\N	\N	\N	1	2025-06-16 21:44:02.265322+00	f	1	2025-06-16 21:44:02.265322+00	\N	\N	1	36
+2	5170	\N	\N	\N	\N	1	2025-06-16 21:44:02.31157+00	t	1	2025-06-16 21:44:02.31157+00	\N	\N	1	9
+2	5171	\N	\N	\N	\N	1	2025-06-16 21:44:02.31157+00	t	1	2025-06-16 21:44:02.31157+00	\N	\N	1	10
+2	5172	\N	\N	\N	\N	1	2025-06-16 21:44:02.31157+00	t	1	2025-06-16 21:44:02.31157+00	\N	\N	1	11
+2	5173	\N	\N	\N	\N	1	2025-06-16 21:44:02.31157+00	t	1	2025-06-16 21:44:02.31157+00	\N	\N	1	12
+2	5174	\N	\N	\N	\N	1	2025-06-16 21:44:02.31157+00	t	1	2025-06-16 21:44:02.31157+00	\N	\N	1	13
+2	5175	\N	\N	\N	\N	1	2025-06-16 21:44:02.31157+00	t	1	2025-06-16 21:44:02.31157+00	\N	\N	1	14
+2	5176	\N	\N	\N	\N	1	2025-06-16 21:44:02.31157+00	t	1	2025-06-16 21:44:02.31157+00	\N	\N	1	15
+2	5177	\N	\N	\N	\N	1	2025-06-16 21:44:02.31157+00	t	1	2025-06-16 21:44:02.31157+00	\N	\N	1	16
+2	5198	\N	\N	\N	\N	1	2025-06-16 21:44:02.317447+00	f	1	2025-06-16 21:44:02.317447+00	\N	\N	1	37
+2	5199	\N	\N	\N	\N	1	2025-06-16 21:44:02.317447+00	f	1	2025-06-16 21:44:02.317447+00	\N	\N	1	38
+2	5200	\N	\N	\N	\N	1	2025-06-16 21:44:02.317447+00	f	1	2025-06-16 21:44:02.317447+00	\N	\N	1	39
+2	5178	\N	\N	\N	\N	1	2025-06-16 21:44:02.368801+00	t	1	2025-06-16 21:44:02.368801+00	\N	\N	1	17
+2	5179	\N	\N	\N	\N	1	2025-06-16 21:44:02.368801+00	t	1	2025-06-16 21:44:02.368801+00	\N	\N	1	18
+2	5180	\N	\N	\N	\N	1	2025-06-16 21:44:02.368801+00	t	1	2025-06-16 21:44:02.368801+00	\N	\N	1	19
+2	5181	\N	\N	\N	\N	1	2025-06-16 21:44:02.368801+00	t	1	2025-06-16 21:44:02.368801+00	\N	\N	1	20
+2	5182	\N	\N	\N	\N	1	2025-06-16 21:44:02.368801+00	t	1	2025-06-16 21:44:02.368801+00	\N	\N	1	21
+2	5183	\N	\N	\N	\N	1	2025-06-16 21:44:02.368801+00	t	1	2025-06-16 21:44:02.368801+00	\N	\N	1	22
+2	5184	\N	\N	\N	\N	1	2025-06-16 21:44:02.368801+00	t	1	2025-06-16 21:44:02.368801+00	\N	\N	1	23
+2	5185	\N	\N	\N	\N	1	2025-06-16 21:44:02.368801+00	t	1	2025-06-16 21:44:02.368801+00	\N	\N	1	24
+2	5201	\N	\N	\N	\N	1	2025-06-16 21:44:02.376337+00	f	1	2025-06-16 21:44:02.376337+00	\N	\N	1	40
+2	5202	\N	\N	\N	\N	1	2025-06-16 21:44:02.376337+00	f	1	2025-06-16 21:44:02.376337+00	\N	\N	1	41
+2	5203	\N	\N	\N	\N	1	2025-06-16 21:44:02.376337+00	f	1	2025-06-16 21:44:02.376337+00	\N	\N	1	42
+3	5162	\N	\N	\N	\N	1	2025-06-16 21:44:04.223951+00	t	1	2025-06-16 21:44:04.223951+00	\N	\N	1	1
+3	5163	\N	\N	\N	\N	1	2025-06-16 21:44:04.223951+00	t	1	2025-06-16 21:44:04.223951+00	\N	\N	1	2
+3	5164	\N	\N	\N	\N	1	2025-06-16 21:44:04.223951+00	t	1	2025-06-16 21:44:04.223951+00	\N	\N	1	3
+3	5165	\N	\N	\N	\N	1	2025-06-16 21:44:04.223951+00	t	1	2025-06-16 21:44:04.223951+00	\N	\N	1	4
+3	5166	\N	\N	\N	\N	1	2025-06-16 21:44:04.223951+00	t	1	2025-06-16 21:44:04.223951+00	\N	\N	1	5
+3	5167	\N	\N	\N	\N	1	2025-06-16 21:44:04.223951+00	t	1	2025-06-16 21:44:04.223951+00	\N	\N	1	6
+3	5168	\N	\N	\N	\N	1	2025-06-16 21:44:04.223951+00	t	1	2025-06-16 21:44:04.223951+00	\N	\N	1	7
+3	5169	\N	\N	\N	\N	1	2025-06-16 21:44:04.223951+00	t	1	2025-06-16 21:44:04.223951+00	\N	\N	1	8
+3	5204	\N	\N	\N	\N	1	2025-06-16 21:44:04.228911+00	f	1	2025-06-16 21:44:04.228911+00	\N	\N	1	43
+3	5205	\N	\N	\N	\N	1	2025-06-16 21:44:04.228911+00	f	1	2025-06-16 21:44:04.228911+00	\N	\N	1	44
+3	5206	\N	\N	\N	\N	1	2025-06-16 21:44:04.228911+00	f	1	2025-06-16 21:44:04.228911+00	\N	\N	1	45
+3	5170	\N	\N	\N	\N	1	2025-06-16 21:44:04.265433+00	t	1	2025-06-16 21:44:04.265433+00	\N	\N	1	9
+3	5171	\N	\N	\N	\N	1	2025-06-16 21:44:04.265433+00	t	1	2025-06-16 21:44:04.265433+00	\N	\N	1	10
+3	5172	\N	\N	\N	\N	1	2025-06-16 21:44:04.265433+00	t	1	2025-06-16 21:44:04.265433+00	\N	\N	1	11
+3	5173	\N	\N	\N	\N	1	2025-06-16 21:44:04.265433+00	t	1	2025-06-16 21:44:04.265433+00	\N	\N	1	12
+3	5174	\N	\N	\N	\N	1	2025-06-16 21:44:04.265433+00	t	1	2025-06-16 21:44:04.265433+00	\N	\N	1	13
+3	5175	\N	\N	\N	\N	1	2025-06-16 21:44:04.265433+00	t	1	2025-06-16 21:44:04.265433+00	\N	\N	1	14
+3	5176	\N	\N	\N	\N	1	2025-06-16 21:44:04.265433+00	t	1	2025-06-16 21:44:04.265433+00	\N	\N	1	15
+3	5177	\N	\N	\N	\N	1	2025-06-16 21:44:04.265433+00	t	1	2025-06-16 21:44:04.265433+00	\N	\N	1	16
+3	5207	\N	\N	\N	\N	1	2025-06-16 21:44:04.270569+00	f	1	2025-06-16 21:44:04.270569+00	\N	\N	1	46
+3	5208	\N	\N	\N	\N	1	2025-06-16 21:44:04.270569+00	f	1	2025-06-16 21:44:04.270569+00	\N	\N	1	47
+3	5209	\N	\N	\N	\N	1	2025-06-16 21:44:04.270569+00	f	1	2025-06-16 21:44:04.270569+00	\N	\N	1	48
+3	5178	\N	\N	\N	\N	1	2025-06-16 21:44:04.304892+00	t	1	2025-06-16 21:44:04.304892+00	\N	\N	1	17
+3	5179	\N	\N	\N	\N	1	2025-06-16 21:44:04.304892+00	t	1	2025-06-16 21:44:04.304892+00	\N	\N	1	18
+3	5180	\N	\N	\N	\N	1	2025-06-16 21:44:04.304892+00	t	1	2025-06-16 21:44:04.304892+00	\N	\N	1	19
+3	5181	\N	\N	\N	\N	1	2025-06-16 21:44:04.304892+00	t	1	2025-06-16 21:44:04.304892+00	\N	\N	1	20
+3	5182	\N	\N	\N	\N	1	2025-06-16 21:44:04.304892+00	t	1	2025-06-16 21:44:04.304892+00	\N	\N	1	21
+3	5183	\N	\N	\N	\N	1	2025-06-16 21:44:04.304892+00	t	1	2025-06-16 21:44:04.304892+00	\N	\N	1	22
+3	5184	\N	\N	\N	\N	1	2025-06-16 21:44:04.304892+00	t	1	2025-06-16 21:44:04.304892+00	\N	\N	1	23
+3	5185	\N	\N	\N	\N	1	2025-06-16 21:44:04.304892+00	t	1	2025-06-16 21:44:04.304892+00	\N	\N	1	24
+3	5210	\N	\N	\N	\N	1	2025-06-16 21:44:04.310304+00	f	1	2025-06-16 21:44:04.310304+00	\N	\N	1	49
+3	5211	\N	\N	\N	\N	1	2025-06-16 21:44:04.310304+00	f	1	2025-06-16 21:44:04.310304+00	\N	\N	1	50
+3	5212	\N	\N	\N	\N	1	2025-06-16 21:44:04.310304+00	f	1	2025-06-16 21:44:04.310304+00	\N	\N	1	51
 \.
 
 
@@ -13390,6 +13755,14 @@ COPY tracking.observation_requested_subzones (observation_id, planting_subzone_i
 1	7
 1	8
 1	9
+2	7
+2	8
+2	9
+3	7
+3	8
+3	9
+4	5
+4	6
 \.
 
 
@@ -13422,6 +13795,9 @@ COPY tracking.observation_types (id, name) FROM stdin;
 
 COPY tracking.observations (id, planting_site_id, created_time, start_date, end_date, completed_time, state_id, upcoming_notification_sent_time, planting_site_history_id, observation_type_id, is_ad_hoc) FROM stdin;
 1	3	2025-05-29 18:49:46.313164+00	2025-05-29	2025-05-31	2025-05-29 18:50:29.365383+00	3	\N	3	1	f
+2	3	2025-06-16 21:43:40.947422+00	2025-01-01	2025-02-01	\N	4	\N	3	1	f
+3	3	2025-06-16 21:43:56.140711+00	2025-04-01	2025-05-01	\N	4	\N	3	1	f
+4	2	2025-06-16 21:47:18.147489+00	2025-06-16	2025-07-16	\N	1	\N	\N	1	f
 \.
 
 
@@ -13706,6 +14082,220 @@ COPY tracking.observed_plot_species_totals (observation_id, monitoring_plot_id, 
 1	5194	2	\N	1	9	0	1	\N	0	0
 1	5194	4	\N	1	9	1	1	\N	0	0
 1	5194	\N	\N	3	3	1	0	\N	0	0
+2	5162	1	\N	1	0	0	0	100	3	0
+2	5162	2	\N	1	0	0	0	100	3	0
+2	5162	3	\N	1	0	0	0	100	3	0
+2	5162	4	\N	1	0	0	0	100	1	0
+2	5163	1	\N	1	0	0	0	100	1	0
+2	5163	2	\N	1	0	0	0	100	1	0
+2	5163	3	\N	1	0	0	0	100	1	0
+2	5163	4	\N	1	0	0	0	100	2	0
+2	5164	2	\N	1	0	0	0	100	2	0
+2	5164	3	\N	1	0	0	0	100	1	0
+2	5164	\N	Other 2	2	0	0	0	100	1	0
+2	5165	1	\N	1	0	0	0	100	3	0
+2	5165	2	\N	1	0	0	0	100	4	0
+2	5165	3	\N	1	0	0	0	100	4	0
+2	5165	4	\N	1	0	0	0	100	2	0
+2	5165	\N	\N	3	0	0	0	100	1	0
+2	5166	1	\N	1	0	0	0	100	2	0
+2	5166	2	\N	1	0	0	0	100	2	0
+2	5166	4	\N	1	0	0	0	100	1	0
+2	5167	1	\N	1	0	0	0	100	3	0
+2	5167	2	\N	1	0	0	0	100	4	0
+2	5167	3	\N	1	0	0	0	100	3	0
+2	5167	4	\N	1	0	0	0	100	9	0
+2	5167	\N	\N	3	0	0	0	100	3	0
+2	5168	1	\N	1	0	0	0	100	4	0
+2	5168	2	\N	1	0	0	0	100	4	0
+2	5168	3	\N	1	0	0	0	100	4	0
+2	5168	4	\N	1	0	0	0	100	3	0
+2	5168	\N	Other 3	2	0	0	0	100	1	0
+2	5169	2	\N	1	0	0	0	100	1	0
+2	5169	3	\N	1	0	0	0	100	2	0
+2	5169	\N	\N	3	0	0	0	100	1	0
+2	5170	1	\N	1	0	0	0	100	1	0
+2	5170	3	\N	1	0	0	0	100	4	0
+2	5170	4	\N	1	0	0	0	100	1	0
+2	5170	\N	\N	3	0	0	0	100	2	0
+2	5171	1	\N	1	0	0	0	100	6	0
+2	5171	2	\N	1	0	0	0	100	3	0
+2	5171	3	\N	1	0	0	0	100	2	0
+2	5171	4	\N	1	0	0	0	100	2	0
+2	5171	\N	Other 1	2	0	0	0	100	1	0
+2	5171	\N	Other 2	2	0	0	0	100	1	0
+2	5172	1	\N	1	0	0	0	100	2	0
+2	5172	2	\N	1	0	0	0	100	4	0
+2	5172	3	\N	1	0	0	0	100	2	0
+2	5172	\N	\N	3	0	0	0	100	1	0
+2	5173	1	\N	1	0	0	0	100	2	0
+2	5173	3	\N	1	0	0	0	100	1	0
+2	5174	3	\N	1	0	0	0	100	2	0
+2	5174	4	\N	1	0	0	0	100	1	0
+2	5174	\N	\N	3	0	0	0	100	2	0
+2	5175	1	\N	1	0	0	0	100	3	0
+2	5175	2	\N	1	0	0	0	100	2	0
+2	5175	3	\N	1	0	0	0	100	1	0
+2	5175	4	\N	1	0	0	0	100	2	0
+2	5176	1	\N	1	0	0	0	100	1	0
+2	5176	2	\N	1	0	0	0	100	2	0
+2	5176	3	\N	1	0	0	0	100	3	0
+2	5176	\N	Other 3	2	0	0	0	100	1	0
+2	5177	1	\N	1	0	0	0	100	2	0
+2	5177	2	\N	1	0	0	0	100	2	0
+2	5177	3	\N	1	0	0	0	100	4	0
+2	5177	4	\N	1	0	0	0	100	5	0
+2	5177	\N	Other 1	2	0	0	0	100	1	0
+2	5177	\N	Other 4	2	0	0	0	100	1	0
+2	5177	\N	\N	3	0	0	0	100	1	0
+2	5178	1	\N	1	0	0	0	100	3	0
+2	5178	2	\N	1	0	0	0	100	1	0
+2	5178	3	\N	1	0	0	0	100	2	0
+2	5178	4	\N	1	0	0	0	100	5	0
+2	5179	1	\N	1	0	0	0	100	1	0
+2	5179	2	\N	1	0	0	0	100	1	0
+2	5179	3	\N	1	0	0	0	100	1	0
+2	5179	4	\N	1	0	0	0	100	1	0
+2	5180	1	\N	1	0	0	0	100	4	0
+2	5180	2	\N	1	0	0	0	100	1	0
+2	5180	3	\N	1	0	0	0	100	3	0
+2	5180	4	\N	1	0	0	0	100	3	0
+2	5180	\N	\N	3	0	0	0	100	2	0
+2	5181	1	\N	1	0	0	0	100	6	0
+2	5181	2	\N	1	0	0	0	100	6	0
+2	5181	3	\N	1	0	0	0	100	1	0
+2	5181	4	\N	1	0	0	0	100	7	0
+2	5181	\N	Other 2	2	0	0	0	100	1	0
+2	5181	\N	Other 3	2	0	0	0	100	1	0
+2	5181	\N	Other 4	2	0	0	0	100	1	0
+2	5181	\N	Other 5	2	0	0	0	100	1	0
+2	5181	\N	\N	3	0	0	0	100	1	0
+2	5182	1	\N	1	0	0	0	100	2	0
+2	5182	2	\N	1	0	0	0	100	3	0
+2	5182	3	\N	1	0	0	0	100	1	0
+2	5182	4	\N	1	0	0	0	100	5	0
+2	5183	1	\N	1	0	0	0	100	3	0
+2	5183	2	\N	1	0	0	0	100	3	0
+2	5183	3	\N	1	0	0	0	100	3	0
+2	5183	4	\N	1	0	0	0	100	7	0
+2	5184	1	\N	1	0	0	0	100	4	0
+2	5184	2	\N	1	0	0	0	100	2	0
+2	5184	3	\N	1	0	0	0	100	5	0
+2	5184	4	\N	1	0	0	0	100	8	0
+2	5184	\N	Other 4	2	0	0	0	100	1	0
+2	5184	\N	\N	3	0	0	0	100	1	0
+2	5185	1	\N	1	0	0	0	100	5	0
+2	5185	2	\N	1	0	0	0	100	3	0
+2	5185	3	\N	1	0	0	0	100	2	0
+2	5185	4	\N	1	0	0	0	100	3	0
+2	5185	\N	\N	3	0	0	0	100	1	0
+3	5162	1	\N	1	0	0	0	100	3	0
+3	5162	2	\N	1	0	0	0	100	3	0
+3	5162	3	\N	1	0	0	0	100	3	0
+3	5162	4	\N	1	0	0	0	100	1	0
+3	5163	1	\N	1	0	0	0	100	1	0
+3	5163	2	\N	1	0	0	0	100	1	0
+3	5163	3	\N	1	0	0	0	100	1	0
+3	5163	4	\N	1	0	0	0	100	2	0
+3	5164	2	\N	1	0	0	0	100	2	0
+3	5164	3	\N	1	0	0	0	100	1	0
+3	5164	\N	Other 2	2	0	0	0	100	1	0
+3	5165	1	\N	1	0	0	0	100	3	0
+3	5165	2	\N	1	0	0	0	100	4	0
+3	5165	3	\N	1	0	0	0	100	4	0
+3	5165	4	\N	1	0	0	0	100	2	0
+3	5165	\N	\N	3	0	0	0	100	1	0
+3	5166	1	\N	1	0	0	0	100	2	0
+3	5166	2	\N	1	0	0	0	100	2	0
+3	5166	4	\N	1	0	0	0	100	1	0
+3	5167	1	\N	1	0	0	0	100	3	0
+3	5167	2	\N	1	0	0	0	100	4	0
+3	5167	3	\N	1	0	0	0	100	3	0
+3	5167	4	\N	1	0	0	0	100	9	0
+3	5167	\N	\N	3	0	0	0	100	3	0
+3	5168	1	\N	1	0	0	0	100	4	0
+3	5168	2	\N	1	0	0	0	100	4	0
+3	5168	3	\N	1	0	0	0	100	4	0
+3	5168	4	\N	1	0	0	0	100	3	0
+3	5168	\N	Other 3	2	0	0	0	100	1	0
+3	5169	2	\N	1	0	0	0	100	1	0
+3	5169	3	\N	1	0	0	0	100	2	0
+3	5169	\N	\N	3	0	0	0	100	1	0
+3	5170	1	\N	1	0	0	0	100	1	0
+3	5170	3	\N	1	0	0	0	100	4	0
+3	5170	4	\N	1	0	0	0	100	1	0
+3	5170	\N	\N	3	0	0	0	100	2	0
+3	5171	1	\N	1	0	0	0	100	6	0
+3	5171	2	\N	1	0	0	0	100	3	0
+3	5171	3	\N	1	0	0	0	100	2	0
+3	5171	4	\N	1	0	0	0	100	2	0
+3	5171	\N	Other 1	2	0	0	0	100	1	0
+3	5171	\N	Other 2	2	0	0	0	100	1	0
+3	5172	1	\N	1	0	0	0	100	2	0
+3	5172	2	\N	1	0	0	0	100	4	0
+3	5172	3	\N	1	0	0	0	100	2	0
+3	5172	\N	\N	3	0	0	0	100	1	0
+3	5173	1	\N	1	0	0	0	100	2	0
+3	5173	3	\N	1	0	0	0	100	1	0
+3	5174	3	\N	1	0	0	0	100	2	0
+3	5174	4	\N	1	0	0	0	100	1	0
+3	5174	\N	\N	3	0	0	0	100	2	0
+3	5175	1	\N	1	0	0	0	100	3	0
+3	5175	2	\N	1	0	0	0	100	2	0
+3	5175	3	\N	1	0	0	0	100	1	0
+3	5175	4	\N	1	0	0	0	100	2	0
+3	5176	1	\N	1	0	0	0	100	1	0
+3	5176	2	\N	1	0	0	0	100	2	0
+3	5176	3	\N	1	0	0	0	100	3	0
+3	5176	\N	Other 3	2	0	0	0	100	1	0
+3	5177	1	\N	1	0	0	0	100	2	0
+3	5177	2	\N	1	0	0	0	100	2	0
+3	5177	3	\N	1	0	0	0	100	4	0
+3	5177	4	\N	1	0	0	0	100	5	0
+3	5177	\N	Other 1	2	0	0	0	100	1	0
+3	5177	\N	Other 4	2	0	0	0	100	1	0
+3	5177	\N	\N	3	0	0	0	100	1	0
+3	5178	1	\N	1	0	0	0	100	3	0
+3	5178	2	\N	1	0	0	0	100	1	0
+3	5178	3	\N	1	0	0	0	100	2	0
+3	5178	4	\N	1	0	0	0	100	5	0
+3	5179	1	\N	1	0	0	0	100	1	0
+3	5179	2	\N	1	0	0	0	100	1	0
+3	5179	3	\N	1	0	0	0	100	1	0
+3	5179	4	\N	1	0	0	0	100	1	0
+3	5180	1	\N	1	0	0	0	100	4	0
+3	5180	2	\N	1	0	0	0	100	1	0
+3	5180	3	\N	1	0	0	0	100	3	0
+3	5180	4	\N	1	0	0	0	100	3	0
+3	5180	\N	\N	3	0	0	0	100	2	0
+3	5181	1	\N	1	0	0	0	100	6	0
+3	5181	2	\N	1	0	0	0	100	6	0
+3	5181	3	\N	1	0	0	0	100	1	0
+3	5181	4	\N	1	0	0	0	100	7	0
+3	5181	\N	Other 2	2	0	0	0	100	1	0
+3	5181	\N	Other 3	2	0	0	0	100	1	0
+3	5181	\N	Other 4	2	0	0	0	100	1	0
+3	5181	\N	Other 5	2	0	0	0	100	1	0
+3	5181	\N	\N	3	0	0	0	100	1	0
+3	5182	1	\N	1	0	0	0	100	2	0
+3	5182	2	\N	1	0	0	0	100	3	0
+3	5182	3	\N	1	0	0	0	100	1	0
+3	5182	4	\N	1	0	0	0	100	5	0
+3	5183	1	\N	1	0	0	0	100	3	0
+3	5183	2	\N	1	0	0	0	100	3	0
+3	5183	3	\N	1	0	0	0	100	3	0
+3	5183	4	\N	1	0	0	0	100	7	0
+3	5184	1	\N	1	0	0	0	100	4	0
+3	5184	2	\N	1	0	0	0	100	2	0
+3	5184	3	\N	1	0	0	0	100	5	0
+3	5184	4	\N	1	0	0	0	100	8	0
+3	5184	\N	Other 4	2	0	0	0	100	1	0
+3	5184	\N	\N	3	0	0	0	100	1	0
+3	5185	1	\N	1	0	0	0	100	5	0
+3	5185	2	\N	1	0	0	0	100	3	0
+3	5185	3	\N	1	0	0	0	100	2	0
+3	5185	4	\N	1	0	0	0	100	3	0
+3	5185	\N	\N	3	0	0	0	100	1	0
 \.
 
 
@@ -13724,6 +14314,26 @@ COPY tracking.observed_site_species_totals (observation_id, planting_site_id, sp
 1	3	\N	Other 4	2	34	4	6	9	3	29
 1	3	\N	\N	3	147	22	16	12	16	116
 1	3	\N	Other 2	2	25	3	4	15	3	17
+2	3	3	\N	1	0	0	0	100	55	0
+2	3	\N	Other 5	2	0	0	0	100	1	0
+2	3	\N	\N	3	0	0	0	100	16	0
+2	3	4	\N	1	0	0	0	100	68	0
+2	3	\N	Other 2	2	0	0	0	100	3	0
+2	3	\N	Other 4	2	0	0	0	100	3	0
+2	3	2	\N	1	0	0	0	100	54	0
+2	3	1	\N	1	0	0	0	100	61	0
+2	3	\N	Other 1	2	0	0	0	100	2	0
+2	3	\N	Other 3	2	0	0	0	100	3	0
+3	3	3	\N	1	0	0	0	100	55	0
+3	3	\N	Other 5	2	0	0	0	100	1	0
+3	3	\N	\N	3	0	0	0	100	16	0
+3	3	4	\N	1	0	0	0	100	68	0
+3	3	\N	Other 2	2	0	0	0	100	3	0
+3	3	\N	Other 4	2	0	0	0	100	3	0
+3	3	2	\N	1	0	0	0	100	54	0
+3	3	1	\N	1	0	0	0	100	61	0
+3	3	\N	Other 1	2	0	0	0	100	2	0
+3	3	\N	Other 3	2	0	0	0	100	3	0
 \.
 
 
@@ -13762,6 +14372,56 @@ COPY tracking.observed_subzone_species_totals (observation_id, planting_subzone_
 1	8	\N	Other 3	2	12	1	0	10	1	9
 1	8	\N	Other 1	2	7	2	0	22	2	7
 1	7	\N	Other 2	2	12	1	1	10	1	9
+2	7	1	\N	1	0	0	0	100	16	0
+2	7	2	\N	1	0	0	0	100	21	0
+2	7	3	\N	1	0	0	0	100	18	0
+2	7	4	\N	1	0	0	0	100	18	0
+2	8	1	\N	1	0	0	0	100	17	0
+2	8	2	\N	1	0	0	0	100	13	0
+2	8	3	\N	1	0	0	0	100	19	0
+2	8	4	\N	1	0	0	0	100	11	0
+2	9	1	\N	1	0	0	0	100	28	0
+2	9	2	\N	1	0	0	0	100	20	0
+2	9	3	\N	1	0	0	0	100	18	0
+2	9	4	\N	1	0	0	0	100	39	0
+2	7	\N	Other 2	2	0	0	0	100	1	0
+2	7	\N	Other 3	2	0	0	0	100	1	0
+2	8	\N	Other 1	2	0	0	0	100	2	0
+2	8	\N	Other 2	2	0	0	0	100	1	0
+2	8	\N	Other 3	2	0	0	0	100	1	0
+2	8	\N	Other 4	2	0	0	0	100	1	0
+2	9	\N	Other 2	2	0	0	0	100	1	0
+2	9	\N	Other 3	2	0	0	0	100	1	0
+2	9	\N	Other 4	2	0	0	0	100	2	0
+2	9	\N	Other 5	2	0	0	0	100	1	0
+2	7	\N	\N	3	0	0	0	100	5	0
+2	8	\N	\N	3	0	0	0	100	6	0
+2	9	\N	\N	3	0	0	0	100	5	0
+3	7	1	\N	1	0	0	0	100	16	0
+3	7	2	\N	1	0	0	0	100	21	0
+3	7	3	\N	1	0	0	0	100	18	0
+3	7	4	\N	1	0	0	0	100	18	0
+3	8	1	\N	1	0	0	0	100	17	0
+3	8	2	\N	1	0	0	0	100	13	0
+3	8	3	\N	1	0	0	0	100	19	0
+3	8	4	\N	1	0	0	0	100	11	0
+3	9	1	\N	1	0	0	0	100	28	0
+3	9	2	\N	1	0	0	0	100	20	0
+3	9	3	\N	1	0	0	0	100	18	0
+3	9	4	\N	1	0	0	0	100	39	0
+3	7	\N	Other 2	2	0	0	0	100	1	0
+3	7	\N	Other 3	2	0	0	0	100	1	0
+3	8	\N	Other 1	2	0	0	0	100	2	0
+3	8	\N	Other 2	2	0	0	0	100	1	0
+3	8	\N	Other 3	2	0	0	0	100	1	0
+3	8	\N	Other 4	2	0	0	0	100	1	0
+3	9	\N	Other 2	2	0	0	0	100	1	0
+3	9	\N	Other 3	2	0	0	0	100	1	0
+3	9	\N	Other 4	2	0	0	0	100	2	0
+3	9	\N	Other 5	2	0	0	0	100	1	0
+3	7	\N	\N	3	0	0	0	100	5	0
+3	8	\N	\N	3	0	0	0	100	6	0
+3	9	\N	\N	3	0	0	0	100	5	0
 \.
 
 
@@ -13800,6 +14460,56 @@ COPY tracking.observed_zone_species_totals (observation_id, planting_zone_id, sp
 1	7	\N	Other 2	2	4	1	1	25	1	3
 1	6	\N	Other 2	2	9	1	2	17	1	5
 1	5	\N	Other 2	2	12	1	1	10	1	9
+2	5	1	\N	1	0	0	0	100	16	0
+2	5	2	\N	1	0	0	0	100	21	0
+2	5	3	\N	1	0	0	0	100	18	0
+2	5	4	\N	1	0	0	0	100	18	0
+2	6	1	\N	1	0	0	0	100	17	0
+2	6	2	\N	1	0	0	0	100	13	0
+2	6	3	\N	1	0	0	0	100	19	0
+2	6	4	\N	1	0	0	0	100	11	0
+2	7	1	\N	1	0	0	0	100	28	0
+2	7	2	\N	1	0	0	0	100	20	0
+2	7	3	\N	1	0	0	0	100	18	0
+2	7	4	\N	1	0	0	0	100	39	0
+2	5	\N	Other 2	2	0	0	0	100	1	0
+2	5	\N	Other 3	2	0	0	0	100	1	0
+2	6	\N	Other 1	2	0	0	0	100	2	0
+2	6	\N	Other 2	2	0	0	0	100	1	0
+2	6	\N	Other 3	2	0	0	0	100	1	0
+2	6	\N	Other 4	2	0	0	0	100	1	0
+2	7	\N	Other 2	2	0	0	0	100	1	0
+2	7	\N	Other 3	2	0	0	0	100	1	0
+2	7	\N	Other 4	2	0	0	0	100	2	0
+2	7	\N	Other 5	2	0	0	0	100	1	0
+2	5	\N	\N	3	0	0	0	100	5	0
+2	6	\N	\N	3	0	0	0	100	6	0
+2	7	\N	\N	3	0	0	0	100	5	0
+3	5	1	\N	1	0	0	0	100	16	0
+3	5	2	\N	1	0	0	0	100	21	0
+3	5	3	\N	1	0	0	0	100	18	0
+3	5	4	\N	1	0	0	0	100	18	0
+3	6	1	\N	1	0	0	0	100	17	0
+3	6	2	\N	1	0	0	0	100	13	0
+3	6	3	\N	1	0	0	0	100	19	0
+3	6	4	\N	1	0	0	0	100	11	0
+3	7	1	\N	1	0	0	0	100	28	0
+3	7	2	\N	1	0	0	0	100	20	0
+3	7	3	\N	1	0	0	0	100	18	0
+3	7	4	\N	1	0	0	0	100	39	0
+3	5	\N	Other 2	2	0	0	0	100	1	0
+3	5	\N	Other 3	2	0	0	0	100	1	0
+3	6	\N	Other 1	2	0	0	0	100	2	0
+3	6	\N	Other 2	2	0	0	0	100	1	0
+3	6	\N	Other 3	2	0	0	0	100	1	0
+3	6	\N	Other 4	2	0	0	0	100	1	0
+3	7	\N	Other 2	2	0	0	0	100	1	0
+3	7	\N	Other 3	2	0	0	0	100	1	0
+3	7	\N	Other 4	2	0	0	0	100	2	0
+3	7	\N	Other 5	2	0	0	0	100	1	0
+3	5	\N	\N	3	0	0	0	100	5	0
+3	6	\N	\N	3	0	0	0	100	6	0
+3	7	\N	\N	3	0	0	0	100	5	0
 \.
 
 
@@ -13830,6 +14540,9 @@ COPY tracking.planting_site_notifications (id, planting_site_id, notification_ty
 1	1	23	1	2024-03-06 18:59:51.272857+00
 2	1	23	2	2024-06-11 22:00:00.182883+00
 3	1	24	2	2025-05-13 20:45:12.95997+00
+4	2	23	1	2025-06-16 21:46:26.60773+00
+5	3	23	1	2025-06-16 21:46:26.648404+00
+6	2	19	1	2025-06-16 21:46:26.654357+00
 \.
 
 
@@ -17982,6 +18695,13 @@ SELECT pg_catalog.setval('public.device_templates_id_seq', 1, false);
 
 
 --
+-- Name: disclaimers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.disclaimers_id_seq', 1, false);
+
+
+--
 -- Name: gbif_names_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -18006,7 +18726,7 @@ SELECT pg_catalog.setval('public.internal_tags_id_seq', 10000, false);
 -- Name: notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.notifications_id_seq', 5, true);
+SELECT pg_catalog.setval('public.notifications_id_seq', 10, true);
 
 
 --
@@ -18048,7 +18768,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 32, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 38, true);
 
 
 --
@@ -18195,14 +18915,14 @@ SELECT pg_catalog.setval('tracking.draft_planting_sites_id_seq', 2, true);
 -- Name: monitoring_plot_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.monitoring_plot_histories_id_seq', 33, true);
+SELECT pg_catalog.setval('tracking.monitoring_plot_histories_id_seq', 51, true);
 
 
 --
 -- Name: monitoring_plots_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.monitoring_plots_id_seq', 5194, true);
+SELECT pg_catalog.setval('tracking.monitoring_plots_id_seq', 5212, true);
 
 
 --
@@ -18216,7 +18936,7 @@ SELECT pg_catalog.setval('tracking.observation_biomass_species_id_seq', 1, false
 -- Name: observations_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.observations_id_seq', 1, true);
+SELECT pg_catalog.setval('tracking.observations_id_seq', 4, true);
 
 
 --
@@ -18244,7 +18964,7 @@ SELECT pg_catalog.setval('tracking.planting_site_histories_id_seq', 3, true);
 -- Name: planting_site_notifications_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
-SELECT pg_catalog.setval('tracking.planting_site_notifications_id_seq', 3, true);
+SELECT pg_catalog.setval('tracking.planting_site_notifications_id_seq', 6, true);
 
 
 --
@@ -19464,6 +20184,38 @@ ALTER TABLE ONLY funder.funding_entity_users
 
 
 --
+-- Name: published_project_carbon_certs published_project_carbon_certs_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_carbon_certs
+    ADD CONSTRAINT published_project_carbon_certs_pkey PRIMARY KEY (project_id, carbon_certification);
+
+
+--
+-- Name: published_project_details published_project_details_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_details
+    ADD CONSTRAINT published_project_details_pkey PRIMARY KEY (project_id);
+
+
+--
+-- Name: published_project_land_use published_project_land_use_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_land_use
+    ADD CONSTRAINT published_project_land_use_pkey PRIMARY KEY (project_id, land_use_model_type_id);
+
+
+--
+-- Name: published_project_sdg published_project_sdg_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_sdg
+    ADD CONSTRAINT published_project_sdg_pkey PRIMARY KEY (project_id, sdg_number);
+
+
+--
 -- Name: published_report_achievements published_report_achievements_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
 --
 
@@ -19829,6 +20581,14 @@ ALTER TABLE ONLY public.device_templates
 
 ALTER TABLE ONLY public.device_templates
     ADD CONSTRAINT device_templates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: disclaimers disclaimers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.disclaimers
+    ADD CONSTRAINT disclaimers_pkey PRIMARY KEY (id);
 
 
 --
@@ -20501,6 +21261,14 @@ ALTER TABLE ONLY public.upload_types
 
 ALTER TABLE ONLY public.uploads
     ADD CONSTRAINT uploads_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_disclaimers user_disclaimers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_disclaimers
+    ADD CONSTRAINT user_disclaimers_pkey PRIMARY KEY (disclaimer_id, user_id);
 
 
 --
@@ -21763,6 +22531,13 @@ CREATE INDEX device_managers_user_id_idx ON public.device_managers USING btree (
 
 
 --
+-- Name: disclaimers_effective_on_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX disclaimers_effective_on_idx ON public.disclaimers USING btree (effective_on);
+
+
+--
 -- Name: facilities_idle_after_time_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -22033,6 +22808,13 @@ CREATE INDEX upload_problems_upload_id_idx ON public.upload_problems USING btree
 --
 
 CREATE INDEX uploads_facility_id_idx ON public.uploads USING btree (facility_id);
+
+
+--
+-- Name: user_disclaimers_user_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX user_disclaimers_user_id_idx ON public.user_disclaimers USING btree (user_id);
 
 
 --
@@ -24444,6 +25226,78 @@ ALTER TABLE ONLY funder.funding_entity_users
 
 
 --
+-- Name: published_project_carbon_certs published_project_carbon_certs_project_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_carbon_certs
+    ADD CONSTRAINT published_project_carbon_certs_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_project_details published_project_details_country_code_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_details
+    ADD CONSTRAINT published_project_details_country_code_fkey FOREIGN KEY (country_code) REFERENCES public.countries(code);
+
+
+--
+-- Name: published_project_details published_project_details_project_highlight_photo_value_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_details
+    ADD CONSTRAINT published_project_details_project_highlight_photo_value_id_fkey FOREIGN KEY (project_highlight_photo_value_id) REFERENCES docprod.variable_values(id);
+
+
+--
+-- Name: published_project_details published_project_details_project_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_details
+    ADD CONSTRAINT published_project_details_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_project_details published_project_details_project_zone_figure_value_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_details
+    ADD CONSTRAINT published_project_details_project_zone_figure_value_id_fkey FOREIGN KEY (project_zone_figure_value_id) REFERENCES docprod.variable_values(id);
+
+
+--
+-- Name: published_project_details published_project_details_published_by_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_details
+    ADD CONSTRAINT published_project_details_published_by_fkey FOREIGN KEY (published_by) REFERENCES public.users(id);
+
+
+--
+-- Name: published_project_land_use published_project_land_use_land_use_model_type_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_land_use
+    ADD CONSTRAINT published_project_land_use_land_use_model_type_id_fkey FOREIGN KEY (land_use_model_type_id) REFERENCES public.land_use_model_types(id);
+
+
+--
+-- Name: published_project_land_use published_project_land_use_project_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_land_use
+    ADD CONSTRAINT published_project_land_use_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_project_sdg published_project_sdg_project_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_project_sdg
+    ADD CONSTRAINT published_project_sdg_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
 -- Name: published_report_achievements published_report_achievements_report_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
 --
 
@@ -25344,7 +26198,7 @@ ALTER TABLE ONLY public.projects
 --
 
 ALTER TABLE ONLY public.projects
-    ADD CONSTRAINT projects_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+    ADD CONSTRAINT projects_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organizations(id) ON DELETE CASCADE;
 
 
 --
@@ -25721,6 +26575,22 @@ ALTER TABLE ONLY public.uploads
 
 ALTER TABLE ONLY public.uploads
     ADD CONSTRAINT uploads_type_id_fkey FOREIGN KEY (type_id) REFERENCES public.upload_types(id);
+
+
+--
+-- Name: user_disclaimers user_disclaimers_disclaimer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_disclaimers
+    ADD CONSTRAINT user_disclaimers_disclaimer_id_fkey FOREIGN KEY (disclaimer_id) REFERENCES public.disclaimers(id) ON DELETE CASCADE;
+
+
+--
+-- Name: user_disclaimers user_disclaimers_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_disclaimers
+    ADD CONSTRAINT user_disclaimers_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --

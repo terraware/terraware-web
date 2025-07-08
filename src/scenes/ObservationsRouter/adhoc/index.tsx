@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
-import { Icon, Textfield } from '@terraware/web-components';
+import { Icon, IconTooltip, Textfield } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import Card from 'src/components/common/Card';
@@ -165,9 +165,17 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
         text: true,
       },
     ];
-  }, [activeLocale, defaultTimeZone, monitoringPlotResult, plantingSite, plantingZone, plantingSubzone]);
+  }, [
+    monitoringPlotResult,
+    result?.completedTime,
+    plantingSite?.timeZone,
+    activeLocale,
+    defaultTimeZone,
+    plantingZone?.name,
+    plantingSubzone?.name,
+  ]);
 
-  const title = (text: string, marginTop?: number, marginBottom?: number) => (
+  const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
     <Typography
       fontSize='20px'
       lineHeight='28px'
@@ -278,7 +286,12 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
                 </Grid>
               )}
             </Grid>
-            {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
+            {title(
+              <Box display='flex'>
+                {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+                <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
+              </Box>
+            )}
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlotSpecies} />
             </Box>

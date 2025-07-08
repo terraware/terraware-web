@@ -240,6 +240,7 @@ const ProjectProfileView = ({
             countryCode={projectDetails?.countryCode}
             includeLabel={!funderView}
             md={isMobile || isTablet ? 12 : projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
+            projectId={project?.id}
           />
         )}
       </Grid>
@@ -309,7 +310,7 @@ const ProjectProfileView = ({
               metrics={lastSubmittedReport.systemMetrics}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
-              formatter={(value) => formatNumberScale(value, 1)}
+              formatter={(value) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0')}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
@@ -334,7 +335,7 @@ const ProjectProfileView = ({
               publishedMetrics={lastPublishedReport.systemMetrics}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
-              formatter={(value) => formatNumberScale(value, 1)}
+              formatter={(value) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0')}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}

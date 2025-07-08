@@ -131,6 +131,10 @@ export default function PlantingProgressList({
   }, [selectedRows]);
 
   useEffect(() => {
+    reloadTracking();
+  }, [reloadTracking]);
+
+  useEffect(() => {
     if (updatePlantingResult?.status === 'success') {
       reloadTracking();
       setRequestId('');

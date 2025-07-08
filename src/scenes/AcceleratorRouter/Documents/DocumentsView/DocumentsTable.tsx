@@ -98,7 +98,7 @@ export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.
           },
         ]
       : [];
-  }, [projectId, query.get('dealName')]);
+  }, [projectId, query]);
 
   const columns = useCallback(
     (): TableColumnType[] =>
@@ -113,7 +113,7 @@ export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.
             { key: 'status', name: strings.STATUS, type: 'string' },
           ]
         : [],
-    [activeLocale, projectId, strings]
+    [activeLocale, projectId]
   );
 
   useEffect(() => {

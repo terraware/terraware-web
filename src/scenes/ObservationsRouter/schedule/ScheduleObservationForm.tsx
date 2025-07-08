@@ -11,11 +11,14 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import SmallSiteWarningDialog from 'src/scenes/ObservationsRouter/schedule/SmallSiteWarningDialog';
 import strings from 'src/strings';
 import { ScheduleObservationRequestPayload } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ObservationSubzoneSelector from './ObservationSubzoneSelector';
+
+const WARN_IF_SITE_LESS_THAN_HECTARES = 3.0;
 
 export type ScheduleObservationFormProps = {
   title: string;
@@ -49,6 +52,7 @@ export default function ScheduleObservationForm({
   const [startDateError, setStartDateError] = useState<string>();
   const [endDateError, setEndDateError] = useState<string>();
   const [subzoneError, setSubzoneError] = useState<string>();
+  const [showSmallSiteWarning, setShowSmallSiteWarning] = useState<boolean>();
 
   const upcomingObservations = useMemo(() => {
     const now = Date.now();
@@ -116,12 +120,16 @@ export default function ScheduleObservationForm({
       _subzoneError = strings.SELECT_AT_LEAST_ONE_SUBZONE;
     }
 
+    const _showSmallSiteWarning =
+      plantingSite?.areaHa !== undefined && plantingSite.areaHa < WARN_IF_SITE_LESS_THAN_HECTARES;
+
     setStartDateError(_startDateError);
     setEndDateError(_endDateError);
     setSubzoneError(_subzoneError);
+    setShowSmallSiteWarning(_showSmallSiteWarning);
 
-    return _startDateError || _endDateError || _subzoneError;
-  }, [endDate, requestedSubzoneIds, startDate]);
+    return _startDateError || _endDateError || _subzoneError || _showSmallSiteWarning;
+  }, [endDate, plantingSite, requestedSubzoneIds, setShowSmallSiteWarning, startDate]);
 
   const onSelectPlantingSite = useCallback(
     (value: string) => {
@@ -130,12 +138,18 @@ export default function ScheduleObservationForm({
     [setSelectedPlantingSite]
   );
 
-  const onSubmit = useCallback(() => {
-    setValidate(true);
-    if (!findErrors() && startDate && endDate && requestedSubzoneIds && plantingSite) {
+  const doSave = useCallback(() => {
+    if (startDate && endDate && requestedSubzoneIds && plantingSite) {
       onSave({ startDate, endDate, requestedSubzoneIds, plantingSiteId: plantingSite.id });
     }
-  }, [endDate, findErrors, onSave, plantingSite, requestedSubzoneIds, startDate]);
+  }, [endDate, onSave, plantingSite, requestedSubzoneIds, startDate]);
+
+  const onSubmit = useCallback(() => {
+    setValidate(true);
+    if (!findErrors()) {
+      doSave();
+    }
+  }, [doSave, findErrors, setValidate]);
 
   const setStartDateCallback = useCallback(
     (value: DateTime<boolean> | undefined) => setStartDate(value?.toISODate() || undefined),
@@ -220,6 +234,9 @@ export default function ScheduleObservationForm({
           </Grid>
         </Card>
       </PageForm>
+      {showSmallSiteWarning && (
+        <SmallSiteWarningDialog onSave={doSave} open={showSmallSiteWarning} setOpen={setShowSmallSiteWarning} />
+      )}
     </TfMain>
   );
 }

@@ -31,6 +31,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Set Environment
         run: ./.github/scripts/set-environment.sh
 
@@ -63,9 +68,10 @@ jobs:
       - name: Generate strings
         run: yarn generate-strings
 
-      # Disable the linter since it will not pass in its current state. Remove the jsx-no-bind rule because it has lots of errors currently
-      # - name: Run linter
-      #   run: yarn lint --rule "react/jsx-no-bind: 0"
+      # Remove the jsx-no-bind rule because it has lots of errors currently
+      - name: Run linter
+        run: >
+          yarn lint --rule "react/jsx-no-bind: 0"
 
       - name: Do typescript check
         run: yarn ts

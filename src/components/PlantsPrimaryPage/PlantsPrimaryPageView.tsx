@@ -173,7 +173,7 @@ export default function PlantsPrimaryPageView({
                     <b>{strings.PLEASE_NOTE}</b>{' '}
                     {strings.formatString(
                       strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
-                      isAcceleratorRoute ? (
+                      !isAcceleratorRoute ? (
                         <Link
                           fontSize={'16px'}
                           to={`${APP_PATHS.OBSERVATION_DETAILS.replace(

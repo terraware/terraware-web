@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Funding Entities';
+export type FeatureName = 'Show Production View' | 'GIS Maps';
 
 export type Feature = {
   name: FeatureName;
@@ -36,12 +36,12 @@ export const OPT_IN_FEATURES: Feature[] = [
     set: env().forceProductionView,
   },
   {
-    name: 'Funding Entities',
-    preferenceName: 'enableFundingEntities',
+    name: 'GIS Maps',
+    preferenceName: 'enableGisMaps',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Enable Funding Entities.'],
+    description: ['Enable GIS Maps on Project Profile view'],
     disclosure: ['This is a WIP'],
   },
 ];

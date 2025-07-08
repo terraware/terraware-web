@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -52,11 +52,15 @@ export default function EventEditView(): JSX.Element {
   const responseDelete = useAppSelector(selectDeleteManyEvents(deleteEventRequestId));
   const snackbar = useSnackbar();
 
+  const goToEvent = useCallback(() => {
+    navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));
+  }, [navigate, moduleId]);
+
   useEffect(() => {
     if (responseProjects?.status === 'error') {
       snackbar.toastError();
     }
-  }, [responseProjects]);
+  }, [responseProjects, snackbar]);
 
   useEffect(() => {
     if (reponseCreate?.status === 'error') {
@@ -65,7 +69,7 @@ export default function EventEditView(): JSX.Element {
     if (reponseCreate?.status === 'success') {
       goToEvent();
     }
-  }, [reponseCreate]);
+  }, [reponseCreate, goToEvent, snackbar]);
 
   useEffect(() => {
     if (reponseUpdate?.status === 'error') {
@@ -74,7 +78,7 @@ export default function EventEditView(): JSX.Element {
     if (reponseUpdate?.status === 'success') {
       goToEvent();
     }
-  }, [reponseUpdate]);
+  }, [reponseUpdate, goToEvent, snackbar]);
 
   useEffect(() => {
     if (responseDelete?.status === 'error') {
@@ -83,11 +87,7 @@ export default function EventEditView(): JSX.Element {
     if (responseDelete?.status === 'success') {
       goToEvent();
     }
-  }, [responseDelete]);
-
-  const goToEvent = () => {
-    navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));
-  };
+  }, [responseDelete, goToEvent, snackbar]);
 
   const save = () => {
     const allEventIdsToDelete = eventsToDelete?.map((etd) => etd.id);

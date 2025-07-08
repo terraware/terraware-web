@@ -75,12 +75,10 @@ export default function PlantsDashboardView({
   }, [latestResult, plantingSite]);
 
   useEffect(() => {
-    if (!acceleratorOrganizationId) {
-      if (organizationId) {
-        setAcceleratorOrganizationId(organizationId);
-      } else if (selectedOrganization?.id) {
-        setAcceleratorOrganizationId(selectedOrganization?.id);
-      }
+    if (organizationId) {
+      setAcceleratorOrganizationId(organizationId);
+    } else if (!isAcceleratorRoute && selectedOrganization?.id) {
+      setAcceleratorOrganizationId(selectedOrganization?.id);
     }
   }, [
     acceleratorOrganizationId,

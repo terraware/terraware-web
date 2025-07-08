@@ -234,7 +234,7 @@ export default fixupConfigRules([
 
       'id-match': 'error',
       'jsdoc/check-alignment': 'error',
-      'jsdoc/check-indentation': 'error',
+      'jsdoc/check-indentation': 'off',
       'linebreak-style': ['error', 'unix'],
       'max-classes-per-file': ['error', 1],
 

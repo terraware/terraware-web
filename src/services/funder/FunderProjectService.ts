@@ -9,22 +9,25 @@ import HttpService, { Response2, ServerData } from '../HttpService';
 
 // types
 export type FunderProjectData = ServerData & {
+  projects: FunderProjectDetails[];
   details: FunderProjectDetails | undefined;
 };
 
 // endpoints
 const FUNDER_PROJECTS_SINGLE_ENDPOINT = '/api/v1/funder/projects/{projectId}';
+const FUNDER_PROJECTS_MULTIPLE_ENDPOINT = '/api/v1/funder/projects/{projectIds}';
 
 // responses
 type PublishFunderProjectResponse =
   paths[typeof FUNDER_PROJECTS_SINGLE_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
-const httpFunderProjects = HttpService.root(FUNDER_PROJECTS_SINGLE_ENDPOINT);
+const httpFunderProject = HttpService.root(FUNDER_PROJECTS_SINGLE_ENDPOINT);
+const httpFunderProjects = HttpService.root(FUNDER_PROJECTS_MULTIPLE_ENDPOINT);
 
-const get = async (projectId: number): Promise<Response2<FunderProjectData>> => {
+const get = async (projectIds: number[]): Promise<Response2<FunderProjectData>> => {
   return await httpFunderProjects.get2<FunderProjectData>({
     urlReplacements: {
-      '{projectId}': projectId.toString(),
+      '{projectIds}': projectIds.join(','),
     },
   });
 };
@@ -32,7 +35,7 @@ const get = async (projectId: number): Promise<Response2<FunderProjectData>> => 
 const publish = async (
   funderProjectDetails: FunderProjectDetails
 ): Promise<Response2<PublishFunderProjectResponse>> => {
-  return await httpFunderProjects.post2<PublishFunderProjectResponse>({
+  return await httpFunderProject.post2<PublishFunderProjectResponse>({
     urlReplacements: {
       '{projectId}': funderProjectDetails.projectId.toString(),
     },

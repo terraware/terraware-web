@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { IconTooltip, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import _ from 'lodash';
 
@@ -61,7 +61,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     });
 
     return { ...observation?.adHocPlot, species: speciesToUse };
-  }, [observation?.adHocPlot]);
+  }, [observation?.adHocPlot, species]);
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
@@ -103,9 +103,9 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
         text: true,
       },
     ];
-  }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
+  }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite?.timeZone, timeZone]);
 
-  const title = (text: string, marginTop?: number, marginBottom?: number) => (
+  const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
     <Typography
       fontSize='20px'
       lineHeight='28px'
@@ -193,7 +193,12 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
                 </Grid>
               ))}
             </Grid>
-            {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
+            {title(
+              <Box display={'flex'}>
+                {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+                <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
+              </Box>
+            )}
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlot?.species} />
             </Box>

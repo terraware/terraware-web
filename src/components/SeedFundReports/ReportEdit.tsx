@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -63,7 +63,7 @@ export default function ReportEdit(): JSX.Element {
     }
   }, [idInView]);
 
-  const reportIdValid = () => reportIdInt && reportIdInt !== -1;
+  const reportIdValid = useCallback(() => reportIdInt && reportIdInt !== -1, [reportIdInt]);
 
   useEffect(() => {
     const getReport = async () => {
@@ -82,7 +82,7 @@ export default function ReportEdit(): JSX.Element {
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
-  }, [reportIdInt, snackbar]);
+  }, [reportIdInt, snackbar, reportIdValid]);
 
   const updateFiles = async () => {
     if (reportIdValid()) {
@@ -225,11 +225,13 @@ export default function ReportEdit(): JSX.Element {
     }
 
     const emptyWorkerField = (location: any) => {
+      /* eslint-disable eqeqeq */
       return (
         location.workers.paidWorkers == null ||
         location.workers.femalePaidWorkers == null ||
         location.workers.volunteers == null
       );
+      /* eslint-enable eqeqeq */
     };
     const emptySeedbankFields = iReport.seedBanks?.findIndex((sb) => {
       return (
@@ -253,6 +255,7 @@ export default function ReportEdit(): JSX.Element {
         (!nursery.buildStartedDate ||
           !nursery.buildCompletedDate ||
           !nursery.operationStartedDate ||
+          /* eslint-disable-next-line eqeqeq */
           nursery.capacity == null ||
           !buildStartedDateValid(nursery) ||
           !buildCompletedDateValid(nursery) ||
@@ -265,6 +268,7 @@ export default function ReportEdit(): JSX.Element {
     }
 
     const emptyPlantingSitesFields = iReport.plantingSites?.findIndex((plantingSite) => {
+      /* eslint-disable eqeqeq */
       const speciesDataMissing =
         plantingSite.species?.some((sp) => sp.totalPlanted == null || sp.mortalityRateInField == null) ?? false;
       return (
@@ -277,6 +281,7 @@ export default function ReportEdit(): JSX.Element {
           speciesDataMissing ||
           emptyWorkerField(plantingSite))
       );
+      /* eslint-enable eqeqeq */
     });
     if (emptyPlantingSitesFields !== undefined && emptyPlantingSitesFields >= 0) {
       return `planting-site-${emptyPlantingSitesFields}`;

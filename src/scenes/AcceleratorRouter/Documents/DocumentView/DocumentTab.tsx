@@ -11,16 +11,18 @@ import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import Metadata from './Metadata';
 
 const DocumentTab = (): JSX.Element => {
-  const { allVariables, document, documentId, documentVariables, projectId, reload, variablesOwners, reloadVariables } =
+  const { allVariables, documentId, documentVariables, projectId, reload, variablesOwners, reloadVariables } =
     useDocumentProducerData();
   const { isAllowed } = useUser();
   const [metadataDisabled, setMetadataDisabled] = useState(!isAllowed('UPDATE_DELIVERABLE'));
 
-  const getVariableOwner = (variableId: number) => {
-    const variableOwner = variablesOwners?.find((vo) => vo.variableId.toString() === variableId.toString());
-    const variableOwnerId = variableOwner?.ownedBy;
-    return variableOwnerId;
-  };
+  const getVariableOwner = useCallback(
+    (variableId: number) => {
+      const variableOwner = variablesOwners?.find((vo) => vo.variableId.toString() === variableId.toString());
+      return variableOwner?.ownedBy;
+    },
+    [variablesOwners]
+  );
 
   const renderSection = useCallback(
     (section: SectionVariableWithValues): JSX.Element[] => {
@@ -66,7 +68,7 @@ const DocumentTab = (): JSX.Element => {
       }
       return sectionsToRender;
     },
-    [allVariables, document, reload, reloadVariables]
+    [allVariables, reload, reloadVariables, documentId, getVariableOwner, projectId]
   );
 
   const renderVariable = useCallback(

@@ -92,6 +92,7 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
     Zones: strings.ZONES,
     'Sub-Zones': strings.SUBZONES,
     'Monitoring Plots': strings.MONITORING_PLOTS,
+    'Project Zones': strings.PROJECT_ZONES,
   };
 
   const mapData = useMemo(() => {
@@ -151,7 +152,7 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
           topRightMapControl={
             <MapLayerSelect
               initialSelection={includedLayers}
-              onUpdateSelection={(selection) => setIncludedLayers(selection)}
+              onUpdateSelection={setIncludedLayers}
               menuSections={[
                 layerOptions.map((opt) => ({
                   label: layerOptionLabels[opt],

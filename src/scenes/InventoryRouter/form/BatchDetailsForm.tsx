@@ -119,7 +119,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
         });
       }
     },
-    [hasErrors, onBatchValidated, selectedOrganization?.id, timeZone]
+    [hasErrors, onBatchValidated, selectedOrganization, timeZone]
   );
 
   const accessionQuantity = useMemo<{ value: number; display?: string } | undefined>(() => {
@@ -141,12 +141,12 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   }, [selectedAccession]);
 
   useEffect(() => {
-    if (!facilityId) {
+    if (!facilityId || !selectedOrganization) {
       return;
     }
 
     const facility = FacilityService.getFacility({
-      organization: selectedOrganization!,
+      organization: selectedOrganization,
       facilityId,
       type: 'Nursery',
     });

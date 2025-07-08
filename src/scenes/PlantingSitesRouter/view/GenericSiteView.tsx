@@ -38,17 +38,14 @@ export default function GenericSiteView({ plantingSite }: GenericSiteViewProps):
     [plantingSite?.boundary, plantingSite?.plantingZones, view]
   );
 
+  const openModal = useCallback(() => setDeleteModalOpen(true), []);
+  const closeModal = useCallback(() => setDeleteModalOpen(false), []);
+
   return (
     <>
-      {deleteModalOpen && plantingSite && (
-        <DeletePlantingSiteModal plantingSite={plantingSite} onClose={() => setDeleteModalOpen(false)} />
-      )}
+      {deleteModalOpen && plantingSite && <DeletePlantingSiteModal plantingSite={plantingSite} onClose={closeModal} />}
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: isMapView ? 1 : 0 }}>
-        <PlantingSiteDetailsHeader
-          onEdit={goToEditPlantingSite}
-          onDelete={() => setDeleteModalOpen(true)}
-          plantingSite={plantingSite}
-        />
+        <PlantingSiteDetailsHeader onEdit={goToEditPlantingSite} onDelete={openModal} plantingSite={plantingSite} />
         <Grid item xs={12}>
           <PageSnackbar />
         </Grid>
@@ -63,13 +60,7 @@ export default function GenericSiteView({ plantingSite }: GenericSiteViewProps):
         >
           <PlantingSiteDetailsCard plantingSite={plantingSite} />
           {plantingSite.boundary && plantingSite.plantingZones && (
-            <BoundariesAndZones
-              plantingSite={plantingSite}
-              search={search}
-              setSearch={setSearch}
-              setView={setView}
-              view={view}
-            />
+            <BoundariesAndZones search={search} setSearch={setSearch} setView={setView} view={view} />
           )}
           {plantingSite.boundary && !plantingSite.plantingZones && (
             <Grid container flexGrow={1}>

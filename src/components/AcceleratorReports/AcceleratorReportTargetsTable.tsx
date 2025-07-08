@@ -261,9 +261,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
               label={''}
               selectedValue={yearFilter}
               options={getReportsYearsString}
-              onChange={(year: string) => {
-                setYearFilter(year);
-              }}
+              onChange={setYearFilter}
               fullWidth
             />
           </Box>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Button, DialogBox } from '@terraware/web-components';
 
@@ -24,14 +24,14 @@ export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JS
   const [requestId, setRequestId] = useState('');
   const deleteRequest = useAppSelector(selectParticipantProjectSpeciesDeleteManyRequest(requestId));
 
-  const removeSelectedSpeciesFromParticipantProject = () => {
+  const removeSelectedSpeciesFromParticipantProject = useCallback(() => {
     if (!speciesToRemove?.length) {
       return;
     }
 
     const request = dispatch(requestDeleteManyParticipantProjectSpecies(speciesToRemove));
     setRequestId(request.requestId);
-  };
+  }, [dispatch, speciesToRemove]);
 
   useEffect(() => {
     if (!deleteRequest) {
@@ -45,7 +45,7 @@ export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JS
       snackbar.toastError(strings.GENERIC_ERROR);
       onClose();
     }
-  }, [deleteRequest]);
+  }, [deleteRequest, onClose, snackbar]);
 
   if (!open) {
     return null;

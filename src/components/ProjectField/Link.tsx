@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { useTheme } from '@mui/material';
 
@@ -11,10 +11,14 @@ const ProjectFieldLink = ({ label, value }: ProjectFieldProps) => {
   const theme = useTheme();
   const navigate = useSyncNavigate();
 
-  const onClick = () => {
-    navigate(value as string);
-    window.scroll(0, 0);
-  };
+  const onClick = useCallback(() => {
+    if ((value as string).startsWith('http')) {
+      window.open(value as string, '_blank');
+    } else {
+      void navigate(value as string);
+      window.scroll(0, 0);
+    }
+  }, [navigate, value]);
 
   return (
     value && (

@@ -76,7 +76,7 @@ const ApplicationReviewModal = ({
     if (!(result?.status === 'pending')) {
       onClose();
     }
-  }, [onClose]);
+  }, [onClose, result?.status]);
 
   const hasChange = useCallback(() => {
     const originalReview: ApplicationReview = {

@@ -17,7 +17,7 @@ const UPDATED_USER: User = {
   globalRoles: [],
   id: 1,
   lastName: 'Uanini',
-  userType: 'Individual'
+  userType: 'Individual',
 };
 
 const PREFERENCES = {
@@ -70,7 +70,7 @@ describe('Cached user service test', () => {
 
     const { preferences } = await PreferencesService.getUserPreferences();
 
-    const cachedPreferences = await CachedUserService.getUserPreferences();
+    const cachedPreferences = CachedUserService.getUserPreferences();
 
     expect(cachedPreferences).toEqual(preferences);
   });
@@ -87,7 +87,7 @@ describe('Cached user service test', () => {
 
     const { preferences } = await PreferencesService.getUserOrgPreferences(1);
 
-    const cachedOrgPreferences = await CachedUserService.getUserOrgPreferences(1);
+    const cachedOrgPreferences = CachedUserService.getUserOrgPreferences(1);
 
     expect(cachedOrgPreferences).toEqual(preferences);
   });
@@ -109,7 +109,7 @@ describe('Cached user service test', () => {
 
     await UserService.updateUser(UPDATED_USER);
 
-    const cachedUser = await CachedUserService.getUser();
+    const cachedUser = CachedUserService.getUser();
 
     expect(cachedUser).toEqual({ ...UPDATED_USER, isTerraformation: true });
   });
@@ -131,7 +131,7 @@ describe('Cached user service test', () => {
 
     await PreferencesService.updateUserPreferences(UPDATED_PREFERENCES);
 
-    const cachedPreferences = await CachedUserService.getUserPreferences();
+    const cachedPreferences = CachedUserService.getUserPreferences();
 
     expect(cachedPreferences).toEqual(UPDATED_PREFERENCES);
   });
@@ -153,7 +153,7 @@ describe('Cached user service test', () => {
 
     await PreferencesService.updateUserOrgPreferences(1, UPDATED_ORG_PREFERENCES);
 
-    const cachedOrgPreferences = await CachedUserService.getUserOrgPreferences(1);
+    const cachedOrgPreferences = CachedUserService.getUserOrgPreferences(1);
 
     expect(cachedOrgPreferences).toEqual(UPDATED_ORG_PREFERENCES);
   });

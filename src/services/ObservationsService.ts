@@ -171,10 +171,17 @@ const exportBiomassPlotCsv = async (observationId: number): Promise<any> => {
   });
 };
 
-const exportBiomassQuadratCsv = async (observationId: number): Promise<any> => {
+const exportBiomassSpeciesCsv = async (observationId: number): Promise<any> => {
   return SearchService.searchCsv({
     prefix: 'plantingSites.observations.observationPlots.biomassDetails.species',
-    fields: ['name', 'quadratSpecies_position', 'quadratSpecies_abundancePercent', 'isInvasive', 'isThreatened'],
+    fields: [
+      'monitoringPlot_plotNumber',
+      'name',
+      'quadratSpecies_position',
+      'quadratSpecies_abundancePercent',
+      'isInvasive',
+      'isThreatened',
+    ],
     sortOrder: [{ field: 'name' }, { field: 'quadratSpecies_position' }],
     search: {
       operation: 'and',
@@ -187,6 +194,7 @@ const exportBiomassTreesShrubsCsv = async (observationId: number): Promise<any> 
   return SearchService.searchCsv({
     prefix: 'plantingSites.observations.observationPlots.recordedTrees',
     fields: [
+      'monitoringPlot_plotNumber',
       'treeNumber',
       'trunkNumber',
       'biomassSpecies_name',
@@ -464,7 +472,7 @@ const listAdHocObservationResults = async (
 const ObservationsService = {
   exportBiomassObservationsCsv,
   exportBiomassPlotCsv,
-  exportBiomassQuadratCsv,
+  exportBiomassSpeciesCsv,
   exportBiomassTreesShrubsCsv,
   exportCsv,
   exportGpx,

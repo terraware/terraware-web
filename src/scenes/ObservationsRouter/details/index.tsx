@@ -72,15 +72,17 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [query]);
 
   const observationsResults = useAppSelector((state) =>
-    searchObservations(
-      state,
-      plantingSiteId,
-      selectedOrganization,
-      defaultTimeZone.get().id,
-      searchProps.search,
-      searchProps.filtersProps?.filters?.zone?.values ?? [],
-      status
-    )
+    !selectedOrganization
+      ? undefined
+      : searchObservations(
+          state,
+          plantingSiteId,
+          selectedOrganization.id,
+          defaultTimeZone.get().id,
+          searchProps.search,
+          searchProps.filtersProps?.filters?.zone?.values ?? [],
+          status
+        )
   );
 
   const selectedObservationResults = useMemo(() => {
@@ -92,17 +94,19 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [observationsResults, observationId]);
 
   const details = useAppSelector((state) =>
-    searchObservationDetails(
-      state,
-      {
-        plantingSiteId,
-        observationId,
-        orgId: selectedOrganization?.id || -1,
-        search: searchProps.search,
-        zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
-      },
-      defaultTimeZone.get().id
-    )
+    !selectedOrganization
+      ? undefined
+      : searchObservationDetails(
+          state,
+          {
+            plantingSiteId,
+            observationId,
+            orgId: selectedOrganization.id,
+            search: searchProps.search,
+            zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
+          },
+          defaultTimeZone.get().id
+        )
   );
 
   useEffect(() => {
@@ -132,7 +136,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) =>
-    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization)
+    !selectedOrganization ? [] : selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
   );
 
   const title = useMemo(() => {

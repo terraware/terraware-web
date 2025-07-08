@@ -72,6 +72,7 @@ export type MapEntity = {
   properties: MapSourceProperties;
   boundary: MapGeometry;
   id: number;
+  totalArea?: number;
 };
 
 export type MapSourceBaseData = {
@@ -188,7 +189,8 @@ export type RenderableObject =
   | 'draft-zone'
   | 'draft-subzone'
   | 'boundary'
-  | 'countryBoundary';
+  | 'countryBoundary'
+  | 'projectZonesBoundary';
 
 export type MapDrawingLayer = {
   id: string;

@@ -28,8 +28,8 @@ export default function useExportBiomassDetailsZip(
             content: () => ObservationsService.exportBiomassPlotCsv(observationId),
           },
           {
-            fileName: `${fileNamePrefix}-${strings.QUADRAT}`,
-            content: () => ObservationsService.exportBiomassQuadratCsv(observationId),
+            fileName: `${fileNamePrefix}-${strings.SPECIES_CLASSIFICATION}`,
+            content: () => ObservationsService.exportBiomassSpeciesCsv(observationId),
           },
           {
             fileName: `${fileNamePrefix}-${strings.TREES_AND_SHRUBS}`,

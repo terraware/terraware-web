@@ -27,7 +27,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, isLoading, righ
     if (allApplications) {
       setSelectedApplication(applicationId);
     }
-  }, [allApplications, applicationId, selectedApplication]);
+  }, [allApplications, applicationId, selectedApplication, setSelectedApplication]);
 
   return (
     <Page
@@ -38,6 +38,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, isLoading, righ
       // TODO: replace "Project Name" placeholder with actual project name once available in application data
       title={strings.formatString(strings.APPLICATION_FOR_PROJECT, selectedApplication?.projectName ?? '')}
       titleStyle={{ marginTop: '24px' }}
+      titleContainerStyle={{ flexFlow: 'nowrap' }}
     >
       {!hideFeedback && selectedApplication?.status === 'Failed Pre-screen' && (
         <FeedbackMessage feedback={selectedApplication.feedback} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
@@ -52,11 +52,11 @@ const OnboardingHomeView = () => {
     if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
       setShowAcceleratorCard(false);
     }
-  }, [orgPreferences]);
+  }, [orgPreferences, showAcceleratorCard]);
 
   useEffect(() => {
     const populatePeople = async () => {
-      if (selectedOrganization && isOwner(selectedOrganization)) {
+      if (isOwner(selectedOrganization)) {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {
           setPeople(response.users);
@@ -76,7 +76,7 @@ const OnboardingHomeView = () => {
   }, [dispatch, selectedOrganization]);
 
   const isLoadingInitialData = useMemo(
-    () => allSpecies === undefined || (selectedOrganization && isOwner(selectedOrganization) && people === undefined),
+    () => allSpecies === undefined || (isOwner(selectedOrganization) && people === undefined),
     [allSpecies, people, selectedOrganization]
   );
 
@@ -89,14 +89,14 @@ const OnboardingHomeView = () => {
     }
   };
 
-  const markAsComplete = async () => {
+  const markAsComplete = useCallback(async () => {
     if (selectedOrganization) {
       await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
         ['singlePersonOrg']: true,
       });
-      reloadOrgPreferences();
     }
-  };
+    reloadOrgPreferences();
+  }, [reloadOrgPreferences, selectedOrganization]);
 
   const onboardingCardRows: OnboardingCardRow[] = useMemo(() => {
     const rows = isOwner(selectedOrganization)
@@ -151,7 +151,7 @@ const OnboardingHomeView = () => {
         : [];
 
     return rows;
-  }, [allSpecies, people, selectedOrganization, orgPreferences]);
+  }, [isLoadingInitialData, markAsComplete, navigate, allSpecies, people, selectedOrganization, orgPreferences]);
 
   return (
     <TfMain>

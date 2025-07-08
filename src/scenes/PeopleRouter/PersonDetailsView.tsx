@@ -101,27 +101,25 @@ export default function PersonDetailsView(): JSX.Element {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            {selectedOrganization
-              ? isAdmin(selectedOrganization)
-              : false &&
-                (isMobile ? (
-                  <Button
-                    icon='iconEdit'
-                    priority='primary'
-                    size='medium'
-                    onClick={goToEditPerson}
-                    style={{ float: 'right' }}
-                  />
-                ) : (
-                  <Button
-                    label={strings.EDIT_PERSON}
-                    icon='iconEdit'
-                    priority='primary'
-                    size='medium'
-                    onClick={goToEditPerson}
-                    style={{ float: 'right' }}
-                  />
-                ))}
+            {isAdmin(selectedOrganization) &&
+              (isMobile ? (
+                <Button
+                  icon='iconEdit'
+                  priority='primary'
+                  size='medium'
+                  onClick={goToEditPerson}
+                  style={{ float: 'right' }}
+                />
+              ) : (
+                <Button
+                  label={strings.EDIT_PERSON}
+                  icon='iconEdit'
+                  priority='primary'
+                  size='medium'
+                  onClick={goToEditPerson}
+                  style={{ float: 'right' }}
+                />
+              ))}
           </Grid>
         </Grid>
         <Grid item xs={12}>

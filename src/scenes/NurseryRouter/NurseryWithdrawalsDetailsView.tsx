@@ -184,7 +184,7 @@ export default function NurseryWithdrawalsDetailsView({
         ),
       },
     ];
-  }, [species, plantingSubzoneNames, withdrawal, withdrawalSummary, delivery, batches, activeLocale]);
+  }, [species, plantingSubzoneNames, withdrawal, withdrawalSummary, delivery, batches, activeLocale, isMobile, theme]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'withdrawal',

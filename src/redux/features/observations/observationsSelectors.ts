@@ -5,9 +5,11 @@ import { selectSpeciesList } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
 import {
+  AdHocObservationResults,
   Observation,
   ObservationPlantingZoneResults,
   ObservationResults,
+  ObservationResultsPayload,
   ObservationState,
 } from 'src/types/Observations';
 
@@ -22,10 +24,6 @@ export const selectObservationsResults = (state: RootState) => state.observation
 export const selectOrgObservationsResults = (orgId: number) => (state: RootState) =>
   state.observationsResults?.[orgId]?.data?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
-export const selectHasObservationsResults = (state: RootState) => {
-  const results = selectObservationsResults(state);
-  return results !== undefined && results.filter((result) => result.state !== 'Upcoming').length > 0;
-};
 export const selectHasCompletedObservations = (state: RootState, plantingSiteId: number) => {
   const results = selectObservationsResults(state);
   return (
@@ -38,7 +36,12 @@ export const selectHasCompletedObservations = (state: RootState, plantingSiteId:
  * Select observations results, filtered down by planting site and/or observation state.
  * Preserves order of results.
  */
-export const selectPlantingSiteObservationsResults = createCachedSelector(
+export const selectPlantingSiteObservationsResults: (
+  state: RootState,
+  plantingSiteId: number,
+  status?: ObservationState[],
+  orgId?: number
+) => ObservationResultsPayload[] | undefined = createCachedSelector(
   (state: RootState, plantingSiteId: number, status?: ObservationState[], orgId?: number) =>
     orgId && orgId !== -1 ? selectOrgObservationsResults(orgId)(state) : selectObservationsResults(state),
   (state: RootState, plantingSiteId: number, status?: ObservationState[], orgId?: number) => plantingSiteId,
@@ -58,7 +61,10 @@ export const selectPlantingSiteObservationsResults = createCachedSelector(
   }
 )((state, plantingSiteId: number, status?: ObservationState[]) => `${plantingSiteId}_${status?.join(',')}`);
 
-export const selectPlantingSiteAdHocObservationResults = createCachedSelector(
+export const selectPlantingSiteAdHocObservationResults: (
+  state: RootState,
+  plantingSiteId: number
+) => ObservationResultsPayload[] | undefined = createCachedSelector(
   (state: RootState, plantingSiteId: number) => selectAdHocObservationResults(state),
   (state: RootState, plantingSiteId: number) => plantingSiteId,
   (observationsResults, plantingSiteId) => {
@@ -76,7 +82,13 @@ export const selectPlantingSiteAdHocObservationResults = createCachedSelector(
  * Merge named entity information with observation results.
  * Preserves order of results.
  */
-export const selectMergedPlantingSiteObservations = createCachedSelector(
+export const selectMergedPlantingSiteObservations: (
+  state: RootState,
+  plantingSiteId: number,
+  orgId: number,
+  defaultTimeZone: string,
+  status?: ObservationState[]
+) => ObservationResults[] | undefined = createCachedSelector(
   (state: RootState, plantingSiteId: number, orgId: number, defaultTimeZone: string, status?: ObservationState[]) =>
     selectPlantingSiteObservationsResults(state, plantingSiteId, status, orgId),
   (state: RootState, plantingSiteId: number, orgId: number, defaultTimeZone: string, status?: ObservationState[]) =>
@@ -100,7 +112,11 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
     `${plantingSiteId}_${orgId}_${defaultTimeZone}_${status?.join(',')}`
 );
 
-export const selectMergedPlantingSiteAdHocObservations = createCachedSelector(
+export const selectMergedPlantingSiteAdHocObservations: (
+  state: RootState,
+  plantingSiteId: number,
+  defaultTimeZone: string
+) => AdHocObservationResults[] | undefined = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string) =>
     selectPlantingSiteAdHocObservationResults(state, plantingSiteId),
   (state: RootState, plantingSiteId: number, defaultTimeZone: string) => selectPlantingSites(state),
@@ -121,7 +137,15 @@ export const selectMergedPlantingSiteAdHocObservations = createCachedSelector(
  * Search observations (search planting zone name only at this time).
  * Preserves order of results.
  */
-export const searchObservations = createCachedSelector(
+export const searchObservations: (
+  state: RootState,
+  plantingSiteId: number,
+  orgId: number,
+  defaultTimeZone: string,
+  search: string,
+  zoneNames: string[],
+  status?: ObservationState[]
+) => ObservationResults[] | undefined = createCachedSelector(
   (
     state: RootState,
     plantingSiteId: number,
@@ -164,8 +188,13 @@ export const searchObservations = createCachedSelector(
 );
 
 // get zone names in observations
-export const selectObservationsZoneNames = createCachedSelector(
-  (state: RootState, plantingSiteId: number, orgId: number, status?: ObservationState[]) =>
+export const selectObservationsZoneNames: (
+  state: RootState,
+  plantingSiteId: number,
+  orgId: number,
+  status: ObservationState[]
+) => string[] = createCachedSelector(
+  (state: RootState, plantingSiteId: number, orgId: number, status: ObservationState[]) =>
     selectMergedPlantingSiteObservations(state, plantingSiteId, orgId, '', status),
   (observations) =>
     Array.from(
@@ -176,7 +205,7 @@ export const selectObservationsZoneNames = createCachedSelector(
       )
     )
 )(
-  (state: RootState, plantingSiteId: number, status?: ObservationState[]) =>
+  (state: RootState, plantingSiteId: number, orgId: number, status: ObservationState[]) =>
     `${plantingSiteId.toString()}_${status?.join(',')}`
 );
 
@@ -195,7 +224,11 @@ export const selectObservation = (state: RootState, plantingSiteId: number, obse
   );
 
 // get observations specific to a planting site, by optional status
-export const selectPlantingSiteObservations = createCachedSelector(
+export const selectPlantingSiteObservations: (
+  state: RootState,
+  plantingSiteId: number,
+  status?: ObservationState
+) => Observation[] = createCachedSelector(
   (state: RootState, plantingSiteId: number, status?: ObservationState) => selectObservations(state),
   (state: RootState, plantingSiteId: number, status?: ObservationState) => plantingSiteId,
   (state: RootState, plantingSiteId: number, status?: ObservationState) => status,
@@ -211,7 +244,11 @@ export const selectPlantingSiteObservations = createCachedSelector(
 )((state: RootState, plantingSiteId: number, status?: ObservationState) => `${plantingSiteId.toString()}_${status}`);
 
 // get ad hoc observations specific to a planting site, by optional status
-export const selectPlantingSiteAdHocObservations = createCachedSelector(
+export const selectPlantingSiteAdHocObservations: (
+  state: RootState,
+  plantingSiteId: number,
+  status?: ObservationState
+) => Observation[] = createCachedSelector(
   (state: RootState, plantingSiteId: number, status?: ObservationState) => selectObservations(state, true),
   (state: RootState, plantingSiteId: number, status?: ObservationState) => plantingSiteId,
   (state: RootState, plantingSiteId: number, status?: ObservationState) => status,
@@ -227,7 +264,12 @@ export const selectPlantingSiteAdHocObservations = createCachedSelector(
 )((state: RootState, plantingSiteId: number, status?: ObservationState) => `${plantingSiteId.toString()}_${status}`);
 
 // get the latest observation for a planting site
-export const selectLatestObservation = createCachedSelector(
+export const selectLatestObservation: (
+  state: RootState,
+  plantingSiteId: number,
+  orgId: number,
+  defaultTimeZoneId: string
+) => ObservationResults | undefined = createCachedSelector(
   (state: RootState, plantingSiteId: number, orgId: number, defaultTimeZoneId: string) =>
     searchObservations(state, plantingSiteId, orgId, defaultTimeZoneId, '', [], []),
   (observationsResults: ObservationResults[] | undefined) =>
@@ -280,7 +322,12 @@ export const selectOrganizationAdHocObservationsRequest = (requestId: string) =>
 export const selectOrganizationAdHocObservationResultsRequest = (requestId: string) => (state: RootState) =>
   state.organizationAdHocObservationResults[requestId];
 
-export const searchAdHocObservations = createCachedSelector(
+export const searchAdHocObservations: (
+  state: RootState,
+  plantingSiteId: number,
+  defaultTimeZone: string,
+  search: string
+) => AdHocObservationResults[] | undefined = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) => search,
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) => plantingSiteId,
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>

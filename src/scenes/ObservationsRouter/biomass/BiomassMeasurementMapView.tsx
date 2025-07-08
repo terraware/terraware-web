@@ -104,7 +104,7 @@ export default function BiomassMeasurementMapView({
     } else {
       setRequestId('');
     }
-  }, [observationData]);
+  }, [dispatch, observationData, selectedPlantingSite.id]);
 
   const plantingSiteMapData: MapSourceBaseData | undefined = useMemo(
     () => MapService.getMapDataFromPlantingSite(selectedPlantingSite)?.site,
@@ -134,6 +134,7 @@ export default function BiomassMeasurementMapView({
     Zones: strings.ZONES,
     'Sub-Zones': strings.SUBZONES,
     'Monitoring Plots': strings.MONITORING_PLOTS,
+    'Project Zones': strings.PROJECT_ZONES,
   };
 
   const contextRenderer = useCallback(

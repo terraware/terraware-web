@@ -6,12 +6,12 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 
-export type DescriptionModal = {
+export type DescriptionModalProps = {
   onClose: () => void;
   description?: string;
 };
 
-const DescriptionModal = ({ onClose, description }: DescriptionModal) => {
+const DescriptionModal = ({ onClose, description }: DescriptionModalProps) => {
   const theme = useTheme();
   return (
     <DialogBox

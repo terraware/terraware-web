@@ -795,6 +795,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports/targets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update project metric targets. */
+        post: operations["updateProjectMetricTargets"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports/{reportId}": {
         parameters: {
             query?: never;
@@ -1708,6 +1725,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/projects/{projectIds}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get published project details displayable to funders */
+        get: operations["getProjects"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/projects/{projectId}": {
         parameters: {
             query?: never;
@@ -1715,8 +1749,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Gets project detail information displayable to funders */
-        get: operations["getProject_1"];
+        get?: never;
         put?: never;
         /** Publishes project detail information for funders */
         post: operations["publishProjectProfile"];
@@ -5764,6 +5797,7 @@ export interface components {
             reference: string;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+            unit?: string;
         };
         ExistingSectionTextValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
             textValue: string;
@@ -6111,7 +6145,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         GetFundingProjectResponsePayload: {
-            details: components["schemas"]["FunderProjectDetailsPayload"];
+            details?: components["schemas"]["FunderProjectDetailsPayload"];
+            projects: components["schemas"]["FunderProjectDetailsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         GetMapboxTokenResponsePayload: {
@@ -7129,6 +7164,7 @@ export interface components {
             reference: string;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+            unit?: string;
         };
         NewNumberValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             citation?: string;
@@ -8222,7 +8258,9 @@ export interface components {
             perHectareBudget?: number;
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+            plantingSitesCql?: string;
             projectArea?: number;
+            projectBoundariesCql?: string;
             /** Format: int64 */
             projectHighlightPhotoValueId?: number;
             /** Format: int64 */
@@ -8304,6 +8342,7 @@ export interface components {
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
             underperformanceJustification?: string;
+            unit?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -8485,6 +8524,12 @@ export interface components {
             challenge: string;
             mitigationPlan: string;
         };
+        ReportMetricTargetPayload: {
+            /** Format: int64 */
+            reportId: number;
+            /** Format: int32 */
+            target?: number;
+        };
         ReportProjectMetricEntriesPayload: {
             /** Format: int64 */
             id: number;
@@ -8514,6 +8559,7 @@ export interface components {
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
             underperformanceJustification?: string;
+            unit?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -9353,6 +9399,13 @@ export interface components {
         UpdateGlobalRolesRequestPayload: {
             globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
         };
+        UpdateMetricTargetsPayload: {
+            targets: components["schemas"]["ReportMetricTargetPayload"][];
+            type: string;
+        };
+        UpdateMetricTargetsRequestPayload: {
+            metric: components["schemas"]["UpdateProjectMetricTargetsPayload"] | components["schemas"]["UpdateStandardMetricTargetsPayload"] | components["schemas"]["UpdateSystemMetricTargetsPayload"];
+        };
         UpdateModuleEventProjectsRequestPayload: {
             addProjects?: number[];
             removeProjects?: number[];
@@ -9512,6 +9565,16 @@ export interface components {
         UpdateProjectMetricRequestPayload: {
             metric: components["schemas"]["ExistingProjectMetricPayload"];
         };
+        UpdateProjectMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+            /** Format: int64 */
+            metricId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "project";
+        };
         UpdateProjectOverallScorePayload: {
             /** Format: uri */
             detailsUrl?: string;
@@ -9543,6 +9606,16 @@ export interface components {
         UpdateStandardMetricRequestPayload: {
             metric: components["schemas"]["ExistingStandardMetricPayload"];
         };
+        UpdateStandardMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+            /** Format: int64 */
+            metricId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "standard";
+        };
         UpdateSubLocationRequestPayload: {
             name: string;
         };
@@ -9551,6 +9624,16 @@ export interface components {
             internalComment?: string;
             /** @enum {string} */
             status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
+        };
+        UpdateSystemMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
+            /** @enum {string} */
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "system";
         };
         UpdateUserCookieConsentRequestPayload: {
             /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
@@ -11781,6 +11864,44 @@ export interface operations {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updateProjectMetricTargets: {
+        parameters: {
+            query?: {
+                /** @description Update targets for submitted reports. Require TF Experts privileges. */
+                updateSubmitted?: boolean;
+            };
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMetricTargetsRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
         };
     };
     getAcceleratorReport: {
@@ -13934,12 +14055,12 @@ export interface operations {
             };
         };
     };
-    getProject_1: {
+    getProjects: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                projectId: number;
+                projectIds: number[];
             };
             cookie?: never;
         };

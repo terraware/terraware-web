@@ -20,61 +20,6 @@ import { specificVariablesCompositeKeyFn, variableHistoryCompositeKeyFn } from '
 export const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>
   documentId ? state.documentProducerDocumentVariables[documentId] : undefined;
 
-export const selectSections = createCachedSelector(
-  (state: RootState, documentId: number | undefined) => selectDocumentVariables(state, documentId),
-  (response) => {
-    if (response?.data) {
-      return {
-        ...response,
-        data: response.data.filter((variable: Variable) => variable.type === 'Section') as Section[],
-      };
-    } else {
-      return response;
-    }
-  }
-)((state: RootState, documentId: number | undefined) => 'sections');
-
-export const searchVariables = createCachedSelector(
-  (state: RootState, documentId: number | undefined, query: string) => selectDocumentVariables(state, documentId),
-  (state: RootState, documentId: number | undefined, query: string) => query,
-  (response, query) => {
-    // filter Section, Image and Table variables because we don't want them in the variables table
-    const dataResponseToReturn = (response?.data || []).filter(
-      (variable: Variable) => variable.type !== 'Section' && variable.type !== 'Image' && variable.type !== 'Table'
-    );
-
-    if (response?.data && query) {
-      const regex = new RegExp(query, 'i');
-      const fields = ['name', 'type', 'value'];
-      return {
-        ...response,
-        data: dataResponseToReturn.filter((variable: Variable) =>
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          fields.some((field) => `${variable[field as keyof Variable]}`.match(regex))
-        ),
-      };
-    } else {
-      return { ...response, data: dataResponseToReturn };
-    }
-  }
-)((state: RootState, documentId: number | undefined, query: string) => query);
-
-export const selectGetVariable = createCachedSelector(
-  (state: RootState, variableId: number) => state.documentProducerAllVariables.all,
-  (state: RootState, variableId: number) => variableId,
-  (response, variableId) => {
-    if (response?.data) {
-      const variableToReturn = response.data.find((variable: Variable) => variable.id === variableId);
-      return {
-        ...response,
-        data: variableToReturn,
-      };
-    } else {
-      return response;
-    }
-  }
-)((state: RootState, variableId: number) => variableId);
-
 const getCombinedProps = (listA: any, listB: any): { status: Statuses; error: string | undefined } => {
   let status: Statuses = 'pending';
   if (listA.status === 'error' || listB.status === 'error') {
@@ -294,10 +239,6 @@ export const selectSpecificVariablesWithValues = createCachedSelector(
 )((state: RootState, variablesStableIds: string[], projectId: number) =>
   specificVariablesCompositeKeyFn({ variablesStableIds, projectId })
 );
-
-export const selectSpecificVariables = (variablesStableIds: string[]) => (state: RootState) => {
-  return state.documentProducerSpecificVariables[variablesStableIds.toString()];
-};
 
 export const selectUpdateVariableWorkflowDetails = (requestId: string) => (state: RootState) =>
   state.variableWorkflowDetailsUpdate[requestId];

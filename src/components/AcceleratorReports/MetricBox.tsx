@@ -312,6 +312,11 @@ const MetricBox = ({
                 <Typography paddingTop={3} paddingLeft={0.5}>
                   / {record.target} ({strings.TARGET})
                 </Typography>
+                {'unit' in record && record.unit && (
+                  <Box paddingLeft={theme.spacing(3)}>
+                    <Textfield type='text' label={strings.UNIT} value={record.unit} id={'unit'} display={true} />
+                  </Box>
+                )}
               </Box>
             )
           )}

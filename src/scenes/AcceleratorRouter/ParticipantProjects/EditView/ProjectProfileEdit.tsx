@@ -56,6 +56,16 @@ const variableStableIds = [
   carbonCertificationsStableId,
 ];
 
+const EXTERNAL_LINK_KEYS = [
+  'googleFolderUrl',
+  'verraLink',
+  'clickUpLink',
+  'hubSpotUrl',
+  'riskTrackerLink',
+  'slackLink',
+  'gisReportsLink',
+] as const;
+
 const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -152,6 +162,8 @@ const ProjectProfileEdit = () => {
     uploadImagesResponse,
     requestsInProgress,
     initiatedRequests,
+    redirectToProjectView,
+    snackbar,
   ]);
 
   useEffect(() => {
@@ -170,7 +182,7 @@ const ProjectProfileEdit = () => {
       snackbar.toastError();
       setUploadImagesRequestId('');
     }
-  }, [uploadImagesResponse]);
+  }, [uploadImagesResponse, redirectToProjectView, snackbar]);
 
   useEffect(() => {
     const tfContactSelected = globalUsersOptions?.find(
@@ -189,7 +201,7 @@ const ProjectProfileEdit = () => {
       })
     );
     setListUsersRequestId(request.requestId);
-  }, [activeLocale, dispatch]);
+  }, [activeLocale, dispatch, projectId]);
 
   useEffect(() => {
     if (listUsersRequest?.status === 'success') {
@@ -237,6 +249,14 @@ const ProjectProfileEdit = () => {
     };
 
     const updatedRecord = { ...participantProjectRecord } as ParticipantProject;
+
+    EXTERNAL_LINK_KEYS.forEach((key) => {
+      const value = updatedRecord[key];
+      if (value && !/^https?:\/\//.test(`${value}`)) {
+        updatedRecord[key] = `https://${value}`;
+      }
+    });
+
     const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(
       (type) => !(updatedRecord.landUseModelTypes as string[]).includes(type)
     );
@@ -287,7 +307,18 @@ const ProjectProfileEdit = () => {
     }
 
     setInitiatedRequests(newInitiatedRequests);
-  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, stableToVariable, saveTFContact]);
+  }, [
+    participantProjectRecord,
+    dispatch,
+    projectId,
+    mainPhoto,
+    mapPhoto,
+    stableToVariable,
+    saveTFContact,
+    redirectToProjectView,
+    snackbar,
+    tfContact,
+  ]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -314,7 +345,7 @@ const ProjectProfileEdit = () => {
       const request = dispatch(requestListOrganizationUsers({ organizationId: organization.id }));
       setOrganizationUsersRequestId(request.requestId);
     }
-  }, [organization]);
+  }, [organization, dispatch]);
 
   const onChangeLandUseHectares = (type: string, hectares: string) => {
     const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
