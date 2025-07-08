@@ -140,7 +140,7 @@ jobs:
           echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
 
       - name: Update GitHub deployment status
-        if: always()
+        if: ${{ steps.vercel_deployment.outputs.deployment_id }}
         uses: chrnorm/deployment-status@v2
         with:
           deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
