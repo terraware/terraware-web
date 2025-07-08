@@ -126,7 +126,9 @@ jobs:
         uses: chrnorm/deployment-action@v2
         id: vercel_deployment
         with:
-          environment: Preview (Staging)
+          environment: Vercel - Preview (tree-location-web)
+          initial-status: 'in_progress'
+          task: 'vercel_deploy'
           token: '${{ github.token }}'
 
       - name: Build for Vercel
