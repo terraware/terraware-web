@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.57% </span>
+                <span class="strong">76.08% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/42</span>
+                <span class='fraction'>35/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55% </span>
+                <span class="strong">45.83% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/20</span>
+                <span class='fraction'>11/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.85% </span>
+                <span class="strong">37.5% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/14</span>
+                <span class='fraction'>6/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.57% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>31/38</span>
+                <span class='fraction'>33/42</span>
             </div>
         
             
@@ -309,7 +309,21 @@
 <a name='L244'></a><a href='#L244'>244</a>
 <a name='L245'></a><a href='#L245'>245</a>
 <a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -483,6 +497,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -733,6 +761,20 @@ const isAllowedUpdateReportsTargets: PermissionCheckFn&lt;UpdateReportsTargetsMe
 };
 &nbsp;
 /**
+ * Function related to funder invites
+ */
+const isAllowedInviteFunders: PermissionCheckFn = <span class="fstat-no" title="function not covered" >(u</span>ser: User): boolean =&gt; {
+<span class="cstat-no" title="statement not covered" >  return isAcceleratorAdmin(user) || user?.userType === 'Funder';</span>
+};
+&nbsp;
+/**
+ * Function related to managing funding entities
+ */
+const isAllowedManageFundingEntities: PermissionCheckFn = <span class="fstat-no" title="function not covered" >(u</span>ser: User): boolean =&gt; {
+<span class="cstat-no" title="statement not covered" >  return isAcceleratorAdmin(user) || user?.userType === 'Funder';</span>
+};
+&nbsp;
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -750,8 +792,8 @@ const ACL: Record&lt;GlobalRolePermission, UserGlobalRoles | PermissionCheckFn&g
   EDIT_REPORTS: AcceleratorAdminPlus,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
-  INVITE_FUNDER: AcceleratorAdminPlus,
-  MANAGE_FUNDING_ENTITIES: AcceleratorAdminPlus,
+  INVITE_FUNDER: isAllowedInviteFunders,
+  MANAGE_FUNDING_ENTITIES: isAllowedManageFundingEntities,
   PUBLISH_PROJECT_DETAILS: AcceleratorAdminPlus,
   PUBLISH_REPORTS: AcceleratorAdminPlus,
   READ_ALL_APPLICATIONS: ReadOnlyPlus,
@@ -808,7 +850,7 @@ export const isAllowed: PermissionCheckFn = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-07T19:32:54.995Z
+                at 2025-07-08T03:05:46.822Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
