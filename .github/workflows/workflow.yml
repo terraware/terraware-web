@@ -127,7 +127,6 @@ jobs:
         with:
           environment: Vercel - Preview (tree-location-web)
           initial-status: 'in_progress'
-          task: 'vercel_deploy'
           token: '${{ github.token }}'
 
       - name: Build for Vercel
