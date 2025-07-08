@@ -21,7 +21,7 @@ export default function FunderHome() {
     selectFunderProjects(fundingEntityProjectIds)
   );
   const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
-  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>([]);
+  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
 
   useEffect(() => {
     if (userFundingEntity?.projects) {
@@ -42,7 +42,7 @@ export default function FunderHome() {
   }, [fundingEntityProjectIds, dispatch]);
 
   useEffect(() => {
-    if (selectedProjectId && selectedProjectId !== -1 && !publishedReports) {
+    if (selectedProjectId && selectedProjectId !== -1 && publishedReports === undefined) {
       void dispatch(requestListFunderReports(selectedProjectId));
     }
   }, [dispatch, selectedProjectId, publishedReports]);
@@ -61,7 +61,7 @@ export default function FunderHome() {
 
   const goToAllProjects = useCallback(() => setSelectedProjectId(undefined), []);
 
-  if (selectedProjectId && projectDetails) {
+  if (selectedProjectId && projectDetails && publishedReports !== undefined) {
     return (
       <ProjectView
         projectDetails={projectDetails}
