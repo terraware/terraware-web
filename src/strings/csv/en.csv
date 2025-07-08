@@ -958,6 +958,7 @@ MAP_EDITOR_EDITING_FEATURE,"Click and drag a corner of the boundary to adjust it
 MAP_EDITOR_NO_FEATURES,"Start drawing the boundary of your planting site. When finished, click on the starting point or double-click to complete the boundary.",
 MAP_EDITOR_NO_SELECTION,"Click on your planting site's boundary if you want to adjust its position or its shape. To replace the boundary with a new one, click the {polygon} button.",{polygon} will be replaced with a symbol.
 MAP_EDITOR_SELECTED_FEATURE,"Hold the mouse button down and drag the boundary to adjust its position. To start adjusting its shape, click on it again. To remove it, click the {trash} button.",{trash} will be replaced with a symbol.
+MAP_NOT_UPLOADED,Map Not Uploaded,
 MAPS_FOR,Maps for,
 MAPS_GIS_DESCRIPTION,The maps shown here are from the GIS database. View the project’s Terraware map in the project’s Plants Dashboard.,
 MARK_ALL_AS_READ,Mark All As Read,
