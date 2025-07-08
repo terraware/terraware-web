@@ -5,25 +5,33 @@ import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import FundersTable from 'src/components/FundersTable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TitleDescription from 'src/components/common/TitleDescription';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useUser, useUserFundingEntity } from 'src/providers';
 import MyAccountForm from 'src/scenes/MyAccountRouter/MyAccountForm';
-import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 const SettingsPage = () => {
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const mixpanel = useMixpanel();
   const theme = useTheme();
   const { user, reloadUser } = useUser();
+  const { userFundingEntity } = useUserFundingEntity();
+  const { isMobile } = useDeviceInfo();
+
+  const contentRef = useRef(null);
   const [isEditingAccount, setIsEditingAccount] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const { isMobile } = useDeviceInfo();
-  const contentRef = useRef(null);
+
+  const onTabsDeleteCancel = useCallback(() => setIsDeleteModalOpen(false), []);
+
+  const tabsBackToView = useCallback(() => setIsEditingAccount(false), []);
+
+  const onClickEditAccount = useCallback(() => setIsEditingAccount(true), []);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -42,16 +50,35 @@ const SettingsPage = () => {
           <MyAccountForm
             edit={isEditingAccount}
             deleteOpen={isDeleteModalOpen}
-            onDeleteCancel={() => setIsDeleteModalOpen(false)}
-            backToView={() => setIsEditingAccount(false)}
+            onDeleteCancel={onTabsDeleteCancel}
+            backToView={tabsBackToView}
             user={{ ...user }}
             reloadUser={reloadUser}
             desktopOffset={'56px'}
           />
         ),
       },
+      ...(userFundingEntity?.id
+        ? [
+            {
+              id: 'user-access',
+              label: strings.USER_ACCESS,
+              children: <FundersTable fundingEntityId={userFundingEntity?.id} />,
+            },
+          ]
+        : []),
     ];
-  }, [activeLocale, user, reloadUser, isEditingAccount, isDeleteModalOpen]);
+  }, [
+    activeLocale,
+    isDeleteModalOpen,
+    isEditingAccount,
+    onTabsDeleteCancel,
+    reloadUser,
+    strings,
+    tabsBackToView,
+    user,
+    userFundingEntity?.id,
+  ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'my-account',
@@ -72,11 +99,11 @@ const SettingsPage = () => {
     [mixpanel, onChangeTab]
   );
 
-  const onOptionItemClick = (optionItem: DropdownItem) => {
+  const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'delete-account') {
       setIsDeleteModalOpen(true);
     }
-  };
+  }, []);
 
   return (
     <Page title={strings.SETTINGS} contentStyle={{ display: 'block' }}>
@@ -118,7 +145,7 @@ const SettingsPage = () => {
                   id='edit-account'
                   icon='iconEdit'
                   label={isMobile ? '' : strings.EDIT_ACCOUNT}
-                  onClick={() => setIsEditingAccount(true)}
+                  onClick={onClickEditAccount}
                   size='medium'
                   priority='primary'
                 />
