@@ -43,8 +43,6 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const [modified, setModified] = useState<boolean>(false);
   // initialize with one org selection enabled
   const [orgProjectsSections, setOrgProjectsSections] = useState<OrgProjectsSection[]>([]);
-  // orgs available for selection in the dropdowns, does not included already selected orgs
-  const [availableOrgs, setAvailableOrgs] = useState<AcceleratorOrg[]>([]);
   // ensures org sections don't update each other after deleting and adding a section
   const [sectionSeq, setSectionSeq] = useState<number>(0);
 
@@ -109,11 +107,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       );
     });
 
-    if (detailsMissingFields) {
-      return false;
-    }
-
-    return true;
+    return !detailsMissingFields;
   };
 
   const onSaveHandler = () => {
@@ -131,8 +125,6 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     );
   };
 
-  // todo fix issue where fields are empty?
-
   /**
    * The orgProjectsSection is an array of org/projects sections
    * ordered by the section id. The id is also the index into the array
@@ -146,7 +138,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       }
       setModified(true);
       setOrgProjectsSections((prev) => {
-        const updated = [...prev].map((section) =>
+        return [...prev].map((section) =>
           section.id !== sectionId
             ? section
             : {
@@ -155,10 +147,6 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
                 selectedProjects: [],
               }
         );
-        // todo only filter out orgs that have no projects left to select
-        // todo also change to useEffect whenever orgProjectsSections changes
-        setAvailableOrgs((acceleratorOrgs || []).filter((o) => !updated.some((data) => data.org?.id === o.id)));
-        return updated;
       });
     },
     [acceleratorOrgs]
@@ -167,15 +155,15 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const onProjectSelect = useCallback((sectionId: number, projectId: number) => {
     setModified(true);
     setOrgProjectsSections((prev) => {
-      const updated = [...prev].map((section) =>
+      return [...prev].map((section) =>
         section.id !== sectionId
           ? section
           : {
               ...section,
+              projectDetails: { ...section.projectDetails, projectId },
               projectId,
             }
       );
-      return updated;
     });
   }, []);
 
@@ -210,8 +198,6 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     if (sections.length) {
       setModified(true);
       setOrgProjectsSections(sections);
-      // remove the orgs as being available for selection (since they already has projects selected prior to edit)
-      setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section?.org?.id === org.id)));
     } else if (acceleratorOrgs.length) {
       // allow initial selection
       setOrgProjectsSections([
@@ -230,12 +216,6 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     // update local record when participant changes
     setLocalRecord(participant);
   }, [participant]);
-
-  useEffect(() => {
-    if (acceleratorOrgs) {
-      setAvailableOrgs(acceleratorOrgs);
-    }
-  }, [acceleratorOrgs]);
 
   const updateProjectDetails = (
     projectId: number,
@@ -273,6 +253,26 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       );
     });
   };
+
+  // orgs available for selection in the dropdowns, excludes selected orgs with no other projects
+  const availableOrgs = useMemo(() => {
+    const selectedProjectsByOrg = new Map<number, Set<number>>();
+    orgProjectsSections.forEach((section) => {
+      if (!section.org?.id) {
+        return;
+      }
+      if (!selectedProjectsByOrg.has(section.org.id)) {
+        selectedProjectsByOrg.set(section.org.id, new Set());
+      }
+      selectedProjectsByOrg.get(section.org.id)!.add(section.projectId);
+    });
+
+    return (acceleratorOrgs || []).filter((availableOrg) => {
+      const selectedProjects = selectedProjectsByOrg.get(availableOrg.id) || new Set();
+
+      return availableOrg.projects.some((project) => !selectedProjects.has(project.id));
+    });
+  }, [acceleratorOrgs, orgProjectsSections]);
 
   return (
     <PageForm
