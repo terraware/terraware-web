@@ -24,7 +24,7 @@ import { MultiPolygon } from 'src/types/Tracking';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
 
-type ZoneOrSiteOption = { name: string; type: 'zone' | 'site' };
+type ZoneOrSiteOption = { name: string; type: 'zone' | 'site'; showSeparator?: boolean };
 const ProjectProfileGisMaps = () => {
   const projectData = useParticipantProjectData();
   const theme = useTheme();
@@ -179,6 +179,9 @@ const ProjectProfileGisMaps = () => {
   const zonesAndSites = useMemo(() => {
     const zones = uniqueZones?.map((z) => ({ name: z, type: 'zone' }) as ZoneOrSiteOption);
     const sites = uniqueSites?.map((s) => ({ name: s, type: 'site' }) as ZoneOrSiteOption);
+    if (zones.length > 0 && sites[0]) {
+      sites[0].showSeparator = true;
+    }
     return [...zones, ...sites];
   }, [uniqueZones, uniqueSites]);
 
@@ -212,7 +215,21 @@ const ProjectProfileGisMaps = () => {
       zoneOrSiteA.name === zoneOrSiteB.name && zoneOrSiteA.type === zoneOrSiteB.type,
     []
   );
-  const renderOptionHandler = useCallback((iZoneOrSite: ZoneOrSiteOption) => iZoneOrSite?.name, []);
+
+  const renderOptionHandler = useCallback((iZoneOrSite: ZoneOrSiteOption) => {
+    return (
+      <Typography
+        component='div'
+        sx={{
+          borderTop: iZoneOrSite.showSeparator ? '1px solid' : 'none',
+          padding: '8px 16px',
+        }}
+      >
+        {iZoneOrSite.name}
+      </Typography>
+    );
+  }, []);
+
   const toTHandler = useCallback(
     (input: string) =>
       ({
@@ -229,7 +246,7 @@ const ProjectProfileGisMaps = () => {
       options={zonesAndSites}
       placeholder={''}
       selectedValue={zoneOrSite}
-      selectStyles={{ optionsContainer: { textAlign: 'left' } }}
+      selectStyles={{ optionsContainer: { textAlign: 'left' }, optionContainer: { padding: 0 } }}
       displayLabel={labelHandler}
       isEqual={isEqualHandler}
       renderOption={renderOptionHandler}
