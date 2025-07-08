@@ -154,7 +154,7 @@ jobs:
           deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
           environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
           state: 'success'
-          token: ${{ github.GITHUB_TOKEN }}
+          token: '${{ github.token }}'
 
       - name: Update deployment status (failure)
         if: failure()
@@ -163,7 +163,7 @@ jobs:
           deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
           environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
           state: 'failure'
-          token: ${{ github.GITHUB_TOKEN }}
+          token: '${{ github.token }}'
 
       # - name: Set commit status with preview URL
       #   if: github.event_name == 'pull_request'
