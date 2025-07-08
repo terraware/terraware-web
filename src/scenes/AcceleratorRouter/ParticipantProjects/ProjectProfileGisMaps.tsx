@@ -80,6 +80,10 @@ const ProjectProfileGisMaps = () => {
     }
   }, [gisBoundariesResponse]);
 
+  const mapsNotUploaded = useMemo(() => {
+    return !projectData.participantProject?.projectBoundariesCql && !projectData.participantProject?.plantingSitesCql;
+  }, [projectData]);
+
   const plantingMapData = useMemo(() => {
     if (plantingSitesData) {
       return MapService.getMapDataFromGisPlantingSites(plantingSitesData);
@@ -317,7 +321,7 @@ const ProjectProfileGisMaps = () => {
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       description={strings.MAPS_GIS_DESCRIPTION}
-      rightComponent={zonesAndSitesDropdown}
+      rightComponent={mapsNotUploaded ? undefined : zonesAndSitesDropdown}
     >
       <Card
         flushMobile
@@ -382,50 +386,49 @@ const ProjectProfileGisMaps = () => {
               layers={['Project Zones']}
             />
           )}
-          {!projectData.participantProject?.projectBoundariesCql &&
-            !projectData.participantProject?.plantingSitesCql && (
-              <Box position='relative' width={'100%'} height={'100%'}>
-                <PlantingSiteMap
-                  mapData={{
-                    site: undefined,
-                    zone: undefined,
-                    subzone: undefined,
-                    permanentPlot: undefined,
-                    temporaryPlot: undefined,
-                    adHocPlot: undefined,
-                  }}
-                  style={{ width: '100%', borderRadius: '24px' }}
-                  layers={['Planting Site', 'Zones', 'Sub-Zones']}
-                />
-                <Box
+          {mapsNotUploaded && (
+            <Box position='relative' width={'100%'} height={'100%'}>
+              <PlantingSiteMap
+                mapData={{
+                  site: undefined,
+                  zone: undefined,
+                  subzone: undefined,
+                  permanentPlot: undefined,
+                  temporaryPlot: undefined,
+                  adHocPlot: undefined,
+                }}
+                style={{ width: '100%', borderRadius: '24px' }}
+                layers={['Planting Site', 'Zones', 'Sub-Zones']}
+              />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                  zIndex: 1000,
+                  cursor: 'not-allowed',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  verticalAlign: 'middle',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
                   sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                    zIndex: 1000,
-                    cursor: 'not-allowed',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    verticalAlign: 'middle',
-                    alignItems: 'center',
+                    padding: theme.spacing(2),
+                    color: theme.palette.TwClrTxtSecondary,
+                    borderRadius: theme.spacing(1),
+                    background: 'rgba(255, 255, 255, 0.8)',
                   }}
                 >
-                  <Typography
-                    sx={{
-                      padding: theme.spacing(2),
-                      color: theme.palette.TwClrTxtSecondary,
-                      borderRadius: theme.spacing(1),
-                      background: 'rgba(255, 255, 255, 0.8)',
-                    }}
-                  >
-                    {strings.MAP_NOT_UPLOADED}
-                  </Typography>
-                </Box>
+                  {strings.MAP_NOT_UPLOADED}
+                </Typography>
               </Box>
-            )}
+            </Box>
+          )}
         </Box>
       </Card>
     </Page>
