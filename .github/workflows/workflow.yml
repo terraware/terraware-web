@@ -139,22 +139,13 @@ jobs:
           preview_url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
 
-      - name: Update deployment status (success)
-        if: success()
+      - name: Update GitHub deployment status
+        if: always()
         uses: chrnorm/deployment-status@v2
         with:
           deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
           environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
-          state: 'success'
-          token: '${{ github.token }}'
-
-      - name: Update deployment status (failure)
-        if: failure()
-        uses: chrnorm/deployment-status@v2
-        with:
-          deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
-          environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
-          state: 'failure'
+          state: ${{ job.status == 'success' && 'success' || 'failure' }}
           token: '${{ github.token }}'
 
       - name: build
