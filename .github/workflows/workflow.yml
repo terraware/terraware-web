@@ -147,17 +147,6 @@ jobs:
           body: |
             ✅ Deployed to Vercel - Preview (`tree-location-web`): [View deployment](${{ steps.vercel_deploy.outputs.preview_url }})
 
-      - name: Update GitHub Deployment Status for Vercel Deploy
-        uses: bobheadxi/deployments@v1
-        if: always()
-        with:
-          deployment_id: ${{ steps.vercel_deployment.outputs.deployment_id }}
-          env: ${{ steps.vercel_deployment.outputs.env }}
-          env_url: ${{ steps.vercel_deploy.outputs.preview_url }}
-          status: ${{ job.status }}
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Update deployment status (success)
         if: success()
         uses: chrnorm/deployment-status@v2
