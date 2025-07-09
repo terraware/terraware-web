@@ -1,3 +1,4 @@
+380563fe3e3 SW-7105: Planting Site dropdown values not in alphabetical order in various places (#4250)
 ac8a660b546 SW-7106 Update web-components and make funding entities project dropdown autocomplete (#4248)
 3d4d9a043eb Updated translations from Phrase (#4245)
 62e56cc7ad3 SW-7136 Fix published reports not showing up in funder portal (#4249)

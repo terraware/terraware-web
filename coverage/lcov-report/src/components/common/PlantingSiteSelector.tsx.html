@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -132,7 +132,12 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,13 +156,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -205,7 +215,7 @@
 &nbsp;
 import { Dropdown } from '@terraware/web-components';
 &nbsp;
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
@@ -218,6 +228,7 @@ type PlantingSiteSelectorProps = {
 export default function <span class="fstat-no" title="function not covered" >PlantingSiteSelector(</span>{ onChange, hideNoBoundary }: PlantingSiteSelectorProps): JSX.Element {
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = <span class="cstat-no" title="statement not covered" >useState&lt;number | undefined&gt;();</span>
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { allPlantingSites } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
 &nbsp;
@@ -226,8 +237,12 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   }, [allPlantingSites, hideNoBoundary]);
 &nbsp;
   const options = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return filteredPlantingSites?.map(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: site.name, value: site.id })</span>) ?? [];</span>
-  }, [filteredPlantingSites]);
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      filteredPlantingSites
+        ?.toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.name.localeCompare(b.name, activeLocale || undefined))</span>
+        .map(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: site.name, value: site.id })</span>) ?? []
+    );
+  }, [activeLocale, filteredPlantingSites]);
 &nbsp;
   const updateAndReloadLastSelectedSite = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    as</span>ync (id: number) =&gt; {
@@ -277,7 +292,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-09T16:24:31.932Z
+                at 2025-07-09T18:59:50.423Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
