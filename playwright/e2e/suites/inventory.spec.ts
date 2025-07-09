@@ -318,6 +318,14 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     const mapTab = page.locator('p.MuiTypography-root').filter({ hasText: 'Map', hasNotText: 'show for this' });
     await mapTab.click();
+
+    // select planting site
+    await page.locator('.textfield-container > .textfield-value').click();
+    await page
+      .locator('li')
+      .filter({ hasText: /^Planting Site$/ })
+      .click();
+
     await page.mouse.down();
     await expect(page.getByLabel('Planting Progress').getByText('Planting Progress')).toBeVisible();
     await page.waitForTimeout(6000); //Wait for map to load
