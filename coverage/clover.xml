@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1752077179574" clover="3.2.0">
-  <project timestamp="1752077179574" name="All files">
+<coverage generated="1752078272628" clover="3.2.0">
+  <project timestamp="1752078272628" name="All files">
     <metrics statements="31048" coveredstatements="1305" conditionals="21568" coveredconditionals="389" methods="9513" coveredmethods="211" elements="62129" coveredelements="1905" complexity="0" loc="31048" ncloc="31048" packages="269" files="1289" classes="1289"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -17115,7 +17115,7 @@
         <line num="66" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
       </file>
       <file name="NewView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/FundingEntities/NewView.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
