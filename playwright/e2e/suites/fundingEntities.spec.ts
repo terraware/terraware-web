@@ -62,7 +62,7 @@ export default function FundingEntitiesTests() {
     await page.getByText('Existing Funding Entity', exactOptions).click();
     await page.getByRole('button', { name: 'Edit Funding Entity' }).click();
     await page.locator('#name > input').fill(updatedEntityName);
-    await page.getByPlaceholder('Select...').locator('../../../../..').locator('button').first().click();
+    await page.getByPlaceholder('Select...').locator('../../../../../..').locator('button').nth(2).click(); // remove first project
     await page.getByText('Add Project').click();
     await page.getByPlaceholder('Select...').click();
     await page
