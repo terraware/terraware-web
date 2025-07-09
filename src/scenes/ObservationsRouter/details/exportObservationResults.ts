@@ -4,11 +4,15 @@ import { AcceptedData, ColumnHeader } from 'export-to-csv/output/lib/types';
 
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ObservationResults, getPlotStatus } from 'src/types/Observations';
+import { Observation, ObservationResultsPayload, getPlotStatus } from 'src/types/Observations';
+import { Species } from 'src/types/Species';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
 interface UseExportObservationResultsParams {
-  observationResults: ObservationResults;
+  observation: Observation;
+  result: ObservationResultsPayload;
+  species: Species[];
+  timeZone: string;
 }
 
 function makeCsv(columns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob {
@@ -17,7 +21,8 @@ function makeCsv(columns: ColumnHeader[], data: { [k: string]: AcceptedData }[])
   return asBlob(csvConfig)(csv);
 }
 
-function makeObservationCsv(observationResults: ObservationResults): Blob {
+function makeObservationCsv(params: UseExportObservationResultsParams): Blob {
+  const { result, timeZone } = params;
   const columnHeaders = [
     {
       key: 'monitoringPlotNumber',
@@ -109,7 +114,7 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
     },
   ];
 
-  const data = observationResults.plantingZones.flatMap((plantingZone) =>
+  const data = result.plantingZones.flatMap((plantingZone) =>
     plantingZone.plantingSubzones.flatMap((subzone) =>
       subzone.monitoringPlots.map((monitoringPlot) => {
         const allSpecies = monitoringPlot.unknownSpecies
@@ -123,15 +128,15 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
         const pathPattern = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS;
         const detailsLink = new URL(
           pathPattern
-            .replace(':plantingSiteId', observationResults.plantingSiteId.toString())
-            .replace(':observationId', observationResults.observationId.toString())
+            .replace(':plantingSiteId', result.plantingSiteId.toString())
+            .replace(':observationId', result.observationId.toString())
             .replace(':plantingZoneName', encodeURIComponent(plantingZone.name))
             .replace(':monitoringPlotId', monitoringPlot.monitoringPlotId.toString()),
           location.href
         ).toString();
 
         const dateObserved = monitoringPlot.completedTime
-          ? getDateDisplayValue(monitoringPlot.completedTime, observationResults.timeZone)
+          ? getDateDisplayValue(monitoringPlot.completedTime, timeZone)
           : '';
 
         // Plot polygon has a single ring of coordinates. They're in order SW-SE-NE-NW-SW, with
@@ -169,7 +174,8 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
   return makeCsv(columnHeaders, data);
 }
 
-function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
+function makePlotSpeciesCsv(params: UseExportObservationResultsParams): Blob {
+  const { result, species } = params;
   const columnHeaders = [
     {
       key: 'monitoringPlot',
@@ -198,23 +204,21 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
   ];
 
   const scientificNamesById: { [key: number]: string } = Object.fromEntries(
-    observationResults.species
-      .filter((species) => species.speciesId)
-      .map((species) => [species.speciesId!, species.speciesScientificName])
+    species.map((_species) => [_species.id, _species.scientificName])
   );
 
-  const data = observationResults.plantingZones.flatMap((plantingZone) =>
+  const data = result.plantingZones.flatMap((plantingZone) =>
     plantingZone.plantingSubzones.flatMap((subzone) =>
       subzone.monitoringPlots.flatMap((monitoringPlot) => {
         const allSpecies = monitoringPlot.unknownSpecies
           ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
           : monitoringPlot.species;
-        return allSpecies.map((species) => {
+        return allSpecies.map((_species) => {
           let speciesName: string;
-          if (species.speciesId) {
-            speciesName = scientificNamesById[species.speciesId];
-          } else if (species.speciesName) {
-            speciesName = strings.formatString(strings.OTHER_VALUE, species.speciesName) as string;
+          if (_species.speciesId) {
+            speciesName = scientificNamesById[_species.speciesId];
+          } else if (_species.speciesName) {
+            speciesName = strings.formatString(strings.OTHER_VALUE, _species.speciesName) as string;
           } else {
             speciesName = strings.UNKNOWN;
           }
@@ -222,10 +226,10 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
           return {
             monitoringPlot: monitoringPlot.monitoringPlotNumber,
             scientificName: speciesName,
-            totalPlants: species.totalDead + species.totalExisting + species.totalLive,
-            preExistingPlants: species.totalExisting,
-            livePlants: species.totalLive,
-            deadPlants: species.totalDead,
+            totalPlants: _species.totalDead + _species.totalExisting + _species.totalLive,
+            preExistingPlants: _species.totalExisting,
+            livePlants: _species.totalLive,
+            deadPlants: _species.totalDead,
           };
         });
       })
@@ -236,8 +240,9 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
 }
 
 export default function exportObservationResults(params: UseExportObservationResultsParams) {
-  const { observationResults } = params;
-  const prefix = `${observationResults.plantingSiteName}-${observationResults.completedDate}`;
+  const { observation, result } = params;
+  const observationDate = result.completedTime ? getDateDisplayValue(result.completedTime) : observation.startDate;
+  const prefix = `${observation.plantingSiteName}-${observationDate}`;
   const dirName = `${prefix}-${strings.OBSERVATION}`;
 
   return downloadZipFile({
@@ -245,11 +250,11 @@ export default function exportObservationResults(params: UseExportObservationRes
     files: [
       {
         fileName: dirName,
-        content: makeObservationCsv(observationResults),
+        content: makeObservationCsv(params),
       },
       {
         fileName: `${prefix}-${strings.SPECIES}`,
-        content: makePlotSpeciesCsv(observationResults),
+        content: makePlotSpeciesCsv(params),
       },
     ],
     suffix: '.csv',

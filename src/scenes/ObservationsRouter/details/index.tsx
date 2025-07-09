@@ -11,12 +11,9 @@ import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper'
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  searchObservationDetails,
-  selectDetailsZoneNames,
-} from 'src/redux/features/observations/observationDetailsSelectors';
-import { searchObservations, selectObservation } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
@@ -25,7 +22,6 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
 import exportObservationResults from 'src/scenes/ObservationsRouter/details/exportObservationResults';
 import strings from 'src/strings';
-import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import useQuery from 'src/utils/useQuery';
@@ -41,7 +37,7 @@ export type ObservationDetailsProps = SearchProps & {
 };
 
 export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
-  const { setFilterOptions, reload } = props;
+  const { reload } = props;
   const { ...searchProps }: SearchProps = props;
 
   const { activeLocale } = useLocalization();
@@ -61,7 +57,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
-  const [status, setStatus] = useState<ObservationState[]>([]);
   const query = useQuery();
 
   useEffect(() => {
@@ -71,27 +66,24 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [query]);
 
-  const observationsResults = useAppSelector((state) =>
-    !selectedOrganization
-      ? undefined
-      : searchObservations(
-          state,
-          plantingSiteId,
-          selectedOrganization.id,
-          defaultTimeZone.get().id,
-          searchProps.search,
-          searchProps.filtersProps?.filters?.zone?.values ?? [],
-          status
-        )
-  );
+  const { plantingSite, observations, observationResults } = usePlantingSiteData();
+  const { species } = useSpeciesData();
 
-  const selectedObservationResults = useMemo(() => {
-    if (!observationsResults) {
-      return [];
+  const selectedObservation = useMemo(() => {
+    if (!observations) {
+      return undefined;
     }
 
-    return observationsResults.filter((result) => result.observationId === observationId);
-  }, [observationsResults, observationId]);
+    return observations.find((obsevation) => obsevation.id === observationId);
+  }, [observations, observationId]);
+
+  const selectedObservationResults = useMemo(() => {
+    if (!observationResults) {
+      return undefined;
+    }
+
+    return observationResults.find((result) => result.observationId === observationId);
+  }, [observationResults, observationId]);
 
   const details = useAppSelector((state) =>
     !selectedOrganization
@@ -109,36 +101,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         )
   );
 
-  useEffect(() => {
-    const values = searchProps.filtersProps?.filters.status?.values ?? [];
-    const mappedValues = values.reduce((acc: ObservationState[], curr: string) => {
-      let mappedValue;
-      if (curr === strings.COMPLETED) {
-        mappedValue = 'Completed';
-      } else if (curr === strings.IN_PROGRESS) {
-        mappedValue = 'InProgress';
-      } else if (curr === strings.OVERDUE) {
-        mappedValue = 'Overdue';
-      } else if (curr === strings.ABANDONED) {
-        mappedValue = 'Abandoned';
-      }
-      return mappedValue ? [...acc, mappedValue] : acc;
-    }, [] as ObservationState[]);
-
-    if (mappedValues.length) {
-      setStatus(mappedValues);
-    } else {
-      // if user clears filter, get specific statuses, we don't want to see Upcoming
-      setStatus(['Completed', 'InProgress', 'Overdue', 'Abandoned']);
-    }
-  }, [searchProps.filtersProps?.filters.status]);
-
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
-  const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
-  const zoneNames = useAppSelector((state) =>
-    !selectedOrganization ? [] : selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization.id)
-  );
-
   const title = useMemo(() => {
     const plantingSiteName = details?.plantingSiteName ?? '';
     const completionDate = details?.completedDate ? getShortDate(details.completedDate, activeLocale) : '';
@@ -146,7 +108,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [activeLocale, details]);
 
   const statusSummary = useMemo<ObservationStatusSummary | undefined>(() => {
-    if (observation && details && Date.now() <= new Date(observation.endDate).getTime()) {
+    if (selectedObservation && details && Date.now() <= new Date(selectedObservation.endDate).getTime()) {
       const plots = details.plantingZones.flatMap((zone) =>
         zone.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots)
       );
@@ -155,7 +117,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       const observedPlots = totalPlots - pendingPlots;
 
       return {
-        endDate: getLongDate(observation.endDate, activeLocale),
+        endDate: getLongDate(selectedObservation.endDate, activeLocale),
         pendingPlots,
         totalPlots,
         observedPlots,
@@ -163,7 +125,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       };
     }
     return undefined;
-  }, [activeLocale, details, observation]);
+  }, [activeLocale, details, selectedObservation]);
 
   useEffect(() => {
     const speciesWithNoIdMap = _.uniqBy(
@@ -180,39 +142,23 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [details]);
 
   useEffect(() => {
-    setFilterOptions({
-      zone: {
-        partial: false,
-        values: zoneNames,
-      },
-    });
-  }, [setFilterOptions, zoneNames]);
-
-  useEffect(() => {
     if (!details) {
       navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', `${plantingSiteId}`));
     }
   }, [details, navigate, plantingSiteId]);
 
-  useEffect(() => {
-    const initialZones = searchProps.filtersProps?.filters?.zone?.values ?? [];
-    const availableZones = initialZones.filter((name: string) => zoneNames.includes(name));
-
-    if (availableZones.length < initialZones.length) {
-      searchProps.filtersProps?.setFilters((previous: Record<string, any>) => ({
-        ...previous,
-        zone: { ...previous.zone, values: availableZones },
-      }));
-    }
-  }, [zoneNames, searchProps.filtersProps]);
-
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
   const onExportObservationResults = useCallback(() => {
-    if (selectedObservationResults && selectedObservationResults.length > 0) {
-      void exportObservationResults({ observationResults: selectedObservationResults[0] });
+    if (plantingSite && selectedObservation && selectedObservationResults && species) {
+      void exportObservationResults({
+        observation: selectedObservation,
+        result: selectedObservationResults,
+        species,
+        timeZone: plantingSite?.timeZone ?? defaultTimeZone.get().id,
+      });
     }
-  }, [selectedObservationResults]);
+  }, [defaultTimeZone, plantingSite, selectedObservation, selectedObservationResults, species]);
 
   return (
     <DetailsPage
@@ -248,7 +194,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       )}
       <ObservationStatusSummaryMessage
         plantingZones={plantingSite?.plantingZones}
-        requestedSubzoneIds={observation?.requestedSubzoneIds}
+        requestedSubzoneIds={selectedObservation?.requestedSubzoneIds}
         statusSummary={statusSummary}
       />
       <Grid container spacing={3}>
@@ -263,7 +209,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
               map={
                 <ObservationMapView
                   hideDate
-                  observationsResults={selectedObservationResults}
+                  observationsResults={[selectedObservationResults]}
                   selectedPlantingSite={plantingSite}
                   {...searchProps}
                 />

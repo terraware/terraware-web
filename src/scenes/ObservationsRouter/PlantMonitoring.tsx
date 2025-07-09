@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -7,56 +7,27 @@ import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
-import {
-  selectAdHocObservationResults,
-  selectObservationsResults,
-} from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import ObservationsDataView from 'src/scenes/ObservationsRouter/ObservationsDataView';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
-import { PlantingSite } from 'src/types/Tracking';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 
 export type PlotSelectionType = 'assigned' | 'adHoc';
 
 export type PlantMonitoringProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
   reload: () => void;
-  selectedPlantingSite?: PlantingSite;
 };
 
 export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Element {
-  const { selectedPlantingSite } = props;
   const [view, setView] = useState<View>('list');
   const theme = useTheme();
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
-  const allObservationsResults = useAppSelector(selectObservationsResults);
-  const observationsResults = useMemo(() => {
-    if (!allObservationsResults || !selectedPlantingSite?.id) {
-      return [];
-    }
 
-    return allObservationsResults?.filter((observationResult) => {
-      const matchesSite =
-        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
-      const matchesState = ['Completed', 'Overdue', 'InProgress', 'Abandoned'].indexOf(observationResult.state) !== -1;
-      return matchesSite && matchesState;
-    });
-  }, [allObservationsResults, selectedPlantingSite]);
-
-  const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
-  const adHocObservationResults = useMemo(() => {
-    if (!allAdHocObservationResults || !selectedPlantingSite?.id) {
-      return [];
-    }
-
-    return allAdHocObservationResults?.filter((observationResult) => {
-      const matchesSite =
-        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
-      return matchesSite;
-    });
-  }, [allAdHocObservationResults, selectedPlantingSite]);
+  const { observationResults, adHocObservationResults } = useOrgTracking();
+  const { plantingSite } = usePlantingSiteData();
 
   const selectPlotType = useCallback((value: string) => {
     if (value === 'assigned' || value === 'adHoc') {
@@ -107,16 +78,15 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
           </>
         )}
       </Box>
-      {(selectedPlotSelection === 'assigned' && observationsResults === undefined) ||
+      {(selectedPlotSelection === 'assigned' && observationResults === undefined) ||
       (selectedPlotSelection === 'adHoc' && adHocObservationResults === undefined) ? (
         <CircularProgress sx={{ margin: 'auto' }} />
-      ) : selectedPlantingSite &&
-        ((selectedPlotSelection === 'assigned' && observationsResults?.length) ||
+      ) : ((selectedPlotSelection === 'assigned' && observationResults?.length) ||
           (selectedPlotSelection === 'adHoc' && adHocObservationResults?.length)) ? (
         <ObservationsDataView
-          selectedPlantingSiteId={selectedPlantingSite.id}
           setView={setView}
           view={view}
+          selectedPlantingSite={plantingSite}
           selectedPlotSelection={selectedPlotSelection}
           {...props}
         />

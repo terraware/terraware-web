@@ -5,13 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import ListMapView from 'src/components/ListMapView';
 import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { useOrganization } from 'src/providers';
-import {
-  searchAdHocObservations,
-  searchObservations,
-  selectObservationsZoneNames,
-} from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
@@ -22,7 +16,6 @@ import OrgObservationsListView from './org/OrgObservationsListView';
 
 export type ObservationsDataViewProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
-  selectedPlantingSiteId: number;
   selectedPlantingSite?: PlantingSite;
   setView: (view: View) => void;
   view?: View;
@@ -32,7 +25,6 @@ export type ObservationsDataViewProps = SearchProps & {
 
 export default function ObservationsDataView(props: ObservationsDataViewProps): JSX.Element {
   const {
-    selectedPlantingSiteId,
     selectedPlantingSite,
     setFilterOptions,
     setView,
@@ -41,81 +33,42 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     selectedPlotSelection,
   } = props;
   const { ...searchProps }: SearchProps = props;
-  const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = selectedPlantingSite?.timeZone || defaultTimeZone.get().id;
 
-  const observationsResults = useAppSelector((state) =>
-    searchObservations(
-      state,
-      selectedPlantingSiteId,
-      selectedOrganization?.id || -1,
-      defaultTimeZone.get().id,
-      searchProps.search,
-      searchProps.filtersProps?.filters.zone?.values ?? [],
-      searchProps.filtersProps?.filters.status?.values ?? []
-    )
-  );
+  const { observationResults, adHocObservationResults } = useOrgTracking();
 
-  const allAdHocObservationResults = useAppSelector((state) =>
-    searchAdHocObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, searchProps.search)
-  );
-
-  const adHocObservationResults = useMemo(() => {
-    if (!allAdHocObservationResults || !selectedPlantingSite?.id) {
+  const monitoringAdHocObservationResults = useMemo(() => {
+    if (!adHocObservationResults || !selectedPlantingSite?.id) {
       return [];
     }
 
-    return allAdHocObservationResults?.filter((observationResult) => {
+    return adHocObservationResults.filter((observationResult) => {
       const isMonitoring = observationResult.type === 'Monitoring';
       return isMonitoring;
     });
-  }, [allAdHocObservationResults, selectedPlantingSite]);
-
-  const zoneNames = useAppSelector((state) =>
-    selectedOrganization
-      ? selectObservationsZoneNames(
-          state,
-          selectedPlantingSiteId,
-          selectedOrganization.id,
-          searchProps.filtersProps?.filters.status?.values
-        )
-      : undefined
-  );
+  }, [adHocObservationResults, selectedPlantingSite]);
 
   useEffect(() => {
-    if (zoneNames !== undefined) {
-      setFilterOptions({
-        zone: {
-          partial: false,
-          values: zoneNames,
-        },
-        status: {
-          partial: false,
-          values: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
-        },
-      });
-    }
-  }, [setFilterOptions, zoneNames]);
+    setFilterOptions({
+      status: {
+        partial: false,
+        values: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
+      },
+    });
+  }, [setFilterOptions]);
 
   return (
     <ListMapView
       initialView='list'
       list={
-        <OrgObservationsListView
-          observationsResults={observationsResults}
-          adHocObservationResults={adHocObservationResults}
-          plantingSiteId={selectedPlantingSiteId}
-          reload={reload}
-          selectedPlotSelection={selectedPlotSelection}
-          timeZone={timeZone}
-        />
+        <OrgObservationsListView reload={reload} selectedPlotSelection={selectedPlotSelection} timeZone={timeZone} />
       }
       map={
-        selectedPlantingSite && selectedPlantingSiteId !== -1 ? (
+        selectedPlantingSite ? (
           <ObservationMapView
-            observationsResults={observationsResults}
-            adHocObservationResults={adHocObservationResults}
+            observationsResults={observationResults}
+            adHocObservationResults={monitoringAdHocObservationResults}
             selectedPlantingSite={selectedPlantingSite}
             {...searchProps}
           />

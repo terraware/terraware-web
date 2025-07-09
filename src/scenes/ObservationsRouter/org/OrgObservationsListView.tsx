@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -6,24 +6,16 @@ import sanitize from 'sanitize-filename';
 
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import useAbandonObservation from 'src/hooks/observations/useAbandonObservation';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { requestAbandonObservation } from 'src/redux/features/observations/observationsAsyncThunks';
-import {
-  selectAbandonObservation,
-  selectPlantingSiteObservations,
-} from 'src/redux/features/observations/observationsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import AdHocObservationsRenderer from 'src/scenes/ObservationsRouter/adhoc/AdHocObservationsRenderer';
 import exportObservationResults from 'src/scenes/ObservationsRouter/details/exportObservationResults';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
-import {
-  AdHocObservationResults,
-  Observation,
-  ObservationPlantingZoneResults,
-  ObservationResults,
-} from 'src/types/Observations';
+import { Observation } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -88,37 +80,30 @@ const scheduleObservationsColumn = (): TableColumnType[] => [
 ];
 
 export type OrgObservationsListViewProps = {
-  plantingSiteId: number;
-  observationsResults?: ObservationResults[];
-  adHocObservationResults?: AdHocObservationResults[];
   reload: () => void;
   selectedPlotSelection?: string;
   timeZone: string;
 };
 
 export default function OrgObservationsListView({
-  observationsResults,
-  adHocObservationResults,
-  plantingSiteId,
   reload,
   selectedPlotSelection,
   timeZone,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const [results, setResults] = useState<any>([]);
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const [endObservationModalOpened, setEndObservationModalOpened] = useState(false);
   const [selectedObservation, setSelectedObservation] = useState<any>();
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState('');
-  const abandonObservationResponse = useAppSelector((state) => selectAbandonObservation(state, requestId));
   const snackbar = useSnackbar();
+  const { species } = useSpeciesData();
+  const { observations, observationResults, adHocObservationResults, reload: reloadOrgTracking } = useOrgTracking();
+  const { abandon, abandonResult } = useAbandonObservation();
 
   useEffect(() => {
-    if (abandonObservationResponse?.status === 'success' && selectedObservation) {
+    if (abandonResult?.status === 'success' && selectedObservation?.completedTime) {
       snackbar.toastSuccess(
         strings.formatString(
           strings.OBSERVATION_ENDED_MESSAGE,
@@ -128,16 +113,13 @@ export default function OrgObservationsListView({
       );
       setSelectedObservation(undefined);
       reload();
+      reloadOrgTracking();
     }
-    if (abandonObservationResponse?.status === 'error') {
+    if (abandonResult?.status === 'error') {
       snackbar.toastError();
       setSelectedObservation(undefined);
     }
-  }, [abandonObservationResponse, activeLocale, reload, selectedObservation, snackbar]);
-
-  const observations: Observation[] | undefined = useAppSelector((state) =>
-    selectPlantingSiteObservations(state, plantingSiteId)
-  );
+  }, [abandonResult?.status, activeLocale, reload, reloadOrgTracking, selectedObservation, snackbar]);
 
   const columns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {
@@ -209,12 +191,13 @@ export default function OrgObservationsListView({
 
   const onExportObservationResults = useCallback(
     (observationId: number) => {
-      const observation = (observationsResults ?? []).find((item) => item.observationId === observationId);
-      if (observation !== undefined) {
-        void exportObservationResults({ observationResults: observation });
+      const observation = (observations ?? []).find((item) => item.id === observationId);
+      const result = (observationResults ?? []).find((item) => item.observationId === observationId);
+      if (result && observation) {
+        void exportObservationResults({ observation, result, species, timeZone });
       }
     },
-    [observationsResults]
+    [observationResults, observations, species, timeZone]
   );
 
   const goToRescheduleObservation = useCallback(
@@ -224,50 +207,21 @@ export default function OrgObservationsListView({
     [navigate]
   );
 
-  const endDates = useMemo<Record<number, string>>(
-    () =>
-      (observations ?? []).reduce(
-        (acc, observation) => {
-          acc[observation.id] = observation.endDate;
-          return acc;
-        },
-        {} as Record<number, string>
-      ),
-    [observations]
-  );
-
-  useEffect(() => {
-    setResults(
-      (observationsResults ?? []).map((observation: ObservationResults) => {
-        return {
-          ...observation,
-          plantingZones: observation.plantingZones
-            .map((zone: ObservationPlantingZoneResults) => zone.plantingZoneName)
-            .join('\r'),
-          endDate: endDates[observation.observationId] ?? '',
-          observationDate: observation.completedDate || observation.startDate,
-        };
-      })
-    );
-  }, [endDates, observationsResults]);
-
   const endObservation = (observation: Observation) => {
     setEndObservationModalOpened(true);
     setSelectedObservation(observation);
   };
 
-  const onCloseModal = () => {
+  const onCloseModal = useCallback(() => {
     setEndObservationModalOpened(false);
     setSelectedObservation(undefined);
-  };
+  }, []);
 
-  const onEndObservation = () => {
+  const onEndObservation = useCallback(() => {
     if (selectedObservation) {
-      const request = dispatch(requestAbandonObservation({ observationId: selectedObservation.observationId }));
-      setRequestId(request.requestId);
-      setEndObservationModalOpened(false);
+      abandon(selectedObservation.id);
     }
-  };
+  }, [abandon, selectedObservation]);
 
   return (
     <Box>
@@ -287,7 +241,7 @@ export default function OrgObservationsListView({
         <Table
           id='org-observations-table'
           columns={columns}
-          rows={results}
+          rows={observationResults || []}
           orderBy='observationDate'
           Renderer={OrgObservationsRenderer(
             theme,

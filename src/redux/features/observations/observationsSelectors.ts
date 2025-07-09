@@ -294,7 +294,8 @@ export const selectReplaceObservationPlot = (state: RootState, requestId: string
   state.replaceObservationPlot[requestId];
 
 // abandon observation selector
-export const selectAbandonObservation = (state: RootState, requestId: string) => state.abandonObservation[requestId];
+export const selectAbandonObservation = (requestId: string) => (state: RootState) =>
+  state.abandonObservation[requestId];
 
 // Planting site observations selectors
 export const selectPlantingSiteObservationSummaries = (requestId: string) => (state: RootState) =>

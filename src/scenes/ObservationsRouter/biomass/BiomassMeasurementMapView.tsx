@@ -7,43 +7,29 @@ import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
-import { selectPlantingSiteAdHocObservations } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
-import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { AdHocObservationResults, Observation } from 'src/types/Observations';
-import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
+import { PlantingSite } from 'src/types/Tracking';
 
 type BiomassMeasurementMapViewProps = {
   hideDate?: boolean;
-  observationsResults?: AdHocObservationResults[];
   selectedPlantingSite: PlantingSite;
 };
 
 export default function BiomassMeasurementMapView({
   hideDate,
-  observationsResults,
   selectedPlantingSite,
 }: BiomassMeasurementMapViewProps): JSX.Element {
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
   const { isDesktop } = useDeviceInfo();
 
-  const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
-
-  const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
-
-  const observations: Observation[] | undefined = useAppSelector((state) =>
-    selectPlantingSiteAdHocObservations(state, selectedPlantingSite.id)
-  );
+  const { adHocObservations, adHocObservationResults, plantingSiteHistories } = usePlantingSiteData();
 
   const observationsDates = useMemo(() => {
     const uniqueDates: Set<string> = new Set();
-    observationsResults?.forEach((obs) => {
+    adHocObservationResults?.forEach((obs) => {
       const dateToUse = obs.completedTime || obs.startDate;
       uniqueDates.add(dateToUse);
     });
@@ -52,15 +38,9 @@ export default function BiomassMeasurementMapView({
       ?.filter((time) => time)
       ?.map((time) => time)
       ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
-  }, [observationsResults]);
+  }, [adHocObservationResults]);
 
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
-
-  useEffect(() => {
-    if (observationHistory?.status === 'success') {
-      setPlantingSiteHistory(observationHistory.data);
-    }
-  }, [observationHistory]);
 
   useEffect(() => {
     if (observationsDates) {
@@ -78,33 +58,12 @@ export default function BiomassMeasurementMapView({
 
   const selectedObservation = useMemo(
     () =>
-      observationsResults?.find((obs) => {
+      adHocObservationResults?.find((obs) => {
         const dateToCheck = obs.completedTime || obs.startDate;
         return dateToCheck === selectedObservationDate;
       }),
-    [observationsResults, selectedObservationDate]
+    [adHocObservationResults, selectedObservationDate]
   );
-
-  const observationData = useMemo(() => {
-    return observations.find((obv) => obv.id === selectedObservation?.observationId);
-  }, [observations, selectedObservation]);
-
-  useEffect(() => {
-    if (observationData) {
-      const historyId = observationData.plantingSiteHistoryId;
-      if (historyId) {
-        const requestObservationHistory = dispatch(
-          requestGetPlantingSiteHistory({
-            plantingSiteId: selectedPlantingSite.id,
-            historyId,
-          })
-        );
-        setRequestId(requestObservationHistory.requestId);
-      }
-    } else {
-      setRequestId('');
-    }
-  }, [dispatch, observationData, selectedPlantingSite.id]);
 
   const plantingSiteMapData: MapSourceBaseData | undefined = useMemo(
     () => MapService.getMapDataFromPlantingSite(selectedPlantingSite)?.site,
@@ -112,7 +71,14 @@ export default function BiomassMeasurementMapView({
   );
 
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    if (!selectedObservationDate || !selectedObservation || !plantingSiteHistory) {
+    const adHocObservation = adHocObservations?.find(
+      (observation) => observation.id === selectedObservation?.observationId
+    );
+    const plantingSiteHistory = plantingSiteHistories?.find(
+      (history) => history.id === selectedObservation?.plantingSiteHistoryId
+    );
+
+    if (!selectedObservationDate || !selectedObservation || !adHocObservation || !plantingSiteHistory) {
       return {
         site: plantingSiteMapData,
         zone: undefined,
@@ -123,8 +89,8 @@ export default function BiomassMeasurementMapView({
       };
     }
 
-    return MapService.getMapDataFromObservation(selectedObservation, plantingSiteHistory);
-  }, [selectedObservation, selectedObservationDate, plantingSiteMapData, plantingSiteHistory]);
+    return MapService.getMapDataFromObservation(adHocObservation, selectedObservation, plantingSiteHistory);
+  }, [adHocObservations, plantingSiteHistories, selectedObservationDate, selectedObservation, plantingSiteMapData]);
 
   const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
@@ -143,6 +109,9 @@ export default function BiomassMeasurementMapView({
       if (properties.type === 'site') {
         entity = selectedObservation;
       } else if (properties.type === 'zone') {
+        const plantingSiteHistory = plantingSiteHistories?.find(
+          (history) => history.id === selectedObservation?.plantingSiteHistoryId
+        );
         entity =
           selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id) ||
           plantingSiteHistory?.plantingZones.find((z) => z.plantingZoneId === properties.id);
@@ -175,7 +144,7 @@ export default function BiomassMeasurementMapView({
         />
       );
     },
-    [selectedObservation, selectedPlantingSite, plantingSiteHistory]
+    [selectedObservation, selectedPlantingSite.id, plantingSiteHistories]
   );
 
   return (
@@ -190,7 +159,7 @@ export default function BiomassMeasurementMapView({
             topRightMapControl={
               <MapLayerSelect
                 initialSelection={layerOptions}
-                onUpdateSelection={(selection) => setIncludedLayers(selection)}
+                onUpdateSelection={setIncludedLayers}
                 menuSections={[
                   layerOptions.map((opt) => ({
                     label: layerOptionLabels[opt],

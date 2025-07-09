@@ -17,6 +17,7 @@ import {
   requestObservations,
   requestObservationsResults,
 } from 'src/redux/features/observations/observationsThunks';
+import { requestListSpecies } from 'src/redux/features/species/speciesAsyncThunks';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import BiomassMeasurementsDetails from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementsDetails';
@@ -54,6 +55,7 @@ export default function ObservationsRouter(): JSX.Element {
   useEffect(() => {
     if (!dispatched && selectedOrganization) {
       setDispatched(true);
+      void dispatch(requestListSpecies(selectedOrganization.id));
       void dispatch(requestPlantingSites(selectedOrganization.id));
       void dispatch(requestObservationsResults(selectedOrganization.id));
       void dispatch(requestAdHocObservationResults(selectedOrganization.id));

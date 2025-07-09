@@ -6,16 +6,13 @@ import { DateTime } from 'luxon';
 import { paths } from 'src/api/types/generated-schema';
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
 import {
-  AdHocObservationResults,
+  Observation,
   ObservationMonitoringPlotResults,
   ObservationMonitoringPlotResultsPayload,
-  ObservationPlantingSubzoneResults,
-  ObservationPlantingZoneResults,
-  ObservationResultsWithLastObv,
+  ObservationResultsPayload,
   ObservationSummary,
 } from 'src/types/Observations';
 import { MinimalPlantingSite, MultiPolygon, PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
-import { isAfter } from 'src/utils/dateUtils';
 
 import HttpService, { Response } from './HttpService';
 
@@ -655,7 +652,8 @@ const getMapDataFromPlantingSiteFromHistoryAndResults = (
  * Extract Planting Site, Zones, Subzones, and Plots from an ObservationResult
  */
 const getMapDataFromObservation = (
-  observation: ObservationResultsWithLastObv | AdHocObservationResults,
+  observation: Observation,
+  observationResults: ObservationResultsPayload,
   plantingSiteHistory: PlantingSiteHistory
 ): MapData => {
   const plantingSiteEntities = [
@@ -672,16 +670,19 @@ const getMapDataFromObservation = (
 
   const plantingSiteHistoryZones = plantingSiteHistory.plantingZones.filter((z) => z.plantingZoneId !== undefined);
   const zoneEntities = plantingSiteHistoryZones.map((zone) => {
-    const zoneFromObservation = observation.plantingZones.find((pz) => pz.plantingZoneName === zone.name);
+    const zoneFromObservation = observationResults.plantingZones.find((pz) => pz.name === zone.name);
+    const hasObservedPermanentPlots = zoneFromObservation?.plantingSubzones.some((subzone) =>
+      subzone.monitoringPlots.some((plot) => plot.isPermanent)
+    );
     return {
       // -1 should never be set because undefined ids are filtered before
       id: zone.plantingZoneId || -1,
       properties: {
         id: zone.plantingZoneId || -1,
-        name: zoneFromObservation?.plantingZoneName || zone.name || '',
+        name: zoneFromObservation?.name || zone.name || '',
         type: 'zone',
         mortalityRate: zoneFromObservation?.mortalityRate,
-        hasObservedPermanentPlots: zoneFromObservation?.hasObservedPermanentPlots,
+        hasObservedPermanentPlots: hasObservedPermanentPlots ?? false,
       },
       boundary: getPolygons(zone.boundary),
     };
@@ -691,69 +692,30 @@ const getMapDataFromObservation = (
     .flatMap((z) => z.plantingSubzones.flatMap((subz) => ({ ...subz, zoneName: z.name })))
     .filter((subz) => subz.name !== undefined);
   const subzoneEntities = plantingSiteHistorySubZones?.map((subzone) => {
-    const zoneFromObservation = observation.plantingZones.find((pz) => pz.name === subzone.zoneName);
-    const subzoneFromObservation = zoneFromObservation?.plantingSubzones?.find(
-      (sz) => sz.plantingSubzoneName === subzone.name
-    );
+    const zoneFromObservation = observationResults.plantingZones.find((pz) => pz.name === subzone.zoneName);
+    const subzoneFromObservation = zoneFromObservation?.plantingSubzones?.find((sz) => sz.name === subzone.name);
     return {
       // -1 should never be set because undefined ids are filtered before
       id: subzone.plantingSubzoneId || -1,
       properties: {
         id: subzone.plantingSubzoneId || -1,
-        name: subzoneFromObservation?.plantingSubzoneName || subzone.name || '',
+        name: subzoneFromObservation?.name || subzone.name || '',
         mortalityRate: zoneFromObservation?.mortalityRate,
         type: 'subzone',
       },
       boundary: getPolygons(subzone.boundary),
-      lastObv: subzoneFromObservation?.lastObv,
     };
   });
-  const subzoneEntitiesWithRecency = () => {
-    const orderedSubzoneEntities = subzoneEntities?.sort((a, b) => {
-      // Check for undefined and compare valid dates
-      if (a.lastObv && b.lastObv) {
-        return isAfter(b.lastObv, a.lastObv) ? 1 : -1;
-      }
-      return 0; // In case both are undefined (should not happen here)
-    });
 
-    const entitiesToReturn: {
-      properties: { recency: number; id: number; name: string; type: string };
-      id: number;
-      boundary: MapGeometry;
-      lastObv: string | undefined;
-    }[] = [];
-    let lastProcecedDate = orderedSubzoneEntities?.[0]?.lastObv;
-    let recencyToSet = 1;
-
-    orderedSubzoneEntities?.forEach((entity) => {
-      if (entity.lastObv !== lastProcecedDate) {
-        recencyToSet = recencyToSet + 1;
-        lastProcecedDate = entity.lastObv;
-      }
-
-      entitiesToReturn.push({
-        ...entity,
-        properties: { ...entity.properties, recency: recencyToSet },
-      });
-    });
-
-    return entitiesToReturn;
-  };
-
-  const permanentPlotEntities = observation.plantingZones.flatMap((zone: ObservationPlantingZoneResults) =>
-    zone.plantingSubzones.flatMap((sz: ObservationPlantingSubzoneResults) =>
-      getMonitoringPlotMapData(sz.monitoringPlots, true)
-    )
+  const permanentPlotEntities = observationResults.plantingZones.flatMap((zone) =>
+    zone.plantingSubzones.flatMap((sz) => getMonitoringPlotMapData(sz.monitoringPlots, true))
   );
 
-  const temporaryPlotEntities = observation.plantingZones.flatMap((zone: ObservationPlantingZoneResults) =>
-    zone.plantingSubzones.flatMap((sz: ObservationPlantingSubzoneResults) =>
-      getMonitoringPlotMapData(sz.monitoringPlots, false)
-    )
+  const temporaryPlotEntities = observationResults.plantingZones.flatMap((zone) =>
+    zone.plantingSubzones.flatMap((sz) => getMonitoringPlotMapData(sz.monitoringPlots, false))
   );
 
-  const adHocPlot = observation.adHocPlot;
+  const adHocPlot = observationResults.adHocPlot;
   const addHocPlotEntities = adHocPlot
     ? [
         {
@@ -771,7 +733,7 @@ const getMapDataFromObservation = (
   return {
     site: { id: 'sites', entities: plantingSiteEntities },
     zone: { id: 'zones', entities: zoneEntities || [] },
-    subzone: { id: 'subzones', entities: subzoneEntitiesWithRecency() },
+    subzone: { id: 'subzones', entities: subzoneEntities || [] },
     permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
     temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
     adHocPlot: { id: 'adHocPlots', entities: addHocPlotEntities },

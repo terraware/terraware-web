@@ -19,15 +19,15 @@ import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { AdHocObservationResults, Observation, ObservationResults } from 'src/types/Observations';
+import { Observation, ObservationResultsPayload } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 import { regexMatch } from 'src/utils/search';
 
 type ObservationMapViewProps = SearchProps & {
   hideDate?: boolean;
-  observationsResults?: ObservationResults[];
-  adHocObservationResults?: AdHocObservationResults[];
+  observationsResults?: ObservationResultsPayload[];
+  adHocObservationResults?: ObservationResultsPayload[];
   selectedPlantingSite: PlantingSite;
 };
 
@@ -45,8 +45,8 @@ export default function ObservationMapView({
   const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
 
   const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
-  const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
-  const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
+  const [selectedObservation, setSelectedObservation] = useState<ObservationResultsPayload>();
+  const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<ObservationResultsPayload>();
   const { isDesktop } = useDeviceInfo();
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
@@ -145,14 +145,18 @@ export default function ObservationMapView({
   );
 
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    let observationToUse = selectedObservation || selectedAdHocObservation;
+    let resultsToUse = selectedObservation || selectedAdHocObservation;
+    let observationToUse = observations.find((observation) => observation.id === selectedObservation?.observationId);
     if (selectedObservation && selectedAdHocObservation) {
       if (isAfter(selectedAdHocObservation.completedTime, selectedObservation.completedTime)) {
-        observationToUse = selectedAdHocObservation;
+        resultsToUse = selectedAdHocObservation;
+        observationToUse = adHocObservations.find(
+          (observation) => observation.id === selectedAdHocObservation?.observationId
+        );
       }
     }
 
-    if (!selectedObservationDate || !observationToUse || !plantingSiteHistory) {
+    if (!selectedObservationDate || !observationToUse || !resultsToUse || !plantingSiteHistory) {
       return {
         site: plantingSiteMapData,
         zone: undefined,
@@ -163,13 +167,15 @@ export default function ObservationMapView({
       };
     }
 
-    return MapService.getMapDataFromObservation(observationToUse, plantingSiteHistory);
+    return MapService.getMapDataFromObservation(observationToUse, resultsToUse, plantingSiteHistory);
   }, [
     selectedObservation,
-    selectedObservationDate,
-    plantingSiteMapData,
-    plantingSiteHistory,
     selectedAdHocObservation,
+    observations,
+    selectedObservationDate,
+    plantingSiteHistory,
+    adHocObservations,
+    plantingSiteMapData,
   ]);
 
   const filterZoneNames = useMemo(() => filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);
@@ -179,9 +185,7 @@ export default function ObservationMapView({
     const entities = (observationsResults ?? [])
       .flatMap((obs) => obs.plantingZones)
       .filter(
-        (zone) =>
-          (!filterZoneNames.length || filterZoneNames.includes(zone.plantingZoneName)) &&
-          regexMatch(zone.plantingZoneName, search)
+        (zone) => (!filterZoneNames.length || filterZoneNames.includes(zone.name)) && regexMatch(zone.name, search)
       )
       .map((zone) => ({ sourceId: 'zones', id: zone.plantingZoneId }));
     setSearchZoneEntities(entities);
@@ -248,7 +252,7 @@ export default function ObservationMapView({
             topRightMapControl={
               <MapLayerSelect
                 initialSelection={layerOptions}
-                onUpdateSelection={(selection) => setIncludedLayers(selection)}
+                onUpdateSelection={setIncludedLayers}
                 menuSections={[
                   layerOptions.map((opt) => ({
                     label: layerOptionLabels[opt],

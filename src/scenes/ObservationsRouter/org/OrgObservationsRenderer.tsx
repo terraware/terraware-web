@@ -10,7 +10,6 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Observation, ObservationState, getStatus } from 'src/types/Observations';
-import { getShortDate } from 'src/utils/dateFormatter';
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
@@ -29,6 +28,7 @@ const OrgObservationsRenderer =
     const { column, row, value } = props;
     const observationId = Number(row.observationId);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const getTruncatedNames = (inputNames: string) => {
       const names = inputNames.split('\r');
       return <TextTruncated fontSize={16} stringList={names} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
@@ -55,7 +55,7 @@ const OrgObservationsRenderer =
       return (
         <CellRenderer
           {...props}
-          value={getTruncatedNames(value as string)}
+          value={value as string}
           sx={{
             fontSize: '16px',
             '& > p': {
@@ -67,7 +67,7 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'observationDate') {
-      return <CellRenderer {...props} value={createLinkToSiteObservation(getShortDate(value as string, locale))} />;
+      return <CellRenderer {...props} value={createLinkToSiteObservation(value as string)} />;
     }
 
     if (column.key === 'state') {
