@@ -1,3 +1,4 @@
+50ddaab9c66 SW-6885: Deploy to Vercel using CI build (#4198)
 01859856ab0 SW-7100 Select component should show a line separator between zones and sites (#4246)
 f477528a416 SW-6865: Funder can add/edit/remove other funders (#4154)
 38f2597429e SW-7122 Format site/zone names inside map (#4241)
