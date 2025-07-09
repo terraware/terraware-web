@@ -24,6 +24,8 @@ docker_tags="${docker_image}:$commit_sha,${docker_image}:${TIER}"
 echo "APP_VERSION=$APP_VERSION
 COMMIT_SHA=$commit_sha
 DOCKER_TAGS=$docker_tags
+ECS_CLUSTER_VAR_NAME=${TIER}_ECS_CLUSTER
+ECS_SERVICE_VAR_NAME=${TIER}_ECS_SERVICE
 IS_CD=true
 TIER=$TIER" >> $GITHUB_ENV
 
