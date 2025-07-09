@@ -10,6 +10,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { useOrgTracking } from 'src/hooks/useOrgTracking';
+import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import SmallSiteWarningDialog from 'src/scenes/ObservationsRouter/schedule/SmallSiteWarningDialog';
 import strings from 'src/strings';
@@ -38,6 +39,7 @@ export default function ScheduleObservationForm({
   onCancel,
   onSave,
 }: ScheduleObservationFormProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
@@ -85,11 +87,13 @@ export default function ScheduleObservationForm({
   }, [allPlantingSites, reportedPlants, upcomingObservations]);
 
   const siteOptions = useMemo((): DropdownItem[] => {
-    return plantingSitesWithZonesAndNoUpcomingObservations.map((site) => ({
-      label: site.name,
-      value: site.id,
-    }));
-  }, [plantingSitesWithZonesAndNoUpcomingObservations]);
+    return plantingSitesWithZonesAndNoUpcomingObservations
+      .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+      .map((site) => ({
+        label: site.name,
+        value: site.id,
+      }));
+  }, [activeLocale, plantingSitesWithZonesAndNoUpcomingObservations]);
 
   const findErrors = useCallback(() => {
     let _startDateError: string = '';

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Dropdown } from '@terraware/web-components';
 
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
@@ -15,6 +15,7 @@ type PlantingSiteSelectorProps = {
 export default function PlantingSiteSelector({ onChange, hideNoBoundary }: PlantingSiteSelectorProps): JSX.Element {
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
+  const { activeLocale } = useLocalization();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { allPlantingSites } = usePlantingSiteData();
 
@@ -23,8 +24,12 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   }, [allPlantingSites, hideNoBoundary]);
 
   const options = useMemo(() => {
-    return filteredPlantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
-  }, [filteredPlantingSites]);
+    return (
+      filteredPlantingSites
+        ?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((site) => ({ label: site.name, value: site.id })) ?? []
+    );
+  }, [activeLocale, filteredPlantingSites]);
 
   const updateAndReloadLastSelectedSite = useCallback(
     async (id: number) => {

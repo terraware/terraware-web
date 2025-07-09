@@ -198,8 +198,11 @@ const PlantingSiteProvider = ({ children }: Props) => {
   }, [reportedPlantsResponse]);
 
   const allPlantingSites = useMemo(
-    () => (plantingSites && allSitesOption ? [...plantingSites, allSitesOption] : []),
-    [allSitesOption, plantingSites]
+    () =>
+      plantingSites && allSitesOption
+        ? [...plantingSites, allSitesOption].toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        : [],
+    [activeLocale, allSitesOption, plantingSites]
   );
 
   const isLoading = useMemo(() => {
