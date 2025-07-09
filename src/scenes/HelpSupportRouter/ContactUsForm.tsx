@@ -15,7 +15,6 @@ import { useLocalization, useUser } from 'src/providers';
 import { requestSubmitSupportRequest } from 'src/redux/features/support/supportAsyncThunks';
 import { selectSupportRequestSubmitRequest } from 'src/redux/features/support/supportSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
 import {
   AttachmentRequest,
   SupportRequest,
@@ -35,7 +34,7 @@ const MAX_FILE_SIZE = 200;
 const ContactUsForm = () => {
   const dispatch = useAppDispatch();
   const { isDesktop } = useDeviceInfo();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const { user } = useUser();
   const theme = useTheme();
   const pathParams = useParams<{ requestType: string }>();
@@ -51,11 +50,11 @@ const ContactUsForm = () => {
   const crumbs: Crumb[] = useMemo(
     () => [
       {
-        name: activeLocale ? strings.HELP_SUPPORT : '',
+        name: strings.HELP_SUPPORT,
         to: APP_PATHS.HELP_SUPPORT,
       },
     ],
-    [activeLocale]
+    [strings]
   );
 
   const { types } = useSupportData();
@@ -129,7 +128,7 @@ const ContactUsForm = () => {
       const dispatched = dispatch(requestSubmitSupportRequest(supportRequest));
       setSubmitSupportRequestId(dispatched.requestId);
     }
-  }, [supportRequest, dispatch]);
+  }, [supportRequest, strings, dispatch]);
 
   const handleOnSave = useCallback(() => {
     submit();
@@ -147,16 +146,16 @@ const ContactUsForm = () => {
       snackbar.toastSuccess(strings.formatString(strings.THANK_YOU_FOR_CONTACTING_SUPPORT, `${issueKey}`));
       goToHelpSupport();
     }
-  }, [activeLocale, submitSupportRequest, snackbar, goToHelpSupport]);
+  }, [submitSupportRequest, snackbar, goToHelpSupport, strings]);
 
   const supportRequestTitle = useMemo(
-    () => (supportRequestType ? getSupportRequestName(supportRequestType) : ''),
-    [supportRequestType]
+    () => (supportRequestType ? getSupportRequestName(supportRequestType, strings) : ''),
+    [supportRequestType, strings]
   );
 
   const supportRequestInstructions = useMemo(
-    () => (supportRequestType ? getSupportRequestInstructions(supportRequestType) : ''),
-    [supportRequestType]
+    () => (supportRequestType ? getSupportRequestInstructions(supportRequestType, strings) : ''),
+    [supportRequestType, strings]
   );
 
   // Confirming that no uploads are pending.

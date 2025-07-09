@@ -51,13 +51,13 @@ export default function HelpSupportHome(): JSX.Element {
     return ORDERED_SUPPORT_REQUEST_TYPES.filter((type) => (types ?? []).includes(type)).map(
       (type): ListItemContent => ({
         icon: getSupportRequestIconName(type),
-        title: getSupportRequestName(type),
-        description: getSupportRequestDescription(type),
-        buttonText: getSupportRequestName(type),
+        title: getSupportRequestName(type, strings),
+        description: getSupportRequestDescription(type, strings),
+        buttonText: getSupportRequestName(type, strings),
         onClick: () => goToContactUsForm(type),
       })
     );
-  }, [types, goToContactUsForm]);
+  }, [types, goToContactUsForm, strings]);
 
   const listItemContent = useMemo(() => [knowledgeBaseItem, ...jiraListItems], [jiraListItems, knowledgeBaseItem]);
 
