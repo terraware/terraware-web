@@ -1,3 +1,4 @@
+1f2d5f1709e SW-7119 Add support for ECS deployment (#4252)
 c2a3a4fe3dc Reorganize set-environment.sh (#4251)
 380563fe3e3 SW-7105: Planting Site dropdown values not in alphabetical order in various places (#4250)
 ac8a660b546 SW-7106 Update web-components and make funding entities project dropdown autocomplete (#4248)
