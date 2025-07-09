@@ -1,3 +1,4 @@
+62e56cc7ad3 SW-7136 Fix published reports not showing up in funder portal (#4249)
 50ddaab9c66 SW-6885: Deploy to Vercel using CI build (#4198)
 01859856ab0 SW-7100 Select component should show a line separator between zones and sites (#4246)
 f477528a416 SW-6865: Funder can add/edit/remove other funders (#4154)
