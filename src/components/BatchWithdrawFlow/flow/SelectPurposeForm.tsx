@@ -427,10 +427,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (!allPlantingSites) {
       return [];
     }
-    return allPlantingSites.map((plantingSite) => ({
-      label: plantingSite.name,
-      value: plantingSite.id.toString(),
-    }));
+    return allPlantingSites
+      .filter((plantingSite) => {
+        return plantingSite.id !== -1;
+      })
+      .map((plantingSite) => ({
+        label: plantingSite.name,
+        value: plantingSite.id.toString(),
+      }));
   };
 
   const gridSize = () => (isMobile ? 12 : 6);
