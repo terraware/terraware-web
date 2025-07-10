@@ -88,35 +88,7 @@ const EXPORT_BATCH_FIELDS = [
   'addedDate',
 ];
 
-const NURSERY_BATCHES_FIELDS = [
-  'accession_id',
-  'accession_accessionNumber',
-  'addedDate',
-  'batchNumber',
-  'facility_id',
-  'facility_name',
-  'germinatingQuantity',
-  'germinatingQuantity(raw)',
-  'id',
-  'notes',
-  'notReadyQuantity',
-  'notReadyQuantity(raw)',
-  'readyQuantity',
-  'readyQuantity(raw)',
-  'readyByDate',
-  'species_id',
-  'species_scientificName',
-  'species_commonName',
-  'subLocations.subLocation_id',
-  'subLocations.subLocation_name',
-  'totalQuantity',
-  'totalQuantity(raw)',
-  'totalQuantityWithdrawn',
-  'totalQuantityWithdrawn(raw)',
-  'version',
-  'project_name',
-  'project_id',
-];
+const NURSERY_BATCHES_FIELDS = [...DEFAULT_BATCH_FIELDS, 'species_id', 'species_scientificName', 'species_commonName'];
 
 export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   accession_id?: string;
@@ -227,8 +199,11 @@ const getBatch = async (batchId: number): Promise<Response & BatchData> => {
 /**
  * Get batches by list of ids
  */
-const getBatches = async (organizationId: number, batchIds: number[]): Promise<SearchResponseElement[] | null> => {
-  const searchResponse = await SearchService.search({
+const getBatches = async (
+  organizationId: number,
+  batchIds: number[]
+): Promise<NurseryBatchesSearchResponseElement[] | null> => {
+  return await SearchService.search({
     prefix: 'batches',
     search: SearchService.convertToSearchNodePayload(
       {
@@ -241,11 +216,9 @@ const getBatches = async (organizationId: number, batchIds: number[]): Promise<S
       },
       organizationId
     ),
-    fields: [...DEFAULT_BATCH_FIELDS, 'species_id', 'species_scientificName', 'species_commonName'],
+    fields: NURSERY_BATCHES_FIELDS,
     count: 1000,
   });
-
-  return searchResponse;
 };
 
 export type SearchResponseBatches = NurseryBatchesSearchResponseElement | NurseryBatchesReportSearchResponseElement;
@@ -275,7 +248,7 @@ const getAllBatches = async (
         },
       ],
     },
-    fields: isCsvExport ? [...REPORT_BATCH_FIELDS] : [...NURSERY_BATCHES_FIELDS],
+    fields: isCsvExport ? REPORT_BATCH_FIELDS : NURSERY_BATCHES_FIELDS,
     sortOrder: [
       searchSortOrder ?? {
         field: 'batchNumber',
