@@ -39,6 +39,10 @@ export default function InventoryTests() {
 
     await page.getByLabel('Date Added *').click();
     await page.getByLabel('Date Added *').fill('2024-02-01');
+    await page.getByLabel('Seeds Sown Date').fill('2024-02-02');
+    await page.getByLabel('Seeds Sown Date').click();
+    await page.getByLabel('Germination Started Date').click();
+    await page.getByLabel('Germination Started Date').fill('2024-02-03');
     await page.locator('#germinatingQuantity').getByRole('spinbutton').click();
     await page.locator('#germinatingQuantity').getByRole('spinbutton').fill('0500');
     await page.locator('#notReadyQuantity').getByRole('spinbutton').click();
@@ -52,6 +56,8 @@ export default function InventoryTests() {
     await expect(page.getByText('Banana', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('-02-01')).toBeVisible();
+    await expect(page.getByText('-02-02')).toBeVisible();
+    await expect(page.getByText('-02-03')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 500')).toBeVisible();
     await expect(page.getByText('Not Ready Quantity 100')).toBeVisible();
     await expect(page.getByText('Ready Quantity 100', { exact: true })).toBeVisible();

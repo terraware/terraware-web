@@ -37,6 +37,7 @@ const DEFAULT_BATCH_FIELDS = [
   'facility_name',
   'germinatingQuantity',
   'germinatingQuantity(raw)',
+  'germinationStartedDate',
   'id',
   'notes',
   'notReadyQuantity',
@@ -46,6 +47,7 @@ const DEFAULT_BATCH_FIELDS = [
   'readyByDate',
   'readyQuantity',
   'readyQuantity(raw)',
+  'seedsSownDate',
   'subLocations.subLocation_id',
   'subLocations.subLocation_name',
   'totalQuantity',
@@ -80,8 +82,11 @@ export type NurseryBatchesReportSearchResponseElement = SearchResponseElement & 
 const EXPORT_BATCH_FIELDS = [
   'batchNumber',
   'species_scientificName',
+  'seedsSownDate',
   'germinatingQuantity',
+  'germinationStartedDate',
   'notReadyQuantity',
+  'readyByDate',
   'readyQuantity',
   'totalQuantity',
   'facility_name',
@@ -98,6 +103,7 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   facility_id: string;
   germinatingQuantity: string;
   'germinatingQuantity(raw)': string;
+  germinationStartedDate: string;
   id: string;
   notes: string;
   notReadyQuantity: string;
@@ -105,6 +111,7 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   readyQuantity: string;
   'readyQuantity(raw)': string;
   readyByDate: string;
+  seedsSownDate: string;
   species_id: string;
   species_scientificName: string;
   species_commonName: string;
@@ -426,8 +433,10 @@ export type UpdateBatchRequestPayloadWithId = UpdateBatchRequestPayload & { id: 
  */
 export const updateBatch = async (batch: UpdateBatchRequestPayloadWithId): Promise<Response & BatchData> => {
   const entity: UpdateBatchRequestPayload = {
+    germinationStartedDate: batch.germinationStartedDate,
     notes: batch.notes,
     readyByDate: batch.readyByDate,
+    seedsSownDate: batch.seedsSownDate,
     version: batch.version,
     subLocationIds: batch.subLocationIds,
     substrate: batch.substrate,

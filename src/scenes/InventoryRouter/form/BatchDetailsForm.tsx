@@ -371,9 +371,20 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
             <Grid
               item
               xs={gridSize()}
-              paddingRight={paddingSeparator}
               sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
+              paddingLeft={paddingSeparator}
             >
+              <DatePicker
+                id='seedsSownDate'
+                label={strings.SEEDS_SOWN_DATE}
+                aria-label={strings.SEEDS_SOWN_DATE}
+                value={record.seedsSownDate}
+                onChange={(value) => changeDate('seedsSownDate', value)}
+                defaultTimeZone={timeZone}
+              />
+            </Grid>
+
+            <Grid item xs={gridSize()} paddingRight={paddingSeparator} sx={marginTop}>
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
@@ -390,6 +401,17 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 }
                 min={0}
                 disabledCharacters={['.']}
+              />
+            </Grid>
+
+            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+              <DatePicker
+                id='germinationStartedDate'
+                label={strings.GERMINATION_STARTED_DATE}
+                aria-label={strings.GERMINATION_STARTED_DATE}
+                value={record.germinationStartedDate}
+                onChange={(value) => changeDate('germinationStartedDate', value)}
+                defaultTimeZone={timeZone}
               />
             </Grid>
 
