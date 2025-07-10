@@ -19185,7 +19185,39 @@
 <a name='L19120'></a><a href='#L19120'>19120</a>
 <a name='L19121'></a><a href='#L19121'>19121</a>
 <a name='L19122'></a><a href='#L19122'>19122</a>
-<a name='L19123'></a><a href='#L19123'>19123</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L19123'></a><a href='#L19123'>19123</a>
+<a name='L19124'></a><a href='#L19124'>19124</a>
+<a name='L19125'></a><a href='#L19125'>19125</a>
+<a name='L19126'></a><a href='#L19126'>19126</a>
+<a name='L19127'></a><a href='#L19127'>19127</a>
+<a name='L19128'></a><a href='#L19128'>19128</a>
+<a name='L19129'></a><a href='#L19129'>19129</a>
+<a name='L19130'></a><a href='#L19130'>19130</a>
+<a name='L19131'></a><a href='#L19131'>19131</a>
+<a name='L19132'></a><a href='#L19132'>19132</a>
+<a name='L19133'></a><a href='#L19133'>19133</a>
+<a name='L19134'></a><a href='#L19134'>19134</a>
+<a name='L19135'></a><a href='#L19135'>19135</a>
+<a name='L19136'></a><a href='#L19136'>19136</a>
+<a name='L19137'></a><a href='#L19137'>19137</a>
+<a name='L19138'></a><a href='#L19138'>19138</a>
+<a name='L19139'></a><a href='#L19139'>19139</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -42805,6 +42837,8 @@ export interface components {
         };
         /** @description A change to the non-quantity-related details of a batch. */
         BatchHistoryDetailsEditedPayload: WithRequired&lt;components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"&gt; &amp; {
+            /** Format: date */
+            germinationStartedDate?: string;
             notes?: string;
             /**
              * Format: int64
@@ -42815,6 +42849,8 @@ export interface components {
             projectName?: string;
             /** Format: date */
             readyByDate?: string;
+            /** Format: date */
+            seedsSownDate?: string;
             subLocations: components["schemas"]["BatchHistorySubLocationPayload"][];
             /** @enum {string} */
             substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
@@ -42971,6 +43007,8 @@ export interface components {
             germinatingQuantity: number;
             /** Format: int32 */
             germinationRate?: number;
+            /** Format: date */
+            germinationStartedDate?: string;
             /** Format: int64 */
             id: number;
             /**
@@ -42991,6 +43029,8 @@ export interface components {
             readyByDate?: string;
             /** Format: int32 */
             readyQuantity: number;
+            /** Format: date */
+            seedsSownDate?: string;
             /** Format: int64 */
             speciesId: number;
             subLocationIds: number[];
@@ -43233,6 +43273,8 @@ export interface components {
             facilityId: number;
             /** Format: int32 */
             germinatingQuantity: number;
+            /** Format: date */
+            germinationStartedDate?: string;
             /** Format: int32 */
             notReadyQuantity: number;
             notes?: string;
@@ -43242,6 +43284,8 @@ export interface components {
             readyByDate?: string;
             /** Format: int32 */
             readyQuantity: number;
+            /** Format: date */
+            seedsSownDate?: string;
             /** Format: int64 */
             speciesId: number;
             subLocationIds?: number[];
@@ -47566,11 +47610,15 @@ export interface components {
             version: number;
         };
         UpdateBatchRequestPayload: {
+            /** Format: date */
+            germinationStartedDate?: string;
             notes?: string;
             /** Format: int64 */
             projectId?: number;
             /** Format: date */
             readyByDate?: string;
+            /** Format: date */
+            seedsSownDate?: string;
             subLocationIds?: number[];
             /** @enum {string} */
             substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
@@ -57436,7 +57484,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-10T22:50:24.638Z
+                at 2025-07-10T23:07:53.032Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
