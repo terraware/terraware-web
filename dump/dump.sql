@@ -9364,6 +9364,21 @@ COPY accelerator.deliverable_variables (deliverable_id, variable_id, "position")
 102	24	21
 102	25	22
 102	26	23
+10001	73	1
+10001	74	2
+10001	75	3
+10001	68	4
+10001	76	5
+10001	70	6
+10001	57	7
+10001	58	8
+10001	59	9
+10001	60	10
+10001	61	11
+10001	62	12
+10001	63	13
+10001	71	14
+10001	77	0
 \.
 
 
@@ -9372,8 +9387,9 @@ COPY accelerator.deliverable_variables (deliverable_id, variable_id, "position")
 --
 
 COPY accelerator.deliverables (id, deliverable_category_id, deliverable_type_id, module_id, "position", created_by, created_time, modified_by, modified_time, name, description_html, is_sensitive, is_required) FROM stdin;
-68	3	1	2	2	1	2025-05-13 17:28:36.446224+00	1	2025-05-13 17:28:36.446224+00	Pre-screen Project Boundary	<p><strong>Where are these planting sites located?</strong></p>\n<p>Please upload a shapefile (including at least the .shp, .shx, and .dbf files) or a kml file of the boundaries of the project area. KML is a file format used to display geographic data in an Earth browser such as Google Earth. The shapefile should be reflective of the areas in which you&#39;d like to plant. The number of hectares given in the shapefile should match (or be reasonably close to) the number of hectares you state in the application. </p>\n<p>If you do not have a shapefile, you can either go back to the previous screen and draw your project boundaries or follow the instructions given in <a target="_blank" href="https://www.loom.com/share/ab4baf6a49704910987ea5f7e1e547a0?sid=7dd0b280-f673-4596-9e75-a9c97ad13661">this video</a> from our GIS team then upload the file here. To upload many files as one, please zip them, then upload the zipped file. </p>	f	t
-102	6	3	2	3	1	2025-05-13 17:28:36.446224+00	1	2025-05-13 17:28:36.446224+00	Pre-screen Questions	<p>Answer the following questions below and then click Save at the bottom of the screen at any time to save your progress. In order to complete the form, please provide answers for all required fields marked with an * . Once completed, you’ll be instructed to submit all requirements to see if you qualify for the Accelerator Program.</p>	f	t
+68	3	1	2	2	1	2025-05-13 17:28:36.446224+00	1	2025-07-09 23:34:46.966814+00	Pre-screen Project Boundary	<p><strong>Where are these planting sites located?</strong></p>\n<p>Please upload a shapefile (including at least the .shp, .shx, and .dbf files) or a kml file of the boundaries of the project area. KML is a file format used to display geographic data in an Earth browser such as Google Earth. The shapefile should be reflective of the areas in which you&#39;d like to plant. The number of hectares given in the shapefile should match (or be reasonably close to) the number of hectares you state in the application. </p>\n<p>If you do not have a shapefile, you can either go back to the previous screen and draw your project boundaries or follow the instructions given in <a target="_blank" href="https://www.loom.com/share/ab4baf6a49704910987ea5f7e1e547a0?sid=7dd0b280-f673-4596-9e75-a9c97ad13661">this video</a> from our GIS team then upload the file here. To upload many files as one, please zip them, then upload the zipped file. </p>	f	t
+102	6	3	2	3	1	2025-05-13 17:28:36.446224+00	1	2025-07-09 23:34:46.966814+00	Pre-screen Questions	<p>Answer the following questions below and then click Save at the bottom of the screen at any time to save your progress. In order to complete the form, please provide answers for all required fields marked with an * . Once completed, you’ll be instructed to submit all requirements to see if you qualify for the Accelerator Program.</p>	f	t
+10001	4	3	1000	4	1	2025-07-09 22:32:15.25527+00	1	2025-07-09 23:34:46.966814+00	Phase 1 Questions	Test Questionnaire for Phase 1	f	t
 \.
 
 
@@ -9482,7 +9498,8 @@ COPY accelerator.metric_types (id, name) FROM stdin;
 --
 
 COPY accelerator.modules (id, name, created_by, created_time, modified_by, modified_time, overview, preparation_materials, live_session_description, workshop_description, one_on_one_session_description, additional_resources, phase_id, "position", recorded_session_description) FROM stdin;
-2	Pre-screen	1	2025-05-13 17:28:26.861918+00	1	2025-05-13 17:28:26.861918+00	<p>Draw your proposed project site map and complete the Pre-screen questions to determine if you qualify for our Accelerator Program. Here are some of the primary criteria by which we select participants. Please visit our <a target="_blank" href="https://www.terraformation.com/accelerator">website</a> for a more details on criteria and which projects we prioritize.</p>\n<ul>\n<li>3,000 hectares of land in priority countries: Kenya, Ghana, or Colombia</li>\n<li>15,000 ha or more of land in non-priority countries</li>\n<li>Long-term access and rights to reforest land for at least 40 years</li>\n<li>Projects should plant at least 10 native tree species, or 3+ species in the case of mangrove projects (native species preferred)</li>\n</ul>	\N	\N	\N	\N	\N	100	2	\N
+2	Pre-screen	1	2025-05-13 17:28:26.861918+00	1	2025-07-09 22:32:05.534626+00	<p>Draw your proposed project site map and complete the Pre-screen questions to determine if you qualify for our Accelerator Program. Here are some of the primary criteria by which we select participants. Please visit our <a target="_blank" href="https://www.terraformation.com/accelerator">website</a> for a more details on criteria and which projects we prioritize.</p>\n<ul>\n<li>3,000 hectares of land in priority countries: Kenya, Ghana, or Colombia</li>\n<li>15,000 ha or more of land in non-priority countries</li>\n<li>Long-term access and rights to reforest land for at least 40 years</li>\n<li>Projects should plant at least 10 native tree species, or 3+ species in the case of mangrove projects (native species preferred)</li>\n</ul>	\N	\N	\N	\N	\N	100	2	\N
+1000	Test Phase 1 Module	1	2025-07-09 22:32:05.534626+00	1	2025-07-09 22:32:05.534626+00	Test Module for Phase 1 Deliverables	\N	\N	\N	\N	\N	1	3	\N
 \.
 
 
@@ -9924,6 +9941,11 @@ COPY docprod.variable_numbers (variable_id, variable_type_id, min_value, max_val
 40	1	\N	\N	\N
 45	1	\N	\N	\N
 49	1	\N	\N	\N
+64	1	0	\N	\N
+65	1	0	\N	\N
+72	1	0	\N	\N
+73	1	0	\N	\N
+77	1	0	1000	\N
 \.
 
 
@@ -10260,6 +10282,18 @@ COPY docprod.variable_select_options (id, variable_id, variable_type_id, "positi
 233	50	5	16	16: Peace, Justice, and Strong Institutions	\N	\N
 234	50	5	17	17: Partnerships for the Goals	\N	\N
 235	56	5	1	CCB Standard	\N	\N
+236	66	5	1	agroforestry timber	\N	\N
+237	66	5	2	sustainable timber	\N	\N
+238	66	5	3	marketable product	\N	\N
+239	69	5	1	do	\N	\N
+240	69	5	2	do not	\N	\N
+241	69	5	3	maybe	\N	\N
+242	74	5	1	agroforestry timber	\N	\N
+243	74	5	2	sustainable timber	\N	\N
+244	74	5	3	marketable product	\N	\N
+245	76	5	1	do	\N	\N
+246	76	5	2	do not	\N	\N
+247	76	5	3	maybe	\N	\N
 \.
 
 
@@ -10276,6 +10310,10 @@ COPY docprod.variable_selects (variable_id, variable_type_id, is_multiple) FROM 
 32	5	f
 50	5	t
 56	5	t
+66	5	t
+69	5	f
+74	5	t
+76	5	f
 \.
 
 
@@ -10284,6 +10322,12 @@ COPY docprod.variable_selects (variable_id, variable_type_id, is_multiple) FROM 
 --
 
 COPY docprod.variable_table_columns (variable_id, table_variable_id, table_variable_type_id, "position", is_header) FROM stdin;
+58	57	6	1	f
+59	57	6	2	f
+60	57	6	3	f
+61	57	6	4	f
+62	57	6	5	f
+63	57	6	6	f
 \.
 
 
@@ -10302,6 +10346,7 @@ COPY docprod.variable_table_styles (id, name) FROM stdin;
 --
 
 COPY docprod.variable_tables (variable_id, variable_type_id, table_style_id) FROM stdin;
+57	6	1
 \.
 
 
@@ -10328,6 +10373,14 @@ COPY docprod.variable_texts (variable_id, variable_type_id, variable_text_type_i
 43	2	2
 44	2	2
 47	2	1
+58	2	1
+59	2	1
+60	2	1
+61	2	1
+62	2	2
+67	2	1
+70	2	2
+75	2	1
 \.
 
 
@@ -10552,6 +10605,27 @@ COPY docprod.variables (id, variable_type_id, replaces_variable_id, is_list, sta
 54	7	\N	f	550	Slack Link	\N	Slack Link	\N	\N	\N	f	f
 55	4	\N	f	551	Project Highlight Photo	\N	Project Highlight Photo	\N	\N	\N	f	f
 56	5	\N	f	552	Certification	\N	Certification	\N	\N	\N	f	f
+57	6	\N	t	1130	TEST Invasive species to remove	\N	What are the invasive and problematic species that would need to be removed during land preparation?	\N	\N	\N	f	f
+58	2	\N	f	1131	TEST Local Name	\N	\N	\N	\N	\N	f	f
+59	2	\N	f	1132	TEST Family	\N	\N	\N	\N	\N	f	f
+60	2	\N	f	1133	TEST Scientific Name	\N	\N	\N	\N	\N	f	f
+61	2	\N	f	1134	TEST Origin (native to)	\N	\N	\N	\N	\N	f	f
+62	2	\N	f	1135	TEST Other facts	\N	\N	\N	\N	\N	f	f
+63	4	\N	t	1136	TEST Photo	\N	\N	\N	\N	\N	f	f
+64	1	\N	f	1114	TEST Number of native species	\N	What number of native species will you plant in this project?	\N	\N	\N	t	f
+65	1	\N	f	1115	TEST Number of non-native species	\N	What number of non-native species will you plant in this project?	\N	\N	\N	t	f
+66	5	\N	f	1116	TEST Reason to use non-native species	\N	What is the reason these non-native species are being planted?	1115	3	5	t	f
+67	2	\N	f	1117	TEST Organization Name	\N	\N	\N	\N	\N	f	f
+68	7	\N	f	1127	TEST Species list references	Native species selected for planting should be ecologically adapted to the project area. Example of sources: common sources of species information include expert opinion, scientific articles, technical reports from government agencies, NGOs, or research groups.	What sources have been consulted to create your species list?	\N	\N	\N	f	f
+69	5	\N	f	1128	TEST Do they prep land	\N	Does the land at the project site require preparation before the planting begins?	\N	\N	\N	f	f
+70	2	\N	f	1129	TEST Land prep steps	\N	If so, please write out the steps and time needed to complete the land preparation	1128	6	do not	f	f
+71	3	\N	f	1140	TEST Start date	\N	What is the start date of the Project?	\N	\N	\N	f	f
+72	1	64	f	1114	TEST Number of native species	\N	What number of native species will you plant in this project?	\N	\N	\N	f	t
+73	1	65	f	1115	TEST Number of non-native species	\N	What number of non-native species will you plant in this project?	\N	\N	\N	f	f
+74	5	66	f	1116	TEST Reason to use non-native species	\N	What is the reason these non-native species are being planted?	1115	3	5	f	t
+75	2	67	f	1117	TEST Organization Name	\N	\N	\N	\N	\N	f	t
+76	5	69	f	1128	TEST Do they prep land	\N	Does the land at the project site require preparation before the planting begins?	\N	\N	\N	f	t
+77	1	72	f	1114	TEST Number of native species	\N	What number of native species will you plant in this project?	\N	\N	\N	f	t
 \.
 
 
@@ -18586,7 +18660,7 @@ SELECT pg_catalog.setval('docprod.variable_section_default_values_id_seq', 1, fa
 -- Name: variable_select_options_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
 --
 
-SELECT pg_catalog.setval('docprod.variable_select_options_id_seq', 235, true);
+SELECT pg_catalog.setval('docprod.variable_select_options_id_seq', 247, true);
 
 
 --
@@ -18614,7 +18688,7 @@ SELECT pg_catalog.setval('docprod.variable_workflow_history_id_seq', 5, true);
 -- Name: variables_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
 --
 
-SELECT pg_catalog.setval('docprod.variables_id_seq', 56, true);
+SELECT pg_catalog.setval('docprod.variables_id_seq', 77, true);
 
 
 --
@@ -18768,7 +18842,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 38, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 44, true);
 
 
 --
