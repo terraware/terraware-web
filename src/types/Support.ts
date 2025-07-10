@@ -1,7 +1,7 @@
 import { components } from 'src/api/types/generated-schema';
 import { IconName } from 'src/components/common/icon/icons';
 import { Statuses } from 'src/redux/features/asyncUtils';
-import strings from 'src/strings';
+import defaultStrings from 'src/strings';
 
 export type SupportRequestType = components['schemas']['SubmitSupportRequestPayload']['requestType'];
 
@@ -18,7 +18,7 @@ export type AttachmentRequest = {
 
 export const ORDERED_SUPPORT_REQUEST_TYPES: SupportRequestType[] = ['Bug Report', 'Feature Request', 'Contact Us'];
 
-export const getSupportRequestName = (type: SupportRequestType): string => {
+export const getSupportRequestName = (type: SupportRequestType, strings: typeof defaultStrings): string => {
   switch (type) {
     case 'Bug Report':
       return strings.BUG_REPORT;
@@ -29,7 +29,7 @@ export const getSupportRequestName = (type: SupportRequestType): string => {
   }
 };
 
-export const getSupportRequestDescription = (type: SupportRequestType): string => {
+export const getSupportRequestDescription = (type: SupportRequestType, strings: typeof defaultStrings): string => {
   switch (type) {
     case 'Bug Report':
       return strings.BUG_REPORT_DESCRIPTION;
@@ -40,7 +40,7 @@ export const getSupportRequestDescription = (type: SupportRequestType): string =
   }
 };
 
-export const getSupportRequestInstructions = (type: SupportRequestType): string => {
+export const getSupportRequestInstructions = (type: SupportRequestType, strings: typeof defaultStrings): string => {
   switch (type) {
     case 'Bug Report':
       return strings.BUG_REPORT_INSTRUCTIONS;
