@@ -174,8 +174,14 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                   ) {
                     changedFields.push(strings.TREATMENT);
                   }
+                  if ((historyItem.germinationStartedDate || '') !== (previousEv?.germinationStartedDate || '')) {
+                    changedFields.push(strings.GERMINATION_STARTED_DATE);
+                  }
                   if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
                     changedFields.push(strings.ESTIMATED_READY_DATE);
+                  }
+                  if ((historyItem.seedsSownDate || '') !== (previousEv?.seedsSownDate || '')) {
+                    changedFields.push(strings.SEEDS_SOWN_DATE);
                   }
                 }
                 if (

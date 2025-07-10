@@ -216,7 +216,18 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       scrolled={true}
     >
       <Grid container item xs={12} spacing={2} textAlign='left'>
-        <Grid item xs={12} sx={marginTop}>
+        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+          <DatePicker
+            id='seedsSownDate'
+            label={strings.SEEDS_SOWN_DATE}
+            aria-label={strings.SEEDS_SOWN_DATE}
+            value={record.seedsSownDate}
+            onChange={(value) => changeDate('seedsSownDate', value)}
+            defaultTimeZone={timeZone}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} sx={marginTop} />
+        <Grid item xs={gridSize()} sx={marginTop}>
           <Textfield
             id='germinatingQuantity'
             value={record.germinatingQuantity}
@@ -226,6 +237,16 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
             errorText={validateFields && !isNumber(record?.germinatingQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+          <DatePicker
+            id='germinationStartedDate'
+            label={strings.GERMINATION_STARTED_DATE}
+            aria-label={strings.GERMINATION_STARTED_DATE}
+            value={record.germinationStartedDate}
+            onChange={(value) => changeDate('germinationStartedDate', value)}
+            defaultTimeZone={timeZone}
           />
         </Grid>
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>

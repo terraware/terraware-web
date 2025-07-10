@@ -4496,6 +4496,8 @@ export interface components {
         };
         /** @description A change to the non-quantity-related details of a batch. */
         BatchHistoryDetailsEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
+            /** Format: date */
+            germinationStartedDate?: string;
             notes?: string;
             /**
              * Format: int64
@@ -4506,6 +4508,8 @@ export interface components {
             projectName?: string;
             /** Format: date */
             readyByDate?: string;
+            /** Format: date */
+            seedsSownDate?: string;
             subLocations: components["schemas"]["BatchHistorySubLocationPayload"][];
             /** @enum {string} */
             substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
@@ -4662,6 +4666,8 @@ export interface components {
             germinatingQuantity: number;
             /** Format: int32 */
             germinationRate?: number;
+            /** Format: date */
+            germinationStartedDate?: string;
             /** Format: int64 */
             id: number;
             /**
@@ -4682,6 +4688,8 @@ export interface components {
             readyByDate?: string;
             /** Format: int32 */
             readyQuantity: number;
+            /** Format: date */
+            seedsSownDate?: string;
             /** Format: int64 */
             speciesId: number;
             subLocationIds: number[];
@@ -4924,6 +4932,8 @@ export interface components {
             facilityId: number;
             /** Format: int32 */
             germinatingQuantity: number;
+            /** Format: date */
+            germinationStartedDate?: string;
             /** Format: int32 */
             notReadyQuantity: number;
             notes?: string;
@@ -4933,6 +4943,8 @@ export interface components {
             readyByDate?: string;
             /** Format: int32 */
             readyQuantity: number;
+            /** Format: date */
+            seedsSownDate?: string;
             /** Format: int64 */
             speciesId: number;
             subLocationIds?: number[];
@@ -9257,11 +9269,15 @@ export interface components {
             version: number;
         };
         UpdateBatchRequestPayload: {
+            /** Format: date */
+            germinationStartedDate?: string;
             notes?: string;
             /** Format: int64 */
             projectId?: number;
             /** Format: date */
             readyByDate?: string;
+            /** Format: date */
+            seedsSownDate?: string;
             subLocationIds?: number[];
             /** @enum {string} */
             substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";

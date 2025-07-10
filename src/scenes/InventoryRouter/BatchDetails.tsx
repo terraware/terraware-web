@@ -98,6 +98,15 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
       <Grid container>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
+            isEditable={false}
+            title={strings.SEEDS_SOWN_DATE}
+            contents={batch.seedsSownDate}
+            grid={true}
+          />
+        </Grid>
+        {!isMobile && <Grid item xs={6} paddingRight={theme.spacing(3)} />}
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
             isEditable={true}
             title={strings.GERMINATING_QUANTITY}
             contents={batch.germinatingQuantity}
@@ -105,7 +114,14 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
             handleEdit={() => setModalValues({ openChangeQuantityModal: true, type: 'germinating' })}
           />
         </Grid>
-        {!isMobile && <Grid item xs={6} paddingRight={theme.spacing(3)} />}
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.GERMINATION_STARTED_DATE}
+            contents={batch.germinationStartedDate}
+            grid={true}
+          />
+        </Grid>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
