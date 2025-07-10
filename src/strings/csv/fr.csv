@@ -958,6 +958,7 @@ MAP_EDITOR_EDITING_FEATURE,"Cliquez sur un coin de la limite et faites-le glisse
 MAP_EDITOR_NO_FEATURES,"Commencez à dessiner les limites de votre site de plantation. Lorsque vous avez terminé, cliquez sur le point de départ ou double-cliquez pour achever la délimitation.",
 MAP_EDITOR_NO_SELECTION,"Cliquez sur la limite de votre site de plantation si vous souhaitez modifier sa position ou sa forme. Pour remplacer la limite par une nouvelle, cliquez sur le bouton {polygon}.",{polygon} will be replaced with a symbol.
 MAP_EDITOR_SELECTED_FEATURE,"Maintenez le bouton de la souris enfoncé et faites glisser la limite pour ajuster sa position. Pour commencer à ajuster sa forme, cliquez à nouveau dessus. Pour la supprimer, cliquez sur le bouton {trash}.",{trash} will be replaced with a symbol.
+MAP_NOT_UPLOADED,Carte non mise en ligne,
 MAPS_FOR,Cartes pour,
 MAPS_GIS_DESCRIPTION,Les cartes présentées ici proviennent de la base de données SIG. Visualisez la carte Terraware du projet dans le tableau de bord des plantes du projet.,
 MARK_ALL_AS_READ,Marquer tout comme lu,
