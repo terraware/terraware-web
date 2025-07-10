@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -318,9 +318,7 @@
 <a name='L253'></a><a href='#L253'>253</a>
 <a name='L254'></a><a href='#L254'>254</a>
 <a name='L255'></a><a href='#L255'>255</a>
-<a name='L256'></a><a href='#L256'>256</a>
-<a name='L257'></a><a href='#L257'>257</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L256'></a><a href='#L256'>256</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -592,7 +590,6 @@ import { useLocalization, useUser } from 'src/providers';
 import { requestSubmitSupportRequest } from 'src/redux/features/support/supportAsyncThunks';
 import { selectSupportRequestSubmitRequest } from 'src/redux/features/support/supportSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
 import {
   AttachmentRequest,
   SupportRequest,
@@ -612,7 +609,7 @@ const MAX_FILE_SIZE = <span class="cstat-no" title="statement not covered" >200;
 const ContactUsForm = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ requestType: string }&gt;();</span>
@@ -628,11 +625,11 @@ const ContactUsForm = <span class="cstat-no" title="statement not covered" ><spa
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
       {
-        name: activeLocale ? strings.HELP_SUPPORT : '',
+        name: strings.HELP_SUPPORT,
         to: APP_PATHS.HELP_SUPPORT,
       },
     ],
-    [activeLocale]
+    [strings]
   );
 &nbsp;
   const { types } = <span class="cstat-no" title="statement not covered" >useSupportData();</span>
@@ -706,7 +703,7 @@ const ContactUsForm = <span class="cstat-no" title="statement not covered" ><spa
       const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestSubmitSupportRequest(supportRequest));</span>
 <span class="cstat-no" title="statement not covered" >      setSubmitSupportRequestId(dispatched.requestId);</span>
     }
-  }, [supportRequest, dispatch]);
+  }, [supportRequest, strings, dispatch]);
 &nbsp;
   const handleOnSave = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    submit();</span>
@@ -724,16 +721,16 @@ const ContactUsForm = <span class="cstat-no" title="statement not covered" ><spa
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.formatString(strings.THANK_YOU_FOR_CONTACTING_SUPPORT, `${issueKey}`));</span>
 <span class="cstat-no" title="statement not covered" >      goToHelpSupport();</span>
     }
-  }, [activeLocale, submitSupportRequest, snackbar, goToHelpSupport]);
+  }, [submitSupportRequest, snackbar, goToHelpSupport, strings]);
 &nbsp;
   const supportRequestTitle = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >supportRequestType ? getSupportRequestName(supportRequestType) : '')</span>,
-    [supportRequestType]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >supportRequestType ? getSupportRequestName(supportRequestType, strings) : '')</span>,
+    [supportRequestType, strings]
   );
 &nbsp;
   const supportRequestInstructions = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >supportRequestType ? getSupportRequestInstructions(supportRequestType) : '')</span>,
-    [supportRequestType]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >supportRequestType ? getSupportRequestInstructions(supportRequestType, strings) : '')</span>,
+    [supportRequestType, strings]
   );
 &nbsp;
   // Confirming that no uploads are pending.
@@ -838,7 +835,7 @@ export default ContactUsForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-10T21:56:09.511Z
+                at 2025-07-10T22:50:24.638Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
