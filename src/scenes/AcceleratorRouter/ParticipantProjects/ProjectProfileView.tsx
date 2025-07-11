@@ -23,6 +23,7 @@ import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
@@ -73,6 +74,7 @@ const ProjectProfileView = ({
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
+  const isGisMapsEnabled = isEnabled('GIS Maps');
 
   const isProjectInPhase = useMemo(
     () => participantProject?.cohortPhase?.startsWith('Phase'),
@@ -539,6 +541,12 @@ const ProjectProfileView = ({
                   <ProjectFieldLink
                     value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
                     label={strings.REPORTS}
+                  />
+                )}
+                {project && isGisMapsEnabled && (
+                  <ProjectFieldLink
+                    value={APP_PATHS.ACCELERATOR_PROJECT_GIS_MAPS_VIEW.replace(':projectId', project.id.toString())}
+                    label={strings.MAPS}
                   />
                 )}
               </Box>
