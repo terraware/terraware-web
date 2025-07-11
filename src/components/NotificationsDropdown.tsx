@@ -7,6 +7,7 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Popover,
@@ -294,9 +295,8 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   };
 
   return (
-    <ListItem
+    <ListItemButton
       id={`notification${id}`}
-      button
       className={criticality}
       onClick={() => void onNotificationClick(true, true)}
       component={Link}
@@ -403,7 +403,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
           />
         )}
       </ListItem>
-    </ListItem>
+    </ListItemButton>
   );
 }
 
@@ -480,12 +480,12 @@ function NotificationItemMenu(props: NotificationItemMenuProps): JSX.Element {
         }}
       >
         <List>
-          <ListItem button onClick={handleMarkRead}>
+          <ListItemButton onClick={handleMarkRead}>
             {strings[isRead ? 'MARK_AS_UNREAD' : 'MARK_AS_READ']}
-          </ListItem>
-          <ListItem button onClick={handleGoToLink} component={Link} to={localUrl}>
+          </ListItemButton>
+          <ListItemButton onClick={handleGoToLink} component={Link} to={localUrl}>
             {strings.TAKE_ME_THERE}
-          </ListItem>
+          </ListItemButton>
         </List>
       </Popover>
     </div>
