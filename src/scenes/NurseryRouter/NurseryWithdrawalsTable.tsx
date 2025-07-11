@@ -183,21 +183,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         values,
       };
       searchValueChildren.push(speciesNameNode);
-    } else {
-      // If the batch was deleted before we added the server-side logic to deal with deleting
-      // batches that have withdrawals, there won't be any batchWithdrawals values. In that
-      // case, we can't show the species name or the total withdrawn. Filter withdrawals without
-      // batches out since they're useless to show.
-      const batchExistsNode: NotNodePayload = {
-        operation: 'not',
-        child: {
-          operation: 'field',
-          field: 'batchWithdrawals.batch_id',
-          type: 'Exact',
-          values: [null],
-        },
-      };
-      searchValueChildren.push(batchExistsNode);
     }
 
     const filterValueChildren: SearchNodePayload[] = [...Object.values(filters)];
@@ -228,6 +213,22 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       };
       finalSearchValueChildren.push(filterValueNodes);
     }
+
+    // If the batch was deleted before we added the server-side logic to deal with deleting batches
+    // that have withdrawals, there won't be any batchWithdrawals values. In that case, we can't
+    // show the species name or the total withdrawn. Filter withdrawals without batches out since
+    // they're useless to show.
+    const batchExistsNode: NotNodePayload = {
+      operation: 'not',
+      child: {
+        operation: 'field',
+        field: 'batchWithdrawals.batch_id',
+        type: 'Exact',
+        values: [null],
+      },
+    };
+    finalSearchValueChildren.push(batchExistsNode);
+
     return finalSearchValueChildren;
   }, [filters, debouncedSearchTerm]);
 
