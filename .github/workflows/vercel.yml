@@ -1,6 +1,6 @@
 # This workflow will do a clean install of node dependencies, build the source code and deploy to Vercel on pull requests
 
-name: Vercel Preview Deployment
+name: Vercel Preview
 
 on:
   pull_request:
