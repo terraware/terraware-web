@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Divider, List, ListItem, ListSubheader, Popover, Typography, useTheme } from '@mui/material';
+import { Box, Divider, List, ListItemButton, ListSubheader, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
 
 import Icon from 'src/components/common/icon/Icon';
@@ -52,9 +52,9 @@ function PopoverHeaderMenu({ menuItems }: PopoverHeaderMenuProps): JSX.Element {
       >
         <List id='popover-header-menu' onClick={handleClose}>
           {menuItems.map((item, index) => (
-            <ListItem button onClick={item.callback} key={index}>
+            <ListItemButton onClick={item.callback} key={index}>
               {item.text}
-            </ListItem>
+            </ListItemButton>
           ))}
         </List>
       </Popover>
