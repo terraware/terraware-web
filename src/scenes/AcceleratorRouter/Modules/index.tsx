@@ -80,9 +80,24 @@ export default function ModuleContentView() {
     },
   };
 
+  const reloadData = useCallback(
+    () =>
+      dispatchSearchRequest(
+        activeLocale,
+        {
+          operation: 'and',
+          children: [],
+        },
+        defaultSearchOrder
+      ),
+    [activeLocale, dispatchSearchRequest]
+  );
+
   return (
     <>
-      {openUploadModal && <UploadModulesModal open={openUploadModal} onClose={() => setOpenUploadModal(false)} />}
+      {openUploadModal && (
+        <UploadModulesModal open={openUploadModal} onClose={() => setOpenUploadModal(false)} reloadData={reloadData} />
+      )}
       <PageListView {...listViewProps} />
     </>
   );

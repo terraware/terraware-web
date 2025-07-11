@@ -13,20 +13,11 @@ export type UploadModulesModalProps = {
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   onError?: (snackbarMessage: string) => void;
   setCheckDataModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export const downloadCsvTemplate = async () => {
-  const apiResponse = await SpeciesService.downloadSpeciesTemplate();
-  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse.template;
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', 'template.csv');
-  link.click();
+  reloadData: () => void;
 };
 
 export default function UploadModulesModal(props: UploadModulesModalProps): JSX.Element {
-  const { open, onClose } = props;
+  const { open, onClose, reloadData } = props;
   const [uploadingDeliverables, setUploadingDeliverables] = useState(false);
 
   const handleTypeChange = (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -51,6 +42,7 @@ export default function UploadModulesModal(props: UploadModulesModalProps): JSX.
       importingLabel={uploadingDeliverables ? strings.IMPORTING_DELIVERABLES : strings.IMPORTING_MODULES}
       duplicatedLabel={strings.DUPLICATED_SPECIES}
       simpleUploadApi={uploadingDeliverables ? DeliverablesService.importDeliverables : ModuleService.importModules}
+      reloadData={reloadData}
     >
       <Box textAlign='center'>
         <RadioGroup
