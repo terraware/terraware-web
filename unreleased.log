@@ -1,3 +1,4 @@
+3e2d2bce59f SW-7145: Move Vercel deploy in CI to separate workflow (#4261)
 d51e7e580c6 SW-7140 Refresh modules in console after upload (#4265)
 9dd6d3ef108 SW-7094 Fix participant form issues (#4244)
 1faf13ccc44 Updated translations from Phrase (#4266)
