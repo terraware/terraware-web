@@ -9313,6 +9313,7 @@ COPY accelerator.deliverable_cohort_due_dates (deliverable_id, cohort_id, due_da
 
 COPY accelerator.deliverable_documents (deliverable_id, deliverable_type_id, template_url) FROM stdin;
 68	1	\N
+10002	1	\N
 \.
 
 
@@ -9364,6 +9365,7 @@ COPY accelerator.deliverable_variables (deliverable_id, variable_id, "position")
 102	24	21
 102	25	22
 102	26	23
+10001	77	0
 10001	73	1
 10001	74	2
 10001	75	3
@@ -9378,7 +9380,6 @@ COPY accelerator.deliverable_variables (deliverable_id, variable_id, "position")
 10001	62	12
 10001	63	13
 10001	71	14
-10001	77	0
 \.
 
 
@@ -9387,9 +9388,11 @@ COPY accelerator.deliverable_variables (deliverable_id, variable_id, "position")
 --
 
 COPY accelerator.deliverables (id, deliverable_category_id, deliverable_type_id, module_id, "position", created_by, created_time, modified_by, modified_time, name, description_html, is_sensitive, is_required) FROM stdin;
-68	3	1	2	2	1	2025-05-13 17:28:36.446224+00	1	2025-07-09 23:34:46.966814+00	Pre-screen Project Boundary	<p><strong>Where are these planting sites located?</strong></p>\n<p>Please upload a shapefile (including at least the .shp, .shx, and .dbf files) or a kml file of the boundaries of the project area. KML is a file format used to display geographic data in an Earth browser such as Google Earth. The shapefile should be reflective of the areas in which you&#39;d like to plant. The number of hectares given in the shapefile should match (or be reasonably close to) the number of hectares you state in the application. </p>\n<p>If you do not have a shapefile, you can either go back to the previous screen and draw your project boundaries or follow the instructions given in <a target="_blank" href="https://www.loom.com/share/ab4baf6a49704910987ea5f7e1e547a0?sid=7dd0b280-f673-4596-9e75-a9c97ad13661">this video</a> from our GIS team then upload the file here. To upload many files as one, please zip them, then upload the zipped file. </p>	f	t
-102	6	3	2	3	1	2025-05-13 17:28:36.446224+00	1	2025-07-09 23:34:46.966814+00	Pre-screen Questions	<p>Answer the following questions below and then click Save at the bottom of the screen at any time to save your progress. In order to complete the form, please provide answers for all required fields marked with an * . Once completed, you’ll be instructed to submit all requirements to see if you qualify for the Accelerator Program.</p>	f	t
-10001	4	3	1000	4	1	2025-07-09 22:32:15.25527+00	1	2025-07-09 23:34:46.966814+00	Phase 1 Questions	Test Questionnaire for Phase 1	f	t
+68	3	1	2	2	1	2025-05-13 17:28:36.446224+00	1	2025-07-10 22:44:13.214764+00	Pre-screen Project Boundary	<p><strong>Where are these planting sites located?</strong></p>\n<p>Please upload a shapefile (including at least the .shp, .shx, and .dbf files) or a kml file of the boundaries of the project area. KML is a file format used to display geographic data in an Earth browser such as Google Earth. The shapefile should be reflective of the areas in which you&#39;d like to plant. The number of hectares given in the shapefile should match (or be reasonably close to) the number of hectares you state in the application. </p>\n<p>If you do not have a shapefile, you can either go back to the previous screen and draw your project boundaries or follow the instructions given in <a target="_blank" href="https://www.loom.com/share/ab4baf6a49704910987ea5f7e1e547a0?sid=7dd0b280-f673-4596-9e75-a9c97ad13661">this video</a> from our GIS team then upload the file here. To upload many files as one, please zip them, then upload the zipped file. </p>	f	t
+102	6	3	2	3	1	2025-05-13 17:28:36.446224+00	1	2025-07-10 22:44:13.214764+00	Pre-screen Questions	<p>Answer the following questions below and then click Save at the bottom of the screen at any time to save your progress. In order to complete the form, please provide answers for all required fields marked with an * . Once completed, you’ll be instructed to submit all requirements to see if you qualify for the Accelerator Program.</p>	f	t
+10001	4	3	1000	4	1	2025-07-09 22:32:15.25527+00	1	2025-07-10 22:44:13.214764+00	Phase 1 Questions	Test Questionnaire for Phase 1	f	t
+10002	4	1	1000	5	1	2025-07-10 18:26:12.655558+00	1	2025-07-10 22:44:13.214764+00	Phase 1 Document	Test Document for Phase 1	f	t
+10003	4	2	1000	6	1	2025-07-10 22:44:13.214764+00	1	2025-07-10 22:44:13.214764+00	Phase 1 Species	Test Species for Phase 1	f	t
 \.
 
 
@@ -18842,7 +18845,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 44, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 48, true);
 
 
 --

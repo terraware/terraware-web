@@ -26,5 +26,5 @@ export const addFunderCookies = async (context: BrowserContext) => {
   ]);
 };
 
-// Just a typing saver for `getByText`
+// Just a typing saver for various usages
 export const exactOptions = { exact: true };
