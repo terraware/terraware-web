@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -125,15 +125,9 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,17 +146,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -173,6 +156,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -218,20 +202,11 @@ export type UploadModulesModalProps = {
   onClose: (saved: boolean, snackbarMessage?: string) =&gt; void;
   onError?: (snackbarMessage: string) =&gt; void;
   setCheckDataModalOpen?: React.Dispatch&lt;React.SetStateAction&lt;boolean&gt;&gt;;
-};
-&nbsp;
-export const downloadCsvTemplate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-  const apiResponse = <span class="cstat-no" title="statement not covered" >await SpeciesService.downloadSpeciesTemplate();</span>
-  const csvContent = <span class="cstat-no" title="statement not covered" >'data:text/csv;charset=utf-8,' + apiResponse.template;</span>
-  const encodedUri = <span class="cstat-no" title="statement not covered" >encodeURI(csvContent);</span>
-  const link = <span class="cstat-no" title="statement not covered" >document.createElement('a');</span>
-<span class="cstat-no" title="statement not covered" >  link.setAttribute('href', encodedUri);</span>
-<span class="cstat-no" title="statement not covered" >  link.setAttribute('download', 'template.csv');</span>
-<span class="cstat-no" title="statement not covered" >  link.click();</span>
+  reloadData: () =&gt; void;
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >UploadModulesModal(</span>props: UploadModulesModalProps): JSX.Element {
-  const { open, onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { open, onClose, reloadData } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [uploadingDeliverables, setUploadingDeliverables] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
   const handleTypeChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(_</span>: React.ChangeEvent&lt;HTMLInputElement&gt;, value: string) =&gt; {</span>
@@ -256,6 +231,7 @@ export default function <span class="fstat-no" title="function not covered" >Upl
       importingLabel={uploadingDeliverables ? strings.IMPORTING_DELIVERABLES : strings.IMPORTING_MODULES}
       duplicatedLabel={strings.DUPLICATED_SPECIES}
       simpleUploadApi={uploadingDeliverables ? DeliverablesService.importDeliverables : ModuleService.importModules}
+      reloadData={reloadData}
     &gt;
       &lt;Box textAlign='center'&gt;
         &lt;RadioGroup
@@ -280,7 +256,7 @@ export default function <span class="fstat-no" title="function not covered" >Upl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-11T18:05:21.931Z
+                at 2025-07-11T18:25:28.755Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
