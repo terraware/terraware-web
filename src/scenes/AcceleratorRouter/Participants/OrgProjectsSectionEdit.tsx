@@ -16,6 +16,8 @@ export type OrgProjectsSection = {
   org?: AcceleratorOrg;
   projectId: number;
   projectDetails: ParticipantProject;
+  isNew?: boolean;
+  isPopulated?: boolean;
 };
 
 export type OrgProjectsSectionEditProps = {
@@ -40,14 +42,12 @@ const OrgProjectsSectionEdit = ({
   const [selectedProject, setSelectedProject] = useState<string>(section.projectId?.toString());
   const dispatch = useAppDispatch();
   const projectDetailsRequest = useAppSelector(selectParticipantProjectRequest(Number(selectedProject)));
-  const [projectDetailsUpdated, setProjectDetailsUpdated] = useState<boolean>(false);
 
   useEffect(() => {
-    if (projectDetailsRequest?.status === 'success' && !projectDetailsUpdated) {
+    if (projectDetailsRequest?.status === 'success' && !section.isPopulated) {
       updateProjectDetails(section.projectId, undefined, undefined, projectDetailsRequest.data);
-      setProjectDetailsUpdated(true);
     }
-  }, [projectDetailsRequest, section.projectId, updateProjectDetails, projectDetailsUpdated]);
+  }, [projectDetailsRequest, section.projectId, updateProjectDetails, section.isPopulated]);
 
   useEffect(() => {
     onProjectSelect(section.id, Number(selectedProject));
@@ -62,7 +62,8 @@ const OrgProjectsSectionEdit = ({
 
   const orgOptions = useMemo(() => {
     const orgs = [...availableOrgs];
-    if (section.org) {
+    const orgIds = orgs.map((org) => org.id);
+    if (section.org && !orgIds.includes(section.org.id)) {
       orgs.push(section.org);
     }
     return orgs
@@ -95,6 +96,8 @@ const OrgProjectsSectionEdit = ({
           tooltipTitle={strings.ACCELERATOR_ORGS_TOOLTIP}
           required
           errorText={validateFields && (!section.org?.id || section.org.id === -1) ? strings.REQUIRED_FIELD : ''}
+          disabled={!section.isNew}
+          autocomplete={section.isNew}
         />
       </Grid>
       <Grid item xs={6}>
@@ -111,6 +114,7 @@ const OrgProjectsSectionEdit = ({
               ? strings.REQUIRED_FIELD
               : ''
           }
+          autocomplete
         />
       </Grid>
       <Grid item xs={6}>

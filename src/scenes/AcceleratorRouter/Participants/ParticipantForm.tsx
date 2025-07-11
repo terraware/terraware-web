@@ -43,8 +43,8 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const [modified, setModified] = useState<boolean>(false);
   // initialize with one org selection enabled
   const [orgProjectsSections, setOrgProjectsSections] = useState<OrgProjectsSection[]>([]);
-  // orgs available for selection in the dropdowns, does not included already selected orgs
-  const [availableOrgs, setAvailableOrgs] = useState<AcceleratorOrg[]>([]);
+  // ensures org sections don't update each other after deleting and adding a section
+  const [sectionSeq, setSectionSeq] = useState<number>(0);
 
   const acceleratorOrgs = useMemo<AcceleratorOrg[]>(() => {
     const orgs = (allAcceleratorOrgs || [])
@@ -107,11 +107,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       );
     });
 
-    if (detailsMissingFields) {
-      return false;
-    }
-
-    return true;
+    return !detailsMissingFields;
   };
 
   const onSaveHandler = () => {
@@ -142,7 +138,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       }
       setModified(true);
       setOrgProjectsSections((prev) => {
-        const updated = [...prev].map((section) =>
+        return [...prev].map((section) =>
           section.id !== sectionId
             ? section
             : {
@@ -151,8 +147,6 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
                 selectedProjects: [],
               }
         );
-        setAvailableOrgs((acceleratorOrgs || []).filter((o) => !updated.some((data) => data.org?.id === o.id)));
-        return updated;
       });
     },
     [acceleratorOrgs]
@@ -161,15 +155,15 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const onProjectSelect = useCallback((sectionId: number, projectId: number) => {
     setModified(true);
     setOrgProjectsSections((prev) => {
-      const updated = [...prev].map((section) =>
+      return [...prev].map((section) =>
         section.id !== sectionId
           ? section
           : {
               ...section,
+              projectDetails: { ...section.projectDetails, projectId },
               projectId,
             }
       );
-      return updated;
     });
   }, []);
 
@@ -184,9 +178,10 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const addOrgProjectsSection = useCallback(() => {
     setOrgProjectsSections((prev) => [
       ...prev,
-      { id: prev.length + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] } },
+      { id: sectionSeq + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] }, isNew: true },
     ]);
-  }, []);
+    setSectionSeq((prev) => prev + 1);
+  }, [sectionSeq]);
 
   // initialize sections for participant that already had project ids (edit use-case)
   useEffect(() => {
@@ -203,12 +198,18 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     if (sections.length) {
       setModified(true);
       setOrgProjectsSections(sections);
-      // remove the orgs as being available for selection (since they already has projects selected prior to edit)
-      setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section?.org?.id === org.id)));
     } else if (acceleratorOrgs.length) {
       // allow initial selection
-      setOrgProjectsSections([{ id: 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] } }]);
+      setOrgProjectsSections([
+        {
+          id: 1,
+          projectId: -1,
+          projectDetails: { projectId: -1, landUseModelTypes: [] },
+          isNew: true,
+        },
+      ]);
     }
+    setSectionSeq(sections.length || 1);
   }, [acceleratorOrgs, activeLocale, localRecord.projectIds, modified]);
 
   useEffect(() => {
@@ -216,42 +217,53 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     setLocalRecord(participant);
   }, [participant]);
 
-  useEffect(() => {
-    if (acceleratorOrgs) {
-      setAvailableOrgs(acceleratorOrgs);
-    }
-  }, [acceleratorOrgs]);
-
   const updateProjectDetails = (
     projectId: number,
     field?: string,
     value?: string,
     allDetails?: ParticipantProjectType
   ) => {
-    const sectionToUpdate = orgProjectsSections.find((section) => section.projectId === projectId);
-    let newDetails: ParticipantProjectType = { landUseModelTypes: [], projectId };
+    setOrgProjectsSections((prev) => {
+      const sectionToUpdate = prev.find((section) => section.projectId === projectId);
 
-    if (sectionToUpdate) {
+      if (!sectionToUpdate) {
+        return prev;
+      }
+
+      let newDetails: ParticipantProjectType = { landUseModelTypes: [], projectId };
+
       if (field && value !== undefined) {
-        newDetails = { ...sectionToUpdate?.projectDetails, [field]: value };
+        newDetails = { ...sectionToUpdate.projectDetails, [field]: value };
       } else if (allDetails) {
         newDetails = allDetails;
       }
 
-      setOrgProjectsSections((prev) => {
-        const updated = [...prev].map((section) =>
-          section.projectId === projectId
-            ? {
-                ...section,
-                projectDetails: { ...newDetails, landUseModelTypes: newDetails.landUseModelTypes || [], projectId },
-              }
-            : section
-        );
-
-        return updated;
-      });
-    }
+      return prev.map((section) =>
+        section.projectId === projectId
+          ? {
+              ...section,
+              projectDetails: {
+                ...newDetails,
+                landUseModelTypes: newDetails.landUseModelTypes || [],
+                projectId,
+              },
+              isPopulated: true,
+            }
+          : section
+      );
+    });
   };
+
+  // orgs available for selection in the dropdowns, excludes selected orgs with no other projects
+  const availableOrgs = useMemo(() => {
+    return (acceleratorOrgs || []).filter((org) => {
+      const selectedProjectIds = orgProjectsSections
+        .filter((section) => section.org?.id === org.id)
+        .map((section) => section.projectId);
+
+      return org.projects.some((project) => !selectedProjectIds.includes(project.id));
+    });
+  }, [acceleratorOrgs, orgProjectsSections]);
 
   return (
     <PageForm
@@ -322,27 +334,29 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
               updateProjectDetails={updateProjectDetails}
               validateFields={validateFields}
             />
-            <Box display='flex' marginTop={theme.spacing(2)}>
-              <Link
-                onClick={() => removeOrgProjectsSection(index)}
-                fontSize='16px'
-                disabled={orgProjectsSections.length === 1}
-              >
-                <Box display='flex' alignItems='center'>
-                  <Icon
-                    name='iconSubtract'
-                    style={{
-                      fill: theme.palette.TwClrIcnSecondary,
-                      height: '20px',
-                      width: '20px',
-                    }}
-                  />
-                  <Typography fontWeight={500} color={theme.palette.TwClrIcnSecondary}>
-                    &nbsp;{strings.REMOVE_PROJECT}
-                  </Typography>
-                </Box>
-              </Link>
-            </Box>
+            {orgProjectsSections.length > 1 && (
+              <Box display='flex' marginTop={theme.spacing(2)}>
+                <Link
+                  onClick={() => removeOrgProjectsSection(index)}
+                  fontSize='16px'
+                  disabled={orgProjectsSections.length === 1}
+                >
+                  <Box display='flex' alignItems='center'>
+                    <Icon
+                      name='iconSubtract'
+                      style={{
+                        fill: theme.palette.TwClrIcnSecondary,
+                        height: '20px',
+                        width: '20px',
+                      }}
+                    />
+                    <Typography fontWeight={500} color={theme.palette.TwClrIcnSecondary}>
+                      &nbsp;{strings.REMOVE_PROJECT}
+                    </Typography>
+                  </Box>
+                </Link>
+              </Box>
+            )}
           </Box>
         ))}
         {acceleratorOrgs.length > 0 && (
