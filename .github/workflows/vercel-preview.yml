@@ -80,8 +80,8 @@ jobs:
         with:
           environment: Vercel - Preview (tree-location-web)
           initial-status: 'in_progress'
+          task: deploy:preview
           token: '${{ github.token }}'
-          # TODO: Add 'task' with unique identifier for the deployment (commit SHA?)
 
       - name: Build for Vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
