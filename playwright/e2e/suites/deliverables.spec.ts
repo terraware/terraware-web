@@ -1,9 +1,17 @@
 import { expect, test } from '@playwright/test';
 
 import {
+  addQuestionnaireComments,
   approveDeliverableSpecies,
+  approveQuestionInQuestionnaire,
+  approveQuestionnaireDeliverable,
   navigateToConsoleDeliverables,
+  requestQuestionUpdatesQuestionnaire,
   requestUpdateDeliverableSpecies,
+  requestUpdateQuestionnaire,
+  validateConsoleQuestionnaireStatusCard,
+  validateQuestionnaireQuestionUpdateComments,
+  validateQuestionnaireUpdateComments,
 } from '../utils/consoleDeliverable';
 import {
   deleteDeliverableSpecies,
@@ -63,6 +71,7 @@ export default function DeliverableTests() {
     await waitFor(page, '#home');
 
     const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
 
     await page.getByText('Deliverables', exactOptions).click();
     await expect(page.getByText('Phase 1 Questions', exactOptions)).toBeVisible(); // waits for table to load
@@ -133,11 +142,7 @@ export default function DeliverableTests() {
       'TestOtherFacts',
       page
     );
-    await fillQuestionnaireInputField(
-      'What is the start date of the Project?',
-      today.toISOString().split('T')[0],
-      page
-    );
+    await fillQuestionnaireInputField('What is the start date of the Project?', todayString, page);
     await page.getByRole('button', { name: 'Save' }).click();
 
     await validateQuestionnaireField('What number of native species will you plant in this project?', '1000', page);
@@ -168,7 +173,7 @@ export default function DeliverableTests() {
       ['TestLocalName', 'TestScientificName', 'TestOtherFacts'],
       page
     );
-    await validateQuestionnaireField('What is the start date of the Project?', '2025-07-10', page);
+    await validateQuestionnaireField('What is the start date of the Project?', todayString, page);
 
     const inReviewVariables = [
       'What number of native species will you plant in this project?',
@@ -189,6 +194,61 @@ export default function DeliverableTests() {
     await page.getByRole('button', { name: 'Submit for Approval' }).click();
     await page.getByRole('button', { name: 'Submit', ...exactOptions }).click();
     await validateQuestionnaireOverallStatus('Test Questionnaire for Phase 1', 'In Review', page);
+
+    await navigateToConsoleDeliverables(page);
+    await page.getByText('Phase 1 Questions').click();
+
+    for (const label of inReviewVariables) {
+      await validateConsoleQuestionnaireStatusCard(label, 'In Review', page);
+    }
+
+    await addQuestionnaireComments(
+      'What number of non-native species will you plant in this project?',
+      'This probably needs to be updated',
+      page
+    );
+    await approveQuestionInQuestionnaire('What number of native species will you plant in this project?', page);
+    await requestQuestionUpdatesQuestionnaire(
+      'What number of non-native species will you plant in this project?',
+      'This is wrong.',
+      page
+    );
+    await requestUpdateQuestionnaire('You need to fix some stuff', page);
+
+    await navigateToParticipantDeliverables(page);
+    await page.getByText('Phase 1 Questions').click();
+    await validateQuestionnaireUpdateComments('You need to fix some stuff', page);
+    await validateQuestionnaireStatusCard(
+      'What number of native species will you plant in this project?',
+      'Approved',
+      page
+    );
+    await validateQuestionnaireQuestionUpdateComments(
+      'What number of non-native species will you plant in this project?',
+      'This is wrong.',
+      page
+    );
+
+    await page.getByRole('button', { name: 'Edit' }).click();
+    await fillQuestionnaireInputField('What number of non-native species will you plant in this project?', '6', page);
+    await page.getByRole('button', { name: 'Save' }).click();
+
+    await page.getByRole('button', { name: 'Submit for Approval' }).click();
+    await page.getByRole('button', { name: 'Submit', ...exactOptions }).click();
+    await validateQuestionnaireOverallStatus('Test Questionnaire for Phase 1', 'In Review', page);
+
+    await navigateToConsoleDeliverables(page);
+    await page.getByText('Phase 1 Questions').click();
+    await approveQuestionnaireDeliverable(page);
+
+    await navigateToParticipantDeliverables(page);
+    await page.getByText('Phase 1 Questions').click();
+    await expect(
+      page.getByText(
+        'This deliverable has been approved. The list of species and their status may change as subsequent species list deliverables are submitted.'
+      )
+    ).toBeVisible();
+    await validateQuestionnaireOverallStatus('Test Questionnaire for Phase 1', 'Approved', page);
   });
 
   test.skip('Document Deliverable', async ({ page }) => {
@@ -206,12 +266,12 @@ export default function DeliverableTests() {
     // todo finish this test once we have support for local file storage
   });
 
-  test.only('Species Deliverable', async ({ page }) => {
+  test('Species Deliverable', async ({ page }) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
 
     await page.getByText('Deliverables', exactOptions).click();
-    await expect(page.getByText('Phase 1 Species', exactOptions)).toBeVisible(); // waits for table to load
+    await expect(page.getByRole('link', { name: 'Phase 1 Species', ...exactOptions })).toBeVisible(); // waits for table to load
     await page.getByText('Phase 1 Species').click();
 
     await expect(page.getByRole('button', { name: 'Submit for Approval' })).toBeDisabled();
@@ -251,6 +311,7 @@ export default function DeliverableTests() {
     await validateSpeciesStatus('Kousa Dogwood', 'Not Submitted', page);
 
     await navigateToConsoleDeliverables(page);
+    await page.getByText('Phase 1 Species').click();
     await approveDeliverableSpecies('Kousa Dogwood', page);
     await requestUpdateDeliverableSpecies('Banana', 'You did something wrong', page);
 
