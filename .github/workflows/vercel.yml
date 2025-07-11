@@ -1,0 +1,87 @@
+# This workflow will do a clean install of node dependencies, build the source code and deploy to Vercel on pull requests
+
+name: Vercel Preview
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set Environment
+        run: ./.github/scripts/set-environment.sh
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v4
+        id: yarn-cache
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            node_modules
+          key: ${{ runner.os }}-yarn-2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Generate strings
+        run: yarn generate-strings
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Create Vercel project.json for Terraware Web Preview
+        run: |
+          mkdir -p .vercel
+          echo "{\"projectId\":\"${{ secrets.VERCEL_PROJECT_ID_TERRAWARE_WEB_PREVIEW }}\",\"orgId\":\"${{ secrets.VERCEL_ORG_ID }}\"}" > .vercel/project.json
+
+      - name: Pull Vercel project settings for "preview" environment
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@v2
+        id: vercel_deployment
+        with:
+          environment: Vercel - Preview (tree-location-web)
+          initial-status: 'in_progress'
+          task: deploy:preview
+          token: '${{ github.token }}'
+
+      - name: Build for Vercel
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel (prebuilt)
+        id: vercel_deploy
+        run: |
+          preview_url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
+
+      - name: Update GitHub deployment status
+        if: ${{ steps.vercel_deployment.outputs.deployment_id }}
+        uses: chrnorm/deployment-status@v2
+        with:
+          deployment-id: ${{ steps.vercel_deployment.outputs.deployment_id }}
+          environment-url: ${{ steps.vercel_deploy.outputs.preview_url }}
+          state: ${{ job.status == 'success' && 'success' || 'failure' }}
+          token: '${{ github.token }}'
