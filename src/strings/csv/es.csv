@@ -960,6 +960,7 @@ MAP_EDITOR_NO_FEATURES,"Comience a dibujar el límite de su terreno de plantaci�
 MAP_EDITOR_NO_SELECTION,"Haga clic en el límite de su sitio de plantación si desea ajustar su posición o su forma. Para sustituir el límite por uno nuevo, haga clic en el botón {polygon}.",{polygon} will be replaced with a symbol.
 MAP_EDITOR_SELECTED_FEATURE,"Mantenga pulsado el botón del ratón y arrastre el límite para ajustar su posición. Para empezar a ajustar su forma, vuelva a hacer clic sobre él. Para eliminarlo, haga clic en el botón {trash}.",{trash} will be replaced with a symbol.
 MAP_NOT_UPLOADED,Mapa sin subir,
+MAPS,Mapas,
 MAPS_FOR,Mapas para,
 MAPS_GIS_DESCRIPTION,Los mapas que se muestran aquí pertenecen a la base de datos GIS. Vea el mapa Terraware del proyecto en el Panel de plantas del mismo.,
 MARK_ALL_AS_READ,Marcar todo como leído,
