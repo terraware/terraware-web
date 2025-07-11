@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { addSuperAdminCookies, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addSuperAdminCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function ParticipantPlantsDashboardTests() {
@@ -12,7 +13,7 @@ export default function ParticipantPlantsDashboardTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
-    await page.getByRole('button', { name: 'Dashboard' }).click();
+    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await page.getByPlaceholder('No Project Selected').click();
     await page.getByText('Phase 1 Project', { exact: true }).click();
@@ -59,7 +60,7 @@ export default function ParticipantPlantsDashboardTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
-    await page.getByRole('button', { name: 'Dashboard' }).click();
+    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS1', { exact: true }).click();
@@ -106,7 +107,7 @@ export default function ParticipantPlantsDashboardTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
-    await page.getByRole('button', { name: 'Dashboard' }).click();
+    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
@@ -203,7 +204,7 @@ export default function ParticipantPlantsDashboardTests() {
 
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
-    await page.getByRole('button', { name: 'Dashboard' }).click();
+    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await expect(page.getByText('To view data in this dashboard, add a planting site', { exact: true })).toBeVisible();
     await expect(

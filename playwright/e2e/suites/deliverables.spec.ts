@@ -33,10 +33,11 @@ import {
   validateSpeciesStatus,
   verifyHomepageDeliverableStatus,
 } from '../utils/participantDeliverable';
-import { addSuperAdminCookies, exactOptions, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { exactOptions, waitFor } from '../utils/utils';
 
 test.beforeEach(async ({ context }) => {
-  await addSuperAdminCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function DeliverableTests() {

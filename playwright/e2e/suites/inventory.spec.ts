@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { addSuperAdminCookies, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(60000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addSuperAdminCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function InventoryTests() {
@@ -13,7 +14,7 @@ export default function InventoryTests() {
 
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory' }).click();
+    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Banana' }).locator('div').click();
@@ -70,7 +71,7 @@ export default function InventoryTests() {
 
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory' }).click();
+    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Coconut' }).locator('div').click();
@@ -127,7 +128,7 @@ export default function InventoryTests() {
 
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory' }).click();
+    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
     await page.getByRole('link', { name: '-2-2-004' }).click();
     await page.getByLabel('Details').getByRole('button').nth(1).click();
@@ -175,7 +176,7 @@ export default function InventoryTests() {
 
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory' }).click();
+    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
     await page.getByRole('link', { name: '-2-2-003' }).click();
     await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
@@ -254,7 +255,7 @@ export default function InventoryTests() {
 
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory' }).click();
+    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
 
     await page.getByRole('link', { name: '-2-2-004' }).click();
@@ -295,7 +296,7 @@ export default function InventoryTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
-    await page.getByRole('button', { name: 'Dashboard' }).click();
+    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
     await expect(page.getByText('60')).toBeVisible();
     await expect(page.getByText('1 Species', { exact: true })).toBeVisible();
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));

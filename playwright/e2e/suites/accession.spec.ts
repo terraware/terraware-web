@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { addSuperAdminCookies, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(60000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addSuperAdminCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function AccessionTests() {
@@ -134,7 +135,7 @@ export default function AccessionTests() {
       'Test User withdrew 300 seeds for nurseryAdding some test notes here!'
     );
     await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory' }).click();
+    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await expect(page.locator('#row1-species_scientificName')).toContainText('Coconut');
     await expect(page.locator('#row1-facilityInventories')).toContainText(/My New Nursery/);
     await expect(page.locator('#row1-germinatingQuantity')).toContainText('300');

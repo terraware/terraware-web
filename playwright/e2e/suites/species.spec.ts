@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { addSuperAdminCookies, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { waitFor } from '../utils/utils';
 
 test.setTimeout(60000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addSuperAdminCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function SpeciesTests() {

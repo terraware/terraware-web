@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test';
 
 import { navigateToProjectProfile } from '../utils/navigation';
-import { addSuperAdminCookies, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addSuperAdminCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function ProjectVariablesTests() {
@@ -51,6 +52,8 @@ export default function ProjectVariablesTests() {
     await waitFor(page, '#snackbar div:has-text("Success")');
 
     // verify variable value is updated
-    await expect(page.locator('#row2-values').getByText('1500')).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Planting Density: Sustainable' }).locator('../../..').getByText('1500')
+    ).toBeVisible();
   });
 }
