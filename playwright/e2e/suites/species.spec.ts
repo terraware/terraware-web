@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { addCookies, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(60000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function SpeciesTests() {
@@ -15,7 +16,7 @@ export default function SpeciesTests() {
 
     await waitFor(page, '#home');
 
-    await page.getByRole('button', { name: 'Species' }).click();
+    await page.getByRole('button', { name: 'Species', ...exactOptions }).click();
 
     await page.waitForTimeout(1000); //Wait for modal to load and be hydrated before interacting
     await page.getByRole('button', { name: 'Add Species' }).click();

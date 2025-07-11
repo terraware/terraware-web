@@ -2,14 +2,15 @@ import { expect, test } from '@playwright/test';
 
 import { navigateToProjectProfile } from '../utils/navigation';
 import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProfile';
-import { addCookies, addFunderCookies, exactOptions, waitFor } from '../utils/utils';
+import { changeToFunderUser, changeToSuperAdmin } from '../utils/userUtils';
+import { exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 
 export default function FunderProjectProfileTests() {
   test('Publish Project and then View Published Project', async ({ page, context }, testInfo) => {
     // publish project
-    await addCookies(context);
+    await changeToSuperAdmin(context);
     await navigateToProjectProfile('Phase 1 Project Deal', page);
     await page.locator('#more-options').click();
     await page
@@ -21,7 +22,7 @@ export default function FunderProjectProfileTests() {
     await expect(page.getByText('Project Profile Published', exactOptions)).toBeVisible();
 
     // view published project
-    await addFunderCookies(context);
+    await changeToFunderUser(context);
     await page.goto('http://127.0.0.1:3000');
     await page.getByRole('tab', { name: 'Project Profile' }).click();
 

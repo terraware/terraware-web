@@ -2,11 +2,12 @@ import { test } from '@playwright/test';
 
 import { navigateToProjectProfile } from '../utils/navigation';
 import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProfile';
-import { addCookies, exactOptions, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function ProjectProfileTests() {
