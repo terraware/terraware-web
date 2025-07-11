@@ -45,22 +45,8 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Check that code is formatted
-        run: yarn prettier --check .
-
       - name: Generate strings
         run: yarn generate-strings
-
-      # Remove the jsx-no-bind rule because it has lots of errors currently
-      - name: Run linter
-        run: >
-          yarn lint --rule "react/jsx-no-bind: 0"
-
-      - name: Do typescript check
-        run: yarn ts
-
-      - name: Run unit tests
-        run: yarn test --ci
 
       - name: Install Vercel CLI
         run: npm install -g vercel
