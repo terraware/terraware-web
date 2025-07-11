@@ -2,11 +2,11 @@ import { expect, test } from '@playwright/test';
 
 import { APP_PATHS } from '../../../src/constants';
 import { navigateToProjectProfile } from '../utils/navigation';
-import { addCookies, waitFor } from '../utils/utils';
+import { addSuperAdminCookies, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addCookies(context);
+  await addSuperAdminCookies(context);
 });
 
 export default function ProjectDocumentsTests() {

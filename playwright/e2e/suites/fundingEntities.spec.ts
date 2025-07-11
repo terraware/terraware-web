@@ -2,11 +2,11 @@ import { expect, test } from '@playwright/test';
 import { Page } from 'playwright-core';
 
 import { navigateToFundingEntities } from '../utils/navigation';
-import { addCookies, exactOptions } from '../utils/utils';
+import { addSuperAdminCookies, exactOptions } from '../utils/utils';
 
 test.setTimeout(20000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addCookies(context);
+  await addSuperAdminCookies(context);
 });
 
 type Funder = {

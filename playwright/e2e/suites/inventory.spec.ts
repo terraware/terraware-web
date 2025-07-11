@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-import { addCookies, waitFor } from '../utils/utils';
+import { addSuperAdminCookies, waitFor } from '../utils/utils';
 
 test.setTimeout(60000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addCookies(context);
+  await addSuperAdminCookies(context);
 });
 
 export default function InventoryTests() {

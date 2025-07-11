@@ -19,7 +19,7 @@ export async function requestUpdateDeliverableSpecies(name: string, feedback: st
 }
 
 export async function requestUpdateQuestionnaire(feedback: string, page: Page) {
-  await page.getByRole('button', { name: 'Request Update' }).click();
+  await page.locator('#rejectDeliverable').click();
   await page.getByText('Feedback').locator('..').locator('textarea').fill(feedback);
   await page.locator('#confirmReject').click();
 }

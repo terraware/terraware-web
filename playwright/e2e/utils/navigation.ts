@@ -16,3 +16,11 @@ export const navigateToFundingEntities = async (page: Page) => {
   await page.getByRole('link', { name: 'Accelerator Console' }).click();
   await page.getByRole('button', { name: 'Funding Entities' }).click();
 };
+
+export const navigateHome = async (page: Page) => {
+  await page.getByRole('button', { name: 'Home' }).click();
+};
+
+export const navigateConsoleToParticipant = async (page: Page) => {
+  await page.getByRole('link', { name: 'Terraware' }).click();
+};

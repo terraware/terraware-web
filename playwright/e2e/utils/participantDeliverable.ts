@@ -3,8 +3,31 @@ import type { Page } from 'playwright-core';
 
 import { exactOptions } from './utils';
 
+export async function verifyHomepageDeliverableStatus(
+  deliverableName: string,
+  status: string,
+  inTodoList: boolean,
+  todoStatus: string,
+  page: Page
+) {
+  const todoItem = page
+    .locator('p', { hasText: deliverableName })
+    .locator('../..')
+    .locator('p', { hasText: todoStatus });
+  if (inTodoList) {
+    await expect(todoItem).toBeVisible();
+  } else {
+    await expect(todoItem).toBeHidden();
+  }
+  await expect(
+    page.getByRole('button', { name: deliverableName }).locator('../..').locator('p', { hasText: status })
+  ).toBeVisible();
+}
+
 export async function navigateToParticipantDeliverables(page: Page) {
-  await page.getByRole('link', { name: 'Terraware' }).click();
+  if (await page.getByRole('link', { name: 'Terraware' }).isVisible()) {
+    await page.getByRole('link', { name: 'Terraware' }).click();
+  }
   await page.getByText('Deliverables', exactOptions).click();
 }
 

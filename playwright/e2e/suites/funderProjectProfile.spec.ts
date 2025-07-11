@@ -2,14 +2,14 @@ import { expect, test } from '@playwright/test';
 
 import { navigateToProjectProfile } from '../utils/navigation';
 import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProfile';
-import { addCookies, addFunderCookies, exactOptions, waitFor } from '../utils/utils';
+import { addFunderCookies, addSuperAdminCookies, exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 
 export default function FunderProjectProfileTests() {
   test('Publish Project and then View Published Project', async ({ page, context }, testInfo) => {
     // publish project
-    await addCookies(context);
+    await addSuperAdminCookies(context);
     await navigateToProjectProfile('Phase 1 Project Deal', page);
     await page.locator('#more-options').click();
     await page

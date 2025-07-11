@@ -6,7 +6,7 @@ export const waitFor = async (page: Page, selector: string, timeout = 3000) => {
   await page.waitForSelector(selector, { timeout });
 };
 
-export const addCookies = async (context: BrowserContext) => {
+export const addSuperAdminCookies = async (context: BrowserContext) => {
   // Make all requests look like they are associated with an existing login session
   // so we don't have to depend on a Keycloak server to run the test suite. The
   // session value here is the base64-encoded session ID from dump/session.sql.
