@@ -1,8 +1,6 @@
 import { expect } from '@playwright/test';
 import { Page } from 'playwright-core';
 
-import { validateQuestionnaireStatusCard } from './participantDeliverable';
-
 export async function navigateToConsoleDeliverables(page: Page) {
   await page.getByRole('link', { name: 'Accelerator Console' }).click();
   await page.getByRole('button', { name: 'Deliverables' }).click();

@@ -33,7 +33,7 @@ import {
   validateSpeciesStatus,
   verifyHomepageDeliverableStatus,
 } from '../utils/participantDeliverable';
-import { changeToSuperAdmin } from '../utils/userUtils';
+import { changeToContributor, changeToReadOnlyUser, changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions, waitFor } from '../utils/utils';
 
 test.beforeEach(async ({ context }) => {
@@ -41,7 +41,7 @@ test.beforeEach(async ({ context }) => {
 });
 
 export default function DeliverableTests() {
-  test('Deliverables tab shows up once cohort has module with deliverables', async ({ page }) => {
+  test('Deliverables tab shows up once cohort has module with deliverables', async ({ page, context }) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
 
@@ -68,6 +68,17 @@ export default function DeliverableTests() {
 
     await page.getByRole('link', { name: 'Terraware' }).click();
     await expect(page.getByText('Deliverables', exactOptions)).toBeVisible();
+
+    await changeToContributor(context);
+    await page.goto('http://127.0.0.1:3000');
+    await expect(page.getByText('Deliverables', exactOptions)).toBeHidden();
+
+    // read only shouldn't be able to approve a whole deliverable
+    await changeToReadOnlyUser(context);
+    await page.goto('http://127.0.0.1:3000');
+    await navigateToConsoleDeliverables(page);
+    await page.getByText('Phase 1 Questions').click();
+    await expect(page.getByText('#approveDeliverable')).toBeHidden();
   });
 
   test('Questionnaire Deliverable', async ({ page }) => {

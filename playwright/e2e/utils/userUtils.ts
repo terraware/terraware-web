@@ -24,3 +24,10 @@ export const changeToContributor = async (context: BrowserContext) => {
     { name: 'SESSION', value: 'YmQ0Y2Y1MTktOGI0Ny00ODI2LTlmNjYtYjlmZGI5YzAyNWI4', url: 'http://127.0.0.1:3000' },
   ]);
 };
+
+export const changeToReadOnlyUser = async (context: BrowserContext) => {
+  await context.clearCookies({ name: 'SESSION' });
+  await context.addCookies([
+    { name: 'SESSION', value: 'NGRiYWRkMWUtNzcxZC00Y2E2LWJiYWItNjMxOGFiYmNhOWMw', url: 'http://127.0.0.1:3000' },
+  ]);
+};
