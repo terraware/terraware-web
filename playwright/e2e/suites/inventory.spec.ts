@@ -62,7 +62,7 @@ export default function InventoryTests() {
     await page.getByRole('tab', { name: 'History' }).click();
     page.mouse.wheel(0, 1000);
     await expect(page.getByRole('cell', { name: 'Germinating Quantity, Not' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Test User' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Super Admin' })).toBeVisible();
     await page.getByRole('tab', { name: 'Details' }).click();
   });
 
@@ -119,7 +119,7 @@ export default function InventoryTests() {
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Germinating Quantity, Not' })).toBeVisible();
-    await expect(page.locator('#row1-editedByName')).toContainText('Test User');
+    await expect(page.locator('#row1-editedByName')).toContainText('Super Admin');
     await page.getByRole('tab', { name: 'Details' }).click();
   });
 
@@ -155,7 +155,7 @@ export default function InventoryTests() {
     await expect(page.getByRole('main')).toContainText('Loss Rate 14');
     await expect(page.getByRole('main')).toContainText('Total Withdrawn 15');
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.locator('#row1-editedByName')).toContainText('Test User');
+    await expect(page.locator('#row1-editedByName')).toContainText('Super Admin');
     await expect(page.getByRole('cell', { name: 'Withdrawal - Dead' })).toBeVisible();
     await page.getByRole('link', { name: 'Withdrawal - Dead' }).click();
     await expect(page.getByText('Purpose Dead')).toBeVisible();
@@ -241,7 +241,7 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: '-2-1-003' }).click();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Nursery Transfer' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Test User' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Super Admin' })).toBeVisible();
   });
 
   test('Withdraw for Outplanting', async ({ page }, testInfo) => {

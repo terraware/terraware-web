@@ -13164,7 +13164,7 @@ COPY public.users (id, auth_id, email, first_name, last_name, created_time, modi
 3	\N	pending@terraformation.com	\N	\N	2025-05-21 21:42:18.239617+00	2025-05-21 21:42:18.23963+00	5	\N	f	\N	\N	\N	\N	\N	\N
 4	157cf509-d3e6-4bde-9e0d-d4ac07e2b721	funder@terraformation.com	Test	Funder	2025-05-21 21:42:25.83028+00	2025-05-21 21:45:27.385204+00	5	2025-05-21 21:46:29.411+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
 5	2cd6d1dd-3135-4ef8-a817-fc6f207d1ab1	contributor@terraformation.com	Contributor	User	2025-07-11 21:45:26.864778+00	2025-07-11 21:48:32.894439+00	1	2025-07-11 21:48:35.525+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
-1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-07-11 23:05:35.809+00	f	\N	Etc/UTC	\N	\N	t	2025-06-11 21:53:16.594086+00
+1	0d04525c-7933-4cec-9647-7b6ac2642838	superadmin@terraformation.com	Super	Admin	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-07-11 23:05:35.809+00	f	\N	Etc/UTC	\N	\N	t	2025-06-11 21:53:16.594086+00
 6	38256d2c-c181-46a3-84fe-2add28c6c57a	readonly@terraformation.com	Read	Only	2025-07-11 23:00:24.169033+00	2025-07-11 23:01:58.394435+00	1	2025-07-11 23:04:59.783+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
 \.
 

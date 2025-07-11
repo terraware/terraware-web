@@ -78,11 +78,11 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('500 Grams');
     await expect(page.getByRole('main')).toContainText('~500 ct');
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByLabel('History')).toContainText('Test User created accession');
-    await expect(page.getByLabel('History')).toContainText('Test User updated the status to Awaiting Processing');
-    await expect(page.getByLabel('History')).toContainText('Test User updated the status to Processing');
-    await expect(page.getByLabel('History')).toContainText('Test User updated the status to Drying');
-    await expect(page.getByLabel('History')).toContainText('Test User updated the quantity to 500 grams');
+    await expect(page.getByLabel('History')).toContainText('Super Admin created accession');
+    await expect(page.getByLabel('History')).toContainText('Super Admin updated the status to Awaiting Processing');
+    await expect(page.getByLabel('History')).toContainText('Super Admin updated the status to Processing');
+    await expect(page.getByLabel('History')).toContainText('Super Admin updated the status to Drying');
+    await expect(page.getByLabel('History')).toContainText('Super Admin updated the quantity to 500 grams');
     await page.getByRole('tab', { name: 'Viability Tests' }).click();
     await page.getByRole('button', { name: 'Add Test' }).click();
     await page.getByPlaceholder('Select...').nth(1).click();
@@ -132,7 +132,7 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('~195 ct');
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByLabel('History')).toContainText(
-      'Test User withdrew 300 seeds for nurseryAdding some test notes here!'
+      'Super Admin withdrew 300 seeds for nurseryAdding some test notes here!'
     );
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
