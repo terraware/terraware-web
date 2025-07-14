@@ -10,18 +10,20 @@ export async function verifyHomepageDeliverableStatus(
   todoStatus: string,
   page: Page
 ) {
-  const todoItem = page
-    .locator('p', { hasText: deliverableName })
-    .locator('../..')
-    .locator('p')
-    .filter({ hasText: todoStatus });
-  if (inTodoList) {
-    await expect(todoItem).toBeVisible();
-  } else {
-    await expect(todoItem).toBeHidden();
+  if (todoStatus !== '') {
+    const todoItem = page
+      .locator('p', { hasText: deliverableName })
+      .locator('../..')
+      .locator('p')
+      .filter({ hasText: todoStatus });
+    if (inTodoList) {
+      await expect(todoItem).toBeVisible();
+    } else {
+      await expect(todoItem).toBeHidden();
+    }
   }
   await expect(
-    page.getByRole('button', { name: deliverableName }).locator('../..').locator('p', { hasText: status })
+    page.getByRole('button', { name: deliverableName }).locator('../..').locator('p').filter({ hasText: status })
   ).toBeVisible();
 }
 

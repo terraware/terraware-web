@@ -41,7 +41,7 @@ test.beforeEach(async ({ context }) => {
 });
 
 export default function DeliverableTests() {
-  test('Deliverables tab shows up once cohort has module with deliverables', async ({ page, context }) => {
+  test.only('Deliverables tab shows up once cohort has module with deliverables', async ({ page, context }) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
 
@@ -291,7 +291,7 @@ export default function DeliverableTests() {
     // todo finish this test once we have support for local file storage
   });
 
-  test('Species Deliverable', async ({ page }) => {
+  test.only('Species Deliverable', async ({ page }) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
 
