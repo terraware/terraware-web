@@ -58,6 +58,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units !== 'Seeds');
   const [withdrawalQty, setWithdrawalQty] = useState<number>(0);
   const [withdrawalValid, setWithdrawalValid] = useState<boolean>(false);
+  const [withdrawalButtonEnabled, setWithdrawalButtonEnabled] = useState<boolean>(true);
 
   const newWithdrawal: Withdrawal = {
     purpose: 'Nursery',
@@ -161,44 +162,49 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   }, [accession, isByWeight, withdrawalQty]);
 
   const saveWithdrawal = async () => {
-    let response;
-    if (record) {
-      if (isNurseryTransfer && nurseryTransferRecord.destinationFacilityId === -1) {
-        setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
-        return;
-      }
-      if (fieldsErrors.date || (isNurseryTransfer && fieldsErrors.readyByDate)) {
-        return;
-      }
-
-      if (isNurseryTransfer) {
-        nurseryTransferRecord.germinatingQuantity = estimatedWithdrawalQty;
-        response = await AccessionService.transferToNursery(nurseryTransferRecord, accession.id);
-      } else if (record.purpose === 'Viability Testing') {
-        viabilityTesting.seedsTested = estimatedWithdrawalQty;
-        viabilityTesting.startDate = record.date;
-        response = await AccessionService.createViabilityTest(viabilityTesting, accession.id);
-      } else {
-        let units: UnitType;
-        if (isByWeight) {
-          if (accession.remainingQuantity?.units === 'Seeds') {
-            units = 'Grams';
-          } else {
-            units = accession.remainingQuantity?.units || 'Grams';
-          }
-        } else {
-          units = 'Seeds';
+    setWithdrawalButtonEnabled(false);
+    try {
+      let response;
+      if (record) {
+        if (isNurseryTransfer && nurseryTransferRecord.destinationFacilityId === -1) {
+          setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
+          return;
         }
-        record.withdrawnQuantity = { quantity: withdrawalQty, units };
-        response = await AccessionService.createWithdrawal(record, accession.id);
-      }
+        if (fieldsErrors.date || (isNurseryTransfer && fieldsErrors.readyByDate)) {
+          return;
+        }
 
-      if (response.requestSucceeded) {
-        reload();
-        onCloseHandler();
-      } else {
-        snackbar.toastError();
+        if (isNurseryTransfer) {
+          nurseryTransferRecord.germinatingQuantity = estimatedWithdrawalQty;
+          response = await AccessionService.transferToNursery(nurseryTransferRecord, accession.id);
+        } else if (record.purpose === 'Viability Testing') {
+          viabilityTesting.seedsTested = estimatedWithdrawalQty;
+          viabilityTesting.startDate = record.date;
+          response = await AccessionService.createViabilityTest(viabilityTesting, accession.id);
+        } else {
+          let units: UnitType;
+          if (isByWeight) {
+            if (accession.remainingQuantity?.units === 'Seeds') {
+              units = 'Grams';
+            } else {
+              units = accession.remainingQuantity?.units || 'Grams';
+            }
+          } else {
+            units = 'Seeds';
+          }
+          record.withdrawnQuantity = { quantity: withdrawalQty, units };
+          response = await AccessionService.createWithdrawal(record, accession.id);
+        }
+
+        if (response.requestSucceeded) {
+          reload();
+          onCloseHandler();
+        } else {
+          snackbar.toastError();
+        }
       }
+    } finally {
+      setWithdrawalButtonEnabled(true);
     }
   };
 
@@ -299,7 +305,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
           onClick={() => void saveWithdrawal()}
           label={strings.WITHDRAW}
           key='button-2'
-          disabled={!withdrawalValid}
+          disabled={!withdrawalValid || !withdrawalButtonEnabled}
         />,
       ]}
       scrolled={true}
