@@ -92,8 +92,8 @@ export default function DeliverableTests() {
     await verifyHomepageDeliverableStatus(deliverableName, 'Incomplete', true, 'Not Submitted', page);
 
     await page.getByText('Deliverables', exactOptions).click();
-    await expect(page.getByText(deliverableName, exactOptions)).toBeVisible(); // waits for table to load
-    await page.getByText(deliverableName).click();
+    await expect(page.getByRole('link', { name: deliverableName, ...exactOptions })).toBeVisible(); // waits for table to load
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
 
     // missing required fields shows error
     await expect(page.getByText('What number of native species will you plant in this project?')).toBeVisible();
@@ -299,7 +299,7 @@ export default function DeliverableTests() {
     await verifyHomepageDeliverableStatus(deliverableName, 'Incomplete', true, 'Not Submitted', page);
     await page.getByText('Deliverables', exactOptions).click();
     await expect(page.getByRole('link', { name: deliverableName, ...exactOptions })).toBeVisible(); // waits for table to load
-    await page.getByText(deliverableName).click();
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
 
     await expect(page.getByRole('button', { name: 'Submit for Approval' })).toBeDisabled();
     await expect(page.getByText('There are no species added to this Project yet.')).toBeVisible();
@@ -341,7 +341,7 @@ export default function DeliverableTests() {
     await verifyHomepageDeliverableStatus(deliverableName, 'In Review', false, '', page);
 
     await navigateToConsoleDeliverables(page);
-    await page.getByText(deliverableName).click();
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
     await approveDeliverableSpecies('Kousa Dogwood', page);
     await requestUpdateDeliverableSpecies('Banana', 'You did something wrong', page);
     await requestUpdateQuestionnaire('Your species are wrong.', page);
@@ -349,7 +349,7 @@ export default function DeliverableTests() {
     await navigateConsoleToParticipant(page);
     await verifyHomepageDeliverableStatus(deliverableName, 'Update Needed', true, 'Update Needed', page);
     await navigateToParticipantDeliverables(page);
-    await page.getByText(deliverableName).click();
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
     await expect(page.getByText('Banana: You did something wrong')).toBeVisible();
     await validateSpeciesStatus('Banana', 'Update Needed', page);
     await validateSpeciesStatus('Kousa Dogwood', 'Approved', page);
