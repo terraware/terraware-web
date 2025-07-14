@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
-import { SelectT, Textfield } from '@terraware/web-components';
-import { Dropdown } from '@terraware/web-components';
+import { Dropdown, SelectT, Textfield } from '@terraware/web-components';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 
 import AddLink from 'src/components/common/AddLink';
@@ -15,12 +14,11 @@ import WeightWithdrawal from 'src/scenes/AccessionsRouter/withdraw/WeightWithdra
 import { OrganizationUserService } from 'src/services';
 import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import strings from 'src/strings';
-import { Accession, Withdrawal } from 'src/types/Accession';
-import { treatments, withdrawalTypes } from 'src/types/Accession';
+import { Accession, Withdrawal, treatments, withdrawalTypes } from 'src/types/Accession';
 import { NurseryTransfer } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
 import { OrganizationUser, User } from 'src/types/User';
-import { Unit } from 'src/units';
+import { UnitType, convertUnits } from 'src/units';
 import { getAllNurseries, getSeedBank, isContributor } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import useForm from 'src/utils/useForm';
@@ -57,9 +55,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState(tz.id);
-  const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units === 'Seeds' ? false : true);
+  const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units !== 'Seeds');
   const [withdrawalQty, setWithdrawalQty] = useState<number>(0);
-  const [withdrawalUnits, setWithdrawalUnits] = useState<Unit['value']>('Grams');
   const [withdrawalValid, setWithdrawalValid] = useState<boolean>(false);
 
   const newWithdrawal: Withdrawal = {
@@ -139,6 +136,28 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     });
   }, [record.purpose, isNurseryTransfer, isByWeight, setRecord]);
 
+  const estimatedWithdrawalQty = useMemo(() => {
+    let estimated = 0;
+    if (isByWeight && accession.subsetCount && accession.subsetWeight) {
+      if (
+        accession.remainingQuantity?.units &&
+        accession.remainingQuantity?.units === 'Seeds' &&
+        accession.estimatedWeight?.units
+      ) {
+        estimated = Math.round(
+          convertUnits(withdrawalQty, accession.estimatedWeight?.units, accession.subsetWeight.units) *
+            (accession.subsetCount / accession.subsetWeight.quantity)
+        );
+      } else if (accession.remainingQuantity?.units) {
+        estimated = Math.round(
+          convertUnits(withdrawalQty, accession.remainingQuantity?.units, accession.subsetWeight.units) *
+            (accession.subsetCount / accession.subsetWeight.quantity)
+        );
+      }
+    }
+    return estimated;
+  }, [accession, isByWeight, withdrawalQty]);
+
   const saveWithdrawal = async () => {
     let response;
     if (record) {
@@ -151,14 +170,24 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       }
 
       if (isNurseryTransfer) {
-        nurseryTransferRecord.germinatingQuantity = withdrawalQty;
+        nurseryTransferRecord.germinatingQuantity = estimatedWithdrawalQty;
         response = await AccessionService.transferToNursery(nurseryTransferRecord, accession.id);
       } else if (record.purpose === 'Viability Testing') {
-        viabilityTesting.seedsTested = withdrawalQty;
+        viabilityTesting.seedsTested = estimatedWithdrawalQty;
         viabilityTesting.startDate = record.date;
         response = await AccessionService.createViabilityTest(viabilityTesting, accession.id);
       } else {
-        record.withdrawnQuantity = { quantity: withdrawalQty, units: withdrawalUnits };
+        let units: UnitType;
+        if (isByWeight) {
+          if (accession.remainingQuantity?.units === 'Seeds') {
+            units = 'Grams';
+          } else {
+            units = accession.remainingQuantity?.units || 'Grams';
+          }
+        } else {
+          units = 'Seeds';
+        }
+        record.withdrawnQuantity = { quantity: withdrawalQty, units };
         response = await AccessionService.createWithdrawal(record, accession.id);
       }
 
@@ -212,10 +241,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     onChange(id, value);
   };
 
-  const onWithdrawCtUpdate = (withdrawnQuantity: Withdrawal['withdrawnQuantity'], valid: boolean) => {
+  const onWithdrawCtUpdate = (withdrawnQuantity: number, valid: boolean) => {
     if (withdrawnQuantity) {
-      setWithdrawalQty(withdrawnQuantity.quantity);
-      setWithdrawalUnits(withdrawnQuantity.units);
+      setWithdrawalQty(withdrawnQuantity);
     }
     setWithdrawalValid(valid);
   };
