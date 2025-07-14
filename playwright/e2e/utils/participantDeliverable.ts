@@ -13,7 +13,8 @@ export async function verifyHomepageDeliverableStatus(
   const todoItem = page
     .locator('p', { hasText: deliverableName })
     .locator('../..')
-    .locator('p', { hasText: todoStatus });
+    .locator('p')
+    .filter({ hasText: todoStatus });
   if (inTodoList) {
     await expect(todoItem).toBeVisible();
   } else {

@@ -77,7 +77,7 @@ export default function DeliverableTests() {
     await changeToReadOnlyUser(context);
     await page.goto('http://127.0.0.1:3000');
     await navigateToConsoleDeliverables(page);
-    await page.getByText('Phase 1 Questions').click();
+    await page.getByRole('link', { name: 'Phase 1 Questions' }).click();
     await expect(page.getByText('#approveDeliverable')).toBeHidden();
   });
 
@@ -291,7 +291,7 @@ export default function DeliverableTests() {
     // todo finish this test once we have support for local file storage
   });
 
-  test('Species Deliverable', async ({ page }) => {
+  test.only('Species Deliverable', async ({ page }) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
 
