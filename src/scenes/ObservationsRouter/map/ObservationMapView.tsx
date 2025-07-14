@@ -203,6 +203,7 @@ export default function ObservationMapView({
   const contextRenderer = useCallback(
     (properties: MapSourceProperties): JSX.Element | null => {
       let entity: any;
+      let showReassignmentButton = false;
       if (properties.type === 'site') {
         entity = selectedObservation;
       } else if (properties.type === 'zone') {
@@ -217,6 +218,7 @@ export default function ObservationMapView({
             ?.flatMap((z) => z.plantingSubzones)
             ?.flatMap((sz) => sz.monitoringPlots)
             ?.find((p) => p.monitoringPlotId === properties.id);
+        showReassignmentButton = true;
       }
 
       if (!entity) {
@@ -230,6 +232,7 @@ export default function ObservationMapView({
           observationState={selectedObservation?.state}
           plantingSiteId={selectedPlantingSite.id}
           title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : properties.type === 'adHocPlot' ? ` (${strings.AD_HOC})` : properties.type === 'permanentPlot' ? ` (${strings.PERMANENT})` : ''}`}
+          showReassignmentButton={showReassignmentButton}
         />
       );
     },

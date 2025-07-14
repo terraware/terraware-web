@@ -18,10 +18,11 @@ type TooltipContentsProps = {
   observationState?: ObservationState;
   plantingSiteId: number;
   title: string;
+  showReassignmentButton?: boolean;
 };
 
 export default function TooltipContents(props: TooltipContentsProps): JSX.Element {
-  const { monitoringPlot, observationId, observationState, plantingSiteId, title } = props;
+  const { monitoringPlot, observationId, observationState, plantingSiteId, title, showReassignmentButton } = props;
   const theme = useTheme();
   const mapPortalContainer = useMapPortalContainer();
   const { selectedOrganization } = useOrganization();
@@ -85,7 +86,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
             </>
           )}
         </Box>
-        {!monitoringPlot?.completedTime && replaceObservationPlotEnabled && (
+        {!monitoringPlot?.completedTime && replaceObservationPlotEnabled && showReassignmentButton && (
           <Box display='flex' padding={theme.spacing(2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
             <Button
               id='reassignPlot'
