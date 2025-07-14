@@ -291,7 +291,7 @@ export default function DeliverableTests() {
     // todo finish this test once we have support for local file storage
   });
 
-  test.only('Species Deliverable', async ({ page }) => {
+  test('Species Deliverable', async ({ page }) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
 
