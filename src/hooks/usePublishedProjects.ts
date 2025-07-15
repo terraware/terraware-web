@@ -19,7 +19,7 @@ export const usePublishedProjects = () => {
   }, [dispatch, publishedProjects]);
 
   useEffect(() => {
-    if (result && result.status === 'success' && result.data) {
+    if (result?.status === 'success' && result.data) {
       setPublishedProjects(result.data.toSorted((a, b) => (a.dealName || '').localeCompare(b.dealName || '')));
     }
   }, [result]);
