@@ -640,6 +640,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
         header: 'Age Month',
         size: 150,
       },
+      {
+        accessorKey: 'estimatedCount',
+        header: 'Count',
+        size: 150,
+      },
+      {
+        accessorKey: 'estimatedWeightOunces',
+        header: 'Weight (Oz)',
+        size: 150,
+      },
+      {
+        accessorKey: 'estimatedWeightGrams',
+        header: 'Weight (g)',
+        size: 150,
+      },
     ],
     []
   );
@@ -648,6 +663,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     columns: columnsMRT,
     data: searchResults || [],
     enableColumnOrdering: true,
+    enableColumnPinning: true,
   });
 
   return (
