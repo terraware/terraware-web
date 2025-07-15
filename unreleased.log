@@ -1,3 +1,4 @@
+e7247323d60 SW-7112 Hide tooltip for non-monitoring plot (#4271)
 42e50f0a939 Upgrade to MUI v6 (#4267)
 3e2d2bce59f SW-7145: Move Vercel deploy in CI to separate workflow (#4261)
 d51e7e580c6 SW-7140 Refresh modules in console after upload (#4265)
