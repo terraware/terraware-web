@@ -27,9 +27,10 @@ import { sendMessage } from 'src/redux/features/message/messageSlice';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PreferencesService } from 'src/services';
+import { AccessionService, PreferencesService } from 'src/services';
 import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
 import strings from 'src/strings';
+import { AccessionState } from 'src/types/Accession';
 import { Facility } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
 import { SearchCriteria, SearchNodePayload, SearchResponseElementWithId, SearchSortOrder } from 'src/types/Search';
@@ -628,7 +629,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
       {
         accessorKey: 'state',
         header: 'State',
-        size: 150,
+        editVariant: 'select',
+        editSelectOptions: ({ cell, column, row, table }) => {
+          return AccessionService.getTransitionToStates(row.original.state as AccessionState);
+        },
+        muiEditTextFieldProps: ({ row }) => ({
+          select: true,
+          onChange: (event) => {
+            console.log('status changed', event);
+          },
+        }),
       },
       {
         accessorKey: 'collectedDate',
@@ -664,6 +674,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
     data: searchResults || [],
     enableColumnOrdering: true,
     enableColumnPinning: true,
+    enableEditing: true,
+    editDisplayMode: 'cell',
   });
 
   return (
