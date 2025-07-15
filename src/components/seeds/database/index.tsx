@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
 import { DropdownItem, Message } from '@terraware/web-components';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 import _ from 'lodash';
+import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 
 import PageHeader from 'src/components/PageHeader';
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
@@ -602,6 +603,53 @@ export default function Database(props: DatabaseProps): JSX.Element {
     void initAccessions();
   }, [initAccessions]);
 
+  const columnsMRT = useMemo<MRT_ColumnDef<SearchResponseElementWithId>[]>(
+    () => [
+      {
+        accessorKey: 'accessionNumber',
+        header: 'Accession Number',
+        size: 150,
+      },
+      {
+        accessorKey: 'speciesName',
+        header: 'Species Name',
+        size: 150,
+      },
+      {
+        accessorKey: 'project_name',
+        header: 'Project Name',
+        size: 200,
+      },
+      {
+        accessorKey: 'collectionSiteName',
+        header: 'Collection Site Name',
+        size: 150,
+      },
+      {
+        accessorKey: 'state',
+        header: 'State',
+        size: 150,
+      },
+      {
+        accessorKey: 'collectedDate',
+        header: 'Collected Date',
+        size: 150,
+      },
+      {
+        accessorKey: 'ageMonths',
+        header: 'Age Month',
+        size: 150,
+      },
+    ],
+    []
+  );
+
+  const dataForMaterialReactTable = useMaterialReactTable({
+    columns: columnsMRT,
+    data: searchResults || [],
+    enableColumnOrdering: true,
+  });
+
   return (
     <>
       {selectedFacility && (
@@ -739,6 +787,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     )}
                     {searchResults === undefined && <CircularProgress />}
                     {searchResults === null && strings.GENERIC_ERROR}
+                    {searchResults && <MaterialReactTable table={dataForMaterialReactTable} />}
                   </Box>
                 </Card>
               ) : isAdmin(selectedOrganization) ? (
