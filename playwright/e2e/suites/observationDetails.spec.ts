@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { addCookies, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../utils/userUtils';
+import { waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 test.beforeEach(async ({ context }, testInfo) => {
-  await addCookies(context);
+  await changeToSuperAdmin(context);
 });
 
 export default function ObservationDetailsTests() {
@@ -149,7 +150,7 @@ export default function ObservationDetailsTests() {
     ).toBeVisible();
     await expect(page.locator('label.textfield-label:has-text("Observer")')).toBeVisible();
     await expect(
-      page.locator('label.textfield-label:has-text("Observer") + p.textfield-value--display:has-text("Test User")')
+      page.locator('label.textfield-label:has-text("Observer") + p.textfield-value--display:has-text("Super Admin")')
     ).toBeVisible();
     await expect(page.getByText('Zone', { exact: true })).toBeVisible();
     await expect(

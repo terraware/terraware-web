@@ -30,6 +30,9 @@ export default defineConfig({
     trace: 'on-first-retry',
 
     screenshot: 'only-on-failure',
+    launchOptions: {
+      slowMo: parseInt(process.env.SLOW_MO || '0'),
+    },
   },
   testMatch: 'test.list.ts',
 

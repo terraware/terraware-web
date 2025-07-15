@@ -121,7 +121,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
           <DatePicker
             id='startDate'
-            label={strings.START_DATE}
+            label={strings.START_DATE_REQUIRED}
             value={record.startDate}
             onDateChange={(value?: DateTime) => {
               onChange('startDate', value?.toFormat('yyyy-MM-dd'));
@@ -133,7 +133,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
           <DatePicker
             id='endDate'
-            label={strings.END_DATE}
+            label={strings.END_DATE_REQUIRED}
             value={record.endDate}
             onDateChange={(value) => {
               onChange('endDate', value?.toFormat('yyyy-MM-dd'));
