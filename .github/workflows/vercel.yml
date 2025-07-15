@@ -63,6 +63,7 @@ jobs:
         uses: chrnorm/deployment-action@v2
         id: vercel_deployment
         with:
+          auto-inactive: false
           environment: Vercel - Preview (tree-location-web)
           initial-status: 'in_progress'
           task: deploy:preview
