@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Portal } from '@mui/base';
 import { Box, Typography, useTheme } from '@mui/material';
@@ -39,6 +39,14 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const plantingDensity = monitoringPlot?.plantingDensity;
   const percentMortality = monitoringPlot?.mortalityRate;
 
+  const openModal = useCallback(() => {
+    setShowReplacePlotModal(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setShowReplacePlotModal(false);
+  }, []);
+
   return (
     <>
       {showReplacePlotModal && observationId && monitoringPlot && (
@@ -46,7 +54,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
           <ReplaceObservationPlotModal
             monitoringPlot={monitoringPlot}
             observationId={observationId}
-            onClose={() => setShowReplacePlotModal(false)}
+            onClose={closeModal}
             plantingSiteId={plantingSiteId}
           />
         </Portal>
@@ -92,7 +100,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
               id='reassignPlot'
               label={`${strings.REQUEST_REASSIGNMENT}...`}
               type='passive'
-              onClick={() => setShowReplacePlotModal(true)}
+              onClick={openModal}
               priority='secondary'
               sx={{
                 marginLeft: 'auto',

@@ -202,8 +202,8 @@ export default function ObservationMapView({
 
   const contextRenderer = useCallback(
     (properties: MapSourceProperties): JSX.Element | null => {
+      const showReassignmentButton = properties.type === 'temporaryPlot' || properties.type === 'permanentPlot';
       let entity: any;
-      let showReassignmentButton = false;
       if (properties.type === 'site') {
         entity = selectedObservation;
       } else if (properties.type === 'zone') {
@@ -218,7 +218,6 @@ export default function ObservationMapView({
             ?.flatMap((z) => z.plantingSubzones)
             ?.flatMap((sz) => sz.monitoringPlots)
             ?.find((p) => p.monitoringPlotId === properties.id);
-        showReassignmentButton = true;
       }
 
       if (!entity) {
@@ -251,7 +250,7 @@ export default function ObservationMapView({
             topRightMapControl={
               <MapLayerSelect
                 initialSelection={layerOptions}
-                onUpdateSelection={(selection) => setIncludedLayers(selection)}
+                onUpdateSelection={setIncludedLayers}
                 menuSections={[
                   layerOptions.map((opt) => ({
                     label: layerOptionLabels[opt],
