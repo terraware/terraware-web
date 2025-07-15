@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test';
 import type { Page } from 'playwright-core';
 
+import { navigateToProjectProfile } from './navigation';
 import { exactOptions } from './utils';
 
 export type ProjectDetails = {
@@ -101,4 +102,16 @@ export async function validateProjectProfilePage(projectDetails: ProjectDetails,
   for (const entity of projectDetails.fundingEntities || []) {
     await expect(page.getByText('Funding Entities').locator('../..').getByText(entity)).toBeVisible();
   }
+}
+
+export async function publishProjectProfile(dealName: string, page: Page) {
+  await navigateToProjectProfile(dealName, page);
+  await page.locator('#more-options').click();
+  await page
+    .locator('li')
+    .filter({ hasText: /^Publish$/ })
+    .click();
+  await expect(page.getByText('You are about to publish to the Funder Portal.')).toBeVisible();
+  await page.getByRole('button', { name: 'Publish' }).click();
+  await expect(page.getByText('Project Profile Published', exactOptions)).toBeVisible();
 }

@@ -1,9 +1,7 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 
-import { navigateToProjectProfile } from '../utils/navigation';
-import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProfile';
+import { ProjectDetails, publishProjectProfile, validateProjectProfilePage } from '../utils/projectProfile';
 import { changeToFunderUser, changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
 
@@ -11,15 +9,7 @@ export default function FunderProjectProfileTests() {
   test('Publish Project and then View Published Project', async ({ page, context }, testInfo) => {
     // publish project
     await changeToSuperAdmin(context);
-    await navigateToProjectProfile('Phase 1 Project Deal', page);
-    await page.locator('#more-options').click();
-    await page
-      .locator('li')
-      .filter({ hasText: /^Publish$/ })
-      .click();
-    await expect(page.getByText('You are about to publish to the Funder Portal.')).toBeVisible();
-    await page.getByRole('button', { name: 'Publish' }).click();
-    await expect(page.getByText('Project Profile Published', exactOptions)).toBeVisible();
+    await publishProjectProfile('Phase 1 Project Deal', page);
 
     // view published project
     await changeToFunderUser(context);
