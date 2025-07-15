@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Portal } from '@mui/base';
 import { Box, Typography, useTheme } from '@mui/material';
@@ -18,10 +18,11 @@ type TooltipContentsProps = {
   observationState?: ObservationState;
   plantingSiteId: number;
   title: string;
+  showReassignmentButton?: boolean;
 };
 
 export default function TooltipContents(props: TooltipContentsProps): JSX.Element {
-  const { monitoringPlot, observationId, observationState, plantingSiteId, title } = props;
+  const { monitoringPlot, observationId, observationState, plantingSiteId, title, showReassignmentButton } = props;
   const theme = useTheme();
   const mapPortalContainer = useMapPortalContainer();
   const { selectedOrganization } = useOrganization();
@@ -38,6 +39,14 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const plantingDensity = monitoringPlot?.plantingDensity;
   const percentMortality = monitoringPlot?.mortalityRate;
 
+  const openModal = useCallback(() => {
+    setShowReplacePlotModal(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setShowReplacePlotModal(false);
+  }, []);
+
   return (
     <>
       {showReplacePlotModal && observationId && monitoringPlot && (
@@ -45,7 +54,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
           <ReplaceObservationPlotModal
             monitoringPlot={monitoringPlot}
             observationId={observationId}
-            onClose={() => setShowReplacePlotModal(false)}
+            onClose={closeModal}
             plantingSiteId={plantingSiteId}
           />
         </Portal>
@@ -85,13 +94,13 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
             </>
           )}
         </Box>
-        {!monitoringPlot?.completedTime && replaceObservationPlotEnabled && (
+        {!monitoringPlot?.completedTime && replaceObservationPlotEnabled && showReassignmentButton && (
           <Box display='flex' padding={theme.spacing(2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
             <Button
               id='reassignPlot'
               label={`${strings.REQUEST_REASSIGNMENT}...`}
               type='passive'
-              onClick={() => setShowReplacePlotModal(true)}
+              onClick={openModal}
               priority='secondary'
               sx={{
                 marginLeft: 'auto',

@@ -202,6 +202,7 @@ export default function ObservationMapView({
 
   const contextRenderer = useCallback(
     (properties: MapSourceProperties): JSX.Element | null => {
+      const showReassignmentButton = properties.type === 'temporaryPlot' || properties.type === 'permanentPlot';
       let entity: any;
       if (properties.type === 'site') {
         entity = selectedObservation;
@@ -230,6 +231,7 @@ export default function ObservationMapView({
           observationState={selectedObservation?.state}
           plantingSiteId={selectedPlantingSite.id}
           title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : properties.type === 'adHocPlot' ? ` (${strings.AD_HOC})` : properties.type === 'permanentPlot' ? ` (${strings.PERMANENT})` : ''}`}
+          showReassignmentButton={showReassignmentButton}
         />
       );
     },
@@ -248,7 +250,7 @@ export default function ObservationMapView({
             topRightMapControl={
               <MapLayerSelect
                 initialSelection={layerOptions}
-                onUpdateSelection={(selection) => setIncludedLayers(selection)}
+                onUpdateSelection={setIncludedLayers}
                 menuSections={[
                   layerOptions.map((opt) => ({
                     label: layerOptionLabels[opt],
