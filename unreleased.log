@@ -1,3 +1,4 @@
+61134ef0822 SW-7084: Planting Sites: Maps - remove "Monitoring Plots" from the zone and subzone popovers (#4276)
 bea864f2478 SW-7089 Removed obseration type and plot selection from planting site details (#4274)
 c668dcc5215 Fix Vercel deploys become inactive (#4272)
 73c451b3652 SW-7110 E2E tests for Deliverables (#4258)
