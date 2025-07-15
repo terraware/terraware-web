@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import ListMapView from 'src/components/ListMapView';
@@ -14,7 +13,6 @@ import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
@@ -38,8 +36,6 @@ type BoundariesAndZonesProps = {
 export default function BoundariesAndZones({ search, setSearch, setView, view }: BoundariesAndZonesProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const [selectedPlotSelection, setSelectedPlotSelection] = useState('assigned');
-  const [selectedObservationType, setSelectedObservationType] = useState('plantMonitoring');
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter(activeLocale);
   const { plantingSite } = usePlantingSiteData();
@@ -79,53 +75,6 @@ export default function BoundariesAndZones({ search, setSearch, setView, view }:
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.BOUNDARIES_AND_ZONES}
         </Typography>
-        {view === 'list' && (
-          <Box display={'flex'} alignItems='center'>
-            <Box
-              sx={{
-                margin: theme.spacing(0, 2),
-                width: '1px',
-                height: '32px',
-                backgroundColor: theme.palette.TwClrBgTertiary,
-              }}
-            />
-            <Box display='flex' alignItems='center'>
-              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
-                {strings.PLOT_SELECTION}
-              </Typography>
-              <Box width='160px' marginRight={3}>
-                <Dropdown
-                  placeholder={strings.SELECT}
-                  id='plot-selection-selector'
-                  onChange={setSelectedPlotSelection}
-                  options={[
-                    { label: strings.ASSIGNED, value: 'assigned' },
-                    { label: strings.AD_HOC, value: 'adHoc' },
-                  ]}
-                  selectedValue={selectedPlotSelection}
-                  selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
-                  fullWidth
-                />
-              </Box>
-            </Box>
-            <Box display='flex' alignItems='center'>
-              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
-                {strings.OBSERVATION_TYPE}
-              </Typography>
-              <Dropdown
-                placeholder={strings.SELECT}
-                id='observation-type-selector'
-                onChange={setSelectedObservationType}
-                options={[
-                  { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
-                  { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
-                ]}
-                selectedValue={selectedObservationType}
-                fullWidth
-              />
-            </Box>
-          </Box>
-        )}
       </Box>
       {plantingSite?.boundary && (
         <ListMapView
@@ -152,13 +101,7 @@ export default function BoundariesAndZones({ search, setSearch, setView, view }:
               )}
             </Box>
           }
-          list={
-            <PlantingSiteDetailsTable
-              plantingSite={plantingSite}
-              plotSelection={selectedPlotSelection as PlotSelectionType}
-              observationType={selectedObservationType as ObservationType}
-            />
-          }
+          list={<PlantingSiteDetailsTable plantingSite={plantingSite} />}
           map={<PlantingSiteMapView search={search ? search.trim() : ''} />}
         />
       )}
