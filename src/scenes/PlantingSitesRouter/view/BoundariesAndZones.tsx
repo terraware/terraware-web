@@ -208,10 +208,6 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
             },
             { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
             {
-              key: strings.MONITORING_PLOTS,
-              value: zone?.numPermanentPlots ?? 0,
-            },
-            {
               key: strings.LAST_OBSERVED,
               value: zone?.latestObservationCompletedTime
                 ? getDateDisplayValue(zone.latestObservationCompletedTime, timeZone)
@@ -232,7 +228,6 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
               value: subzoneHistory?.areaHa && subzoneHistory?.areaHa > 0 ? subzoneHistory?.areaHa : '',
             },
             { key: strings.PLANTING_COMPLETE, value: subzone?.plantingCompleted ? strings.YES : strings.NO },
-            { key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 },
           ];
         } else {
           return null;
