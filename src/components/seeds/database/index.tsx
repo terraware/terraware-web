@@ -515,7 +515,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const isInactive = (row: SearchResponseElementWithId) => {
+  const isInactive = () => {
     return false;
   };
 
@@ -630,10 +630,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
         accessorKey: 'state',
         header: 'State',
         editVariant: 'select',
-        editSelectOptions: ({ cell, column, row, table }) => {
+        editSelectOptions: ({ row }) => {
           return AccessionService.getTransitionToStates(row.original.state as AccessionState);
         },
-        muiEditTextFieldProps: ({ row }) => ({
+        muiEditTextFieldProps: () => ({
           select: true,
           onChange: (event) => {
             console.log('status changed', event);
