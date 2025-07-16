@@ -79,10 +79,10 @@ jobs:
             --prebuilt \
             --archive=tgz \
             --token=${{ secrets.VERCEL_TOKEN }} \
-            --meta commitRef="${{ github.head_ref || github.ref_name }}" \
-            --meta commitSha="${{ github.sha }}" \
-            --meta commitMessage="${{ github.event.head_commit.message || github.event.pull_request.title }}" \
-            --meta author="${{ github.actor }}")
+            --meta author="${{ github.actor }}" \
+            --meta branch="${{ github.head_ref || github.ref_name }}" \
+            --meta commit="${{ github.sha }}" \
+            --meta commitMessage="${{ github.event.head_commit.message || github.event.pull_request.title }}")
           echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
 
       - name: Update GitHub deployment status
