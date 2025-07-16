@@ -82,7 +82,7 @@ jobs:
             --meta author="${{ github.actor }}" \
             --meta branch="${{ github.head_ref || github.ref_name }}" \
             --meta commit="${{ github.sha }}" \
-            --meta commitMessage="${{ github.event.head_commit.message || github.event.pull_request.title }}")
+            --meta message="${{ github.event.head_commit.message || github.event.pull_request.title }}")
           echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
 
       - name: Update GitHub deployment status
