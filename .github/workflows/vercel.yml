@@ -19,6 +19,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Use Node.js 22
         uses: actions/setup-node@v4
@@ -68,6 +70,7 @@ jobs:
           initial-status: 'in_progress'
           task: deploy:preview
           token: '${{ github.token }}'
+          transient-environment: true
 
       - name: Build for Vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
@@ -75,7 +78,7 @@ jobs:
       - name: Deploy to Vercel (prebuilt)
         id: vercel_deploy
         run: |
-          preview_url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          preview_url=$(vercel deploy --prebuilt --archive=tgz --token=${{ secrets.VERCEL_TOKEN }})
           echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
 
       - name: Update GitHub deployment status
