@@ -70,6 +70,7 @@ jobs:
           initial-status: 'in_progress'
           task: deploy:preview
           token: '${{ github.token }}'
+          transient-environment: true
 
       - name: Build for Vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
