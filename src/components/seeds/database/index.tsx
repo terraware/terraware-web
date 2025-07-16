@@ -664,6 +664,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
         accessorKey: 'estimatedCount',
         header: 'Count',
         size: 150,
+        Edit: ({}) => {
+          return <Button onClick={() => console.log('open modal')} label={'Open modal'} />;
+        },
       },
       {
         accessorKey: 'estimatedWeightOunces',
@@ -685,7 +688,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     enableColumnOrdering: true,
     enableColumnPinning: true,
     enableEditing: true,
-    enableCellActions: true,
+    editDisplayMode: 'cell',
   });
 
   return (
