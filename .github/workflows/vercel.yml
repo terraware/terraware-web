@@ -77,18 +77,7 @@ jobs:
       - name: Deploy to Vercel (prebuilt)
         id: vercel_deploy
         run: |
-          preview_url=$(vercel deploy \
-            --prebuilt \
-            --archive=tgz \
-            --token=${{ secrets.VERCEL_TOKEN }} \
-            --env VERCEL_GIT_COMMIT_AUTHOR_LOGIN="${{ github.actor }}" \
-            --env VERCEL_GIT_COMMIT_MESSAGE="${{ github.event.head_commit.message || github.event.pull_request.title }}" \
-            --env VERCEL_GIT_COMMIT_REF="${{ github.head_ref || github.ref_name }}" \
-            --env VERCEL_GIT_COMMIT_SHA="${{ github.sha }}" \
-            --meta author="${{ github.actor }}" \
-            --meta branch="${{ github.head_ref || github.ref_name }}" \
-            --meta commit="${{ github.sha }}" \
-            --meta message="${{ github.event.head_commit.message || github.event.pull_request.title }}")
+          preview_url=$(vercel deploy --prebuilt --archive=tgz --token=${{ secrets.VERCEL_TOKEN }})
           echo "preview_url=$preview_url" >> $GITHUB_OUTPUT
 
       - name: Update GitHub deployment status
