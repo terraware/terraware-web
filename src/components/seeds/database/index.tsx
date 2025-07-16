@@ -128,6 +128,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
   const contentRef = useRef(null);
   const searchedLocaleRef = useRef<string | null>(activeLocale);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
 
   /*
    * fieldOptions is a list of records
@@ -610,6 +611,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
         accessorKey: 'accessionNumber',
         header: 'Accession Number',
         size: 150,
+        muiEditTextFieldProps: ({ cell }) => ({
+          error: !!validationErrors?.[cell.id],
+          helperText: validationErrors?.[cell.id],
+          required: true,
+          onBlur: (event) => {
+            console.log('event.currentTarget.value', event.currentTarget.value);
+            const validationError = event.currentTarget.value ? undefined : 'Required Field';
+            console.log('validationError', validationError);
+            console.log('cell.id', cell.id);
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: validationError,
+            });
+          },
+        }),
       },
       {
         accessorKey: 'speciesName',
@@ -633,12 +649,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         editSelectOptions: ({ row }) => {
           return AccessionService.getTransitionToStates(row.original.state as AccessionState);
         },
-        muiEditTextFieldProps: () => ({
-          select: true,
-          onChange: (event) => {
-            console.log('status changed', event);
-          },
-        }),
       },
       {
         accessorKey: 'collectedDate',
@@ -666,7 +676,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         size: 150,
       },
     ],
-    []
+    [validationErrors]
   );
 
   const dataForMaterialReactTable = useMaterialReactTable({
@@ -675,7 +685,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     enableColumnOrdering: true,
     enableColumnPinning: true,
     enableEditing: true,
-    editDisplayMode: 'cell',
+    enableCellActions: true,
   });
 
   return (
