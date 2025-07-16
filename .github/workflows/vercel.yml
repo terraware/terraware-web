@@ -68,6 +68,7 @@ jobs:
           auto-inactive: false
           environment: Vercel - Preview (tree-location-web)
           initial-status: 'in_progress'
+          owner: ${{ github.actor }}
           task: deploy:preview
           token: '${{ github.token }}'
           transient-environment: true
