@@ -165,6 +165,32 @@ jobs:
         run: |
           aws ecs wait services-stable --cluster ${{ vars[env.ECS_CLUSTER_VAR_NAME] }} --service ${{ vars[env.ECS_SERVICE_VAR_NAME] }}
 
+      - name: Get current version
+        # if: env.TIER == 'PROD'
+        id: version
+        run: |
+          THIS_VERSION=`git tag --list --sort=creatordate 'v[0-9]*' | tail -n1`
+          echo "THIS_VERSION=${THIS_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        # if: env.TIER == 'PROD'
+        id: changelog
+        run: |
+          LAST_VERSION=`git tag --list --sort=creatordate 'v[0-9]*' | tail -n 2 | head -n 1`
+          CHANGELOG=`git log $LAST_VERSION..HEAD --oneline`
+          echo "CHANGELOG=${CHANGELOG}" >> $GITHUB_OUTPUT
+
+      - name: Post release notes on Slack
+        # if: env.TIER == 'PROD'
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+          payload: |
+            "release_notes": ${{ steps.changelog.outputs.CHANGELOG }},
+            "release_repository": "${{ github.repository }}",
+            "release_version": "${{ steps.changelog.version.THIS_VERSION }}",
+
       - name: Jira Login
         if: env.TIER == 'PROD'
         uses: atlassian/gajira-login@master
