@@ -180,6 +180,7 @@ jobs:
         id: changelog
         run: |
           LAST_VERSION=${{ steps.versions.outputs.last_version }}
+          THIS_VERSION=${{ steps.versions.outputs.this_version }}
           MAX_DEPTH=500
           STEP=50
           CURRENT_DEPTH=$STEP
@@ -200,7 +201,7 @@ jobs:
 
             CURRENT_DEPTH=$((CURRENT_DEPTH + STEP))
           done
-          LOG=$(git log LAST_VERSION..HEAD --pretty=format:"%s")
+          LOG=$(git log $LAST_VERSION..$THIS_VERSION --pretty=format:"%s")
           {
             echo 'changelog<<EOF'
             echo "$LOG"
