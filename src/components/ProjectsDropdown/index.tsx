@@ -16,6 +16,7 @@ type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined
   autoComplete?: boolean;
   availableProjects: ProjectDropdownOption[] | undefined;
   label?: string | undefined;
+  tooltip?: string;
   record: T;
   required?: boolean;
   setRecord: (setFn: (previousValue: T) => T) => void;
@@ -30,6 +31,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
   autoComplete,
   availableProjects,
   label,
+  tooltip,
   record,
   required,
   setRecord,
@@ -70,6 +72,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
       autocomplete={autoComplete}
       id='projectId'
       label={label ?? strings.PROJECT}
+      tooltipTitle={tooltip}
       selectedValue={record?.projectId}
       options={projectOptions}
       onChange={(projectId: string) => {

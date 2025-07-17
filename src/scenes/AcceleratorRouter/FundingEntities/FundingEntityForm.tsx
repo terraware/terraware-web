@@ -82,6 +82,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
               projects={localRecord.projects || []}
               allProjects={publishedProjects || []}
               setProjects={(projects) => updateField('projects', projects)}
+              tooltip={strings.PROJECT_NOT_LISTED_PUBLISH}
             />
           </Grid>
         </Card>
