@@ -5,7 +5,7 @@ import { Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
-import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
+import { usePublishedProjects } from 'src/hooks/usePublishedProjects';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -25,7 +25,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
   const { isMobile } = useDeviceInfo();
 
   const [localRecord, setLocalRecord] = useState<Partial<FundingEntity>>({});
-  const { allProjects } = useAcceleratorProjects();
+  const { publishedProjects } = usePublishedProjects();
 
   const onSaveHandler = () => {
     onSave({
@@ -49,7 +49,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
 
   return (
     <PageForm
-      busy={busy || allProjects === null}
+      busy={busy || publishedProjects === null}
       cancelID='cancelEditFundingEntity'
       onCancel={onCancel}
       onSave={onSaveHandler}
@@ -80,7 +80,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <MultiProjectsEdit
               projects={localRecord.projects || []}
-              allProjects={allProjects || []}
+              allProjects={publishedProjects || []}
               setProjects={(projects) => updateField('projects', projects)}
             />
           </Grid>

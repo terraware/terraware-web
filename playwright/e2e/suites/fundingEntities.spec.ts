@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { Page } from 'playwright-core';
 
 import { navigateToFundingEntities } from '../utils/navigation';
+import { publishProjectProfile } from '../utils/projectProfile';
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions } from '../utils/utils';
 
@@ -28,10 +29,22 @@ export default function FundingEntitiesTests() {
 
     const newEntityName = `New Funding Entity-${new Date().getTime()}`;
 
+    // unpublished projects are not in projects list
     await page.getByRole('button', { name: 'Add Funding Entity' }).click();
     await page.locator('#name > input').fill(newEntityName);
     await page.getByText('Add Project').click();
     await page.getByPlaceholder('Select...').click();
+    await expect(page.locator('li').filter({ hasText: /^Phase 0 Project Deal$/ })).toBeHidden();
+
+    await publishProjectProfile('Phase 0 Project Deal', page);
+    await publishProjectProfile('Phase 1 Project Deal', page);
+
+    await navigateToFundingEntities(page);
+    await page.getByRole('button', { name: 'Add Funding Entity' }).click();
+    await page.locator('#name > input').fill(newEntityName);
+    await page.getByText('Add Project').click();
+    await page.getByPlaceholder('Select...').click();
+
     await page
       .locator('li')
       .filter({ hasText: /^Phase 0 Project Deal$/ })

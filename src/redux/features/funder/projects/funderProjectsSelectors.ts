@@ -3,6 +3,8 @@ import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 
+export const selectPublishedProjects = (requestId: string) => (state: RootState) => state.publishedProjects[requestId];
+
 export const selectFunderProjects = (projectIds: number[]) =>
   createSelector(
     (state: RootState) => state.funderProjects,

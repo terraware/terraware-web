@@ -1725,6 +1725,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of all published projects */
+        get: operations["getAllProjects"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/projects/{projectIds}": {
         parameters: {
             query?: never;
@@ -6312,6 +6329,10 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             votes: components["schemas"]["ProjectVotesPayload"];
         };
+        GetPublishedProjectResponsePayload: {
+            projects: components["schemas"]["PublishedProjectPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetReportPayload: {
             /** Format: int64 */
             id: number;
@@ -8339,6 +8360,11 @@ export interface components {
         };
         PublishProjectProfileRequestPayload: {
             details: components["schemas"]["FunderProjectDetailsPayload"];
+        };
+        PublishedProjectPayload: {
+            dealName?: string;
+            /** Format: int64 */
+            projectId: number;
         };
         PublishedReportMetricPayload: {
             /** @enum {string} */
@@ -14067,6 +14093,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getAllProjects: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetPublishedProjectResponsePayload"];
                 };
             };
         };

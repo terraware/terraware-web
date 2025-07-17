@@ -1,12 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers, setStatus } from 'src/redux/features/asyncUtils';
-import { FunderProjectDetails } from 'src/types/FunderProject';
+import { FunderProjectDetails, PublishedProject } from 'src/types/FunderProject';
 
-import { requestGetFunderProjects, requestPublishFunderProject } from './funderProjectsAsyncThunks';
+import {
+  requestGetFunderProjects,
+  requestListPublishedProjects,
+  requestPublishFunderProject,
+} from './funderProjectsAsyncThunks';
+
+const initialPublishedProjects: { [key: string]: StatusT<PublishedProject[]> } = {};
+export const publishedProjectsSlice = createSlice({
+  name: 'publishedProjectsSlice',
+  initialState: initialPublishedProjects,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListPublishedProjects)(builder);
+  },
+});
 
 const initialStateFunderProject: { [key: string]: FunderProjectDetails } = {};
-
 export const funderProjectsSlice = createSlice({
   name: 'funderProjectSlice',
   initialState: initialStateFunderProject,
@@ -38,6 +51,7 @@ export const publishFunderProjectSlice = createSlice({
 const funderProjectsReducers = {
   funderProjects: funderProjectsSlice.reducer,
   publishFunderProject: publishFunderProjectSlice.reducer,
+  publishedProjects: publishedProjectsSlice.reducer,
 };
 
 export default funderProjectsReducers;
