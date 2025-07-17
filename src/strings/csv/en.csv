@@ -1496,6 +1496,7 @@ PROJECT_INFORMATION,Project Information,
 PROJECT_LEAD,Project Lead,
 PROJECT_LINKS,Project Links,
 PROJECT_NAME,Project Name,
+PROJECT_NOT_LISTED_PUBLISH,A project profile must be published to appear in this list.
 PROJECT_NOTES,Additional Project Information Notes,
 PROJECT_OBJECTIVES,Project Objectives,
 PROJECT_OR_PROJECTS,Project(s),
