@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/hooks/useAcceleratorProjects.tsx</title>
+    <title>Code coverage report for src/hooks/usePublishedProjects.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/hooks</a> useAcceleratorProjects.tsx</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/hooks</a> usePublishedProjects.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -121,31 +121,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useState } from 'react';
 &nbsp;
-import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
-import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { requestListPublishedProjects } from '../redux/features/funder/projects/funderProjectsAsyncThunks';
+import { selectPublishedProjects } from '../redux/features/funder/projects/funderProjectsSelectors';
+import { useAppDispatch, useAppSelector } from '../redux/store';
+import { PublishedProject } from '../types/FunderProject';
 &nbsp;
-export const useAcceleratorProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+export const usePublishedProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const [allProjects, setAllProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantProject[] | null&gt;(null);</span>
+  const [publishedProjects, setPublishedProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;PublishedProject[] | null&gt;(null);</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantProjectsListRequest(requestId));</span>
+  const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPublishedProjects(requestId));</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (allProjects === null) {</span>
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListParticipantProjects({}));</span>
+<span class="cstat-no" title="statement not covered" >    if (publishedProjects === null) {</span>
+      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListPublishedProjects());</span>
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
     }
-  }, [dispatch, allProjects]);
+  }, [dispatch, publishedProjects]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (result &amp;&amp; result.status === 'success' &amp;&amp; result.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setAllProjects(result.data.toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >(a.dealName || '').localeCompare(b.dealName || ''))</span>);</span>
+<span class="cstat-no" title="statement not covered" >    if (result?.status === 'success' &amp;&amp; result.data) {</span>
+<span class="cstat-no" title="statement not covered" >      setPublishedProjects(result.data.toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >(a.dealName || '').localeCompare(b.dealName || ''))</span>);</span>
     }
   }, [result]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return { allProjects };</span>
+<span class="cstat-no" title="statement not covered" >  return { publishedProjects };</span>
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -154,7 +154,7 @@ export const useAcceleratorProjects = <span class="cstat-no" title="statement no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-17T15:34:56.036Z
+                at 2025-07-17T16:59:36.905Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
