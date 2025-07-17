@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'GIS Maps';
+export type FeatureName = 'Show Production View' | 'GIS Maps' | 'Matrix View';
 
 export type Feature = {
   name: FeatureName;
@@ -42,6 +42,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Enable GIS Maps on Project Profile view'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Matrix View',
+    preferenceName: 'enableMatrixView',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Enable Matrix View'],
     disclosure: ['This is a WIP'],
   },
 ];
