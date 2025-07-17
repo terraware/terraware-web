@@ -180,6 +180,26 @@ jobs:
         id: changelog
         run: |
           LAST_VERSION=${{ steps.versions.outputs.last_version }}
+          MAX_DEPTH=1000
+          STEP=50
+          CURRENT_DEPTH=$STEP
+
+          while true; do
+            echo "Fetching with depth=$CURRENT_DEPTH"
+            git fetch --tags --depth=$CURRENT_DEPTH
+
+            if git rev-parse "$TAG_TO_FIND" >/dev/null 2>&1; then
+              echo "✅ Found last version $TAG_TO_FIND"
+              break
+            fi
+
+            if [ "$CURRENT_DEPTH" -ge "$MAX_DEPTH" ]; then
+              echo "❌ Could not find tag $TAG_TO_FIND"
+              exit 1
+            fi
+
+            CURRENT_DEPTH=$((CURRENT_DEPTH + STEP))
+          done
           LOG=$(git log "$LAST_VERSION"..HEAD --oneline --no-decorate)
           {
             echo 'changelog<<EOF'
