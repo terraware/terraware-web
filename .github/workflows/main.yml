@@ -30,143 +30,143 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - name: Use Node.js 22
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '22'
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-      # - name: Set Environment
-      #   run: ./.github/scripts/set-environment.sh
+      - name: Set Environment
+        run: ./.github/scripts/set-environment.sh
 
-      # - name: Get yarn cache directory path
-      #   id: yarn-cache-dir-path
-      #   run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      # - uses: actions/cache@v4
-      #   id: yarn-cache
-      #   with:
-      #     path: |
-      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #       node_modules
-      #     key: ${{ runner.os }}-yarn-2-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn-
+      - uses: actions/cache@v4
+        id: yarn-cache
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            node_modules
+          key: ${{ runner.os }}-yarn-2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-      # - name: Install dependencies
-      #   run: yarn
+      - name: Install dependencies
+        run: yarn
 
-      # # This is currently failing because the server hasn't been started yet.
-      # # Additionally, it's not enough to just output the generated types file.
-      # # We need to create a script that checks that our types file is up to date.
-      # #- name: generate schemas
-      # #  run: yarn generate-types
+      # This is currently failing because the server hasn't been started yet.
+      # Additionally, it's not enough to just output the generated types file.
+      # We need to create a script that checks that our types file is up to date.
+      #- name: generate schemas
+      #  run: yarn generate-types
 
-      # - name: Check that code is formatted
-      #   run: yarn prettier --check .
+      - name: Check that code is formatted
+        run: yarn prettier --check .
 
-      # - name: Generate strings
-      #   run: yarn generate-strings
+      - name: Generate strings
+        run: yarn generate-strings
 
-      # # Remove the jsx-no-bind rule because it has lots of errors currently
-      # - name: Run linter
-      #   run: >
-      #     yarn lint --rule "react/jsx-no-bind: 0"
+      # Remove the jsx-no-bind rule because it has lots of errors currently
+      - name: Run linter
+        run: >
+          yarn lint --rule "react/jsx-no-bind: 0"
 
-      # - name: Do typescript check
-      #   run: yarn ts
+      - name: Do typescript check
+        run: yarn ts
 
-      # - name: Run unit tests
-      #   run: yarn test --ci
+      - name: Run unit tests
+        run: yarn test --ci
 
-      # - name: Download and start backend
-      #   if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-      #   run: yarn server:reset
-      #   env:
-      #     SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
-      #     SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
-      #     SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
-      #     TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
+      - name: Download and start backend
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+        run: yarn server:reset
+        env:
+          SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
+          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+          TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
-      # - name: Install Playwright Browsers
-      #   if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-      #   run: yarn playwright install --with-deps
+      - name: Install Playwright Browsers
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+        run: yarn playwright install --with-deps
 
-      # - name: Run end-to-end playwright tests
-      #   if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-      #   run: yarn test:e2e
-      #   env:
-      #     REACT_APP_TERRAWARE_API: 'http://localhost:8080'
-      #     REACT_APP_SNACKBAR_TIMEOUT: 1000
-      #     REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
+      - name: Run end-to-end playwright tests
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+        run: yarn test:e2e
+        env:
+          REACT_APP_TERRAWARE_API: 'http://localhost:8080'
+          REACT_APP_SNACKBAR_TIMEOUT: 1000
+          REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
 
-      # - name: save screenshots of e2e test failures
-      #   if: failure()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: playwright-report
-      #     path: playwright-report/
-      #     retention-days: 30
+      - name: save screenshots of e2e test failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 
-      # - name: build
-      #   run: yarn build
-      #   env:
-      #     REACT_APP_TERRAWARE_API: ''
-      #     REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
-      #     REACT_APP_MIXPANEL_TOKEN: ${{ secrets[env.MIXPANEL_SECRET_NAME] }}
+      - name: build
+        run: yarn build
+        env:
+          REACT_APP_TERRAWARE_API: ''
+          REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
+          REACT_APP_MIXPANEL_TOKEN: ${{ secrets[env.MIXPANEL_SECRET_NAME] }}
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      # - name: Docker login
-      #   if: env.IS_CD == 'true'
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker login
+        if: env.IS_CD == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Docker build/push
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: .
-      #     cache-from: type=gha
-      #     cache-to: type=gha, mode=max
-      #     tags: ${{ env.DOCKER_TAGS }}
-      #     platforms: linux/amd64,linux/arm64
-      #     push: ${{ env.IS_CD == 'true' }}
+      - name: Docker build/push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          cache-from: type=gha
+          cache-to: type=gha, mode=max
+          tags: ${{ env.DOCKER_TAGS }}
+          platforms: linux/amd64,linux/arm64
+          push: ${{ env.IS_CD == 'true' }}
 
-      # - name: Configure AWS Credentials
-      #   if: env.IS_CD == 'true'
-      #   uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     aws-region: ${{ secrets[env.AWS_REGION_SECRET_NAME] }}
-      #     role-to-assume: ${{ secrets[env.AWS_ROLE_SECRET_NAME] }}
+      - name: Configure AWS Credentials
+        if: env.IS_CD == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets[env.AWS_REGION_SECRET_NAME] }}
+          role-to-assume: ${{ secrets[env.AWS_ROLE_SECRET_NAME] }}
 
-      # - name: Connect to Tailscale
-      #   uses: tailscale/github-action@v3
-      #   with:
-      #     oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
-      #     oauth-secret: ${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
-      #     tags: tag:github
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
+          tags: tag:github
 
-      # - name: Deploy to EC2
-      #   if: env.IS_CD == 'true'
-      #   env:
-      #     SSH_KEY: ${{ secrets[env.SSH_KEY_SECRET_NAME] }}
-      #     SSH_USER: ${{ secrets[env.SSH_USER_SECRET_NAME] }}
-      #   run: ./.github/scripts/deploy.sh
+      - name: Deploy to EC2
+        if: env.IS_CD == 'true'
+        env:
+          SSH_KEY: ${{ secrets[env.SSH_KEY_SECRET_NAME] }}
+          SSH_USER: ${{ secrets[env.SSH_USER_SECRET_NAME] }}
+        run: ./.github/scripts/deploy.sh
 
-      # - name: Deploy to ECS
-      #   if: vars[env.ECS_CLUSTER_VAR_NAME] != '' && vars[env.ECS_SERVICE_VAR_NAME] != ''
-      #   run: |
-      #     aws ecs update-service --cluster ${{ vars[env.ECS_CLUSTER_VAR_NAME] }} --service ${{ vars[env.ECS_SERVICE_VAR_NAME] }} --force-new-deployment
+      - name: Deploy to ECS
+        if: vars[env.ECS_CLUSTER_VAR_NAME] != '' && vars[env.ECS_SERVICE_VAR_NAME] != ''
+        run: |
+          aws ecs update-service --cluster ${{ vars[env.ECS_CLUSTER_VAR_NAME] }} --service ${{ vars[env.ECS_SERVICE_VAR_NAME] }} --force-new-deployment
 
-      # - name: Wait for ECS deployment to become stable
-      #   if: vars[env.ECS_CLUSTER_VAR_NAME] != '' && vars[env.ECS_SERVICE_VAR_NAME] != ''
-      #   run: |
-      #     aws ecs wait services-stable --cluster ${{ vars[env.ECS_CLUSTER_VAR_NAME] }} --service ${{ vars[env.ECS_SERVICE_VAR_NAME] }}
+      - name: Wait for ECS deployment to become stable
+        if: vars[env.ECS_CLUSTER_VAR_NAME] != '' && vars[env.ECS_SERVICE_VAR_NAME] != ''
+        run: |
+          aws ecs wait services-stable --cluster ${{ vars[env.ECS_CLUSTER_VAR_NAME] }} --service ${{ vars[env.ECS_SERVICE_VAR_NAME] }}
 
       - name: Get current and last version tags
-        # if: env.TIER == 'PROD'
+        if: env.TIER == 'PROD'
         id: versions
         run: |
           git fetch --tags --depth=1
@@ -176,7 +176,7 @@ jobs:
           echo "last_version=${LAST_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Generate changelog
-        # if: env.TIER == 'PROD'
+        if: env.TIER == 'PROD'
         id: changelog
         run: |
           LAST_VERSION=${{ steps.versions.outputs.last_version }}
@@ -209,7 +209,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Post release notes on Slack
-        # if: env.TIER == 'PROD'
+        if: env.TIER == 'PROD'
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
