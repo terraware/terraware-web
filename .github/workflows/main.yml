@@ -177,8 +177,9 @@ jobs:
         id: changelog
         run: |
           LAST_VERSION=`git tag --list --sort=creatordate 'v[0-9]*' | tail -n 2 | head -n 1`
-          CHANGELOG=`git log $LAST_VERSION..HEAD --oneline`
-          echo "CHANGELOG=${CHANGELOG}" >> $GITHUB_OUTPUT
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          git log $LAST_VERSION..HEAD --oneline >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Post release notes on Slack
         # if: env.TIER == 'PROD'
