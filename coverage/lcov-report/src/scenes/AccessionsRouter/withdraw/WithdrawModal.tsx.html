@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/141</span>
+                <span class='fraction'>0/145</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/140</span>
+                <span class='fraction'>0/144</span>
             </div>
         
             
@@ -525,7 +525,13 @@
 <a name='L460'></a><a href='#L460'>460</a>
 <a name='L461'></a><a href='#L461'>461</a>
 <a name='L462'></a><a href='#L462'>462</a>
-<a name='L463'></a><a href='#L463'>463</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -585,6 +591,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -687,6 +694,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -726,6 +735,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1047,6 +1059,7 @@ export default function <span class="fstat-no" title="function not covered" >Wit
   const [isByWeight, setIsByWeight] = <span class="cstat-no" title="statement not covered" >useState(accession.remainingQuantity?.units !== 'Seeds');</span>
   const [withdrawalQty, setWithdrawalQty] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
   const [withdrawalValid, setWithdrawalValid] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+  const [withdrawalButtonEnabled, setWithdrawalButtonEnabled] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(true);</span>
 &nbsp;
   const newWithdrawal: Withdrawal = <span class="cstat-no" title="statement not covered" >{</span>
     purpose: 'Nursery',
@@ -1150,44 +1163,49 @@ export default function <span class="fstat-no" title="function not covered" >Wit
   }, [accession, isByWeight, withdrawalQty]);
 &nbsp;
   const saveWithdrawal = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-    let response;
-<span class="cstat-no" title="statement not covered" >    if (record) {</span>
-<span class="cstat-no" title="statement not covered" >      if (isNurseryTransfer &amp;&amp; nurseryTransferRecord.destinationFacilityId === -1) {</span>
-<span class="cstat-no" title="statement not covered" >        setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);</span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
-      }
-<span class="cstat-no" title="statement not covered" >      if (fieldsErrors.date || (isNurseryTransfer &amp;&amp; fieldsErrors.readyByDate)) {</span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
-      }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      if (isNurseryTransfer) {</span>
-<span class="cstat-no" title="statement not covered" >        nurseryTransferRecord.germinatingQuantity = estimatedWithdrawalQty;</span>
-<span class="cstat-no" title="statement not covered" >        response = await AccessionService.transferToNursery(nurseryTransferRecord, accession.id);</span>
-      } else <span class="cstat-no" title="statement not covered" >if (record.purpose === 'Viability Testing') {</span>
-<span class="cstat-no" title="statement not covered" >        viabilityTesting.seedsTested = estimatedWithdrawalQty;</span>
-<span class="cstat-no" title="statement not covered" >        viabilityTesting.startDate = record.date;</span>
-<span class="cstat-no" title="statement not covered" >        response = await AccessionService.createViabilityTest(viabilityTesting, accession.id);</span>
-      } else {
-        let units: UnitType;
-<span class="cstat-no" title="statement not covered" >        if (isByWeight) {</span>
-<span class="cstat-no" title="statement not covered" >          if (accession.remainingQuantity?.units === 'Seeds') {</span>
-<span class="cstat-no" title="statement not covered" >            units = 'Grams';</span>
-          } else {
-<span class="cstat-no" title="statement not covered" >            units = accession.remainingQuantity?.units || 'Grams';</span>
-          }
-        } else {
-<span class="cstat-no" title="statement not covered" >          units = 'Seeds';</span>
+<span class="cstat-no" title="statement not covered" >    setWithdrawalButtonEnabled(false);</span>
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      let response;
+<span class="cstat-no" title="statement not covered" >      if (record) {</span>
+<span class="cstat-no" title="statement not covered" >        if (isNurseryTransfer &amp;&amp; nurseryTransferRecord.destinationFacilityId === -1) {</span>
+<span class="cstat-no" title="statement not covered" >          setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
         }
-<span class="cstat-no" title="statement not covered" >        record.withdrawnQuantity = { quantity: withdrawalQty, units };</span>
-<span class="cstat-no" title="statement not covered" >        response = await AccessionService.createWithdrawal(record, accession.id);</span>
-      }
+<span class="cstat-no" title="statement not covered" >        if (fieldsErrors.date || (isNurseryTransfer &amp;&amp; fieldsErrors.readyByDate)) {</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >        reload();</span>
-<span class="cstat-no" title="statement not covered" >        onCloseHandler();</span>
-      } else {
-<span class="cstat-no" title="statement not covered" >        snackbar.toastError();</span>
+<span class="cstat-no" title="statement not covered" >        if (isNurseryTransfer) {</span>
+<span class="cstat-no" title="statement not covered" >          nurseryTransferRecord.germinatingQuantity = estimatedWithdrawalQty;</span>
+<span class="cstat-no" title="statement not covered" >          response = await AccessionService.transferToNursery(nurseryTransferRecord, accession.id);</span>
+        } else <span class="cstat-no" title="statement not covered" >if (record.purpose === 'Viability Testing') {</span>
+<span class="cstat-no" title="statement not covered" >          viabilityTesting.seedsTested = estimatedWithdrawalQty;</span>
+<span class="cstat-no" title="statement not covered" >          viabilityTesting.startDate = record.date;</span>
+<span class="cstat-no" title="statement not covered" >          response = await AccessionService.createViabilityTest(viabilityTesting, accession.id);</span>
+        } else {
+          let units: UnitType;
+<span class="cstat-no" title="statement not covered" >          if (isByWeight) {</span>
+<span class="cstat-no" title="statement not covered" >            if (accession.remainingQuantity?.units === 'Seeds') {</span>
+<span class="cstat-no" title="statement not covered" >              units = 'Grams';</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >              units = accession.remainingQuantity?.units || 'Grams';</span>
+            }
+          } else {
+<span class="cstat-no" title="statement not covered" >            units = 'Seeds';</span>
+          }
+<span class="cstat-no" title="statement not covered" >          record.withdrawnQuantity = { quantity: withdrawalQty, units };</span>
+<span class="cstat-no" title="statement not covered" >          response = await AccessionService.createWithdrawal(record, accession.id);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (response.requestSucceeded) {</span>
+<span class="cstat-no" title="statement not covered" >          reload();</span>
+<span class="cstat-no" title="statement not covered" >          onCloseHandler();</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          snackbar.toastError();</span>
+        }
       }
+    } finally {
+<span class="cstat-no" title="statement not covered" >      setWithdrawalButtonEnabled(true);</span>
     }
   };
 &nbsp;
@@ -1288,7 +1306,7 @@ export default function <span class="fstat-no" title="function not covered" >Wit
           onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void saveWithdrawal()}</span>
           label={strings.WITHDRAW}
           key='button-2'
-          disabled={!withdrawalValid}
+          disabled={!withdrawalValid || !withdrawalButtonEnabled}
         /&gt;,
       ]}
       scrolled={true}
@@ -1456,7 +1474,7 @@ export default function <span class="fstat-no" title="function not covered" >Wit
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-17T19:53:59.292Z
+                at 2025-07-17T20:03:26.353Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
