@@ -5,6 +5,7 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 
 interface InternalCommentProps<T> {
@@ -13,8 +14,12 @@ interface InternalCommentProps<T> {
 }
 
 function InternalComment<T extends { internalComment?: string }>({ entity, update }: InternalCommentProps<T>) {
+  const { isAllowed } = useUser();
+
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [internalComment, setInternalComment] = useState(entity.internalComment || '');
+
+  const isAllowedUpdateDeliverable = isAllowed('UPDATE_DELIVERABLE');
 
   const toggleDialog = useCallback(() => {
     setIsDialogOpen((prev) => !prev);
@@ -35,17 +40,19 @@ function InternalComment<T extends { internalComment?: string }>({ entity, updat
     <>
       <Box display='flex' alignItems='center'>
         <strong>{strings.INTERNAL_COMMENTS}</strong>
-        <Button
-          icon='iconEdit'
-          onClick={toggleDialog}
-          priority='ghost'
-          size='small'
-          type='passive'
-          style={{
-            marginLeft: '-1px',
-            marginTop: '-1px',
-          }}
-        />
+        {isAllowedUpdateDeliverable && (
+          <Button
+            icon='iconEdit'
+            onClick={toggleDialog}
+            priority='ghost'
+            size='small'
+            type='passive'
+            style={{
+              marginLeft: '-1px',
+              marginTop: '-1px',
+            }}
+          />
+        )}
       </Box>
       <TextField
         display
