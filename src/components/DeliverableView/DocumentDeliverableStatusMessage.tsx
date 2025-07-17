@@ -6,16 +6,26 @@ import { Message } from '@terraware/web-components';
 import { ViewProps } from 'src/components/DeliverableView/types';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
-import strings from 'src/strings';
 
-const DocumentDeliverableRejectedMessage = ({ deliverable }: ViewProps): JSX.Element => {
-  const { activeLocale } = useLocalization();
+const DocumentDeliverableStatusMessage = ({ deliverable }: ViewProps): JSX.Element => {
+  const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
 
   return (
     <>
-      {activeLocale && deliverable?.status === 'Rejected' && (
+      {deliverable?.status === 'Approved' && (
+        <Box marginBottom={theme.spacing(4)}>
+          <Message
+            body={isAcceleratorRoute ? '' : strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT}
+            priority='success'
+            title={strings.DELIVERABLE_APPROVED}
+            type='page'
+          />
+        </Box>
+      )}
+
+      {deliverable?.status === 'Rejected' && (
         <Box marginBottom={theme.spacing(4)}>
           <Message
             body={deliverable?.feedback || ''}
@@ -29,4 +39,4 @@ const DocumentDeliverableRejectedMessage = ({ deliverable }: ViewProps): JSX.Ele
   );
 };
 
-export default DocumentDeliverableRejectedMessage;
+export default DocumentDeliverableStatusMessage;
