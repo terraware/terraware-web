@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -174,7 +174,13 @@
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,6 +214,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -243,6 +252,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -292,6 +304,7 @@ import { Box, Slide, useTheme } from '@mui/material';
 &nbsp;
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import ApplicationProvider from 'src/providers/Application';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
 import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
@@ -304,6 +317,7 @@ import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
 import DocumentsRouter from './Documents';
 import FundingEntities from './FundingEntities';
+import MatrixView from './MatrixView';
 import ModuleContent from './Modules';
 import EventEdit from './Modules/EventEdit';
 import ModuleView from './Modules/ModuleView';
@@ -323,6 +337,7 @@ const AcceleratorRouter = <span class="cstat-no" title="statement not covered" >
   const { type } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const isMatrixViewEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Matrix View');</span>
 &nbsp;
   const viewHasBackgroundImage = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span>: boolean =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);</span>
@@ -373,6 +388,9 @@ const AcceleratorRouter = <span class="cstat-no" title="statement not covered" >
             &lt;ErrorBoundary setShowNavBar={setShowNavBar}&gt;
               &lt;Routes&gt;
                 &lt;Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={&lt;Overview /&gt;} /&gt;
+                {isMatrixViewEnabled &amp;&amp; (
+                  &lt;Route path={`${APP_PATHS.ACCELERATOR_MATRIX_VIEW}/*`} element={&lt;MatrixView /&gt;} /&gt;
+                )}
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={&lt;Applications /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={&lt;Cohorts /&gt;} /&gt;
                 &lt;Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={&lt;Deliverables /&gt;} /&gt;
@@ -403,7 +421,7 @@ export default AcceleratorRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-17T20:03:26.353Z
+                at 2025-07-17T20:36:31.661Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
