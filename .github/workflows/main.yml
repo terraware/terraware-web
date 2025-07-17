@@ -188,7 +188,7 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: webhook-trigger
           payload: |
-            "release_notes": ${{ steps.changelog.outputs.CHANGELOG }},
+            "release_notes": "${{ steps.changelog.outputs.CHANGELOG }}",
             "release_repository": "${{ github.repository }}",
             "release_version": "${{ steps.version.outputs.THIS_VERSION }}",
 
