@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -156,7 +156,14 @@
 <a name='L91'></a><a href='#L91'>91</a>
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,11 +177,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,6 +202,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -256,6 +270,7 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 &nbsp;
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 &nbsp;
 interface InternalCommentProps&lt;T&gt; {
@@ -264,8 +279,12 @@ interface InternalCommentProps&lt;T&gt; {
 }
 &nbsp;
 function <span class="fstat-no" title="function not covered" >InternalComment&lt;</span>T extends { internalComment?: string }&gt;({ entity, update }: InternalCommentProps&lt;T&gt;) {
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+&nbsp;
   const [isDialogOpen, setIsDialogOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [internalComment, setInternalComment] = <span class="cstat-no" title="statement not covered" >useState(entity.internalComment || '');</span>
+&nbsp;
+  const isAllowedUpdateDeliverable = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_DELIVERABLE');</span>
 &nbsp;
   const toggleDialog = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setIsDialogOpen(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >!prev)</span>;</span>
@@ -286,17 +305,19 @@ function <span class="fstat-no" title="function not covered" >InternalComment&lt
     &lt;&gt;
       &lt;Box display='flex' alignItems='center'&gt;
         &lt;strong&gt;{strings.INTERNAL_COMMENTS}&lt;/strong&gt;
-        &lt;Button
-          icon='iconEdit'
-          onClick={toggleDialog}
-          priority='ghost'
-          size='small'
-          type='passive'
-          style={{
-            marginLeft: '-1px',
-            marginTop: '-1px',
-          }}
-        /&gt;
+        {isAllowedUpdateDeliverable &amp;&amp; (
+          &lt;Button
+            icon='iconEdit'
+            onClick={toggleDialog}
+            priority='ghost'
+            size='small'
+            type='passive'
+            style={{
+              marginLeft: '-1px',
+              marginTop: '-1px',
+            }}
+          /&gt;
+        )}
       &lt;/Box&gt;
       &lt;TextField
         display
@@ -349,7 +370,7 @@ export default InternalComment;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-17T16:59:36.905Z
+                at 2025-07-17T18:55:56.760Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1,3 +1,4 @@
+775573bd0d0 SW-7162: Read Only Global Users Shouldn't be Able to Modify Deliverable Variables (#4279)
 551371bbd55 SW-7164 Funding Entities should only be able to select Published Projects (#4273)
 5ba98473201 SW-7169 Feature flag for matrix view (#4280)
 03cb91758df Vercel deployment follow-ups (#4278)

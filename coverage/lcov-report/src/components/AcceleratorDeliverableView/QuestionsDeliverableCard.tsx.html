@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/103</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/99</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
@@ -592,7 +592,10 @@
 <a name='L527'></a><a href='#L527'>527</a>
 <a name='L528'></a><a href='#L528'>528</a>
 <a name='L529'></a><a href='#L529'>529</a>
-<a name='L530'></a><a href='#L530'>530</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -676,6 +679,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -694,6 +698,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1139,7 +1145,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useProjectVariableWorklow } from 'src/hooks/useProjectVariableWorkflow';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import {
   requestListDeliverableVariablesValues,
   requestListSpecificVariablesValues,
@@ -1200,6 +1206,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
     setVariableHasError,
     update,
   } = <span class="cstat-no" title="statement not covered" >useProjectVariablesUpdate(projectId, [variable]);</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { isAcceleratorApplicationRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const [showRejectDialog, setShowRejectDialog] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [showVariableHistoryModal, setShowVariableHistoryModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -1225,6 +1232,8 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
   );
 &nbsp;
   const editing = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >editingId === variable.id,</span> [editingId, variable.id]);</span>
+&nbsp;
+  const isAllowedUpdateDeliverable = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_DELIVERABLE');</span>
 &nbsp;
   const onEditItem = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setEditingId(variable.id);</span>
@@ -1395,7 +1404,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
             &lt;Box sx={{ margin: '4px', visibility: hideStatusBadge ? 'hidden' : 'visible' }}&gt;
               &lt;VariableStatusBadge status={initialStatus} /&gt;
             &lt;/Box&gt;
-            {!editingId &amp;&amp; (
+            {!editingId &amp;&amp; isAllowedUpdateDeliverable &amp;&amp; (
               &lt;Box className='actions'&gt;
                 &lt;Button
                   id='edit'
@@ -1657,7 +1666,7 @@ export default QuestionsDeliverableCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-17T16:59:36.905Z
+                at 2025-07-17T18:55:56.760Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

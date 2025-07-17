@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -234,7 +234,10 @@
 <a name='L169'></a><a href='#L169'>169</a>
 <a name='L170'></a><a href='#L170'>170</a>
 <a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -279,6 +282,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -301,6 +305,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -414,7 +420,7 @@ import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useSpeciesDeliverableSearch } from 'src/providers/Participant/useSpeciesDeliverableSearch';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
@@ -434,7 +440,7 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
   { key: 'participantProjectSpecies_submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 &nbsp;
-const consoleColumns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
+const consoleUpdateColumns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
   ...columns(),
   { key: 'reject', name: '', type: 'string' },
   { key: 'approve', name: '', type: 'string' },
@@ -447,6 +453,7 @@ type SpeciesDeliverableTableProps = {
 const SpeciesDeliverableTable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> deliverable }: SpeciesDeliverableTableProps): JSX.Element =&gt; {</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const { goToParticipantProjectSpecies } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
@@ -472,6 +479,8 @@ const SpeciesDeliverableTable = <span class="cstat-no" title="statement not cove
       participantProjectSpecies_submissionStatus: value.participantProjectSpecies.submissionStatus,
     }));
   }, [participantProjectSpecies]);
+&nbsp;
+  const isAllowedUpdateDeliverable = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_DELIVERABLE');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));</span>
@@ -547,7 +556,7 @@ const SpeciesDeliverableTable = <span class="cstat-no" title="statement not cove
           &lt;/Box&gt;
 &nbsp;
           &lt;Table
-            columns={isAcceleratorRoute ? consoleColumns : columns}
+            columns={isAcceleratorRoute &amp;&amp; isAllowedUpdateDeliverable ? consoleUpdateColumns : columns}
             emptyTableMessage={strings.THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET}
             id='species-deliverable-table'
             orderBy='speciesScientificName'
@@ -583,7 +592,7 @@ export default SpeciesDeliverableTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-17T16:59:36.905Z
+                at 2025-07-17T18:55:56.760Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
