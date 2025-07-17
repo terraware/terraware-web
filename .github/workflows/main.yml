@@ -169,7 +169,7 @@ jobs:
         # if: env.TIER == 'PROD'
         id: versions
         run: |
-          git fetch --tags
+          git fetch --tags --depth=1
           THIS_VERSION=`git tag --list --sort=creatordate 'v[0-9]*' | tail -n1`
           LAST_VERSION=`git tag --list --sort=creatordate 'v[0-9]*' | tail -n2 | head -n1`
           echo "this_version=${THIS_VERSION}" >> $GITHUB_OUTPUT
