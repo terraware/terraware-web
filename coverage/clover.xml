@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1752784592341" clover="3.2.0">
-  <project timestamp="1752784592341" name="All files">
-    <metrics statements="31074" coveredstatements="1305" conditionals="21588" coveredconditionals="389" methods="9520" coveredmethods="211" elements="62182" coveredelements="1905" complexity="0" loc="31074" ncloc="31074" packages="270" files="1290" classes="1290"/>
+<coverage generated="1752788496831" clover="3.2.0">
+  <project timestamp="1752788496831" name="All files">
+    <metrics statements="31074" coveredstatements="1305" conditionals="21590" coveredconditionals="389" methods="9520" coveredmethods="211" elements="62184" coveredelements="1905" complexity="0" loc="31074" ncloc="31074" packages="270" files="1290" classes="1290"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -21090,7 +21090,7 @@
       </file>
     </package>
     <package name="src.scenes.AccessionsRouter.withdraw">
-      <metrics statements="258" coveredstatements="0" conditionals="255" coveredconditionals="0" methods="50" coveredmethods="0"/>
+      <metrics statements="258" coveredstatements="0" conditionals="257" coveredconditionals="0" methods="50" coveredmethods="0"/>
       <file name="CountWithdrawal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AccessionsRouter/withdraw/CountWithdrawal.tsx">
         <metrics statements="52" coveredstatements="0" conditionals="45" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -21147,7 +21147,7 @@
         <line num="145" count="0" type="stmt"/>
       </file>
       <file name="WeightWithdrawal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AccessionsRouter/withdraw/WeightWithdrawal.tsx">
-        <metrics statements="62" coveredstatements="0" conditionals="114" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="62" coveredstatements="0" conditionals="116" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
