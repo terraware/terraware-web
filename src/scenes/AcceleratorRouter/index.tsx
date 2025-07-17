@@ -5,6 +5,7 @@ import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import ApplicationProvider from 'src/providers/Application';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
 import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
@@ -17,6 +18,7 @@ import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
 import DocumentsRouter from './Documents';
 import FundingEntities from './FundingEntities';
+import MatrixView from './MatrixView';
 import ModuleContent from './Modules';
 import EventEdit from './Modules/EventEdit';
 import ModuleView from './Modules/ModuleView';
@@ -36,6 +38,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   const { type } = useDeviceInfo();
   const location = useStateLocation();
   const theme = useTheme();
+  const isMatrixViewEnabled = isEnabled('Matrix View');
 
   const viewHasBackgroundImage = useCallback((): boolean => {
     return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
@@ -86,6 +89,9 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <ErrorBoundary setShowNavBar={setShowNavBar}>
               <Routes>
                 <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
+                {isMatrixViewEnabled && (
+                  <Route path={`${APP_PATHS.ACCELERATOR_MATRIX_VIEW}/*`} element={<MatrixView />} />
+                )}
                 <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
