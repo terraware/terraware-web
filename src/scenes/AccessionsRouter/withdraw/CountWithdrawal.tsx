@@ -8,7 +8,7 @@ import { Accession, Withdrawal } from 'src/types/Accession';
 
 export interface CountWithdrawalProps {
   accession: Accession;
-  onWithdrawCtUpdate: (withdrawnQuantity: Withdrawal['withdrawnQuantity'], valid: boolean) => void;
+  onWithdrawCtUpdate: (withdrawnQuantity: number, valid: boolean) => void;
 }
 
 export default function CountWithdrawal(props: CountWithdrawalProps): JSX.Element {
@@ -55,13 +55,7 @@ export default function CountWithdrawal(props: CountWithdrawalProps): JSX.Elemen
     }
 
     valid = validateAmount(value);
-    onWithdrawCtUpdate(
-      {
-        quantity: value || 0,
-        units: 'Seeds',
-      },
-      valid
-    );
+    onWithdrawCtUpdate(value || 0, valid);
   };
 
   const onSelectAll = (id: string, withdrawAll: boolean) => {

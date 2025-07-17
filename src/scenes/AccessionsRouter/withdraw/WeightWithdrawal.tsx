@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
@@ -10,7 +10,7 @@ import { convertUnits, unitAbbv } from 'src/units';
 export interface WeightWithdrawalProps {
   accession: Accession;
   purpose: string | undefined;
-  onWithdrawCtUpdate: (withdrawnQuantity: Withdrawal['withdrawnQuantity'], valid: boolean) => void;
+  onWithdrawCtUpdate: (withdrawnQuantity: number, valid: boolean) => void;
 }
 
 export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Element {
@@ -38,71 +38,6 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
     }
   }, [purpose, accession.subsetCount, accession.subsetWeight?.quantity]);
 
-  const onChangeWithdrawnQuantity = (value: number) => {
-    let estimated = 0;
-    let valid = false;
-
-    if (
-      value.toString() === accession.remainingQuantity?.quantity.toString() &&
-      withdrawnQuantity?.units === accession.remainingQuantity?.units
-    ) {
-      setWithdrawAllSelected(true);
-    } else {
-      setWithdrawAllSelected(false);
-    }
-
-    if (accession.subsetCount && accession.subsetWeight) {
-      if (
-        accession.remainingQuantity?.units &&
-        accession.remainingQuantity?.units === 'Seeds' &&
-        accession.estimatedWeight?.units
-      ) {
-        estimated = Math.round(
-          convertUnits(value, accession.estimatedWeight?.units, accession.subsetWeight.units) *
-            (accession.subsetCount / accession.subsetWeight.quantity)
-        );
-      } else if (accession.remainingQuantity?.units) {
-        estimated = Math.round(
-          convertUnits(value, accession.remainingQuantity?.units, accession.subsetWeight.units) *
-            (accession.subsetCount / accession.subsetWeight.quantity)
-        );
-      }
-      setEstimatedWithdrawnCt(estimated);
-    }
-
-    setWithdrawnQuantity(
-      value.toString().trim() === ''
-        ? undefined
-        : {
-            quantity: value || 0,
-            units: withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams',
-          }
-    );
-
-    setWithdrawnQtyError('');
-    if (purpose === 'Nursery' || purpose === 'Viability Testing') {
-      if (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount) {
-        setWithdrawnQtyError(
-          purpose === 'Nursery'
-            ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
-            : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST
-        );
-      }
-    }
-    valid = validateAmount(estimated, value, withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams');
-    if (purpose === 'Nursery' || purpose === 'Viability Testing') {
-      onWithdrawCtUpdate({ quantity: estimated, units: 'Seeds' }, valid);
-    } else {
-      onWithdrawCtUpdate(
-        {
-          quantity: value || 0,
-          units: withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams',
-        },
-        valid
-      );
-    }
-  };
-
   const onSelectAll = (id: string, withdrawAll: boolean) => {
     if (withdrawAll) {
       if (
@@ -121,50 +56,115 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
     setWithdrawAllSelected(withdrawAll);
   };
 
-  const validateAmount = (estimated: number, withdrawnQty: number, withdrawnUnits: string) => {
-    if (!withdrawnQty) {
-      setWithdrawnQtyError(strings.REQUIRED_FIELD);
-      return false;
-    }
-    if (isNaN(withdrawnQty) || Number(withdrawnQty) <= 0) {
-      setWithdrawnQtyError(strings.INVALID_VALUE);
-      return false;
-    }
-    if (
-      accession.remainingQuantity?.units === withdrawnUnits &&
-      accession.remainingQuantity.units === 'Seeds' &&
-      Number(estimated) > accession.remainingQuantity?.quantity
-    ) {
-      setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
-      return false;
-    }
-    if (
-      accession.remainingQuantity?.units === withdrawnUnits &&
-      accession.remainingQuantity.units !== 'Seeds' &&
-      accession.remainingQuantity?.quantity &&
-      withdrawnQty > accession.remainingQuantity?.quantity
-    ) {
-      setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
-      return false;
-    }
-    if (
-      purpose === 'Nursery' &&
-      (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)
-    ) {
-      setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY);
-      return false;
-    }
-    if (
-      purpose === 'Viability Testing' &&
-      (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)
-    ) {
-      setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST);
-      return false;
-    }
+  const validateAmount = useCallback(
+    (estimated: number, withdrawnQty: number, withdrawnUnits: string) => {
+      if (!withdrawnQty) {
+        setWithdrawnQtyError(strings.REQUIRED_FIELD);
+        return false;
+      }
+      if (isNaN(withdrawnQty) || Number(withdrawnQty) <= 0) {
+        setWithdrawnQtyError(strings.INVALID_VALUE);
+        return false;
+      }
+      if (
+        accession.remainingQuantity?.units === withdrawnUnits &&
+        accession.remainingQuantity.units === 'Seeds' &&
+        Number(estimated) > accession.remainingQuantity?.quantity
+      ) {
+        setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
+        return false;
+      }
+      if (
+        accession.remainingQuantity?.units === withdrawnUnits &&
+        accession.remainingQuantity.units !== 'Seeds' &&
+        accession.remainingQuantity?.quantity &&
+        withdrawnQty > accession.remainingQuantity?.quantity
+      ) {
+        setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
+        return false;
+      }
+      if (
+        purpose === 'Nursery' &&
+        (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)
+      ) {
+        setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY);
+        return false;
+      }
+      if (
+        purpose === 'Viability Testing' &&
+        (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)
+      ) {
+        setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST);
+        return false;
+      }
 
-    setWithdrawnQtyError('');
-    return true;
-  };
+      setWithdrawnQtyError('');
+      return true;
+    },
+    [accession, purpose]
+  );
+
+  const onChangeWithdrawnQuantity = useCallback(
+    (value: number) => {
+      let estimated = 0;
+      let valid = false;
+
+      if (
+        value.toString() === accession.remainingQuantity?.quantity.toString() &&
+        withdrawnQuantity?.units === accession.remainingQuantity?.units
+      ) {
+        setWithdrawAllSelected(true);
+      } else {
+        setWithdrawAllSelected(false);
+      }
+
+      if (accession.subsetCount && accession.subsetWeight) {
+        if (
+          accession.remainingQuantity?.units &&
+          accession.remainingQuantity?.units === 'Seeds' &&
+          accession.estimatedWeight?.units
+        ) {
+          estimated = Math.round(
+            convertUnits(value, accession.estimatedWeight?.units, accession.subsetWeight.units) *
+              (accession.subsetCount / accession.subsetWeight.quantity)
+          );
+        } else if (accession.remainingQuantity?.units) {
+          estimated = Math.round(
+            convertUnits(value, accession.remainingQuantity?.units, accession.subsetWeight.units) *
+              (accession.subsetCount / accession.subsetWeight.quantity)
+          );
+        }
+        setEstimatedWithdrawnCt(estimated);
+      }
+
+      setWithdrawnQuantity(
+        value.toString().trim() === ''
+          ? undefined
+          : {
+              quantity: value || 0,
+              units: withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams',
+            }
+      );
+
+      setWithdrawnQtyError('');
+      if (purpose === 'Nursery' || purpose === 'Viability Testing') {
+        if (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount) {
+          setWithdrawnQtyError(
+            purpose === 'Nursery'
+              ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
+              : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST
+          );
+        }
+      }
+      valid = validateAmount(
+        estimated,
+        value,
+        withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams'
+      );
+      onWithdrawCtUpdate(value || 0, valid);
+    },
+    [accession, onWithdrawCtUpdate, purpose, validateAmount, withdrawnQuantity?.units]
+  );
 
   return (
     <Grid container direction='row'>

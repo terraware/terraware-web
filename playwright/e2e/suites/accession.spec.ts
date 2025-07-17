@@ -110,7 +110,7 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('Coconut');
   });
 
-  test('Withdraw to Nursery', async ({ page }, testInfo) => {
+  test('Withdraw to Nursery by seed count', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
 
     await waitFor(page, '#home');
@@ -124,7 +124,8 @@ export default function AccessionTests() {
       .getByText(/My New Nursery/)
       .nth(0)
       .click();
-    await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('300');
+    await page.getByLabel('Seed Count', { exact: true }).check();
+    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('300');
     await page.getByRole('button', { name: 'Add Notes' }).click();
     await page.locator('textarea').fill('Adding some test notes here!');
     await page.locator('#saveWithdraw').click();
