@@ -7,7 +7,7 @@ import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useSpeciesDeliverableSearch } from 'src/providers/Participant/useSpeciesDeliverableSearch';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
@@ -27,7 +27,7 @@ const columns = (): TableColumnType[] => [
   { key: 'participantProjectSpecies_submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
-const consoleColumns = (): TableColumnType[] => [
+const consoleUpdateColumns = (): TableColumnType[] => [
   ...columns(),
   { key: 'reject', name: '', type: 'string' },
   { key: 'approve', name: '', type: 'string' },
@@ -40,6 +40,7 @@ type SpeciesDeliverableTableProps = {
 const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { goToParticipantProjectSpecies } = useNavigateTo();
@@ -65,6 +66,8 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
       participantProjectSpecies_submissionStatus: value.participantProjectSpecies.submissionStatus,
     }));
   }, [participantProjectSpecies]);
+
+  const isAllowedUpdateDeliverable = isAllowed('UPDATE_DELIVERABLE');
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
@@ -140,7 +143,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
           </Box>
 
           <Table
-            columns={isAcceleratorRoute ? consoleColumns : columns}
+            columns={isAcceleratorRoute && isAllowedUpdateDeliverable ? consoleUpdateColumns : columns}
             emptyTableMessage={strings.THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET}
             id='species-deliverable-table'
             orderBy='speciesScientificName'

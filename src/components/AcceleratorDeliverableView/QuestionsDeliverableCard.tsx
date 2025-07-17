@@ -16,7 +16,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useProjectVariableWorklow } from 'src/hooks/useProjectVariableWorkflow';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import {
   requestListDeliverableVariablesValues,
   requestListSpecificVariablesValues,
@@ -77,6 +77,7 @@ const QuestionBox = ({
     setVariableHasError,
     update,
   } = useProjectVariablesUpdate(projectId, [variable]);
+  const { isAllowed } = useUser();
   const { isAcceleratorApplicationRoute } = useAcceleratorConsole();
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const [showVariableHistoryModal, setShowVariableHistoryModal] = useState<boolean>(false);
@@ -102,6 +103,8 @@ const QuestionBox = ({
   );
 
   const editing = useMemo(() => editingId === variable.id, [editingId, variable.id]);
+
+  const isAllowedUpdateDeliverable = isAllowed('UPDATE_DELIVERABLE');
 
   const onEditItem = useCallback(() => {
     setEditingId(variable.id);
@@ -272,7 +275,7 @@ const QuestionBox = ({
             <Box sx={{ margin: '4px', visibility: hideStatusBadge ? 'hidden' : 'visible' }}>
               <VariableStatusBadge status={initialStatus} />
             </Box>
-            {!editingId && (
+            {!editingId && isAllowedUpdateDeliverable && (
               <Box className='actions'>
                 <Button
                   id='edit'
