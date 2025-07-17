@@ -180,7 +180,7 @@ jobs:
         id: changelog
         run: |
           LAST_VERSION=${{ steps.versions.outputs.last_version }}
-          MAX_DEPTH=1000
+          MAX_DEPTH=500
           STEP=50
           CURRENT_DEPTH=$STEP
 
@@ -194,13 +194,13 @@ jobs:
             fi
 
             if [ "$CURRENT_DEPTH" -ge "$MAX_DEPTH" ]; then
-              echo "❌ Could not find tag $LAST_VERSION"
+              echo "❌ Could not find last version $LAST_VERSION"
               exit 1
             fi
 
             CURRENT_DEPTH=$((CURRENT_DEPTH + STEP))
           done
-          LOG=$(git log "$LAST_VERSION"..HEAD --oneline --no-decorate)
+          LOG=$(git log LAST_VERSION..HEAD --pretty=format:"%s")
           {
             echo 'changelog<<EOF'
             echo "$LOG"
