@@ -189,7 +189,7 @@ jobs:
           payload: |
             "release_notes": ${{ steps.changelog.outputs.CHANGELOG }},
             "release_repository": "${{ github.repository }}",
-            "release_version": "${{ steps.changelog.version.THIS_VERSION }}",
+            "release_version": "${{ steps.version.outputs.THIS_VERSION }}",
 
       - name: Jira Login
         if: env.TIER == 'PROD'
