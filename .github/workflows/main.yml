@@ -188,13 +188,13 @@ jobs:
             echo "Fetching with depth=$CURRENT_DEPTH"
             git fetch --tags --depth=$CURRENT_DEPTH
 
-            if git rev-parse "$TAG_TO_FIND" >/dev/null 2>&1; then
-              echo "✅ Found last version $TAG_TO_FIND"
+            if git rev-parse "$LAST_VERSION" >/dev/null 2>&1; then
+              echo "✅ Found last version $LAST_VERSION"
               break
             fi
 
             if [ "$CURRENT_DEPTH" -ge "$MAX_DEPTH" ]; then
-              echo "❌ Could not find tag $TAG_TO_FIND"
+              echo "❌ Could not find tag $LAST_VERSION"
               exit 1
             fi
 
