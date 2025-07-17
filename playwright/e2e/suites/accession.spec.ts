@@ -110,7 +110,7 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('Coconut');
   });
 
-  test('Withdraw to Nursery', async ({ page }, testInfo) => {
+  test('Withdraw to Nursery by weight', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
 
     await waitFor(page, '#home');
@@ -208,5 +208,33 @@ export default function AccessionTests() {
     await page.getByRole('button', { name: 'Save' }).click();
     await page.getByRole('button', { name: 'Apply Result' }).click();
     await expect(page.locator('#row1-viabilityPercent')).toContainText('90%');
+  });
+
+  test('Withdraw to Nursery by Seed Count', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
+
+    await page.getByRole('button', { name: 'Seeds' }).click();
+    await page.getByRole('button', { name: 'Accessions' }).click();
+    await page.locator('#row1-accessionNumber').getByText('25-1-2-001').click();
+    await page.getByRole('button', { name: 'Withdraw' }).click();
+    await page.locator('#destinationFacilityId').getByRole('textbox').click();
+    await page
+      .getByText(/My New Nursery/)
+      .nth(0)
+      .click();
+    await page.getByLabel('Seed Count', { exact: true }).check();
+
+    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('10');
+
+    await page.locator('#saveWithdraw').click();
+    await expect(page.getByRole('main')).toContainText('65 Grams');
+    await expect(page.getByRole('main')).toContainText('~65 ct');
+    await page.getByRole('tab', { name: 'History' }).click();
+    await expect(page.getByLabel('History')).toContainText('Super Admin withdrew 10 seeds for nursery');
+    await page.getByRole('button', { name: 'Seedlings' }).click();
+    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+    await expect(page.locator('#row1-species_scientificName')).toContainText('Coconut');
+    await expect(page.locator('#row1-germinatingQuantity')).toContainText('310');
   });
 }

@@ -154,6 +154,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             (accession.subsetCount / accession.subsetWeight.quantity)
         );
       }
+    } else if (!isByWeight) {
+      return withdrawalQty;
     }
     return estimated;
   }, [accession, isByWeight, withdrawalQty]);
