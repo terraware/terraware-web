@@ -5,25 +5,26 @@ import { Message } from '@terraware/web-components';
 
 import { ViewProps } from 'src/components/DeliverableView/types';
 import { useLocalization } from 'src/providers/hooks';
-import strings from 'src/strings';
 
 const ApprovedDeliverableMessage = ({ deliverable }: ViewProps): JSX.Element | null => {
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const theme = useTheme();
 
-  if (!(activeLocale && deliverable?.status === 'Approved')) {
+  const messageBody =
+    deliverable?.type === 'Document'
+      ? strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT
+      : deliverable?.type === 'Questions'
+        ? strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE
+        : strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES;
+
+  if (deliverable?.status !== 'Approved') {
     return null;
   }
 
   return (
     <>
       <Box marginBottom={theme.spacing(4)}>
-        <Message
-          body={strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED}
-          priority='success'
-          title={strings.DELIVERABLE_APPROVED}
-          type='page'
-        />
+        <Message body={messageBody} priority='success' title={strings.DELIVERABLE_APPROVED} type='page' />
       </Box>
     </>
   );
