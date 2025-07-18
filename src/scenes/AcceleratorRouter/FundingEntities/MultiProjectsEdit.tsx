@@ -17,10 +17,11 @@ type ProjectsEditProps = {
   projects: ProjectsEditOption[];
   allProjects: ProjectsEditOption[];
   setProjects: (projects: ProjectsEditOption[]) => void;
+  tooltip?: string;
 };
 
 const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
-  const { projects, allProjects, setProjects } = props;
+  const { projects, allProjects, setProjects, tooltip } = props;
   const [rows, setRows] = useState<Partial<ProjectsEditOption> & { projectId: number }[]>([]);
 
   useEffect(() => {
@@ -70,6 +71,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
                   };
                 })}
               useDealName={true}
+              tooltip={tooltip}
               record={{ projectId: project.projectId }}
               setRecord={(setFn) => {
                 const _project = setFn({ projectId: -1 });

@@ -21,7 +21,7 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
   const [estimatedWithdrawnCt, setEstimatedWithdrawnCt] = useState<number>(0);
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<Withdrawal['withdrawnQuantity']>({
     quantity: 0,
-    units: 'Grams',
+    units: accession.remainingQuantity?.units || 'Grams',
   });
   const [withdrawnQtyError, setWithdrawnQtyError] = useState<string>('');
 
