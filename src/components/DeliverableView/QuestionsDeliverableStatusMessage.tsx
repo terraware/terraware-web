@@ -34,7 +34,7 @@ const QuestionsDeliverableStatusMessage = ({ deliverable, variables }: Props): J
       {deliverable?.status === 'Approved' && (
         <Box marginBottom={theme.spacing(4)}>
           <Message
-            body={strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED}
+            body={strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE}
             priority='success'
             title={strings.DELIVERABLE_APPROVED}
             type='page'

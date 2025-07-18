@@ -25,7 +25,7 @@ const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.E
       {deliverable?.status === 'Approved' && (
         <Box marginBottom={theme.spacing(4)}>
           <Message
-            body={strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED}
+            body={strings.THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES}
             priority='success'
             title={strings.DELIVERABLE_APPROVED}
             type='page'
