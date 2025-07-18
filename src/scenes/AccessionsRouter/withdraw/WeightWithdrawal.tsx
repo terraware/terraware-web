@@ -58,6 +58,10 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
 
   const validateAmount = useCallback(
     (estimated: number, withdrawnQty: number, withdrawnUnits: string) => {
+      if (!estimated) {
+        setWithdrawnQtyError(strings.WITHDRAWAL_COUNT_GREATER_THAN_ZERO_ERROR);
+        return false;
+      }
       if (!withdrawnQty) {
         setWithdrawnQtyError(strings.REQUIRED_FIELD);
         return false;
