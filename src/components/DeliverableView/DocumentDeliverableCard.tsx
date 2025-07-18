@@ -8,7 +8,7 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
 import DeliverableDocumentsList from './DeliverableDocumentsList';
-import DocumentDeliverableRejectedMessage from './DocumentDeliverableRejectedMessage';
+import DocumentDeliverableStatusMessage from './DocumentDeliverableStatusMessage';
 import DocumentLimitReachedMessage from './DocumentLimitReachedMessage';
 import DocumentsUploader from './DocumentsUploader';
 import Metadata from './Metadata';
@@ -53,7 +53,7 @@ const DocumentDeliverableCard = (props: EditProps): JSX.Element => {
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-      <DocumentDeliverableRejectedMessage {...viewProps} />
+      <DocumentDeliverableStatusMessage {...viewProps} />
       {documentLimitReached && <DocumentLimitReachedMessage maxFiles={MAX_FILES_LIMIT} />}
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Metadata {...viewProps} />

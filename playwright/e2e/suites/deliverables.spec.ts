@@ -270,7 +270,7 @@ export default function DeliverableTests() {
     await page.getByText(deliverableName).click();
     await expect(
       page.getByText(
-        'This deliverable has been approved. The list of species and their status may change as subsequent species list deliverables are submitted.'
+        'This deliverable has been approved. If the project resubmits the questionnaire, the status will revert back to “In Review”.'
       )
     ).toBeVisible();
     await validateQuestionnaireOverallStatus('Test Questionnaire for Phase 1', 'Approved', page);
