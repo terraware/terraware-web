@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1752788496831" clover="3.2.0">
-  <project timestamp="1752788496831" name="All files">
-    <metrics statements="31074" coveredstatements="1305" conditionals="21590" coveredconditionals="389" methods="9520" coveredmethods="211" elements="62184" coveredelements="1905" complexity="0" loc="31074" ncloc="31074" packages="270" files="1290" classes="1290"/>
+<coverage generated="1752806752857" clover="3.2.0">
+  <project timestamp="1752806752857" name="All files">
+    <metrics statements="31075" coveredstatements="1305" conditionals="21595" coveredconditionals="389" methods="9520" coveredmethods="211" elements="62190" coveredelements="1905" complexity="0" loc="31075" ncloc="31075" packages="270" files="1290" classes="1290"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2210,7 +2210,7 @@
       </file>
     </package>
     <package name="src.components.DeliverableView">
-      <metrics statements="376" coveredstatements="0" conditionals="250" coveredconditionals="0" methods="105" coveredmethods="0"/>
+      <metrics statements="376" coveredstatements="0" conditionals="253" coveredconditionals="0" methods="105" coveredmethods="0"/>
       <file name="DeliverableCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DeliverableCard.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -2281,13 +2281,13 @@
         <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="54" count="0" type="stmt"/>
       </file>
-      <file name="DocumentDeliverableRejectedMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DocumentDeliverableRejectedMessage.tsx">
-        <metrics statements="5" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="DocumentDeliverableStatusMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DocumentDeliverableStatusMessage.tsx">
+        <metrics statements="5" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
       </file>
       <file name="DocumentLimitReachedMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DocumentLimitReachedMessage.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -16013,7 +16013,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Deliverables">
-      <metrics statements="112" coveredstatements="0" conditionals="75" coveredconditionals="0" methods="37" coveredmethods="0"/>
+      <metrics statements="113" coveredstatements="0" conditionals="77" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="ApproveDeliverableDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Deliverables/ApproveDeliverableDialog.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -16028,13 +16028,14 @@
         <line num="41" count="0" type="stmt"/>
       </file>
       <file name="ApprovedDeliverableMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Deliverables/ApprovedDeliverableMessage.tsx">
-        <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="14" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
+        <line num="14" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
       </file>
       <file name="DeliverableRouter.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Deliverables/DeliverableRouter.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
