@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
 import { DropdownItem, Message } from '@terraware/web-components';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 import _ from 'lodash';
+import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 
 import PageHeader from 'src/components/PageHeader';
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
@@ -26,9 +27,10 @@ import { sendMessage } from 'src/redux/features/message/messageSlice';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PreferencesService } from 'src/services';
+import { AccessionService, PreferencesService } from 'src/services';
 import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
 import strings from 'src/strings';
+import { AccessionState } from 'src/types/Accession';
 import { Facility } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
 import { SearchCriteria, SearchNodePayload, SearchResponseElementWithId, SearchSortOrder } from 'src/types/Search';
@@ -126,6 +128,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
   const contentRef = useRef(null);
   const searchedLocaleRef = useRef<string | null>(activeLocale);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
 
   /*
    * fieldOptions is a list of records
@@ -513,7 +516,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const isInactive = (row: SearchResponseElementWithId) => {
+  const isInactive = () => {
     return false;
   };
 
@@ -601,6 +604,92 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const reloadAccessions = useCallback(() => {
     void initAccessions();
   }, [initAccessions]);
+
+  const columnsMRT = useMemo<MRT_ColumnDef<SearchResponseElementWithId>[]>(
+    () => [
+      {
+        accessorKey: 'accessionNumber',
+        header: 'Accession Number',
+        size: 150,
+        muiEditTextFieldProps: ({ cell }) => ({
+          error: !!validationErrors?.[cell.id],
+          helperText: validationErrors?.[cell.id],
+          required: true,
+          onBlur: (event) => {
+            console.log('event.currentTarget.value', event.currentTarget.value);
+            const validationError = event.currentTarget.value ? undefined : 'Required Field';
+            console.log('validationError', validationError);
+            console.log('cell.id', cell.id);
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: validationError,
+            });
+          },
+        }),
+      },
+      {
+        accessorKey: 'speciesName',
+        header: 'Species Name',
+        size: 150,
+      },
+      {
+        accessorKey: 'project_name',
+        header: 'Project Name',
+        size: 200,
+      },
+      {
+        accessorKey: 'collectionSiteName',
+        header: 'Collection Site Name',
+        size: 150,
+      },
+      {
+        accessorKey: 'state',
+        header: 'State',
+        editVariant: 'select',
+        editSelectOptions: ({ row }) => {
+          return AccessionService.getTransitionToStates(row.original.state as AccessionState);
+        },
+      },
+      {
+        accessorKey: 'collectedDate',
+        header: 'Collected Date',
+        size: 150,
+      },
+      {
+        accessorKey: 'ageMonths',
+        header: 'Age Month',
+        size: 150,
+      },
+      {
+        accessorKey: 'estimatedCount',
+        header: 'Count',
+        size: 150,
+        Edit: ({}) => {
+          return <Button onClick={() => console.log('open modal')} label={'Open modal'} />;
+        },
+      },
+      {
+        accessorKey: 'estimatedWeightOunces',
+        header: 'Weight (Oz)',
+        size: 150,
+      },
+      {
+        accessorKey: 'estimatedWeightGrams',
+        header: 'Weight (g)',
+        size: 150,
+      },
+    ],
+    [validationErrors]
+  );
+
+  const dataForMaterialReactTable = useMaterialReactTable({
+    columns: columnsMRT,
+    data: searchResults || [],
+    enableColumnOrdering: true,
+    enableColumnPinning: true,
+    enableEditing: true,
+    editDisplayMode: 'cell',
+  });
 
   return (
     <>
@@ -739,6 +828,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     )}
                     {searchResults === undefined && <CircularProgress />}
                     {searchResults === null && strings.GENERIC_ERROR}
+                    {searchResults && <MaterialReactTable table={dataForMaterialReactTable} />}
                   </Box>
                 </Card>
               ) : isAdmin(selectedOrganization) ? (
