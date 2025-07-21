@@ -1,3 +1,6 @@
+81401c6446b Update dependency slate-dom to ^0.117.0 (#4290)
+dbcfaa10fff Update Node.js to v22.17.1 (#4289)
+6bdade7ad45 Updated translations from Phrase (#4288)
 f319d97e8fc SW-1142 Post release notes on Slack (#4283)
 758b7b4db25 SW-7174: Withdrawing the weight of less than a single seed causes error (#4287)
 de80950d8a8 Updated translations from Phrase (#4286)
