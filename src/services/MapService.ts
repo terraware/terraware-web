@@ -432,7 +432,7 @@ const getMapDataFromGisPlantingSites = (gisPlantingSiteData: FeatureCollection<M
   };
 };
 
-const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string) => {
+const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, siteIndex?: number) => {
   let unionedFeature: Feature<Polygon | MultiPolygon> = features[0];
 
   for (let i = 1; i < features.length; i++) {
@@ -448,20 +448,28 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string) => 
 
   const totalArea = (area(unionedFeature) / 10_000).toFixed(2);
 
+  // Generate numeric ID from site name
+  const siteName = siteId || firstFeature.properties?.site;
+  const siteNameForId = siteName || firstFeature.properties?.boundary_name;
+
+  const numericId = siteNameForId
+    ? Math.abs(siteNameForId.split('').reduce((a: number, b: string) => a + b.charCodeAt(0), 0)) || (siteIndex ?? 0)
+    : siteIndex ?? 0;
+
   return {
     properties: {
-      id: siteId || firstFeature.properties?.site,
-      name: siteId || firstFeature.properties?.site,
+      id: numericId,
+      name: siteName,
       type: 'site',
     },
     boundary: boundaryCoordinates,
-    id: siteId || firstFeature.properties?.site,
+    id: numericId,
     totalArea,
   };
 };
 
 const calculateAreaFromGisData = (gisPlantingSiteData: FeatureCollection<MultiPolygon>) => {
-  const processedFeatures = processFeatures(gisPlantingSiteData.features);
+  const processedFeatures = processFeatures(gisPlantingSiteData.features, undefined, 0);
   return processedFeatures.totalArea;
 };
 
@@ -488,14 +496,14 @@ const extractPlantingSitesFromGis = (gisPlantingSiteData: FeatureCollection<Mult
   }, {});
 
   if (groupedByPlantingSite && Object.keys(groupedByPlantingSite).length > 0) {
-    Object.keys(groupedByPlantingSite).forEach((site) => {
+    Object.keys(groupedByPlantingSite).forEach((site, index) => {
       const features = groupedByPlantingSite[site] as Feature<MultiPolygon>[];
-      plantingSitesData.push(processFeatures(features, site));
+      plantingSitesData.push(processFeatures(features, site, index));
     });
   } else {
     const allFeatures = gisPlantingSiteData.features;
     if (allFeatures) {
-      plantingSitesData.push(processFeatures(allFeatures));
+      plantingSitesData.push(processFeatures(allFeatures, undefined, 0));
     }
   }
 
@@ -529,7 +537,7 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
   }, {});
 
   if (groupedByStrata) {
-    Object.keys(groupedByStrata).forEach((strata) => {
+    Object.keys(groupedByStrata).forEach((strata, index) => {
       const features = groupedByStrata[strata] as Feature<MultiPolygon>[];
 
       // Start with the first feature, then union with the rest
@@ -547,14 +555,22 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
       const totalArea = (area(unionedFeature) / 10_000).toFixed(2);
 
       const firstFeature = groupedByStrata[strata][0];
+      // Generate a unique numeric ID using a simple hash of the strata name or use index
+      const numericId =
+        Math.abs(
+          strata.split('').reduce((a: number, b: string) => {
+            return a + b.charCodeAt(0);
+          }, 0)
+        ) || index;
+
       zonesData.push({
         properties: {
-          id: firstFeature.properties?.strata,
+          id: numericId,
           name: firstFeature.properties?.strata,
           type: 'zone',
         },
         boundary: boundaryCoordinates,
-        id: firstFeature.properties?.strata,
+        id: numericId,
         totalArea: Number(totalArea),
       });
     });

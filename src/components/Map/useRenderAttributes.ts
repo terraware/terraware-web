@@ -91,8 +91,8 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
           };
         case 'projectZonesBoundary':
           return {
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
-            hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
+            fillColor: getRgbaFromHex('#E6D763', 0.2),
+            hoverFillColor: getRgbaFromHex('#E6D763', 0.4),
             selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
             highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
             lineColor: '#E6D763',

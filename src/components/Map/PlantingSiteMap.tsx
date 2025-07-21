@@ -205,7 +205,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.site && (layers === undefined || layers?.includes('Project Zones'))) {
         sources.push({
           ...mapData.site,
-          isInteractive: isFirstLayerAdded(),
+          isInteractive: true,
           annotation: isFirstLayerAdded()
             ? {
                 textField: 'name',
