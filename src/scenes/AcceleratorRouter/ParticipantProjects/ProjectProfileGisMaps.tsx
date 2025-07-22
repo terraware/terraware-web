@@ -363,7 +363,7 @@ const ProjectProfileGisMaps = () => {
           {plantingSitesData && plantingMapData && showSiteMap && filteredSiteData && (
             <PlantingSiteMap
               mapData={filteredSiteData}
-              style={{ width: '100%', borderRadius: '24px' }}
+              style={{ width: '100%', borderRadius: '8px' }}
               layers={[selectedLayer || 'Planting Site']}
               contextRenderer={{
                 render: contextRenderer,
@@ -383,7 +383,7 @@ const ProjectProfileGisMaps = () => {
           {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (
             <PlantingSiteMap
               mapData={filteredZoneData}
-              style={{ width: '100%', borderRadius: '24px' }}
+              style={{ width: '100%', borderRadius: '8px' }}
               layers={['Project Zones']}
             />
           )}
@@ -398,7 +398,7 @@ const ProjectProfileGisMaps = () => {
                   temporaryPlot: undefined,
                   adHocPlot: undefined,
                 }}
-                style={{ width: '100%', borderRadius: '24px' }}
+                style={{ width: '100%', borderRadius: '8px' }}
                 layers={['Planting Site', 'Zones', 'Sub-Zones']}
               />
               <Box
