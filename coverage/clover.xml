@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1753208674234" clover="3.2.0">
-  <project timestamp="1753208674234" name="All files">
-    <metrics statements="31083" coveredstatements="1305" conditionals="21602" coveredconditionals="389" methods="9522" coveredmethods="211" elements="62207" coveredelements="1905" complexity="0" loc="31083" ncloc="31083" packages="270" files="1290" classes="1290"/>
+<coverage generated="1753211166288" clover="3.2.0">
+  <project timestamp="1753211166288" name="All files">
+    <metrics statements="31083" coveredstatements="1305" conditionals="21604" coveredconditionals="389" methods="9522" coveredmethods="211" elements="62209" coveredelements="1905" complexity="0" loc="31083" ncloc="31083" packages="270" files="1290" classes="1290"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -4405,7 +4405,7 @@
       </file>
     </package>
     <package name="src.components.Map">
-      <metrics statements="748" coveredstatements="71" conditionals="557" coveredconditionals="48" methods="201" coveredmethods="20"/>
+      <metrics statements="748" coveredstatements="71" conditionals="559" coveredconditionals="48" methods="201" coveredmethods="20"/>
       <file name="EditableMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/EditableMap.tsx">
         <metrics statements="33" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -5046,43 +5046,43 @@
         <line num="71" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/PlantingSiteMap.tsx">
-        <metrics statements="36" coveredstatements="0" conditionals="62" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="36" coveredstatements="0" conditionals="64" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
         <line num="82" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="87" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
         <line num="89" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="90" count="0" type="stmt"/>
-        <line num="103" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="117" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="132" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="133" count="0" type="stmt"/>
-        <line num="176" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="177" count="0" type="stmt"/>
-        <line num="190" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="191" count="0" type="stmt"/>
-        <line num="205" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="206" count="0" type="stmt"/>
-        <line num="220" count="0" type="stmt"/>
-        <line num="225" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="226" count="0" type="stmt"/>
-        <line num="230" count="0" type="stmt"/>
-        <line num="244" count="0" type="stmt"/>
-        <line num="245" count="0" type="stmt"/>
-        <line num="252" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="253" count="0" type="stmt"/>
-        <line num="260" count="0" type="stmt"/>
+        <line num="91" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="105" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="119" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="134" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="178" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="192" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="207" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="208" count="0" type="stmt"/>
+        <line num="222" count="0" type="stmt"/>
+        <line num="227" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="228" count="0" type="stmt"/>
+        <line num="232" count="0" type="stmt"/>
+        <line num="246" count="0" type="stmt"/>
+        <line num="247" count="0" type="stmt"/>
+        <line num="254" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="255" count="0" type="stmt"/>
+        <line num="262" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteMapEditor.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/PlantingSiteMapEditor.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
