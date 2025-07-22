@@ -12,12 +12,14 @@ export type PlantingSiteMapLegendProps = {
   options: PlantingSiteMapLegendOption[];
   onChangeLayer?: (layer: string) => void;
   selectedLayer?: string;
+  disableLegends?: boolean;
 };
 
 export default function PlantingSiteMapLegend({
   options,
   onChangeLayer,
   selectedLayer,
+  disableLegends,
 }: PlantingSiteMapLegendProps): JSX.Element {
   const theme = useTheme();
   const hasSite = !!options.find((opt) => opt === 'site');
@@ -88,7 +90,12 @@ export default function PlantingSiteMapLegend({
 
   return (
     <Box display='flex'>
-      <MapLegend legends={legends} onChangeLayer={onChangeLayer} selectedLayer={selectedLayer} />
+      <MapLegend
+        legends={legends}
+        onChangeLayer={onChangeLayer}
+        selectedLayer={selectedLayer}
+        disableLegends={disableLegends}
+      />
     </Box>
   );
 }
