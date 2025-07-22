@@ -453,7 +453,8 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, sit
   const siteNameForId = siteName || firstFeature.properties?.boundary_name;
 
   const numericId = siteNameForId
-    ? Math.abs(siteNameForId.split('').reduce((a: number, b: string) => a + b.charCodeAt(0), 0)) || (siteIndex ?? 0)
+    ? Math.abs(siteNameForId.split('').reduce((a: number, b: string, i: number) => a + b.charCodeAt(0) * (i + 1), 0)) ||
+      (siteIndex ?? 0)
     : siteIndex ?? 0;
 
   return {
@@ -557,11 +558,8 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
       const firstFeature = groupedByStrata[strata][0];
       // Generate a unique numeric ID using a simple hash of the strata name or use index
       const numericId =
-        Math.abs(
-          strata.split('').reduce((a: number, b: string) => {
-            return a + b.charCodeAt(0);
-          }, 0)
-        ) || index;
+        Math.abs(strata.split('').reduce((a: number, b: string, i: number) => a + b.charCodeAt(0) * (i + 1), 0)) ||
+        index;
 
       zonesData.push({
         properties: {
