@@ -379,6 +379,7 @@ const ProjectProfileGisMaps = () => {
               }}
               showSiteMarker
               zoneInteractive={true}
+              minHeight='700px'
             />
           )}
           {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (
@@ -386,6 +387,7 @@ const ProjectProfileGisMaps = () => {
               mapData={filteredZoneData}
               style={{ width: '100%', borderRadius: '24px' }}
               layers={['Project Zones']}
+              minHeight='700px'
             />
           )}
           {mapsNotUploaded && (
@@ -401,6 +403,7 @@ const ProjectProfileGisMaps = () => {
                 }}
                 style={{ width: '100%', borderRadius: '24px' }}
                 layers={['Planting Site', 'Zones', 'Sub-Zones']}
+                minHeight='700px'
               />
               <Box
                 sx={{
