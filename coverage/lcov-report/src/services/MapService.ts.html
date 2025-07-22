@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">34.51% </span>
+                <span class="strong">33.79% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>97/281</span>
+                <span class='fraction'>97/287</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.59% </span>
+                <span class="strong">29.07% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>41/134</span>
+                <span class='fraction'>41/141</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.43% </span>
+                <span class="strong">25.84% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>23/87</span>
+                <span class='fraction'>23/89</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.66% </span>
+                <span class="strong">35.01% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>97/272</span>
+                <span class='fraction'>97/277</span>
             </div>
         
             
@@ -884,7 +884,21 @@
 <a name='L819'></a><a href='#L819'>819</a>
 <a name='L820'></a><a href='#L820'>820</a>
 <a name='L821'></a><a href='#L821'>821</a>
-<a name='L822'></a><a href='#L822'>822</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L822'></a><a href='#L822'>822</a>
+<a name='L823'></a><a href='#L823'>823</a>
+<a name='L824'></a><a href='#L824'>824</a>
+<a name='L825'></a><a href='#L825'>825</a>
+<a name='L826'></a><a href='#L826'>826</a>
+<a name='L827'></a><a href='#L827'>827</a>
+<a name='L828'></a><a href='#L828'>828</a>
+<a name='L829'></a><a href='#L829'>829</a>
+<a name='L830'></a><a href='#L830'>830</a>
+<a name='L831'></a><a href='#L831'>831</a>
+<a name='L832'></a><a href='#L832'>832</a>
+<a name='L833'></a><a href='#L833'>833</a>
+<a name='L834'></a><a href='#L834'>834</a>
+<a name='L835'></a><a href='#L835'>835</a>
+<a name='L836'></a><a href='#L836'>836</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1334,6 +1348,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1433,6 +1456,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2139,7 +2167,7 @@ const getMapDataFromGisPlantingSites = <span class="fstat-no" title="function no
   };
 };
 &nbsp;
-const processFeatures = <span class="fstat-no" title="function not covered" >(f</span>eatures: Feature&lt;MultiPolygon&gt;[], siteId?: string) =&gt; {
+const processFeatures = <span class="fstat-no" title="function not covered" >(f</span>eatures: Feature&lt;MultiPolygon&gt;[], siteId?: string, siteIndex?: number) =&gt; {
   let unionedFeature: Feature&lt;Polygon | MultiPolygon&gt; = <span class="cstat-no" title="statement not covered" >features[0];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  for (let i = <span class="cstat-no" title="statement not covered" >1;</span> i &lt; features.length; i++) {</span>
@@ -2155,20 +2183,29 @@ const processFeatures = <span class="fstat-no" title="function not covered" >(f<
 &nbsp;
   const totalArea = <span class="cstat-no" title="statement not covered" >(area(unionedFeature) / 10_000).toFixed(2);</span>
 &nbsp;
+  // Generate numeric ID from site name
+  const siteName = <span class="cstat-no" title="statement not covered" >siteId || firstFeature.properties?.site;</span>
+  const siteNameForId = <span class="cstat-no" title="statement not covered" >siteName || firstFeature.properties?.boundary_name;</span>
+&nbsp;
+  const numericId = <span class="cstat-no" title="statement not covered" >siteNameForId</span>
+    ? Math.abs(siteNameForId.split('').reduce(<span class="fstat-no" title="function not covered" >(a</span>: number, b: string, i: number) =&gt; <span class="cstat-no" title="statement not covered" >a + b.charCodeAt(0) * (i + 1),</span> 0)) ||
+      (siteIndex ?? 0)
+    : siteIndex ?? 0;
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
     properties: {
-      id: siteId || firstFeature.properties?.site,
-      name: siteId || firstFeature.properties?.site,
+      id: numericId,
+      name: siteName,
       type: 'site',
     },
     boundary: boundaryCoordinates,
-    id: siteId || firstFeature.properties?.site,
+    id: numericId,
     totalArea,
   };
 };
 &nbsp;
 const calculateAreaFromGisData = <span class="fstat-no" title="function not covered" >(g</span>isPlantingSiteData: FeatureCollection&lt;MultiPolygon&gt;) =&gt; {
-  const processedFeatures = <span class="cstat-no" title="statement not covered" >processFeatures(gisPlantingSiteData.features);</span>
+  const processedFeatures = <span class="cstat-no" title="statement not covered" >processFeatures(gisPlantingSiteData.features, undefined, 0);</span>
 <span class="cstat-no" title="statement not covered" >  return processedFeatures.totalArea;</span>
 };
 &nbsp;
@@ -2195,14 +2232,14 @@ const extractPlantingSitesFromGis = <span class="fstat-no" title="function not c
   }, {});
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (groupedByPlantingSite &amp;&amp; Object.keys(groupedByPlantingSite).length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    Object.keys(groupedByPlantingSite).forEach(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    Object.keys(groupedByPlantingSite).forEach(<span class="fstat-no" title="function not covered" >(s</span>ite, index) =&gt; {</span>
       const features = <span class="cstat-no" title="statement not covered" >groupedByPlantingSite[site] as Feature&lt;MultiPolygon&gt;[];</span>
-<span class="cstat-no" title="statement not covered" >      plantingSitesData.push(processFeatures(features, site));</span>
+<span class="cstat-no" title="statement not covered" >      plantingSitesData.push(processFeatures(features, site, index));</span>
     });
   } else {
     const allFeatures = <span class="cstat-no" title="statement not covered" >gisPlantingSiteData.features;</span>
 <span class="cstat-no" title="statement not covered" >    if (allFeatures) {</span>
-<span class="cstat-no" title="statement not covered" >      plantingSitesData.push(processFeatures(allFeatures));</span>
+<span class="cstat-no" title="statement not covered" >      plantingSitesData.push(processFeatures(allFeatures, undefined, 0));</span>
     }
   }
 &nbsp;
@@ -2236,7 +2273,7 @@ const extractZonesFromGis = <span class="fstat-no" title="function not covered" 
   }, {});
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (groupedByStrata) {</span>
-<span class="cstat-no" title="statement not covered" >    Object.keys(groupedByStrata).forEach(<span class="fstat-no" title="function not covered" >(s</span>trata) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    Object.keys(groupedByStrata).forEach(<span class="fstat-no" title="function not covered" >(s</span>trata, index) =&gt; {</span>
       const features = <span class="cstat-no" title="statement not covered" >groupedByStrata[strata] as Feature&lt;MultiPolygon&gt;[];</span>
 &nbsp;
       // Start with the first feature, then union with the rest
@@ -2254,14 +2291,19 @@ const extractZonesFromGis = <span class="fstat-no" title="function not covered" 
       const totalArea = <span class="cstat-no" title="statement not covered" >(area(unionedFeature) / 10_000).toFixed(2);</span>
 &nbsp;
       const firstFeature = <span class="cstat-no" title="statement not covered" >groupedByStrata[strata][0];</span>
+      // Generate a unique numeric ID using a simple hash of the strata name or use index
+      const numericId =
+<span class="cstat-no" title="statement not covered" >        Math.abs(strata.split('').reduce(<span class="fstat-no" title="function not covered" >(a</span>: number, b: string, i: number) =&gt; <span class="cstat-no" title="statement not covered" >a + b.charCodeAt(0) * (i + 1),</span> 0)) ||</span>
+        index;
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      zonesData.push({</span>
         properties: {
-          id: firstFeature.properties?.strata,
+          id: numericId,
           name: firstFeature.properties?.strata,
           type: 'zone',
         },
         boundary: boundaryCoordinates,
-        id: firstFeature.properties?.strata,
+        id: numericId,
         totalArea: Number(totalArea),
       });
     });
@@ -2533,7 +2575,7 @@ export default MapService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-21T15:10:15.341Z
+                at 2025-07-22T17:46:49.499Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
