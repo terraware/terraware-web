@@ -54,6 +54,7 @@ export type PlantingSiteMapProps = {
   zoneInteractive?: boolean;
   subzoneInteractive?: boolean;
   showSiteMarker?: boolean;
+  minHeight?: string;
 } & MapControl;
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
@@ -69,6 +70,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     zoneInteractive,
     subzoneInteractive,
     showSiteMarker,
+    minHeight,
   } = props;
   const { ...controlProps }: MapControl = props;
   const theme = useTheme();
@@ -258,7 +260,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   }
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, position: 'relative', minHeight: '436px' }}>
+    <Box sx={{ display: 'flex', flexGrow: 1, position: 'relative', minHeight: minHeight ?? '436px' }}>
       <GenericMap
         options={mapOptions}
         contextRenderer={contextRenderer}
