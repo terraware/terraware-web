@@ -377,6 +377,7 @@ const ProjectProfileGisMaps = () => {
                 },
               }}
               showSiteMarker
+              zoneInteractive={true}
             />
           )}
           {boundariesData && boundariesMapData && showBoundaryMap && filteredZoneData && (

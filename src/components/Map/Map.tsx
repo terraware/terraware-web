@@ -418,7 +418,7 @@ export default function Map(props: MapProps): JSX.Element {
               backdropFilter: 'blur(2px)', // Optional: adds blur effect
             }}
           >
-            {geo.data.features?.[0]?.properties?.id}
+            {geo.data.features?.[0]?.properties?.name}
           </div>
         </Marker>
       );
