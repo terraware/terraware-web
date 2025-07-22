@@ -359,6 +359,7 @@ const ProjectProfileGisMaps = () => {
             options={['site', 'zone', 'subzone']}
             onChangeLayer={showSiteMap ? onChangeLayerHandler : undefined}
             selectedLayer={selectedLayer || 'Project Zones'}
+            disableLegends={!showSiteMap}
           />
           {plantingSitesData && plantingMapData && showSiteMap && filteredSiteData && (
             <PlantingSiteMap

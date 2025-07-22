@@ -35,9 +35,16 @@ type MapLegendProps = {
   setLegends?: React.Dispatch<React.SetStateAction<MapLegendGroup[]>>;
   onChangeLayer?: (layer: string) => void;
   selectedLayer?: string;
+  disableLegends?: boolean;
 };
 
-export default function MapLegend({ legends, setLegends, onChangeLayer, selectedLayer }: MapLegendProps): JSX.Element {
+export default function MapLegend({
+  legends,
+  setLegends,
+  onChangeLayer,
+  selectedLayer,
+  disableLegends,
+}: MapLegendProps): JSX.Element {
   const theme = useTheme();
   const { isMobile, isDesktop } = useDeviceInfo();
 
@@ -104,7 +111,12 @@ export default function MapLegend({ legends, setLegends, onChangeLayer, selected
             <Box>
               {legend.items.map((item) => (
                 <Box key={`${legend.title}-${item.label}`} paddingRight={1} paddingTop={1}>
-                  <LabeledSwatch {...item} onChangeLayer={onChangeLayer} selectedLayer={selectedLayer} />
+                  <LabeledSwatch
+                    {...item}
+                    onChangeLayer={onChangeLayer}
+                    selectedLayer={selectedLayer}
+                    disableLegends={disableLegends}
+                  />
                 </Box>
               ))}
             </Box>
@@ -115,7 +127,11 @@ export default function MapLegend({ legends, setLegends, onChangeLayer, selected
   );
 }
 
-type LabeledSwatchProps = MapLegendItem & { onChangeLayer?: (layer: string) => void; selectedLayer?: string };
+type LabeledSwatchProps = MapLegendItem & {
+  onChangeLayer?: (layer: string) => void;
+  selectedLayer?: string;
+  disableLegends?: boolean;
+};
 
 const getLayerFromLabel = (label: string): MapLayer => {
   if (label === 'Subzones') {
@@ -134,6 +150,7 @@ function LabeledSwatch({
   isDisabled,
   onChangeLayer,
   selectedLayer,
+  disableLegends,
 }: LabeledSwatchProps): JSX.Element {
   const theme = useTheme();
 
@@ -158,7 +175,7 @@ function LabeledSwatch({
           selectedLayer && selectedLayer === getLayerFromLabel(label) ? theme.palette.TwClrBgSecondary : 'none',
         borderRadius: selectedLayer && selectedLayer === getLayerFromLabel(label) ? '4px' : 'none',
         padding: selectedLayer ? '4px 8px' : 0,
-        opacity: selectedLayer && selectedLayer !== getLayerFromLabel(label) ? '0.5' : 1,
+        opacity: disableLegends ? '0.5' : 1,
       }}
       justifyContent={'space-between'}
     >
