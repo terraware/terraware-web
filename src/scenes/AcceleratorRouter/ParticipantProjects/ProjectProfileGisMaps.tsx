@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 import { FeatureCollection } from 'geojson';
@@ -19,7 +19,7 @@ import { selectGisRequest } from 'src/redux/features/gis/gisSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
-import { MapSourceProperties } from 'src/types/Map';
+import { MapEntity, MapSourceProperties } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
@@ -40,6 +40,7 @@ const ProjectProfileGisMaps = () => {
   const [selectedArea, setSelectedArea] = useState<string>();
   const [showSiteMap, setShowSiteMap] = useState(false);
   const [showBoundaryMap, setShowBoundaryMap] = useState(false);
+  const [isProcessingSite, setIsProcessingSite] = useState(false);
   const { isDesktop } = useDeviceInfo();
   const [selectedLayer, setSelectedLayer] = useState<MapLayer>();
 
@@ -96,59 +97,127 @@ const ProjectProfileGisMaps = () => {
     }
   }, [boundariesData]);
 
-  const filteredSiteData = useMemo(() => {
-    let totalArea = '';
+  const basePlantingMapData = useMemo(() => {
     if (plantingSitesData) {
-      if (showSiteMap && zoneOrSite && zoneOrSite.type === 'site') {
-        const filteredPlantingSitesData = {
-          ...plantingSitesData,
-          features: plantingSitesData.features.filter((f) => f.properties?.site === zoneOrSite.name),
-        };
-        if (filteredPlantingSitesData.features) {
+      return MapService.getMapDataFromGisPlantingSites(plantingSitesData);
+    }
+    return undefined;
+  }, [plantingSitesData]);
+
+  const [processedSiteData, setProcessedSiteData] = useState<any>(null);
+
+  // Process site data asynchronously
+  useEffect(() => {
+    if (!plantingSitesData || !showSiteMap || !zoneOrSite || zoneOrSite.type !== 'site') {
+      setIsProcessingSite(false);
+      setProcessedSiteData(null);
+      return;
+    }
+
+    setIsProcessingSite(true);
+
+    // Process in next frame to avoid blocking UI
+    requestAnimationFrame(() => {
+      const filteredFeatures = plantingSitesData.features.filter((f) => f.properties?.site === zoneOrSite.name);
+
+      if (filteredFeatures.length === 0) {
+        setProcessedSiteData(basePlantingMapData);
+        setIsProcessingSite(false);
+        return;
+      }
+
+      const filteredPlantingSitesData = {
+        ...plantingSitesData,
+        features: filteredFeatures,
+      };
+
+      const mapData = MapService.getMapDataFromGisPlantingSites(
+        filteredPlantingSitesData as unknown as FeatureCollection<MultiPolygon>
+      );
+
+      setProcessedSiteData(mapData);
+      setIsProcessingSite(false);
+    });
+  }, [plantingSitesData, showSiteMap, zoneOrSite, basePlantingMapData]);
+
+  const filteredSiteData = useMemo(() => {
+    if (!showSiteMap || !zoneOrSite || zoneOrSite.type !== 'site') {
+      return basePlantingMapData;
+    }
+    return processedSiteData || basePlantingMapData;
+  }, [showSiteMap, zoneOrSite, processedSiteData, basePlantingMapData]);
+
+  const filteredZoneData = useMemo(() => {
+    if (!boundariesData) {
+      return undefined;
+    }
+
+    if (!showBoundaryMap || !zoneOrSite || zoneOrSite.type !== 'zone') {
+      return boundariesMapData;
+    }
+
+    if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
+      return boundariesMapData;
+    }
+
+    const filteredBoundaryData = {
+      ...boundariesData,
+      features: boundariesData.features.filter((f) => f.properties?.boundary_name === zoneOrSite.name),
+    };
+
+    if (filteredBoundaryData.features && filteredBoundaryData.features.length > 0) {
+      return MapService.getMapDataFromGisPlantingSites(
+        filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
+      );
+    }
+
+    return boundariesMapData;
+  }, [boundariesData, showBoundaryMap, zoneOrSite, boundariesMapData]);
+
+  useEffect(() => {
+    const calculateArea = () => {
+      let totalArea = '';
+
+      if (showSiteMap && zoneOrSite && zoneOrSite.type === 'site' && plantingSitesData) {
+        const filteredFeatures = plantingSitesData.features.filter((f) => f.properties?.site === zoneOrSite.name);
+        if (filteredFeatures.length > 0) {
+          const filteredPlantingSitesData = {
+            ...plantingSitesData,
+            features: filteredFeatures,
+          };
           totalArea = MapService.calculateAreaFromGisData(
             filteredPlantingSitesData as unknown as FeatureCollection<MultiPolygon>
           );
-          setSelectedArea(totalArea);
-          return MapService.getMapDataFromGisPlantingSites(
-            filteredPlantingSitesData as unknown as FeatureCollection<MultiPolygon>
+        }
+      } else if (showBoundaryMap && zoneOrSite && zoneOrSite.type === 'zone' && boundariesData) {
+        if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
+          totalArea = MapService.calculateAreaFromGisData(boundariesData as unknown as FeatureCollection<MultiPolygon>);
+        } else {
+          const filteredFeatures = boundariesData.features.filter(
+            (f) => f.properties?.boundary_name === zoneOrSite.name
           );
+          if (filteredFeatures.length > 0) {
+            const filteredBoundaryData = {
+              ...boundariesData,
+              features: filteredFeatures,
+            };
+            totalArea = MapService.calculateAreaFromGisData(
+              filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
+            );
+          }
         }
       }
-      return MapService.getMapDataFromGisPlantingSites(plantingSitesData);
-    }
-  }, [plantingSitesData, showSiteMap, zoneOrSite]);
 
-  const filteredZoneData = useMemo(() => {
-    let totalArea = '';
-    if (
-      boundariesData &&
-      showBoundaryMap &&
-      zoneOrSite &&
-      zoneOrSite.type === 'zone' &&
-      zoneOrSite.name !== strings.ALL_PROJECT_ZONES
-    ) {
-      const filteredBoundaryData = {
-        ...boundariesData,
-        features: boundariesData.features.filter((f) => f.properties?.boundary_name === zoneOrSite.name),
-      };
-      if (filteredBoundaryData.features) {
-        totalArea = MapService.calculateAreaFromGisData(
-          filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
-        );
-        setSelectedArea(totalArea);
-        return MapService.getMapDataFromGisPlantingSites(
-          filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
-        );
-      }
-    }
-    if (boundariesData && zoneOrSite?.name === strings.ALL_PROJECT_ZONES) {
-      totalArea = MapService.calculateAreaFromGisData(boundariesData as unknown as FeatureCollection<MultiPolygon>);
       setSelectedArea(totalArea);
-    }
-    if (boundariesData) {
-      return MapService.getMapDataFromGisPlantingSites(boundariesData);
-    }
-  }, [boundariesData, showBoundaryMap, zoneOrSite]);
+    };
+
+    const frameId = requestAnimationFrame(() => {
+      const timeoutId = setTimeout(calculateArea, 50);
+      return () => clearTimeout(timeoutId);
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [showSiteMap, showBoundaryMap, zoneOrSite, plantingSitesData, boundariesData]);
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(
@@ -243,19 +312,22 @@ const ProjectProfileGisMaps = () => {
   );
 
   const zonesAndSitesDropdown = (
-    <SelectT
-      id='zoneOrSite'
-      label=''
-      onChange={setZoneOrSite}
-      options={zonesAndSites}
-      placeholder={''}
-      selectedValue={zoneOrSite}
-      selectStyles={{ optionsContainer: { textAlign: 'left' }, optionContainer: { padding: 0 } }}
-      displayLabel={labelHandler}
-      isEqual={isEqualHandler}
-      renderOption={renderOptionHandler}
-      toT={toTHandler}
-    />
+    <Box display='flex' alignItems='center' gap={1}>
+      <SelectT
+        id='zoneOrSite'
+        label=''
+        onChange={setZoneOrSite}
+        options={zonesAndSites}
+        placeholder={''}
+        selectedValue={zoneOrSite}
+        selectStyles={{ optionsContainer: { textAlign: 'left' }, optionContainer: { padding: 0 } }}
+        displayLabel={labelHandler}
+        isEqual={isEqualHandler}
+        renderOption={renderOptionHandler}
+        toT={toTHandler}
+      />
+      {isProcessingSite && <CircularProgress size={16} sx={{ color: theme.palette.TwClrTxtSecondary }} />}
+    </Box>
   );
 
   const projectViewTitle = (
@@ -282,29 +354,30 @@ const ProjectProfileGisMaps = () => {
       const tooltipProperties: TooltipProperty[] = [{ key: strings.TYPE, value: properties.type }];
 
       if (properties.type === 'subzone') {
-        const selectedSubZone = filteredSiteData?.subzone?.entities?.find((ent) => ent.id === properties.id);
+        const selectedSubZone = filteredSiteData?.subzone?.entities?.find((ent: MapEntity) => ent.id === properties.id);
         tooltipProperties.push({
           key: strings.ZONE,
           value: filteredSiteData?.subzone?.entities?.[0].properties.zoneId,
         });
         tooltipProperties.push({
           key: strings.AREA_HA,
-          value: selectedSubZone?.totalArea?.toString() || '',
+          value: selectedSubZone && 'totalArea' in selectedSubZone ? String(selectedSubZone.totalArea) : '',
         });
       }
 
       if (properties.type === 'zone') {
-        const selectedZone = filteredSiteData?.zone?.entities?.find((ent) => ent.id === properties.id);
+        const selectedZone = filteredSiteData?.zone?.entities?.find((ent: MapEntity) => ent.id === properties.id);
         tooltipProperties.push({
           key: strings.AREA_HA,
-          value: selectedZone?.totalArea?.toString() || '',
+          value: selectedZone && 'totalArea' in selectedZone ? String(selectedZone.totalArea) : '',
         });
       }
 
       if (properties.type === 'site') {
+        const siteEntity = filteredSiteData?.site?.entities?.[0];
         tooltipProperties.push({
           key: strings.AREA_HA,
-          value: filteredSiteData?.site?.entities?.[0].totalArea?.toString() || '',
+          value: siteEntity && 'totalArea' in siteEntity ? String(siteEntity.totalArea) : '',
         });
       }
 
@@ -378,7 +451,6 @@ const ProjectProfileGisMaps = () => {
                 },
               }}
               showSiteMarker
-              zoneInteractive={true}
               minHeight='700px'
             />
           )}
