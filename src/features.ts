@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'GIS Maps' | 'Matrix View';
+export type FeatureName = 'Show Production View' | 'GIS Maps' | 'Matrix View' | 'New Plant Dashboard Map';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +51,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Enable Matrix View'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'New Plant Dashboard Map',
+    preferenceName: 'enableNewPlantDashboardMap',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Enable New Plant Dashboard Map'],
     disclosure: ['This is a WIP'],
   },
 ];
