@@ -211,12 +211,17 @@ const ProjectProfileGisMaps = () => {
   }, [boundariesData, plantingSitesData, showBoundaryMap, showSiteMap, zoneOrSite]);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
     const frameId = requestAnimationFrame(() => {
-      const timeoutId = setTimeout(calculateArea, 50);
-      return () => clearTimeout(timeoutId);
+      timeoutId = setTimeout(calculateArea, 50);
     });
 
-    return () => cancelAnimationFrame(frameId);
+    return () => {
+      cancelAnimationFrame(frameId);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [showSiteMap, showBoundaryMap, zoneOrSite, plantingSitesData, boundariesData, calculateArea]);
 
   // construct the bread crumbs back to originating context
