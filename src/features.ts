@@ -53,7 +53,7 @@ export const OPT_IN_FEATURES: Feature[] = [
     description: ['Enable Matrix View'],
     disclosure: ['This is a WIP'],
   },
-    {
+  {
     name: 'New Plant Dashboard Map',
     preferenceName: 'enableNewPlantDashboardMap',
     active: true,
