@@ -176,50 +176,48 @@ const ProjectProfileGisMaps = () => {
     return boundariesMapData;
   }, [boundariesData, showBoundaryMap, zoneOrSite, boundariesMapData]);
 
-  useEffect(() => {
-    const calculateArea = () => {
-      let totalArea = '';
+  const calculateArea = useCallback(() => {
+    let totalArea = '';
 
-      if (showSiteMap && zoneOrSite && zoneOrSite.type === 'site' && plantingSitesData) {
-        const filteredFeatures = plantingSitesData.features.filter((f) => f.properties?.site === zoneOrSite.name);
+    if (showSiteMap && zoneOrSite && zoneOrSite.type === 'site' && plantingSitesData) {
+      const filteredFeatures = plantingSitesData.features.filter((f) => f.properties?.site === zoneOrSite.name);
+      if (filteredFeatures.length > 0) {
+        const filteredPlantingSitesData = {
+          ...plantingSitesData,
+          features: filteredFeatures,
+        };
+        totalArea = MapService.calculateAreaFromGisData(
+          filteredPlantingSitesData as unknown as FeatureCollection<MultiPolygon>
+        );
+      }
+    } else if (showBoundaryMap && zoneOrSite && zoneOrSite.type === 'zone' && boundariesData) {
+      if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
+        totalArea = MapService.calculateAreaFromGisData(boundariesData as unknown as FeatureCollection<MultiPolygon>);
+      } else {
+        const filteredFeatures = boundariesData.features.filter((f) => f.properties?.boundary_name === zoneOrSite.name);
         if (filteredFeatures.length > 0) {
-          const filteredPlantingSitesData = {
-            ...plantingSitesData,
+          const filteredBoundaryData = {
+            ...boundariesData,
             features: filteredFeatures,
           };
           totalArea = MapService.calculateAreaFromGisData(
-            filteredPlantingSitesData as unknown as FeatureCollection<MultiPolygon>
+            filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
           );
-        }
-      } else if (showBoundaryMap && zoneOrSite && zoneOrSite.type === 'zone' && boundariesData) {
-        if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
-          totalArea = MapService.calculateAreaFromGisData(boundariesData as unknown as FeatureCollection<MultiPolygon>);
-        } else {
-          const filteredFeatures = boundariesData.features.filter(
-            (f) => f.properties?.boundary_name === zoneOrSite.name
-          );
-          if (filteredFeatures.length > 0) {
-            const filteredBoundaryData = {
-              ...boundariesData,
-              features: filteredFeatures,
-            };
-            totalArea = MapService.calculateAreaFromGisData(
-              filteredBoundaryData as unknown as FeatureCollection<MultiPolygon>
-            );
-          }
         }
       }
+    }
 
-      setSelectedArea(totalArea);
-    };
+    setSelectedArea(totalArea);
+  }, [boundariesData, plantingSitesData, showBoundaryMap, showSiteMap, zoneOrSite]);
 
+  useEffect(() => {
     const frameId = requestAnimationFrame(() => {
       const timeoutId = setTimeout(calculateArea, 50);
       return () => clearTimeout(timeoutId);
     });
 
     return () => cancelAnimationFrame(frameId);
-  }, [showSiteMap, showBoundaryMap, zoneOrSite, plantingSitesData, boundariesData]);
+  }, [showSiteMap, showBoundaryMap, zoneOrSite, plantingSitesData, boundariesData, calculateArea]);
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(

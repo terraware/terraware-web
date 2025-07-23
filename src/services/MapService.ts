@@ -442,7 +442,7 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, sit
   // and just use the individual feature boundaries
   if (skipUnion || features.length === 1) {
     // Use the first feature for basic properties, but combine all boundaries for rendering
-    unionedFeature = features[0];
+    unionedFeature = features[0] ?? undefined;
 
     // Combine all feature boundaries without union (much faster)
     const allBoundaries = features.map((f) => getPolygons(f.geometry)).flat();
@@ -453,7 +453,7 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, sit
     totalArea = totalAreaNum.toFixed(2);
   } else {
     // Only do expensive union when absolutely necessary
-    unionedFeature = features[0];
+    unionedFeature = features[0] ?? undefined;
     for (let i = 1; i < features.length; i++) {
       const result = union(unionedFeature, features[i]);
       if (result) {
@@ -562,23 +562,13 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
     Object.keys(groupedByStrata).forEach((strata, index) => {
       const features = groupedByStrata[strata] as Feature<MultiPolygon>[];
 
-      // Skip expensive union operations for zone rendering - use individual boundaries
-      let boundaryCoordinates: MapGeometry;
-      let totalArea: string;
+      // Combine boundaries without union (much faster)
+      const allBoundaries = features.map((f) => getPolygons(f.geometry)).flat();
+      const boundaryCoordinates = allBoundaries;
 
-      if (features.length === 1) {
-        // Single feature - use directly
-        boundaryCoordinates = getPolygons(features[0].geometry);
-        totalArea = (area(features[0]) / 10_000).toFixed(2);
-      } else {
-        // Multiple features - combine boundaries without union (much faster)
-        const allBoundaries = features.map((f) => getPolygons(f.geometry)).flat();
-        boundaryCoordinates = allBoundaries;
-
-        // Calculate total area by summing individual areas (faster than union+area)
-        const totalAreaNum = features.reduce((sum, feature) => sum + area(feature) / 10_000, 0);
-        totalArea = totalAreaNum.toFixed(2);
-      }
+      // Calculate total area by summing individual areas (faster than union+area)
+      const totalAreaNum = features.reduce((sum, feature) => sum + area(feature) / 10_000, 0);
+      const totalArea = totalAreaNum.toFixed(2);
 
       const firstFeature = groupedByStrata[strata][0];
       // Generate a unique numeric ID using a simple hash of the strata name or use index
