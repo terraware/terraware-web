@@ -19,7 +19,7 @@ import { selectGisRequest } from 'src/redux/features/gis/gisSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
-import { MapEntity, MapSourceProperties } from 'src/types/Map';
+import { MapData, MapEntity, MapSourceProperties } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
@@ -157,7 +157,9 @@ const ProjectProfileGisMaps = () => {
     }
 
     if (zoneOrSite.name === strings.ALL_PROJECT_ZONES) {
-      return boundariesMapData;
+      const boundariesMapDataToReturn = { ...boundariesMapData } as MapData;
+      boundariesMapDataToReturn.site?.entities.forEach((ent: MapEntity) => (ent.properties.name = ''));
+      return boundariesMapDataToReturn;
     }
 
     const filteredBoundaryData = {
