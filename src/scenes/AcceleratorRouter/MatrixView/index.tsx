@@ -27,13 +27,11 @@ const MatrixView = () => {
           'participant_cohort_phase',
           'variableValues.stableId',
           'variableValues.variableId',
-          'variableValues.variableValueId',
           'variableValues.variableType',
           'variableValues.textValue',
           'variableValues.numberValue',
           'variableValues.dateValue',
           'variableValues.isMultiSelect',
-          'variableValues.options.id',
           'variableValues.options.name',
           'variableValues.options.position',
         ],
@@ -51,7 +49,7 @@ const MatrixView = () => {
       Array.from(
         new Set(
           projects?.flatMap((project) => {
-            return project.variableValues?.map((variable) => variable.variableId) || [];
+            return project.variableValues?.map((variable) => variable.stableId) || [];
           }) || []
         )
       ),
