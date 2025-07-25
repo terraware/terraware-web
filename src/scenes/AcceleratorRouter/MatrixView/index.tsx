@@ -23,6 +23,8 @@ const MatrixView = () => {
         fields: [
           'id',
           'name',
+          'country_name',
+          'participant_cohort_phase',
           'variableValues.stableId',
           'variableValues.variableId',
           'variableValues.variableValueId',
@@ -60,7 +62,17 @@ const MatrixView = () => {
     const baseColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
       {
         accessorKey: 'name',
-        header: 'Project Name',
+        header: strings.PROJECT_NAME,
+        size: 200,
+      },
+      {
+        accessorKey: 'participant_cohort_phase',
+        header: strings.PHASE,
+        size: 200,
+      },
+      {
+        accessorKey: 'country_name',
+        header: strings.COUNTRY,
         size: 200,
       },
     ];

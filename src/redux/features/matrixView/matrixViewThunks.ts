@@ -6,6 +6,8 @@ import strings from 'src/strings';
 export type ProjectsWithVariablesSearchResult = {
   id: number;
   name: string;
+  country_name: string;
+  participant_cohort_phase: string;
   variableValues: {
     stableId: string;
     variableId: string;
