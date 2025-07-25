@@ -7,7 +7,10 @@ export type ProjectsWithVariablesSearchResult = {
   id: number;
   name: string;
   country_name: string;
-  participant_cohort_phase: string;
+  acceleratorDetails: {
+    confirmedReforestableLand: string;
+    projectLead: string;
+  };
   variableValues: {
     stableId: string;
     variableId: string;

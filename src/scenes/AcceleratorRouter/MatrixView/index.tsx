@@ -23,8 +23,10 @@ const MatrixView = () => {
         fields: [
           'id',
           'name',
-          'country_name',
           'participant_cohort_phase',
+          'acceleratorDetails.confirmedReforestableLand',
+          'country_name',
+          'acceleratorDetails.projectLead',
           'variableValues.stableId',
           'variableValues.variableId',
           'variableValues.variableType',
@@ -69,8 +71,18 @@ const MatrixView = () => {
         size: 200,
       },
       {
+        accessorKey: 'acceleratorDetails.confirmedReforestableLand',
+        header: strings.ELIGIBLE_LAND,
+        size: 200,
+      },
+      {
         accessorKey: 'country_name',
         header: strings.COUNTRY,
+        size: 200,
+      },
+      {
+        accessorKey: 'acceleratorDetails.projectLead',
+        header: strings.PROJECT_LEAD,
         size: 200,
       },
     ];
