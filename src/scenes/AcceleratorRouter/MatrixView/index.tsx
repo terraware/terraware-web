@@ -29,6 +29,7 @@ const MatrixView = () => {
           'acceleratorDetails.projectLead',
           'variableValues.stableId',
           'variableValues.variableId',
+          'variableValues.variableName',
           'variableValues.variableType',
           'variableValues.textValue',
           'variableValues.numberValue',
@@ -87,36 +88,47 @@ const MatrixView = () => {
       },
     ];
 
-    const variableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = uniqueVariableIds.map((variableId) => ({
-      id: variableId,
-      header: variableId,
-      size: 150,
-      accessorFn: (row) => {
-        const variableValue = row.variableValues.find((variable) => variable.variableId === variableId);
+    const variableNameMap = new Map<string, string>();
+    projects?.forEach((project) => {
+      project.variableValues?.forEach((variable) => {
+        if (!variableNameMap.has(variable.stableId)) {
+          variableNameMap.set(variable.stableId, variable.variableName);
+        }
+      });
+    });
 
-        if (!variableValue) {
+    const variableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = uniqueVariableIds.map((variableId) => {
+      return {
+        id: variableId,
+        header: variableNameMap.get(variableId) || variableId,
+        size: 150,
+        accessorFn: (row) => {
+          const variableValue = row.variableValues.find((variable) => variable.stableId === variableId);
+
+          if (!variableValue) {
+            return '';
+          }
+
+          if (variableValue.numberValue) {
+            return variableValue.numberValue;
+          }
+          if (variableValue.textValue) {
+            return variableValue.textValue;
+          }
+          if (variableValue.dateValue) {
+            return variableValue.dateValue;
+          }
+          if (variableValue.options) {
+            return variableValue.options.map((option) => option.name).join(', ');
+          }
+
           return '';
-        }
-
-        if (variableValue.numberValue) {
-          return variableValue.numberValue;
-        }
-        if (variableValue.textValue) {
-          return variableValue.textValue;
-        }
-        if (variableValue.dateValue) {
-          return variableValue.dateValue;
-        }
-        if (variableValue.options) {
-          return variableValue.options.map((option) => option.name).join(', ');
-        }
-
-        return '';
-      },
-    }));
+        },
+      };
+    });
 
     return [...baseColumns, ...variableColumns];
-  }, [uniqueVariableIds]);
+  }, [projects, uniqueVariableIds]);
 
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {

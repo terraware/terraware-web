@@ -14,6 +14,7 @@ export type ProjectsWithVariablesSearchResult = {
   variableValues: {
     stableId: string;
     variableId: string;
+    variableName: string;
     variableType: string;
     variableValueId: string;
     isMultiselect?: boolean;
