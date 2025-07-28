@@ -47,17 +47,19 @@ const MatrixView = () => {
     setRequestId(request.requestId);
   }, [dispatch]);
 
-  const uniqueVariableIds = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          projects?.flatMap((project) => {
-            return project.variableValues?.map((variable) => variable.stableId) || [];
-          }) || []
-        )
-      ),
-    [projects]
-  );
+  const variableNameMap = useMemo(() => {
+    const map = new Map<string, string>();
+    projects?.forEach((project) => {
+      project.variableValues?.forEach((variable) => {
+        if (!map.has(variable.stableId)) {
+          map.set(variable.stableId, variable.variableName);
+        }
+      });
+    });
+    return map;
+  }, [projects]);
+
+  const uniqueVariableIds = useMemo(() => Array.from(variableNameMap.keys()), [variableNameMap]);
 
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
     const baseColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
@@ -87,15 +89,6 @@ const MatrixView = () => {
         size: 200,
       },
     ];
-
-    const variableNameMap = new Map<string, string>();
-    projects?.forEach((project) => {
-      project.variableValues?.forEach((variable) => {
-        if (!variableNameMap.has(variable.stableId)) {
-          variableNameMap.set(variable.stableId, variable.variableName);
-        }
-      });
-    });
 
     const variableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = uniqueVariableIds.map((variableId) => {
       return {
@@ -128,7 +121,7 @@ const MatrixView = () => {
     });
 
     return [...baseColumns, ...variableColumns];
-  }, [projects, uniqueVariableIds]);
+  }, [uniqueVariableIds, variableNameMap]);
 
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {
