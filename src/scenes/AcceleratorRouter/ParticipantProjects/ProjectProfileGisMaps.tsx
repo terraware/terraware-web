@@ -41,6 +41,7 @@ const ProjectProfileGisMaps = () => {
   const [showSiteMap, setShowSiteMap] = useState(false);
   const [showBoundaryMap, setShowBoundaryMap] = useState(false);
   const [isProcessingSite, setIsProcessingSite] = useState(false);
+  const [processedSiteData, setProcessedSiteData] = useState<any>(null);
   const { isDesktop } = useDeviceInfo();
   const [selectedLayer, setSelectedLayer] = useState<MapLayer>();
 
@@ -103,8 +104,6 @@ const ProjectProfileGisMaps = () => {
     }
     return undefined;
   }, [plantingSitesData]);
-
-  const [processedSiteData, setProcessedSiteData] = useState<any>(null);
 
   // Process site data asynchronously
   useEffect(() => {
