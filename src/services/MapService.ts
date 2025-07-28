@@ -432,26 +432,44 @@ const getMapDataFromGisPlantingSites = (gisPlantingSiteData: FeatureCollection<M
   };
 };
 
-const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, siteIndex?: number) => {
-  let unionedFeature: Feature<Polygon | MultiPolygon> = features[0];
+const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, siteIndex?: number, skipUnion = false) => {
+  const siteName = siteId || features[0]?.properties?.site || features[0]?.properties?.boundary_name;
+  let unionedFeature: Feature<Polygon | MultiPolygon>;
+  let boundaryCoordinates: MapGeometry;
+  let totalArea: string;
 
-  for (let i = 1; i < features.length; i++) {
-    const result = union(unionedFeature, features[i]);
-    if (result) {
-      unionedFeature = result;
+  // For map rendering, we can often skip the expensive union operation
+  // and just use the individual feature boundaries
+  if (skipUnion || features.length === 1) {
+    // Use the first feature for basic properties, but combine all boundaries for rendering
+    unionedFeature = features[0] ?? undefined;
+
+    // Combine all feature boundaries without union (much faster)
+    const allBoundaries = features.map((f) => getPolygons(f.geometry)).flat();
+    boundaryCoordinates = allBoundaries;
+
+    // Calculate total area by summing individual areas (faster than union+area)
+    const totalAreaNum = features.reduce((sum, feature) => sum + area(feature) / 10_000, 0);
+    totalArea = totalAreaNum.toFixed(2);
+  } else {
+    // Only do expensive union when absolutely necessary
+    unionedFeature = features[0] ?? undefined;
+    for (let i = 1; i < features.length; i++) {
+      const result = union(unionedFeature, features[i]);
+      if (result) {
+        unionedFeature = result;
+      }
     }
+
+    const unionedBoundary = unionedFeature.geometry;
+    boundaryCoordinates = getPolygons(unionedBoundary as MultiPolygon);
+    totalArea = (area(unionedFeature) / 10_000).toFixed(2);
   }
 
-  const unionedBoundary = unionedFeature.geometry;
-  const boundaryCoordinates = getPolygons(unionedBoundary as MultiPolygon);
   const firstFeature = features[0];
 
-  const totalArea = (area(unionedFeature) / 10_000).toFixed(2);
-
   // Generate numeric ID from site name
-  const siteName = siteId || firstFeature.properties?.site;
   const siteNameForId = siteName || firstFeature.properties?.boundary_name;
-
   const numericId = siteNameForId
     ? Math.abs(siteNameForId.split('').reduce((a: number, b: string, i: number) => a + b.charCodeAt(0) * (i + 1), 0)) ||
       (siteIndex ?? 0)
@@ -470,7 +488,8 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, sit
 };
 
 const calculateAreaFromGisData = (gisPlantingSiteData: FeatureCollection<MultiPolygon>) => {
-  const processedFeatures = processFeatures(gisPlantingSiteData.features, undefined, 0);
+  // For area calculation, we can skip union and just sum individual areas (much faster)
+  const processedFeatures = processFeatures(gisPlantingSiteData.features, undefined, 0, true);
   return processedFeatures.totalArea;
 };
 
@@ -499,12 +518,14 @@ const extractPlantingSitesFromGis = (gisPlantingSiteData: FeatureCollection<Mult
   if (groupedByPlantingSite && Object.keys(groupedByPlantingSite).length > 0) {
     Object.keys(groupedByPlantingSite).forEach((site, index) => {
       const features = groupedByPlantingSite[site] as Feature<MultiPolygon>[];
-      plantingSitesData.push(processFeatures(features, site, index));
+      // Skip union for map rendering - individual boundaries work fine for display
+      plantingSitesData.push(processFeatures(features, site, index, true));
     });
   } else {
     const allFeatures = gisPlantingSiteData.features;
     if (allFeatures) {
-      plantingSitesData.push(processFeatures(allFeatures, undefined, 0));
+      // Skip union for map rendering
+      plantingSitesData.push(processFeatures(allFeatures, undefined, 0, true));
     }
   }
 
@@ -541,19 +562,13 @@ const extractZonesFromGis = (gisPlantingSiteData: FeatureCollection): MapSourceB
     Object.keys(groupedByStrata).forEach((strata, index) => {
       const features = groupedByStrata[strata] as Feature<MultiPolygon>[];
 
-      // Start with the first feature, then union with the rest
-      let unionedFeature: Feature<Polygon | MultiPolygon> = features[0];
+      // Combine boundaries without union (much faster)
+      const allBoundaries = features.map((f) => getPolygons(f.geometry)).flat();
+      const boundaryCoordinates = allBoundaries;
 
-      for (let i = 1; i < features.length; i++) {
-        const result = union(unionedFeature, features[i]);
-        if (result) {
-          unionedFeature = result;
-        }
-      }
-
-      const unionedGeometry = unionedFeature.geometry;
-      const boundaryCoordinates = getPolygons(unionedGeometry as MultiPolygon);
-      const totalArea = (area(unionedFeature) / 10_000).toFixed(2);
+      // Calculate total area by summing individual areas (faster than union+area)
+      const totalAreaNum = features.reduce((sum, feature) => sum + area(feature) / 10_000, 0);
+      const totalArea = totalAreaNum.toFixed(2);
 
       const firstFeature = groupedByStrata[strata][0];
       // Generate a unique numeric ID using a simple hash of the strata name or use index
