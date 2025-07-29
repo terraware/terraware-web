@@ -15,8 +15,11 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
+import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -42,6 +45,15 @@ const DeliverableView = () => {
   const { activeLocale } = useLocalization();
   const { currentDeliverable: deliverable } = useDeliverableData();
 
+  const variablesWithValues: VariableWithValues[] | undefined = useAppSelector((state) =>
+    deliverable?.id && deliverable?.projectId && deliverable?.type === 'Questions'
+      ? selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+      : undefined
+  );
+  const questionsAreLoading = useMemo(
+    () => deliverable?.type === 'Questions' && !variablesWithValues?.length,
+    [deliverable?.type, variablesWithValues?.length]
+  );
   useEffect(() => {
     const _source = query.get('source');
     if (_source) {
@@ -138,7 +150,7 @@ const DeliverableView = () => {
       isAllowed('UPDATE_SUBMISSION_STATUS') && (
         <>
           <Button
-            disabled={deliverable?.status === 'Rejected'}
+            disabled={!deliverable || deliverable.status === 'Rejected' || questionsAreLoading}
             id='rejectDeliverable'
             label={strings.REQUEST_UPDATE_ACTION}
             priority='secondary'
@@ -147,7 +159,7 @@ const DeliverableView = () => {
             type='destructive'
           />
           <Button
-            disabled={deliverable?.status === 'Approved'}
+            disabled={!deliverable || deliverable.status === 'Approved' || questionsAreLoading}
             id='approveDeliverable'
             label={strings.APPROVE}
             onClick={() => void setShowApproveDialog(true)}
@@ -156,7 +168,7 @@ const DeliverableView = () => {
         </>
       )
     );
-  }, [deliverable?.status, isAllowed]);
+  }, [deliverable, isAllowed, questionsAreLoading]);
 
   const optionsMenu = useMemo(
     () => (
