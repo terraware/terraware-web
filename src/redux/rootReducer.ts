@@ -17,6 +17,7 @@ import funderProjectsReducers from './features/funder/projects/funderProjectsSli
 import gisReducers from './features/gis/gisSlice';
 import globalRolesReducers from './features/globalRoles/globalRolesSlice';
 import locationReducers from './features/location/locationSlice';
+import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
 import observationsReducers from './features/observations/observationsSlice';
@@ -64,6 +65,7 @@ export const reducers = {
   ...globalRolesReducers,
   ...locationReducers,
   ...messageReducers,
+  ...matrixViewReducers,
   ...moduleReducers,
   ...observationsReducers,
   ...organizationsReducers,
