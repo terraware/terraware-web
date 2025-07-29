@@ -20,6 +20,9 @@ import { specificVariablesCompositeKeyFn, variableHistoryCompositeKeyFn } from '
 export const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>
   documentId ? state.documentProducerDocumentVariables[documentId] : undefined;
 
+export const selectAllVariables = (requestId: string) => (state: RootState) =>
+  state.documentProducerAllVariables[requestId];
+
 const getCombinedProps = (listA: any, listB: any): { status: Statuses; error: string | undefined } => {
   let status: Statuses = 'pending';
   if (listA.status === 'error' || listB.status === 'error') {
