@@ -15,8 +15,11 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
+import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -42,6 +45,15 @@ const DeliverableView = () => {
   const { activeLocale } = useLocalization();
   const { currentDeliverable: deliverable } = useDeliverableData();
 
+  const variablesWithValues: VariableWithValues[] | undefined = useAppSelector((state) =>
+    deliverable?.id && deliverable?.projectId && deliverable?.type === 'Questions'
+      ? selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+      : undefined
+  );
+  const questionsAreLoading = useMemo(
+    () => deliverable?.type === 'Questions' && !variablesWithValues?.length,
+    [deliverable?.type, variablesWithValues?.length]
+  );
   useEffect(() => {
     const _source = query.get('source');
     if (_source) {
@@ -97,6 +109,26 @@ const DeliverableView = () => {
     [setStatus]
   );
 
+  const onCloseApproveDialog = useCallback(() => {
+    setShowApproveDialog(false);
+  }, [setShowApproveDialog]);
+
+  const onShowApproveDialog = useCallback(() => {
+    setShowApproveDialog(true);
+  }, [setShowApproveDialog]);
+
+  const onCloseRejectDialog = useCallback(() => {
+    setShowRejectDialog(false);
+  }, [setShowRejectDialog]);
+
+  const onCloseDownloadModal = useCallback(() => {
+    setShowDownloadModal(false);
+  }, [setShowDownloadModal]);
+
+  const onShowRejectDialog = useCallback(() => {
+    setShowRejectDialog(true);
+  }, [setShowRejectDialog]);
+
   const speciesOptionItems = useMemo(
     (): DropdownItem[] =>
       activeLocale
@@ -138,25 +170,25 @@ const DeliverableView = () => {
       isAllowed('UPDATE_SUBMISSION_STATUS') && (
         <>
           <Button
-            disabled={deliverable?.status === 'Rejected'}
+            disabled={!deliverable || deliverable.status === 'Rejected' || questionsAreLoading}
             id='rejectDeliverable'
             label={strings.REQUEST_UPDATE_ACTION}
             priority='secondary'
-            onClick={() => void setShowRejectDialog(true)}
+            onClick={onShowRejectDialog}
             size='medium'
             type='destructive'
           />
           <Button
-            disabled={deliverable?.status === 'Approved'}
+            disabled={!deliverable || deliverable.status === 'Approved' || questionsAreLoading}
             id='approveDeliverable'
             label={strings.APPROVE}
-            onClick={() => void setShowApproveDialog(true)}
+            onClick={onShowApproveDialog}
             size='medium'
           />
         </>
       )
     );
-  }, [deliverable?.status, isAllowed]);
+  }, [deliverable, isAllowed, onShowApproveDialog, onShowRejectDialog, questionsAreLoading]);
 
   const optionsMenu = useMemo(
     () => (
@@ -208,18 +240,18 @@ const DeliverableView = () => {
       <>
         {showApproveDialog && (
           <ApproveDeliverableDialog
-            onClose={() => setShowApproveDialog(false)}
+            onClose={onCloseApproveDialog}
             onSubmit={approveDeliverable}
             deliverableType={deliverable.type}
           />
         )}
-        {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
+        {showRejectDialog && <RejectDialog onClose={onCloseRejectDialog} onSubmit={rejectDeliverable} />}
         {showDownloadModal && (
           <DownloadSpeciesSnapshotModal
             deliverableId={deliverable.id}
             projectId={deliverable.projectId}
             open={showDownloadModal}
-            onClose={() => setShowDownloadModal(false)}
+            onClose={onCloseDownloadModal}
           />
         )}
 
@@ -227,7 +259,7 @@ const DeliverableView = () => {
           {requestStatus === 'pending' && <BusySpinner />}
           <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
             <ApprovedDeliverableMessage deliverable={deliverable} />
-            <RejectedDeliverableMessage deliverable={deliverable} showRejectDialog={() => setShowRejectDialog(true)} />
+            <RejectedDeliverableMessage deliverable={deliverable} showRejectDialog={onShowRejectDialog} />
             <AcceleratorDeliverableCard deliverable={deliverable} />
           </Box>
         </Page>
