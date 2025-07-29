@@ -406,7 +406,7 @@ export default function Map(props: MapProps): JSX.Element {
         <Marker key={0} longitude={longitude} latitude={latitude} anchor='center'>
           <div
             style={{
-              background: 'rgba(255, 255, 255, 0.9)',
+              background: 'rgba(255, 255, 255, 0.6)',
               padding: '4px 8px',
               borderRadius: '4px',
               border: '1px solid #ccc',
@@ -418,7 +418,7 @@ export default function Map(props: MapProps): JSX.Element {
               backdropFilter: 'blur(2px)', // Optional: adds blur effect
             }}
           >
-            {geo.data.features?.[0]?.properties?.id}
+            {geo.data.features?.[0]?.properties?.name}
           </div>
         </Marker>
       );
