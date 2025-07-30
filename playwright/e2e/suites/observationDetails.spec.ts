@@ -168,9 +168,9 @@ export default function ObservationDetailsTests() {
         'label.textfield-label:has-text("Monitoring Plot Type") + p.textfield-value--display:has-text("Permanent")'
       )
     ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Plants")')).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Total Plants")')).toBeVisible();
     await expect(
-      page.locator('label.textfield-label:has-text("Plants") + p.textfield-value--display:has-text("85")')
+      page.locator('label.textfield-label:has-text("Total Plants") + p.textfield-value--display:has-text("85")')
     ).toBeVisible();
     await expect(page.locator('label.textfield-label:has-text("Species")')).toBeVisible();
     await expect(
