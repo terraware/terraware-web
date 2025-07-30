@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SpeciesDeliverableStatusMessage from './SpeciesDeliverableStatusMessage';
 
 const SpeciesDeliverableCard = (props: EditProps): JSX.Element => {
-  const { deliverable, setSubmitButtonDisalbed } = props;
+  const { deliverable, setSubmitButtonDisabled } = props;
   const dispatch = useAppDispatch();
 
   const ppsSearchResults = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
@@ -22,8 +22,8 @@ const SpeciesDeliverableCard = (props: EditProps): JSX.Element => {
     const disabled =
       !ppsSearchResults?.data?.length ||
       ppsSearchResults?.data?.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved');
-    setSubmitButtonDisalbed?.(disabled);
-  }, [ppsSearchResults, setSubmitButtonDisalbed]);
+    setSubmitButtonDisabled?.(disabled);
+  }, [ppsSearchResults, setSubmitButtonDisabled]);
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
