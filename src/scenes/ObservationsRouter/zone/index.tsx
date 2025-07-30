@@ -20,6 +20,7 @@ import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePl
 import strings from 'src/strings';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -31,7 +32,8 @@ const defaultColumns = (): TableColumnType[] => [
   { key: 'completedDate', name: strings.DATE, type: 'string' },
   { key: 'status', name: strings.STATUS, type: 'string' },
   { key: 'isPermanent', name: strings.MONITORING_PLOT_TYPE, type: 'string' },
-  { key: 'totalPlants', name: strings.PLANTS, type: 'number' },
+  { key: 'totalLive', name: strings.LIVE_PLANTS, type: 'number' },
+  { key: 'totalPlants', name: strings.TOTAL_PLANTS, type: 'number' },
   { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
   { key: 'plantingDensity', name: strings.PLANTING_DENSITY, type: 'number' },
   { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
@@ -134,10 +136,14 @@ export default function ObservationPlantingZone(): JSX.Element {
     }
   }, [navigate, observationId, plantingSiteId, plantingZone]);
 
-  const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string })[] = useMemo(
+  const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string; totalLive?: number })[] = useMemo(
     () =>
       plantingZone?.plantingSubzones?.flatMap((subzone) =>
-        subzone.monitoringPlots.map((plot) => ({ ...plot, subzoneName: subzone.name }))
+        subzone.monitoringPlots.map((plot) => ({
+          ...plot,
+          subzoneName: subzone.name,
+          totalLive: getObservationSpeciesLivePlantsCount(plot.species),
+        }))
       ) ?? [],
     [plantingZone]
   );
@@ -165,7 +171,7 @@ export default function ObservationPlantingZone(): JSX.Element {
         </Grid>
         <Box sx={{ marginTop: 3, maxWidth: '100%' }}>
           <Card flushMobile>
-            <Search search={search} onSearch={(value: string) => onSearch(value)} filtersProps={filtersProps} />
+            <Search search={search} onSearch={onSearch} filtersProps={filtersProps} />
             <Box marginTop={2}>
               <Table
                 id='observation-zone-table'
