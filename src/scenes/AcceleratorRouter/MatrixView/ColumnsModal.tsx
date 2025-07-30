@@ -84,7 +84,10 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
 
   // Get current pinning state from the table
   const columnPinning = table?.getState()?.columnPinning || { left: [], right: [] };
-  const pinnedColumns = [...(columnPinning.left || []), ...(columnPinning.right || [])];
+  const pinnedColumns = useMemo(
+    () => [...(columnPinning.left || []), ...(columnPinning.right || [])],
+    [columnPinning.left, columnPinning.right]
+  );
 
   // Group variables by deliverable
   const deliverableGroups = useMemo(() => {
@@ -124,135 +127,156 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
     }
   }, [deliverableGroups]);
 
-  const handleDeliverableToggle = (deliverableId: number) => {
-    const newSelected = new Set(selectedDeliverables);
-    const deliverable = deliverableGroups.find((d) => d.id === deliverableId);
+  const handleDeliverableToggle = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+      const deliverableId = parseInt(event.target.value, 10);
+      const newSelected = new Set(selectedDeliverables);
+      const deliverable = deliverableGroups.find((d) => d.id === deliverableId);
 
-    if (!deliverable) {
-      return;
-    }
+      if (!deliverable) {
+        return;
+      }
 
-    if (newSelected.has(deliverableId)) {
-      newSelected.delete(deliverableId);
-      // Remove all variables from this deliverable
-      const variableIds = deliverable.variables?.map((v) => v.stableId) || [];
-      setSelectedColumns((prev) => prev?.filter((col) => !variableIds.includes(col)));
-    } else {
-      newSelected.add(deliverableId);
-      // Add all variables from this deliverable
-      const variableIds = deliverable.variables?.map((v) => v.stableId) || [];
-      setSelectedColumns((prev) => {
-        const newVariableIds = variableIds.filter((vid) => !prev?.includes(vid));
-        return [...prev, ...newVariableIds];
-      });
-    }
+      if (checked) {
+        newSelected.add(deliverableId);
+        // Add all variables from this deliverable
+        const variableIds = deliverable.variables?.map((v) => v.stableId) || [];
+        setSelectedColumns((prev) => {
+          const currentColumns = prev || [];
+          const newVariableIds = variableIds.filter((vid) => !currentColumns.includes(vid));
+          return [...currentColumns, ...newVariableIds];
+        });
+      } else {
+        newSelected.delete(deliverableId);
+        // Remove all variables from this deliverable
+        const variableIds = deliverable.variables?.map((v) => v.stableId) || [];
+        setSelectedColumns((prev) => prev?.filter((col) => !variableIds.includes(col)) || []);
+      }
 
-    setSelectedDeliverables(newSelected);
-  };
+      setSelectedDeliverables(newSelected);
+    },
+    [deliverableGroups, selectedDeliverables]
+  );
 
-  const handleVariableToggle = (variableStableId: string) => {
+  const handleVariableToggle = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const variableStableId = event.target.value;
     setSelectedColumns((prev) => {
       const currentColumns = prev || [];
-      if (currentColumns.includes(variableStableId)) {
-        return currentColumns.filter((col) => col !== variableStableId);
+      if (checked) {
+        return currentColumns.includes(variableStableId) ? currentColumns : [...currentColumns, variableStableId];
       } else {
-        return [...currentColumns, variableStableId];
+        return currentColumns.filter((col) => col !== variableStableId);
       }
     });
-  };
+  }, []);
 
-  const removeColumn = (variableStableId: string) => {
-    setSelectedColumns((prev) => prev.filter((col) => col !== variableStableId));
+  const removeColumn = useCallback(
+    (variableStableId: string) => {
+      setSelectedColumns((prev) => prev.filter((col) => col !== variableStableId));
 
-    // Update deliverable selection if needed
-    const updatedColumns = selectedColumns.filter((col) => col !== variableStableId);
-    const newSelectedDeliverables = new Set();
+      // Update deliverable selection if needed
+      const updatedColumns = selectedColumns.filter((col) => col !== variableStableId);
+      const newSelectedDeliverables = new Set();
 
-    deliverableGroups.forEach((deliverable) => {
-      const hasVariables = deliverable.variables.some((v) => updatedColumns.includes(v.stableId));
-      if (hasVariables) {
-        newSelectedDeliverables.add(deliverable.id);
-      }
-    });
+      deliverableGroups.forEach((deliverable) => {
+        const hasVariables = deliverable.variables.some((v) => updatedColumns.includes(v.stableId));
+        if (hasVariables) {
+          newSelectedDeliverables.add(deliverable.id);
+        }
+      });
 
-    setSelectedDeliverables(newSelectedDeliverables);
-  };
+      setSelectedDeliverables(newSelectedDeliverables);
+    },
+    [deliverableGroups, selectedColumns]
+  );
 
-  const handleHideAll = () => {
+  const handleHideAll = useCallback(() => {
     setSelectedColumns([]);
     setSelectedDeliverables(new Set());
-  };
+  }, []);
 
-  const handleResetOrder = () => {
+  const handleResetOrder = useCallback(() => {
     // Reset to original order based on variable positions
     const orderedColumns = allVariables
       .filter((v) => selectedColumns?.includes(v.stableId))
       .sort((a, b) => (a.position || 0) - (b.position || 0))
       .map((v) => v.stableId);
     setSelectedColumns(orderedColumns);
-  };
+  }, [allVariables, selectedColumns]);
 
-  const handleUnpinAll = () => {
+  const handleUnpinAll = useCallback(() => {
     // Unpin all columns using Material React Table's functionality
     table?.setColumnPinning({ left: [], right: [] });
-  };
+  }, [table]);
 
-  const handlePinColumn = (columnId: string, position: 'left' | 'right' = 'left') => {
-    const currentPinning = table?.getState()?.columnPinning || { left: [], right: [] };
+  const handlePinColumn = useCallback(
+    (columnId: string, position: 'left' | 'right' = 'left') => {
+      const currentPinning = table?.getState()?.columnPinning || { left: [], right: [] };
 
-    const newPinning = {
-      left:
-        position === 'left'
-          ? [...(currentPinning.left || []), columnId].filter((id, index, arr) => arr.indexOf(id) === index)
-          : (currentPinning.left || []).filter((id) => id !== columnId),
-      right:
-        position === 'right'
-          ? [...(currentPinning.right || []), columnId].filter((id, index, arr) => arr.indexOf(id) === index)
-          : (currentPinning.right || []).filter((id) => id !== columnId),
-    };
+      const newPinning = {
+        left:
+          position === 'left'
+            ? [...(currentPinning.left || []), columnId].filter((id, index, arr) => arr.indexOf(id) === index)
+            : (currentPinning.left || []).filter((id) => id !== columnId),
+        right:
+          position === 'right'
+            ? [...(currentPinning.right || []), columnId].filter((id, index, arr) => arr.indexOf(id) === index)
+            : (currentPinning.right || []).filter((id) => id !== columnId),
+      };
 
-    table?.setColumnPinning(newPinning);
-  };
+      table?.setColumnPinning(newPinning);
+    },
+    [table]
+  );
 
-  const handleUnpinColumn = (columnId: string) => {
-    const currentPinning = table?.getState()?.columnPinning || { left: [], right: [] };
+  const handleUnpinColumn = useCallback(
+    (columnId: string) => {
+      const currentPinning = table?.getState()?.columnPinning || { left: [], right: [] };
 
-    const newPinning = {
-      left: (currentPinning.left || []).filter((id) => id !== columnId.toString()),
-      right: (currentPinning.right || []).filter((id) => id !== columnId.toString()),
-    };
+      const newPinning = {
+        left: (currentPinning.left || []).filter((id) => id !== columnId.toString()),
+        right: (currentPinning.right || []).filter((id) => id !== columnId.toString()),
+      };
 
-    table?.setColumnPinning(newPinning);
-  };
+      table?.setColumnPinning(newPinning);
+    },
+    [table]
+  );
 
-  const isColumnPinned = (columnName: string) => {
-    // Find the column by name and check if it's pinned
-    const column = table
-      ?.getVisibleFlatColumns()
-      ?.find(
-        (col) =>
-          'accessorKey' in col.columnDef &&
-          (col.columnDef?.header === columnName || col.columnDef?.accessorKey === columnName || col.id === columnName)
-      );
+  const isColumnPinned = useCallback(
+    (columnName: string) => {
+      // Find the column by name and check if it's pinned
+      const column = table
+        ?.getVisibleFlatColumns()
+        ?.find(
+          (col) =>
+            'accessorKey' in col.columnDef &&
+            (col.columnDef?.header === columnName || col.columnDef?.accessorKey === columnName || col.id === columnName)
+        );
 
-    return column ? pinnedColumns.includes(column.id) : false;
-  };
+      return column ? pinnedColumns.includes(column.id) : false;
+    },
+    [pinnedColumns, table]
+  );
 
-  const getColumnId = (columnName: string) => {
-    // Get the column ID for pinning operations
-    const column = table
-      ?.getVisibleFlatColumns()
-      ?.find(
-        (col) =>
-          col.columnDef &&
-          'accessorKey' in col.columnDef &&
-          (col.columnDef?.header === columnName || col.columnDef?.accessorKey === columnName || col.id === columnName)
-      );
+  const getColumnId = useCallback(
+    (columnName: string) => {
+      // Get the column ID for pinning operations
+      const column = table
+        ?.getVisibleFlatColumns()
+        ?.find(
+          (col) =>
+            col.columnDef &&
+            'accessorKey' in col.columnDef &&
+            (col.columnDef?.header === columnName || col.columnDef?.accessorKey === columnName || col.id === columnName)
+        );
 
-    return column?.id || columnName;
-  };
+      return column?.id || columnName;
+    },
+    [table]
+  );
 
-  const handleResetColumns = () => {
+  const handleResetColumns = useCallback(() => {
     // Reset to default selection - customize as needed
     const defaultDeliverable = deliverableGroups.find((d) => d.name.toLowerCase().includes('compliance'));
 
@@ -260,60 +284,105 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
       setSelectedDeliverables(new Set([defaultDeliverable.id]));
       setSelectedColumns(defaultDeliverable.variables.map((v) => v.stableId));
     }
-  };
+  }, [deliverableGroups]);
 
-  const moveColumn = (fromIndex: number, toIndex: number) => {
-    if (fromIndex === toIndex) {
-      return;
-    }
+  const moveColumn = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      if (fromIndex === toIndex) {
+        return;
+      }
 
-    const newColumns = [...selectedColumns];
-    const [removed] = newColumns.splice(fromIndex, 1);
-    newColumns.splice(toIndex, 0, removed);
-    setSelectedColumns(newColumns);
-  };
+      const newColumns = [...selectedColumns];
+      const [removed] = newColumns.splice(fromIndex, 1);
+      newColumns.splice(toIndex, 0, removed);
+      setSelectedColumns(newColumns);
+    },
+    [selectedColumns]
+  );
 
-  // Drag and drop handlers
-  const handleDragStart = (e: React.DragEvent, index: number) => {
+  const handleDragStart = useCallback((e: React.DragEvent<HTMLLIElement>) => {
+    const index = parseInt(e.currentTarget.dataset.index || '0', 10);
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = 'move';
+
     e.dataTransfer.setData('text/plain', index.toString());
 
     // Add some visual feedback
     if (e.currentTarget instanceof HTMLElement) {
       e.currentTarget.style.opacity = '0.5';
     }
-  };
+  }, []);
 
-  const handleDragEnd = (e: React.DragEvent) => {
+  const handleDragEnd = useCallback((e: React.DragEvent) => {
     setDraggedIndex(null);
 
     // Reset visual feedback
     if (e.currentTarget instanceof HTMLElement) {
       e.currentTarget.style.opacity = '1';
     }
-  };
+  }, []);
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-  };
+  }, []);
 
-  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
-    e.preventDefault();
-    const dragIndex = e.dataTransfer.getData('text/plain');
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLLIElement>) => {
+      e.preventDefault();
 
-    if (Number(dragIndex) !== dropIndex && draggedIndex !== null) {
-      moveColumn(Number(dragIndex), dropIndex);
-    }
+      const dropIndex = parseInt(e.currentTarget.dataset.index || '0', 10);
+      const dragIndex = e.dataTransfer.getData('text/plain');
 
-    setDraggedIndex(null);
-  };
+      if (Number(dragIndex) !== dropIndex && draggedIndex !== null) {
+        moveColumn(Number(dragIndex), dropIndex);
+      }
+
+      setDraggedIndex(null);
+    },
+    [draggedIndex, moveColumn]
+  );
 
   const onSaveHandler = useCallback(() => {
     onSave(selectedColumns);
     onClose();
   }, [onClose, onSave, selectedColumns]);
+
+  const onChangeTab = useCallback((_event: any, newValue: React.SetStateAction<number>) => {
+    setActiveTab(newValue);
+  }, []);
+
+  const onSearch = useCallback(
+    (e: { target: { value: React.SetStateAction<string> } }) => setSearchTerm(e.target.value),
+    []
+  );
+
+  const pinUnpinHandler = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      const columnName = event.currentTarget.dataset.columnName;
+      if (!columnName) {
+        return;
+      }
+      const columnId = getColumnId(columnName);
+      if (isColumnPinned(columnName)) {
+        handleUnpinColumn(columnId);
+      } else {
+        handlePinColumn(columnId, 'left');
+      }
+    },
+    [getColumnId, handlePinColumn, handleUnpinColumn, isColumnPinned]
+  );
+
+  const removeColumnHandler = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      const variableStableId = event.currentTarget.dataset.variableStableId;
+      if (!variableStableId) {
+        return;
+      }
+      removeColumn(variableStableId);
+    },
+    [removeColumn]
+  );
 
   return (
     <DialogBox
@@ -327,7 +396,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
           id='cancel'
           label={strings.CANCEL}
           type='passive'
-          onClick={() => onClose()}
+          onClick={onClose}
           priority='secondary'
           key='button-1'
         />,
@@ -344,9 +413,9 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
           justifyContent: 'space-between',
         }}
       >
-        <Tabs value={activeTab} onChange={(_event, newValue) => setActiveTab(newValue)}>
-          <Tab label='Variables' />
-          <Tab label='Deliverables' />
+        <Tabs value={activeTab} onChange={onChangeTab}>
+          <Tab label={strings.VARIABLES} />
+          <Tab label={strings.DELIVERABLES} />
         </Tabs>
 
         <Box
@@ -357,10 +426,10 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
             padding: theme.spacing(1, 3, 1, 3),
           }}
         >
-          <Button size='small' priority='ghost' onClick={handleHideAll} label='Hide All' />
-          <Button size='small' priority='ghost' onClick={handleResetOrder} label='Reset Order' />
-          <Button size='small' priority='ghost' onClick={handleUnpinAll} label='Unpin All' />
-          <Button size='small' priority='ghost' onClick={handleResetColumns} label='Reset Columns' />
+          <Button size='small' priority='ghost' onClick={handleHideAll} label={strings.HIDE_ALL} />
+          <Button size='small' priority='ghost' onClick={handleResetOrder} label={strings.RESET_ORDER} />
+          <Button size='small' priority='ghost' onClick={handleUnpinAll} label={strings.UNPIN_ALL} />
+          <Button size='small' priority='ghost' onClick={handleResetColumns} label={strings.RESET_COLUMNS} />
         </Box>
       </Box>
       <Box sx={{ display: 'flex', height: '100%' }}>
@@ -378,14 +447,14 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
             // Variables Tab
             <>
               <Typography variant='subtitle1' gutterBottom>
-                Variables ({filteredVariables.length})
+                {strings.VARIABLES} ({filteredVariables.length})
               </Typography>
 
               <TextField
                 size='small'
                 placeholder='Search Variables'
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={onSearch}
                 sx={{ mb: 2, width: '100%' }}
                 InputProps={{
                   startAdornment: (
@@ -411,7 +480,8 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                       control={
                         <Checkbox
                           checked={selectedColumns.includes(variable.stableId)}
-                          onChange={() => handleVariableToggle(variable.stableId)}
+                          onChange={handleVariableToggle}
+                          value={variable.stableId}
                           size='small'
                         />
                       }
@@ -447,15 +517,16 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                       control={
                         <Checkbox
                           checked={selectedDeliverables.has(deliverable.id)}
-                          onChange={() => handleDeliverableToggle(deliverable.id)}
+                          onChange={handleDeliverableToggle}
                           size='small'
+                          value={deliverable.id}
                         />
                       }
                       label={
                         <Box>
                           <Typography variant='body2'>{deliverable.name}</Typography>
                           <Typography variant='caption' color='text.secondary'>
-                            ({deliverable.variables.length} variables)
+                            ({deliverable.variables.length} {strings.VARIABLES})
                           </Typography>
                         </Box>
                       }
@@ -471,7 +542,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
         {/* Right Panel - Selected Columns */}
         <Box sx={{ width: '50%', p: 3, overflowY: 'auto' }}>
           <Typography variant='subtitle1' gutterBottom>
-            Selected Columns ({selectedColumns.length})
+            {strings.SELECTED_COLUMNS} ({selectedColumns.length})
           </Typography>
 
           {selectedColumns.length === 0 ? (
@@ -484,7 +555,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
               }}
             >
               <Typography variant='body2' color='text.secondary'>
-                No columns selected
+                {strings.NO_COLUMNS_SELECTED}
               </Typography>
             </Box>
           ) : (
@@ -495,10 +566,11 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                   <ListItem
                     key={columnName}
                     draggable
-                    onDragStart={(e) => handleDragStart(e, index)}
+                    onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                     onDragOver={handleDragOver}
-                    onDrop={(e) => handleDrop(e, index)}
+                    onDrop={handleDrop}
+                    data-index={index}
                     sx={{
                       px: 1.5,
                       py: 1,
@@ -529,18 +601,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
 
                     {/* Pin/Unpin Button */}
                     <Tooltip title={isColumnPinned(columnName) ? 'Unpin column' : 'Pin to left'}>
-                      <IconButton
-                        size='small'
-                        onClick={() => {
-                          const columnId = getColumnId(columnName);
-                          if (isColumnPinned(columnName)) {
-                            handleUnpinColumn(columnId);
-                          } else {
-                            handlePinColumn(columnId, 'left');
-                          }
-                        }}
-                        sx={{ ml: 0.5 }}
-                      >
+                      <IconButton size='small' onClick={pinUnpinHandler} sx={{ ml: 0.5 }} data-column-name={columnName}>
                         {isColumnPinned(columnName) ? (
                           <PinIcon sx={{ fontSize: 14, color: 'primary.main' }} />
                         ) : (
@@ -550,8 +611,13 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                     </Tooltip>
 
                     {/* Remove Button */}
-                    <Tooltip title='Remove column'>
-                      <IconButton size='small' onClick={() => removeColumn(variableStableId)} sx={{ ml: 0.5 }}>
+                    <Tooltip title={strings.REMOVE_COLUMN}>
+                      <IconButton
+                        size='small'
+                        onClick={removeColumnHandler}
+                        sx={{ ml: 0.5 }}
+                        data-variable-stable-id={variableStableId}
+                      >
                         <CloseIcon sx={{ fontSize: 14 }} />
                       </IconButton>
                     </Tooltip>

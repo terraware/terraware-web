@@ -163,7 +163,6 @@ const MatrixView = () => {
     });
 
     return [...baseColumns, ...variableColumns];
-    // return baseColumns;
   }, [projects, uniqueVariableIds]);
 
   useEffect(() => {
