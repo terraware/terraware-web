@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -25,6 +25,7 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
 import strings from 'src/strings';
 import { getShortTime } from 'src/utils/dateFormatter';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -53,6 +54,10 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>([]);
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
+
+  const onOptionItemClick = useCallback(() => setShowMatchSpeciesModal(true), []);
+
+  const onCloseMatchSpeciesModal = useCallback(() => setShowMatchSpeciesModal(false), []);
 
   const monitoringPlot = useMemo(() => {
     const speciesToUse = observation?.adHocPlot?.species.map((sp) => {
@@ -88,7 +93,11 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       },
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
       { label: strings.PLOT_SELECTION, value: strings.AD_HOC },
-      { label: strings.PLANTS, value: handleMissingData(monitoringPlot?.totalPlants) },
+      {
+        label: strings.LIVE_PLANTS,
+        value: handleMissingData(getObservationSpeciesLivePlantsCount(monitoringPlot?.species)),
+      },
+      { label: strings.TOTAL_PLANTS, value: handleMissingData(monitoringPlot?.totalPlants) },
       { label: strings.SPECIES, value: handleMissingData(monitoringPlot?.totalSpecies) },
       { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlot?.plantingDensity) },
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos?.length) },
@@ -150,7 +159,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       observationId={Number(observationId)}
       rightComponent={
         <OptionsMenu
-          onOptionItemClick={() => setShowMatchSpeciesModal(true)}
+          onOptionItemClick={onOptionItemClick}
           optionItems={[
             {
               label: strings.MATCH_UNRECOGNIZED_SPECIES,
@@ -170,7 +179,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       )}
       {showMatchSpeciesModal && (
         <MatchSpeciesModal
-          onClose={() => setShowMatchSpeciesModal(false)}
+          onClose={onCloseMatchSpeciesModal}
           onSave={onSaveMergedSpecies}
           unrecognizedSpecies={unrecognizedSpecies || []}
         />

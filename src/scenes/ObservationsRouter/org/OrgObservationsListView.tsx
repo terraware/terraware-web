@@ -53,8 +53,13 @@ const defaultColumns = (): TableColumnType[] => [
     type: 'string',
   },
   {
+    key: 'totalLive',
+    name: strings.LIVE_PLANTS,
+    type: 'number',
+  },
+  {
     key: 'totalPlants',
-    name: strings.PLANTS,
+    name: strings.TOTAL_PLANTS,
     type: 'number',
   },
   {
@@ -168,8 +173,13 @@ export default function OrgObservationsListView({
         type: 'string',
       },
       {
+        key: 'totalLive',
+        name: strings.LIVE_PLANTS,
+        type: 'number',
+      },
+      {
         key: 'totalPlants',
-        name: strings.PLANTS,
+        name: strings.TOTAL_PLANTS,
         type: 'number',
       },
       {
@@ -256,18 +266,18 @@ export default function OrgObservationsListView({
     setSelectedObservation(observation);
   };
 
-  const onCloseModal = () => {
+  const onCloseModal = useCallback(() => {
     setEndObservationModalOpened(false);
     setSelectedObservation(undefined);
-  };
+  }, [setEndObservationModalOpened, setSelectedObservation]);
 
-  const onEndObservation = () => {
+  const onEndObservation = useCallback(() => {
     if (selectedObservation) {
       const request = dispatch(requestAbandonObservation({ observationId: selectedObservation.observationId }));
       setRequestId(request.requestId);
       setEndObservationModalOpened(false);
     }
-  };
+  }, [dispatch, selectedObservation, setEndObservationModalOpened, setRequestId]);
 
   return (
     <Box>

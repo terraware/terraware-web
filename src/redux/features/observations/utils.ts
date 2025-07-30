@@ -17,6 +17,7 @@ import {
 } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
 import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { regexMatch } from 'src/utils/search';
 
 // utils
@@ -131,6 +132,7 @@ export const mergeObservations = (
       const timeZone = site.timeZone ?? defaultTimeZone;
 
       const mergedZones = mergeZones(observation.plantingZones, species, timeZone);
+      const mergedSpecies = mergeSpecies(observation.species, species);
 
       return {
         ...observation,
@@ -139,8 +141,9 @@ export const mergeObservations = (
         completedDate: observation.completedTime ? getDateDisplayValue(observation.completedTime, site.timeZone) : '',
         startDate: getDateDisplayValue(observation.startDate, site.timeZone),
         plantingZones: mergedZones,
-        species: mergeSpecies(observation.species, species),
+        species: mergedSpecies,
         timeZone,
+        totalLive: getObservationSpeciesLivePlantsCount(observation.species),
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
         hasObservedPermanentPlots: mergedZones.some((zone) => zone.hasObservedPermanentPlots),
         hasObservedTemporaryPlots: mergedZones.some((zone) => zone.hasObservedTemporaryPlots),

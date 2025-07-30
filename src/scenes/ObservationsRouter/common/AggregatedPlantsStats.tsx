@@ -7,6 +7,7 @@ import Card from 'src/components/common/Card';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { ObservationSpeciesResults } from 'src/types/Observations';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import SpeciesMortalityRateChart from './SpeciesMortalityRateChart';
@@ -24,7 +25,6 @@ export type AggregatedPlantsStatsProps = {
 
 export default function AggregatedPlantsStats({
   completedTime,
-  totalPlants,
   totalSpecies,
   plantingDensity,
   mortalityRate,
@@ -35,10 +35,12 @@ export default function AggregatedPlantsStats({
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
 
+  const livePlants = getObservationSpeciesLivePlantsCount(species);
+
   const handleMissingData = (num?: number) => (!completedTime && !num ? '' : num);
 
   const getData = () => [
-    { label: strings.PLANTS, value: handleMissingData(totalPlants) },
+    { label: strings.LIVE_PLANTS, value: handleMissingData(livePlants) },
     { label: strings.SPECIES, value: handleMissingData(totalSpecies) },
     {
       label: strings.PLANTING_DENSITY,

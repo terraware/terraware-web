@@ -25,6 +25,7 @@ import {
   ObservationSpeciesResults,
 } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -147,7 +148,11 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
             : strings.TEMPORARY
           : undefined,
       },
-      { label: strings.PLANTS, value: handleMissingData(monitoringPlotResult?.totalPlants) },
+      {
+        label: strings.LIVE_PLANTS,
+        value: handleMissingData(getObservationSpeciesLivePlantsCount(monitoringPlotResult?.species)),
+      },
+      { label: strings.TOTAL_PLANTS, value: handleMissingData(monitoringPlotResult?.totalPlants) },
       { label: strings.SPECIES, value: handleMissingData(monitoringPlotResult?.totalSpecies) },
       { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlotResult?.plantingDensity) },
       ...(monitoringPlotResult?.isPermanent
