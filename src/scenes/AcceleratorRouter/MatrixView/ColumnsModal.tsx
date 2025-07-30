@@ -20,6 +20,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 import { MRT_TableInstance } from 'material-react-table';
@@ -53,6 +54,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   const deliverablesResult = useAppSelector(selectDeliverablesSearchRequest(requestId));
   const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>();
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const request = dispatch(
@@ -332,7 +334,16 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
         <Button id='save' onClick={onSaveHandler} label={strings.APPLY} key='button-2' />,
       ]}
     >
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 3 }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: 'divider',
+          px: 3,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <Tabs value={activeTab} onChange={(_event, newValue) => setActiveTab(newValue)}>
           <Tab label='Variables' />
           <Tab label='Deliverables' />
@@ -343,16 +354,13 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
             display: 'flex',
             justifyContent: 'flex-end',
             gap: 2,
-            px: 3,
-            py: 1,
-            borderBottom: 1,
-            borderColor: 'divider',
+            padding: theme.spacing(1, 3, 1, 3),
           }}
         >
-          <Button size='small' onClick={handleHideAll} label='Hide All' />
-          <Button size='small' onClick={handleResetOrder} label='Reset Order' />
-          <Button size='small' onClick={handleUnpinAll} label='Unpin All' />
-          <Button size='small' onClick={handleResetColumns} label='Reset Columns' />
+          <Button size='small' priority='ghost' onClick={handleHideAll} label='Hide All' />
+          <Button size='small' priority='ghost' onClick={handleResetOrder} label='Reset Order' />
+          <Button size='small' priority='ghost' onClick={handleUnpinAll} label='Unpin All' />
+          <Button size='small' priority='ghost' onClick={handleResetColumns} label='Reset Columns' />
         </Box>
       </Box>
       <Box sx={{ display: 'flex', height: '100%' }}>
