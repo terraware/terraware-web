@@ -45,15 +45,15 @@ const DeliverableView = () => {
   const { activeLocale } = useLocalization();
   const { currentDeliverable: deliverable } = useDeliverableData();
 
-  const variablesWithValues: VariableWithValues[] | undefined = useAppSelector((state) =>
-    deliverable?.id && deliverable?.projectId && deliverable?.type === 'Questions'
-      ? selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
-      : undefined
+  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
+    selectDeliverableVariablesWithValues(state, deliverable?.id || -1, deliverable?.projectId)
   );
+
   const questionsAreLoading = useMemo(
-    () => deliverable?.type === 'Questions' && !variablesWithValues?.length,
-    [deliverable?.type, variablesWithValues?.length]
+    () => deliverable?.type === 'Questions' && !variablesWithValues.length,
+    [deliverable?.type, variablesWithValues.length]
   );
+
   useEffect(() => {
     const _source = query.get('source');
     if (_source) {
