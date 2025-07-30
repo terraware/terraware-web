@@ -5,6 +5,9 @@ import { Icon } from '@terraware/web-components';
 import {
   MRT_ColumnDef,
   MRT_ToggleDensePaddingButton,
+  MRT_ToggleFiltersButton,
+  MRT_ToggleFullScreenButton,
+  MRT_ToggleGlobalFilterButton,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -181,7 +184,8 @@ const MatrixView = () => {
     },
     renderToolbarInternalActions: ({ table }) => (
       <Box>
-        {/* add custom button to print table  */}
+        <MRT_ToggleGlobalFilterButton table={table} />
+        <MRT_ToggleFiltersButton table={table} />
         <IconButton
           onClick={() => {
             setShowColumnsModal(true);
@@ -189,8 +193,8 @@ const MatrixView = () => {
         >
           <Icon name='iconColumns' />
         </IconButton>
-        {/* along-side built-in buttons in whatever order you want them */}
         <MRT_ToggleDensePaddingButton table={table} />
+        <MRT_ToggleFullScreenButton table={table} />
       </Box>
     ),
   });
@@ -221,6 +225,7 @@ const MatrixView = () => {
         ...prev,
         ...columnVisibility,
       }));
+      dataForMaterialReactTable.setColumnOrder(columns);
     },
     [dataForMaterialReactTable]
   );

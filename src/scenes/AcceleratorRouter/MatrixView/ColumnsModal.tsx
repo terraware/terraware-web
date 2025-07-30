@@ -333,7 +333,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
       ]}
     >
       <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 3 }}>
-        <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
+        <Tabs value={activeTab} onChange={(_event, newValue) => setActiveTab(newValue)}>
           <Tab label='Variables' />
           <Tab label='Deliverables' />
         </Tabs>
