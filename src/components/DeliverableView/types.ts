@@ -6,7 +6,7 @@ export type ViewProps = {
   deliverable: DeliverableWithOverdue;
   hideId?: boolean;
   hideStatusBadge?: boolean;
-  setSubmitButtonDisalbed?: (disabled: boolean) => void;
+  setSubmitButtonDisabled?: (disabled: boolean) => void;
 };
 
 export type EditProps = ViewProps & {

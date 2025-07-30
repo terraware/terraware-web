@@ -31,13 +31,18 @@ const DeliverableView = (): JSX.Element => {
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
   const { status: requestStatus, submit } = useSubmitDeliverable();
 
-  const [submitButtonDisabled, setSubmitButtonDisalbed] = useState<boolean>(false);
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState<boolean>(false);
   const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable?.id || -1, deliverable?.projectId)
+  );
+
+  const questionsAreLoading = useMemo(
+    () => deliverable?.type === 'Questions' && !variablesWithValues.length,
+    [deliverable?.type, variablesWithValues.length]
   );
 
   useEffect(() => {
@@ -59,6 +64,30 @@ const DeliverableView = (): JSX.Element => {
     setShowSubmitDialog(false);
   }, [deliverable, variablesWithValues, snackbar, submit]);
 
+  const closeSubmitDialog = useCallback(() => {
+    setShowSubmitDialog(false);
+  }, [setShowSubmitDialog]);
+
+  const openSubmitDialog = useCallback(() => {
+    setShowSubmitDialog(true);
+  }, [setShowSubmitDialog]);
+
+  const onClickEdit = useCallback(() => {
+    if (!deliverable) {
+      return;
+    }
+
+    const firstVisibleQuestion = document.querySelector('.question-visible');
+    const variableId = firstVisibleQuestion?.getAttribute('data-variable-id');
+    const scrolledBeyondViewport = window.scrollY > window.innerHeight;
+
+    goToDeliverableEdit(
+      deliverable.id,
+      deliverable.projectId,
+      scrolledBeyondViewport && variableId ? Number(variableId) : undefined
+    );
+  }, [deliverable, goToDeliverableEdit]);
+
   const crumbs: Crumb[] = useMemo(
     () => [
       {
@@ -78,36 +107,27 @@ const DeliverableView = (): JSX.Element => {
       <Box display='flex' justifyContent='right'>
         {deliverable.type === 'Questions' && (
           <Button
+            disabled={!deliverable || questionsAreLoading}
             id='edit-deliverable'
             icon='iconEdit'
             label={strings.EDIT}
-            onClick={() => {
-              const firstVisibleQuestion = document.querySelector('.question-visible');
-              const variableId = firstVisibleQuestion?.getAttribute('data-variable-id');
-              const scrolledBeyondViewport = window.scrollY > window.innerHeight;
-
-              goToDeliverableEdit(
-                deliverable.id,
-                deliverable.projectId,
-                scrolledBeyondViewport && variableId ? Number(variableId) : undefined
-              );
-            }}
+            onClick={onClickEdit}
             size='medium'
             priority='secondary'
           />
         )}
         {(deliverable.type === 'Questions' || deliverable.type === 'Species') && (
           <Button
-            disabled={submitButtonDisabled}
+            disabled={submitButtonDisabled || !deliverable || questionsAreLoading}
             label={strings.SUBMIT_FOR_APPROVAL}
-            onClick={() => setShowSubmitDialog(true)}
+            onClick={openSubmitDialog}
             size='medium'
             id='submit-deliverable'
           />
         )}
       </Box>
     );
-  }, [activeLocale, deliverable, submitButtonDisabled, goToDeliverableEdit]);
+  }, [activeLocale, deliverable, onClickEdit, openSubmitDialog, questionsAreLoading, submitButtonDisabled]);
 
   const isLoading = useMemo(() => {
     return requestStatus === 'pending';
@@ -136,13 +156,13 @@ const DeliverableView = (): JSX.Element => {
     <>
       {deliverable && showSubmitDialog && (
         <SubmitDeliverableDialog
-          onClose={() => setShowSubmitDialog(false)}
+          onClose={closeSubmitDialog}
           onSubmit={submitDeliverable}
           submitMessage={submitMessage}
         />
       )}
       <DeliverablePage deliverable={deliverable} crumbs={crumbs} rightComponent={actionMenu} isLoading={isLoading}>
-        <DeliverableViewCard deliverable={deliverable} setSubmitButtonDisalbed={setSubmitButtonDisalbed} />
+        <DeliverableViewCard deliverable={deliverable} setSubmitButtonDisabled={setSubmitButtonDisabled} />
       </DeliverablePage>
     </>
   );
