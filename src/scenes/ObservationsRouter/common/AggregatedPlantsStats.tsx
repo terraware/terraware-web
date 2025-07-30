@@ -5,7 +5,7 @@ import { IconTooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers/hooks';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -31,6 +31,7 @@ export default function AggregatedPlantsStats({
   species,
   hasObservedPermanentPlots,
 }: AggregatedPlantsStatsProps): JSX.Element {
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
@@ -40,12 +41,12 @@ export default function AggregatedPlantsStats({
   const handleMissingData = (num?: number) => (!completedTime && !num ? '' : num);
 
   const getData = () => [
-    { label: strings.LIVE_PLANTS, value: handleMissingData(livePlants) },
+    { label: strings.LIVE_PLANTS, tooltip: strings.TOOLTIP_LIVE_PLANTS, value: handleMissingData(livePlants) },
     { label: strings.SPECIES, value: handleMissingData(totalSpecies) },
     {
       label: strings.PLANTING_DENSITY,
+      tooltip: strings.PLANTING_DENSITY_MISSING_TOOLTIP,
       value: plantingDensity,
-      toolTip: strings.PLANTING_DENSITY_MISSING_TOOLTIP,
     },
     { label: strings.MORTALITY_RATE, value: hasObservedPermanentPlots ? handleMissingData(mortalityRate) : '' },
   ];
@@ -59,7 +60,7 @@ export default function AggregatedPlantsStats({
               isEditable={false}
               title={data.label}
               contents={data.value?.toString() ?? null}
-              titleInfoTooltip={data.toolTip}
+              titleInfoTooltip={data.tooltip}
             />
           </Grid>
         ))}
