@@ -99,7 +99,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       },
       { label: strings.TOTAL_PLANTS, value: handleMissingData(monitoringPlot?.totalPlants) },
       { label: strings.SPECIES, value: handleMissingData(monitoringPlot?.totalSpecies) },
-      { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlot?.plantingDensity) },
+      { label: strings.PLANT_DENSITY, value: handleMissingData(monitoringPlot?.plantingDensity) },
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos?.length) },
       {
         label: strings.PLOT_CONDITIONS,

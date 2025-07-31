@@ -27,7 +27,7 @@ const columns = (): TableColumnType[] => [
   { key: 'totalLive', name: strings.LIVE_PLANTS, type: 'number' },
   { key: 'totalPlants', name: strings.TOTAL_PLANTS, type: 'number' },
   { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
-  { key: 'plantingDensity', name: strings.PLANTING_DENSITY, type: 'number' },
+  { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
   { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
 ];
 

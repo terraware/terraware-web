@@ -154,7 +154,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       },
       { label: strings.TOTAL_PLANTS, value: handleMissingData(monitoringPlotResult?.totalPlants) },
       { label: strings.SPECIES, value: handleMissingData(monitoringPlotResult?.totalSpecies) },
-      { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlotResult?.plantingDensity) },
+      { label: strings.PLANT_DENSITY, value: handleMissingData(monitoringPlotResult?.plantingDensity) },
       ...(monitoringPlotResult?.isPermanent
         ? [{ label: strings.MORTALITY_RATE, value: handleMissingData(monitoringPlotResult?.mortalityRate) }]
         : []),
