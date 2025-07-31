@@ -84,7 +84,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
               ) : (
                 <>
                   <Typography fontSize='16px' fontWeight={400}>
-                    {`${strings.PLANTING_DENSITY}: ${plantingDensity ? `${plantingDensity} ${strings.PLANTS_PER_HECTARE}` : strings.UNKNOWN} `}
+                    {`${strings.PLANT_DENSITY}: ${plantingDensity ? `${plantingDensity} ${strings.PLANTS_PER_HECTARE}` : strings.UNKNOWN} `}
                   </Typography>
                   <Typography fontSize='16px' fontWeight={400}>
                     {`${strings.MORTALITY_RATE}: ${percentMortality ? `${percentMortality} %` : strings.UNKNOWN} `}

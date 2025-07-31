@@ -44,8 +44,8 @@ export default function AggregatedPlantsStats({
     { label: strings.LIVE_PLANTS, tooltip: strings.TOOLTIP_LIVE_PLANTS, value: handleMissingData(livePlants) },
     { label: strings.SPECIES, value: handleMissingData(totalSpecies) },
     {
-      label: strings.PLANTING_DENSITY,
-      tooltip: strings.PLANTING_DENSITY_MISSING_TOOLTIP,
+      label: strings.PLANT_DENSITY,
+      tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP,
       value: plantingDensity,
     },
     { label: strings.MORTALITY_RATE, value: hasObservedPermanentPlots ? handleMissingData(mortalityRate) : '' },

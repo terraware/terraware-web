@@ -143,7 +143,7 @@ export default function ParticipantPlantsDashboardTests() {
     await expect(page.locator('#plantsPerHaChart')).toBeVisible();
     await expect(page.getByText('Mortality Rate').first()).toBeVisible();
     await expect(page.locator('#mortalityChart')).toBeVisible();
-    await expect(page.getByText('Planting Density', { exact: true })).toBeVisible();
+    await expect(page.getByText('Plant Density', { exact: true })).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').first()).toBeVisible();
     await expect(
       page

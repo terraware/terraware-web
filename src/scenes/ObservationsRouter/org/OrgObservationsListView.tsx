@@ -69,7 +69,7 @@ const defaultColumns = (): TableColumnType[] => [
   },
   {
     key: 'plantingDensity',
-    name: strings.PLANTING_DENSITY,
+    name: strings.PLANT_DENSITY,
     type: 'number',
   },
   {

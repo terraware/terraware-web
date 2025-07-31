@@ -97,7 +97,7 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
     },
     {
       key: 'plantingDensity',
-      displayLabel: strings.PLANTING_DENSITY,
+      displayLabel: strings.PLANT_DENSITY,
     },
     {
       key: 'mortalityRate',
