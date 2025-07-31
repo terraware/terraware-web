@@ -11,17 +11,21 @@ export type ProjectsWithVariablesSearchResult = {
     confirmedReforestableLand: string;
     projectLead: string;
   };
-  variableValues: {
+  variables: {
     stableId: string;
     variableId: string;
     variableName: string;
     variableType: string;
-    variableValueId: string;
+    isList?: boolean;
     isMultiselect?: boolean;
-    options?: { id: string; name: string; position: string }[];
-    numberValue?: string;
-    textValue?: string;
-    dateValue?: string;
+    variableValues?: {
+      variableValueId: string;
+      options?: { id: string; name: string; position: string }[];
+      numberValue?: string;
+      textValue?: string;
+      dateValue?: string;
+      linkUrl?: string;
+    }[];
   }[];
 };
 
