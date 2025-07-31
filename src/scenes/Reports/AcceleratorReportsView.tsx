@@ -29,8 +29,10 @@ const AcceleratorReportsView = () => {
   useEffect(() => {
     if (projectFilter.projectId) {
       setCurrentParticipantProject(projectFilter.projectId);
+    } else if (allParticipantProjects.length === 1) {
+      setCurrentParticipantProject(allParticipantProjects[0].id);
     }
-  }, [projectFilter.projectId, setCurrentParticipantProject]);
+  }, [allParticipantProjects, projectFilter.projectId, setCurrentParticipantProject]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
