@@ -277,6 +277,7 @@ export const mergeAdHocObservations = (
         plantingZones: mergedZones,
         plotName: observation?.adHocPlot?.monitoringPlotName,
         plotNumber: observation?.adHocPlot?.monitoringPlotNumber,
+        totalLive: getObservationSpeciesLivePlantsCount(observation.adHocPlot?.species),
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
       };
     });
