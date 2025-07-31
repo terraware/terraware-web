@@ -33,11 +33,11 @@ const MatrixView = () => {
           'variables.variableType',
           'variables.isList',
           'variables.isMultiSelect',
-          'variables.variableValues.textValue',
-          'variables.variableValues.numberValue',
-          'variables.variableValues.dateValue',
-          'variables.variableValues.options.name',
-          'variables.variableValues.options.position',
+          'variables.values.textValue',
+          'variables.values.numberValue',
+          'variables.values.dateValue',
+          'variables.values.options.name',
+          'variables.values.options.position',
         ],
         sortOrder: {
           field: 'name',
@@ -98,7 +98,7 @@ const MatrixView = () => {
         size: 150,
         accessorFn: (row) => {
           const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
-          const variableValue = variable?.variableValues?.[0];
+          const variableValue = variable?.values?.[0];
 
           if (!variableValue || variable?.isList) {
             return '';

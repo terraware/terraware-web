@@ -18,7 +18,7 @@ export type ProjectsWithVariablesSearchResult = {
     variableType: string;
     isList?: boolean;
     isMultiselect?: boolean;
-    variableValues?: {
+    values?: {
       variableValueId: string;
       options?: { id: string; name: string; position: string }[];
       numberValue?: string;
