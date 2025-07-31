@@ -16,11 +16,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 const AcceleratorReportsView = () => {
   const { activeLocale } = useLocalization();
-  const {
-    currentParticipantProject,
-    projectsWithModules: moduleProjects,
-    setCurrentParticipantProject,
-  } = useParticipantData();
+  const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
@@ -69,29 +65,29 @@ const AcceleratorReportsView = () => {
             <Grid item>
               <Separator height={'40px'} />
             </Grid>
-            {moduleProjects?.length > 0 && (
+            {allParticipantProjects?.length > 0 && (
               <Grid item>
-                {moduleProjects?.length > 1 ? (
+                {allParticipantProjects?.length > 1 ? (
                   <Box display='flex'>
                     <Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}>
                       {strings.PROJECT}
                     </Typography>
                     <ProjectsDropdown
-                      availableProjects={moduleProjects}
+                      availableProjects={allParticipantProjects}
                       label=''
                       record={projectFilter}
                       setRecord={setProjectFilter}
                     />
                   </Box>
                 ) : (
-                  <Typography>{moduleProjects[0].name}</Typography>
+                  <Typography>{allParticipantProjects[0].name}</Typography>
                 )}
               </Grid>
             )}
           </Grid>
         </>
       ) : undefined,
-    [activeLocale, moduleProjects, projectFilter]
+    [activeLocale, allParticipantProjects, projectFilter]
   );
 
   return (
