@@ -38,6 +38,7 @@ export default function BiomassMeasurementList({ adHocObservationResults }: Biom
     {
       key: 'totalPlants',
       name: strings.TOTAL_PLANTS,
+      tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
       type: 'number',
     },
     {
