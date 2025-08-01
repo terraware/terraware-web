@@ -1,8 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { Box, IconButton } from '@mui/material';
+import { Icon } from '@terraware/web-components';
+import {
+  MRT_ColumnDef,
+  MRT_ToggleDensePaddingButton,
+  MRT_ToggleFiltersButton,
+  MRT_ToggleFullScreenButton,
+  MRT_ToggleGlobalFilterButton,
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
 
 import Page from 'src/components/Page';
+import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestListAllVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { selectProjectsWithVariables } from 'src/redux/features/matrixView/matrixViewSelectors';
 import {
   ProjectsWithVariablesSearchResult,
@@ -10,12 +22,30 @@ import {
 } from 'src/redux/features/matrixView/matrixViewThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { VariableUnion } from 'src/types/documentProducer/Variable';
+
+import ColumnsModal from './ColumnsModal';
 
 const MatrixView = () => {
   const [requestId, setRequestId] = useState<string>('');
+  const [requestVarsId, setRequestVarsId] = useState<string>('');
   const result = useAppSelector(selectProjectsWithVariables(requestId));
+  const allVariablesResponse = useAppSelector(selectAllVariables(requestVarsId));
   const [projects, setProjects] = useState<ProjectsWithVariablesSearchResult[]>([]);
+  const [showColumnsModal, setShowColumnsModal] = useState(false);
+  const [allVariables, setAllVariables] = useState<VariableUnion[]>();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (allVariablesResponse?.status === 'success') {
+      setAllVariables(allVariablesResponse.data);
+    }
+  }, [allVariablesResponse]);
+
+  useEffect(() => {
+    const request = dispatch(requestListAllVariables());
+    setRequestVarsId(request.requestId);
+  }, [dispatch]);
 
   useEffect(() => {
     const request = dispatch(
@@ -48,6 +78,18 @@ const MatrixView = () => {
     setRequestId(request.requestId);
   }, [dispatch]);
 
+  const uniqueVariableIds = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          allVariables?.flatMap((variable) => {
+            return variable.stableId ?? variable.name;
+          }) || []
+        )
+      ),
+    [allVariables]
+  );
+
   const variableNameMap = useMemo(() => {
     const map = new Map<string, string>();
     projects?.forEach((project) => {
@@ -60,34 +102,37 @@ const MatrixView = () => {
     return map;
   }, [projects]);
 
-  const uniqueVariableIds = useMemo(() => Array.from(variableNameMap.keys()), [variableNameMap]);
-
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
     const baseColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
       {
         accessorKey: 'name',
         header: strings.PROJECT_NAME,
         size: 200,
+        id: 'projectName',
       },
       {
         accessorKey: 'participant_cohort_phase',
         header: strings.PHASE,
         size: 200,
+        id: 'participantCohortPhase',
       },
       {
         accessorKey: 'acceleratorDetails_confirmedReforestableLand',
         header: strings.ELIGIBLE_LAND,
         size: 200,
+        id: 'elegibleLand',
       },
       {
         accessorKey: 'country_name',
         header: strings.COUNTRY,
         size: 200,
+        id: 'countryName',
       },
       {
         accessorKey: 'acceleratorDetails_projectLead',
         header: strings.PROJECT_LEAD,
         size: 200,
+        id: 'projectLead',
       },
     ];
 
@@ -134,6 +179,10 @@ const MatrixView = () => {
     }
   }, [result]);
 
+  const onColumnsClickHandler = useCallback(() => {
+    setShowColumnsModal(true);
+  }, []);
+
   const dataForMaterialReactTable = useMaterialReactTable({
     columns: columnsMRT,
     data: projects || [],
@@ -144,10 +193,60 @@ const MatrixView = () => {
     initialState: {
       columnPinning: { left: ['name'] },
     },
+    renderToolbarInternalActions: ({ table }) => (
+      <Box>
+        <MRT_ToggleGlobalFilterButton table={table} />
+        <MRT_ToggleFiltersButton table={table} />
+        <IconButton onClick={onColumnsClickHandler}>
+          <Icon name='iconColumns' />
+        </IconButton>
+        <MRT_ToggleDensePaddingButton table={table} />
+        <MRT_ToggleFullScreenButton table={table} />
+      </Box>
+    ),
   });
+
+  // Update column visibility when uniqueVariableIds changes
+  useEffect(() => {
+    if (uniqueVariableIds && dataForMaterialReactTable) {
+      const columnVisibility = uniqueVariableIds.reduce((acc: Record<string, boolean>, id) => {
+        acc[id] = false;
+        return acc;
+      }, {});
+
+      dataForMaterialReactTable.setColumnVisibility(columnVisibility);
+    }
+  }, [uniqueVariableIds, dataForMaterialReactTable]);
+
+  const onCloseColumnsModalHandler = useCallback(() => {
+    setShowColumnsModal(false);
+  }, []);
+
+  const onColumnsSelected = useCallback(
+    (columns: string[]) => {
+      const columnVisibility = columns.reduce((acc: Record<string, boolean>, id) => {
+        acc[id] = true;
+        return acc;
+      }, {});
+      dataForMaterialReactTable.setColumnVisibility((prev) => ({
+        ...prev,
+        ...columnVisibility,
+      }));
+      dataForMaterialReactTable.setColumnOrder(columns);
+    },
+    [dataForMaterialReactTable]
+  );
 
   return (
     <Page title={strings.MATRIX_VIEW}>
+      {showColumnsModal && allVariables && (
+        <ColumnsModal
+          onClose={onCloseColumnsModalHandler}
+          onSave={onColumnsSelected}
+          allVariables={allVariables}
+          table={dataForMaterialReactTable}
+        />
+      )}
       <MaterialReactTable table={dataForMaterialReactTable} />
     </Page>
   );
