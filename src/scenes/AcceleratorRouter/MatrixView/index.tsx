@@ -171,13 +171,17 @@ const MatrixView = () => {
     });
 
     return [...baseColumns, ...variableColumns];
-  }, [projects, uniqueVariableIds]);
+  }, [uniqueVariableIds, variableNameMap]);
 
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {
       setProjects(result.data);
     }
   }, [result]);
+
+  const onColumnsClickHandler = useCallback(() => {
+    setShowColumnsModal(true);
+  }, []);
 
   const dataForMaterialReactTable = useMaterialReactTable({
     columns: columnsMRT,
@@ -193,11 +197,7 @@ const MatrixView = () => {
       <Box>
         <MRT_ToggleGlobalFilterButton table={table} />
         <MRT_ToggleFiltersButton table={table} />
-        <IconButton
-          onClick={() => {
-            setShowColumnsModal(true);
-          }}
-        >
+        <IconButton onClick={onColumnsClickHandler}>
           <Icon name='iconColumns' />
         </IconButton>
         <MRT_ToggleDensePaddingButton table={table} />
