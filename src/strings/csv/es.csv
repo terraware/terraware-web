@@ -2136,6 +2136,7 @@ TOOLTIP_TIME_ZONE_NURSERY,Usamos zonas horarias para notificaciones y para deter
 TOOLTIP_TIME_ZONE_ORGANIZATION,"Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a su organización en conjunto. Puede seleccionar zonas horarias para sus bancos de semillas, viveros y sitios de plantación en cada una de sus páginas de configuración.",
 TOOLTIP_TIME_ZONE_PLANTING_SITE,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este sitio de plantación específico. Todo el trabajo realizado en este sitio de plantación usará esta zona horaria.,
 TOOLTIP_TIME_ZONE_SEEDBANK,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este banco de semillas. Todo el trabajo realizado en este banco de semillas usará esta zona horaria.,
+TOOLTIP_TOTAL_PLANTS,"Las plantas en total observadas incluyen las plantas vivas y muertas de especies conocidas y desconocidas; no obstante, no incluyen las plantas registradas como preexistentes.",
 TOOLTIP_TOTAL_QUANTITY,La cantidad total es la suma de las cantidades no listas y listas.,
 TOOLTIP_TOTAL_WITHDRAWN,El número total de plantas extraídas para cualquier fin.,
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Plato que contiene un medio de cultivo de agar solidificado.,
