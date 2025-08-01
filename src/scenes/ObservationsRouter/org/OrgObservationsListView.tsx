@@ -55,11 +55,13 @@ const defaultColumns = (): TableColumnType[] => [
   {
     key: 'totalLive',
     name: strings.LIVE_PLANTS,
+    tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
     type: 'number',
   },
   {
     key: 'totalPlants',
     name: strings.TOTAL_PLANTS,
+    tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
     type: 'number',
   },
   {
@@ -175,11 +177,13 @@ export default function OrgObservationsListView({
       {
         key: 'totalLive',
         name: strings.LIVE_PLANTS,
+        tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
         type: 'number',
       },
       {
         key: 'totalPlants',
         name: strings.TOTAL_PLANTS,
+        tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
         type: 'number',
       },
       {

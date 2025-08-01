@@ -49,7 +49,10 @@ export type AdHocObservationResults = Omit<
       plantingZones: ObservationPlantingZoneResultsWithLastObv[];
     },
   'plantingZones'
-> & { plantingZones: ObservationPlantingZoneResultsWithLastObv[] };
+> & {
+  plantingZones: ObservationPlantingZoneResultsWithLastObv[];
+  totalLive: number | undefined;
+};
 
 export type ObservationResultsWithLastObv = Omit<
   Omit<ObservationResultsPayload, 'species'> &
