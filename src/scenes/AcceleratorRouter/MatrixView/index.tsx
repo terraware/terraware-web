@@ -54,22 +54,23 @@ const MatrixView = () => {
           'id',
           'name',
           'participant_cohort_phase',
-          'acceleratorDetails.confirmedReforestableLand',
+          'acceleratorDetails_confirmedReforestableLand',
           'country_name',
-          'acceleratorDetails.projectLead',
-          'variableValues.stableId',
-          'variableValues.variableId',
-          'variableValues.variableName',
-          'variableValues.variableType',
-          'variableValues.textValue',
-          'variableValues.numberValue',
-          'variableValues.dateValue',
-          'variableValues.isMultiSelect',
-          'variableValues.options.name',
-          'variableValues.options.position',
+          'acceleratorDetails_projectLead',
+          'variables.stableId',
+          'variables.variableId',
+          'variables.variableName',
+          'variables.variableType',
+          'variables.isList',
+          'variables.isMultiSelect',
+          'variables.values.textValue',
+          'variables.values.numberValue',
+          'variables.values.dateValue',
+          'variables.values.options.name',
+          'variables.values.options.position',
         ],
         sortOrder: {
-          field: 'variableValues.stableId',
+          field: 'name',
           direction: 'Ascending',
         },
       })
@@ -82,12 +83,24 @@ const MatrixView = () => {
       Array.from(
         new Set(
           allVariables?.flatMap((variable) => {
-            return variable.stableId;
+            return variable.stableId ?? variable.name;
           }) || []
         )
       ),
     [allVariables]
   );
+
+  const variableNameMap = useMemo(() => {
+    const map = new Map<string, string>();
+    projects?.forEach((project) => {
+      project.variables?.forEach((variable) => {
+        if (!map.has(variable.stableId)) {
+          map.set(variable.stableId, variable.variableName);
+        }
+      });
+    });
+    return map;
+  }, [projects]);
 
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
     const baseColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
@@ -104,7 +117,7 @@ const MatrixView = () => {
         id: 'participantCohortPhase',
       },
       {
-        accessorKey: 'acceleratorDetails.confirmedReforestableLand',
+        accessorKey: 'acceleratorDetails_confirmedReforestableLand',
         header: strings.ELIGIBLE_LAND,
         size: 200,
         id: 'elegibleLand',
@@ -116,21 +129,12 @@ const MatrixView = () => {
         id: 'countryName',
       },
       {
-        accessorKey: 'acceleratorDetails.projectLead',
+        accessorKey: 'acceleratorDetails_projectLead',
         header: strings.PROJECT_LEAD,
         size: 200,
         id: 'projectLead',
       },
     ];
-
-    const variableNameMap = new Map<string, string>();
-    projects?.forEach((project) => {
-      project.variableValues?.forEach((variable) => {
-        if (!variableNameMap.has(variable.stableId)) {
-          variableNameMap.set(variable.stableId, variable.variableName);
-        }
-      });
-    });
 
     const variableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = uniqueVariableIds.map((variableId) => {
       return {
@@ -138,9 +142,10 @@ const MatrixView = () => {
         header: variableNameMap.get(variableId) || variableId,
         size: 150,
         accessorFn: (row) => {
-          const variableValue = row.variableValues.find((variable) => variable.stableId === variableId);
+          const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
+          const variableValue = variable?.values?.[0];
 
-          if (!variableValue) {
+          if (!variableValue || variable?.isList) {
             return '';
           }
 
@@ -155,6 +160,9 @@ const MatrixView = () => {
           }
           if (variableValue.options) {
             return variableValue.options.map((option) => option.name).join(', ');
+          }
+          if (variableValue.linkUrl) {
+            return variableValue.linkUrl;
           }
 
           return '';

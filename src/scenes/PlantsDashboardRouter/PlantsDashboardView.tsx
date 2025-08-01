@@ -189,7 +189,7 @@ export default function PlantsDashboardView({
               }}
             >
               <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-                {strings.PLANTING_DENSITY}
+                {strings.PLANT_DENSITY}
               </Typography>
               {hasObservations && (
                 <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>

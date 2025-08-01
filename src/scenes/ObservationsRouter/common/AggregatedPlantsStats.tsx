@@ -5,8 +5,9 @@ import { IconTooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers/hooks';
 import { ObservationSpeciesResults } from 'src/types/Observations';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import SpeciesMortalityRateChart from './SpeciesMortalityRateChart';
@@ -24,26 +25,28 @@ export type AggregatedPlantsStatsProps = {
 
 export default function AggregatedPlantsStats({
   completedTime,
-  totalPlants,
   totalSpecies,
   plantingDensity,
   mortalityRate,
   species,
   hasObservedPermanentPlots,
 }: AggregatedPlantsStatsProps): JSX.Element {
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
 
+  const livePlants = getObservationSpeciesLivePlantsCount(species);
+
   const handleMissingData = (num?: number) => (!completedTime && !num ? '' : num);
 
   const getData = () => [
-    { label: strings.PLANTS, value: handleMissingData(totalPlants) },
+    { label: strings.LIVE_PLANTS, tooltip: strings.TOOLTIP_LIVE_PLANTS, value: handleMissingData(livePlants) },
     { label: strings.SPECIES, value: handleMissingData(totalSpecies) },
     {
-      label: strings.PLANTING_DENSITY,
+      label: strings.PLANT_DENSITY,
+      tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP,
       value: plantingDensity,
-      toolTip: strings.PLANTING_DENSITY_MISSING_TOOLTIP,
     },
     { label: strings.MORTALITY_RATE, value: hasObservedPermanentPlots ? handleMissingData(mortalityRate) : '' },
   ];
@@ -57,7 +60,7 @@ export default function AggregatedPlantsStats({
               isEditable={false}
               title={data.label}
               contents={data.value?.toString() ?? null}
-              titleInfoTooltip={data.toolTip}
+              titleInfoTooltip={data.tooltip}
             />
           </Grid>
         ))}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { TableColumnType } from '@terraware/web-components';
@@ -15,6 +15,7 @@ import {
 import { has25mPlots } from 'src/redux/features/observations/utils';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
@@ -23,9 +24,10 @@ const columns = (): TableColumnType[] => [
   { key: 'plantingZoneName', name: strings.ZONE, type: 'string' },
   { key: 'completedDate', name: strings.DATE, type: 'string' },
   { key: 'status', name: strings.STATUS, type: 'string' },
-  { key: 'totalPlants', name: strings.PLANTS, type: 'number' },
+  { key: 'totalLive', name: strings.LIVE_PLANTS, type: 'number' },
+  { key: 'totalPlants', name: strings.TOTAL_PLANTS, type: 'number' },
   { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
-  { key: 'plantingDensity', name: strings.PLANTING_DENSITY, type: 'number' },
+  { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
   { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
 ];
 
@@ -61,6 +63,15 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
     selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization?.id || -1)
   );
 
+  const rows = useMemo(() => {
+    return (
+      details?.plantingZones.map((zone) => {
+        const totalLive = getObservationSpeciesLivePlantsCount(zone.species);
+        return { ...zone, totalLive };
+      }) ?? []
+    );
+  }, [details?.plantingZones]);
+
   useEffect(() => {
     if (!details) {
       navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', `${plantingSiteId}`));
@@ -90,7 +101,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
     <Table
       id='observation-details-table'
       columns={columns}
-      rows={details?.plantingZones ?? []}
+      rows={rows}
       orderBy='plantingZoneName'
       Renderer={ObservationDetailsRenderer(plantingSiteId, observationId)}
       tableComments={has25mPlotsZones() ? strings.PLOTS_SIZE_NOTE : undefined}

@@ -24,9 +24,9 @@ export default function ObservationDetailsTests() {
     await waitFor(page, '#home');
 
     // metrics
-    await expect(page.getByText('Plants').nth(1)).toBeVisible();
+    await expect(page.getByText('Live Plants').nth(1)).toBeVisible();
     await expect(page.getByText('Species', { exact: true }).nth(1)).toBeVisible();
-    await expect(page.locator('p').filter({ hasText: 'Planting Density' })).toBeVisible();
+    await expect(page.locator('p').filter({ hasText: 'Plant Density' })).toBeVisible();
     await expect(page.getByText('Mortality Rate').first()).toBeVisible();
 
     // charts
@@ -39,9 +39,10 @@ export default function ObservationDetailsTests() {
     await expect(page.getByRole('columnheader', { name: 'Zone' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Date' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Plants' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Total Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Species' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Planting Density' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Plant Density' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Mortality Rate' })).toBeVisible();
 
     // table row values
@@ -76,9 +77,9 @@ export default function ObservationDetailsTests() {
     await waitFor(page, '#home');
 
     // metrics
-    await expect(page.getByText('Plants').nth(1)).toBeVisible();
+    await expect(page.getByText('Live Plants').nth(1)).toBeVisible();
     await expect(page.getByText('Species', { exact: true }).nth(1)).toBeVisible();
-    await expect(page.locator('p').filter({ hasText: 'Planting Density' })).toBeVisible();
+    await expect(page.locator('p').filter({ hasText: 'Plant Density' })).toBeVisible();
     await expect(page.getByText('Mortality Rate').first()).toBeVisible();
 
     // charts
@@ -93,9 +94,10 @@ export default function ObservationDetailsTests() {
     await expect(page.getByRole('columnheader', { name: 'Date' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Monitoring Plot Type' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Plants' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Total Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Species' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Planting Density' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Plant Density' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Mortality Rate' })).toBeVisible();
 
     // table row values
@@ -166,17 +168,17 @@ export default function ObservationDetailsTests() {
         'label.textfield-label:has-text("Monitoring Plot Type") + p.textfield-value--display:has-text("Permanent")'
       )
     ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Plants")')).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Total Plants")')).toBeVisible();
     await expect(
-      page.locator('label.textfield-label:has-text("Plants") + p.textfield-value--display:has-text("85")')
+      page.locator('label.textfield-label:has-text("Total Plants") + p.textfield-value--display:has-text("85")')
     ).toBeVisible();
     await expect(page.locator('label.textfield-label:has-text("Species")')).toBeVisible();
     await expect(
       page.locator('label.textfield-label:has-text("Species") + p.textfield-value--display:has-text("7")')
     ).toBeVisible();
-    await expect(page.locator('label.textfield-label:has-text("Planting Density")')).toBeVisible();
+    await expect(page.locator('label.textfield-label:has-text("Plant Density")')).toBeVisible();
     await expect(
-      page.locator('label.textfield-label:has-text("Planting Density") + p.textfield-value--display:has-text("756")')
+      page.locator('label.textfield-label:has-text("Plant Density") + p.textfield-value--display:has-text("756")')
     ).toBeVisible();
     await expect(page.locator('label.textfield-label:has-text("Mortality Rate")')).toBeVisible();
     await expect(

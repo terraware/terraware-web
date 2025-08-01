@@ -210,7 +210,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
                     : strings.INSUFFICIENT_DATA,
               },
               {
-                key: strings.PLANTING_DENSITY,
+                key: strings.PLANT_DENSITY,
                 value: `${lastZoneSummary.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
               },
               {
