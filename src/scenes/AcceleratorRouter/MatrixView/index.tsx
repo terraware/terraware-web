@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, IconButton, TextField } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { BusySpinner, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_Column,
@@ -57,26 +57,10 @@ const MatrixView = () => {
   const [allVariables, setAllVariables] = useState<VariableUnion[]>();
   const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
   const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (updateVariableValuesRequest?.status === 'success') {
-      console.log('success saving!');
-    }
-  }, [updateVariableValuesRequest]);
-
-  useEffect(() => {
-    if (allVariablesResponse?.status === 'success') {
-      setAllVariables(allVariablesResponse.data);
-    }
-  }, [allVariablesResponse]);
-
-  useEffect(() => {
-    const request = dispatch(requestListAllVariables());
-    setRequestVarsId(request.requestId);
-  }, [dispatch]);
-
-  useEffect(() => {
+  const reloadTable = useCallback(() => {
     const request = dispatch(
       requestGetProjectsWithVariables({
         fields: [
@@ -94,6 +78,7 @@ const MatrixView = () => {
           'variables.isMultiSelect',
           'variables.values.textValue',
           'variables.values.numberValue',
+          'variables.values.linkUrl',
           'variables.values.dateValue',
           'variables.values.options.name',
           'variables.values.options.position',
@@ -106,6 +91,27 @@ const MatrixView = () => {
     );
     setRequestId(request.requestId);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (updateVariableValuesRequest?.status === 'success') {
+      reloadTable();
+    }
+  }, [reloadTable, updateVariableValuesRequest]);
+
+  useEffect(() => {
+    if (allVariablesResponse?.status === 'success') {
+      setAllVariables(allVariablesResponse.data);
+    }
+  }, [allVariablesResponse]);
+
+  useEffect(() => {
+    const request = dispatch(requestListAllVariables());
+    setRequestVarsId(request.requestId);
+  }, [dispatch]);
+
+  useEffect(() => {
+    reloadTable();
+  }, [dispatch, reloadTable]);
 
   const uniqueVariableIds = useMemo(
     () =>
@@ -194,6 +200,7 @@ const MatrixView = () => {
         newValue = { type: 'Link', url: updatedValue.toString() };
       }
       if (newValue) {
+        setLoading(true);
         if (valueIdToUpdate.toString() !== '-1') {
           const request = dispatch(
             requestUpdateVariableValues({
@@ -271,6 +278,7 @@ const MatrixView = () => {
         // eslint-disable-next-line react/display-name, react/prop-types
         Edit = ({
           cell,
+          row,
           table,
         }: {
           cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
@@ -283,14 +291,19 @@ const MatrixView = () => {
           return (
             <DatePicker
               value={value ? new Date(value) : null}
-              onChange={(date) => {
-                const dateString = date ? date.toISOString().split('T')[0] : '';
+              onDateChange={(date) => {
+                const dateString = date ? date.toLocaleString() : '';
                 setValue(dateString);
                 table.setEditingCell(null);
+                const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
+                const variableToProcess = variable ?? correspondingVariable;
+                if (variableToProcess && date) {
+                  onSaveHandler(row.original.id, date.toISODate() ?? '', variableToProcess);
+                }
               }}
               aria-label={''}
               id={''}
-              label={undefined} // Add your date picker props here
+              label={undefined}
             />
           );
         };
@@ -318,6 +331,7 @@ const MatrixView = () => {
         // eslint-disable-next-line react/display-name, react/prop-types
         Edit = ({
           cell,
+          row,
           table,
         }: {
           cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
@@ -325,7 +339,16 @@ const MatrixView = () => {
           row: MRT_Row<ProjectsWithVariablesSearchResult>;
           table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
         }) => {
-          const [value, setValue] = useState(cell.getValue<number>() || 0);
+          const [value, setValue] = useState<string>((cell.getValue<string>() || 0).toString());
+
+          const handleSave = () => {
+            table.setEditingCell(null);
+            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
+            const variableToProcess = variable ?? correspondingVariable;
+            if (variableToProcess) {
+              onSaveHandler(row.original.id, value, variableToProcess);
+            }
+          };
 
           return (
             <TextField
@@ -333,12 +356,17 @@ const MatrixView = () => {
               value={value}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={(e) => {
-                const numValue = parseFloat(e.target.value) || 0;
+                const numValue = e.target.value;
                 setValue(numValue);
               }}
-              onBlur={() => {
-                table.setEditingCell(null);
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSave();
+                } else if (e.key === 'Escape') {
+                  table.setEditingCell(null);
+                }
               }}
+              onBlur={handleSave}
               size='small'
               fullWidth
             />
@@ -350,6 +378,7 @@ const MatrixView = () => {
         // eslint-disable-next-line react/display-name, react/prop-types
         Edit = ({
           cell,
+          row,
           table,
         }: {
           cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
@@ -359,6 +388,15 @@ const MatrixView = () => {
         }) => {
           const [value, setValue] = useState(cell.getValue<string>() || '');
 
+          const handleSave = () => {
+            table.setEditingCell(null);
+            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
+            const variableToProcess = variable ?? correspondingVariable;
+            if (variableToProcess) {
+              onSaveHandler(row.original.id, value, variableToProcess);
+            }
+          };
+
           return (
             <TextField
               type='url'
@@ -366,13 +404,10 @@ const MatrixView = () => {
               onChange={(e) => {
                 setValue(e.target.value);
               }}
-              onBlur={() => {
-                table.setEditingCell(null);
-              }}
+              onBlur={handleSave}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  table.setEditingCell(null);
-                  // Handle save logic
+                  handleSave();
                 } else if (e.key === 'Escape') {
                   table.setEditingCell(null);
                 }
@@ -444,6 +479,10 @@ const MatrixView = () => {
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {
       setProjects(result.data);
+      setLoading(false);
+    }
+    if (result?.status === 'error') {
+      setLoading(false);
     }
   }, [result]);
 
@@ -507,6 +546,7 @@ const MatrixView = () => {
 
   return (
     <Page title={strings.MATRIX_VIEW}>
+      {loading === true && <BusySpinner />}
       {showColumnsModal && allVariables && (
         <ColumnsModal
           onClose={onCloseColumnsModalHandler}
