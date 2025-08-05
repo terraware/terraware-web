@@ -118,19 +118,19 @@ function makeAdHocObservationCsv({
       displayLabel: strings.NORTHEAST_CORNER_LONGITUDE,
     },
     {
-      key: 'totalPlantsObserved',
+      key: 'totalPlants',
       displayLabel: strings.TOTAL_PLANTS_OBSERVED,
     },
     {
-      key: 'preExistingPlantsObserved',
+      key: 'preExistingPlants',
       displayLabel: strings.PREEXISTING_PLANTS_OBSERVED,
     },
     {
-      key: 'livePlantsObserved',
+      key: 'livePlants',
       displayLabel: strings.LIVE_PLANTS_OBSERVED,
     },
     {
-      key: 'deadPlantsObserved',
+      key: 'deadPlants',
       displayLabel: strings.DEAD_PLANTS_OBSERVED,
     },
     {
@@ -182,10 +182,10 @@ function makeAdHocObservationCsv({
       southeastLongitude: plotBoundaryCoordinates[2][1],
       northeastLatitude: plotBoundaryCoordinates[3][0],
       northeastLongitude: plotBoundaryCoordinates[3][1],
-      totalPlantsObserved: adHocObservation.adHocPlot.totalPlants || 0,
-      preExistingPlantsObserved: aggregateSpeciesData.totalExisting || 0,
-      livePlantsObserved: aggregateSpeciesData.totalLive || 0,
-      deadPlantsObserved: aggregateSpeciesData.totalDead || 0,
+      totalPlants: adHocObservation.adHocPlot.totalPlants || 0,
+      preExistingPlants: aggregateSpeciesData.totalExisting || 0,
+      livePlants: aggregateSpeciesData.totalLive || 0,
+      deadPlants: aggregateSpeciesData.totalDead || 0,
       totalSpecies: adHocObservation.adHocPlot.totalSpecies || 0,
       conditions:
         adHocObservation.adHocPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '- -',
