@@ -442,7 +442,7 @@ const ProjectProfileGisMaps = () => {
             <PlantingSiteMap
               mapData={filteredSiteData}
               style={{ width: '100%', borderRadius: theme.spacing(1) }}
-              layers={[selectedLayer || 'Planting Site']}
+              layers={[selectedLayer || 'Planting Site', 'Planting Site']}
               contextRenderer={{
                 render: contextRenderer,
                 sx: {
