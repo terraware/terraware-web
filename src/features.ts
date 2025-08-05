@@ -3,7 +3,6 @@ import env from 'src/utils/useEnvironment';
 
 export type FeatureName =
   | 'Show Production View'
-  | 'GIS Maps'
   | 'Matrix View'
   | 'New Plant Dashboard Map'
   | 'Updated Nursery Growth Phases';
@@ -39,15 +38,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'GIS Maps',
-    preferenceName: 'enableGisMaps',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Enable GIS Maps on Project Profile view'],
-    disclosure: ['This is a WIP'],
   },
   {
     name: 'Matrix View',
