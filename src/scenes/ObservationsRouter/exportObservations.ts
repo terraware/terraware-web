@@ -13,13 +13,13 @@ interface ExportAdHocObservationsResultsParams {
   selectedPlantingSite?: PlantingSite;
 }
 
-function makeCsv(columns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob {
+const makeCsv = (columns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob => {
   const csvConfig = mkConfig({ columnHeaders: columns });
   const csv = generateCsv(csvConfig)(data);
   return asBlob(csvConfig)(csv);
-}
+};
 
-function makeAdHocObservationsResultsCsv(adHocObservationsResults: AdHocObservationResults[]): Blob {
+const makeAdHocObservationsResultsCsv = (adHocObservationsResults: AdHocObservationResults[]): Blob => {
   console.log('makeAdHocObservationsResultsCsv - adHocObservationsResults:', adHocObservationsResults);
 
   const columnHeaders = [
@@ -52,22 +52,22 @@ function makeAdHocObservationsResultsCsv(adHocObservationsResults: AdHocObservat
   const data = adHocObservationsResults.map((observation) => ({
     monitoringPlot: observation.plotNumber,
     plantingSiteName: observation.plantingSiteName,
-    startDate: getDateDisplayValue(observation.startDate),
+    startDate: getDateDisplayValue(observation.startDate), // TODO: maybe add time zone handling here
     totalLive: observation.totalLive,
     totalPlants: observation.totalPlants,
     totalSpecies: observation.totalSpecies,
   }));
 
   return makeCsv(columnHeaders, data);
-}
+};
 
-function makeAdHocObservationCsv({
+const makeAdHocObservationCsv = ({
   adHocObservation,
   plantingSiteName,
 }: {
   adHocObservation: AdHocObservationResults;
   plantingSiteName: string;
-}): Blob {
+}): Blob => {
   if (!adHocObservation?.adHocPlot) {
     return new Blob([], { type: 'text/csv' });
   }
@@ -194,9 +194,9 @@ function makeAdHocObservationCsv({
   ];
 
   return makeCsv(columnHeaders, data);
-}
+};
 
-function makeAdHocObservationSpeciesCsv({ adHocObservation }: { adHocObservation: AdHocObservationResults }): Blob {
+const makeAdHocObservationSpeciesCsv = ({ adHocObservation }: { adHocObservation: AdHocObservationResults }): Blob => {
   if (!adHocObservation?.adHocPlot) {
     return new Blob([], { type: 'text/csv' });
   }
@@ -241,12 +241,12 @@ function makeAdHocObservationSpeciesCsv({ adHocObservation }: { adHocObservation
     })) || [];
 
   return makeCsv(columnHeaders, data);
-}
+};
 
-export default function exportAdHocObservationsResults({
+export const exportAdHocObservationsResults = ({
   adHocObservationsResults,
   selectedPlantingSite,
-}: ExportAdHocObservationsResultsParams) {
+}: ExportAdHocObservationsResultsParams) => {
   const plantingSiteName = selectedPlantingSite?.name || strings.ALL_PLANTING_SITES;
   const dirName = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
 
@@ -260,15 +260,15 @@ export default function exportAdHocObservationsResults({
     ],
     suffix: '.csv',
   });
-}
+};
 
-export function exportAdHocObservationDetails({
+export const exportAdHocObservationDetails = ({
   adHocObservation,
   plantingSiteName,
 }: {
   adHocObservation: AdHocObservationResults;
   plantingSiteName: string;
-}) {
+}) => {
   const dirName = `${plantingSiteName}-${adHocObservation.completedTime?.split('T')[0]}-${strings.AD_HOC_PLANT_MONITORING}-${strings.OBSERVATION}`;
 
   return downloadZipFile({
@@ -285,4 +285,4 @@ export function exportAdHocObservationDetails({
     ],
     suffix: '.csv',
   });
-}
+};
