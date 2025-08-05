@@ -151,6 +151,23 @@ export default function Map(props: MapProps): JSX.Element {
     [loadImages]
   );
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Check if click is outside the map container
+      if (mapRef.current && !mapRef.current.getContainer().contains(event.target as Node)) {
+        setPopupInfo(null);
+      }
+    };
+
+    if (popupInfo) {
+      document.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [popupInfo]);
+
   const onMapError = useCallback(
     (event: any) => {
       if (event?.error?.status === 401) {
@@ -545,6 +562,7 @@ export default function Map(props: MapProps): JSX.Element {
               }}
               style={popupRenderer.style}
               className={popupRenderer.className}
+              closeButton={false}
             >
               {renderedPopup}
             </Popup>
