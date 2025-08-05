@@ -20,8 +20,6 @@ const makeCsv = (columns: ColumnHeader[], data: { [k: string]: AcceptedData }[])
 };
 
 const makeAdHocObservationsResultsCsv = (adHocObservationsResults: AdHocObservationResults[]): Blob => {
-  console.log('makeAdHocObservationsResultsCsv - adHocObservationsResults:', adHocObservationsResults);
-
   const columnHeaders = [
     {
       key: 'monitoringPlot',
