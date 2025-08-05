@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1754312131927" clover="3.2.0">
-  <project timestamp="1754312131927" name="All files">
+<coverage generated="1754420309727" clover="3.2.0">
+  <project timestamp="1754420309727" name="All files">
     <metrics statements="31404" coveredstatements="1305" conditionals="21828" coveredconditionals="389" methods="9635" coveredmethods="211" elements="62867" coveredelements="1905" complexity="0" loc="31404" ncloc="31404" packages="271" files="1296" classes="1296"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -5302,11 +5302,11 @@
       <metrics statements="5" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Page/index.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.PageHeader">

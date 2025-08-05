@@ -1,3 +1,4 @@
+388c68726c8 SW-7219 Text under page title is not left aligned (#4323)
 a66a942e08b Update Node.js to v22.18.0 (#4320)
 b7fafb1d2c1 Update dependency eslint-plugin-jsdoc to v52 (#4317)
 1bac2162bd6 Update dependency slate to ^0.118.0 (#4319)
