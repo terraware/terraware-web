@@ -216,7 +216,7 @@ function makeAdHocObservationSpeciesCsv({ adHocObservation }: { adHocObservation
     },
     {
       key: 'preExistingPlants',
-      displayLabel: 'Pre-existing Plants Observed',
+      displayLabel: strings.PREEXISTING_PLANTS_OBSERVED,
     },
     {
       key: 'livePlants',
