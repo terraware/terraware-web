@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/204</span>
+                <span class='fraction'>0/209</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/147</span>
+                <span class='fraction'>0/149</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/193</span>
+                <span class='fraction'>0/196</span>
             </div>
         
             
@@ -676,7 +676,15 @@
 <a name='L611'></a><a href='#L611'>611</a>
 <a name='L612'></a><a href='#L612'>612</a>
 <a name='L613'></a><a href='#L613'>613</a>
-<a name='L614'></a><a href='#L614'>614</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L614'></a><a href='#L614'>614</a>
+<a name='L615'></a><a href='#L615'>615</a>
+<a name='L616'></a><a href='#L616'>616</a>
+<a name='L617'></a><a href='#L617'>617</a>
+<a name='L618'></a><a href='#L618'>618</a>
+<a name='L619'></a><a href='#L619'>619</a>
+<a name='L620'></a><a href='#L620'>620</a>
+<a name='L621'></a><a href='#L621'>621</a>
+<a name='L622'></a><a href='#L622'>622</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1055,7 +1063,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1079,9 +1096,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1668,7 +1684,16 @@ export default function <span class="fstat-no" title="function not covered" >Map
 <span class="cstat-no" title="statement not covered" >    if (!geoData) {</span>
 <span class="cstat-no" title="statement not covered" >      return null;</span>
     }
-    const sources = <span class="cstat-no" title="statement not covered" >geoData.map(<span class="fstat-no" title="function not covered" >(g</span>eo: any) =&gt; (</span>
+&nbsp;
+    const totalLayers = <span class="cstat-no" title="statement not covered" >geoData.length;</span>
+    let layersToUse = <span class="cstat-no" title="statement not covered" >geoData;</span>
+&nbsp;
+    // if siteMarker is showing and there is more than one layer, that means the planting site layer doesn't have to be rendered, site layer is added only for the site marker
+<span class="cstat-no" title="statement not covered" >    if (showSiteMarker &amp;&amp; totalLayers &gt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >      layersToUse = geoData.filter(<span class="fstat-no" title="function not covered" >(g</span>eo) =&gt; <span class="cstat-no" title="statement not covered" >geo.id !== 'sites')</span>;</span>
+    }
+&nbsp;
+    const sources = <span class="cstat-no" title="statement not covered" >layersToUse.map(<span class="fstat-no" title="function not covered" >(g</span>eo: any) =&gt; (</span>
 <span class="cstat-no" title="statement not covered" >      &lt;Source type='geojson' key={geo.id} data={geo.data} id={geo.id}&gt;</span>
         {geo.layer &amp;&amp; &lt;Layer {...geo.layer} /&gt;}
         {geo.patternFill &amp;&amp; (
@@ -1689,31 +1714,30 @@ export default function <span class="fstat-no" title="function not covered" >Map
 <span class="cstat-no" title="statement not covered" >    if (!geoData || !showSiteMarker) {</span>
 <span class="cstat-no" title="statement not covered" >      return null;</span>
     }
-    const geo = <span class="cstat-no" title="statement not covered" >geoData[0];</span>
-    const center = <span class="cstat-no" title="statement not covered" >centroid(geo.data);</span>
+    const geo = <span class="cstat-no" title="statement not covered" >geoData.find(<span class="fstat-no" title="function not covered" >(g</span>d) =&gt; <span class="cstat-no" title="statement not covered" >gd.id === 'sites')</span>;</span>
+    const center = <span class="cstat-no" title="statement not covered" >centroid(geo?.data);</span>
     const [longitude, latitude] = <span class="cstat-no" title="statement not covered" >center.geometry.coordinates;</span>
-<span class="cstat-no" title="statement not covered" >    if (geo.textAnnotation.id === 'sites-annotation') {</span>
-<span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;Marker key={0} longitude={longitude} latitude={latitude} anchor='center'&gt;
-          &lt;div
-            style={{
-              background: 'rgba(255, 255, 255, 0.6)',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc',
-              fontSize: '12px',
-              fontWeight: 'bold',
-              color: '#000000',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-              backdropFilter: 'blur(2px)', // Optional: adds blur effect
-            }}
-          &gt;
-            {geo.data.features?.[0]?.properties?.name}
-          &lt;/div&gt;
-        &lt;/Marker&gt;
-      );
-    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Marker key={0} longitude={longitude} latitude={latitude} anchor='center'&gt;
+        &lt;div
+          style={{
+            background: 'rgba(255, 255, 255, 0.6)',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            color: '#000000',
+            whiteSpace: 'nowrap',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            backdropFilter: 'blur(2px)', // Optional: adds blur effect
+          }}
+        &gt;
+          {geo.data.features?.[0]?.properties?.name}
+        &lt;/div&gt;
+      &lt;/Marker&gt;
+    );
   }, [geoData, showSiteMarker]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1909,7 +1933,7 @@ const ZoomToFitControl = <span class="cstat-no" title="statement not covered" ><
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-05T18:58:28.991Z
+                at 2025-08-05T20:41:55.889Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

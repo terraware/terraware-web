@@ -1,3 +1,4 @@
+345b28a7e72 SW-7218 Planting Site name/label missing in Zones and Subzones view of Planting Site (#4324)
 388c68726c8 SW-7219 Text under page title is not left aligned (#4323)
 a66a942e08b Update Node.js to v22.18.0 (#4320)
 b7fafb1d2c1 Update dependency eslint-plugin-jsdoc to v52 (#4317)
