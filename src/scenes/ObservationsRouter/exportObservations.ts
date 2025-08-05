@@ -50,7 +50,7 @@ const makeAdHocObservationsResultsCsv = (adHocObservationsResults: AdHocObservat
   const data = adHocObservationsResults.map((observation) => ({
     monitoringPlot: observation.plotNumber,
     plantingSiteName: observation.plantingSiteName,
-    startDate: getDateDisplayValue(observation.startDate), // TODO: maybe add time zone handling here
+    startDate: getDateDisplayValue(observation.startDate),
     totalLive: observation.totalLive,
     totalPlants: observation.totalPlants,
     totalSpecies: observation.totalSpecies,
