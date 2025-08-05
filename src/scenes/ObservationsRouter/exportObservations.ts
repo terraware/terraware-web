@@ -134,6 +134,10 @@ function makeAdHocObservationCsv({
       displayLabel: strings.DEAD_PLANTS_OBSERVED,
     },
     {
+      key: 'totalSpecies',
+      displayLabel: strings.TOTAL_SPECIES_OBSERVED,
+    },
+    {
       key: 'conditions',
       displayLabel: strings.PLOT_CONDITIONS,
     },
@@ -182,7 +186,7 @@ function makeAdHocObservationCsv({
       preExistingPlantsObserved: aggregateSpeciesData.totalExisting || 0,
       livePlantsObserved: aggregateSpeciesData.totalLive || 0,
       deadPlantsObserved: aggregateSpeciesData.totalDead || 0,
-      totalSpeciesObserved: adHocObservation.adHocPlot.totalSpecies || 0,
+      totalSpecies: adHocObservation.adHocPlot.totalSpecies || 0,
       conditions:
         adHocObservation.adHocPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '- -',
       notes: adHocObservation.adHocPlot?.notes || '',
