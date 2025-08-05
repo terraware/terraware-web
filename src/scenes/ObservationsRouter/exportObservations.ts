@@ -243,6 +243,25 @@ function makeAdHocObservationSpeciesCsv({ adHocObservation }: { adHocObservation
   return makeCsv(columnHeaders, data);
 }
 
+export default function exportAdHocObservationsResults({
+  adHocObservationsResults,
+  selectedPlantingSite,
+}: ExportAdHocObservationsResultsParams) {
+  const plantingSiteName = selectedPlantingSite?.name || strings.ALL_PLANTING_SITES;
+  const dirName = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
+
+  return downloadZipFile({
+    dirName,
+    files: [
+      {
+        fileName: dirName,
+        content: makeAdHocObservationsResultsCsv(adHocObservationsResults),
+      },
+    ],
+    suffix: '.csv',
+  });
+}
+
 export function exportAdHocObservationDetails({
   adHocObservation,
   plantingSiteName,
@@ -262,25 +281,6 @@ export function exportAdHocObservationDetails({
       {
         fileName: `${dirName}-${strings.SPECIES}`,
         content: makeAdHocObservationSpeciesCsv({ adHocObservation }),
-      },
-    ],
-    suffix: '.csv',
-  });
-}
-
-export default function exportAdHocObservationsResults({
-  adHocObservationsResults,
-  selectedPlantingSite,
-}: ExportAdHocObservationsResultsParams) {
-  const plantingSiteName = selectedPlantingSite?.name || strings.ALL_PLANTING_SITES;
-  const dirName = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
-
-  return downloadZipFile({
-    dirName,
-    files: [
-      {
-        fileName: dirName,
-        content: makeAdHocObservationsResultsCsv(adHocObservationsResults),
       },
     ],
     suffix: '.csv',
