@@ -377,7 +377,16 @@ export default function Map(props: MapProps): JSX.Element {
     if (!geoData) {
       return null;
     }
-    const sources = geoData.map((geo: any) => (
+
+    const totalLayers = geoData.length;
+    let layersToUse = geoData;
+
+    // if siteMarker is showing and there is more than one layer, that means the planting site layer doesn't have to be rendered, site layer is added only for the site marker
+    if (showSiteMarker && totalLayers > 1) {
+      layersToUse = geoData.filter((geo) => geo.id !== 'sites');
+    }
+
+    const sources = layersToUse.map((geo: any) => (
       <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
         {geo.layer && <Layer {...geo.layer} />}
         {geo.patternFill && (
@@ -398,31 +407,30 @@ export default function Map(props: MapProps): JSX.Element {
     if (!geoData || !showSiteMarker) {
       return null;
     }
-    const geo = geoData[0];
-    const center = centroid(geo.data);
+    const geo = geoData.find((gd) => gd.id === 'sites');
+    const center = centroid(geo?.data);
     const [longitude, latitude] = center.geometry.coordinates;
-    if (geo.textAnnotation.id === 'sites-annotation') {
-      return (
-        <Marker key={0} longitude={longitude} latitude={latitude} anchor='center'>
-          <div
-            style={{
-              background: 'rgba(255, 255, 255, 0.6)',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc',
-              fontSize: '12px',
-              fontWeight: 'bold',
-              color: '#000000',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-              backdropFilter: 'blur(2px)', // Optional: adds blur effect
-            }}
-          >
-            {geo.data.features?.[0]?.properties?.name}
-          </div>
-        </Marker>
-      );
-    }
+
+    return (
+      <Marker key={0} longitude={longitude} latitude={latitude} anchor='center'>
+        <div
+          style={{
+            background: 'rgba(255, 255, 255, 0.6)',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            color: '#000000',
+            whiteSpace: 'nowrap',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            backdropFilter: 'blur(2px)', // Optional: adds blur effect
+          }}
+        >
+          {geo.data.features?.[0]?.properties?.name}
+        </div>
+      </Marker>
+    );
   }, [geoData, showSiteMarker]);
 
   useEffect(() => {
