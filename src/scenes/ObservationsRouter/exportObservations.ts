@@ -10,7 +10,7 @@ import downloadZipFile from 'src/utils/downloadZipFile';
 
 interface ExportAdHocObservationsResultsParams {
   adHocObservationsResults: AdHocObservationResults[];
-  selectedPlantingSite?: PlantingSite;
+  plantingSite?: PlantingSite;
 }
 
 const makeCsv = (columns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob => {
@@ -19,7 +19,13 @@ const makeCsv = (columns: ColumnHeader[], data: { [k: string]: AcceptedData }[])
   return asBlob(csvConfig)(csv);
 };
 
-const makeAdHocObservationsResultsCsv = (adHocObservationsResults: AdHocObservationResults[]): Blob => {
+const makeAdHocObservationsResultsCsv = ({
+  adHocObservationsResults,
+  plantingSite,
+}: {
+  adHocObservationsResults: AdHocObservationResults[];
+  plantingSite?: PlantingSite;
+}): Blob => {
   const columnHeaders = [
     {
       key: 'monitoringPlot',
@@ -50,7 +56,7 @@ const makeAdHocObservationsResultsCsv = (adHocObservationsResults: AdHocObservat
   const data = adHocObservationsResults.map((observation) => ({
     monitoringPlot: observation.plotNumber,
     plantingSiteName: observation.plantingSiteName,
-    startDate: getDateDisplayValue(observation.startDate),
+    startDate: getDateDisplayValue(observation.startDate, plantingSite?.timeZone),
     totalLive: observation.totalLive,
     totalPlants: observation.totalPlants,
     totalSpecies: observation.totalSpecies,
@@ -61,10 +67,10 @@ const makeAdHocObservationsResultsCsv = (adHocObservationsResults: AdHocObservat
 
 const makeAdHocObservationCsv = ({
   adHocObservation,
-  plantingSiteName,
+  plantingSite,
 }: {
   adHocObservation: AdHocObservationResults;
-  plantingSiteName: string;
+  plantingSite: PlantingSite;
 }): Blob => {
   if (!adHocObservation?.adHocPlot) {
     return new Blob([], { type: 'text/csv' });
@@ -170,8 +176,10 @@ const makeAdHocObservationCsv = ({
   const data = [
     {
       monitoringPlotNumber: adHocObservation.adHocPlot.monitoringPlotNumber,
-      plantingSiteName,
-      completedTime: adHocObservation.completedTime ? getDateDisplayValue(adHocObservation.completedTime) : '',
+      plantingSiteName: plantingSite.name,
+      completedTime: adHocObservation.completedTime
+        ? getDateDisplayValue(adHocObservation.completedTime, plantingSite.timeZone)
+        : '',
       southwestLatitude: plotBoundaryCoordinates[0][0],
       southwestLongitude: plotBoundaryCoordinates[0][1],
       northwestLatitude: plotBoundaryCoordinates[1][0],
@@ -243,9 +251,9 @@ const makeAdHocObservationSpeciesCsv = ({ adHocObservation }: { adHocObservation
 
 export const exportAdHocObservationsResults = ({
   adHocObservationsResults,
-  selectedPlantingSite,
+  plantingSite,
 }: ExportAdHocObservationsResultsParams) => {
-  const plantingSiteName = selectedPlantingSite?.name || strings.ALL_PLANTING_SITES;
+  const plantingSiteName = plantingSite?.name || strings.ALL_PLANTING_SITES;
   const dirName = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
 
   return downloadZipFile({
@@ -253,7 +261,7 @@ export const exportAdHocObservationsResults = ({
     files: [
       {
         fileName: dirName,
-        content: makeAdHocObservationsResultsCsv(adHocObservationsResults),
+        content: makeAdHocObservationsResultsCsv({ adHocObservationsResults, plantingSite }),
       },
     ],
     suffix: '.csv',
@@ -262,19 +270,19 @@ export const exportAdHocObservationsResults = ({
 
 export const exportAdHocObservationDetails = ({
   adHocObservation,
-  plantingSiteName,
+  plantingSite,
 }: {
   adHocObservation: AdHocObservationResults;
-  plantingSiteName: string;
+  plantingSite: PlantingSite;
 }) => {
-  const dirName = `${plantingSiteName}-${adHocObservation.completedTime?.split('T')[0]}-${strings.AD_HOC_PLANT_MONITORING}-${strings.OBSERVATION}`;
+  const dirName = `${plantingSite.name}-${adHocObservation.completedTime?.split('T')[0]}-${strings.AD_HOC_PLANT_MONITORING}-${strings.OBSERVATION}`;
 
   return downloadZipFile({
     dirName,
     files: [
       {
         fileName: `${dirName}-${strings.PLOT}`,
-        content: makeAdHocObservationCsv({ adHocObservation, plantingSiteName }),
+        content: makeAdHocObservationCsv({ adHocObservation, plantingSite }),
       },
       {
         fileName: `${dirName}-${strings.SPECIES}`,

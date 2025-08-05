@@ -75,7 +75,10 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
 
   const onExportAdHocObservationResults = useCallback(() => {
     if (adHocObservationResults && adHocObservationResults.length > 0) {
-      void exportAdHocObservationsResults({ adHocObservationsResults: adHocObservationResults, selectedPlantingSite });
+      void exportAdHocObservationsResults({
+        adHocObservationsResults: adHocObservationResults,
+        plantingSite: selectedPlantingSite,
+      });
     }
   }, [adHocObservationResults, selectedPlantingSite]);
 
