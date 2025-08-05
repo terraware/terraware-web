@@ -31,12 +31,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 import {
-  NewDateValuePayload,
-  NewEmailValuePayload,
-  NewLinkValuePayload,
-  NewNumberValuePayload,
-  NewSelectValuePayload,
-  NewTextValuePayload,
+  NewNonSectionValuePayloadUnion,
   VariableValueDateValue,
   VariableValueEmailValue,
   VariableValueLinkValue,
@@ -160,45 +155,33 @@ const MatrixView = () => {
     ) => {
       const values = variable?.values;
 
-      let newValue:
-        | NewDateValuePayload
-        | NewEmailValuePayload
-        | NewTextValuePayload
-        | NewNumberValuePayload
-        | NewSelectValuePayload
-        | NewLinkValuePayload
-        | undefined;
-      let valueIdToUpdate = -1;
+      let newValue: NewNonSectionValuePayloadUnion | undefined;
+      let firstValue;
       if (variable?.variableType === 'Text') {
-        const firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueTextValue) : undefined;
-        valueIdToUpdate = firstValue?.id || -1;
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueTextValue) : undefined;
         newValue = { type: 'Text', textValue: updatedValue.toString() };
       }
       if (variable?.variableType === 'Number') {
-        const firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueNumberValue) : undefined;
-        valueIdToUpdate = firstValue?.id || -1;
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueNumberValue) : undefined;
         newValue = { type: 'Number', numberValue: Number(updatedValue) };
       }
       if (variable?.variableType === 'Select') {
-        const firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueSelectValue) : undefined;
-        valueIdToUpdate = firstValue?.id || -1;
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueSelectValue) : undefined;
         newValue = { type: 'Select', optionIds: [Number(updatedValue)] };
       }
       if (variable?.variableType === 'Date') {
-        const firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueDateValue) : undefined;
-        valueIdToUpdate = firstValue?.id || -1;
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueDateValue) : undefined;
         newValue = { type: 'Date', dateValue: updatedValue.toString() };
       }
       if (variable?.variableType === 'Email') {
-        const firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueEmailValue) : undefined;
-        valueIdToUpdate = firstValue?.id || -1;
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueEmailValue) : undefined;
         newValue = { type: 'Email', emailValue: updatedValue.toString() };
       }
       if (variable?.variableType === 'Link') {
-        const firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueLinkValue) : undefined;
-        valueIdToUpdate = firstValue?.id || -1;
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueLinkValue) : undefined;
         newValue = { type: 'Link', url: updatedValue.toString() };
       }
+      const valueIdToUpdate = firstValue?.id || -1;
       if (newValue) {
         setLoading(true);
         if (valueIdToUpdate.toString() !== '-1') {
