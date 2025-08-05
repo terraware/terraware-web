@@ -206,17 +206,52 @@ const MatrixView = () => {
     ),
   });
 
-  // Update column visibility when uniqueVariableIds changes
+  // Load saved column state after table is created
   useEffect(() => {
-    if (uniqueVariableIds && dataForMaterialReactTable) {
-      const columnVisibility = uniqueVariableIds.reduce((acc: Record<string, boolean>, id) => {
-        acc[id] = false;
-        return acc;
-      }, {});
+    const loadSavedColumnState = () => {
+      try {
+        const savedColumns = localStorage.getItem('selectedColumns');
+        if (savedColumns) {
+          const parsedColumns = JSON.parse(savedColumns);
+          if (Array.isArray(parsedColumns) && parsedColumns.length > 0) {
+            console.log('Loading saved columns:', parsedColumns);
 
-      dataForMaterialReactTable.setColumnVisibility(columnVisibility);
+            // Apply saved column visibility
+            const columnVisibility: Record<string, boolean> = {};
+
+            // Hide all columns first
+            uniqueVariableIds?.forEach((id) => {
+              columnVisibility[id] = false;
+            });
+
+            // Show only saved columns
+            parsedColumns.forEach((id) => {
+              columnVisibility[id] = true;
+            });
+
+            dataForMaterialReactTable.setColumnVisibility(columnVisibility);
+            dataForMaterialReactTable.setColumnOrder(parsedColumns);
+          }
+        } else {
+          if (uniqueVariableIds && dataForMaterialReactTable) {
+            const columnVisibility = uniqueVariableIds.reduce((acc: Record<string, boolean>, id) => {
+              acc[id] = false;
+              return acc;
+            }, {});
+
+            dataForMaterialReactTable.setColumnVisibility(columnVisibility);
+          }
+        }
+      } catch (error) {
+        /* empty */
+      }
+    };
+
+    // Load after table and data are ready
+    if (dataForMaterialReactTable && uniqueVariableIds) {
+      loadSavedColumnState();
     }
-  }, [uniqueVariableIds, dataForMaterialReactTable]);
+  }, [dataForMaterialReactTable, uniqueVariableIds]);
 
   const onCloseColumnsModalHandler = useCallback(() => {
     setShowColumnsModal(false);
@@ -233,6 +268,14 @@ const MatrixView = () => {
         ...columnVisibility,
       }));
       dataForMaterialReactTable.setColumnOrder(columns);
+
+      // Save to localStorage
+      try {
+        localStorage.setItem('selectedColumns', JSON.stringify(columns));
+        console.log('Columns saved to localStorage:', columns);
+      } catch (error) {
+        console.error('Failed to save columns to localStorage:', error);
+      }
     },
     [dataForMaterialReactTable]
   );
