@@ -74,7 +74,7 @@ function makeAdHocObservationCsv({
 
   const columnHeaders = [
     {
-      key: 'monitoringPlot',
+      key: 'monitoringPlotNumber',
       displayLabel: strings.MONITORING_PLOT,
     },
     {
@@ -171,7 +171,7 @@ function makeAdHocObservationCsv({
 
   const data = [
     {
-      monitoringPlot: adHocObservation.adHocPlot.monitoringPlotNumber,
+      monitoringPlotNumber: adHocObservation.adHocPlot.monitoringPlotNumber,
       plantingSiteName,
       completedTime: adHocObservation.completedTime ? getDateDisplayValue(adHocObservation.completedTime) : '',
       southwestLatitude: plotBoundaryCoordinates[0][0],
@@ -203,7 +203,7 @@ function makeAdHocObservationSpeciesCsv({ adHocObservation }: { adHocObservation
 
   const columnHeaders = [
     {
-      key: 'monitoringPlot',
+      key: 'monitoringPlotNumber',
       displayLabel: strings.MONITORING_PLOT,
     },
     {
@@ -211,33 +211,33 @@ function makeAdHocObservationSpeciesCsv({ adHocObservation }: { adHocObservation
       displayLabel: strings.SPECIES_SCIENTIFIC_NAME,
     },
     {
-      key: 'totalPlantsObserved',
+      key: 'totalPlants',
       displayLabel: strings.TOTAL_PLANTS_OBSERVED,
     },
     {
-      key: 'preExistingPlantsObserved',
+      key: 'preExistingPlants',
       displayLabel: 'Pre-existing Plants Observed',
     },
     {
-      key: 'livePlantsObserved',
+      key: 'livePlants',
       displayLabel: strings.LIVE_PLANTS_OBSERVED,
     },
     {
-      key: 'deadPlantsObserved',
+      key: 'deadPlants',
       displayLabel: strings.DEAD_PLANTS_OBSERVED,
     },
   ];
 
-  const plotNumber = adHocObservation.adHocPlot.monitoringPlotNumber;
+  const monitoringPlotNumber = adHocObservation.adHocPlot.monitoringPlotNumber;
 
   const data =
     adHocObservation.adHocPlot.species.map((species) => ({
-      monitoringPlot: plotNumber,
+      monitoringPlotNumber,
       speciesScientificName: species.speciesName,
-      totalPlantsObserved: species.totalPlants,
-      preExistingPlantsObserved: species.totalExisting,
-      livePlantsObserved: species.totalLive,
-      deadPlantsObserved: species.totalDead,
+      totalPlants: species.totalPlants,
+      preExistingPlants: species.totalExisting,
+      livePlants: species.totalLive,
+      deadPlants: species.totalDead,
     })) || [];
 
   return makeCsv(columnHeaders, data);
