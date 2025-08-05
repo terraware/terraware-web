@@ -86,8 +86,8 @@ const makeAdHocObservationCsv = ({
       displayLabel: strings.PLANTING_SITE,
     },
     {
-      key: 'completedTime',
-      displayLabel: 'Plot Completed Time',
+      key: 'dateObserved',
+      displayLabel: strings.DATE_OBSERVED,
     },
     {
       key: 'southwestLatitude',
@@ -177,8 +177,8 @@ const makeAdHocObservationCsv = ({
     {
       monitoringPlotNumber: adHocObservation.adHocPlot.monitoringPlotNumber,
       plantingSiteName: plantingSite.name,
-      completedTime: adHocObservation.completedTime
-        ? getDateDisplayValue(adHocObservation.completedTime, plantingSite.timeZone)
+      dateObserved: adHocObservation.completedTime
+        ? getDateDisplayValue(adHocObservation.completedTime || '', plantingSite.timeZone)
         : '',
       southwestLatitude: plotBoundaryCoordinates[0][0],
       southwestLongitude: plotBoundaryCoordinates[0][1],
@@ -275,7 +275,10 @@ export const exportAdHocObservationDetails = ({
   adHocObservation: AdHocObservationResults;
   plantingSite: PlantingSite;
 }) => {
-  const dirName = `${plantingSite.name}-${adHocObservation.completedTime?.split('T')[0]}-${strings.AD_HOC_PLANT_MONITORING}-${strings.OBSERVATION}`;
+  const dateObserved = adHocObservation.completedTime
+    ? getDateDisplayValue(adHocObservation.completedTime || '', plantingSite.timeZone)
+    : '';
+  const dirName = `${plantingSite.name}-${dateObserved}-${strings.AD_HOC_PLANT_MONITORING}-${strings.OBSERVATION}`;
 
   return downloadZipFile({
     dirName,
