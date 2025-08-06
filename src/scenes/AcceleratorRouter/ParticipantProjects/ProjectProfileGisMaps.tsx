@@ -399,6 +399,7 @@ const ProjectProfileGisMaps = () => {
       hierarchicalCrumbs={false}
       description={strings.MAPS_GIS_DESCRIPTION}
       rightComponent={mapsNotUploaded ? undefined : zonesAndSitesDropdown}
+      descriptionStyle={{ paddingLeft: 1 }}
     >
       <Card
         flushMobile
@@ -407,7 +408,7 @@ const ProjectProfileGisMaps = () => {
           flexDirection: 'column',
           flexGrow: 1,
           marginBottom: theme.spacing(3),
-          padding: `${theme.spacing(2, 1)}`,
+          padding: `${theme.spacing(2, 3)}`,
           borderRadius: theme.spacing(1),
         }}
       >
@@ -442,7 +443,7 @@ const ProjectProfileGisMaps = () => {
             <PlantingSiteMap
               mapData={filteredSiteData}
               style={{ width: '100%', borderRadius: theme.spacing(1) }}
-              layers={[selectedLayer || 'Planting Site']}
+              layers={[selectedLayer || 'Planting Site', 'Planting Site']}
               contextRenderer={{
                 render: contextRenderer,
                 sx: {
