@@ -12,15 +12,11 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
-import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
-import {
-  searchPlantingProgress,
-  selectUpdatePlantingsCompleted,
-} from 'src/redux/features/plantings/plantingsSelectors';
+import { PlantingProgress, selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
+import { selectUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 import strings from 'src/strings';
-import { SearchNodePayload } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -83,18 +79,12 @@ const columnsWithZones = (): TableColumnType[] => [
 ];
 
 export type PlantingProgressListProps = {
-  filters: Record<string, SearchNodePayload>;
-  search: string;
+  data: Partial<PlantingProgress>[] | undefined;
   reloadTracking: () => void;
 };
 
-export default function PlantingProgressList({
-  filters,
-  search,
-  reloadTracking,
-}: PlantingProgressListProps): JSX.Element {
+export default function PlantingProgressList({ data, reloadTracking }: PlantingProgressListProps): JSX.Element {
   const [hasZones, setHasZones] = useState<boolean | undefined>();
-  const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), filters));
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();

@@ -10,6 +10,7 @@ import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import Search, { FeaturedFilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { searchPlantingProgress } from 'src/redux/features/plantings/plantingsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { selectPlantingSite, selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
@@ -22,6 +23,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import PlantingProgressList from './PlantingProgressList';
 import PlantingProgressMap from './PlantingProgressMap';
+import { exportNurseryPlantingProgress } from './exportNurseryData';
 
 const initialView: View = 'list';
 
@@ -40,6 +42,8 @@ export default function PlantingProgress(): JSX.Element {
   const [activeView, setActiveView] = useState<View>(initialView);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(selectedPlantingSiteId)));
+
+  const plantingProgressResults = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), filters));
 
   const getProjectName = useCallback(
     (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
@@ -132,6 +136,10 @@ export default function PlantingProgress(): JSX.Element {
     });
   }, [activeLocale, plantingSitesNames]);
 
+  const onExportPlantingProgress = useCallback(() => {
+    void exportNurseryPlantingProgress({ plantingProgress: plantingProgressResults || [] });
+  }, [plantingProgressResults]);
+
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
@@ -156,11 +164,12 @@ export default function PlantingProgress(): JSX.Element {
           <SearchComponent
             view={activeView}
             onChangePlantingSite={setSelectedPlantingSiteId}
+            onExport={onExportPlantingProgress}
             featuredFilters={featuredFilters}
             {...searchProps}
           />
         }
-        list={<PlantingProgressList filters={filters} search={search} reloadTracking={reloadTrackingAndObservations} />}
+        list={<PlantingProgressList data={plantingProgressResults} reloadTracking={reloadTrackingAndObservations} />}
         map={
           <PlantingProgressMap plantingSiteId={selectedPlantingSiteId} reloadTracking={reloadTrackingAndObservations} />
         }
@@ -175,13 +184,25 @@ type SearchComponentProps = SearchProps & {
   featuredFilters?: FeaturedFilterConfig[];
 };
 
-function SearchComponent(props: SearchComponentProps): JSX.Element {
-  const { search, onSearch, filtersProps, view, onChangePlantingSite, featuredFilters } = props;
-
+function SearchComponent({
+  featuredFilters,
+  filtersProps,
+  onChangePlantingSite,
+  onExport,
+  onSearch,
+  search,
+  view,
+}: SearchComponentProps): JSX.Element {
   return (
     <>
       <div style={{ display: view === 'list' ? 'flex' : 'none' }}>
-        <Search search={search} onSearch={onSearch} filtersProps={filtersProps} featuredFilters={featuredFilters} />
+        <Search
+          featuredFilters={featuredFilters}
+          filtersProps={filtersProps}
+          onExport={onExport}
+          onSearch={onSearch}
+          search={search}
+        />
       </div>
       <div style={{ display: view === 'map' ? 'flex' : 'none' }}>
         <PlantingSiteSelector onChange={onChangePlantingSite} />
