@@ -36,6 +36,8 @@ import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import { exportNurseryWithdrawalResults } from './exportNurseryData';
+
 const columns = (): TableColumnType[] => [
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
@@ -301,11 +303,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     });
   };
 
+  const onExportNurseryWithdrawals = useCallback(() => {
+    void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: searchResults || [] });
+  }, [searchResults]);
+
   return (
     <Grid container>
       <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
         <SearchFiltersWrapper
           search={searchValue}
+          onExport={onExportNurseryWithdrawals}
           onSearch={setSearchValue}
           filtersProps={filtersProps}
           featuredFilters={featuredFilters}
