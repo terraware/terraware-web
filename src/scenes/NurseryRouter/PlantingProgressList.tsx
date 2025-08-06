@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
 import { BusySpinner, TableColumnType } from '@terraware/web-components';
@@ -139,14 +139,32 @@ export default function PlantingProgressList({ data, reloadTracking }: PlantingP
     }
   }, [updatePlantingResult, reloadTracking, snackbar, markingAsComplete]);
 
+  const setPlantingCompleted = useCallback(
+    (complete: boolean) => {
+      const subzoneIds = selectedRows.map((row) => row.subzoneId);
+      const request = dispatch(
+        requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
+      );
+      setMarkingAsComplete(complete);
+      setRequestId(request.requestId);
+    },
+    [dispatch, selectedRows]
+  );
+
+  const onModalSubmit = useCallback(() => {
+    setShowWarningModal(false);
+    setPlantingCompleted(false);
+  }, [setPlantingCompleted]);
+
+  const onCloseStatsWarningModal = useCallback(() => {
+    setShowWarningModal(false);
+  }, []);
+
+  const isClickable = useCallback(() => false, []);
+
   if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
-
-  const onModalSubmit = () => {
-    setShowWarningModal(false);
-    setPlantingCompleted(false);
-  };
 
   const validateUndoPlantingComplete = () => {
     if (subzonesStatisticsResult) {
@@ -154,15 +172,6 @@ export default function PlantingProgressList({ data, reloadTracking }: PlantingP
       return;
     }
     setPlantingCompleted(false);
-  };
-
-  const setPlantingCompleted = (complete: boolean) => {
-    const subzoneIds = selectedRows.map((row) => row.subzoneId);
-    const request = dispatch(
-      requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
-    );
-    setMarkingAsComplete(complete);
-    setRequestId(request.requestId);
   };
 
   const getTopBarButtons = () => {
@@ -192,11 +201,7 @@ export default function PlantingProgressList({ data, reloadTracking }: PlantingP
   return (
     <Box>
       {showWarningModal && (
-        <StatsWarningDialog
-          open={showWarningModal}
-          onClose={() => setShowWarningModal(false)}
-          onSubmit={onModalSubmit}
-        />
+        <StatsWarningDialog open={showWarningModal} onClose={onCloseStatsWarningModal} onSubmit={onModalSubmit} />
       )}
       <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
       <Table
@@ -208,7 +213,7 @@ export default function PlantingProgressList({ data, reloadTracking }: PlantingP
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         showCheckbox={true}
-        isClickable={() => false}
+        isClickable={isClickable}
         showTopBar={true}
         topBarButtons={getTopBarButtons()}
       />
