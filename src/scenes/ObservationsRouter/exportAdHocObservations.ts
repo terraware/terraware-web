@@ -1,23 +1,16 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
-import { asBlob, generateCsv, mkConfig } from 'export-to-csv';
-import { AcceptedData, ColumnHeader } from 'export-to-csv/output/lib/types';
 
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
+import { makeCsv } from 'src/utils/csv';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
 interface ExportAdHocObservationsResultsParams {
   adHocObservationsResults: AdHocObservationResults[];
   plantingSite?: PlantingSite;
 }
-
-const makeCsv = (columns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob => {
-  const csvConfig = mkConfig({ columnHeaders: columns });
-  const csv = generateCsv(csvConfig)(data);
-  return asBlob(csvConfig)(csv);
-};
 
 const makeAdHocObservationsResultsCsv = ({
   adHocObservationsResults,
