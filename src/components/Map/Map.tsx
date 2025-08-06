@@ -161,11 +161,11 @@ export default function Map(props: MapProps): JSX.Element {
 
     if (popupInfo) {
       document.addEventListener('click', handleClickOutside);
-    }
 
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }
   }, [popupInfo]);
 
   const onMapError = useCallback(
