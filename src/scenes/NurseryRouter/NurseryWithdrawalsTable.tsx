@@ -147,15 +147,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [selectedOrganization]);
 
-  const onWithdrawalClicked = (withdrawal: any) => {
-    navigate({
-      pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
-    });
-  };
-
-  const reload = () => {
-    void onApplyFilters();
-  };
+  const onWithdrawalClicked = useCallback(
+    (withdrawal: any) => {
+      navigate({
+        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
+      });
+    },
+    [navigate]
+  );
 
   const getSearchChildren = useCallback(() => {
     const { type, values } = parseSearchTerm(debouncedSearchTerm);
@@ -259,6 +258,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [getSearchChildren, selectedOrganization, searchSortOrder, filters]);
 
+  const reload = useCallback(() => {
+    void onApplyFilters();
+  }, [onApplyFilters]);
+
   useEffect(() => {
     if (siteParam) {
       query.delete('siteName');
@@ -295,13 +298,19 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     void onApplyFilters();
   }, [filters, onApplyFilters]);
 
-  const onSortChange = (order: SortOrder, orderBy: string) => {
-    const orderByStr = orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
-    setSearchSortOrder({
-      field: orderByStr,
-      direction: order === 'asc' ? 'Ascending' : 'Descending',
-    });
-  };
+  const onSortChange = useCallback(
+    (order: SortOrder, orderBy: string) => {
+      const orderByStr =
+        orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
+      setSearchSortOrder({
+        field: orderByStr,
+        direction: order === 'asc' ? 'Ascending' : 'Descending',
+      });
+    },
+    [setSearchSortOrder]
+  );
+
+  const isClickable = useCallback(() => false, []);
 
   const onExportNurseryWithdrawals = useCallback(() => {
     void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: searchResults || [] });
@@ -331,7 +340,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           onSelect={onWithdrawalClicked}
           controlledOnSelect={true}
           sortHandler={onSortChange}
-          isClickable={() => false}
+          isClickable={isClickable}
           reloadData={reload}
         />
       </Grid>
