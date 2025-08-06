@@ -30,7 +30,7 @@ import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import { exportAdHocObservationDetails } from '../exportObservations';
+import { exportAdHocObservationDetails } from '../exportAdHocObservations';
 
 type AdHocObservationDetailsProps = {
   reload: () => void;

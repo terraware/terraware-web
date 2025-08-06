@@ -17,7 +17,7 @@ import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import { exportAdHocObservationsResults } from './exportObservations';
+import { exportAdHocObservationsResults } from './exportAdHocObservations';
 import ObservationMapView from './map/ObservationMapView';
 import OrgObservationsListView from './org/OrgObservationsListView';
 
