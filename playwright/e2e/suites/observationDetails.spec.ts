@@ -41,7 +41,7 @@ export default function ObservationDetailsTests() {
     await expect(page.getByRole('columnheader', { name: 'Status' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Total Plants' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Species' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Species', exact: true })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Plant Density' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Mortality Rate' })).toBeVisible();
 
@@ -96,7 +96,7 @@ export default function ObservationDetailsTests() {
     await expect(page.getByRole('columnheader', { name: 'Monitoring Plot Type' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Live Plants' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Total Plants' })).toBeVisible();
-    await expect(page.getByRole('columnheader', { name: 'Species' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Species', exact: true })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Plant Density' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Mortality Rate' })).toBeVisible();
 

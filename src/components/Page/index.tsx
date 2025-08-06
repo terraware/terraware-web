@@ -31,6 +31,7 @@ export type PageProps = {
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
   description?: string;
+  descriptionStyle?: CSSProperties;
 };
 
 /**
@@ -50,6 +51,7 @@ export default function Page({
   rightComponent,
   title,
   description,
+  descriptionStyle,
 }: PageProps): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
@@ -119,7 +121,12 @@ export default function Page({
         </Grid>
         {description ? (
           <Grid item xs={12} marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle}>
-            <Typography margin={0} fontSize='14px' fontWeight={400} sx={{ paddingLeft: theme.spacing(3) }}>
+            <Typography
+              margin={0}
+              fontSize='14px'
+              fontWeight={400}
+              sx={{ paddingLeft: theme.spacing(3), ...descriptionStyle }}
+            >
               {description}
             </Typography>
           </Grid>
