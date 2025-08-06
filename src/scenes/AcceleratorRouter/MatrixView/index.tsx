@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, IconButton } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { Box, IconButton, TextField } from '@mui/material';
+import { BusySpinner, Icon } from '@terraware/web-components';
 import {
+  MRT_Cell,
+  MRT_Column,
   MRT_ColumnDef,
+  MRT_Row,
+  MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
@@ -13,6 +17,9 @@ import {
 } from 'material-react-table';
 
 import Page from 'src/components/Page';
+import DatePicker from 'src/components/common/DatePicker';
+import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
+import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListAllVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { selectProjectsWithVariables } from 'src/redux/features/matrixView/matrixViewSelectors';
@@ -23,6 +30,15 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
+import {
+  NewNonSectionValuePayloadUnion,
+  VariableValueDateValue,
+  VariableValueEmailValue,
+  VariableValueLinkValue,
+  VariableValueNumberValue,
+  VariableValueSelectValue,
+  VariableValueTextValue,
+} from 'src/types/documentProducer/VariableValue';
 
 import ColumnsModal from './ColumnsModal';
 
@@ -34,20 +50,12 @@ const MatrixView = () => {
   const [projects, setProjects] = useState<ProjectsWithVariablesSearchResult[]>([]);
   const [showColumnsModal, setShowColumnsModal] = useState(false);
   const [allVariables, setAllVariables] = useState<VariableUnion[]>();
+  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
+  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (allVariablesResponse?.status === 'success') {
-      setAllVariables(allVariablesResponse.data);
-    }
-  }, [allVariablesResponse]);
-
-  useEffect(() => {
-    const request = dispatch(requestListAllVariables());
-    setRequestVarsId(request.requestId);
-  }, [dispatch]);
-
-  useEffect(() => {
+  const reloadTable = useCallback(() => {
     const request = dispatch(
       requestGetProjectsWithVariables({
         fields: [
@@ -65,6 +73,7 @@ const MatrixView = () => {
           'variables.isMultiSelect',
           'variables.values.textValue',
           'variables.values.numberValue',
+          'variables.values.linkUrl',
           'variables.values.dateValue',
           'variables.values.options.name',
           'variables.values.options.position',
@@ -77,6 +86,27 @@ const MatrixView = () => {
     );
     setRequestId(request.requestId);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (updateVariableValuesRequest?.status === 'success') {
+      reloadTable();
+    }
+  }, [reloadTable, updateVariableValuesRequest]);
+
+  useEffect(() => {
+    if (allVariablesResponse?.status === 'success') {
+      setAllVariables(allVariablesResponse.data);
+    }
+  }, [allVariablesResponse]);
+
+  useEffect(() => {
+    const request = dispatch(requestListAllVariables());
+    setRequestVarsId(request.requestId);
+  }, [dispatch]);
+
+  useEffect(() => {
+    reloadTable();
+  }, [dispatch, reloadTable]);
 
   const uniqueVariableIds = useMemo(
     () =>
@@ -102,6 +132,84 @@ const MatrixView = () => {
     return map;
   }, [projects]);
 
+  const onSaveHandler = useCallback(
+    (
+      projectId: number,
+      updatedValue: string | number,
+      variable: {
+        stableId: string;
+        variableId: string;
+        variableName: string;
+        variableType: string;
+        isList?: boolean;
+        isMultiselect?: boolean;
+        values?: {
+          variableValueId: string;
+          options?: { id: string; name: string; position: string }[];
+          numberValue?: string;
+          textValue?: string;
+          dateValue?: string;
+          linkUrl?: string;
+        }[];
+      }
+    ) => {
+      const values = variable?.values;
+
+      let newValue: NewNonSectionValuePayloadUnion | undefined;
+      let firstValue;
+      if (variable?.variableType === 'Text') {
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueTextValue) : undefined;
+        newValue = { type: 'Text', textValue: updatedValue.toString() };
+      }
+      if (variable?.variableType === 'Number') {
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueNumberValue) : undefined;
+        newValue = { type: 'Number', numberValue: Number(updatedValue) };
+      }
+      if (variable?.variableType === 'Select') {
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueSelectValue) : undefined;
+        newValue = { type: 'Select', optionIds: [Number(updatedValue)] };
+      }
+      if (variable?.variableType === 'Date') {
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueDateValue) : undefined;
+        newValue = { type: 'Date', dateValue: updatedValue.toString() };
+      }
+      if (variable?.variableType === 'Email') {
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueEmailValue) : undefined;
+        newValue = { type: 'Email', emailValue: updatedValue.toString() };
+      }
+      if (variable?.variableType === 'Link') {
+        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueLinkValue) : undefined;
+        newValue = { type: 'Link', url: updatedValue.toString() };
+      }
+      const valueIdToUpdate = firstValue?.id || -1;
+      if (newValue) {
+        setLoading(true);
+        if (valueIdToUpdate.toString() !== '-1') {
+          const request = dispatch(
+            requestUpdateVariableValues({
+              operations: [
+                { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
+              ],
+              projectId,
+              updateStatuses: false,
+            })
+          );
+          setUpdateVariableValuesRequestId(request.requestId);
+        } else {
+          const request = dispatch(
+            requestUpdateVariableValues({
+              operations: [{ operation: 'Append', variableId: Number(variable.variableId), value: newValue }],
+              projectId,
+              updateStatuses: false,
+            })
+          );
+          setUpdateVariableValuesRequestId(request.requestId);
+        }
+      }
+    },
+    [dispatch]
+  );
+
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
     const baseColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
       {
@@ -109,43 +217,203 @@ const MatrixView = () => {
         header: strings.PROJECT_NAME,
         size: 200,
         id: 'projectName',
+        enableEditing: false,
       },
       {
         accessorKey: 'participant_cohort_phase',
         header: strings.PHASE,
         size: 200,
         id: 'participantCohortPhase',
+        enableEditing: false,
       },
       {
         accessorKey: 'acceleratorDetails_confirmedReforestableLand',
         header: strings.ELIGIBLE_LAND,
         size: 200,
         id: 'elegibleLand',
+        enableEditing: false,
       },
       {
         accessorKey: 'country_name',
         header: strings.COUNTRY,
         size: 200,
         id: 'countryName',
+        enableEditing: false,
       },
       {
         accessorKey: 'acceleratorDetails_projectLead',
         header: strings.PROJECT_LEAD,
         size: 200,
         id: 'projectLead',
+        enableEditing: false,
       },
     ];
 
     const variableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = uniqueVariableIds.map((variableId) => {
+      const selectedVariable = allVariables?.find((va) => va.stableId === variableId);
+      const correspondingVariable = projects?.flatMap((p) => p.variables || []).find((v) => v.stableId === variableId);
+      const correspondingValue = correspondingVariable?.values?.[0];
+      let Edit: any;
+      let editVariant: 'text' | 'select' = 'text';
+      let editSelectOptions: { label: string; value: string }[] | undefined;
+
+      if (correspondingValue?.dateValue) {
+        // eslint-disable-next-line react/display-name, react/prop-types
+        Edit = ({
+          cell,
+          row,
+          table,
+        }: {
+          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
+          column: MRT_Column<ProjectsWithVariablesSearchResult>;
+          row: MRT_Row<ProjectsWithVariablesSearchResult>;
+          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+        }) => {
+          const [value, setValue] = useState(cell.getValue<string>() || '');
+
+          return (
+            <DatePicker
+              value={value ? new Date(value) : null}
+              onDateChange={(date) => {
+                const dateString = date ? date.toLocaleString() : '';
+                setValue(dateString);
+                table.setEditingCell(null);
+                const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
+                const variableToProcess = variable ?? correspondingVariable;
+                if (variableToProcess && date) {
+                  onSaveHandler(row.original.id, date.toISODate() ?? '', variableToProcess);
+                }
+              }}
+              aria-label={''}
+              id={''}
+              label={undefined}
+            />
+          );
+        };
+      }
+
+      if (correspondingValue?.options && correspondingValue?.options.length > 0) {
+        const getSelectOptions = () => {
+          if (selectedVariable && 'options' in selectedVariable && selectedVariable.options) {
+            return selectedVariable.options.map((option) => ({
+              label: option.renderedText ?? option.name,
+              value: option.id.toString(),
+            }));
+          }
+          return [];
+        };
+
+        editVariant = 'select';
+        editSelectOptions = getSelectOptions();
+
+        Edit = undefined;
+      }
+
+      if (correspondingValue?.numberValue !== undefined) {
+        // Number input
+        // eslint-disable-next-line react/display-name, react/prop-types
+        Edit = ({
+          cell,
+          row,
+          table,
+        }: {
+          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
+          column: MRT_Column<ProjectsWithVariablesSearchResult>;
+          row: MRT_Row<ProjectsWithVariablesSearchResult>;
+          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+        }) => {
+          const [value, setValue] = useState<string>((cell.getValue<string>() || 0).toString());
+
+          const handleSave = () => {
+            table.setEditingCell(null);
+            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
+            const variableToProcess = variable ?? correspondingVariable;
+            if (variableToProcess) {
+              onSaveHandler(row.original.id, value, variableToProcess);
+            }
+          };
+
+          return (
+            <TextField
+              type='number'
+              value={value}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={(e) => {
+                const numValue = e.target.value;
+                setValue(numValue);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSave();
+                } else if (e.key === 'Escape') {
+                  table.setEditingCell(null);
+                }
+              }}
+              onBlur={handleSave}
+              size='small'
+              fullWidth
+            />
+          );
+        };
+      }
+      if (correspondingValue?.linkUrl) {
+        // URL input
+        // eslint-disable-next-line react/display-name, react/prop-types
+        Edit = ({
+          cell,
+          row,
+          table,
+        }: {
+          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
+          column: MRT_Column<ProjectsWithVariablesSearchResult>;
+          row: MRT_Row<ProjectsWithVariablesSearchResult>;
+          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+        }) => {
+          const [value, setValue] = useState(cell.getValue<string>() || '');
+
+          const handleSave = () => {
+            table.setEditingCell(null);
+            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
+            const variableToProcess = variable ?? correspondingVariable;
+            if (variableToProcess) {
+              onSaveHandler(row.original.id, value, variableToProcess);
+            }
+          };
+
+          return (
+            <TextField
+              type='url'
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+              onBlur={handleSave}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSave();
+                } else if (e.key === 'Escape') {
+                  table.setEditingCell(null);
+                }
+              }}
+              size='small'
+              fullWidth
+              placeholder='https://...'
+            />
+          );
+        };
+      }
       return {
         id: variableId,
         header: variableNameMap.get(variableId) || variableId,
         size: 150,
+        editVariant,
+        editSelectOptions,
+        Edit,
         accessorFn: (row) => {
           const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
           const variableValue = variable?.values?.[0];
 
-          if (!variableValue || variable?.isList) {
+          if (!variableValue || variable?.isList?.toString() === 'true') {
             return '';
           }
 
@@ -167,15 +435,37 @@ const MatrixView = () => {
 
           return '';
         },
+        // Handle saving the edited value
+        muiEditTextFieldProps: ({
+          row,
+        }: {
+          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
+          column: MRT_Column<ProjectsWithVariablesSearchResult>;
+          row: MRT_Row<ProjectsWithVariablesSearchResult>;
+          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+        }) => ({
+          onBlur: (event) => {
+            const newValue = event.target.value;
+            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
+            const variableToProcess = variable ?? correspondingVariable;
+            if (variableToProcess) {
+              onSaveHandler(row.original.id, newValue, variableToProcess);
+            }
+          },
+        }),
       };
     });
 
     return [...baseColumns, ...variableColumns];
-  }, [uniqueVariableIds, variableNameMap]);
+  }, [allVariables, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
 
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {
       setProjects(result.data);
+      setLoading(false);
+    }
+    if (result?.status === 'error') {
+      setLoading(false);
     }
   }, [result]);
 
@@ -239,6 +529,7 @@ const MatrixView = () => {
 
   return (
     <Page title={strings.MATRIX_VIEW}>
+      {loading === true && <BusySpinner />}
       {showColumnsModal && allVariables && (
         <ColumnsModal
           onClose={onCloseColumnsModalHandler}
