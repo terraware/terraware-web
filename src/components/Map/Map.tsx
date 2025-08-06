@@ -154,18 +154,14 @@ export default function Map(props: MapProps): JSX.Element {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       // Check if click is outside the map container
-      if (mapRef.current && !mapRef.current.getContainer().contains(event.target as Node)) {
+      if (popupInfo && mapRef.current && !mapRef.current.getContainer().contains(event.target as Node)) {
         setPopupInfo(null);
       }
     };
-
-    if (popupInfo) {
-      document.addEventListener('click', handleClickOutside);
-
-      return () => {
-        document.removeEventListener('click', handleClickOutside);
-      };
-    }
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, [popupInfo]);
 
   const onMapError = useCallback(
