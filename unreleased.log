@@ -1,3 +1,4 @@
+bbcd600c22f Save visible columns on local storage (#4327)
 f6588982f02 SW-7220 Popover persists even when selected boundary is changed (#4325)
 23cfbf613f8 SW-7198: Observations: Ability to download Ad Hoc Plant Monitoring data (#4322)
 7acccf5212a SW-7176 Add in-line editing for variables (#4321)

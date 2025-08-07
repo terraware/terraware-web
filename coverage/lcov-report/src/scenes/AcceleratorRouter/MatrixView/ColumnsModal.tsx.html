@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/185</span>
+                <span class='fraction'>0/190</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/118</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/166</span>
+                <span class='fraction'>0/170</span>
             </div>
         
             
@@ -696,7 +696,13 @@
 <a name='L631'></a><a href='#L631'>631</a>
 <a name='L632'></a><a href='#L632'>632</a>
 <a name='L633'></a><a href='#L633'>633</a>
-<a name='L634'></a><a href='#L634'>634</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L634'></a><a href='#L634'>634</a>
+<a name='L635'></a><a href='#L635'>635</a>
+<a name='L636'></a><a href='#L636'>636</a>
+<a name='L637'></a><a href='#L637'>637</a>
+<a name='L638'></a><a href='#L638'>638</a>
+<a name='L639'></a><a href='#L639'>639</a>
+<a name='L640'></a><a href='#L640'>640</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -779,6 +785,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -813,7 +826,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1409,8 +1421,15 @@ export default function <span class="fstat-no" title="function not covered" >Col
   }, [allVariables, searchTerm]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const columnOrder = <span class="cstat-no" title="statement not covered" >table.getState().columnOrder;</span>
     const visibleColumnIds = <span class="cstat-no" title="statement not covered" >table.getVisibleFlatColumns().map(<span class="fstat-no" title="function not covered" >(c</span>ol) =&gt; <span class="cstat-no" title="statement not covered" >col.id)</span>;</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedColumns(visibleColumnIds);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (columnOrder.length &gt; 0) {</span>
+      const orderedVisibleColumns = <span class="cstat-no" title="statement not covered" >columnOrder.filter(<span class="fstat-no" title="function not covered" >(c</span>olumnId) =&gt; <span class="cstat-no" title="statement not covered" >visibleColumnIds.includes(columnId))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedColumns(orderedVisibleColumns);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      setSelectedColumns(visibleColumnIds);</span>
+    }
   }, [table]);
 &nbsp;
   // Get current pinning state from the table
@@ -1448,7 +1467,6 @@ export default function <span class="fstat-no" title="function not covered" >Col
 <span class="cstat-no" title="statement not covered" >    return Object.values(groups);</span>
   }, [allVariables, deliverables]);
 &nbsp;
-  // Initialize with compliance deliverable selected (adjust logic as needed)
 <span class="cstat-no" title="statement not covered" >  React.useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const complianceDeliverable = <span class="cstat-no" title="statement not covered" >deliverableGroups.find(<span class="fstat-no" title="function not covered" >(d</span>) =&gt; <span class="cstat-no" title="statement not covered" >d.name.toLowerCase().includes('compliance'))</span>;</span>
 &nbsp;
@@ -1969,7 +1987,7 @@ export default function <span class="fstat-no" title="function not covered" >Col
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-07T12:44:34.544Z
+                at 2025-08-07T13:24:34.367Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
