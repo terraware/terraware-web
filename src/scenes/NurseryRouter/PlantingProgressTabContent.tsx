@@ -173,7 +173,7 @@ export default function PlantingProgress({
             {...searchProps}
           />
         }
-        list={<PlantingProgressList data={plantingProgressResults} reloadTracking={reloadTrackingAndObservations} />}
+        list={<PlantingProgressList reloadTracking={reloadTrackingAndObservations} rows={plantingProgressResults} />}
         map={
           <PlantingProgressMap plantingSiteId={selectedPlantingSiteId} reloadTracking={reloadTrackingAndObservations} />
         }

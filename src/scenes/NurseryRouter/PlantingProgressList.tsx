@@ -79,11 +79,11 @@ const columnsWithZones = (): TableColumnType[] => [
 ];
 
 export type PlantingProgressListProps = {
-  data: Partial<PlantingProgress>[] | undefined;
+  rows: Partial<PlantingProgress>[] | undefined;
   reloadTracking: () => void;
 };
 
-export default function PlantingProgressList({ data, reloadTracking }: PlantingProgressListProps): JSX.Element {
+export default function PlantingProgressList({ rows, reloadTracking }: PlantingProgressListProps): JSX.Element {
   const [hasZones, setHasZones] = useState<boolean | undefined>();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
@@ -100,10 +100,10 @@ export default function PlantingProgressList({ data, reloadTracking }: PlantingP
   const [markingAsComplete, setMarkingAsComplete] = useState(false);
 
   useEffect(() => {
-    if (data && hasZones === undefined) {
-      setHasZones(data.some((d) => d.subzoneName));
+    if (rows && hasZones === undefined) {
+      setHasZones(rows.some((d) => d.subzoneName));
     }
-  }, [data, hasZones]);
+  }, [rows, hasZones]);
 
   useEffect(() => {
     if (selectedRows) {
@@ -162,7 +162,7 @@ export default function PlantingProgressList({ data, reloadTracking }: PlantingP
 
   const isClickable = useCallback(() => false, []);
 
-  if (!data || hasZones === undefined) {
+  if (!rows || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
@@ -207,7 +207,7 @@ export default function PlantingProgressList({ data, reloadTracking }: PlantingP
       <Table
         id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
         columns={hasZones ? columnsWithZones : columnsWithoutZones}
-        rows={data}
+        rows={rows}
         orderBy={hasZones ? 'subzoneName' : 'siteName'}
         Renderer={DetailsRenderer}
         selectedRows={selectedRows}
