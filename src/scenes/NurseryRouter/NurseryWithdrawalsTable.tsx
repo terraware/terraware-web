@@ -36,8 +36,6 @@ import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import { exportNurseryWithdrawalResults } from './exportNurseryData';
-
 const columns = (): TableColumnType[] => [
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
@@ -50,7 +48,13 @@ const columns = (): TableColumnType[] => [
   { key: 'menu', name: '', type: 'string' },
 ];
 
-export default function NurseryWithdrawalsTable(): JSX.Element {
+export default function NurseryWithdrawalsTable({
+  rows,
+  setRows,
+}: {
+  rows: SearchResponseElement[] | null | undefined;
+  setRows: (rows: SearchResponseElement[] | null) => void;
+}): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const navigate = useSyncNavigate();
@@ -62,7 +66,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const projects = useAppSelector(selectProjects);
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
@@ -247,16 +250,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         if (getRequestId('searchWithdrawals') === requestId) {
           const destinationFilter = filters.destinationName?.values ?? [];
           if (destinationFilter.length) {
-            setSearchResults(
-              apiSearchResults.filter((result) => destinationFilter.indexOf(result.destinationName) !== -1)
-            );
+            setRows(apiSearchResults.filter((result) => destinationFilter.indexOf(result.destinationName) !== -1));
           } else {
-            setSearchResults(apiSearchResults);
+            setRows(apiSearchResults);
           }
         }
       }
     }
-  }, [getSearchChildren, selectedOrganization, searchSortOrder, filters]);
+  }, [selectedOrganization, getSearchChildren, searchSortOrder, filters.destinationName?.values, setRows]);
 
   const reload = useCallback(() => {
     void onApplyFilters();
@@ -312,16 +313,11 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const isClickable = useCallback(() => false, []);
 
-  const onExportNurseryWithdrawals = useCallback(() => {
-    void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: searchResults || [] });
-  }, [searchResults]);
-
   return (
     <Grid container>
       <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
         <SearchFiltersWrapper
           search={searchValue}
-          onExport={onExportNurseryWithdrawals}
           onSearch={setSearchValue}
           filtersProps={filtersProps}
           featuredFilters={featuredFilters}
@@ -332,7 +328,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         <Table
           id='withdrawal-log'
           columns={columns}
-          rows={searchResults || []}
+          rows={rows || []}
           Renderer={WithdrawalLogRenderer}
           orderBy={searchSortOrder.field}
           order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}

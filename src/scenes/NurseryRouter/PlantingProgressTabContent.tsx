@@ -27,7 +27,19 @@ import { exportNurseryPlantingProgress } from './exportNurseryData';
 
 const initialView: View = 'list';
 
-export default function PlantingProgress(): JSX.Element {
+type PlantingProgressProps = {
+  filters: Record<string, SearchNodePayload>;
+  search: string;
+  setFilters: (value: Record<string, SearchNodePayload>) => void;
+  setSearch: (value: string) => void;
+};
+
+export default function PlantingProgress({
+  filters,
+  search,
+  setFilters,
+  setSearch,
+}: PlantingProgressProps): JSX.Element {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -36,8 +48,6 @@ export default function PlantingProgress(): JSX.Element {
 
   const projects = useAppSelector(selectProjects);
 
-  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
-  const [search, setSearch] = useState<string>('');
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
@@ -110,7 +120,7 @@ export default function PlantingProgress(): JSX.Element {
         filterOptions,
       },
     }),
-    [filters, filterColumns, filterOptions, search]
+    [filters, filterColumns, filterOptions, search, setFilters, setSearch]
   );
 
   const reloadTrackingAndObservations = useCallback(() => {
@@ -136,10 +146,6 @@ export default function PlantingProgress(): JSX.Element {
     });
   }, [activeLocale, plantingSitesNames]);
 
-  const onExportPlantingProgress = useCallback(() => {
-    void exportNurseryPlantingProgress({ plantingProgress: plantingProgressResults || [] });
-  }, [plantingProgressResults]);
-
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
@@ -164,7 +170,6 @@ export default function PlantingProgress(): JSX.Element {
           <SearchComponent
             view={activeView}
             onChangePlantingSite={setSelectedPlantingSiteId}
-            onExport={onExportPlantingProgress}
             featuredFilters={featuredFilters}
             {...searchProps}
           />
