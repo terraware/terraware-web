@@ -194,7 +194,7 @@ const makeAdHocObservationCsv = ({
       deadPlants: aggregateSpeciesData.totalDead || 0,
       totalSpecies: adHocObservation.adHocPlot.totalSpecies || 0,
       conditions:
-        adHocObservation.adHocPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '- -',
+        adHocObservation.adHocPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '',
       notes: adHocObservation.adHocPlot?.notes || '',
     },
   ];
