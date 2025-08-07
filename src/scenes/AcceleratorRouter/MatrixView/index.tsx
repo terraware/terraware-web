@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-import { Box, IconButton, TextField } from '@mui/material';
+import { Box, Button, Checkbox, Chip, IconButton, TextField } from '@mui/material';
 import { BusySpinner, Icon } from '@terraware/web-components';
+import { isArray } from 'lodash';
 import {
   MRT_Cell,
   MRT_Column,
@@ -39,6 +41,7 @@ import {
   VariableValueSelectValue,
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal from './ColumnsModal';
 
@@ -53,6 +56,7 @@ const MatrixView = () => {
   const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
   const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
   const [loading, setLoading] = useState(false);
+  const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
   const reloadTable = useCallback(() => {
@@ -91,7 +95,11 @@ const MatrixView = () => {
     if (updateVariableValuesRequest?.status === 'success') {
       reloadTable();
     }
-  }, [reloadTable, updateVariableValuesRequest]);
+    if (updateVariableValuesRequest?.status === 'error') {
+      snackbar.toastError();
+      setLoading(false);
+    }
+  }, [reloadTable, snackbar, updateVariableValuesRequest]);
 
   useEffect(() => {
     if (allVariablesResponse?.status === 'success') {
@@ -122,62 +130,83 @@ const MatrixView = () => {
 
   const variableNameMap = useMemo(() => {
     const map = new Map<string, string>();
-    projects?.forEach((project) => {
-      project.variables?.forEach((variable) => {
-        if (!map.has(variable.stableId)) {
-          map.set(variable.stableId, variable.variableName);
-        }
-      });
+    allVariables?.forEach((variable) => {
+      if (!map.has(variable.stableId)) {
+        map.set(variable.stableId, variable.name);
+      }
     });
     return map;
-  }, [projects]);
+  }, [allVariables]);
 
   const onSaveHandler = useCallback(
     (
       projectId: number,
-      updatedValue: string | number,
-      variable: {
-        stableId: string;
-        variableId: string;
-        variableName: string;
-        variableType: string;
-        isList?: boolean;
-        isMultiselect?: boolean;
-        values?: {
-          variableValueId: string;
-          options?: { id: string; name: string; position: string }[];
-          numberValue?: string;
-          textValue?: string;
-          dateValue?: string;
-          linkUrl?: string;
-        }[];
-      }
+      updatedValue: string | number | string[],
+      variable:
+        | {
+            stableId: string;
+            variableId: string;
+            variableName: string;
+            variableType: string;
+            isList?: boolean;
+            isMultiselect?: boolean;
+            values?: {
+              variableValueId: string;
+              options?: { id: string; name: string; position: string }[];
+              numberValue?: string;
+              textValue?: string;
+              dateValue?: string;
+              linkUrl?: string;
+            }[];
+          }
+        | VariableUnion
     ) => {
-      const values = variable?.values;
+      const values = 'values' in variable ? variable?.values : undefined;
 
       let newValue: NewNonSectionValuePayloadUnion | undefined;
       let firstValue;
-      if (variable?.variableType === 'Text') {
+      if (
+        ('variableType' in variable && variable.variableType === 'Text') ||
+        ('type' in variable && variable.type === 'Text')
+      ) {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueTextValue) : undefined;
         newValue = { type: 'Text', textValue: updatedValue.toString() };
       }
-      if (variable?.variableType === 'Number') {
+      if (
+        ('variableType' in variable && variable.variableType === 'Number') ||
+        ('type' in variable && variable.type === 'Number')
+      ) {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueNumberValue) : undefined;
         newValue = { type: 'Number', numberValue: Number(updatedValue) };
       }
-      if (variable?.variableType === 'Select') {
+      if (
+        ('variableType' in variable && variable.variableType === 'Select') ||
+        ('type' in variable && variable.type === 'Select')
+      ) {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueSelectValue) : undefined;
-        newValue = { type: 'Select', optionIds: [Number(updatedValue)] };
+        newValue = {
+          type: 'Select',
+          optionIds: isArray(updatedValue) ? updatedValue.map((uVal) => Number(uVal)) : [Number(updatedValue)],
+        };
       }
-      if (variable?.variableType === 'Date') {
+      if (
+        ('variableType' in variable && variable.variableType === 'Date') ||
+        ('type' in variable && variable.type === 'Date')
+      ) {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueDateValue) : undefined;
         newValue = { type: 'Date', dateValue: updatedValue.toString() };
       }
-      if (variable?.variableType === 'Email') {
+      if (
+        ('variableType' in variable && variable.variableType === 'Email') ||
+        ('type' in variable && variable.type === 'Email')
+      ) {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueEmailValue) : undefined;
         newValue = { type: 'Email', emailValue: updatedValue.toString() };
       }
-      if (variable?.variableType === 'Link') {
+      if (
+        ('variableType' in variable && variable.variableType === 'Link') ||
+        ('type' in variable && variable.type === 'Link')
+      ) {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueLinkValue) : undefined;
         newValue = { type: 'Link', url: updatedValue.toString() };
       }
@@ -196,14 +225,17 @@ const MatrixView = () => {
           );
           setUpdateVariableValuesRequestId(request.requestId);
         } else {
-          const request = dispatch(
-            requestUpdateVariableValues({
-              operations: [{ operation: 'Append', variableId: Number(variable.variableId), value: newValue }],
-              projectId,
-              updateStatuses: false,
-            })
-          );
-          setUpdateVariableValuesRequestId(request.requestId);
+          const varId = 'variableId' in variable ? variable.variableId : 'id' in variable ? variable.id : '';
+          if (varId) {
+            const request = dispatch(
+              requestUpdateVariableValues({
+                operations: [{ operation: 'Append', variableId: Number(varId), value: newValue }],
+                projectId,
+                updateStatuses: false,
+              })
+            );
+            setUpdateVariableValuesRequestId(request.requestId);
+          }
         }
       }
     },
@@ -258,7 +290,7 @@ const MatrixView = () => {
       let editSelectOptions: { label: string; value: string }[] | undefined;
 
       if (correspondingValue?.dateValue) {
-        // eslint-disable-next-line react/display-name, react/prop-types
+        // eslint-disable-next-line react/display-name
         Edit = ({
           cell,
           row,
@@ -292,7 +324,7 @@ const MatrixView = () => {
         };
       }
 
-      if (correspondingValue?.options && correspondingValue?.options.length > 0) {
+      if (selectedVariable && 'options' in selectedVariable) {
         const getSelectOptions = () => {
           if (selectedVariable && 'options' in selectedVariable && selectedVariable.options) {
             return selectedVariable.options.map((option) => ({
@@ -303,15 +335,190 @@ const MatrixView = () => {
           return [];
         };
 
-        editVariant = 'select';
-        editSelectOptions = getSelectOptions();
+        if (selectedVariable && 'isMultiple' in selectedVariable && selectedVariable.isMultiple) {
+          // eslint-disable-next-line react/display-name
+          Edit = ({
+            cell,
+            row,
+            table,
+          }: {
+            cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
+            column: MRT_Column<ProjectsWithVariablesSearchResult>;
+            row: MRT_Row<ProjectsWithVariablesSearchResult>;
+            table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+          }) => {
+            const [selectedLabels] = React.useState<string[]>(
+              cell.getValue<string>()
+                ? cell
+                    .getValue<string>()
+                    .trim()
+                    ?.split(',')
+                    .map((item) => item.trim())
+                : []
+            );
+            const [selections, setSelections] = React.useState<string[]>([]);
+            const [isOpen, setIsOpen] = useState(false);
+            const [position, setPosition] = useState({ top: 0, left: 0 });
+            const triggerRef = useRef<HTMLDivElement>(null);
 
-        Edit = undefined;
+            const optionsMap = useMemo(
+              () =>
+                new Map<string, string>(
+                  getSelectOptions()
+                    .filter((opt) => opt.value && opt.label)
+                    .map((opt) => [opt.value, opt.label])
+                ),
+              []
+            );
+
+            useEffect(() => {
+              if (selectedLabels) {
+                setSelections(
+                  selectedLabels.map((sl) => getSelectOptions().find((opt) => opt.label === sl)?.value || '')
+                );
+              }
+            }, [optionsMap, selectedLabels]);
+
+            const handleSave = () => {
+              const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
+              const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
+              if (variableToProcess) {
+                onSaveHandler(row.original.id, selections, variableToProcess);
+              }
+              table.setEditingCell(null);
+            };
+
+            const onAdd = (value: string | null) => {
+              const updatedValues = [...selections];
+              const valueIndex = updatedValues.findIndex((v) => v === value);
+              if (value && valueIndex < 0) {
+                updatedValues.push(value);
+                setSelections(updatedValues);
+              }
+            };
+
+            const onRemove = (value: string | null) => {
+              const updatedValues = [...selections];
+              const valueIndex = updatedValues.findIndex((v) => v === value);
+              if (valueIndex >= 0) {
+                updatedValues.splice(valueIndex, 1);
+                setSelections(updatedValues);
+              }
+            };
+
+            const handleOpen = () => {
+              if (triggerRef.current) {
+                const rect = triggerRef.current.getBoundingClientRect();
+                setPosition({
+                  top: rect.bottom + window.scrollY,
+                  left: rect.left + window.scrollX,
+                });
+                setIsOpen(true);
+              }
+            };
+
+            const handleClose = () => {
+              handleSave();
+              setIsOpen(false);
+            };
+
+            return (
+              <>
+                <div
+                  ref={triggerRef}
+                  onClick={handleOpen}
+                  style={{
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    padding: '8px',
+                    minHeight: '40px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '4px',
+                    alignItems: 'center',
+                    width: '100%',
+                  }}
+                >
+                  {selections.map((value) => (
+                    <Chip
+                      key={value}
+                      label={optionsMap.get(value) || value}
+                      size='small'
+                      onDelete={(e) => {
+                        e.stopPropagation();
+                        onRemove(value);
+                      }}
+                    />
+                  ))}
+                  {selections.length === 0 && <span style={{ color: '#999' }}>Select options...</span>}
+                </div>
+
+                {isOpen &&
+                  createPortal(
+                    <div
+                      style={{
+                        position: 'fixed',
+                        top: position.top,
+                        left: position.left,
+                        zIndex: 9999,
+                        backgroundColor: 'white',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        maxHeight: '200px',
+                        overflowY: 'auto',
+                        minWidth: '200px',
+                      }}
+                    >
+                      {Array.from(optionsMap.entries()).map(([value, label]) => (
+                        <div
+                          key={value}
+                          onClick={() => {
+                            if (selections.includes(value)) {
+                              onRemove(value);
+                            } else {
+                              onAdd(value);
+                            }
+                          }}
+                          style={{
+                            padding: '8px 12px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            borderBottom: '1px solid #f0f0f0',
+                          }}
+                          onMouseEnter={(e) => {
+                            (e.target as HTMLElement).style.backgroundColor = '#f5f5f5';
+                          }}
+                          onMouseLeave={(e) => {
+                            (e.target as HTMLElement).style.backgroundColor = 'white';
+                          }}
+                        >
+                          <Checkbox checked={selections.includes(value)} size='small' style={{ marginRight: '8px' }} />
+                          {label}
+                        </div>
+                      ))}
+                      <div style={{ padding: '8px', textAlign: 'right' }}>
+                        <Button size='small' onClick={handleClose}>
+                          Done
+                        </Button>
+                      </div>
+                    </div>,
+                    document.body
+                  )}
+              </>
+            );
+          };
+        } else {
+          editVariant = 'select';
+          editSelectOptions = getSelectOptions();
+          Edit = undefined;
+        }
       }
-
       if (correspondingValue?.numberValue !== undefined) {
         // Number input
-        // eslint-disable-next-line react/display-name, react/prop-types
+        // eslint-disable-next-line react/display-name
         Edit = ({
           cell,
           row,
