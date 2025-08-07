@@ -2,7 +2,7 @@ import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'rea
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { IconTooltip, Textfield } from '@terraware/web-components';
+import { DropdownItem, IconTooltip, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import _ from 'lodash';
 
@@ -24,10 +24,13 @@ import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/Specie
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
 import strings from 'src/strings';
+import { AdHocObservationResults } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import { exportAdHocObservationDetails } from '../exportAdHocObservations';
 
 type AdHocObservationDetailsProps = {
   reload: () => void;
@@ -55,8 +58,6 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
 
-  const onOptionItemClick = useCallback(() => setShowMatchSpeciesModal(true), []);
-
   const onCloseMatchSpeciesModal = useCallback(() => setShowMatchSpeciesModal(false), []);
 
   const monitoringPlot = useMemo(() => {
@@ -72,6 +73,20 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
 
   const gridSize = isMobile ? 12 : 4;
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      if (optionItem.value === 'match') {
+        return setShowMatchSpeciesModal(true);
+      } else if (optionItem.value === 'export' && observation && plantingSite) {
+        void exportAdHocObservationDetails({
+          adHocObservation: observation as AdHocObservationResults,
+          plantingSite,
+        });
+      }
+    },
+    [observation, plantingSite]
+  );
 
   const data: Record<string, any>[] = useMemo(() => {
     const handleMissingData = (num?: number) => (!monitoringPlot?.completedTime && !num ? '' : num);
@@ -165,6 +180,10 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
               label: strings.MATCH_UNRECOGNIZED_SPECIES,
               value: 'match',
               disabled: (unrecognizedSpecies?.length || 0) === 0,
+            },
+            {
+              label: strings.EXPORT_OBSERVATION_DETAILS_CSV,
+              value: 'export',
             },
           ]}
         />
