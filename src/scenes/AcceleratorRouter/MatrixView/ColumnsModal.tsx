@@ -78,8 +78,15 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   }, [allVariables, searchTerm]);
 
   useEffect(() => {
+    const columnOrder = table.getState().columnOrder;
     const visibleColumnIds = table.getVisibleFlatColumns().map((col) => col.id);
-    setSelectedColumns(visibleColumnIds);
+
+    if (columnOrder.length > 0) {
+      const orderedVisibleColumns = columnOrder.filter((columnId) => visibleColumnIds.includes(columnId));
+      setSelectedColumns(orderedVisibleColumns);
+    } else {
+      setSelectedColumns(visibleColumnIds);
+    }
   }, [table]);
 
   // Get current pinning state from the table
@@ -117,7 +124,6 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
     return Object.values(groups);
   }, [allVariables, deliverables]);
 
-  // Initialize with compliance deliverable selected (adjust logic as needed)
   React.useEffect(() => {
     const complianceDeliverable = deliverableGroups.find((d) => d.name.toLowerCase().includes('compliance'));
 
