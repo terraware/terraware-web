@@ -6,3 +6,20 @@ export const makeCsv = (columns: ColumnHeader[], data: { [k: string]: AcceptedDa
   const csv = generateCsv(csvConfig)(data);
   return asBlob(csvConfig)(csv);
 };
+
+export const downloadFile = (filename: string, mimeType: string, fileContent: string) => {
+  const fileData = `data:${mimeType};charset=utf-8,${fileContent}`;
+  const encodedUri = encodeURI(fileData);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', filename);
+  link.click();
+};
+
+export const downloadCsv = (filename: string, fileContent: string) => {
+  downloadFile(`${filename}.csv`, 'text/csv', fileContent);
+};
+
+export const downloadGeoJson = (fileContent: string, filename: string) => {
+  downloadFile(`${filename}.geojson`, 'application/geo+json', fileContent);
+};
