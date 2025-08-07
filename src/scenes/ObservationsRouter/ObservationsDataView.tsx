@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -17,6 +17,7 @@ import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import { exportAdHocObservationsResults } from './exportAdHocObservations';
 import ObservationMapView from './map/ObservationMapView';
 import OrgObservationsListView from './org/OrgObservationsListView';
 
@@ -71,6 +72,15 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       return isMonitoring;
     });
   }, [allAdHocObservationResults, selectedPlantingSite]);
+
+  const onExportAdHocObservationResults = useCallback(() => {
+    if (adHocObservationResults && adHocObservationResults.length > 0) {
+      void exportAdHocObservationsResults({
+        adHocObservationsResults: adHocObservationResults,
+        plantingSite: selectedPlantingSite,
+      });
+    }
+  }, [adHocObservationResults, selectedPlantingSite]);
 
   const zoneNames = useAppSelector((state) =>
     selectedOrganization
@@ -128,6 +138,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         <Search
           {...searchProps}
           filtersProps={selectedPlotSelection === 'adHoc' ? undefined : searchProps.filtersProps}
+          onExport={selectedPlotSelection === 'adHoc' ? onExportAdHocObservationResults : undefined}
         />
       }
       style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
