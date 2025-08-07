@@ -23,7 +23,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import PlantingProgressList from './PlantingProgressList';
 import PlantingProgressMap from './PlantingProgressMap';
-import { exportNurseryPlantingProgress } from './exportNurseryData';
 
 const initialView: View = 'list';
 
