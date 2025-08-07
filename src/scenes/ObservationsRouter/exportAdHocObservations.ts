@@ -58,8 +58,8 @@ const makeAdHocObservationsResultsCsv = ({
     plantingSiteName: observation.plantingSiteName,
     startDate: getDateDisplayValue(observation.startDate, plantingSite?.timeZone),
     totalLive: observation.totalLive,
-    totalPlants: observation.totalPlants,
-    totalSpecies: observation.totalSpecies,
+    totalPlants: observation.adHocPlot?.totalPlants,
+    totalSpecies: observation.adHocPlot?.totalSpecies,
   }));
 
   return makeCsv(columnHeaders, data);
