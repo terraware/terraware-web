@@ -2,6 +2,7 @@ import React from 'react';
 
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
+import { downloadCsv } from 'src/utils/csv';
 
 import ImportModal from '../../components/common/ImportModal';
 
@@ -14,12 +15,9 @@ export type ImportSpeciesModalProps = {
 
 export const downloadCsvTemplate = async () => {
   const apiResponse = await SpeciesService.downloadSpeciesTemplate();
-  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse.template;
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', 'template.csv');
-  link.click();
+  if (apiResponse?.template) {
+    downloadCsv('template', apiResponse.template);
+  }
 };
 
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
