@@ -147,7 +147,7 @@ export const exportNurseryWithdrawalResults = ({
 }: {
   nurseryWithdrawalResults: NurseryWithdrawalResults;
 }) => {
-  const nurseryName = nurseryWithdrawalResults[0]?.facility_name || strings.UNKNOWN;
+  const nurseryName = nurseryWithdrawalResults?.[0]?.facility_name || strings.UNKNOWN;
   const dirName = `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`;
 
   return downloadZipFile({
