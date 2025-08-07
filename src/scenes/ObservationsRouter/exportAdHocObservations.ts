@@ -51,8 +51,8 @@ const makeAdHocObservationsResultsCsv = ({
     plantingSiteName: observation.plantingSiteName,
     startDate: getDateDisplayValue(observation.startDate, plantingSite?.timeZone),
     totalLive: observation.totalLive,
-    totalPlants: observation.totalPlants,
-    totalSpecies: observation.totalSpecies,
+    totalPlants: observation.adHocPlot?.totalPlants,
+    totalSpecies: observation.adHocPlot?.totalSpecies,
   }));
 
   return makeCsv(columnHeaders, data);
@@ -187,7 +187,7 @@ const makeAdHocObservationCsv = ({
       deadPlants: aggregateSpeciesData.totalDead || 0,
       totalSpecies: adHocObservation.adHocPlot.totalSpecies || 0,
       conditions:
-        adHocObservation.adHocPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '- -',
+        adHocObservation.adHocPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '',
       notes: adHocObservation.adHocPlot?.notes || '',
     },
   ];
