@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -214,11 +214,7 @@
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
 <a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a>
-<a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a>
-<a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L152'></a><a href='#L152'>152</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -245,8 +241,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -336,8 +330,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -381,7 +373,6 @@ import { Icon } from '@terraware/web-components';
 import { GenericMap } from 'src/components/Map';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestGetCountryBoundary } from 'src/redux/features/location/locationAsyncThunks';
 import { selectCountryBoundary } from 'src/redux/features/location/locationSelectors';
@@ -407,7 +398,6 @@ const ProjectMap = <span class="cstat-no" title="statement not covered" ><span c
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const countryBoundaryResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectCountryBoundary(countryCode ?? ''));</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-  const isGisMapsEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('GIS Maps');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (countryCode) {</span>
@@ -492,34 +482,32 @@ const ProjectMap = <span class="cstat-no" title="statement not covered" ><span c
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)} position={'relative'}&gt;
-      {isGisMapsEnabled &amp;&amp; (
-        &lt;Box
-          sx={{
-            position: 'absolute',
-            right: '20px',
-            top: '12px',
-            zIndex: 10,
-            backgroundColor: `${theme.palette.TwClrBaseWhite}`,
+      &lt;Box
+        sx={{
+          position: 'absolute',
+          right: '20px',
+          top: '12px',
+          zIndex: 10,
+          backgroundColor: `${theme.palette.TwClrBaseWhite}`,
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      &gt;
+        &lt;button
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '8px',
             borderRadius: '8px',
             display: 'flex',
-            alignItems: 'center',
           }}
+          onClick={goToGisMapsView}
         &gt;
-          &lt;button
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '8px',
-              borderRadius: '8px',
-              display: 'flex',
-            }}
-            onClick={goToGisMapsView}
-          &gt;
-            &lt;Icon name='iconExternalLink' size='medium' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
-          &lt;/button&gt;
-        &lt;/Box&gt;
-      )}
+          &lt;Icon name='iconExternalLink' size='medium' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
+        &lt;/button&gt;
+      &lt;/Box&gt;
       &lt;Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignContent: 'center' }}&gt;
         {mapElement}
       &lt;/Box&gt;
@@ -535,7 +523,7 @@ export default ProjectMap;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-07T13:24:34.367Z
+                at 2025-08-07T16:21:41.785Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
