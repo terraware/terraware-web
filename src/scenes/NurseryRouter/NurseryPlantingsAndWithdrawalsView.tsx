@@ -30,9 +30,7 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
 
-  const [nurseryWithdrawalSearchResults, setNurseryWithdrawalSearchResults] = useState<
-    SearchResponseElement[] | null
-  >();
+  const [nurseryWithdrawalResults, setNurseryWithdrawalResults] = useState<SearchResponseElement[] | null>();
   const [plantingProgressFilters, setPlantingProgressFilters] = useState<Record<string, SearchNodePayload>>({});
   const [plantingProgressSearchQuery, setPlantingProgressSearchQuery] = useState<string>('');
 
@@ -61,12 +59,10 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
       {
         id: 'withdrawal_history',
         label: strings.WITHDRAWAL_HISTORY,
-        children: (
-          <NurseryWithdrawals rows={nurseryWithdrawalSearchResults} setRows={setNurseryWithdrawalSearchResults} />
-        ),
+        children: <NurseryWithdrawals rows={nurseryWithdrawalResults} setRows={setNurseryWithdrawalResults} />,
       },
     ];
-  }, [activeLocale, nurseryWithdrawalSearchResults, plantingProgressFilters, plantingProgressSearchQuery]);
+  }, [activeLocale, nurseryWithdrawalResults, plantingProgressFilters, plantingProgressSearchQuery]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'planting_progress',
@@ -79,8 +75,8 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
   }, [plantingProgressResults]);
 
   const onExportNurseryWithdrawals = useCallback(() => {
-    void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: nurseryWithdrawalSearchResults || [] });
-  }, [nurseryWithdrawalSearchResults]);
+    void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: nurseryWithdrawalResults || [] });
+  }, [nurseryWithdrawalResults]);
 
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
