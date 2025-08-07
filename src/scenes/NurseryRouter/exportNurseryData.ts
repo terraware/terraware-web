@@ -1,7 +1,6 @@
 import { PlantingProgress } from 'src/redux/features/plantings/plantingsSelectors';
 import strings from 'src/strings';
-import { makeCsv } from 'src/utils/csv';
-import downloadZipFile from 'src/utils/downloadZipFile';
+import { downloadCsv, makeCsv } from 'src/utils/csv';
 
 type NurseryWithdrawalResults = any[];
 
@@ -122,42 +121,28 @@ const makeNurseryWithdrawalResultsCsv = ({
   return makeCsv(columnHeaders, data);
 };
 
-export const exportNurseryPlantingProgress = ({
+export const exportNurseryPlantingProgress = async ({
   plantingProgress,
 }: {
   plantingProgress: Partial<PlantingProgress>[] | undefined;
 }) => {
   const nurseryName = plantingProgress?.[0]?.siteName || strings.UNKNOWN;
-  const dirName = `${nurseryName}-${strings.PLANTING_PROGRESS}`;
+  const filename = `${nurseryName}-${strings.PLANTING_PROGRESS}`;
+  const fileBlob = makePlantingProgressCsv({ plantingProgress });
+  const fileContent = await fileBlob.text();
 
-  return downloadZipFile({
-    dirName,
-    files: [
-      {
-        fileName: dirName,
-        content: makePlantingProgressCsv({ plantingProgress }),
-      },
-    ],
-    suffix: '.csv',
-  });
+  downloadCsv(filename, fileContent);
 };
 
-export const exportNurseryWithdrawalResults = ({
+export const exportNurseryWithdrawalResults = async ({
   nurseryWithdrawalResults,
 }: {
   nurseryWithdrawalResults: NurseryWithdrawalResults;
 }) => {
   const nurseryName = nurseryWithdrawalResults?.[0]?.facility_name || strings.UNKNOWN;
-  const dirName = `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`;
+  const filename = `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`;
+  const fileBlob = makeNurseryWithdrawalResultsCsv({ nurseryWithdrawalResults });
+  const fileContent = await fileBlob.text();
 
-  return downloadZipFile({
-    dirName,
-    files: [
-      {
-        fileName: dirName,
-        content: makeNurseryWithdrawalResultsCsv({ nurseryWithdrawalResults }),
-      },
-    ],
-    suffix: '.csv',
-  });
+  downloadCsv(filename, fileContent);
 };

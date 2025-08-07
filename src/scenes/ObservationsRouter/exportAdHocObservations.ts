@@ -4,7 +4,7 @@ import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
-import { makeCsv } from 'src/utils/csv';
+import { downloadCsv, makeCsv } from 'src/utils/csv';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
 interface ExportAdHocObservationsResultsParams {
@@ -242,23 +242,20 @@ const makeAdHocObservationSpeciesCsv = ({ adHocObservation }: { adHocObservation
   return makeCsv(columnHeaders, data);
 };
 
-export const exportAdHocObservationsResults = ({
+export const exportAdHocObservationsResults = async ({
   adHocObservationsResults,
   plantingSite,
 }: ExportAdHocObservationsResultsParams) => {
   const plantingSiteName = plantingSite?.name || strings.ALL_PLANTING_SITES;
-  const dirName = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
+  const fileName = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
 
-  return downloadZipFile({
-    dirName,
-    files: [
-      {
-        fileName: dirName,
-        content: makeAdHocObservationsResultsCsv({ adHocObservationsResults, plantingSite }),
-      },
-    ],
-    suffix: '.csv',
+  const fileBlob = makeAdHocObservationsResultsCsv({
+    adHocObservationsResults,
+    plantingSite,
   });
+  const fileContent = await fileBlob.text();
+
+  downloadCsv(fileName, fileContent);
 };
 
 export const exportAdHocObservationDetails = ({
