@@ -19,6 +19,6 @@ export const downloadCsv = (filename: string, fileContent: string) => {
   downloadFile(`${filename}.csv`, 'text/csv', fileContent);
 };
 
-export const downloadGeoJson = (fileContent: string, filename: string) => {
+export const downloadGeoJson = (filename: string, fileContent: string) => {
   downloadFile(`${filename}.geojson`, 'application/geo+json', fileContent);
 };
