@@ -561,10 +561,10 @@ const MatrixView = () => {
                             borderBottom: '1px solid #f0f0f0',
                           }}
                           onMouseEnter={(e) => {
-                            (e.target as HTMLElement).style.backgroundColor = '#f5f5f5';
+                            (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
                           }}
                           onMouseLeave={(e) => {
-                            (e.target as HTMLElement).style.backgroundColor = 'white';
+                            (e.currentTarget as HTMLElement).style.backgroundColor = 'white';
                           }}
                         >
                           <Checkbox checked={selections.includes(value)} size='small' style={{ marginRight: '8px' }} />
