@@ -8,8 +8,7 @@ export const makeCsv = (columns: ColumnHeader[], data: { [k: string]: AcceptedDa
 };
 
 export const downloadFile = (filename: string, mimeType: string, fileContent: string) => {
-  const fileData = `data:${mimeType};charset=utf-8,${fileContent}`;
-  const encodedUri = encodeURI(fileData);
+  const encodedUri = `data:${mimeType};charset=utf-8,${encodeURIComponent(fileContent)}`;
   const link = document.createElement('a');
   link.setAttribute('href', encodedUri);
   link.setAttribute('download', filename);
