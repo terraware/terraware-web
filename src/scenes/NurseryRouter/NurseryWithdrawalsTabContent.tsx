@@ -2,10 +2,17 @@ import React, { Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
+import { SearchResponseElement } from 'src/types/Search';
 
 import NurseryWithdrawalsTable from './NurseryWithdrawalsTable';
 
-export default function NurseryWithdrawalsTabContent(): JSX.Element {
+export default function NurseryWithdrawalsTabContent({
+  rows,
+  setRows,
+}: {
+  rows: SearchResponseElement[] | null | undefined;
+  setRows: (rows: SearchResponseElement[] | null) => void;
+}): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -20,7 +27,7 @@ export default function NurseryWithdrawalsTabContent(): JSX.Element {
       >
         {strings.WITHDRAWAL_HISTORY}
       </Typography>
-      <NurseryWithdrawalsTable />
+      <NurseryWithdrawalsTable rows={rows} setRows={setRows} />
     </Card>
   );
 }

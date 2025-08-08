@@ -20,6 +20,7 @@ import BiomassMeasurementMapView from 'src/scenes/ObservationsRouter/biomass/Bio
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import { downloadCsv } from 'src/utils/csv';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export type BiomassMeasurementProps = SearchProps & {
@@ -71,14 +72,8 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
 
     if (content !== null) {
       const siteName = selectedPlantingSite?.name ?? organization.selectedOrganization?.name ?? 'Unknown';
-      const fileName = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}.csv`);
-
-      const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
-
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', fileName);
-      link.click();
+      const filename = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}`);
+      downloadCsv(filename, content);
     }
   }, [organization, selectedPlantingSite]);
 

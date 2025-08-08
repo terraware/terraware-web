@@ -1,23 +1,16 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
-import { asBlob, generateCsv, mkConfig } from 'export-to-csv';
-import { AcceptedData, ColumnHeader } from 'export-to-csv/output/lib/types';
 
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
+import { downloadCsv, makeCsv } from 'src/utils/csv';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
 interface ExportAdHocObservationsResultsParams {
   adHocObservationsResults: AdHocObservationResults[];
   plantingSite?: PlantingSite;
 }
-
-const makeCsv = (columns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob => {
-  const csvConfig = mkConfig({ columnHeaders: columns });
-  const csv = generateCsv(csvConfig)(data);
-  return asBlob(csvConfig)(csv);
-};
 
 const makeAdHocObservationsResultsCsv = ({
   adHocObservationsResults,
@@ -249,23 +242,20 @@ const makeAdHocObservationSpeciesCsv = ({ adHocObservation }: { adHocObservation
   return makeCsv(columnHeaders, data);
 };
 
-export const exportAdHocObservationsResults = ({
+export const exportAdHocObservationsResults = async ({
   adHocObservationsResults,
   plantingSite,
 }: ExportAdHocObservationsResultsParams) => {
   const plantingSiteName = plantingSite?.name || strings.ALL_PLANTING_SITES;
-  const dirName = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
+  const filename = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
 
-  return downloadZipFile({
-    dirName,
-    files: [
-      {
-        fileName: dirName,
-        content: makeAdHocObservationsResultsCsv({ adHocObservationsResults, plantingSite }),
-      },
-    ],
-    suffix: '.csv',
+  const fileBlob = makeAdHocObservationsResultsCsv({
+    adHocObservationsResults,
+    plantingSite,
   });
+  const fileContent = await fileBlob.text();
+
+  downloadCsv(filename, fileContent);
 };
 
 export const exportAdHocObservationDetails = ({

@@ -8,6 +8,7 @@ import { ImportModuleResponsePayload } from 'src/services/ModuleService';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse, UploadResponse } from 'src/types/File';
+import { downloadCsv } from 'src/utils/csv';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import DialogBox from './DialogBox/DialogBox';
@@ -48,12 +49,7 @@ export type ImportSpeciesModalProps = {
 export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>) => {
   const apiResponse = await templateApi();
   const data = apiResponse?.template ?? apiResponse; // TODO, make all API return a { template: <string> } type
-  const csvContent = 'data:text/csv;charset=utf-8,' + data;
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', 'template.csv');
-  link.click();
+  downloadCsv('template', data);
 };
 
 const warningContentStyles = {

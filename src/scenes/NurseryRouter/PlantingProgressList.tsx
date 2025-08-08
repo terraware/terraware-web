@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
 import { BusySpinner, TableColumnType } from '@terraware/web-components';
@@ -12,15 +12,11 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
-import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
-import {
-  searchPlantingProgress,
-  selectUpdatePlantingsCompleted,
-} from 'src/redux/features/plantings/plantingsSelectors';
+import { PlantingProgress, selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
+import { selectUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 import strings from 'src/strings';
-import { SearchNodePayload } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -83,18 +79,12 @@ const columnsWithZones = (): TableColumnType[] => [
 ];
 
 export type PlantingProgressListProps = {
-  filters: Record<string, SearchNodePayload>;
-  search: string;
+  rows: Partial<PlantingProgress>[] | undefined;
   reloadTracking: () => void;
 };
 
-export default function PlantingProgressList({
-  filters,
-  search,
-  reloadTracking,
-}: PlantingProgressListProps): JSX.Element {
+export default function PlantingProgressList({ rows, reloadTracking }: PlantingProgressListProps): JSX.Element {
   const [hasZones, setHasZones] = useState<boolean | undefined>();
-  const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), filters));
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();
@@ -110,10 +100,10 @@ export default function PlantingProgressList({
   const [markingAsComplete, setMarkingAsComplete] = useState(false);
 
   useEffect(() => {
-    if (data && hasZones === undefined) {
-      setHasZones(data.some((d) => d.subzoneName));
+    if (rows && hasZones === undefined) {
+      setHasZones(rows.some((d) => d.subzoneName));
     }
-  }, [data, hasZones]);
+  }, [rows, hasZones]);
 
   useEffect(() => {
     if (selectedRows) {
@@ -149,14 +139,32 @@ export default function PlantingProgressList({
     }
   }, [updatePlantingResult, reloadTracking, snackbar, markingAsComplete]);
 
-  if (!data || hasZones === undefined) {
-    return <CircularProgress sx={{ margin: 'auto' }} />;
-  }
+  const setPlantingCompleted = useCallback(
+    (complete: boolean) => {
+      const subzoneIds = selectedRows.map((row) => row.subzoneId);
+      const request = dispatch(
+        requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
+      );
+      setMarkingAsComplete(complete);
+      setRequestId(request.requestId);
+    },
+    [dispatch, selectedRows]
+  );
 
-  const onModalSubmit = () => {
+  const onModalSubmit = useCallback(() => {
     setShowWarningModal(false);
     setPlantingCompleted(false);
-  };
+  }, [setPlantingCompleted]);
+
+  const onCloseStatsWarningModal = useCallback(() => {
+    setShowWarningModal(false);
+  }, []);
+
+  const isClickable = useCallback(() => false, []);
+
+  if (!rows || hasZones === undefined) {
+    return <CircularProgress sx={{ margin: 'auto' }} />;
+  }
 
   const validateUndoPlantingComplete = () => {
     if (subzonesStatisticsResult) {
@@ -164,15 +172,6 @@ export default function PlantingProgressList({
       return;
     }
     setPlantingCompleted(false);
-  };
-
-  const setPlantingCompleted = (complete: boolean) => {
-    const subzoneIds = selectedRows.map((row) => row.subzoneId);
-    const request = dispatch(
-      requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
-    );
-    setMarkingAsComplete(complete);
-    setRequestId(request.requestId);
   };
 
   const getTopBarButtons = () => {
@@ -202,23 +201,19 @@ export default function PlantingProgressList({
   return (
     <Box>
       {showWarningModal && (
-        <StatsWarningDialog
-          open={showWarningModal}
-          onClose={() => setShowWarningModal(false)}
-          onSubmit={onModalSubmit}
-        />
+        <StatsWarningDialog open={showWarningModal} onClose={onCloseStatsWarningModal} onSubmit={onModalSubmit} />
       )}
       <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
       <Table
         id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
         columns={hasZones ? columnsWithZones : columnsWithoutZones}
-        rows={data}
+        rows={rows}
         orderBy={hasZones ? 'subzoneName' : 'siteName'}
         Renderer={DetailsRenderer}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         showCheckbox={true}
-        isClickable={() => false}
+        isClickable={isClickable}
         showTopBar={true}
         topBarButtons={getTopBarButtons()}
       />

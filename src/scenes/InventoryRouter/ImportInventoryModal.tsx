@@ -4,6 +4,7 @@ import { useOrganization } from 'src/providers/hooks';
 import { NurseryInventoryService, SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
+import { downloadCsv } from 'src/utils/csv';
 import useForm from 'src/utils/useForm';
 
 import ImportModal from '../../components/common/ImportModal';
@@ -17,12 +18,9 @@ export type ImportInventoryModalProps = {
 
 export const downloadInventoryCsvTemplate = async () => {
   const apiResponse = await NurseryInventoryService.downloadInventoryTemplate();
-  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse.template;
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', 'template.csv');
-  link.click();
+  if (apiResponse?.template) {
+    downloadCsv('template', apiResponse.template);
+  }
 };
 
 export default function ImportInventoryModal(props: ImportInventoryModalProps): JSX.Element {
