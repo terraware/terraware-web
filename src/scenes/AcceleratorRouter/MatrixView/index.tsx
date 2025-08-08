@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Button, Checkbox, Chip, IconButton, TextField } from '@mui/material';
+import { Box, Button, Checkbox, Chip, IconButton, TextField, useTheme } from '@mui/material';
 import { BusySpinner, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
@@ -65,6 +65,7 @@ const MatrixView = () => {
   const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
   const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
   const [loading, setLoading] = useState(false);
+  const theme = useTheme();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
@@ -316,7 +317,7 @@ const MatrixView = () => {
     const baseColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
       {
         accessorKey: 'name',
-        header: strings.PROJECT_NAME,
+        header: strings.DEAL_NAME,
         size: 200,
         id: 'projectName',
         enableEditing: false,
@@ -544,7 +545,8 @@ const MatrixView = () => {
                       {Array.from(optionsMap.entries()).map(([value, label]) => (
                         <div
                           key={value}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             if (selections.includes(value)) {
                               onRemove(value);
                             } else {
@@ -782,6 +784,13 @@ const MatrixView = () => {
     onSortingChange: setSorting,
     onColumnPinningChange: setColumnPinning,
     onColumnOrderChange: setColumnOrder,
+    muiTableBodyProps: {
+      sx: {
+        '& tr:nth-of-type(odd) > td': {
+          backgroundColor: theme.palette.TwClrBaseGray025,
+        },
+      },
+    },
   });
 
   useEffect(() => {
