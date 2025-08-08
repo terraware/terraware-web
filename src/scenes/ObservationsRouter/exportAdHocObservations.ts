@@ -247,7 +247,7 @@ export const exportAdHocObservationsResults = async ({
   plantingSite,
 }: ExportAdHocObservationsResultsParams) => {
   const plantingSiteName = plantingSite?.name || strings.ALL_PLANTING_SITES;
-  const fileName = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
+  const filename = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
 
   const fileBlob = makeAdHocObservationsResultsCsv({
     adHocObservationsResults,
@@ -255,7 +255,7 @@ export const exportAdHocObservationsResults = async ({
   });
   const fileContent = await fileBlob.text();
 
-  downloadCsv(fileName, fileContent);
+  downloadCsv(filename, fileContent);
 };
 
 export const exportAdHocObservationDetails = ({
