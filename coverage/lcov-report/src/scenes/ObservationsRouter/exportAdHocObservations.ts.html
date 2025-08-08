@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -350,17 +350,7 @@
 <a name='L285'></a><a href='#L285'>285</a>
 <a name='L286'></a><a href='#L286'>286</a>
 <a name='L287'></a><a href='#L287'>287</a>
-<a name='L288'></a><a href='#L288'>288</a>
-<a name='L289'></a><a href='#L289'>289</a>
-<a name='L290'></a><a href='#L290'>290</a>
-<a name='L291'></a><a href='#L291'>291</a>
-<a name='L292'></a><a href='#L292'>292</a>
-<a name='L293'></a><a href='#L293'>293</a>
-<a name='L294'></a><a href='#L294'>294</a>
-<a name='L295'></a><a href='#L295'>295</a>
-<a name='L296'></a><a href='#L296'>296</a>
-<a name='L297'></a><a href='#L297'>297</a>
-<a name='L298'></a><a href='#L298'>298</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L288'></a><a href='#L288'>288</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -372,13 +362,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -622,12 +605,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -658,25 +638,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import getDateDisplayValue from '@terraware/web-components/utils/date';
-import { asBlob, generateCsv, mkConfig } from 'export-to-csv';
-import { AcceptedData, ColumnHeader } from 'export-to-csv/output/lib/types';
 &nbsp;
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
+import { downloadCsv, makeCsv } from 'src/utils/csv';
 import downloadZipFile from 'src/utils/downloadZipFile';
 &nbsp;
 interface ExportAdHocObservationsResultsParams {
   adHocObservationsResults: AdHocObservationResults[];
   plantingSite?: PlantingSite;
 }
-&nbsp;
-const makeCsv = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>olumns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob =&gt; {</span>
-  const csvConfig = <span class="cstat-no" title="statement not covered" >mkConfig({ columnHeaders: columns });</span>
-  const csv = <span class="cstat-no" title="statement not covered" >generateCsv(csvConfig)(data);</span>
-<span class="cstat-no" title="statement not covered" >  return asBlob(csvConfig)(csv);</span>
-};
 &nbsp;
 const makeAdHocObservationsResultsCsv = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
   adHocObservationsResults,
@@ -908,23 +881,20 @@ const makeAdHocObservationSpeciesCsv = <span class="cstat-no" title="statement n
 <span class="cstat-no" title="statement not covered" >  return makeCsv(columnHeaders, data);</span>
 };
 &nbsp;
-export const exportAdHocObservationsResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
+export const exportAdHocObservationsResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync ({</span>
   adHocObservationsResults,
   plantingSite,
 }: ExportAdHocObservationsResultsParams) =&gt; {
   const plantingSiteName = <span class="cstat-no" title="statement not covered" >plantingSite?.name || strings.ALL_PLANTING_SITES;</span>
-  const dirName = <span class="cstat-no" title="statement not covered" >`${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;</span>
+  const filename = <span class="cstat-no" title="statement not covered" >`${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return downloadZipFile({</span>
-    dirName,
-    files: [
-      {
-        fileName: dirName,
-        content: makeAdHocObservationsResultsCsv({ adHocObservationsResults, plantingSite }),
-      },
-    ],
-    suffix: '.csv',
+  const fileBlob = <span class="cstat-no" title="statement not covered" >makeAdHocObservationsResultsCsv({</span>
+    adHocObservationsResults,
+    plantingSite,
   });
+  const fileContent = <span class="cstat-no" title="statement not covered" >await fileBlob.text();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  downloadCsv(filename, fileContent);</span>
 };
 &nbsp;
 export const exportAdHocObservationDetails = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
@@ -961,7 +931,7 @@ export const exportAdHocObservationDetails = <span class="cstat-no" title="state
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-07T19:09:30.950Z
+                at 2025-08-08T00:56:33.709Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
