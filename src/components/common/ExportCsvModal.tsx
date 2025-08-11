@@ -6,6 +6,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
+import { downloadCsv } from 'src/utils/csv';
 
 interface ExportCsvModalProps {
   open: boolean;
@@ -26,11 +27,7 @@ export default function ExportCsvModal(props: ExportCsvModalProps): JSX.Element 
     const apiResponse = await onExport();
 
     if (apiResponse !== null) {
-      const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(apiResponse);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', `${name}.csv`);
-      link.click();
+      downloadCsv(name, apiResponse);
     }
 
     onClose();

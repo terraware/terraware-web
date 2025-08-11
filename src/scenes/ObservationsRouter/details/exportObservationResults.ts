@@ -1,20 +1,13 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
-import { asBlob, generateCsv, mkConfig } from 'export-to-csv';
-import { AcceptedData, ColumnHeader } from 'export-to-csv/output/lib/types';
 
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ObservationResults, getPlotStatus } from 'src/types/Observations';
+import { makeCsv } from 'src/utils/csv';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
 interface UseExportObservationResultsParams {
   observationResults: ObservationResults;
-}
-
-function makeCsv(columns: ColumnHeader[], data: { [k: string]: AcceptedData }[]): Blob {
-  const csvConfig = mkConfig({ columnHeaders: columns });
-  const csv = generateCsv(csvConfig)(data);
-  return asBlob(csvConfig)(csv);
 }
 
 function makeObservationCsv(observationResults: ObservationResults): Blob {

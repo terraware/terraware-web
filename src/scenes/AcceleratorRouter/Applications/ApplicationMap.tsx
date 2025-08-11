@@ -12,6 +12,7 @@ import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import ApplicationService from 'src/services/ApplicationService';
 import strings from 'src/strings';
+import { downloadGeoJson } from 'src/utils/csv';
 
 const ApplicationMap = () => {
   const { activeLocale } = useLocalization();
@@ -57,11 +58,8 @@ const ApplicationMap = () => {
     const response = await ApplicationService.exportBoundary(selectedApplication.id);
     if (response !== null) {
       const dataString = JSON.stringify(response.data);
-      const encodedUri = 'data:application/geo+json;charset=utf-8,' + encodeURIComponent(dataString);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', `${selectedApplication.internalName}.geojson`);
-      link.click();
+      const filename = `${selectedApplication.internalName}`;
+      downloadGeoJson(filename, dataString);
     }
   }, [selectedApplication]);
 

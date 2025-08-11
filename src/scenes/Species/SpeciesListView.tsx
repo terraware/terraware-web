@@ -35,6 +35,7 @@ import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import { Species } from 'src/types/Species';
+import { downloadCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { parseSearchTerm } from 'src/utils/search';
@@ -502,14 +503,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     const params = getParams();
     params.fields = CSV_FIELDS;
     const apiResponse = await SearchService.searchCsv(params);
-
     if (apiResponse !== null) {
-      const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'species.csv');
-      link.click();
+      downloadCsv('species', apiResponse);
     }
   };
 

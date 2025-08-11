@@ -48,7 +48,13 @@ const columns = (): TableColumnType[] => [
   { key: 'menu', name: '', type: 'string' },
 ];
 
-export default function NurseryWithdrawalsTable(): JSX.Element {
+export default function NurseryWithdrawalsTable({
+  rows,
+  setRows,
+}: {
+  rows: SearchResponseElement[] | null | undefined;
+  setRows: (rows: SearchResponseElement[] | null) => void;
+}): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const navigate = useSyncNavigate();
@@ -60,7 +66,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const projects = useAppSelector(selectProjects);
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
@@ -145,15 +150,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [selectedOrganization]);
 
-  const onWithdrawalClicked = (withdrawal: any) => {
-    navigate({
-      pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
-    });
-  };
-
-  const reload = () => {
-    void onApplyFilters();
-  };
+  const onWithdrawalClicked = useCallback(
+    (withdrawal: any) => {
+      navigate({
+        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
+      });
+    },
+    [navigate]
+  );
 
   const getSearchChildren = useCallback(() => {
     const { type, values } = parseSearchTerm(debouncedSearchTerm);
@@ -246,16 +250,18 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         if (getRequestId('searchWithdrawals') === requestId) {
           const destinationFilter = filters.destinationName?.values ?? [];
           if (destinationFilter.length) {
-            setSearchResults(
-              apiSearchResults.filter((result) => destinationFilter.indexOf(result.destinationName) !== -1)
-            );
+            setRows(apiSearchResults.filter((result) => destinationFilter.indexOf(result.destinationName) !== -1));
           } else {
-            setSearchResults(apiSearchResults);
+            setRows(apiSearchResults);
           }
         }
       }
     }
-  }, [getSearchChildren, selectedOrganization, searchSortOrder, filters]);
+  }, [selectedOrganization, getSearchChildren, searchSortOrder, filters.destinationName?.values, setRows]);
+
+  const reload = useCallback(() => {
+    void onApplyFilters();
+  }, [onApplyFilters]);
 
   useEffect(() => {
     if (siteParam) {
@@ -293,13 +299,19 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     void onApplyFilters();
   }, [filters, onApplyFilters]);
 
-  const onSortChange = (order: SortOrder, orderBy: string) => {
-    const orderByStr = orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
-    setSearchSortOrder({
-      field: orderByStr,
-      direction: order === 'asc' ? 'Ascending' : 'Descending',
-    });
-  };
+  const onSortChange = useCallback(
+    (order: SortOrder, orderBy: string) => {
+      const orderByStr =
+        orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
+      setSearchSortOrder({
+        field: orderByStr,
+        direction: order === 'asc' ? 'Ascending' : 'Descending',
+      });
+    },
+    [setSearchSortOrder]
+  );
+
+  const isClickable = useCallback(() => false, []);
 
   return (
     <Grid container>
@@ -316,7 +328,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         <Table
           id='withdrawal-log'
           columns={columns}
-          rows={searchResults || []}
+          rows={rows || []}
           Renderer={WithdrawalLogRenderer}
           orderBy={searchSortOrder.field}
           order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
@@ -324,7 +336,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           onSelect={onWithdrawalClicked}
           controlledOnSelect={true}
           sortHandler={onSortChange}
-          isClickable={() => false}
+          isClickable={isClickable}
           reloadData={reload}
         />
       </Grid>
