@@ -44,6 +44,8 @@ export default function MatrixViewTests() {
     await expect(page.getByText('TEST Number of native species')).toBeVisible();
 
     //selected columns
+    const columnHeaders = page.getByRole('columnheader');
+    await expect(columnHeaders).toHaveCount(5);
     await expect(page.locator('li').filter({ hasText: 'projectName' })).toBeVisible();
     await expect(page.locator('li').filter({ hasText: 'participantCohortPhase' })).toBeVisible();
     await expect(page.locator('li').filter({ hasText: 'elegibleLand' })).toBeVisible();
@@ -61,10 +63,10 @@ export default function MatrixViewTests() {
 
     await page.locator('#manageColumns').click();
     await expect(page.locator('.dialog-box')).toBeVisible();
-
-    // variables
     page.getByLabel('Certification').click();
     page.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('columnheader', { name: 'Certification' })).toBeVisible();
+    const columnHeaders = page.getByRole('columnheader');
+    await expect(columnHeaders).toHaveCount(6);
   });
 }
