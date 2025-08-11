@@ -396,7 +396,6 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
       open={true}
       title={strings.MANAGE_COLUMNS}
       size='xx-large'
-      scrolled
       middleButtons={[
         <Button
           id='cancel'
@@ -438,7 +437,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
           <Button size='small' priority='ghost' onClick={handleResetColumns} label={strings.RESET_COLUMNS} />
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', height: '100%' }}>
+      <Box sx={{ display: 'flex', height: '58vh' }}>
         {/* Left Panel - Variables or Deliverables based on active tab */}
         <Box
           sx={{
@@ -506,7 +505,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
             // Deliverables Tab
             <>
               <Typography variant='subtitle1' gutterBottom>
-                Deliverables ({deliverableGroups.length})
+                {strings.DELIVERABLES} ({deliverableGroups.length})
               </Typography>
               <List dense>
                 {deliverableGroups.map((deliverable) => (

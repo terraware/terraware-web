@@ -216,9 +216,9 @@ const MatrixView = () => {
       variable:
         | {
             stableId: string;
-            variableId: string;
+            id: string;
             variableName: string;
-            variableType: string;
+            type: string;
             isList?: boolean;
             isMultiselect?: boolean;
             values?: {
@@ -236,48 +236,30 @@ const MatrixView = () => {
 
       let newValue: NewNonSectionValuePayloadUnion | undefined;
       let firstValue;
-      if (
-        ('variableType' in variable && variable.variableType === 'Text') ||
-        ('type' in variable && variable.type === 'Text')
-      ) {
+      if (variable.type === 'Text') {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueTextValue) : undefined;
         newValue = { type: 'Text', textValue: updatedValue.toString() };
       }
-      if (
-        ('variableType' in variable && variable.variableType === 'Number') ||
-        ('type' in variable && variable.type === 'Number')
-      ) {
+      if (variable.type === 'Number') {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueNumberValue) : undefined;
         newValue = { type: 'Number', numberValue: Number(updatedValue) };
       }
-      if (
-        ('variableType' in variable && variable.variableType === 'Select') ||
-        ('type' in variable && variable.type === 'Select')
-      ) {
+      if (variable.type === 'Select') {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueSelectValue) : undefined;
         newValue = {
           type: 'Select',
           optionIds: isArray(updatedValue) ? updatedValue.map((uVal) => Number(uVal)) : [Number(updatedValue)],
         };
       }
-      if (
-        ('variableType' in variable && variable.variableType === 'Date') ||
-        ('type' in variable && variable.type === 'Date')
-      ) {
+      if (variable.type === 'Date') {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueDateValue) : undefined;
         newValue = { type: 'Date', dateValue: updatedValue.toString() };
       }
-      if (
-        ('variableType' in variable && variable.variableType === 'Email') ||
-        ('type' in variable && variable.type === 'Email')
-      ) {
+      if (variable.type === 'Email') {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueEmailValue) : undefined;
         newValue = { type: 'Email', emailValue: updatedValue.toString() };
       }
-      if (
-        ('variableType' in variable && variable.variableType === 'Link') ||
-        ('type' in variable && variable.type === 'Link')
-      ) {
+      if (variable.type === 'Link') {
         firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueLinkValue) : undefined;
         newValue = { type: 'Link', url: updatedValue.toString() };
       }
@@ -296,7 +278,7 @@ const MatrixView = () => {
           );
           setUpdateVariableValuesRequestId(request.requestId);
         } else {
-          const varId = 'variableId' in variable ? variable.variableId : 'id' in variable ? variable.id : '';
+          const varId = variable.id;
           if (varId) {
             const request = dispatch(
               requestUpdateVariableValues({
