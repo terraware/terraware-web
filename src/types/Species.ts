@@ -86,7 +86,6 @@ export function growthForms(activeLocale: string | null) {
     { label: strings.MOSS, value: 'Moss' },
     { label: strings.MULTIPLE_FORMS, value: 'Multiple Forms' },
     { label: strings.SHRUB, value: 'Shrub' },
-    { label: strings.SHRUB_TREE, value: 'Shrub/Tree' },
     { label: strings.SUBSHRUB, value: 'Subshrub' },
     { label: strings.TREE, value: 'Tree' },
     { label: strings.VINE, value: 'Vine' },
@@ -246,8 +245,6 @@ export function getGrowthFormsString(species?: Species): string {
           return strings.MULTIPLE_FORMS;
         case 'Shrub':
           return strings.SHRUB;
-        case 'Shrub/Tree':
-          return strings.SHRUB_TREE;
         case 'Subshrub':
           return strings.SUBSHRUB;
         case 'Tree':
