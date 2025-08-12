@@ -4685,6 +4685,8 @@ export interface components {
             germinationRate?: number;
             /** Format: date */
             germinationStartedDate?: string;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int64 */
             id: number;
             /**
@@ -4952,6 +4954,8 @@ export interface components {
             /** Format: date */
             germinationStartedDate?: string;
             /** Format: int32 */
+            hardeningOffQuantity: number;
+            /** Format: int32 */
             notReadyQuantity: number;
             notes?: string;
             /** Format: int64 */
@@ -5147,6 +5151,8 @@ export interface components {
             destinationFacilityId: number;
             /** Format: int32 */
             germinatingQuantity: number;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantity: number;
             notes?: string;
@@ -8243,6 +8249,37 @@ export interface components {
              */
             type: "Polygon";
         };
+        /**
+         * @description Search criteria to apply, only to the specified prefix. If the prefix is an empty string, apply the search to all results. If prefix is a sublist (no matter how nested), apply the search to the sublist results without affecting the top level results.
+         * @example [
+         *       {
+         *         "prefix": "species",
+         *         "search": {
+         *           "operation": "field",
+         *           "field": "name",
+         *           "values": [
+         *             "Species Name"
+         *           ]
+         *         }
+         *       },
+         *       {
+         *         "prefix": "viabilityTests.viabilityTestResults",
+         *         "search": {
+         *           "operation": "field",
+         *           "field": "seedsGerminated",
+         *           "type": "Range",
+         *           "values": [
+         *             "30",
+         *             "40"
+         *           ]
+         *         }
+         *       }
+         *     ]
+         */
+        PrefixedSearch: {
+            prefix: string;
+            search: components["schemas"]["SearchNodePayload"];
+        };
         ProjectAcceleratorDetailsPayload: {
             accumulationRate?: number;
             annualCarbon?: number;
@@ -9287,6 +9324,8 @@ export interface components {
         UpdateBatchQuantitiesRequestPayload: {
             /** Format: int32 */
             germinatingQuantity: number;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantity: number;
             /** Format: int32 */
