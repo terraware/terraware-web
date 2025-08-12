@@ -4550,6 +4550,8 @@ export interface components {
             /** Format: int32 */
             germinatingQuantityAdded: number;
             /** Format: int32 */
+            hardeningOffQuantity: number;
+            /** Format: int32 */
             notReadyQuantityAdded: number;
             /** Format: int32 */
             readyQuantityAdded: number;
@@ -4570,6 +4572,8 @@ export interface components {
         BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
             /** Format: int32 */
             germinatingQuantityWithdrawn: number;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantityWithdrawn: number;
             /** @enum {string} */
@@ -4628,6 +4632,8 @@ export interface components {
             /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
+            hardeningOffQuantity: number;
+            /** Format: int32 */
             notReadyQuantity: number;
             /** Format: int32 */
             readyQuantity: number;
@@ -4644,6 +4650,8 @@ export interface components {
         BatchHistoryStatusChangedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
             /** Format: int32 */
             germinatingQuantity: number;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantity: number;
             /** Format: int32 */
@@ -4685,6 +4693,8 @@ export interface components {
             germinationRate?: number;
             /** Format: date */
             germinationStartedDate?: string;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int64 */
             id: number;
             /**
@@ -4769,10 +4779,20 @@ export interface components {
         };
         ChangeBatchStatusRequestPayload: {
             /**
+             * @description Which status to move seedlings to.
+             * @enum {string}
+             */
+            newPhase?: "Germinating" | "NotReady" | "HardeningOff" | "Ready";
+            /**
              * @description Which status change to apply.
              * @enum {string}
              */
-            operation: "GerminatingToNotReady" | "NotReadyToReady";
+            operation?: "GerminatingToNotReady" | "NotReadyToReady";
+            /**
+             * @description Which status to move seedlings from.
+             * @enum {string}
+             */
+            previousPhase?: "Germinating" | "NotReady" | "HardeningOff" | "Ready";
             /**
              * Format: int32
              * @description Number of seedlings to move from one status to the next.
@@ -4951,6 +4971,8 @@ export interface components {
             germinatingQuantity: number;
             /** Format: date */
             germinationStartedDate?: string;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantity: number;
             notes?: string;
@@ -5147,6 +5169,8 @@ export interface components {
             destinationFacilityId: number;
             /** Format: int32 */
             germinatingQuantity: number;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantity: number;
             notes?: string;
@@ -8243,6 +8267,37 @@ export interface components {
              */
             type: "Polygon";
         };
+        /**
+         * @description Search criteria to apply, only to the specified prefix. If the prefix is an empty string, apply the search to all results. If prefix is a sublist (no matter how nested), apply the search to the sublist results without affecting the top level results.
+         * @example [
+         *       {
+         *         "prefix": "species",
+         *         "search": {
+         *           "operation": "field",
+         *           "field": "name",
+         *           "values": [
+         *             "Species Name"
+         *           ]
+         *         }
+         *       },
+         *       {
+         *         "prefix": "viabilityTests.viabilityTestResults",
+         *         "search": {
+         *           "operation": "field",
+         *           "field": "seedsGerminated",
+         *           "type": "Range",
+         *           "values": [
+         *             "30",
+         *             "40"
+         *           ]
+         *         }
+         *       }
+         *     ]
+         */
+        PrefixedSearch: {
+            prefix: string;
+            search: components["schemas"]["SearchNodePayload"];
+        };
         ProjectAcceleratorDetailsPayload: {
             accumulationRate?: number;
             annualCarbon?: number;
@@ -8766,6 +8821,7 @@ export interface components {
             count?: number;
             cursor?: string;
             fields: string[];
+            filters?: components["schemas"]["PrefixedSearch"][];
             prefix?: string;
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
@@ -9287,6 +9343,8 @@ export interface components {
         UpdateBatchQuantitiesRequestPayload: {
             /** Format: int32 */
             germinatingQuantity: number;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantity: number;
             /** Format: int32 */

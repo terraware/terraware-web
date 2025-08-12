@@ -32,11 +32,11 @@ export type ProjectsWithVariablesSearchResult = {
 export const requestGetProjectsWithVariables = createAsyncThunk(
   'projectsWithVariables/get',
   async (request: MatrixViewSearchParams, { rejectWithValue }) => {
-    const { fields, searchCriteria, sortOrder } = request;
+    const { fields, filters, sortOrder } = request;
 
     const response: ProjectsWithVariablesSearchResult[] | null = await MatrixViewService.searchProjects({
       fields,
-      searchCriteria,
+      filters,
       sortOrder,
     });
 

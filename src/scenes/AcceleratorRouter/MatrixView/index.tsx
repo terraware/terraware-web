@@ -761,12 +761,15 @@ const MatrixView = () => {
           field: 'name',
           direction: 'Ascending',
         },
-        searchCriteria: [
+        filters: [
           {
-            field: 'variables.stableId',
-            operation: 'field',
-            type: 'Exact',
-            values: visibleColumnIds,
+            prefix: 'variables',
+            search: {
+              field: 'stableId',
+              operation: 'field',
+              type: 'Exact',
+              values: visibleColumnIds,
+            },
           },
         ],
       })
