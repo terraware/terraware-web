@@ -78,7 +78,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
               key: 'hardeningOffQuantity',
               name: strings.HARDENING_OFF,
               type: 'number' as const,
-              tooltipTitle: '', // TODO: add tooltip title for hardening off quantity
+              tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
             },
           ]
         : []),
