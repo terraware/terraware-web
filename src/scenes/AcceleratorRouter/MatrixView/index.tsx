@@ -772,7 +772,8 @@ const MatrixView = () => {
       })
     );
     setRequestId(request.requestId);
-  }, [dispatch, dataForMaterialReactTable]);
+    // eslint-disable-next-line
+  }, [dispatch, dataForMaterialReactTable, dataForMaterialReactTable?.getState()?.columnVisibility]);
 
   useEffect(() => {
     if (updateVariableValuesRequest?.status === 'success') {
