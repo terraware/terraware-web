@@ -33,8 +33,9 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   const batchWithRawQtys = {
     ...batch,
     'germinatingQuantity(raw)': batch.germinatingQuantity,
-    'readyQuantity(raw)': batch.readyQuantity,
+    'hardeningOffQuantity(raw)': batch.hardeningOffQuantity,
     'notReadyQuantity(raw)': batch.notReadyQuantity,
+    'readyQuantity(raw)': batch.readyQuantity,
   };
 
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
