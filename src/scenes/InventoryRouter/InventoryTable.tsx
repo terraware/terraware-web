@@ -9,10 +9,10 @@ import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useLocalization } from 'src/providers';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
-import strings from 'src/strings';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 
@@ -20,7 +20,7 @@ import InventoryCellRenderer from './InventoryCellRenderer';
 
 interface InventoryTableProps {
   allowSelectionProjectAssign?: boolean;
-  columns: () => TableColumnType[];
+  columns: TableColumnType[] | (() => TableColumnType[]);
   filters: InventoryFiltersUnion;
   isPresorted: boolean;
   origin: OriginPage;
@@ -47,6 +47,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     allowSelectionProjectAssign,
   } = props;
 
+  const { strings } = useLocalization();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const navigate = useSyncNavigate();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
@@ -138,14 +139,17 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     } else {
       setWithdrawTooltip(undefined);
     }
-  }, [origin, selectedRows, totalSelectedQuantity]);
+  }, [origin, selectedRows, strings, totalSelectedQuantity]);
 
-  const onSortChange = (order: SortOrder, orderBy: string) => {
-    setSearchSortOrder({
-      field: orderBy,
-      direction: order === 'asc' ? 'Ascending' : 'Descending',
-    });
-  };
+  const onSortChange = useCallback(
+    (order: SortOrder, orderBy: string) => {
+      setSearchSortOrder({
+        field: orderBy,
+        direction: order === 'asc' ? 'Ascending' : 'Descending',
+      });
+    },
+    [setSearchSortOrder]
+  );
 
   const selectAllRows = useCallback(() => {
     setSelectedRows(results);
@@ -160,19 +164,30 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       .filter((species) => !!species) as string[];
   }, [results]);
 
+  const setSearchFilters = useCallback(
+    (f: InventoryFiltersUnion) => {
+      setFilters(f);
+      setSessionFilters(f);
+    },
+    [setFilters, setSessionFilters]
+  );
+
+  const isClickable = useCallback(() => false, []);
+
+  const projectAssignPayloadCreator = useCallback(() => {
+    return { batchIds: selectedRows.map((row) => Number(row.id)) };
+  }, [selectedRows]);
+
   return (
     <>
       <Box>
         <Search
           filters={filters}
           getResultsSpeciesNames={getResultsSpeciesNames}
-          onSearch={(val) => setTemporalSearchValue(val)}
+          onSearch={setTemporalSearchValue}
           origin={origin}
           searchValue={temporalSearchValue}
-          setFilters={(f) => {
-            setFilters(f);
-            setSessionFilters(f);
-          }}
+          setFilters={setSearchFilters}
           showEmptyBatchesFilter={origin === 'Batches'}
           showProjectsFilter={origin === 'Batches'}
         />
@@ -187,7 +202,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 rows={results}
                 orderBy='species_scientificName'
                 Renderer={InventoryCellRenderer}
-                isClickable={() => false}
+                isClickable={isClickable}
                 selectedRows={selectedRows}
                 setSelectedRows={setSelectedRows}
                 showCheckbox={true}
@@ -200,7 +215,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                           totalResultsCount={results?.length}
                           selectAllRows={selectAllRows}
                           reloadData={reloadData}
-                          projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
+                          projectAssignPayloadCreator={projectAssignPayloadCreator}
                         />,
                       ]
                     : []),

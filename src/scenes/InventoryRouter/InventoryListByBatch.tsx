@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Container, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -6,75 +6,25 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
-import { useOrganization } from 'src/providers';
+import isEnabled from 'src/features';
+import { useLocalization, useOrganization } from 'src/providers';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/scenes/InventoryRouter/InventoryV2View';
 import { NurseryBatchService } from 'src/services';
 import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
-import strings from 'src/strings';
 import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-
-const columns = (): TableColumnType[] => [
-  { key: 'batchNumber', name: strings.BATCH_NUMBER, type: 'string', tooltipTitle: strings.TOOLTIP_BATCH_NUMBER },
-  { key: 'project_name', name: strings.PROJECT, type: 'string' },
-  {
-    key: 'species_scientificName_noLink',
-    name: strings.SPECIES,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
-  },
-  {
-    key: 'species_commonName',
-    name: strings.COMMON_NAME,
-    type: 'string',
-  },
-  {
-    key: 'facility_name_noLink',
-    name: strings.NURSERY,
-    type: 'string',
-  },
-  {
-    key: 'subLocations',
-    name: strings.SUB_LOCATIONS,
-    type: 'string',
-  },
-  {
-    key: 'germinatingQuantity',
-    name: strings.GERMINATING,
-    type: 'number',
-    tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-  },
-  {
-    key: 'notReadyQuantity',
-    name: strings.NOT_READY,
-    type: 'number',
-    tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-  },
-  {
-    key: 'readyQuantity',
-    name: strings.READY,
-    type: 'number',
-    tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-  },
-  {
-    key: 'totalQuantity',
-    name: strings.TOTAL,
-    type: 'number',
-    tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
-  },
-  { key: 'quantitiesMenu', name: '', type: 'string' },
-];
 
 type InventoryListByBatchProps = {
   setReportData: (data: SearchInventoryParams) => void;
 };
 
 export default function InventoryListByBatch({ setReportData }: InventoryListByBatchProps) {
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
@@ -88,10 +38,79 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const theme = useTheme();
 
-  const onSearchSortOrder = (order: SearchSortOrder) => {
-    const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
-    setSearchSortOrder(isClientSorted ? undefined : order);
-  };
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const onSearchSortOrder = useCallback(
+    (order: SearchSortOrder) => {
+      const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
+      setSearchSortOrder(isClientSorted ? undefined : order);
+    },
+    [setSearchSortOrder]
+  );
+
+  const columns = useMemo(
+    (): TableColumnType[] => [
+      { key: 'batchNumber', name: strings.BATCH_NUMBER, type: 'string', tooltipTitle: strings.TOOLTIP_BATCH_NUMBER },
+      { key: 'project_name', name: strings.PROJECT, type: 'string' },
+      {
+        key: 'species_scientificName_noLink',
+        name: strings.SPECIES,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
+      },
+      {
+        key: 'species_commonName',
+        name: strings.COMMON_NAME,
+        type: 'string',
+      },
+      {
+        key: 'facility_name_noLink',
+        name: strings.NURSERY,
+        type: 'string',
+      },
+      {
+        key: 'subLocations',
+        name: strings.SUB_LOCATIONS,
+        type: 'string',
+      },
+      {
+        key: 'germinatingQuantity',
+        name: strings.GERMINATING,
+        type: 'number',
+        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+      },
+      {
+        key: 'notReadyQuantity',
+        name: strings.NOT_READY,
+        type: 'number',
+        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+      },
+      ...(isUpdatedNurseryGrowthPhasesEnabled
+        ? [
+            {
+              key: 'hardeningOffQuantity',
+              name: strings.HARDENING_OFF,
+              type: 'number' as const,
+              tooltipTitle: '', // TODO: add tooltip title for hardening off quantity
+            },
+          ]
+        : []),
+      {
+        key: 'readyQuantity',
+        name: strings.READY,
+        type: 'number',
+        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+      },
+      {
+        key: 'totalQuantity',
+        name: strings.TOTAL,
+        type: 'number',
+        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+      },
+      { key: 'quantitiesMenu', name: '', type: 'string' },
+    ],
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+  );
 
   const onApplyFilters = useCallback(async () => {
     if (selectedOrganization) {
@@ -171,6 +190,8 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
     }
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 
+  const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
+
   useEffect(() => {
     void onApplyFilters();
   }, [filters, onApplyFilters]);
@@ -197,7 +218,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
           columns={columns}
-          reloadData={() => void onApplyFilters()}
+          reloadData={reloadData}
           origin='Batches'
           allowSelectionProjectAssign
         />
@@ -213,7 +234,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage pageName={'Inventory'} reloadData={() => void onApplyFilters()} />
+          <EmptyStatePage pageName='Inventory' reloadData={reloadData} />
         </Container>
       )}
     </Card>

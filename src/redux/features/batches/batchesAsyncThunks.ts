@@ -43,6 +43,7 @@ export const requestSaveBatch = createAsyncThunk(
           date: getTodaysDateFormatted(timezone),
           destinationFacilityId: Number(batch.facilityId),
           germinatingQuantity: Number(batch.germinatingQuantity),
+          hardeningOffQuantity: Number(batch.hardeningOffQuantity),
           notReadyQuantity: Number(batch.notReadyQuantity),
           notes: batch.notes,
           readyByDate: batch.readyByDate,

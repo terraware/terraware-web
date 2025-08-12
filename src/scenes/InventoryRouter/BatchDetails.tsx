@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import isEnabled from 'src/features';
+import { useLocalization } from 'src/providers';
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
 import { NurseryBatchService } from 'src/services';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
-import strings from 'src/strings';
 import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
 import { Batch } from 'src/types/Batch';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -23,6 +24,7 @@ interface BatchDetailsProps {
 }
 
 export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
@@ -37,6 +39,8 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
 
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
+
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -60,21 +64,35 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     }
   }, [batch, snackbar]);
 
-  const openEditModal = () => {
+  const openEditModal = useCallback(() => {
     setOpenEditBatchModal(true);
-  };
+  }, [setOpenEditBatchModal]);
+
+  const closeEditModal = useCallback(() => {
+    setOpenEditBatchModal(false);
+  }, [setOpenEditBatchModal]);
+
+  const onCloseChangeQuantityModal = useCallback(
+    () => setModalValues({ openChangeQuantityModal: false, type: 'germinating' }),
+    [setModalValues]
+  );
+
+  const handleEditGerminatingQuantity = useCallback(() => {
+    setModalValues({ openChangeQuantityModal: true, type: 'germinating' });
+  }, [setModalValues]);
+
+  const handleEditNotReadyQuantity = useCallback(() => {
+    setModalValues({ openChangeQuantityModal: true, type: 'not-ready' });
+  }, [setModalValues]);
+
+  const handleEditHardeningOffQuantity = useCallback(() => {
+    console.log('handleEditHardeningOffQuantity called');
+    setModalValues({ openChangeQuantityModal: true, type: 'hardening-off' });
+  }, [setModalValues]);
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-      {openEditBatchModal && (
-        <BatchDetailsModal
-          reload={onUpdate}
-          onClose={() => {
-            setOpenEditBatchModal(false);
-          }}
-          batch={batch}
-        />
-      )}
+      {openEditBatchModal && <BatchDetailsModal batch={batch} onClose={closeEditModal} reload={onUpdate} />}
 
       <Box sx={{ display: 'flex', alignItems: 'center' }} marginBottom={theme.spacing(1)}>
         <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} sx={{ flexGrow: 1 }}>
@@ -90,7 +108,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
       {modalValues.openChangeQuantityModal && (
         <ChangeQuantityModal
           reload={onUpdate}
-          onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
+          onClose={onCloseChangeQuantityModal}
           modalValues={modalValues}
           row={batchWithRawQtys}
         />
@@ -111,7 +129,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
             title={strings.GERMINATING_QUANTITY}
             contents={batch.germinatingQuantity}
             grid={true}
-            handleEdit={() => setModalValues({ openChangeQuantityModal: true, type: 'germinating' })}
+            handleEdit={handleEditGerminatingQuantity}
           />
         </Grid>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
@@ -128,7 +146,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
             title={strings.NOT_READY_QUANTITY}
             contents={batch.notReadyQuantity}
             grid={true}
-            handleEdit={() => setModalValues({ openChangeQuantityModal: true, type: 'not-ready' })}
+            handleEdit={handleEditNotReadyQuantity}
           />
         </Grid>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
@@ -139,6 +157,20 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
             grid={true}
           />
         </Grid>
+        {isUpdatedNurseryGrowthPhasesEnabled && (
+          <>
+            <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+              <OverviewItemCard
+                contents={batch.hardeningOffQuantity}
+                grid
+                handleEdit={handleEditHardeningOffQuantity}
+                isEditable
+                title={strings.HARDENING_OFF_QUANTITY}
+              />
+            </Grid>
+            {!isMobile && <Grid item xs={6} paddingRight={theme.spacing(3)} />}
+          </>
+        )}
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={false}

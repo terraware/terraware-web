@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Dropdown, SelectT, Textfield } from '@terraware/web-components';
@@ -8,12 +8,11 @@ import AddLink from 'src/components/common/AddLink';
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import CountWithdrawal from 'src/scenes/AccessionsRouter/withdraw/CountWithdrawal';
 import WeightWithdrawal from 'src/scenes/AccessionsRouter/withdraw/WeightWithdrawal';
 import { OrganizationUserService } from 'src/services';
 import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
-import strings from 'src/strings';
 import { Accession, Withdrawal, treatments, withdrawalTypes } from 'src/types/Accession';
 import { NurseryTransfer } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
@@ -36,6 +35,7 @@ export interface WithdrawDialogProps {
 }
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, reload, user } = props;
 
@@ -60,27 +60,48 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [withdrawalValid, setWithdrawalValid] = useState<boolean>(false);
   const [withdrawalButtonEnabled, setWithdrawalButtonEnabled] = useState<boolean>(true);
 
-  const newWithdrawal: Withdrawal = {
-    purpose: 'Nursery',
-    withdrawnByUserId: user.id,
-    date: getTodaysDateFormatted(timeZone),
-    withdrawnQuantity: undefined,
-    notes: '',
-  };
+  const newWithdrawal: Withdrawal = useMemo(
+    () => ({
+      purpose: 'Nursery',
+      withdrawnByUserId: user.id,
+      date: getTodaysDateFormatted(timeZone),
+      withdrawnQuantity: undefined,
+      notes: '',
+    }),
+    [user.id, timeZone]
+  );
 
-  const nurseryTransferWithdrawal: NurseryTransfer = {
-    date: getTodaysDateFormatted(timeZone),
-    destinationFacilityId: -1,
-    germinatingQuantity: 0,
-    notes: '',
-    notReadyQuantity: 0,
-    readyByDate: undefined,
-    readyQuantity: 0,
-    withdrawnByUserId: user.id,
-  };
+  const nurseryTransferWithdrawal: NurseryTransfer = useMemo(
+    () => ({
+      date: getTodaysDateFormatted(timeZone),
+      destinationFacilityId: -1,
+      germinatingQuantity: 0,
+      hardeningOffQuantity: 0,
+      notes: '',
+      notReadyQuantity: 0,
+      readyByDate: undefined,
+      readyQuantity: 0,
+      withdrawnByUserId: user.id,
+    }),
+    [timeZone, user.id]
+  );
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);
   const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
+
+  const setIndividualError = useCallback((id: string, error?: string) => {
+    setFieldsErrors((prev) => ({
+      ...prev,
+      [id]: error,
+    }));
+  }, []);
+
+  const onCloseHandler = useCallback(() => {
+    setIsNotesOpened(false);
+    setRecord(newWithdrawal);
+    setNurseryTransferRecord(nurseryTransferWithdrawal);
+    onClose();
+  }, [newWithdrawal, nurseryTransferWithdrawal, setRecord, setNurseryTransferRecord, onClose]);
 
   useEffect(() => {
     if (accession.facilityId) {
@@ -161,7 +182,60 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     return estimated;
   }, [accession, isByWeight, withdrawalQty]);
 
-  const saveWithdrawal = async () => {
+  const onChangeUser = useCallback(
+    (newValue: OrganizationUser) => {
+      onChange('withdrawnByUserId', newValue.id);
+      onChangeNurseryTransfer('withdrawnByUserId', newValue.id);
+    },
+    [onChange, onChangeNurseryTransfer]
+  );
+
+  const validateDate = useCallback(
+    (id: string, value?: any) => {
+      if (!value) {
+        if (id === 'date') {
+          setIndividualError('date', strings.REQUIRED_FIELD);
+          return false;
+        }
+      } else {
+        if (isNaN(new Date(value).getTime())) {
+          setIndividualError(id, strings.INVALID_DATE);
+          return false;
+        } else if (isInTheFuture(value, timeZone) && id === 'date') {
+          setIndividualError('date', strings.NO_FUTURE_DATES);
+          return false;
+        } else {
+          setIndividualError(id, '');
+          return true;
+        }
+      }
+    },
+    [setIndividualError, strings, timeZone]
+  );
+
+  const onChangeDate = useCallback(
+    (id: string, value?: any) => {
+      const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
+      const valid = validateDate(id, value);
+      if (valid) {
+        if (id === 'date') {
+          onChange(id, date);
+        }
+        onChangeNurseryTransfer(id, date);
+      }
+    },
+    [timeZone, validateDate, onChange, onChangeNurseryTransfer]
+  );
+
+  const onChangeNotes = useCallback(
+    (id: string, value: unknown) => {
+      onChangeNurseryTransfer(id, value);
+      onChange(id, value);
+    },
+    [onChangeNurseryTransfer, onChange]
+  );
+
+  const saveWithdrawalHandler = useCallback(async () => {
     setWithdrawalButtonEnabled(false);
     try {
       let response;
@@ -206,84 +280,100 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     } finally {
       setWithdrawalButtonEnabled(true);
     }
-  };
+  }, [
+    accession.id,
+    accession.remainingQuantity?.units,
+    estimatedWithdrawalQty,
+    fieldsErrors,
+    isByWeight,
+    isNurseryTransfer,
+    nurseryTransferRecord,
+    onCloseHandler,
+    record,
+    reload,
+    setIndividualError,
+    snackbar,
+    strings,
+    viabilityTesting,
+    withdrawalQty,
+  ]);
 
-  const onChangeUser = (newValue: OrganizationUser) => {
-    onChange('withdrawnByUserId', newValue.id);
-    onChangeNurseryTransfer('withdrawnByUserId', newValue.id);
-  };
+  const handleSaveWithdrawal = useCallback(() => {
+    void saveWithdrawalHandler();
+  }, [saveWithdrawalHandler]);
 
-  const validateDate = (id: string, value?: any) => {
-    if (!value) {
-      if (id === 'date') {
-        setIndividualError('date', strings.REQUIRED_FIELD);
-        return false;
+  const onWithdrawCtUpdate = useCallback(
+    (withdrawnQuantity: number, valid: boolean) => {
+      if (withdrawnQuantity) {
+        setWithdrawalQty(withdrawnQuantity);
       }
-    } else {
-      if (isNaN(new Date(value).getTime())) {
-        setIndividualError(id, strings.INVALID_DATE);
-        return false;
-      } else if (isInTheFuture(value, timeZone) && id === 'date') {
-        setIndividualError('date', strings.NO_FUTURE_DATES);
-        return false;
+      setWithdrawalValid(valid);
+    },
+    [setWithdrawalQty, setWithdrawalValid]
+  );
+
+  const onChangePurpose = useCallback(
+    (value: string) => {
+      const nurseryTransfer = value === 'Nursery';
+      if (nurseryTransfer) {
+        setIsNurseryTransfer(true);
       } else {
-        setIndividualError(id, '');
-        return true;
+        setIsNurseryTransfer(false);
+        onChange('purpose', value);
       }
-    }
-  };
+    },
+    [onChange, setIsNurseryTransfer]
+  );
 
-  const onChangeDate = (id: string, value?: any) => {
-    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
-    const valid = validateDate(id, value);
-    if (valid) {
-      if (id === 'date') {
-        onChange(id, date);
-      }
-      onChangeNurseryTransfer(id, date);
-    }
-  };
+  const onChangeTestType = useCallback(
+    (value: string) => onChangeViabilityTesting('testType', value),
+    [onChangeViabilityTesting]
+  );
 
-  const onChangeNotes = (id: string, value: unknown) => {
-    onChangeNurseryTransfer(id, value);
-    onChange(id, value);
-  };
+  const onChangeSubstrate = useCallback(
+    (value: string) => onChangeViabilityTesting('substrate', value),
+    [onChangeViabilityTesting]
+  );
 
-  const onWithdrawCtUpdate = (withdrawnQuantity: number, valid: boolean) => {
-    if (withdrawnQuantity) {
-      setWithdrawalQty(withdrawnQuantity);
-    }
-    setWithdrawalValid(valid);
-  };
+  const onChangeTreatment = useCallback(
+    (value: string) => onChangeViabilityTesting('treatment', value),
+    [onChangeViabilityTesting]
+  );
 
-  const onChangePurpose = (value: string) => {
-    const nurseryTransfer = value === 'Nursery';
-    if (nurseryTransfer) {
-      setIsNurseryTransfer(true);
-    } else {
-      setIsNurseryTransfer(false);
-      onChange('purpose', value);
-    }
-  };
+  const onChangeDestinationFacility = useCallback(
+    (value: string) => onChangeNurseryTransfer('destinationFacilityId', value),
+    [onChangeNurseryTransfer]
+  );
 
-  const onCloseHandler = () => {
-    setIsNotesOpened(false);
-    setRecord(newWithdrawal);
-    setNurseryTransferRecord(nurseryTransferWithdrawal);
-    onClose();
-  };
+  const onChangeReadyByDate = useCallback((value: any) => onChangeDate('readyByDate', value), [onChangeDate]);
 
-  const onChangeWithdrawBy = (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
-    setIndividualError('withdrawnQuantity', '');
-    setIsByWeight(value === 'weight');
-  };
+  const onChangeDateHandler = useCallback((value: any) => onChangeDate('date', value), [onChangeDate]);
 
-  const setIndividualError = (id: string, error?: string) => {
-    setFieldsErrors((prev) => ({
-      ...prev,
-      [id]: error,
-    }));
-  };
+  const onChangeNotesHandler = useCallback((value: unknown) => onChangeNotes('notes', value), [onChangeNotes]);
+
+  const onClickAddNotes = useCallback(() => setIsNotesOpened(true), []);
+
+  const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) => a.id === b.id, []);
+
+  const renderOptionUser = useCallback(
+    (option: OrganizationUser) => renderUser(option, user, contributor),
+    [user, contributor]
+  );
+
+  const displayLabelUser = useCallback(
+    (option: OrganizationUser) => renderUser(option, user, contributor),
+    [user, contributor]
+  );
+
+  const toTUser = useCallback((firstName: string) => ({ firstName }) as OrganizationUser, []);
+
+  const onChangeWithdrawBy = useCallback(
+    (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
+      setIndividualError('withdrawnQuantity', '');
+      setIsByWeight(value === 'weight');
+    },
+    [setIndividualError, setIsByWeight]
+  );
 
   return (
     <DialogBox
@@ -302,7 +392,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         />,
         <Button
           id='saveWithdraw'
-          onClick={() => void saveWithdrawal()}
+          onClick={handleSaveWithdrawal}
           label={strings.WITHDRAW}
           key='button-2'
           disabled={!withdrawalValid || !withdrawalButtonEnabled}
@@ -332,7 +422,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                   label: nursery.name,
                   value: nursery.id.toString(),
                 }))}
-                onChange={(value) => onChangeNurseryTransfer('destinationFacilityId', value)}
+                onChange={onChangeDestinationFacility}
                 errorText={fieldsErrors.destinationFacilityId}
                 fullWidth={true}
               />
@@ -346,7 +436,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.TEST_TYPE}
                 placeholder={strings.SELECT}
                 options={withdrawalTypes()}
-                onChange={(value: string) => onChangeViabilityTesting('testType', value)}
+                onChange={onChangeTestType}
                 selectedValue={viabilityTesting?.testType}
                 fullWidth={true}
               />
@@ -356,7 +446,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.SUBSTRATE}
                 placeholder={strings.SELECT}
                 options={getSubstratesAccordingToType(viabilityTesting?.testType)}
-                onChange={(value: string) => onChangeViabilityTesting('substrate', value)}
+                onChange={onChangeSubstrate}
                 selectedValue={viabilityTesting.substrate}
                 fullWidth={true}
               />
@@ -366,7 +456,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.TREATMENT}
                 placeholder={strings.SELECT}
                 options={treatments()}
-                onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
+                onChange={onChangeTreatment}
                 selectedValue={viabilityTesting.treatment}
                 fullWidth={true}
               />
@@ -412,11 +502,11 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             placeholder={strings.SELECT}
             options={users}
             onChange={onChangeUser}
-            isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
-            renderOption={(option) => renderUser(option, user, contributor)}
-            displayLabel={(option) => renderUser(option, user, contributor)}
+            isEqual={isEqualUsers}
+            renderOption={renderOptionUser}
+            displayLabel={displayLabelUser}
             selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
-            toT={(firstName: string) => ({ firstName }) as OrganizationUser}
+            toT={toTUser}
             fullWidth={true}
             disabled={contributor}
           />
@@ -429,7 +519,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={nurseryTransferRecord.readyByDate}
-                onChange={(value) => onChangeDate('readyByDate', value)}
+                onChange={onChangeReadyByDate}
                 errorText={fieldsErrors.readyByDate}
                 defaultTimeZone={timeZone}
               />
@@ -442,7 +532,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             label={strings.DATE}
             aria-label={strings.DATE}
             value={record.date}
-            onChange={(value) => onChangeDate('date', value)}
+            onChange={onChangeDateHandler}
             errorText={fieldsErrors.date}
             defaultTimeZone={timeZone}
           />
@@ -452,13 +542,13 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             <Textfield
               id='notes'
               value={record.notes}
-              onChange={(value) => onChangeNotes('notes', value)}
+              onChange={onChangeNotesHandler}
               type='textarea'
               label={strings.NOTES}
             />
           ) : (
             <Box display='flex' justifyContent='flex-start'>
-              <AddLink id='addNotes' onClick={() => setIsNotesOpened(true)} text={strings.ADD_NOTES} large={true} />
+              <AddLink id='addNotes' onClick={onClickAddNotes} text={strings.ADD_NOTES} large={true} />
             </Box>
           )}
         </Grid>

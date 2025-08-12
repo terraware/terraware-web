@@ -38,6 +38,8 @@ const DEFAULT_BATCH_FIELDS = [
   'germinatingQuantity',
   'germinatingQuantity(raw)',
   'germinationStartedDate',
+  'hardeningOffQuantity',
+  'hardeningOffQuantity(raw)',
   'id',
   'notes',
   'notReadyQuantity',
@@ -63,6 +65,7 @@ const REPORT_BATCH_FIELDS = [
   'species_commonName',
   'facility_name',
   'germinatingQuantity',
+  'hardeningOffQuantity',
   'notReadyQuantity',
   'readyQuantity',
   'totalQuantity',
@@ -74,6 +77,7 @@ export type NurseryBatchesReportSearchResponseElement = SearchResponseElement & 
   species_commonName: string;
   facility_name: string;
   germinatingQuantity: string;
+  hardeningOffQuantity: string;
   notReadyQuantity: string;
   readyQuantity: string;
   totalQuantity: string;
@@ -85,6 +89,7 @@ const EXPORT_BATCH_FIELDS = [
   'seedsSownDate',
   'germinatingQuantity',
   'germinationStartedDate',
+  'hardeningOffQuantity',
   'notReadyQuantity',
   'readyByDate',
   'readyQuantity',
@@ -104,6 +109,8 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   germinatingQuantity: string;
   'germinatingQuantity(raw)': string;
   germinationStartedDate: string;
+  hardeningOffQuantity: string;
+  'hardeningOffQuantity(raw)': string;
   id: string;
   notes: string;
   notReadyQuantity: string;
@@ -465,6 +472,7 @@ export const updateBatch = async (batch: UpdateBatchRequestPayloadWithId): Promi
 const updateBatchQuantities = async (batch: Batch): Promise<Response> => {
   const entity: UpdateBatchQuantitiesRequestPayload = {
     germinatingQuantity: batch.germinatingQuantity,
+    hardeningOffQuantity: batch.hardeningOffQuantity,
     notReadyQuantity: batch.notReadyQuantity,
     readyQuantity: batch.readyQuantity,
     version: batch.version,

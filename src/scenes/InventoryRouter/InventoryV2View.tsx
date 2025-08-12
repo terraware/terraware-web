@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
@@ -13,7 +13,6 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
-import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -47,6 +46,7 @@ export type InventoryResult = {
   species_scientificName: string;
   species_commonName?: string;
   germinatingQuantity: string;
+  hardeningOffQuantity: string;
   notReadyQuantity: string;
   readyQuantity: string;
   totalQuantity: string;
@@ -57,6 +57,7 @@ export type FacilitySpeciesInventoryResult = {
   facility_id: string;
   facility_name: string;
   germinatingQuantity: string;
+  hardeningOffQuantity: string;
   readyQuantity: string;
   notReadyQuantity: string;
   totalQuantity: string;
@@ -88,6 +89,7 @@ export type FacilityInventoryResult = {
   species_scientificName: string;
   species_commonName?: string;
   'germinatingQuantity(raw)': string;
+  'hardeningOffQuantity(raw)': string;
   'readyQuantity(raw)': string;
   'notReadyQuantity(raw)': string;
   'totalQuantity(raw)': string;
@@ -102,11 +104,13 @@ export type BatchInventoryResult = {
   species_scientificName: string;
   species_commonName?: string;
   germinatingQuantity: string;
+  hardeningOffQuantity: string;
   notReadyQuantity: string;
   readyQuantity: string;
   subLocations: string;
   totalQuantity: string;
   'germinatingQuantity(raw)': string;
+  'hardeningOffQuantity(raw)': string;
   'readyQuantity(raw)': string;
   'notReadyQuantity(raw)': string;
   'totalQuantity(raw)': string;
@@ -118,7 +122,7 @@ type InventoryProps = {
 };
 
 export default function InventoryV2View(props: InventoryProps): JSX.Element {
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -136,30 +140,34 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     width: isMobile ? 'auto' : '800px',
   };
 
-  const goTo = (appPath: string) => {
-    const appPathLocation = {
-      pathname: appPath,
-    };
-    navigate(appPathLocation);
-  };
+  const goTo = useCallback(
+    (appPath: string) => {
+      navigate({ pathname: appPath });
+    },
+    [navigate]
+  );
 
-  const onCloseDownloadReportModal = () => {
+  const onCloseDownloadReportModal = useCallback(() => {
     setReportModalOpen(false);
-  };
+  }, [setReportModalOpen]);
 
-  const onDownloadReport = () => {
+  const onDownloadReport = useCallback(() => {
     setReportModalOpen(true);
-  };
+  }, [setReportModalOpen]);
 
   const isOnboarded = hasNurseries && hasSpecies;
-  const onOptionItemClick = (optionItem: DropdownItem) => {
-    if (optionItem.value === 'import') {
-      setImportInventoryModalOpen(true);
-    }
-    if (optionItem.value === 'export') {
-      onDownloadReport();
-    }
-  };
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      if (optionItem.value === 'import') {
+        setImportInventoryModalOpen(true);
+      }
+      if (optionItem.value === 'export') {
+        onDownloadReport();
+      }
+    },
+    [onDownloadReport, setImportInventoryModalOpen]
+  );
 
   const importInventory = () => {
     setImportInventoryModalOpen(true);
@@ -220,7 +228,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
         children: <InventoryListByBatch setReportData={setReportData} />,
       },
     ];
-  }, [activeLocale, isOnboarded]);
+  }, [activeLocale, isOnboarded, strings, setReportData]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: InventoryListTypes.BATCHES_BY_SPECIES,
@@ -228,9 +236,13 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     viewIdentifier: 'inventory',
   });
 
+  const onCloseImportInventoryModal = useCallback(() => setImportInventoryModalOpen(false), []);
+
+  const navigateToInventoryCreateView = useCallback(() => goTo(APP_PATHS.INVENTORY_NEW), [goTo]);
+
   return (
     <TfMain>
-      <ImportInventoryModal open={importInventoryModalOpen} onClose={() => setImportInventoryModalOpen(false)} />
+      <ImportInventoryModal open={importInventoryModalOpen} onClose={onCloseImportInventoryModal} />
       {reportData && (
         <DownloadReportModal
           reportData={reportData}
@@ -260,7 +272,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
             {isOnboarded ? (
               <Grid item xs={6} sx={{ textAlign: 'right' }}>
                 {isMobile ? (
-                  <Button id='new-inventory' icon='plus' onClick={() => goTo(APP_PATHS.INVENTORY_NEW)} size='medium' />
+                  <Button id='new-inventory' icon='plus' onClick={navigateToInventoryCreateView} size='medium' />
                 ) : (
                   <>
                     <Box sx={{ display: 'inline', paddingLeft: 1 }}>
@@ -268,7 +280,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
                         id='new-inventory'
                         icon='plus'
                         label={strings.ADD_INVENTORY}
-                        onClick={() => goTo(APP_PATHS.INVENTORY_NEW)}
+                        onClick={navigateToInventoryCreateView}
                         size='medium'
                       />
                     </Box>
