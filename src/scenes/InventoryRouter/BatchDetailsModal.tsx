@@ -203,7 +203,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   }, [saveBatch]);
 
   const changeDate = useCallback(
-    (id: string, value?: any) => {
+    (id: string, value?: Date | null) => {
       const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
       onChange(id, date);
     },
@@ -211,7 +211,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   );
 
   const handleSeedsSownDateChange = useCallback(
-    (value: any) => {
+    (value?: Date | null) => {
       changeDate('seedsSownDate', value);
     },
     [changeDate]
@@ -225,7 +225,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   );
 
   const handleGerminationStartedDateChange = useCallback(
-    (value: any) => {
+    (value?: Date | null) => {
       changeDate('germinationStartedDate', value);
     },
     [changeDate]
@@ -239,7 +239,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   );
 
   const handleReadyByDateChange = useCallback(
-    (value: any) => {
+    (value?: Date | null) => {
       changeDate('readyByDate', value);
     },
     [changeDate]

@@ -225,7 +225,7 @@ export default function BatchDetailsForm({
   const paddingSeparator = useMemo(() => (isMobile ? 0 : 1.5), [isMobile]);
 
   const changeDate = useCallback(
-    (id: string, value?: any) => {
+    (id: string, value?: Date | null) => {
       const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
       onChange(id, date);
     },
@@ -233,14 +233,14 @@ export default function BatchDetailsForm({
   );
 
   const handleAddedDateChange = useCallback(
-    (value: any) => {
+    (value?: Date | null) => {
       changeDate('addedDate', value);
     },
     [changeDate]
   );
 
   const handleSeedsSownDateChange = useCallback(
-    (value: any) => {
+    (value?: Date | null) => {
       changeDate('seedsSownDate', value);
     },
     [changeDate]
@@ -254,7 +254,7 @@ export default function BatchDetailsForm({
   );
 
   const handleGerminationStartedDateChange = useCallback(
-    (value: any) => {
+    (value?: Date | null) => {
       changeDate('germinationStartedDate', value);
     },
     [changeDate]
@@ -268,7 +268,7 @@ export default function BatchDetailsForm({
   );
 
   const handleReadyByDateChange = useCallback(
-    (value: any) => {
+    (value?: Date | null) => {
       changeDate('readyByDate', value);
     },
     [changeDate]
