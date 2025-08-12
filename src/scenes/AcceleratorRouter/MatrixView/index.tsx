@@ -837,10 +837,16 @@ const MatrixView = () => {
 
   const onColumnsSelected = useCallback(
     (columns: string[]) => {
-      const columnVisibility = columns.reduce((acc: Record<string, boolean>, id) => {
-        acc[id] = true;
-        return acc;
-      }, {});
+      const columnVisibility: Record<string, boolean> = {};
+
+      uniqueVariableIds?.forEach((id) => {
+        columnVisibility[id] = false;
+      });
+
+      columns.forEach((id) => {
+        columnVisibility[id] = true;
+      });
+
       dataForMaterialReactTable.setColumnVisibility((prev) => ({
         ...prev,
         ...columnVisibility,
@@ -851,7 +857,7 @@ const MatrixView = () => {
       localStorage.setItem('selectedColumns', JSON.stringify(columns));
       reloadTable();
     },
-    [dataForMaterialReactTable, reloadTable]
+    [dataForMaterialReactTable, reloadTable, uniqueVariableIds]
   );
 
   return (
