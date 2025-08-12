@@ -130,48 +130,6 @@ const MatrixView = () => {
     setRequestVarsId(request.requestId);
   }, [dispatch]);
 
-  const reloadTable = useCallback(() => {
-    const request = dispatch(
-      requestGetProjectsWithVariables({
-        fields: [
-          'id',
-          'name',
-          'participant_cohort_phase',
-          'acceleratorDetails_confirmedReforestableLand',
-          'country_name',
-          'acceleratorDetails_projectLead',
-          'variables.stableId',
-          'variables.variableId',
-          'variables.variableName',
-          'variables.variableType',
-          'variables.isList',
-          'variables.isMultiSelect',
-          'variables.values.textValue',
-          'variables.values.numberValue',
-          'variables.values.linkUrl',
-          'variables.values.dateValue',
-          'variables.values.options.name',
-          'variables.values.options.position',
-        ],
-        sortOrder: {
-          field: 'name',
-          direction: 'Ascending',
-        },
-      })
-    );
-    setRequestId(request.requestId);
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (updateVariableValuesRequest?.status === 'success') {
-      reloadTable();
-    }
-    if (updateVariableValuesRequest?.status === 'error') {
-      snackbar.toastError();
-      setLoading(false);
-    }
-  }, [reloadTable, snackbar, updateVariableValuesRequest]);
-
   useEffect(() => {
     if (allVariablesResponse?.status === 'success') {
       setAllVariables(allVariablesResponse.data);
@@ -182,10 +140,6 @@ const MatrixView = () => {
     const request = dispatch(requestListAllVariables());
     setRequestVarsId(request.requestId);
   }, [dispatch]);
-
-  useEffect(() => {
-    reloadTable();
-  }, [dispatch, reloadTable]);
 
   const uniqueVariableIds = useMemo(
     () =>
@@ -555,7 +509,7 @@ const MatrixView = () => {
                       ))}
                       <div style={{ padding: '8px', textAlign: 'right' }}>
                         <Button size='small' onClick={handleClose}>
-                          Done
+                          {strings.DONE}
                         </Button>
                       </div>
                     </div>,
@@ -775,6 +729,65 @@ const MatrixView = () => {
     },
   });
 
+  const reloadTable = useCallback(() => {
+    const visibleColumnIds = dataForMaterialReactTable
+      .getVisibleFlatColumns()
+      .filter((col) => !isNaN(Number(col.id)))
+      .map((col) => col.id);
+
+    const request = dispatch(
+      requestGetProjectsWithVariables({
+        fields: [
+          'id',
+          'name',
+          'participant_cohort_phase',
+          'acceleratorDetails_confirmedReforestableLand',
+          'country_name',
+          'acceleratorDetails_projectLead',
+          'variables.stableId',
+          'variables.variableId',
+          'variables.variableName',
+          'variables.variableType',
+          'variables.isList',
+          'variables.isMultiSelect',
+          'variables.values.textValue',
+          'variables.values.numberValue',
+          'variables.values.linkUrl',
+          'variables.values.dateValue',
+          'variables.values.options.name',
+          'variables.values.options.position',
+        ],
+        sortOrder: {
+          field: 'name',
+          direction: 'Ascending',
+        },
+        searchCriteria: [
+          {
+            field: 'variables.stableId',
+            operation: 'field',
+            type: 'Exact',
+            values: visibleColumnIds,
+          },
+        ],
+      })
+    );
+    setRequestId(request.requestId);
+  }, [dispatch, dataForMaterialReactTable]);
+
+  useEffect(() => {
+    if (updateVariableValuesRequest?.status === 'success') {
+      reloadTable();
+    }
+    if (updateVariableValuesRequest?.status === 'error') {
+      snackbar.toastError();
+      setLoading(false);
+    }
+  }, [reloadTable, snackbar, updateVariableValuesRequest]);
+
+  useEffect(() => {
+    reloadTable();
+  }, [dispatch, reloadTable]);
+
   useEffect(() => {
     const loadSavedColumnState = () => {
       const savedColumns = localStorage.getItem('selectedColumns');
@@ -832,8 +845,9 @@ const MatrixView = () => {
 
       // Save to localStorage
       localStorage.setItem('selectedColumns', JSON.stringify(columns));
+      reloadTable();
     },
-    [dataForMaterialReactTable]
+    [dataForMaterialReactTable, reloadTable]
   );
 
   return (
