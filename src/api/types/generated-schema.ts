@@ -4550,6 +4550,8 @@ export interface components {
             /** Format: int32 */
             germinatingQuantityAdded: number;
             /** Format: int32 */
+            hardeningOffQuantity: number;
+            /** Format: int32 */
             notReadyQuantityAdded: number;
             /** Format: int32 */
             readyQuantityAdded: number;
@@ -4570,6 +4572,8 @@ export interface components {
         BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
             /** Format: int32 */
             germinatingQuantityWithdrawn: number;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantityWithdrawn: number;
             /** @enum {string} */
@@ -4628,6 +4632,8 @@ export interface components {
             /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
+            hardeningOffQuantity: number;
+            /** Format: int32 */
             notReadyQuantity: number;
             /** Format: int32 */
             readyQuantity: number;
@@ -4644,6 +4650,8 @@ export interface components {
         BatchHistoryStatusChangedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
             /** Format: int32 */
             germinatingQuantity: number;
+            /** Format: int32 */
+            hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantity: number;
             /** Format: int32 */
@@ -4771,10 +4779,20 @@ export interface components {
         };
         ChangeBatchStatusRequestPayload: {
             /**
+             * @description Which status to move seedlings to.
+             * @enum {string}
+             */
+            newPhase?: "Germinating" | "ActiveGrowth" | "NotReady" | "HardeningOff" | "Ready";
+            /**
              * @description Which status change to apply.
              * @enum {string}
              */
-            operation: "GerminatingToNotReady" | "NotReadyToReady";
+            operation?: "GerminatingToNotReady" | "NotReadyToReady";
+            /**
+             * @description Which status to move seedlings from.
+             * @enum {string}
+             */
+            previousPhase?: "Germinating" | "ActiveGrowth" | "NotReady" | "HardeningOff" | "Ready";
             /**
              * Format: int32
              * @description Number of seedlings to move from one status to the next.
@@ -5152,7 +5170,7 @@ export interface components {
             /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
-            hardeningOffQuantity: number;
+            hardeningOffQuantity?: number;
             /** Format: int32 */
             notReadyQuantity: number;
             notes?: string;
@@ -9325,7 +9343,7 @@ export interface components {
             /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
-            hardeningOffQuantity: number;
+            hardeningOffQuantity?: number;
             /** Format: int32 */
             notReadyQuantity: number;
             /** Format: int32 */
