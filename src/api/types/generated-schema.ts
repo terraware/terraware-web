@@ -4545,6 +4545,8 @@ export interface components {
         };
         /** @description A nursery transfer withdrawal from another batch that added seedlings to this batch. */
         BatchHistoryIncomingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
+            /** Format: int32 */
+            activeGrowthQuantityAdded: number;
             /** Format: int64 */
             fromBatchId: number;
             /** Format: int32 */
@@ -4570,6 +4572,8 @@ export interface components {
         };
         /** @description A withdrawal that removed seedlings from this batch. This does not include the full details of the withdrawal; they can be retrieved using the withdrawal ID. */
         BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
+            /** Format: int32 */
+            activeGrowthQuantityWithdrawn: number;
             /** Format: int32 */
             germinatingQuantityWithdrawn: number;
             /** Format: int32 */
@@ -4630,6 +4634,8 @@ export interface components {
         /** @description A manual edit of a batch's remaining quantities. */
         BatchHistoryQuantityEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
             /** Format: int32 */
+            activeGrowthQuantity: number;
+            /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
             hardeningOffQuantity: number;
@@ -4648,6 +4654,8 @@ export interface components {
         };
         /** @description The new quantities resulting from changing the statuses of seedlings in a batch. The values here are the total quantities remaining after the status change, not the number of seedlings whose statuses were changed. */
         BatchHistoryStatusChangedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
+            /** Format: int32 */
+            activeGrowthQuantity: number;
             /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
@@ -4682,6 +4690,8 @@ export interface components {
             accessionId?: number;
             /** @description If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. */
             accessionNumber?: string;
+            /** Format: int32 */
+            activeGrowthQuantity: number;
             /** Format: date */
             addedDate: string;
             batchNumber: string;
@@ -4743,6 +4753,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         BatchWithdrawalPayload: {
+            /** Format: int32 */
+            activeGrowthQuantityWithdrawn: number;
             /** Format: int64 */
             batchId: number;
             /**
@@ -4782,7 +4794,7 @@ export interface components {
              * @description Which status to move seedlings to.
              * @enum {string}
              */
-            newPhase?: "Germinating" | "NotReady" | "HardeningOff" | "Ready";
+            newPhase?: "Germinating" | "ActiveGrowth" | "NotReady" | "HardeningOff" | "Ready";
             /**
              * @description Which status change to apply.
              * @enum {string}
@@ -4792,7 +4804,7 @@ export interface components {
              * @description Which status to move seedlings from.
              * @enum {string}
              */
-            previousPhase?: "Germinating" | "NotReady" | "HardeningOff" | "Ready";
+            previousPhase?: "Germinating" | "ActiveGrowth" | "NotReady" | "HardeningOff" | "Ready";
             /**
              * Format: int32
              * @description Number of seedlings to move from one status to the next.
@@ -4963,6 +4975,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CreateBatchRequestPayload: {
+            /** Format: int32 */
+            activeGrowthQuantity: number;
             /** Format: date */
             addedDate: string;
             /** Format: int64 */
@@ -4973,8 +4987,6 @@ export interface components {
             germinationStartedDate?: string;
             /** Format: int32 */
             hardeningOffQuantity: number;
-            /** Format: int32 */
-            notReadyQuantity: number;
             notes?: string;
             /** Format: int64 */
             projectId?: number;
@@ -5163,6 +5175,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CreateNurseryTransferRequestPayload: {
+            /** Format: int32 */
+            activeGrowthQuantity: number;
             /** Format: date */
             date: string;
             /** Format: int64 */
@@ -5170,9 +5184,7 @@ export interface components {
             /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
-            hardeningOffQuantity: number;
-            /** Format: int32 */
-            notReadyQuantity: number;
+            hardeningOffQuantity?: number;
             notes?: string;
             /** Format: date */
             readyByDate?: string;
@@ -7403,6 +7415,8 @@ export interface components {
         };
         NurserySummaryPayload: {
             /** Format: int64 */
+            activeGrowthQuantity: number;
+            /** Format: int64 */
             germinatingQuantity: number;
             /** Format: int32 */
             germinationRate?: number;
@@ -7790,6 +7804,8 @@ export interface components {
             organizationName: string;
         };
         OrganizationNurserySummaryPayload: {
+            /** Format: int64 */
+            activeGrowthQuantity: number;
             /** Format: int64 */
             germinatingQuantity: number;
             /** Format: int32 */
@@ -9032,6 +9048,8 @@ export interface components {
         };
         SpeciesSummaryPayload: {
             /** Format: int64 */
+            activeGrowthQuantity: number;
+            /** Format: int64 */
             germinatingQuantity: number;
             /** Format: int32 */
             germinationRate?: number;
@@ -9342,11 +9360,11 @@ export interface components {
         };
         UpdateBatchQuantitiesRequestPayload: {
             /** Format: int32 */
+            activeGrowthQuantity: number;
+            /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
-            hardeningOffQuantity: number;
-            /** Format: int32 */
-            notReadyQuantity: number;
+            hardeningOffQuantity?: number;
             /** Format: int32 */
             readyQuantity: number;
             /** Format: int32 */
