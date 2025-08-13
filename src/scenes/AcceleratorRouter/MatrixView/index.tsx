@@ -768,7 +768,7 @@ const MatrixView = () => {
               field: 'stableId',
               operation: 'field',
               type: 'Exact',
-              values: visibleColumnIds,
+              values: visibleColumnIds.length > 0 ? visibleColumnIds : [''],
             },
           },
         ],
