@@ -29,6 +29,12 @@ type InventoryListBySpeciesProps = {
 export default function InventoryListBySpecies({ setReportData }: InventoryListBySpeciesProps) {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter(user?.locale);
+  const theme = useTheme();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const [filters, setFilters] = useForm<InventoryFiltersType>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -37,13 +43,6 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
     field: 'species_scientificName',
     direction: 'Ascending',
   });
-  const [filters, setFilters] = useForm<InventoryFiltersType>({});
-
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter(user?.locale);
-  const theme = useTheme();
-
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const columns = useMemo(
     (): TableColumnType[] => [

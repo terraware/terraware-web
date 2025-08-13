@@ -33,7 +33,6 @@ export default function ChangeQuantityModal({
   const snackbar = useSnackbar();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter(user?.locale);
-
   const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const [saving, setSaving] = useState<boolean>(false);

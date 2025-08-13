@@ -26,19 +26,19 @@ type InventoryListByBatchProps = {
 export default function InventoryListByBatch({ setReportData }: InventoryListByBatchProps) {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const theme = useTheme();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
-  const [temporalSearchValue, setTemporalSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'batchNumber',
     direction: 'Ascending',
   });
-  const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
-  const theme = useTheme();
+  const [temporalSearchValue, setTemporalSearchValue] = useState('');
 
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
   const onSearchSortOrder = useCallback(
     (order: SearchSortOrder) => {

@@ -24,19 +24,18 @@ type InventoryListByNurseryProps = {
 export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const theme = useTheme();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const [filters, setFilters] = useForm<InventoryFiltersType>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
-  const [temporalSearchValue, setTemporalSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'facility_name',
     direction: 'Ascending',
   });
-  const [filters, setFilters] = useForm<InventoryFiltersType>({});
-  const theme = useTheme();
-
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+  const [temporalSearchValue, setTemporalSearchValue] = useState('');
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
   const onSearchSortOrder = useCallback(
     (order: SearchSortOrder) => {

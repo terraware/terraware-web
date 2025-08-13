@@ -28,6 +28,10 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
   const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
   const batchWithRawQtys = {
@@ -37,11 +41,6 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     'notReadyQuantity(raw)': batch.notReadyQuantity,
     'readyQuantity(raw)': batch.readyQuantity,
   };
-
-  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
-  const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
-
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   useEffect(() => {
     const getPhotos = async () => {

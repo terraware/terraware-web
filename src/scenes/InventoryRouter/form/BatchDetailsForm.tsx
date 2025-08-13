@@ -63,6 +63,7 @@ export default function BatchDetailsForm({
   const snackBar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const locationTimezone = useLocationTimeZone();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
   const [record, setRecord, onChange] = useForm<FormRecord>(undefined);
 
   const facilityId = origin === 'Nursery' ? originId : record?.facilityId;
@@ -86,8 +87,6 @@ export default function BatchDetailsForm({
     hardeningOff: '',
     ready: '',
   });
-
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const hasErrors = useCallback(() => {
     if (record) {

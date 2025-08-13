@@ -28,37 +28,32 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export interface BatchDetailsModalProps {
-  onClose: () => void;
   batch: Batch;
+  onClose: () => void;
   reload: () => void;
 }
 
 type BatchPhotoWithUrl = BatchPhoto & { url: string };
 
-export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element | null {
+export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetailsModalProps): JSX.Element | null {
   const { strings } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter(user?.locale);
-  const { selectedOrganization } = useOrganization();
-  const { onClose, batch, reload } = props;
-
-  const [record, setRecord, onChange] = useForm(batch);
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const [validateFields, setValidateFields] = useState<boolean>(false);
-
   const { isMobile } = useDeviceInfo();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const [record, setRecord, onChange] = useForm(batch);
+  const [validateFields, setValidateFields] = useState<boolean>(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
-  const [facility, setFacility] = useState<Facility>();
-
-  const tz = useLocationTimeZone().get(facility);
-  const [timeZone, setTimeZone] = useState(tz.id);
-
   const [photos, setPhotos] = useState<BatchPhotoWithUrl[]>([]);
   const [newPhotos, setNewPhotos] = useState<File[]>([]);
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
-
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+  const [facility, setFacility] = useState<Facility>();
+  const tz = useLocationTimeZone().get(facility);
+  const [timeZone, setTimeZone] = useState(tz.id);
 
   const onPhotosChanged = useCallback(
     (photosList: File[]) => {
