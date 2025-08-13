@@ -703,7 +703,7 @@ const MatrixView = () => {
       <Box>
         <MRT_ToggleGlobalFilterButton table={table} />
         <MRT_ToggleFiltersButton table={table} />
-        <IconButton onClick={onColumnsClickHandler}>
+        <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
           <Icon name='iconColumns' />
         </IconButton>
         <MRT_ToggleDensePaddingButton table={table} />

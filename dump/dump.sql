@@ -456,6 +456,186 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: applications; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.applications (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    internal_name text NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    application_status_id integer NOT NULL,
+    boundary public.geometry,
+    internal_comment text,
+    feedback text,
+    country_code text
+);
+
+
+--
+-- Name: TABLE applications; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.applications IS 'Information about projects that are applying for the accelerator program.';
+
+
+--
+-- Name: participants; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.participants (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    cohort_id bigint
+);
+
+
+--
+-- Name: TABLE participants; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.participants IS 'Accelerator participant details.';
+
+
+--
+-- Name: project_accelerator_details; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.project_accelerator_details (
+    project_id bigint NOT NULL,
+    pipeline_id integer,
+    deal_stage_id integer,
+    application_reforestable_land numeric,
+    confirmed_reforestable_land numeric,
+    total_expansion_potential numeric,
+    num_native_species integer,
+    min_carbon_accumulation numeric,
+    max_carbon_accumulation numeric,
+    per_hectare_budget numeric,
+    num_communities integer,
+    investment_thesis text,
+    failure_risk text,
+    what_needs_to_be_true text,
+    deal_description text,
+    project_lead text,
+    file_naming text,
+    dropbox_folder_path text,
+    google_folder_url text,
+    carbon_capacity numeric,
+    annual_carbon numeric,
+    total_carbon numeric,
+    hubspot_url text,
+    deal_name text,
+    logframe_url text,
+    planting_sites_cql text,
+    project_boundaries_cql text
+);
+
+
+--
+-- Name: TABLE project_accelerator_details; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.project_accelerator_details IS 'Details about projects that are only relevant for accelerator applicants. The values here are for internal use, not exposed to end users.';
+
+
+--
+-- Name: COLUMN project_accelerator_details.file_naming; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.project_accelerator_details.file_naming IS 'Identifier that is included in generated filenames. This is often, but not necessarily, the same as the project name.';
+
+
+--
+-- Name: COLUMN project_accelerator_details.logframe_url; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.project_accelerator_details.logframe_url IS 'Link to the project logical framework, monitoring and evaluation plan, and operational work plan.';
+
+
+--
+-- Name: organization_internal_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organization_internal_tags (
+    organization_id bigint NOT NULL,
+    internal_tag_id bigint NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE organization_internal_tags; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.organization_internal_tags IS 'Which internal (non-user-facing) tags apply to which organizations.';
+
+
+--
+-- Name: projects; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.projects (
+    id bigint NOT NULL,
+    created_by bigint DEFAULT '-1'::integer NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint DEFAULT '-1'::integer NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    organization_id bigint NOT NULL,
+    name text NOT NULL,
+    description text,
+    participant_id bigint,
+    country_code text
+);
+
+
+--
+-- Name: TABLE projects; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.projects IS 'Distinguishes among an organization''s projects.';
+
+
+--
+-- Name: accelerator_projects; Type: VIEW; Schema: accelerator; Owner: -
+--
+
+CREATE VIEW accelerator.accelerator_projects AS
+ SELECT project_id,
+    application_id,
+    participant_id,
+    cohort_id,
+    has_org_accelerator_tag
+   FROM ( SELECT p.id AS project_id,
+            a.id AS application_id,
+            part.id AS participant_id,
+            part.cohort_id,
+            (EXISTS ( SELECT 1
+                   FROM public.organization_internal_tags oit
+                  WHERE ((oit.organization_id = p.organization_id) AND (oit.internal_tag_id = 4)))) AS has_org_accelerator_tag
+           FROM (((public.projects p
+             LEFT JOIN accelerator.applications a ON ((p.id = a.project_id)))
+             LEFT JOIN accelerator.participants part ON ((p.participant_id = part.id)))
+             LEFT JOIN accelerator.project_accelerator_details pad ON ((p.id = pad.project_id)))) accelerator_projects
+  WHERE ((application_id IS NOT NULL) OR (participant_id IS NOT NULL) OR (has_org_accelerator_tag IS TRUE));
+
+
+--
+-- Name: VIEW accelerator_projects; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON VIEW accelerator.accelerator_projects IS 'All projects that are in the accelerator, by any of the definitions. The 3 definitions at the time of creation were: having an application, having a participant, or the project''s org having an internal tag of "Accelerator".';
+
+
+--
 -- Name: application_histories; Type: TABLE; Schema: accelerator; Owner: -
 --
 
@@ -542,33 +722,6 @@ CREATE TABLE accelerator.application_statuses (
 --
 
 COMMENT ON TABLE accelerator.application_statuses IS '(Enum) Possible statuses for an application to the accelerator program.';
-
-
---
--- Name: applications; Type: TABLE; Schema: accelerator; Owner: -
---
-
-CREATE TABLE accelerator.applications (
-    id bigint NOT NULL,
-    project_id bigint NOT NULL,
-    internal_name text NOT NULL,
-    created_by bigint NOT NULL,
-    created_time timestamp with time zone NOT NULL,
-    modified_by bigint NOT NULL,
-    modified_time timestamp with time zone NOT NULL,
-    application_status_id integer NOT NULL,
-    boundary public.geometry,
-    internal_comment text,
-    feedback text,
-    country_code text
-);
-
-
---
--- Name: TABLE applications; Type: COMMENT; Schema: accelerator; Owner: -
---
-
-COMMENT ON TABLE accelerator.applications IS 'Information about projects that are applying for the accelerator program.';
 
 
 --
@@ -1160,28 +1313,6 @@ ALTER TABLE accelerator.participant_project_species ALTER COLUMN id ADD GENERATE
 
 
 --
--- Name: participants; Type: TABLE; Schema: accelerator; Owner: -
---
-
-CREATE TABLE accelerator.participants (
-    id bigint NOT NULL,
-    name text NOT NULL,
-    created_by bigint NOT NULL,
-    created_time timestamp with time zone NOT NULL,
-    modified_by bigint NOT NULL,
-    modified_time timestamp with time zone NOT NULL,
-    cohort_id bigint
-);
-
-
---
--- Name: TABLE participants; Type: COMMENT; Schema: accelerator; Owner: -
---
-
-COMMENT ON TABLE accelerator.participants IS 'Accelerator participant details.';
-
-
---
 -- Name: participants_id_seq; Type: SEQUENCE; Schema: accelerator; Owner: -
 --
 
@@ -1213,62 +1344,6 @@ COMMENT ON TABLE accelerator.pipelines IS '(Enum) Deal pipelines for accelerator
 
 
 --
--- Name: project_accelerator_details; Type: TABLE; Schema: accelerator; Owner: -
---
-
-CREATE TABLE accelerator.project_accelerator_details (
-    project_id bigint NOT NULL,
-    pipeline_id integer,
-    deal_stage_id integer,
-    application_reforestable_land numeric,
-    confirmed_reforestable_land numeric,
-    total_expansion_potential numeric,
-    num_native_species integer,
-    min_carbon_accumulation numeric,
-    max_carbon_accumulation numeric,
-    per_hectare_budget numeric,
-    num_communities integer,
-    investment_thesis text,
-    failure_risk text,
-    what_needs_to_be_true text,
-    deal_description text,
-    project_lead text,
-    file_naming text,
-    dropbox_folder_path text,
-    google_folder_url text,
-    carbon_capacity numeric,
-    annual_carbon numeric,
-    total_carbon numeric,
-    hubspot_url text,
-    deal_name text,
-    logframe_url text,
-    planting_sites_cql text,
-    project_boundaries_cql text
-);
-
-
---
--- Name: TABLE project_accelerator_details; Type: COMMENT; Schema: accelerator; Owner: -
---
-
-COMMENT ON TABLE accelerator.project_accelerator_details IS 'Details about projects that are only relevant for accelerator applicants. The values here are for internal use, not exposed to end users.';
-
-
---
--- Name: COLUMN project_accelerator_details.file_naming; Type: COMMENT; Schema: accelerator; Owner: -
---
-
-COMMENT ON COLUMN accelerator.project_accelerator_details.file_naming IS 'Identifier that is included in generated filenames. This is often, but not necessarily, the same as the project name.';
-
-
---
--- Name: COLUMN project_accelerator_details.logframe_url; Type: COMMENT; Schema: accelerator; Owner: -
---
-
-COMMENT ON COLUMN accelerator.project_accelerator_details.logframe_url IS 'Link to the project logical framework, monitoring and evaluation plan, and operational work plan.';
-
-
---
 -- Name: submissions; Type: TABLE; Schema: accelerator; Owner: -
 --
 
@@ -1291,31 +1366,6 @@ CREATE TABLE accelerator.submissions (
 --
 
 COMMENT ON TABLE accelerator.submissions IS 'Information about the current states of the information supplied by specific projects in response to deliverables.';
-
-
---
--- Name: projects; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.projects (
-    id bigint NOT NULL,
-    created_by bigint DEFAULT '-1'::integer NOT NULL,
-    created_time timestamp with time zone NOT NULL,
-    modified_by bigint DEFAULT '-1'::integer NOT NULL,
-    modified_time timestamp with time zone NOT NULL,
-    organization_id bigint NOT NULL,
-    name text NOT NULL,
-    description text,
-    participant_id bigint,
-    country_code text
-);
-
-
---
--- Name: TABLE projects; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.projects IS 'Distinguishes among an organization''s projects.';
 
 
 --
@@ -1481,6 +1531,203 @@ COMMENT ON TABLE accelerator.project_scores IS 'Scores assigned to project by sc
 --
 
 COMMENT ON COLUMN accelerator.project_scores.score IS 'Integer score between -2 to 2. The score can be null to represent not yet scored. ';
+
+
+--
+-- Name: variable_link_values; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_link_values (
+    variable_value_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    url text NOT NULL,
+    title text,
+    CONSTRAINT variable_link_values_variable_type_id_check CHECK ((variable_type_id = 7))
+);
+
+
+--
+-- Name: TABLE variable_link_values; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_link_values IS 'Type-specific details of the values of link variables.';
+
+
+--
+-- Name: variable_values; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_values (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    list_position integer DEFAULT 0 NOT NULL,
+    created_by bigint DEFAULT '-1'::integer NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    number_value numeric,
+    text_value text,
+    date_value date,
+    citation text,
+    CONSTRAINT text_value_is_text_or_email CHECK (((text_value IS NULL) OR (variable_type_id = ANY (ARRAY[2, 9])))),
+    CONSTRAINT variable_values_check CHECK (((number_value IS NULL) OR (variable_type_id = 1)))
+);
+
+
+--
+-- Name: TABLE variable_values; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_values IS 'Insert-only table with all historical and current values of all inputs.';
+
+
+--
+-- Name: COLUMN variable_values.text_value; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variable_values.text_value IS 'For text or email variables, the variable''s value. May contain newlines if the text variable is multi-line.';
+
+
+--
+-- Name: project_variable_values; Type: VIEW; Schema: accelerator; Owner: -
+--
+
+CREATE VIEW accelerator.project_variable_values AS
+ WITH latest_values AS (
+         SELECT variable_values.project_id,
+            variable_values.variable_id,
+            variable_values.list_position,
+            max(variable_values.id) AS variable_value_id
+           FROM docprod.variable_values
+          GROUP BY variable_values.project_id, variable_values.variable_id, variable_values.list_position
+        )
+ SELECT vv.project_id,
+    vv.variable_id,
+    vv.id AS variable_value_id,
+    vv.list_position,
+    vv.text_value,
+    vv.number_value,
+    vv.date_value,
+    vlv.url AS link_url,
+    vlv.title AS link_title
+   FROM ((docprod.variable_values vv
+     JOIN latest_values lv ON (((lv.project_id = vv.project_id) AND (lv.variable_id = vv.variable_id) AND (lv.list_position = vv.list_position) AND (lv.variable_value_id = vv.id))))
+     LEFT JOIN docprod.variable_link_values vlv ON ((vlv.variable_value_id = vv.id)))
+  WHERE (NOT vv.is_deleted);
+
+
+--
+-- Name: VIEW project_variable_values; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON VIEW accelerator.project_variable_values IS 'Latest Variable Values for projects, excluding deleted. Only includes accelerator projects, and includes all accelerator projects, whether or not they have values for any variables.';
+
+
+--
+-- Name: variable_selects; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_selects (
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    is_multiple boolean NOT NULL,
+    CONSTRAINT variable_selects_variable_type_id_check CHECK ((variable_type_id = 5))
+);
+
+
+--
+-- Name: TABLE variable_selects; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_selects IS 'Information about select variables that is not relevant for other variable types. This table only has information about the variable as a whole; the options are in `variable_select_options`.';
+
+
+--
+-- Name: COLUMN variable_selects.is_multiple; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variable_selects.is_multiple IS 'If true, allow multiple options to be selected. The list of selected options is considered a single value; do not set `variables.is_list` to true unless you want a list of multiple-select variables.';
+
+
+--
+-- Name: variables; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variables (
+    id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    replaces_variable_id bigint,
+    is_list boolean DEFAULT false NOT NULL,
+    stable_id text NOT NULL,
+    name text NOT NULL,
+    description text,
+    deliverable_question text,
+    dependency_variable_stable_id text,
+    dependency_condition_id integer,
+    dependency_value text,
+    internal_only boolean DEFAULT false NOT NULL,
+    is_required boolean NOT NULL
+);
+
+
+--
+-- Name: TABLE variables; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variables IS 'variables that can be supplied by the user. This table stores the variables themselves, not the values of the variables in a particular document. Type-specific information is in child tables such as `variable_numbers`.';
+
+
+--
+-- Name: COLUMN variables.replaces_variable_id; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variables.replaces_variable_id IS 'If this is a new version of a variable that existed in a previous manifest version, the ID of the previous version of the variable. This allows the system to automatically migrate values from older variable versions when a document is updated to a new manifest version.';
+
+
+--
+-- Name: COLUMN variables.is_list; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variables.is_list IS 'True if this variable is a list of values rather than a single value. If the variable is a table, true if the table can contain multiple rows.';
+
+
+--
+-- Name: project_variables; Type: VIEW; Schema: accelerator; Owner: -
+--
+
+CREATE VIEW accelerator.project_variables AS
+ WITH latest_variables AS (
+         SELECT variables.stable_id,
+            max(variables.id) AS variable_id
+           FROM docprod.variables
+          GROUP BY variables.stable_id
+        ), project_variables AS (
+         SELECT DISTINCT vv.project_id,
+            lv_1.variable_id
+           FROM (docprod.variable_values vv
+             JOIN latest_variables lv_1 ON ((lv_1.variable_id = vv.variable_id)))
+        )
+ SELECT ap.project_id,
+    lv.stable_id,
+    lv.variable_id,
+    v.name,
+    v.is_list,
+    v.variable_type_id,
+    vs.is_multiple AS is_multi_select
+   FROM ((((accelerator.accelerator_projects ap
+     LEFT JOIN project_variables pv ON ((pv.project_id = ap.project_id)))
+     LEFT JOIN latest_variables lv ON ((lv.variable_id = pv.variable_id)))
+     LEFT JOIN docprod.variables v ON ((v.id = lv.variable_id)))
+     LEFT JOIN docprod.variable_selects vs ON ((vs.variable_id = lv.variable_id)));
+
+
+--
+-- Name: VIEW project_variables; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON VIEW accelerator.project_variables IS 'Latest Variables for projects. Only includes accelerator projects, and includes all accelerator projects, whether or not they have values for any variables.';
 
 
 --
@@ -2231,27 +2478,6 @@ COMMENT ON TABLE docprod.variable_injection_display_styles IS '(Enum) For inject
 
 
 --
--- Name: variable_link_values; Type: TABLE; Schema: docprod; Owner: -
---
-
-CREATE TABLE docprod.variable_link_values (
-    variable_value_id bigint NOT NULL,
-    variable_id bigint NOT NULL,
-    variable_type_id integer NOT NULL,
-    url text NOT NULL,
-    title text,
-    CONSTRAINT variable_link_values_variable_type_id_check CHECK ((variable_type_id = 7))
-);
-
-
---
--- Name: TABLE variable_link_values; Type: COMMENT; Schema: docprod; Owner: -
---
-
-COMMENT ON TABLE docprod.variable_link_values IS 'Type-specific details of the values of link variables.';
-
-
---
 -- Name: variable_manifest_entries; Type: TABLE; Schema: docprod; Owner: -
 --
 
@@ -2527,32 +2753,6 @@ ALTER TABLE docprod.variable_select_options ALTER COLUMN id ADD GENERATED BY DEF
 
 
 --
--- Name: variable_selects; Type: TABLE; Schema: docprod; Owner: -
---
-
-CREATE TABLE docprod.variable_selects (
-    variable_id bigint NOT NULL,
-    variable_type_id integer NOT NULL,
-    is_multiple boolean NOT NULL,
-    CONSTRAINT variable_selects_variable_type_id_check CHECK ((variable_type_id = 5))
-);
-
-
---
--- Name: TABLE variable_selects; Type: COMMENT; Schema: docprod; Owner: -
---
-
-COMMENT ON TABLE docprod.variable_selects IS 'Information about select variables that is not relevant for other variable types. This table only has information about the variable as a whole; the options are in `variable_select_options`.';
-
-
---
--- Name: COLUMN variable_selects.is_multiple; Type: COMMENT; Schema: docprod; Owner: -
---
-
-COMMENT ON COLUMN docprod.variable_selects.is_multiple IS 'If true, allow multiple options to be selected. The list of selected options is considered a single value; do not set `variables.is_list` to true unless you want a list of multiple-select variables.';
-
-
---
 -- Name: variable_table_columns; Type: TABLE; Schema: docprod; Owner: -
 --
 
@@ -2712,42 +2912,6 @@ ALTER TABLE docprod.variable_value_table_rows ALTER COLUMN id ADD GENERATED BY D
 
 
 --
--- Name: variable_values; Type: TABLE; Schema: docprod; Owner: -
---
-
-CREATE TABLE docprod.variable_values (
-    id bigint NOT NULL,
-    project_id bigint NOT NULL,
-    variable_id bigint NOT NULL,
-    variable_type_id integer NOT NULL,
-    list_position integer DEFAULT 0 NOT NULL,
-    created_by bigint DEFAULT '-1'::integer NOT NULL,
-    created_time timestamp with time zone NOT NULL,
-    is_deleted boolean DEFAULT false NOT NULL,
-    number_value numeric,
-    text_value text,
-    date_value date,
-    citation text,
-    CONSTRAINT text_value_is_text_or_email CHECK (((text_value IS NULL) OR (variable_type_id = ANY (ARRAY[2, 9])))),
-    CONSTRAINT variable_values_check CHECK (((number_value IS NULL) OR (variable_type_id = 1)))
-);
-
-
---
--- Name: TABLE variable_values; Type: COMMENT; Schema: docprod; Owner: -
---
-
-COMMENT ON TABLE docprod.variable_values IS 'Insert-only table with all historical and current values of all inputs.';
-
-
---
--- Name: COLUMN variable_values.text_value; Type: COMMENT; Schema: docprod; Owner: -
---
-
-COMMENT ON COLUMN docprod.variable_values.text_value IS 'For text or email variables, the variable''s value. May contain newlines if the text variable is multi-line.';
-
-
---
 -- Name: variable_values_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
 --
 
@@ -2821,48 +2985,6 @@ CREATE TABLE docprod.variable_workflow_statuses (
 --
 
 COMMENT ON TABLE docprod.variable_workflow_statuses IS '(Enum) Workflow statuses of variables in projects. The list of valid statuses depends on the variable type.';
-
-
---
--- Name: variables; Type: TABLE; Schema: docprod; Owner: -
---
-
-CREATE TABLE docprod.variables (
-    id bigint NOT NULL,
-    variable_type_id integer NOT NULL,
-    replaces_variable_id bigint,
-    is_list boolean DEFAULT false NOT NULL,
-    stable_id text NOT NULL,
-    name text NOT NULL,
-    description text,
-    deliverable_question text,
-    dependency_variable_stable_id text,
-    dependency_condition_id integer,
-    dependency_value text,
-    internal_only boolean DEFAULT false NOT NULL,
-    is_required boolean NOT NULL
-);
-
-
---
--- Name: TABLE variables; Type: COMMENT; Schema: docprod; Owner: -
---
-
-COMMENT ON TABLE docprod.variables IS 'variables that can be supplied by the user. This table stores the variables themselves, not the values of the variables in a particular document. Type-specific information is in child tables such as `variable_numbers`.';
-
-
---
--- Name: COLUMN variables.replaces_variable_id; Type: COMMENT; Schema: docprod; Owner: -
---
-
-COMMENT ON COLUMN docprod.variables.replaces_variable_id IS 'If this is a new version of a variable that existed in a previous manifest version, the ID of the previous version of the variable. This allows the system to automatically migrate values from older variable versions when a document is updated to a new manifest version.';
-
-
---
--- Name: COLUMN variables.is_list; Type: COMMENT; Schema: docprod; Owner: -
---
-
-COMMENT ON COLUMN docprod.variables.is_list IS 'True if this variable is a list of values rather than a single value. If the variable is a table, true if the table can contain multiple rows.';
 
 
 --
@@ -3299,6 +3421,7 @@ CREATE TABLE nursery.batch_quantity_history (
     ready_quantity integer NOT NULL,
     withdrawal_id bigint,
     version integer NOT NULL,
+    hardening_off_quantity integer DEFAULT 0 NOT NULL,
     CONSTRAINT batch_quantity_history_germinating_quantity_check CHECK ((germinating_quantity >= 0)),
     CONSTRAINT batch_quantity_history_not_ready_quantity_check CHECK ((not_ready_quantity >= 0)),
     CONSTRAINT batch_quantity_history_ready_quantity_check CHECK ((ready_quantity >= 0))
@@ -3366,6 +3489,13 @@ COMMENT ON COLUMN nursery.batch_quantity_history.ready_quantity IS 'New number o
 --
 
 COMMENT ON COLUMN nursery.batch_quantity_history.withdrawal_id IS 'If this change in quantity was due to a withdrawal from the batch, the withdrawal''s ID.';
+
+
+--
+-- Name: COLUMN batch_quantity_history.hardening_off_quantity; Type: COMMENT; Schema: nursery; Owner: -
+--
+
+COMMENT ON COLUMN nursery.batch_quantity_history.hardening_off_quantity IS 'New number of hardening-off seedlings in the batch.';
 
 
 --
@@ -3445,6 +3575,7 @@ CREATE TABLE nursery.batch_withdrawals (
     not_ready_quantity_withdrawn integer NOT NULL,
     ready_quantity_withdrawn integer NOT NULL,
     destination_batch_id bigint,
+    hardening_off_quantity_withdrawn integer DEFAULT 0 NOT NULL,
     CONSTRAINT quantity_signs_consistent CHECK ((((germinating_quantity_withdrawn <= 0) AND (not_ready_quantity_withdrawn <= 0) AND (ready_quantity_withdrawn <= 0)) OR ((germinating_quantity_withdrawn >= 0) AND (not_ready_quantity_withdrawn >= 0) AND (ready_quantity_withdrawn >= 0))))
 );
 
@@ -3499,6 +3630,13 @@ COMMENT ON COLUMN nursery.batch_withdrawals.destination_batch_id IS 'If the with
 
 
 --
+-- Name: COLUMN batch_withdrawals.hardening_off_quantity_withdrawn; Type: COMMENT; Schema: nursery; Owner: -
+--
+
+COMMENT ON COLUMN nursery.batch_withdrawals.hardening_off_quantity_withdrawn IS 'Number of hardening-off seedlings that were withdrawn from this batch. This is not necessarily the total number of seedlings in the withdrawal as a whole since a withdrawal can come from multiple batches.';
+
+
+--
 -- Name: batches; Type: TABLE; Schema: nursery; Owner: -
 --
 
@@ -3538,6 +3676,8 @@ CREATE TABLE nursery.batches (
     total_loss_candidates integer,
     germination_started_date date,
     seeds_sown_date date,
+    hardening_off_quantity integer DEFAULT 0 NOT NULL,
+    latest_observed_hardening_off_quantity integer DEFAULT 0 NOT NULL,
     CONSTRAINT batches_germinating_quantity_check CHECK ((germinating_quantity >= 0)),
     CONSTRAINT batches_latest_observed_germinating_quantity_check CHECK ((latest_observed_germinating_quantity >= 0)),
     CONSTRAINT batches_latest_observed_not_ready_quantity_check CHECK ((latest_observed_not_ready_quantity >= 0)),
@@ -3746,6 +3886,20 @@ COMMENT ON COLUMN nursery.batches.seeds_sown_date IS 'Date when newly-arrived se
 
 
 --
+-- Name: COLUMN batches.hardening_off_quantity; Type: COMMENT; Schema: nursery; Owner: -
+--
+
+COMMENT ON COLUMN nursery.batches.hardening_off_quantity IS 'Number of hardening-off seedlings currently available in inventory. Withdrawals cause this to decrease.';
+
+
+--
+-- Name: COLUMN batches.latest_observed_hardening_off_quantity; Type: COMMENT; Schema: nursery; Owner: -
+--
+
+COMMENT ON COLUMN nursery.batches.latest_observed_hardening_off_quantity IS 'Latest user-observed number of hardening-off seedlings currently available in inventory. Withdrawals do not cause this to decrease.';
+
+
+--
 -- Name: batches_id_seq; Type: SEQUENCE; Schema: nursery; Owner: -
 --
 
@@ -3770,10 +3924,11 @@ CREATE VIEW nursery.facility_inventories AS
     sum(ready_quantity) AS ready_quantity,
     sum(not_ready_quantity) AS not_ready_quantity,
     sum(germinating_quantity) AS germinating_quantity,
-    sum((ready_quantity + not_ready_quantity)) AS total_quantity
+    sum(hardening_off_quantity) AS hardening_off_quantity,
+    sum(((ready_quantity + not_ready_quantity) + hardening_off_quantity)) AS total_quantity
    FROM nursery.batches
   GROUP BY organization_id, species_id, facility_id
- HAVING (sum(((ready_quantity + not_ready_quantity) + germinating_quantity)) > 0);
+ HAVING (sum((((ready_quantity + not_ready_quantity) + germinating_quantity) + hardening_off_quantity)) > 0);
 
 
 --
@@ -3786,10 +3941,11 @@ CREATE VIEW nursery.facility_inventory_totals AS
     sum(ready_quantity) AS ready_quantity,
     sum(not_ready_quantity) AS not_ready_quantity,
     sum(germinating_quantity) AS germinating_quantity,
-    sum((ready_quantity + not_ready_quantity)) AS total_quantity,
+    sum(hardening_off_quantity) AS hardening_off_quantity,
+    sum(((ready_quantity + not_ready_quantity) + hardening_off_quantity)) AS total_quantity,
     count(DISTINCT species_id) AS total_species
    FROM nursery.batches
-  WHERE ((ready_quantity > 0) OR (not_ready_quantity > 0) OR (germinating_quantity > 0))
+  WHERE ((ready_quantity > 0) OR (not_ready_quantity > 0) OR (germinating_quantity > 0) OR (hardening_off_quantity > 0))
   GROUP BY organization_id, facility_id;
 
 
@@ -3803,10 +3959,11 @@ CREATE VIEW nursery.inventories AS
     sum(ready_quantity) AS ready_quantity,
     sum(not_ready_quantity) AS not_ready_quantity,
     sum(germinating_quantity) AS germinating_quantity,
-    sum((ready_quantity + not_ready_quantity)) AS total_quantity
+    sum(hardening_off_quantity) AS hardening_off_quantity,
+    sum(((ready_quantity + not_ready_quantity) + hardening_off_quantity)) AS total_quantity
    FROM nursery.batches
   GROUP BY organization_id, species_id
- HAVING (sum(((ready_quantity + not_ready_quantity) + germinating_quantity)) > 0);
+ HAVING (sum((((ready_quantity + not_ready_quantity) + germinating_quantity) + hardening_off_quantity)) > 0);
 
 
 --
@@ -3818,7 +3975,7 @@ CREATE VIEW nursery.species_projects AS
     species_id,
     project_id
    FROM nursery.batches
-  WHERE ((project_id IS NOT NULL) AND ((germinating_quantity > 0) OR (not_ready_quantity > 0) OR (ready_quantity > 0)));
+  WHERE ((project_id IS NOT NULL) AND ((germinating_quantity > 0) OR (not_ready_quantity > 0) OR (ready_quantity > 0) OR (hardening_off_quantity > 0)));
 
 
 --
@@ -4445,7 +4602,7 @@ CREATE VIEW nursery.withdrawal_summaries AS
      LEFT JOIN tracking.deliveries deliveries ON (((withdrawals.id = deliveries.withdrawal_id) AND (withdrawals.purpose_id = 3))))
      LEFT JOIN nursery.withdrawals undone_by_withdrawals ON ((withdrawals.id = undone_by_withdrawals.undoes_withdrawal_id)))
      LEFT JOIN nursery.withdrawals undoes_withdrawals ON ((withdrawals.undoes_withdrawal_id = undoes_withdrawals.id)))
-     LEFT JOIN LATERAL ( SELECT COALESCE(sum(((bw.germinating_quantity_withdrawn + bw.not_ready_quantity_withdrawn) + bw.ready_quantity_withdrawn)), (0)::bigint) AS total_withdrawn
+     LEFT JOIN LATERAL ( SELECT COALESCE(sum((((bw.germinating_quantity_withdrawn + bw.hardening_off_quantity_withdrawn) + bw.not_ready_quantity_withdrawn) + bw.ready_quantity_withdrawn)), (0)::bigint) AS total_withdrawn
            FROM nursery.batch_withdrawals bw
           WHERE (withdrawals.id = bw.withdrawal_id)) totals ON (true))
      LEFT JOIN LATERAL ( SELECT string_agg(DISTINCT p.full_name, ', '::text ORDER BY p.full_name) AS plot_names
@@ -5574,25 +5731,6 @@ ALTER TABLE public.notifications ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDE
     NO MAXVALUE
     CACHE 1
 );
-
-
---
--- Name: organization_internal_tags; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.organization_internal_tags (
-    organization_id bigint NOT NULL,
-    internal_tag_id bigint NOT NULL,
-    created_by bigint NOT NULL,
-    created_time timestamp with time zone NOT NULL
-);
-
-
---
--- Name: TABLE organization_internal_tags; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.organization_internal_tags IS 'Which internal (non-user-facing) tags apply to which organizations.';
 
 
 --
@@ -10760,10 +10898,10 @@ COPY nursery.batch_photos (id, batch_id, file_id, created_by, created_time, dele
 -- Data for Name: batch_quantity_history; Type: TABLE DATA; Schema: nursery; Owner: -
 --
 
-COPY nursery.batch_quantity_history (id, batch_id, history_type_id, created_by, created_time, germinating_quantity, not_ready_quantity, ready_quantity, withdrawal_id, version) FROM stdin;
-1	1	1	1	2025-05-29 18:48:31.418448+00	0	0	200	\N	1
-2	1	2	1	2025-05-29 18:49:05.998985+00	0	0	100	1	2
-3	1	2	1	2025-05-29 18:49:17.954018+00	0	0	0	2	3
+COPY nursery.batch_quantity_history (id, batch_id, history_type_id, created_by, created_time, germinating_quantity, not_ready_quantity, ready_quantity, withdrawal_id, version, hardening_off_quantity) FROM stdin;
+1	1	1	1	2025-05-29 18:48:31.418448+00	0	0	200	\N	1	0
+2	1	2	1	2025-05-29 18:49:05.998985+00	0	0	100	1	2	0
+3	1	2	1	2025-05-29 18:49:17.954018+00	0	0	0	2	3	0
 \.
 
 
@@ -10804,9 +10942,9 @@ COPY nursery.batch_substrates (id, name) FROM stdin;
 -- Data for Name: batch_withdrawals; Type: TABLE DATA; Schema: nursery; Owner: -
 --
 
-COPY nursery.batch_withdrawals (batch_id, withdrawal_id, germinating_quantity_withdrawn, not_ready_quantity_withdrawn, ready_quantity_withdrawn, destination_batch_id) FROM stdin;
-1	1	0	0	100	\N
-1	2	0	0	100	\N
+COPY nursery.batch_withdrawals (batch_id, withdrawal_id, germinating_quantity_withdrawn, not_ready_quantity_withdrawn, ready_quantity_withdrawn, destination_batch_id, hardening_off_quantity_withdrawn) FROM stdin;
+1	1	0	0	100	\N	0
+1	2	0	0	100	\N	0
 \.
 
 
@@ -10814,8 +10952,8 @@ COPY nursery.batch_withdrawals (batch_id, withdrawal_id, germinating_quantity_wi
 -- Data for Name: batches; Type: TABLE DATA; Schema: nursery; Owner: -
 --
 
-COPY nursery.batches (id, version, organization_id, facility_id, species_id, batch_number, added_date, germinating_quantity, not_ready_quantity, ready_quantity, latest_observed_germinating_quantity, latest_observed_not_ready_quantity, latest_observed_ready_quantity, latest_observed_time, created_by, created_time, modified_by, modified_time, notes, ready_by_date, accession_id, project_id, substrate_id, substrate_notes, treatment_id, treatment_notes, germination_rate, loss_rate, initial_batch_id, total_germinated, total_germination_candidates, total_lost, total_loss_candidates, germination_started_date, seeds_sown_date) FROM stdin;
-1	3	1	103	3	25-2-1-001	2025-05-29	0	0	0	0	0	200	2025-05-29 18:48:31.338767+00	1	2025-05-29 18:48:31.338767+00	1	2025-05-29 18:49:17.952372+00	\N	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	0	200	\N	\N
+COPY nursery.batches (id, version, organization_id, facility_id, species_id, batch_number, added_date, germinating_quantity, not_ready_quantity, ready_quantity, latest_observed_germinating_quantity, latest_observed_not_ready_quantity, latest_observed_ready_quantity, latest_observed_time, created_by, created_time, modified_by, modified_time, notes, ready_by_date, accession_id, project_id, substrate_id, substrate_notes, treatment_id, treatment_notes, germination_rate, loss_rate, initial_batch_id, total_germinated, total_germination_candidates, total_lost, total_loss_candidates, germination_started_date, seeds_sown_date, hardening_off_quantity, latest_observed_hardening_off_quantity) FROM stdin;
+1	3	1	103	3	25-2-1-001	2025-05-29	0	0	0	0	0	200	2025-05-29 18:48:31.338767+00	1	2025-05-29 18:48:31.338767+00	1	2025-05-29 18:49:17.952372+00	\N	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	0	200	\N	\N	0	0
 \.
 
 
@@ -11765,6 +11903,14 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 409	388	DropBatchSummaries	SQL	0350/V388__DropBatchSummaries.sql	2030818952	postgres	2025-07-11 21:45:09.33946	4	t
 410	389	BatchSeedDates	SQL	0350/V389__BatchSeedDates.sql	1719531098	postgres	2025-07-11 21:45:09.359537	8	t
 411	\N	Comments	SQL	R__Comments.sql	811537801	postgres	2025-07-11 21:45:09.37177	63	t
+412	390	ProjectVariableValues	SQL	0350/V390__ProjectVariableValues.sql	-1930700875	postgres	2025-08-11 18:46:34.266966	27	t
+413	391	AcceleratorProjectsView	SQL	0350/V391__AcceleratorProjectsView.sql	825604965	postgres	2025-08-11 18:46:34.343268	5	t
+414	392	ProjectVarValsAccelerator	SQL	0350/V392__ProjectVarValsAccelerator.sql	-708737318	postgres	2025-08-11 18:46:34.362866	15	t
+415	393	NurseryGrowthPhaseUpdates	SQL	0350/V393__NurseryGrowthPhaseUpdates.sql	-580913014	postgres	2025-08-11 18:46:34.391824	35	t
+416	394	HardeningPhaseNotNull	SQL	0350/V394__HardeningPhaseNotNull.sql	1707858436	postgres	2025-08-11 18:46:34.444079	6	t
+417	395	DeleteShrubTree	SQL	0350/V395__DeleteShrubTree.sql	1355227686	postgres	2025-08-11 18:46:34.461445	16	t
+418	\N	Comments	SQL	R__Comments.sql	-81086986	postgres	2025-08-11 18:46:34.486673	233	t
+419	\N	TypeCodes	SQL	R__TypeCodes.sql	-1285946683	postgres	2025-08-11 18:46:34.767174	108	t
 \.
 
 
@@ -11835,7 +11981,6 @@ COPY public.growth_forms (id, name) FROM stdin;
 8	Moss
 9	Vine
 10	Liana
-11	Shrub/Tree
 12	Subshrub
 13	Multiple Forms
 14	Mangrove
@@ -11871,6 +12016,7 @@ COPY public.internal_tags (id, name, description, is_system, created_by, created
 
 COPY public.jobrunr_backgroundjobservers (id, workerpoolsize, pollintervalinseconds, firstheartbeat, lastheartbeat, running, systemtotalmemory, systemfreememory, systemcpuload, processmaxmemory, processfreememory, processallocatedmemory, processcpuload, deletesucceededjobsafter, permanentlydeletejobsafter, name) FROM stdin;
 828a694d-0209-4484-a7bb-ed943b84e50b	224	15	2025-07-11 21:45:12.468236	2025-07-11 21:48:42.698407	1	8217473024	1122287616	0.02	2055208960	1870229936	184979024	0.02	PT36H	PT72H	fd5fca596b1d
+8f0f5d39-6dfa-4582-8381-5fda898511aa	128	15	2025-08-11 18:46:52.006894	2025-08-11 18:47:22.109872	1	8346034176	4865634304	0.24	2086666240	1878246568	208419672	0.24	PT36H	PT72H	5872bb16572e
 \.
 
 
@@ -12359,7 +12505,7 @@ COPY public.spring_session (primary_id, session_id, creation_time, last_access_t
 b57978b9-873d-4ea2-88c2-391fcdee5470	b9b00dda-c789-40cd-8c02-7ef21025c4d8	1747863920486	1747863989388	315360000	3000000000000	157cf509-d3e6-4bde-9e0d-d4ac07e2b721
 b3a1fd73-8ec2-4770-9a16-905a11fe1320	bd4cf519-8b47-4826-9f66-b9fdb9c025b8	1752270502225	1752270514426	315360000	3000000000000	2cd6d1dd-3135-4ef8-a817-fc6f207d1ab1
 04331063-4630-49b3-ba5c-8a4b2644ad28	4dbadd1e-771d-4ca6-bbab-6318abbca9c0	1752274911258	1752275099760	315360000	3000000000000	38256d2c-c181-46a3-84fe-2add28c6c57a
-b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1752275135807	315360000	3000000000000	0d04525c-7933-4cec-9647-7b6ac2642838
+b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1754938041916	315360000	2070298041916	0d04525c-7933-4cec-9647-7b6ac2642838
 \.
 
 
@@ -13134,12 +13280,12 @@ COPY public.user_global_roles (user_id, global_role_id) FROM stdin;
 
 COPY public.user_preferences (user_id, organization_id, preferences) FROM stdin;
 4	\N	{"preferredWeightSystem": "metric"}
-1	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric", "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
 5	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric"}
 5	1	{"lastPlantingSiteSelected": -1}
 1	1	{"lastPlantingSiteSelected": -1, "plants.dashboard.lastVisitedPlantingSite": {"plantingSiteId": 1}, "plants.observations.lastVisitedPlantingSite": {"plantingSiteId": -1}}
 6	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric"}
 6	1	{"lastPlantingSiteSelected": -1}
+1	\N	{"lastVisitedOrg": 1, "enableMatrixView": true, "preferredWeightSystem": "metric", "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
 \.
 
 
@@ -13164,8 +13310,8 @@ COPY public.users (id, auth_id, email, first_name, last_name, created_time, modi
 3	\N	pending@terraformation.com	\N	\N	2025-05-21 21:42:18.239617+00	2025-05-21 21:42:18.23963+00	5	\N	f	\N	\N	\N	\N	\N	\N
 4	157cf509-d3e6-4bde-9e0d-d4ac07e2b721	funder@terraformation.com	Test	Funder	2025-05-21 21:42:25.83028+00	2025-05-21 21:45:27.385204+00	5	2025-05-21 21:46:29.411+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
 5	2cd6d1dd-3135-4ef8-a817-fc6f207d1ab1	contributor@terraformation.com	Contributor	User	2025-07-11 21:45:26.864778+00	2025-07-11 21:48:32.894439+00	1	2025-07-11 21:48:35.525+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
-1	0d04525c-7933-4cec-9647-7b6ac2642838	superadmin@terraformation.com	Super	Admin	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-07-11 23:05:35.809+00	f	\N	Etc/UTC	\N	\N	t	2025-06-11 21:53:16.594086+00
 6	38256d2c-c181-46a3-84fe-2add28c6c57a	readonly@terraformation.com	Read	Only	2025-07-11 23:00:24.169033+00	2025-07-11 23:01:58.394435+00	1	2025-07-11 23:04:59.783+00	f	\N	America/Los_Angeles	\N	\N	\N	\N
+1	0d04525c-7933-4cec-9647-7b6ac2642838	superadmin@terraformation.com	Super	Admin	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-08-11 18:47:21.924+00	f	\N	Etc/UTC	\N	\N	t	2025-06-11 21:53:16.594086+00
 \.
 
 
@@ -18833,7 +18979,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 50, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 52, true);
 
 
 --
