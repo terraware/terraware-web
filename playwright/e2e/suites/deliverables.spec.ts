@@ -67,6 +67,7 @@ export default function DeliverableTests() {
     await expect(page.getByText('Changes Saved!')).toBeVisible();
 
     await page.getByRole('link', { name: 'Terraware' }).click();
+    await waitFor(page, '#home');
     await expect(page.getByText('Deliverables', exactOptions)).toBeVisible();
 
     await changeToContributor(context);
