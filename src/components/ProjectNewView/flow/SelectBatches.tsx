@@ -15,10 +15,10 @@ import {
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
-import { useOrganization } from 'src/providers';
+import isEnabled from 'src/features';
+import { useLocalization, useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
-import strings from 'src/strings';
 import { CreateProjectRequest } from 'src/types/Project';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getAllNurseries } from 'src/utils/organization';
@@ -37,57 +37,71 @@ type SelectBatchesProps = {
   setHasBatches: (value: boolean) => void;
 };
 
-const columns = (): TableColumnType[] => [
-  {
-    key: 'batchNumber',
-    name: strings.SEEDLING_BATCH,
-    type: 'string',
-  },
-  {
-    key: 'project_name',
-    name: strings.PROJECT,
-    type: 'string',
-  },
-  {
-    key: 'germinatingQuantity',
-    name: strings.GERMINATING,
-    type: 'string',
-  },
-  {
-    key: 'notReadyQuantity',
-    name: strings.NOT_READY,
-    type: 'string',
-  },
-  {
-    key: 'readyQuantity',
-    name: strings.READY,
-    type: 'string',
-  },
-  {
-    key: 'totalQuantity',
-    name: strings.TOTAL,
-    type: 'string',
-  },
-  {
-    key: 'facility_name',
-    name: strings.NURSERY,
-    type: 'string',
-  },
-  {
-    key: 'readyByDate',
-    name: strings.ESTIMATED_READY_DATE,
-    type: 'string',
-  },
-  { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
-];
-
 export default function SelectBatches(props: SelectBatchesProps): JSX.Element | null {
   const { project, flowState, onNext, onCancel, saveText, pageFormRightButtons, setProjectBatches, setHasBatches } =
     props;
 
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const columns = useMemo(
+    (): TableColumnType[] => [
+      {
+        key: 'batchNumber',
+        name: strings.SEEDLING_BATCH,
+        type: 'string',
+      },
+      {
+        key: 'project_name',
+        name: strings.PROJECT,
+        type: 'string',
+      },
+      {
+        key: 'germinatingQuantity',
+        name: strings.GERMINATING,
+        type: 'string',
+      },
+      {
+        key: 'notReadyQuantity',
+        name: strings.NOT_READY,
+        type: 'string',
+      },
+      ...(isUpdatedNurseryGrowthPhasesEnabled
+        ? [
+            {
+              key: 'hardeningOffQuantity',
+              name: strings.HARDENING_OFF,
+              type: 'number' as const,
+            },
+          ]
+        : []),
+      {
+        key: 'readyQuantity',
+        name: strings.READY,
+        type: 'string',
+      },
+      {
+        key: 'totalQuantity',
+        name: strings.TOTAL,
+        type: 'string',
+      },
+      {
+        key: 'facility_name',
+        name: strings.NURSERY,
+        type: 'string',
+      },
+      {
+        key: 'readyByDate',
+        name: strings.ESTIMATED_READY_DATE,
+        type: 'string',
+      },
+      { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
+    ],
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+  );
 
   const nurseries = useMemo(
     () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
@@ -193,7 +207,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
         },
       },
     ],
-    [filters, nurseries]
+    [filters, nurseries, strings]
   );
 
   if (flowState !== 'batches') {
@@ -255,7 +269,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 >
                   <ProjectEntitySearch
                     searchValue={temporalSearchValue || ''}
-                    onSearch={(value: string) => setTemporalSearchValue(value)}
+                    onSearch={setTemporalSearchValue}
                     entitySpecificFilterConfigs={entitySpecificFilterConfigs}
                     filters={filters}
                     setFilters={setFilters}
