@@ -86,7 +86,6 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   }, [setModalValues]);
 
   const handleEditHardeningOffQuantity = useCallback(() => {
-    console.log('handleEditHardeningOffQuantity called');
     setModalValues({ openChangeQuantityModal: true, type: 'hardening-off' });
   }, [setModalValues]);
 
