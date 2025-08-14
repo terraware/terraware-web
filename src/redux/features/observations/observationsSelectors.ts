@@ -13,7 +13,7 @@ import {
   ObservationState,
 } from 'src/types/Observations';
 
-import { mergeAdHocObservations, mergeObservations, searchPlots, searchZones } from './utils';
+import { mergeAdHocObservations, mergeObservations, searchPlots, searchZonesAndDates } from './utils';
 
 export const ALL_STATES: ObservationState[] = ['Abandoned', 'Completed', 'Overdue', 'InProgress'];
 
@@ -134,7 +134,7 @@ export const selectMergedPlantingSiteAdHocObservations: (
 )((state: RootState, plantingSiteId: number, defaultTimeZone: string) => `${plantingSiteId}_${defaultTimeZone}`);
 
 /**
- * Search observations (search planting zone name only at this time).
+ * Search observations (search planting zone name and date only at this time).
  * Preserves order of results.
  */
 export const searchObservations: (
@@ -144,7 +144,8 @@ export const searchObservations: (
   defaultTimeZone: string,
   search: string,
   zoneNames: string[],
-  status?: ObservationState[]
+  status?: ObservationState[],
+  locale?: string
 ) => ObservationResults[] | undefined = createCachedSelector(
   (
     state: RootState,
@@ -153,7 +154,8 @@ export const searchObservations: (
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    locale?: string
   ) => search,
   (
     state: RootState,
@@ -162,7 +164,8 @@ export const searchObservations: (
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    locale?: string
   ) => zoneNames,
   (
     state: RootState,
@@ -171,9 +174,20 @@ export const searchObservations: (
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    locale?: string
+  ) => locale,
+  (
+    state: RootState,
+    plantingSiteId: number,
+    orgId: number,
+    defaultTimeZone: string,
+    search: string,
+    zoneNames: string[],
+    status?: ObservationState[],
+    locale?: string
   ) => selectMergedPlantingSiteObservations(state, plantingSiteId, orgId, defaultTimeZone, status),
-  searchZones
+  searchZonesAndDates
 )(
   (
     state: RootState,
@@ -182,7 +196,8 @@ export const searchObservations: (
     search: string,
     zoneNames: string[],
     status?: ObservationState[],
-    orgId?: number
+    orgId?: number,
+    locale?: string
   ) =>
     `${plantingSiteId}_${defaultTimeZone}_${search}_${Array.from(new Set(zoneNames)).toString()}_${status?.join(',')}`
 );
