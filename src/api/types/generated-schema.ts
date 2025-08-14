@@ -4750,7 +4750,10 @@ export interface components {
              * @default 0
              */
             germinatingQuantityWithdrawn: number;
-            /** Format: int64 */
+            /**
+             * Format: int32
+             * @default 0
+             */
             hardeningOffQuantityWithdrawn: number;
             /** Format: int32 */
             notReadyQuantityWithdrawn: number;
