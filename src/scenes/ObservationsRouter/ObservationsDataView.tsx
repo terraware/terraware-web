@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import ListMapView from 'src/components/ListMapView';
 import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
   searchObservations,
@@ -45,6 +45,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = selectedPlantingSite?.timeZone || defaultTimeZone.get().id;
+  const { activeLocale } = useLocalization();
 
   const observationsResults = useAppSelector((state) =>
     searchObservations(
@@ -54,7 +55,8 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       defaultTimeZone.get().id,
       searchProps.search,
       searchProps.filtersProps?.filters.zone?.values ?? [],
-      searchProps.filtersProps?.filters.status?.values ?? []
+      searchProps.filtersProps?.filters.status?.values ?? [],
+      activeLocale ?? undefined
     )
   );
 

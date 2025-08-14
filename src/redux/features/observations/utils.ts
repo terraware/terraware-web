@@ -17,6 +17,7 @@ import {
 } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
 import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
+import { getShortDate } from 'src/utils/dateFormatter';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { regexMatch } from 'src/utils/search';
 
@@ -54,21 +55,33 @@ export const searchResultZones = (search: string, zoneNames: string[], observati
   };
 };
 
-export const searchZones = (search: string, zoneNames: string[], observations?: ObservationResults[]) => {
-  if (!search?.trim() && !zoneNames?.length) {
+export const searchZonesAndDates = (
+  search: string,
+  zoneNames: string[],
+  locale?: string,
+  observations?: ObservationResults[]
+) => {
+  if (!search?.trim()) {
     return observations;
   }
-  return observations?.filter(
-    (observation: ObservationResults) =>
-      (!zoneNames.length ||
+  return observations?.filter((observation: ObservationResults) => {
+    return (
+      ((!zoneNames.length ||
         observation.plantingZones.some((zone: ObservationPlantingZoneResults) =>
           zoneNames.includes(zone.plantingZoneName)
         )) &&
-      observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search))
-  );
+        observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search))) ||
+      matchDate(observation.completedDate ? observation.completedDate : observation.startDate, search, locale)
+    );
+  });
 };
 
 const matchZone = (zone: ObservationPlantingZoneResults, search: string) => regexMatch(zone.plantingZoneName, search);
+const matchDate = (date: string, search: string, locale?: string) => {
+  if (date) {
+    return regexMatch(getShortDate(date, locale), search);
+  }
+};
 
 export const searchPlots = (search: string, observations?: AdHocObservationResults[]) => {
   if (!search?.trim()) {
