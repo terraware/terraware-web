@@ -47,7 +47,11 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const { isMobile } = useDeviceInfo();
 
   const isWithdrawable =
-    Number(batch?.readyQuantity) + Number(batch?.notReadyQuantity) + Number(batch?.germinatingQuantity) > 0;
+    Number(batch?.readyQuantity) +
+      Number(batch?.notReadyQuantity) +
+      Number(batch?.hardeningOffQuantity) +
+      Number(batch?.germinatingQuantity) >
+    0;
 
   useEffect(() => {
     if (speciesId) {

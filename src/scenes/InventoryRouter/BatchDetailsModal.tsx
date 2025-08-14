@@ -108,8 +108,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   useEffect(() => {
     if (record) {
       const notReadyQuantity = record?.notReadyQuantity ?? 0;
+      const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
       const readyQuantity = record?.readyQuantity ?? 0;
-      setTotalQuantity(+notReadyQuantity + +readyQuantity);
+      setTotalQuantity(+notReadyQuantity + +hardeningOffQuantity + +readyQuantity);
     }
   }, [record, selectedOrganization]);
 

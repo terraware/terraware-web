@@ -3,7 +3,8 @@ import React, { useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import strings from 'src/strings';
+import isEnabled from 'src/features';
+import { useLocalization } from 'src/providers';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
 import { batchToSpecies } from 'src/utils/batch';
@@ -13,6 +14,7 @@ import WithdrawalRenderer from './WithdrawalRenderer';
 type SpeciesWithdrawal = {
   name?: string;
   germinating?: number;
+  hardeningOff?: number;
   notReady: number;
   ready: number;
   total: number;
@@ -27,20 +29,35 @@ type NonOutplantWithdrawalTableProps = {
   batches?: Batch[];
 };
 
-const columns = (): TableColumnType[] => [
-  { key: 'batchNumber', name: strings.BATCH, type: 'string' },
-  { key: 'name', name: strings.SPECIES, type: 'string' },
-  { key: 'germinating', name: strings.GERMINATING, type: 'number' },
-  { key: 'notReady', name: strings.NOT_READY, type: 'number' },
-  { key: 'ready', name: strings.READY, type: 'number' },
-  { key: 'total', name: strings.TOTAL, type: 'number' },
-];
-
 export default function NonOutplantWithdrawalTable({
   species,
   withdrawal,
   batches,
 }: NonOutplantWithdrawalTableProps): JSX.Element {
+  const { strings } = useLocalization();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const columns = useMemo(
+    (): TableColumnType[] => [
+      { key: 'batchNumber', name: strings.BATCH, type: 'string' },
+      { key: 'name', name: strings.SPECIES, type: 'string' },
+      { key: 'germinating', name: strings.GERMINATING, type: 'number' },
+      { key: 'notReady', name: strings.NOT_READY, type: 'number' },
+      ...(isUpdatedNurseryGrowthPhasesEnabled
+        ? [
+            {
+              key: 'hardeningOffQuantity',
+              name: strings.HARDENING_OFF,
+              type: 'number' as const,
+            },
+          ]
+        : []),
+      { key: 'ready', name: strings.READY, type: 'number' },
+      { key: 'total', name: strings.TOTAL, type: 'number' },
+    ],
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+  );
+
   const rowData = useMemo(() => {
     // get map of batch id to species id - for correlation
     // the withdrawal details hold a batch id but no species id
@@ -52,9 +69,10 @@ export default function NonOutplantWithdrawalTable({
 
       if (Object.keys(batchToSpeciesMap).length > 0) {
         withdrawal?.batchWithdrawals?.forEach((batch) => {
-          const { batchId, notReadyQuantityWithdrawn, readyQuantityWithdrawn } = batch;
+          const { batchId, notReadyQuantityWithdrawn, hardeningOffQuantityWithdrawn, readyQuantityWithdrawn } = batch;
           const { speciesId, batchNumber } = batchToSpeciesMap[batchId];
           const notReady = notReadyQuantityWithdrawn || 0;
+          const hardeningOff = hardeningOffQuantityWithdrawn || 0;
           const ready = readyQuantityWithdrawn || 0;
           const name = species.find((sp) => sp.id === speciesId)?.scientificName;
 
@@ -63,9 +81,10 @@ export default function NonOutplantWithdrawalTable({
           batchesMap.push({
             name,
             germinating,
+            hardeningOff,
             notReady,
             ready,
-            total: notReady + ready + germinating,
+            total: notReady + hardeningOff + ready + germinating,
             batchNumber,
             batchId,
             speciesId,

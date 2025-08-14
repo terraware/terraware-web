@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 import _ from 'lodash';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
 import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
@@ -21,6 +22,7 @@ interface InventorySummaryProps {
 
 export default function InventorySummaryForSpecies(props: InventorySummaryProps): JSX.Element {
   const { speciesId, modified } = props;
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -56,8 +58,17 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
     if (!summary) {
       return [];
     }
-    const { germinatingQuantity, notReadyQuantity, readyQuantity, totalQuantity, nurseries, lossRate, totalWithdrawn } =
-      summary;
+
+    const {
+      germinatingQuantity,
+      notReadyQuantity,
+      hardeningOffQuantity,
+      readyQuantity,
+      totalQuantity,
+      nurseries,
+      lossRate,
+      totalWithdrawn,
+    } = summary;
 
     const topRowColumns = isMobile ? 12 : 3;
 
@@ -77,6 +88,16 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
         tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
         gridColumns: topRowColumns,
       },
+      ...(isUpdatedNurseryGrowthPhasesEnabled
+        ? [
+            {
+              label: strings.HARDENING_OFF_QUANTITY,
+              value: hardeningOffQuantity.toString(),
+              tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
+              gridColumns: topRowColumns,
+            },
+          ]
+        : []),
       {
         label: strings.READY_QUANTITY,
         value: readyQuantity.toString(),
