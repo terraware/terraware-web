@@ -63,8 +63,8 @@ export default function MatrixViewTests() {
 
     await page.locator('#manageColumns').click();
     await expect(page.locator('.dialog-box')).toBeVisible();
-    page.getByLabel('Certification').click();
-    page.getByRole('button', { name: 'Apply' }).click();
+    await page.getByLabel('Certification').click();
+    await page.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('columnheader', { name: 'Certification' })).toBeVisible();
     const columnHeaders = page.getByRole('columnheader');
     await expect(columnHeaders).toHaveCount(6);
