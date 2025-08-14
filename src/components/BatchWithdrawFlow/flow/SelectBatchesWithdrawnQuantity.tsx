@@ -97,11 +97,6 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             },
           ]
         : []),
-      {
-        key: 'hardeningOffQuantityWithdrawn',
-        name: strings.HARDENING_OFF_QUANTITY,
-        type: 'number',
-      },
       { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
       { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
       {
