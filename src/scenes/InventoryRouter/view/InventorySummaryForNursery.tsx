@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import TextTruncated from 'src/components/common/TextTruncated';
+import isEnabled from 'src/features';
 import NurserySummaryService, {
   NurserySummaryPayload,
   NurserySummarySpecies,
@@ -23,6 +24,7 @@ export default function InventorySummaryForNursery({
 }: InventorySummaryForNurseryProps): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
 
@@ -50,6 +52,7 @@ export default function InventorySummaryForNursery({
     const {
       germinatingQuantity,
       notReadyQuantity,
+      hardeningOffQuantity,
       readyQuantity,
       totalQuantity,
       germinationRate,
@@ -71,6 +74,16 @@ export default function InventorySummaryForNursery({
         tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
         gridColumns,
       },
+      ...(isUpdatedNurseryGrowthPhasesEnabled
+        ? [
+            {
+              label: strings.HARDENING_OFF_QUANTITY,
+              value: hardeningOffQuantity,
+              tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
+              gridColumns,
+            },
+          ]
+        : []),
       {
         label: strings.READY_QUANTITY,
         value: readyQuantity,
@@ -115,7 +128,7 @@ export default function InventorySummaryForNursery({
         gridColumns,
       },
     ];
-  }, [isMobile, summary]);
+  }, [isMobile, isUpdatedNurseryGrowthPhasesEnabled, summary]);
 
   return (
     <Grid container spacing={3}>

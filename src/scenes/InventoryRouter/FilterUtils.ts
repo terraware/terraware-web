@@ -27,6 +27,7 @@ export const isBatchEmpty = (batch: SearchResponseElement): boolean => {
   return (
     Number(batch['readyQuantity(raw)']) +
       Number(batch['notReadyQuantity(raw)']) +
+      Number(batch['hardeningOffQuantity(raw)']) +
       Number(batch['germinatingQuantity(raw)']) ===
     0
   );

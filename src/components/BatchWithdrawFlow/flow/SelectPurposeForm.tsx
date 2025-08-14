@@ -20,6 +20,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -58,6 +59,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const { allPlantingSites } = usePlantingSiteData();
   const { species } = useSpeciesData();
@@ -73,6 +75,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>(0);
   const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>(0);
   const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>(0);
+  const [hardeningOffQuantityWithdrawn, setHardeningOffQuantityWithdrawn] = useState<number>(0);
   const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>(0);
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
@@ -247,7 +250,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const validateGerminatingReadyAndNotReadyQuantities = () => {
     let allValid = true;
     if (isSingleBatch && !isOutplant) {
-      if (notReadyQuantityWithdrawn === 0 && readyQuantityWithdrawn === 0 && germinatingQuantityWithdrawn === 0) {
+      if (
+        notReadyQuantityWithdrawn === 0 &&
+        hardeningOffQuantityWithdrawn === 0 &&
+        readyQuantityWithdrawn === 0 &&
+        germinatingQuantityWithdrawn === 0
+      ) {
         setIndividualError('totalQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR);
         allValid = false;
       } else {
@@ -267,6 +275,23 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             allValid = false;
           } else {
             setIndividualError('notReadyQuantityWithdrawn', '');
+          }
+        }
+      }
+
+      if (!hardeningOffQuantityWithdrawn && hardeningOffQuantityWithdrawn !== 0) {
+        setIndividualError('hardeningOffQuantityWithdrawn', strings.REQUIRED_FIELD);
+        allValid = false;
+      } else {
+        if (isNaN(hardeningOffQuantityWithdrawn)) {
+          setIndividualError('hardeningOffQuantityWithdrawn', strings.INVALID_VALUE);
+          allValid = false;
+        } else {
+          if (Number(hardeningOffQuantityWithdrawn) > Number(batches[0]['hardeningOffQuantity(raw)'])) {
+            setIndividualError('hardeningOffQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+            allValid = false;
+          } else {
+            setIndividualError('hardeningOffQuantityWithdrawn', '');
           }
         }
       }
@@ -374,6 +399,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             batchId: Number(batch.id),
             germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
             notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
+            hardeningOffQuantityWithdrawn: isSingleOutplant
+              ? 0
+              : isSingleBatch
+                ? hardeningOffQuantityWithdrawn || 0
+                : 0,
             readyQuantityWithdrawn: isSingleOutplant
               ? withdrawnQuantity || 0
               : isSingleBatch
@@ -455,9 +485,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     setWithdrawnQuantity(
       (readyQuantityWithdrawn ? Number(readyQuantityWithdrawn) : 0) +
         (notReadyQuantityWithdrawn ? Number(notReadyQuantityWithdrawn) : 0) +
+        (hardeningOffQuantityWithdrawn ? Number(hardeningOffQuantityWithdrawn) : 0) +
         (germinatingQuantityWithdrawn ? Number(germinatingQuantityWithdrawn) : 0)
     );
-  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, germinatingQuantityWithdrawn]);
+  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, hardeningOffQuantityWithdrawn, germinatingQuantityWithdrawn]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
@@ -754,6 +785,33 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     </Grid>
                   </Grid>
 
+                  {isUpdatedNurseryGrowthPhasesEnabled && (
+                    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
+                        <Textfield
+                          label={strings
+                            .formatString(
+                              strings.HARDENING_OFF_QUANTITY_REMAINING,
+                              String(batches[0].hardeningOffQuantity)
+                            )
+                            .toString()}
+                          id='hardeningOffQuantityWithdrawn'
+                          onChange={(value: unknown) => setHardeningOffQuantityWithdrawn(value as number)}
+                          type='number'
+                          value={hardeningOffQuantityWithdrawn}
+                          tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
+                          errorText={fieldsErrors.hardeningOffQuantityWithdrawn}
+                          required
+                          sx={{
+                            '&> #hardeningOffQuantityWithdrawn': {
+                              height: '44px',
+                            },
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  )}
+
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
@@ -785,6 +843,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       />
                     </Grid>
                   </Grid>
+
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
                       <Textfield

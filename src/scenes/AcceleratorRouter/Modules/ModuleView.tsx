@@ -34,6 +34,7 @@ export type InventoryResult = {
   species_scientificName: string;
   species_commonName?: string;
   germinatingQuantity: string;
+  hardeningOffQuantity: string;
   notReadyQuantity: string;
   readyQuantity: string;
   totalQuantity: string;

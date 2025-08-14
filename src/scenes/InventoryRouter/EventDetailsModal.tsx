@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Divider, Grid, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
@@ -25,12 +26,14 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
   const previousEvent = selectedEvent.previousEvent;
   const gridSize = () => (isMobile ? 12 : 6);
-  const paddingSeparator = () => (isMobile ? 0 : 1.5);
   const marginTop = {
     marginTop: theme.spacing(0.5),
   };
+
+  const paddingSeparator = useMemo(() => (isMobile ? 0 : 1.5), [isMobile]);
 
   const [relatedBatch, setRelatedBatch] = useState<Batch | null>();
   const [photoUrl, setPhotoUrl] = useState<string>();
@@ -154,6 +157,37 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             )}
           </>
         )}
+
+        {isUpdatedNurseryGrowthPhasesEnabled &&
+          selectedEvent.modifiedFields.includes(strings.HARDENING_OFF_QUANTITY) && (
+            <>
+              {(!previousEvent ||
+                previousEvent?.type === 'QuantityEdited' ||
+                previousEvent?.type === 'StatusChanged') && (
+                <Grid item paddingRight={paddingSeparator} sx={marginTop} xs={12}>
+                  <Textfield
+                    display
+                    id='hardeningOffQuantityBefore'
+                    label={strings.HARDENING_OFF_QUANTITY_BEFORE}
+                    type='text'
+                    value={previousEvent?.hardeningOffQuantity || 0}
+                  />
+                </Grid>
+              )}
+              {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
+                <Grid item paddingRight={paddingSeparator} sx={marginTop} xs={12}>
+                  <Textfield
+                    display
+                    id='hardeningOffQuantityAfter'
+                    label={strings.HARDENING_OFF_QUANTITY_AFTER}
+                    type='text'
+                    value={selectedEvent.hardeningOffQuantity}
+                  />
+                </Grid>
+              )}
+            </>
+          )}
+
         {selectedEvent.modifiedFields.includes(strings.READY_QUANTITY) && (
           <>
             {(!previousEvent ||
@@ -325,7 +359,11 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='totalQuantityMoved'
-                value={+selectedEvent.readyQuantityAdded + +selectedEvent.notReadyQuantityAdded}
+                value={
+                  +selectedEvent.readyQuantityAdded +
+                  +selectedEvent.notReadyQuantityAdded +
+                  +selectedEvent.hardeningOffQuantityAdded
+                }
                 type='text'
                 label={strings.TOTAL_QUANTITY_MOVED}
                 display={true}
