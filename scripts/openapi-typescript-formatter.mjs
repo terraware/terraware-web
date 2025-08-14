@@ -65,6 +65,7 @@ const parseType = (typeString) => {
             ' count?: number;' +
             ' cursor?: string;' +
             ' fields: string[];' +
+            ' filters?: components["schemas"]["PrefixedSearch"][];' +
             ' prefix?: string;' +
             ' search?: components["schemas"]["SearchNodePayload"];' +
             ' sortOrder?: components["schemas"]["SearchSortOrderElement"][];' +

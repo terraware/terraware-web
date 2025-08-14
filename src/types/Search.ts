@@ -8,6 +8,7 @@ export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePaylo
 export type FieldValuesPayload = { [key: string]: components['schemas']['FieldValuesPayload'] };
 export type SearchCriteria = { [key: string]: SearchNodePayload };
 export type SearchSortOrder = components['schemas']['SearchSortOrderElement'];
+export type PrefixedSearch = components['schemas']['PrefixedSearch'];
 export type SearchType = components['schemas']['FieldNodePayload']['type'];
 export type SearchResponseElement = components['schemas']['SearchResponsePayload']['results'][0];
 export type SearchResponseElementWithId = SearchResponseElement & { id: string };
@@ -16,6 +17,7 @@ export type SearchValuesResponseElementWithId = SearchValuesResponseElement & { 
 
 export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
+export type SearchRequestPayloadWithOptionalSearch = components['schemas']['SearchRequestPayload'];
 /** Search request payload that requires a search node to be specified. */
 export type SearchRequestPayload = components['schemas']['SearchRequestPayload'] & { search: SearchNodePayload };
 export type OptionalSearchRequestPayload = components['schemas']['SearchRequestPayload'];
