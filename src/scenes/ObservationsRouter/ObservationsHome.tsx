@@ -110,12 +110,6 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   );
 
   useEffect(() => {
-    if (allPlantingSites?.length === 0) {
-      navigate(APP_PATHS.HOME);
-    }
-  }, [navigate, allPlantingSites?.length]);
-
-  useEffect(() => {
     if (selectedOrganization) {
       void dispatch(requestPlantings(selectedOrganization.id));
     }
