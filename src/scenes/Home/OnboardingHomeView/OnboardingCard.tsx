@@ -482,7 +482,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
               <Typography>
                 {strings.formatString(
                   strings.DESCRIPTION_KNOWLEDGE_BASE_WITH_LINK,
-                  <Link to={knowledgeBaseLinks['/home']} fontSize={'16px'}>
+                  <Link to={knowledgeBaseLinks['/home']} fontSize={'16px'} target='_blank'>
                     {strings.KNOWLEDGE_BASE}
                   </Link>
                 )}
