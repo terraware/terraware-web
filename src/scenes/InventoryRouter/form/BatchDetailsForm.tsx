@@ -223,6 +223,15 @@ export default function BatchDetailsForm({
 
   const paddingSeparator = useMemo(() => (isMobile ? 0 : 1.5), [isMobile]);
 
+  const getOnChange = useCallback(
+    (id: string) => {
+      return (value: unknown) => {
+        onChange(id, value);
+      };
+    },
+    [onChange]
+  );
+
   const changeDate = useCallback(
     (id: string, value?: Date | null) => {
       const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
@@ -231,67 +240,13 @@ export default function BatchDetailsForm({
     [timeZone, onChange]
   );
 
-  const handleAddedDateChange = useCallback(
-    (value?: Date | null) => {
-      changeDate('addedDate', value);
+  const getOnChangeDate = useCallback(
+    (id: string) => {
+      return (value?: Date | null) => {
+        changeDate(id, value);
+      };
     },
     [changeDate]
-  );
-
-  const handleSeedsSownDateChange = useCallback(
-    (value?: Date | null) => {
-      changeDate('seedsSownDate', value);
-    },
-    [changeDate]
-  );
-
-  const handleGerminatingQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('germinatingQuantity', value);
-    },
-    [onChange]
-  );
-
-  const handleGerminationStartedDateChange = useCallback(
-    (value?: Date | null) => {
-      changeDate('germinationStartedDate', value);
-    },
-    [changeDate]
-  );
-
-  const handleNotReadyQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('notReadyQuantity', value);
-    },
-    [onChange]
-  );
-
-  const handleReadyByDateChange = useCallback(
-    (value?: Date | null) => {
-      changeDate('readyByDate', value);
-    },
-    [changeDate]
-  );
-
-  const handleHardeningOffQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('hardeningOffQuantity', value);
-    },
-    [onChange]
-  );
-
-  const handleReadyQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('readyQuantity', value);
-    },
-    [onChange]
-  );
-
-  const handleNotesChange = useCallback(
-    (value: unknown) => {
-      onChange('notes', value);
-    },
-    [onChange]
   );
 
   const marginTop = {
@@ -448,7 +403,7 @@ export default function BatchDetailsForm({
                 label={strings.DATE_ADDED_REQUIRED}
                 aria-label={strings.DATE_ADDED}
                 value={record.addedDate}
-                onChange={handleAddedDateChange}
+                onChange={getOnChangeDate('addedDate')}
                 defaultTimeZone={timeZone}
               />
             </Grid>
@@ -468,7 +423,7 @@ export default function BatchDetailsForm({
                 label={strings.SEEDS_SOWN_DATE}
                 aria-label={strings.SEEDS_SOWN_DATE}
                 value={record.seedsSownDate}
-                onChange={handleSeedsSownDateChange}
+                onChange={getOnChangeDate('seedsSownDate')}
                 defaultTimeZone={timeZone}
               />
             </Grid>
@@ -477,7 +432,7 @@ export default function BatchDetailsForm({
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
-                onChange={handleGerminatingQuantityChange}
+                onChange={getOnChange('germinatingQuantity')}
                 type='number'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
@@ -499,7 +454,7 @@ export default function BatchDetailsForm({
                 label={strings.GERMINATION_STARTED_DATE}
                 aria-label={strings.GERMINATION_STARTED_DATE}
                 value={record.germinationStartedDate}
-                onChange={handleGerminationStartedDateChange}
+                onChange={getOnChangeDate('germinationStartedDate')}
                 defaultTimeZone={timeZone}
               />
             </Grid>
@@ -508,7 +463,7 @@ export default function BatchDetailsForm({
               <Textfield
                 id='notReadyQuantity'
                 value={record.notReadyQuantity}
-                onChange={handleNotReadyQuantityChange}
+                onChange={getOnChange('notReadyQuantity')}
                 type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -530,7 +485,7 @@ export default function BatchDetailsForm({
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={record.readyByDate}
-                onChange={handleReadyByDateChange}
+                onChange={getOnChangeDate('readyByDate')}
                 defaultTimeZone={timeZone}
               />
             </Grid>
@@ -550,7 +505,7 @@ export default function BatchDetailsForm({
                     id='hardeningOffQuantity'
                     label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
                     min={0}
-                    onChange={handleHardeningOffQuantityChange}
+                    onChange={getOnChange('hardeningOffQuantity')}
                     tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
                     type='number'
                     value={record.hardeningOffQuantity}
@@ -565,7 +520,7 @@ export default function BatchDetailsForm({
               <Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
-                onChange={handleReadyQuantityChange}
+                onChange={getOnChange('readyQuantity')}
                 type='number'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -602,7 +557,7 @@ export default function BatchDetailsForm({
               <Textfield
                 id='notes'
                 value={record?.notes}
-                onChange={handleNotesChange}
+                onChange={getOnChange('notes')}
                 type='textarea'
                 label={strings.NOTES}
               />
