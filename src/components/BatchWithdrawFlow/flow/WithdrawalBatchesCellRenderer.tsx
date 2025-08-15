@@ -155,6 +155,18 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     );
   }
 
+  if (column.key === 'hardeningOffQuantityWithdrawn') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={createQuantityInput('hardeningOffQuantityWithdrawn', 'hardeningOffQuantity')}
+        row={row}
+        sx={[textStyles, cellStyles]}
+      />
+    );
+  }
+
   if (column.key === 'totalQuantity') {
     return <CellRenderer index={index} column={column} row={row} value={row.totalQuantity} sx={textStyles} />;
   }
@@ -165,7 +177,10 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         index={index}
         column={column}
         value={numberFormatter.format(
-          +row.readyQuantityWithdrawn + +row.notReadyQuantityWithdrawn + +row.germinatingQuantityWithdrawn
+          +row.readyQuantityWithdrawn +
+            +row.notReadyQuantityWithdrawn +
+            +row.hardeningOffQuantityWithdrawn +
+            +row.germinatingQuantityWithdrawn
         )}
         row={row}
         sx={textStyles}

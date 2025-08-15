@@ -6,16 +6,16 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { SavableBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { InventoryListType, InventoryListTypes } from 'src/scenes/InventoryRouter/InventoryV2View';
 import BatchDetailsForm from 'src/scenes/InventoryRouter/form/BatchDetailsForm';
-import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export default function InventoryCreateView(): JSX.Element {
+  const { strings } = useLocalization();
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const navigate = useSyncNavigate();
@@ -92,7 +92,7 @@ export default function InventoryCreateView(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR);
       setDoValidateBatch(false);
     }
-  }, [batchesRequest, navigate, inventoryLocation, originInventoryViewType, snackbar]);
+  }, [batchesRequest, navigate, inventoryLocation, originInventoryViewType, snackbar, strings]);
 
   return (
     <TfMain>

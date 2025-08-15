@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
@@ -7,11 +7,11 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
+import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryBatchService } from 'src/services';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
-import strings from 'src/strings';
 import {
   batchSubstrateEnumToLocalized,
   batchSubstrateLocalizedToEnum,
@@ -28,49 +28,56 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export interface BatchDetailsModalProps {
-  onClose: () => void;
   batch: Batch;
+  onClose: () => void;
   reload: () => void;
 }
 
 type BatchPhotoWithUrl = BatchPhoto & { url: string };
 
-export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element | null {
+export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetailsModalProps): JSX.Element | null {
+  const { strings } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter(user?.locale);
-  const { selectedOrganization } = useOrganization();
-  const { onClose, batch, reload } = props;
-
-  const [record, setRecord, onChange] = useForm(batch);
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const [validateFields, setValidateFields] = useState<boolean>(false);
-
   const { isMobile } = useDeviceInfo();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const [record, setRecord, onChange] = useForm(batch);
+  const [validateFields, setValidateFields] = useState<boolean>(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
-  const [facility, setFacility] = useState<Facility>();
-
-  const tz = useLocationTimeZone().get(facility);
-  const [timeZone, setTimeZone] = useState(tz.id);
-
   const [photos, setPhotos] = useState<BatchPhotoWithUrl[]>([]);
   const [newPhotos, setNewPhotos] = useState<File[]>([]);
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
+  const [facility, setFacility] = useState<Facility>();
+  const tz = useLocationTimeZone().get(facility);
+  const [timeZone, setTimeZone] = useState(tz.id);
 
-  const onPhotosChanged = (photosList: File[]) => {
-    setNewPhotos(photosList);
-  };
+  const onPhotosChanged = useCallback(
+    (photosList: File[]) => {
+      setNewPhotos(photosList);
+    },
+    [setNewPhotos]
+  );
 
-  const onRemovePhoto = (id: number) => {
-    const newIds = [...photoIdsToRemove];
-    newIds.push(id);
-    setPhotoIdsToRemove(newIds);
-  };
+  const onRemovePhoto = useCallback(
+    (id: number) => {
+      const newIds = [...photoIdsToRemove];
+      newIds.push(id);
+      setPhotoIdsToRemove(newIds);
+    },
+    [photoIdsToRemove]
+  );
 
-  const removePhoto = (id: number, index: number) => {
-    photos.splice(index, 1);
-    onRemovePhoto(id);
-  };
+  const removePhoto = useCallback(
+    (id: number, index: number) => {
+      photos.splice(index, 1);
+      onRemovePhoto(id);
+    },
+    [photos, onRemovePhoto]
+  );
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -101,8 +108,9 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   useEffect(() => {
     if (record) {
       const notReadyQuantity = record?.notReadyQuantity ?? 0;
+      const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
       const readyQuantity = record?.readyQuantity ?? 0;
-      setTotalQuantity(+notReadyQuantity + +readyQuantity);
+      setTotalQuantity(+notReadyQuantity + +hardeningOffQuantity + +readyQuantity);
     }
   }, [record, selectedOrganization]);
 
@@ -132,26 +140,34 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     }
   }, [batch, setRecord, selectedOrganization]);
 
-  const MANDATORY_FIELDS = ['germinatingQuantity', 'notReadyQuantity', 'readyQuantity', 'addedDate'] as const;
+  const MANDATORY_FIELDS = useMemo(
+    () => ['germinatingQuantity', 'notReadyQuantity', 'hardeningOffQuantity', 'readyQuantity', 'addedDate'] as const,
+    []
+  );
   type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
-  const hasErrors = () => {
+  const hasErrors = useCallback(() => {
     if (record) {
       return MANDATORY_FIELDS.some((field: MandatoryField) => record[field] === '' || record[field] === undefined);
     }
     return true;
-  };
+  }, [MANDATORY_FIELDS, record]);
 
-  const updatePhotos = async () => {
+  const updatePhotos = useCallback(async () => {
     await NurseryBatchService.uploadBatchPhotos(batch.id, newPhotos);
     setNewPhotos([]);
     if (photoIdsToRemove) {
       await NurseryBatchService.deleteBatchPhotos(batch.id, photoIdsToRemove);
       setPhotoIdsToRemove([]);
     }
-  };
+  }, [batch.id, newPhotos, photoIdsToRemove]);
 
-  const saveBatch = async () => {
+  const onCloseHandler = useCallback(() => {
+    setValidateFields(false);
+    onClose();
+  }, [onClose, setValidateFields]);
+
+  const saveBatch = useCallback(async () => {
     if (record) {
       if (hasErrors()) {
         setValidateFields(true);
@@ -176,21 +192,114 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         snackbar.toastError();
       }
     }
-  };
+  }, [record, hasErrors, updatePhotos, reload, onCloseHandler, snackbar]);
 
-  const onCloseHandler = () => {
-    setValidateFields(false);
-    onClose();
-  };
+  const handleSaveBatch = useCallback(() => {
+    void saveBatch();
+  }, [saveBatch]);
 
-  const gridSize = () => (isMobile ? 12 : 6);
+  const changeDate = useCallback(
+    (id: string, value?: Date | null) => {
+      const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
+      onChange(id, date);
+    },
+    [tz.id, onChange]
+  );
 
-  const paddingSeparator = () => (isMobile ? 0 : 1.5);
+  const handleSeedsSownDateChange = useCallback(
+    (value?: Date | null) => {
+      changeDate('seedsSownDate', value);
+    },
+    [changeDate]
+  );
 
-  const changeDate = (id: string, value?: any) => {
-    const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
-    onChange(id, date);
-  };
+  const handleGerminatingQuantityChange = useCallback(
+    (value: unknown) => {
+      onChange('germinatingQuantity', value);
+    },
+    [onChange]
+  );
+
+  const handleGerminationStartedDateChange = useCallback(
+    (value?: Date | null) => {
+      changeDate('germinationStartedDate', value);
+    },
+    [changeDate]
+  );
+
+  const handleNotReadyQuantityChange = useCallback(
+    (value: unknown) => {
+      onChange('notReadyQuantity', value);
+    },
+    [onChange]
+  );
+
+  const handleReadyByDateChange = useCallback(
+    (value?: Date | null) => {
+      changeDate('readyByDate', value);
+    },
+    [changeDate]
+  );
+
+  const handleHardeningOffQuantityChange = useCallback(
+    (value: unknown) => {
+      onChange('hardeningOffQuantity', value);
+    },
+    [onChange]
+  );
+
+  const handleReadyQuantityChange = useCallback(
+    (value: unknown) => {
+      onChange('readyQuantity', value);
+    },
+    [onChange]
+  );
+
+  const handleSubstrateChange = useCallback(
+    (value: unknown) => {
+      onChange('substrate', batchSubstrateLocalizedToEnum(value as string));
+    },
+    [onChange]
+  );
+
+  const handleSubstrateNotesChange = useCallback(
+    (value: unknown) => {
+      onChange('substrateNotes', value);
+    },
+    [onChange]
+  );
+
+  const handleTreatmentChange = useCallback(
+    (value: unknown) => {
+      onChange('treatment', value);
+    },
+    [onChange]
+  );
+
+  const handleTreatmentNotesChange = useCallback(
+    (value: unknown) => {
+      onChange('treatmentNotes', value);
+    },
+    [onChange]
+  );
+
+  const handleNotesChange = useCallback(
+    (value: unknown) => {
+      onChange('notes', value);
+    },
+    [onChange]
+  );
+
+  const getHandleRemovePhoto = useCallback(
+    (photoId: number, index: number) => () => {
+      removePhoto(photoId, index);
+    },
+    [removePhoto]
+  );
+
+  const gridSize = useMemo(() => (isMobile ? 12 : 6), [isMobile]);
+
+  const paddingSeparator = useMemo(() => (isMobile ? 0 : 1.5), [isMobile]);
 
   const marginTop = {
     marginTop: theme.spacing(0),
@@ -211,27 +320,27 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           priority='secondary'
           key='button-1'
         />,
-        <Button id='saveBatchDetails' onClick={() => void saveBatch()} label={strings.SAVE} key='button-2' />,
+        <Button id='saveBatchDetails' onClick={handleSaveBatch} label={strings.SAVE} key='button-2' />,
       ]}
       scrolled={true}
     >
-      <Grid container item xs={12} spacing={2} textAlign='left'>
-        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+      <Grid container spacing={2} textAlign='left'>
+        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
           <DatePicker
             id='seedsSownDate'
             label={strings.SEEDS_SOWN_DATE}
             aria-label={strings.SEEDS_SOWN_DATE}
             value={record.seedsSownDate}
-            onChange={(value) => changeDate('seedsSownDate', value)}
+            onChange={handleSeedsSownDateChange}
             defaultTimeZone={timeZone}
           />
         </Grid>
-        <Grid item xs={gridSize()} sx={marginTop} />
-        <Grid item xs={gridSize()} sx={marginTop}>
+        <Grid item xs={gridSize} sx={marginTop} />
+        <Grid item xs={gridSize} sx={marginTop}>
           <Textfield
             id='germinatingQuantity'
             value={record.germinatingQuantity}
-            onChange={(value) => onChange('germinatingQuantity', value)}
+            onChange={handleGerminatingQuantityChange}
             type='number'
             label={strings.GERMINATING_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
@@ -239,21 +348,21 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             min={0}
           />
         </Grid>
-        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
           <DatePicker
             id='germinationStartedDate'
             label={strings.GERMINATION_STARTED_DATE}
             aria-label={strings.GERMINATION_STARTED_DATE}
             value={record.germinationStartedDate}
-            onChange={(value) => changeDate('germinationStartedDate', value)}
+            onChange={handleGerminationStartedDateChange}
             defaultTimeZone={timeZone}
           />
         </Grid>
-        <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+        <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
             id='notReadyQuantity'
             value={record.notReadyQuantity}
-            onChange={(value) => onChange('notReadyQuantity', value)}
+            onChange={handleNotReadyQuantityChange}
             type='number'
             label={strings.NOT_READY_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -261,21 +370,41 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             min={0}
           />
         </Grid>
-        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
           <DatePicker
             id='readyByDate'
             label={strings.ESTIMATED_READY_DATE}
             aria-label={strings.ESTIMATED_READY_DATE}
             value={record.readyByDate}
-            onChange={(value) => changeDate('readyByDate', value)}
+            onChange={handleReadyByDateChange}
             defaultTimeZone={timeZone}
           />
         </Grid>
-        <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+
+        {isUpdatedNurseryGrowthPhasesEnabled && (
+          <>
+            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                id='hardeningOffQuantity'
+                value={record.hardeningOffQuantity}
+                onChange={handleHardeningOffQuantityChange}
+                type='number'
+                label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
+                tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
+                errorText={validateFields && !isNumber(record?.hardeningOffQuantity) ? strings.REQUIRED_FIELD : ''}
+                min={0}
+              />
+            </Grid>
+
+            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
+          </>
+        )}
+
+        <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
             id='readyQuantity'
             value={record.readyQuantity}
-            onChange={(value) => onChange('readyQuantity', value)}
+            onChange={handleReadyQuantityChange}
             type='number'
             label={strings.READY_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -284,8 +413,8 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           />
         </Grid>
 
-        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator} />
-        <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
+        <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
             id='totalQuantity'
             value={numberFormatter.format(totalQuantity)}
@@ -299,17 +428,17 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           <Divider />
         </Grid>
 
-        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={gridSize()}>
+        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={gridSize}>
           <Dropdown
             id='substrate'
             label={strings.SUBSTRATE}
             selectedValue={batchSubstrateEnumToLocalized(record.substrate)}
             options={nurserySubstratesLocalized()}
-            onChange={(value) => onChange('substrate', batchSubstrateLocalizedToEnum(value))}
+            onChange={handleSubstrateChange}
             fullWidth={true}
           />
         </Grid>
-        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={gridSize} sx={{ alignSelf: 'flex-end' }}>
           {record.substrate === strings.OTHER && (
             <Textfield
               preserveNewlines={true}
@@ -317,85 +446,89 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               value={record.substrateNotes}
               type='text'
               label=''
-              onChange={(value) => onChange('substrateNotes', value)}
+              onChange={handleSubstrateNotesChange}
             />
           )}
         </Grid>
-        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={gridSize()}>
+        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={gridSize}>
           <Dropdown
             id='treatment'
             label={strings.TREATMENT}
             selectedValue={record.treatment}
             options={treatments()}
-            onChange={(value) => onChange('treatment', value)}
+            onChange={handleTreatmentChange}
             fullWidth={true}
           />
         </Grid>
-        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={gridSize} sx={{ alignSelf: 'flex-end' }}>
           {record.treatment === strings.OTHER && (
             <Textfield
               id='treatmentNotes'
               value={record.treatmentNotes}
               type='text'
               label=''
-              onChange={(value) => onChange('treatmentNotes', value)}
+              onChange={handleTreatmentNotesChange}
             />
           )}
         </Grid>
         <Grid item xs={12} sx={marginTop}>
           <Divider />
         </Grid>
-        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={12}>
+        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={12}>
           <Textfield
             id='notes'
             value={record?.notes}
-            onChange={(value) => onChange('notes', value)}
+            onChange={handleNotesChange}
             type='textarea'
             label={strings.NOTES}
           />
         </Grid>
 
-        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={12}>
+        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={12}>
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {strings.PHOTOS}
           </Typography>
           <Box display='flex' flexWrap='wrap' flexDirection='row'>
-            {photos.map((photo, index) => (
-              <Box
-                key={index}
-                display='flex'
-                position='relative'
-                height={122}
-                width={122}
-                marginRight={isMobile ? 2 : 3}
-                marginTop={1}
-                border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-                sx={{ cursor: 'pointer' }}
-              >
-                <Button
-                  icon='iconTrashCan'
-                  onClick={() => removePhoto(photo.id, index)}
-                  size='small'
-                  style={{
-                    position: 'absolute',
-                    top: -10,
-                    right: -10,
-                    backgroundColor: theme.palette.TwClrBgDanger,
-                  }}
-                />
-                <img
-                  src={`${photo.url}?maxHeight=120&maxWidth=120`}
-                  alt={`${index}`}
-                  style={{
-                    margin: 'auto auto',
-                    objectFit: 'contain',
-                    display: 'flex',
-                    maxWidth: '120px',
-                    maxHeight: '120px',
-                  }}
-                />
-              </Box>
-            ))}
+            {photos.map((photo, index) => {
+              const handleRemovePhoto = getHandleRemovePhoto(photo.id, index);
+
+              return (
+                <Box
+                  key={index}
+                  display='flex'
+                  position='relative'
+                  height={122}
+                  width={122}
+                  marginRight={isMobile ? 2 : 3}
+                  marginTop={1}
+                  border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  <Button
+                    icon='iconTrashCan'
+                    onClick={handleRemovePhoto}
+                    size='small'
+                    style={{
+                      position: 'absolute',
+                      top: -10,
+                      right: -10,
+                      backgroundColor: theme.palette.TwClrBgDanger,
+                    }}
+                  />
+                  <img
+                    src={`${photo.url}?maxHeight=120&maxWidth=120`}
+                    alt={`${index}`}
+                    style={{
+                      margin: 'auto auto',
+                      objectFit: 'contain',
+                      display: 'flex',
+                      maxWidth: '120px',
+                      maxHeight: '120px',
+                    }}
+                  />
+                </Box>
+              );
+            })}
           </Box>
         </Grid>
         <Container maxWidth={false}>

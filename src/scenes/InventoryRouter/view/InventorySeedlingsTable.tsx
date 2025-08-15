@@ -38,7 +38,7 @@ export interface InventorySeedlingsTableProps {
   openBatchNumber: string | null;
   onUpdateOpenBatch: (batchNum: string | null) => void;
   origin: OriginPage;
-  columns: () => TableColumnType[];
+  columns: TableColumnType[] | (() => TableColumnType[]);
   isSelectionBulkWithdrawable: (selectedRows: SearchResponseElement[]) => boolean;
   getFuzzySearchFields: (debouncedSearchTerm: string) => FieldNodePayload[];
   // Origin ID is either the facility ID or the species ID

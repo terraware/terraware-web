@@ -29,6 +29,7 @@ export const BE_SORTED_FIELDS = [
   'species_scientificName',
   'facilityInventories.facility_name',
   'germinatingQuantity',
+  'hardeningOffQuantity',
   'notReadyQuantity',
   'readyQuantity',
   'totalQuantity',
@@ -37,6 +38,7 @@ export const BE_SORTED_FIELDS = [
 export const INVENTORY_FIELDS = [
   ...BE_SORTED_FIELDS,
   'germinatingQuantity(raw)',
+  'hardeningOffQuantity(raw)',
   'species_commonName',
   'totalQuantity(raw)',
 ];
@@ -47,10 +49,12 @@ export const FACILITY_SPECIFIC_FIELDS = [
   'species_commonName',
   'facility_name',
   'germinatingQuantity',
+  'hardeningOffQuantity',
   'notReadyQuantity',
   'readyQuantity',
   'totalQuantity',
   'germinatingQuantity(raw)',
+  'hardeningOffQuantity(raw)',
   'readyQuantity(raw)',
   'notReadyQuantity(raw)',
   'totalQuantity(raw)',
@@ -261,6 +265,7 @@ const searchInventoryByNursery = async ({
     'facility_name',
     'facilityInventories.species_scientificName',
     'germinatingQuantity',
+    'hardeningOffQuantity',
     'notReadyQuantity',
     'readyQuantity',
     'totalQuantity',
@@ -270,6 +275,7 @@ const searchInventoryByNursery = async ({
     'facilityInventories.species_id',
     'facilityInventories.batches.id',
     'germinatingQuantity(raw)',
+    'hardeningOffQuantity(raw)',
     'totalQuantity(raw)',
   ];
   const fields = isCsvExport ? exportedFields : exportedFields.concat(nonExportedFields);

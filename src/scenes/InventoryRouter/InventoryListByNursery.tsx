@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Container, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -6,73 +6,91 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
-import { useOrganization } from 'src/providers';
+import isEnabled from 'src/features';
+import { useLocalization, useOrganization } from 'src/providers';
 import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
-import strings from 'src/strings';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-
-const columns = (): TableColumnType[] => [
-  { key: 'facility_name', name: strings.NURSERY, type: 'string' },
-  {
-    key: 'facilityInventories',
-    name: strings.SPECIES,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
-  },
-  {
-    key: 'germinatingQuantity',
-    name: strings.GERMINATING,
-    type: 'number',
-    tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-  },
-  {
-    key: 'notReadyQuantity',
-    name: strings.NOT_READY,
-    type: 'number',
-    tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-  },
-  {
-    key: 'readyQuantity',
-    name: strings.READY,
-    type: 'number',
-    tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-  },
-  {
-    key: 'totalQuantity',
-    name: strings.TOTAL,
-    type: 'number',
-    tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
-  },
-];
 
 type InventoryListByNurseryProps = {
   setReportData: (data: SearchInventoryParams) => void;
 };
 
 export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const theme = useTheme();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
+
+  const [filters, setFilters] = useForm<InventoryFiltersType>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
-  const [temporalSearchValue, setTemporalSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'facility_name',
     direction: 'Ascending',
   });
-  const [filters, setFilters] = useForm<InventoryFiltersType>({});
-  const theme = useTheme();
+  const [temporalSearchValue, setTemporalSearchValue] = useState('');
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
-  const onSearchSortOrder = (order: SearchSortOrder) => {
-    const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
-    setSearchSortOrder(isClientSorted ? undefined : order);
-  };
+  const onSearchSortOrder = useCallback(
+    (order: SearchSortOrder) => {
+      const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
+      setSearchSortOrder(isClientSorted ? undefined : order);
+    },
+    [setSearchSortOrder]
+  );
+
+  const columns = useMemo(
+    (): TableColumnType[] => [
+      { key: 'facility_name', name: strings.NURSERY, type: 'string' },
+      {
+        key: 'facilityInventories',
+        name: strings.SPECIES,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
+      },
+      {
+        key: 'germinatingQuantity',
+        name: strings.GERMINATING,
+        type: 'number',
+        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+      },
+      {
+        key: 'notReadyQuantity',
+        name: strings.NOT_READY,
+        type: 'number',
+        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+      },
+      ...(isUpdatedNurseryGrowthPhasesEnabled
+        ? [
+            {
+              key: 'hardeningOffQuantity',
+              name: strings.HARDENING_OFF,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
+            },
+          ]
+        : []),
+      {
+        key: 'readyQuantity',
+        name: strings.READY,
+        type: 'number',
+        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+      },
+      {
+        key: 'totalQuantity',
+        name: strings.TOTAL,
+        type: 'number',
+        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+      },
+    ],
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+  );
 
   const onApplyFilters = useCallback(async () => {
     if (selectedOrganization) {
@@ -117,6 +135,8 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
     }
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 
+  const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
+
   useEffect(() => {
     void onApplyFilters();
   }, [filters, onApplyFilters]);
@@ -157,7 +177,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage pageName={'Inventory'} reloadData={() => void onApplyFilters()} />
+          <EmptyStatePage pageName='Inventory' reloadData={reloadData} />
         </Container>
       )}
     </Card>

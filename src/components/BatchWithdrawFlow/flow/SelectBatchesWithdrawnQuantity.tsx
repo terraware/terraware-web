@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
@@ -7,8 +7,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
-import { useOrganization } from 'src/providers';
-import strings from 'src/strings';
+import isEnabled from 'src/features';
+import { useLocalization, useOrganization } from 'src/providers';
 import { NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
 
@@ -27,13 +27,16 @@ type BatchWithdrawalForTable = {
   batchId: number;
   batchNumber: string;
   notReadyQuantityWithdrawn: number;
+  hardeningOffQuantityWithdrawn: number;
   germinatingQuantityWithdrawn: number;
   readyQuantityWithdrawn: number;
   germinatingQuantity: number;
   notReadyQuantity: number;
+  hardeningOffQuantity: number;
   readyQuantity: number;
   'germinatingQuantity(raw)': number;
   'notReadyQuantity(raw)': number;
+  'hardeningOffQuantity(raw)': number;
   'readyQuantity(raw)': number;
   totalQuantity: number;
   speciesId: number;
@@ -43,78 +46,100 @@ type BatchWithdrawalForTable = {
   error: { [key: string]: string | undefined };
 };
 
-const defaultTableColumns = (): TableColumnType[] => [
-  {
-    key: 'batchNumber',
-    name: strings.SEEDLING_BATCH,
-    type: 'string',
-  },
-  {
-    key: 'facilityName',
-    name: strings.NURSERY,
-    type: 'string',
-  },
-  {
-    key: 'projectName',
-    name: strings.PROJECT,
-    type: 'string',
-  },
-  {
-    key: 'germinatingQuantityWithdrawn',
-    name: strings.GERMINATING_QUANTITY,
-    type: 'number',
-  },
-  {
-    key: 'notReadyQuantityWithdrawn',
-    name: strings.NOT_READY_QUANTITY,
-    type: 'number',
-  },
-  { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
-  { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
-  {
-    key: 'totalWithdraw',
-    name: strings.TOTAL_WITHDRAW,
-    type: 'number',
-  },
-];
-
-const outplantTableColumns = (): TableColumnType[] => [
-  {
-    key: 'batchNumber',
-    name: strings.SEEDLING_BATCH,
-    type: 'string',
-  },
-  {
-    key: 'facilityName',
-    name: strings.NURSERY,
-    type: 'string',
-  },
-  {
-    key: 'projectName',
-    name: strings.PROJECT,
-    type: 'string',
-  },
-  {
-    key: 'readyQuantity',
-    name: strings.READY_QUANTITY,
-    type: 'string',
-    alignment: 'right',
-  },
-  { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string', alignment: 'right' },
-];
-
 const { OUTPLANT } = NurseryWithdrawalPurposes;
 
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
   const { onNext, onCancel, saveText, batches, nurseryWithdrawal, filterProjectId } = props;
 
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
+  const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
   const [species, setSpecies] = useState<any>([]);
   const [errorPageMessage, setErrorPageMessage] = useState('');
+
+  const defaultTableColumns = useMemo(
+    (): TableColumnType[] => [
+      {
+        key: 'batchNumber',
+        name: strings.SEEDLING_BATCH,
+        type: 'string',
+      },
+      {
+        key: 'facilityName',
+        name: strings.NURSERY,
+        type: 'string',
+      },
+      {
+        key: 'projectName',
+        name: strings.PROJECT,
+        type: 'string',
+      },
+      {
+        key: 'germinatingQuantityWithdrawn',
+        name: strings.GERMINATING_QUANTITY,
+        type: 'number',
+      },
+      {
+        key: 'notReadyQuantityWithdrawn',
+        name: strings.NOT_READY_QUANTITY,
+        type: 'number',
+      },
+      ...(isUpdatedNurseryGrowthPhasesEnabled
+        ? [
+            {
+              key: 'hardeningOffQuantityWithdrawn',
+              name: strings.HARDENING_OFF_QUANTITY,
+              type: 'number' as const,
+            },
+          ]
+        : []),
+      { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
+      { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
+      {
+        key: 'totalWithdraw',
+        name: strings.TOTAL_WITHDRAW,
+        type: 'number',
+      },
+    ],
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+  );
+
+  const outplantTableColumns = useMemo(
+    (): TableColumnType[] => [
+      {
+        key: 'batchNumber',
+        name: strings.SEEDLING_BATCH,
+        type: 'string',
+      },
+      {
+        key: 'facilityName',
+        name: strings.NURSERY,
+        type: 'string',
+      },
+      {
+        key: 'projectName',
+        name: strings.PROJECT,
+        type: 'string',
+      },
+      {
+        key: 'readyQuantity',
+        name: strings.READY_QUANTITY,
+        type: 'string',
+        alignment: 'right',
+      },
+      { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string', alignment: 'right' },
+    ],
+    [strings]
+  );
+
+  const columns = useMemo(
+    () => (nurseryWithdrawal.purpose === OUTPLANT ? outplantTableColumns : defaultTableColumns),
+    [defaultTableColumns, nurseryWithdrawal.purpose, outplantTableColumns]
+  );
 
   useEffect(() => {
     const transformBatchesForTable = () => {
@@ -128,12 +153,15 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             batchId: bw.batchId,
             germinatingQuantityWithdrawn: bw.germinatingQuantityWithdrawn ?? 0,
             notReadyQuantityWithdrawn: bw.notReadyQuantityWithdrawn,
+            hardeningOffQuantityWithdrawn: bw.hardeningOffQuantityWithdrawn ?? 0,
             readyQuantityWithdrawn: bw.readyQuantityWithdrawn,
             germinatingQuantity: associatedBatch.germinatingQuantity,
             notReadyQuantity: associatedBatch.notReadyQuantity,
+            hardeningOffQuantity: associatedBatch.hardeningOffQuantity,
             readyQuantity: associatedBatch.readyQuantity,
             'germinatingQuantity(raw)': +associatedBatch['germinatingQuantity(raw)'],
             'notReadyQuantity(raw)': +associatedBatch['notReadyQuantity(raw)'],
+            'hardeningOffQuantity(raw)': +associatedBatch['hardeningOffQuantity(raw)'],
             'readyQuantity(raw)': +associatedBatch['readyQuantity(raw)'],
             totalQuantity: associatedBatch.totalQuantity,
             batchNumber: associatedBatch.batchNumber,
@@ -218,6 +246,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         let germinatingQuantityWithdrawnError = '';
         let readyQuantityWithdrawnError = '';
         let notReadyQuantityWithdrawnError = '';
+        let hardeningOffQuantityWithdrawnError = '';
 
         if (rec.germinatingQuantityWithdrawn) {
           if (isInvalidQuantity(rec.germinatingQuantityWithdrawn)) {
@@ -267,6 +296,22 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           unsetValues++;
         }
 
+        if (rec.hardeningOffQuantityWithdrawn) {
+          if (isInvalidQuantity(rec.hardeningOffQuantityWithdrawn)) {
+            hardeningOffQuantityWithdrawnError = strings.INVALID_VALUE;
+            noErrors = false;
+          } else {
+            if (+rec.hardeningOffQuantityWithdrawn > +rec['hardeningOffQuantity(raw)']) {
+              hardeningOffQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+              noErrors = false;
+            } else {
+              hardeningOffQuantityWithdrawnError = '';
+            }
+          }
+        } else {
+          unsetValues++;
+        }
+
         if (unsetValues === record.length * 3) {
           setErrorPageMessage(strings.WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR);
           noErrors = false;
@@ -280,6 +325,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             germinatingQuantityWithdrawn: germinatingQuantityWithdrawnError,
             readyQuantityWithdrawn: readyQuantityWithdrawnError,
             notReadyQuantityWithdrawn: notReadyQuantityWithdrawnError,
+            hardeningOffQuantityWithdrawn: hardeningOffQuantityWithdrawnError,
           },
         };
       });
@@ -299,6 +345,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           batchId: rec.batchId,
           germinatingQuantityWithdrawn: rec.germinatingQuantityWithdrawn,
           notReadyQuantityWithdrawn: rec.notReadyQuantityWithdrawn,
+          hardeningOffQuantityWithdrawn: rec.hardeningOffQuantityWithdrawn,
           readyQuantityWithdrawn: rec.readyQuantityWithdrawn,
         };
       });
@@ -355,9 +402,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                   {record.length > 0 && (
                     <Table
                       id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
-                      columns={() =>
-                        nurseryWithdrawal.purpose === OUTPLANT ? outplantTableColumns() : defaultTableColumns()
-                      }
+                      columns={columns}
                       rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
                       Renderer={WithdrawalBatchesCellRenderer}
                       orderBy={'batchId'}

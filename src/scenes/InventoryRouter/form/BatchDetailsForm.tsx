@@ -7,9 +7,10 @@ import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-comp
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DatePicker from 'src/components/common/DatePicker';
+import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useUser } from 'src/providers';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import AccessionsDropdown from 'src/scenes/InventoryRouter/form/AccessionsDropdown';
@@ -21,7 +22,6 @@ import { useNurseries } from 'src/scenes/InventoryRouter/form/useNurseries';
 import { useSpeciesForm } from 'src/scenes/InventoryRouter/form/useSpeciesForm';
 import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
 import FacilityService from 'src/services/FacilityService';
-import strings from 'src/strings';
 import { stateName } from 'src/types/Accession';
 import { CreateBatchRequestPayload } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
@@ -39,7 +39,7 @@ export interface BatchDetailsFormProps {
 type FormRecord = Partial<SavableBatch> | undefined;
 type SavableFormRecord = Partial<SavableBatch>;
 
-const QUANTITY_FIELDS = ['germinatingQuantity', 'notReadyQuantity', 'readyQuantity'] as const;
+const QUANTITY_FIELDS = ['germinatingQuantity', 'notReadyQuantity', 'hardeningOffQuantity', 'readyQuantity'] as const;
 
 type QuantityField = (typeof QUANTITY_FIELDS)[number];
 
@@ -49,8 +49,13 @@ const DEFAULT_DATE = getTodaysDateFormatted();
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
-export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Element {
-  const { doValidateBatch, onBatchValidated, originId, origin } = props;
+export default function BatchDetailsForm({
+  doValidateBatch,
+  onBatchValidated,
+  originId,
+  origin,
+}: BatchDetailsFormProps): JSX.Element {
+  const { strings } = useLocalization();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter(user?.locale);
   const { selectedOrganization } = useOrganization();
@@ -58,6 +63,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const snackBar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const locationTimezone = useLocationTimeZone();
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
   const [record, setRecord, onChange] = useForm<FormRecord>(undefined);
 
   const facilityId = origin === 'Nursery' ? originId : record?.facilityId;
@@ -73,9 +79,12 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [timeZone, setTimeZone] = useState('');
 
-  const [invalidFields, setInvalidFields] = useState<Record<'germinating' | 'notReady' | 'ready', string>>({
+  const [invalidFields, setInvalidFields] = useState<
+    Record<'germinating' | 'notReady' | 'hardeningOff' | 'ready', string>
+  >({
     germinating: '',
     notReady: '',
+    hardeningOff: '',
     ready: '',
   });
 
@@ -101,7 +110,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     }
 
     return true;
-  }, [invalidFields, record, snackBar]);
+  }, [invalidFields, record, snackBar, strings]);
 
   const handleBatchValidation = useCallback(
     (savableRecord: SavableFormRecord) => {
@@ -158,8 +167,9 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   useEffect(() => {
     if (record) {
       const notReadyQuantity = record?.notReadyQuantity ?? 0;
+      const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
       const readyQuantity = record?.readyQuantity ?? 0;
-      setTotalQuantity(+notReadyQuantity + +readyQuantity);
+      setTotalQuantity(+notReadyQuantity + +hardeningOffQuantity + +readyQuantity);
     }
   }, [record]);
 
@@ -185,6 +195,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     const newBatch: Partial<CreateBatchRequestPayload> = {
       addedDate: DEFAULT_DATE,
       germinatingQuantity: 0,
+      hardeningOffQuantity: 0,
       notReadyQuantity: 0,
       readyQuantity: 0,
       facilityId,
@@ -208,14 +219,80 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     }
   }, [record, doValidateBatch, handleBatchValidation]);
 
-  const gridSize = () => (isMobile ? 12 : 6);
+  const gridSize = useMemo(() => (isMobile ? 12 : 6), [isMobile]);
 
-  const paddingSeparator = () => (isMobile ? 0 : 1.5);
+  const paddingSeparator = useMemo(() => (isMobile ? 0 : 1.5), [isMobile]);
 
-  const changeDate = (id: string, value?: any) => {
-    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
-    onChange(id, date);
-  };
+  const changeDate = useCallback(
+    (id: string, value?: Date | null) => {
+      const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
+      onChange(id, date);
+    },
+    [timeZone, onChange]
+  );
+
+  const handleAddedDateChange = useCallback(
+    (value?: Date | null) => {
+      changeDate('addedDate', value);
+    },
+    [changeDate]
+  );
+
+  const handleSeedsSownDateChange = useCallback(
+    (value?: Date | null) => {
+      changeDate('seedsSownDate', value);
+    },
+    [changeDate]
+  );
+
+  const handleGerminatingQuantityChange = useCallback(
+    (value: unknown) => {
+      onChange('germinatingQuantity', value);
+    },
+    [onChange]
+  );
+
+  const handleGerminationStartedDateChange = useCallback(
+    (value?: Date | null) => {
+      changeDate('germinationStartedDate', value);
+    },
+    [changeDate]
+  );
+
+  const handleNotReadyQuantityChange = useCallback(
+    (value: unknown) => {
+      onChange('notReadyQuantity', value);
+    },
+    [onChange]
+  );
+
+  const handleReadyByDateChange = useCallback(
+    (value?: Date | null) => {
+      changeDate('readyByDate', value);
+    },
+    [changeDate]
+  );
+
+  const handleHardeningOffQuantityChange = useCallback(
+    (value: unknown) => {
+      onChange('hardeningOffQuantity', value);
+    },
+    [onChange]
+  );
+
+  const handleReadyQuantityChange = useCallback(
+    (value: unknown) => {
+      onChange('readyQuantity', value);
+    },
+    [onChange]
+  );
+
+  const handleNotesChange = useCallback(
+    (value: unknown) => {
+      onChange('notes', value);
+    },
+    [onChange]
+  );
 
   const marginTop = {
     marginTop: theme.spacing(0.5),
@@ -244,9 +321,10 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   }, [availableSubLocations, record?.id, setRecord]);
 
   useEffect(() => {
-    const invalid = { germinating: '', notReady: '', ready: '' };
+    const invalid = { germinating: '', notReady: '', hardeningOff: '', ready: '' };
     const germinatingQuantity = Number(record?.germinatingQuantity ?? 0);
     const notReadyQuantity = Number(record?.notReadyQuantity ?? 0);
+    const hardeningOffQuantity = Number(record?.hardeningOffQuantity ?? 0);
     const readyQuantity = Number(record?.readyQuantity ?? 0);
 
     if (germinatingQuantity < 0) {
@@ -254,6 +332,9 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     }
     if (notReadyQuantity < 0) {
       invalid.notReady = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    }
+    if (hardeningOffQuantity < 0) {
+      invalid.hardeningOff = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
     }
     if (readyQuantity < 0) {
       invalid.ready = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
@@ -270,7 +351,13 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
         if (notReadyQuantity && germinatingQuantity + notReadyQuantity > remainingSeeds) {
           invalid.notReady = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
-        if (readyQuantity && germinatingQuantity + notReadyQuantity + readyQuantity > remainingSeeds) {
+        if (hardeningOffQuantity && germinatingQuantity + notReadyQuantity + hardeningOffQuantity > remainingSeeds) {
+          invalid.hardeningOff = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
+        }
+        if (
+          readyQuantity &&
+          germinatingQuantity + notReadyQuantity + hardeningOffQuantity + readyQuantity > remainingSeeds
+        ) {
           invalid.ready = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
       }
@@ -280,9 +367,11 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   }, [
     accessionQuantity,
     record?.germinatingQuantity,
+    record?.hardeningOffQuantity,
     record?.notReadyQuantity,
     record?.readyQuantity,
     selectedAccession,
+    strings,
     totalQuantity,
   ]);
 
@@ -353,13 +442,13 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
               </Grid>
             )}
 
-            <Grid item xs={gridSize()} paddingLeft={paddingSeparator}>
+            <Grid item xs={gridSize} paddingLeft={paddingSeparator}>
               <DatePicker
                 id='addedDate'
                 label={strings.DATE_ADDED_REQUIRED}
                 aria-label={strings.DATE_ADDED}
                 value={record.addedDate}
-                onChange={(value) => changeDate('addedDate', value)}
+                onChange={handleAddedDateChange}
                 defaultTimeZone={timeZone}
               />
             </Grid>
@@ -370,7 +459,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
             <Grid
               item
-              xs={gridSize()}
+              xs={gridSize}
               sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
               paddingLeft={paddingSeparator}
             >
@@ -379,16 +468,16 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 label={strings.SEEDS_SOWN_DATE}
                 aria-label={strings.SEEDS_SOWN_DATE}
                 value={record.seedsSownDate}
-                onChange={(value) => changeDate('seedsSownDate', value)}
+                onChange={handleSeedsSownDateChange}
                 defaultTimeZone={timeZone}
               />
             </Grid>
 
-            <Grid item xs={gridSize()} paddingRight={paddingSeparator} sx={marginTop}>
+            <Grid item xs={gridSize} paddingRight={paddingSeparator} sx={marginTop}>
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
-                onChange={(value) => onChange('germinatingQuantity', value)}
+                onChange={handleGerminatingQuantityChange}
                 type='number'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
@@ -404,22 +493,22 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
               />
             </Grid>
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
                 id='germinationStartedDate'
                 label={strings.GERMINATION_STARTED_DATE}
                 aria-label={strings.GERMINATION_STARTED_DATE}
                 value={record.germinationStartedDate}
-                onChange={(value) => changeDate('germinationStartedDate', value)}
+                onChange={handleGerminationStartedDateChange}
                 defaultTimeZone={timeZone}
               />
             </Grid>
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='notReadyQuantity'
                 value={record.notReadyQuantity}
-                onChange={(value) => onChange('notReadyQuantity', value)}
+                onChange={handleNotReadyQuantityChange}
                 type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -435,22 +524,48 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
               />
             </Grid>
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
                 id='readyByDate'
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={record.readyByDate}
-                onChange={(value) => changeDate('readyByDate', value)}
+                onChange={handleReadyByDateChange}
                 defaultTimeZone={timeZone}
               />
             </Grid>
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+            {isUpdatedNurseryGrowthPhasesEnabled && (
+              <>
+                <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+                  <Textfield
+                    errorText={
+                      validateFields
+                        ? isUndefinedQuantity(record.hardeningOffQuantity)
+                          ? strings.REQUIRED_FIELD
+                          : invalidFields.hardeningOff
+                        : ''
+                    }
+                    disabledCharacters={['.']}
+                    id='hardeningOffQuantity'
+                    label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
+                    min={0}
+                    onChange={handleHardeningOffQuantityChange}
+                    tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
+                    type='number'
+                    value={record.hardeningOffQuantity}
+                  />
+                </Grid>
+
+                <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
+              </>
+            )}
+
+            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
-                onChange={(value) => onChange('readyQuantity', value)}
+                onChange={handleReadyQuantityChange}
                 type='number'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -466,9 +581,9 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
               />
             </Grid>
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator} />
+            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='totalQuantity'
                 value={numberFormatter.format(totalQuantity)}
@@ -487,7 +602,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
               <Textfield
                 id='notes'
                 value={record?.notes}
-                onChange={(value) => onChange('notes', value)}
+                onChange={handleNotesChange}
                 type='textarea'
                 label={strings.NOTES}
               />
