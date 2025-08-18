@@ -63,10 +63,6 @@ export default function NumberOfSpeciesPlantedCard({
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
   const { plantingSite } = usePlantingSiteData();
 
-  useEffect(() => {
-    console.log('plantingSite', plantingSite);
-  }, [plantingSite]);
-
   if (projectId && plantingSite?.id === -1) {
     return <RolledUpCard projectId={projectId} />;
   }
@@ -141,7 +137,7 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
     setValues(processedValues);
   }, [orgSpecies, projectTotalSpecies, projectSpecies]);
 
-  return <ChartData labels={labels} values={values} newVersion={true} rareSpecies={rareSpecies} />;
+  return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
 
 const SiteWithoutZonesCard = ({
@@ -239,7 +235,6 @@ type ChartDataProps = {
   labels?: string[];
   values?: number[];
   rareSpecies?: number;
-  newVersion?: boolean;
 };
 
 const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined => {
