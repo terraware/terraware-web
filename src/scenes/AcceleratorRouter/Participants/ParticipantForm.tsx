@@ -63,7 +63,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     (existingProjects ?? []).forEach((project) => {
       const { organizationId: id, organizationName: name, projectId, projectName } = project;
       if (!orgs[id]) {
-        orgs[id] = { id, name, projects: [{ id: projectId, name: projectName }] };
+        orgs[id] = { id, name, projects: [{ id: projectId, name: projectName }], tfContactUsers: [] };
       } else {
         if (!orgs[id].projects.find((orgProject) => orgProject.id === projectId)) {
           orgs[id].projects.push({ id: projectId, name: projectName });

@@ -4149,6 +4149,7 @@ export interface components {
             name: string;
             projects: components["schemas"]["AcceleratorProjectPayload"][];
             tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
+            tfContactUsers: components["schemas"]["TerraformationContactUserPayload"][];
         };
         AcceleratorProjectPayload: {
             /** Format: int64 */

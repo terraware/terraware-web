@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem } from '@terraware/web-components';
+import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';
 
 import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
@@ -33,7 +33,7 @@ import { selectOrganizationUsers } from 'src/redux/features/organizationUser/org
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import { TFContactType, getTFContactTypeString, tfContactTypes } from 'src/types/Accelerator';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
 import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -42,6 +42,13 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
+import AddNewContactTypeModal from './AddNewContactTypeModal';
+
+type TFContactRow = {
+  name: string;
+  type: TFContactType | undefined;
+  userId?: number;
+};
 
 const HighlightPhotoStableId = '551';
 const ZoneFigureStableId = '525';
@@ -102,9 +109,10 @@ const ProjectProfileEdit = () => {
     selectSpecificVariablesWithValues(state, variableStableIds, projectId)
   );
   const [stableToVariable, setStableToVariable] = useState<Record<string, VariableWithValues>>();
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
+  const [tfContacts, setTfContacts] = useState<TFContactRow[]>();
   const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
@@ -115,7 +123,16 @@ const ProjectProfileEdit = () => {
     reload();
     snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
     goToParticipantProject(projectId);
-  }, [reload, snackbar, goToParticipantProject, projectId]);
+  }, [reload, snackbar, goToParticipantProject, projectId, strings]);
+
+  const contactTypeDropdownOptions = useMemo(
+    () =>
+      tfContactTypes.map((contactType) => ({
+        label: getTFContactTypeString(contactType, strings),
+        value: contactType,
+      })),
+    [strings]
+  );
 
   useEffect(() => {
     if (variableValues.length > 0) {
@@ -190,6 +207,17 @@ const ProjectProfileEdit = () => {
     );
     setTfContact(tfContactSelected);
   }, [organization?.tfContactUser, globalUsersOptions]);
+
+  useEffect(() => {
+    const tfContactUserIds = organization?.tfContactUsers?.map((user) => user.userId);
+    const tfContactsSelected = globalUsersOptions?.filter((userOpt) => tfContactUserIds?.includes(userOpt.value));
+    const tfContactsNextValue: TFContactRow[] = (tfContactsSelected || []).map((userOpt) => ({
+      name: userOpt.label,
+      userId: userOpt.value,
+      type: undefined, // TODO: populate this once value is available from the API
+    }));
+    setTfContacts(tfContactsNextValue);
+  }, [organization?.tfContactUsers, globalUsersOptions]);
 
   useEffect(() => {
     const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
@@ -347,20 +375,79 @@ const ProjectProfileEdit = () => {
     }
   }, [organization, dispatch]);
 
-  const onChangeLandUseHectares = (type: string, hectares: string) => {
-    const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
-    if (hectares === '') {
-      delete updated[type];
-    }
-    onChangeParticipantProject('landUseModelHectares', updated);
-  };
+  const onChangeLandUseHectares = useCallback(
+    (type: string, hectares: string) => {
+      const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
+      if (hectares === '') {
+        delete updated[type];
+      }
+      onChangeParticipantProject('landUseModelHectares', updated);
+    },
+    [onChangeParticipantProject, participantProjectRecord]
+  );
 
-  const onChangeSdgList = (id: string, newList: string[]) => {
-    onChangeParticipantProject(
-      id,
-      newList.map((item) => Number(item))
-    );
-  };
+  const onChangeSdgList = useCallback(
+    (id: string, newList: string[]) => {
+      onChangeParticipantProject(
+        id,
+        newList.map((item) => Number(item))
+      );
+    },
+    [onChangeParticipantProject]
+  );
+
+  const onChangeProjectLead = useCallback(
+    (value: string) => {
+      setTfContact(globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString()));
+    },
+    [globalUsersOptions, setTfContact]
+  );
+
+  const getOnChangeProjectLead = useCallback(
+    (index: number) => (value: string) => {
+      const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString());
+      if (nextUser) {
+        const tfContactsUpdate = tfContacts?.map((contact) => ({ ...contact }));
+        if (tfContactsUpdate?.[index]) {
+          tfContactsUpdate[index] = {
+            name: nextUser.label,
+            userId: nextUser.value,
+            type: undefined,
+          };
+          setTfContacts(tfContactsUpdate);
+        }
+      }
+    },
+    [globalUsersOptions, tfContacts]
+  );
+
+  const getOnChangeContactType = useCallback(
+    (index: number) => (value: string) => {
+      const tfContactsUpdate = tfContacts?.map((contact) => ({ ...contact }));
+      if (tfContactsUpdate?.[index]) {
+        tfContactsUpdate[index] = {
+          ...tfContactsUpdate[index],
+          type: value as TFContactType,
+        };
+        setTfContacts(tfContactsUpdate);
+      }
+    },
+    [tfContacts]
+  );
+
+  const onClickAddRow = useCallback(() => {
+    setTfContacts((prev) => [...(prev || []), { name: '', userId: undefined, type: undefined }]);
+  }, [setTfContacts]);
+
+  const [addNewContactTypeModalOpen, setAddNewContactTypeModalOpen] = useState(false);
+
+  const onClickAddNewContactType = useCallback(() => {
+    setAddNewContactTypeModalOpen(true);
+  }, [setAddNewContactTypeModalOpen]);
+
+  const onCloseAddNewContactTypeModal = useCallback(() => {
+    setAddNewContactTypeModalOpen(false);
+  }, [setAddNewContactTypeModalOpen]);
 
   const globalUsersWithNoOwner = useMemo(() => {
     const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
@@ -373,6 +460,7 @@ const ProjectProfileEdit = () => {
 
   return (
     <Grid container paddingRight={theme.spacing(3)}>
+      {addNewContactTypeModalOpen && <AddNewContactTypeModal onClose={onCloseAddNewContactTypeModal} />}
       <PageForm
         busy={[
           participantProjectUpdateResponse?.status,
@@ -410,18 +498,118 @@ const ProjectProfileEdit = () => {
                 value={participantProjectRecord?.dealName}
               />
             </Grid>
-            <GridEntryWrapper md={6}>
+            <Grid item md={6} display={'flex'} flexDirection={'column'}>
+              <Box width={'100%'}>
+                <CountrySelect
+                  id={'countryCode'}
+                  md={12}
+                  label={strings.COUNTRY}
+                  onChange={onChangeCountry}
+                  region={participantProjectRecord?.region}
+                  value={participantProjectRecord?.countryCode}
+                />
+              </Box>
+            </Grid>
+
+            <Grid item md={12}>
+              <Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}>
+                <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
+                  {/* TODO: update the tooltip copy below */}
+                  <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
+                    {strings.INTERNAL_LEADS} <IconTooltip title='Internal leads tooltip...' />
+                  </Typography>
+                </Box>
+
+                <Grid container>
+                  <Grid item md={6}>
+                    <Typography
+                      color={theme.palette.TwClrTxtSecondary}
+                      fontSize='14px'
+                      fontWeight={400}
+                      lineHeight='20px'
+                    >
+                      {strings.PERSON}
+                    </Typography>
+                  </Grid>
+                  <Grid item md={6}>
+                    <Typography
+                      color={theme.palette.TwClrTxtSecondary}
+                      fontSize='14px'
+                      fontWeight={400}
+                      lineHeight='20px'
+                    >
+                      {strings.CONTACT_TYPE}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                {tfContacts?.map((user, index) => (
+                  <Grid container key={`tfContact-user-${index}`} marginBottom='8px'>
+                    <Grid item md={6} paddingRight='8px'>
+                      <Dropdown
+                        autocomplete
+                        fullWidth
+                        hideClearIcon
+                        id={`tfContact-${index}`}
+                        label=''
+                        onChange={getOnChangeProjectLead(index)}
+                        options={globalUsersWithNoOwner}
+                        placeholder={strings.SELECT}
+                        selectedValue={user?.userId}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <Dropdown
+                        autocomplete
+                        fullWidth
+                        hideClearIcon
+                        id={`tfContact-type-${index}`}
+                        label=''
+                        onChange={getOnChangeContactType(index)}
+                        options={contactTypeDropdownOptions}
+                        placeholder={strings.SELECT}
+                        selectedValue={tfContacts?.[index]?.type}
+                      />
+                    </Grid>
+                  </Grid>
+                ))}
+
+                <Grid container>
+                  <Grid item md={6}>
+                    <Button
+                      icon='iconAdd'
+                      label={strings.EDITABLE_TABLE_ADD_ROW}
+                      onClick={onClickAddRow}
+                      priority='ghost'
+                      size='medium'
+                      style={{ paddingLeft: 0 }}
+                      type='productive'
+                    />
+                  </Grid>
+
+                  <Grid item md={6} textAlign='right'>
+                    <Button
+                      icon='plus'
+                      label='New Contact Type'
+                      onClick={onClickAddNewContactType}
+                      priority='secondary'
+                      size='medium'
+                      type='productive'
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+
+            <GridEntryWrapper md={12}>
               <Box paddingX={theme.spacing(2)}>
                 <Dropdown
                   id='projectLead'
                   placeholder={strings.SELECT}
                   selectedValue={tfContact?.value}
                   options={globalUsersWithNoOwner}
-                  onChange={(value: string) => {
-                    setTfContact(
-                      globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
-                    );
-                  }}
+                  onChange={onChangeProjectLead}
                   hideClearIcon={true}
                   label={strings.PROJECT_LEAD}
                   fullWidth
@@ -435,18 +623,6 @@ const ProjectProfileEdit = () => {
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.dealDescription}
             />
-            <Grid item md={6} display={'flex'} flexDirection={'column'}>
-              <Box width={'100%'}>
-                <CountrySelect
-                  id={'countryCode'}
-                  md={12}
-                  label={strings.COUNTRY}
-                  onChange={onChangeCountry}
-                  region={participantProjectRecord?.region}
-                  value={participantProjectRecord?.countryCode}
-                />
-              </Box>
-            </Grid>
             <Grid item md={12}>
               <LandUseMultiSelect
                 id={'landUseModelTypes'}
