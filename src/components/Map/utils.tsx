@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layer, LngLatBoundsLike, Source } from 'react-map-gl';
+import { Layer, LngLatBoundsLike, Source } from 'react-map-gl/mapbox';
 
 import { Theme } from '@mui/material';
 import bbox from '@turf/bbox';

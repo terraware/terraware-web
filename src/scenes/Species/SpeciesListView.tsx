@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
-import { DropdownItem, SortOrder } from '@terraware/web-components';
-import { Tooltip } from '@terraware/web-components';
+import { DropdownItem, SortOrder, Tooltip } from '@terraware/web-components';
 import _ from 'lodash';
 
 import PageSnackbar from 'src/components/PageSnackbar';
