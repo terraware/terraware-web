@@ -24,15 +24,15 @@ const processConservationCategories = (
   totalRare: number,
   totalSpecies: number
 ): CategoryData => {
-  const sortedCategories = Object.entries(categoryTotals)
+  const sortedTopFourCategories = Object.entries(categoryTotals)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 4);
 
-  const topCategoriesTotal = sortedCategories.reduce((sum, [, quantity]) => sum + quantity, 0);
+  const topCategoriesTotal = sortedTopFourCategories.reduce((sum, [, quantity]) => sum + quantity, 0);
   const totalQuantity = Object.values(categoryTotals).reduce((sum, quantity) => sum + quantity, 0);
   const otherTotal = totalQuantity - topCategoriesTotal;
   const finalCategoryTotals: Record<string, number> = {};
-  sortedCategories.forEach(([category, quantity]) => {
+  sortedTopFourCategories.forEach(([category, quantity]) => {
     finalCategoryTotals[category] = quantity;
   });
   if (otherTotal > 0) {
@@ -55,7 +55,6 @@ const processConservationCategories = (
 };
 
 type NumberOfSpeciesPlantedCardProps = {
-  newVersion?: boolean;
   projectId?: number;
 };
 
@@ -63,6 +62,10 @@ export default function NumberOfSpeciesPlantedCard({
   projectId,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
   const { plantingSite } = usePlantingSiteData();
+
+  useEffect(() => {
+    console.log('plantingSite', plantingSite);
+  }, [plantingSite]);
 
   if (projectId && plantingSite?.id === -1) {
     return <RolledUpCard projectId={projectId} />;
@@ -248,10 +251,6 @@ const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element
   }, []);
 
   const chartData = useMemo(() => {
-    if (!labels?.length || !values?.length) {
-      return undefined;
-    }
-
     return {
       labels: labels ?? [],
       datasets: [
@@ -288,6 +287,13 @@ const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element
           yLimits={{ min: 0, max: 100 }}
           yStepSize={20}
           customTooltipLabel={tooltipRenderer}
+          pluginsOptions={{
+            emptyDoughnut: {
+              color: theme.palette.TwClrBaseGray050,
+              width: 100,
+              radiusDecrease: 70,
+            },
+          }}
         />
       </Box>
 

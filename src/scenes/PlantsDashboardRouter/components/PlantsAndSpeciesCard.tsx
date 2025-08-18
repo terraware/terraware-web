@@ -203,7 +203,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
           </Box>
           <div style={separatorStyles} />
           <Box flexBasis='100%'>
-            <NumberOfSpeciesPlantedCard newVersion projectId={projectId} />
+            <NumberOfSpeciesPlantedCard projectId={projectId} />
           </Box>
         </Card>
       </Grid>
