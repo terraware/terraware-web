@@ -263,6 +263,11 @@ const ProjectProfileEdit = () => {
     return false;
   }, [tfContact, dispatch, project?.organizationId]);
 
+  // // TODO: Implement saveTFContacts
+  // const saveTFContacts = useCallback(() => {
+  //   console.log('saveTFContacts - tfContacts:', tfContacts);
+  // }, [tfContacts]);
+
   const handleSave = useCallback(() => {
     if (!stableToVariable) {
       snackbar.toastError("Can't save until page is fully loaded.");
@@ -303,6 +308,7 @@ const ProjectProfileEdit = () => {
       saveTFContact();
       newInitiatedRequests.assignTfContact = true;
     }
+    // TODO: Implement saveTFContacts
     if ((mainPhoto || mapPhoto) && stableToVariable) {
       const imageValues = [];
       if (mainPhoto) {
