@@ -402,7 +402,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                   label: nursery.name,
                   value: nursery.id.toString(),
                 }))}
-                onChange={onChangeViabilityTesting('destinationFacilityId')}
+                onChange={onChangeNurseryTransfer('destinationFacilityId')}
                 errorText={fieldsErrors.destinationFacilityId}
                 fullWidth={true}
               />
