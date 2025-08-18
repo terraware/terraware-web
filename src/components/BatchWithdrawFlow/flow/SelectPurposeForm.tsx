@@ -247,7 +247,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
-  const validateGerminatingReadyAndActiveGrowthQuantities = () => {
+  const validateQuantities = () => {
     let allValid = true;
     if (isSingleBatch && !isOutplant) {
       if (
@@ -367,7 +367,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
     const plantingSiteSubzoneInvalid = !validatePlantingSiteSubzone();
-    const germinatingReadyAndActiveGrowthInvalid = !validateGerminatingReadyAndActiveGrowthQuantities();
+    const germinatingReadyAndActiveGrowthInvalid = !validateQuantities();
     if (
       fieldsErrors.withdrawnDate ||
       nurseryTransferInvalid ||
