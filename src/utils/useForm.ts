@@ -9,6 +9,7 @@ const useForm = <T>(originalRecord: T): [T, Dispatch<SetStateAction<T>>, FormCha
   const [record, setRecord] = React.useState(originalRecord);
 
   const onChange = useCallback(
+    // eslint-disable-next-line
     function onChangeInternal(id: string, value?: unknown) {
       // If value is provided, execute immediately (direct form)
       if (arguments.length === 2) {
