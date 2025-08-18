@@ -95,7 +95,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     (map: MapRef) => {
       mapImageUrls?.forEach((url) => {
         if (!map.hasImage(url)) {
-          map.loadImage(url, (error, image) => {
+          map.loadImage(url, (_error, image) => {
             if (image) {
               map.addImage(url, image, { sdf: true });
             }
@@ -106,13 +106,16 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     [mapImageUrls]
   );
 
-  const mapRefCallback = useCallback((map: MapRef | null) => {
-    if (map !== null) {
-      mapRef.current = map;
-      setZoom(map.getZoom());
-      loadImages(map);
-    }
-  }, []);
+  const mapRefCallback = useCallback(
+    (map: MapRef | null) => {
+      if (map !== null) {
+        mapRef.current = map;
+        setZoom(map.getZoom());
+        loadImages(map);
+      }
+    },
+    [loadImages]
+  );
 
   const onMove = useCallback((view: ViewStateChangeEvent) => {
     setZoom(view.viewState.zoom);

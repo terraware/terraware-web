@@ -166,7 +166,7 @@ const MapComponent = (props: MapComponentProps) => {
           };
       }
     });
-  }, [features, selectedLayer, visibleHighlights, visibleMarkers]);
+  }, [features, selectedLayer, setHighlightVisible, setMarkerVisible, visibleHighlights, visibleMarkers]);
 
   const layers = useMemo(() => {
     return features
@@ -227,7 +227,7 @@ const MapComponent = (props: MapComponentProps) => {
         };
       }
     }
-  }, [initialViewState]);
+  }, [features, initialViewState]);
 
   const mapImageUrls = useMemo(() => {
     const layerFeatures =
