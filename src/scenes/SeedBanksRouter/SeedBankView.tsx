@@ -199,7 +199,7 @@ export default function SeedBankView(): JSX.Element {
                 id='name'
                 label={strings.NAME_REQUIRED}
                 type='text'
-                onChange={(value) => onChange('name', value)}
+                onChange={onChange('name')}
                 value={record.name}
                 errorText={record.name ? '' : nameError}
               />
@@ -209,7 +209,7 @@ export default function SeedBankView(): JSX.Element {
                 id='description'
                 label={strings.DESCRIPTION_REQUIRED}
                 type='textarea'
-                onChange={(value) => onChange('description', value)}
+                onChange={onChange('description')}
                 value={record.description}
                 errorText={record.description ? '' : descriptionError}
               />

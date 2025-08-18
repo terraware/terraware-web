@@ -214,25 +214,11 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [changeDate]
   );
 
-  const handleGerminatingQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('germinatingQuantity', value);
-    },
-    [onChange]
-  );
-
   const handleGerminationStartedDateChange = useCallback(
     (value?: Date | null) => {
       changeDate('germinationStartedDate', value);
     },
     [changeDate]
-  );
-
-  const handleActiveGrowthQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('activeGrowthQuantity', value);
-    },
-    [onChange]
   );
 
   const handleReadyByDateChange = useCallback(
@@ -242,51 +228,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [changeDate]
   );
 
-  const handleHardeningOffQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('hardeningOffQuantity', value);
-    },
-    [onChange]
-  );
-
-  const handleReadyQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('readyQuantity', value);
-    },
-    [onChange]
-  );
-
   const handleSubstrateChange = useCallback(
     (value: unknown) => {
       onChange('substrate', batchSubstrateLocalizedToEnum(value as string));
-    },
-    [onChange]
-  );
-
-  const handleSubstrateNotesChange = useCallback(
-    (value: unknown) => {
-      onChange('substrateNotes', value);
-    },
-    [onChange]
-  );
-
-  const handleTreatmentChange = useCallback(
-    (value: unknown) => {
-      onChange('treatment', value);
-    },
-    [onChange]
-  );
-
-  const handleTreatmentNotesChange = useCallback(
-    (value: unknown) => {
-      onChange('treatmentNotes', value);
-    },
-    [onChange]
-  );
-
-  const handleNotesChange = useCallback(
-    (value: unknown) => {
-      onChange('notes', value);
     },
     [onChange]
   );
@@ -341,7 +285,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='germinatingQuantity'
             value={record.germinatingQuantity}
-            onChange={handleGerminatingQuantityChange}
+            onChange={onChange('germinatingQuantity')}
             type='number'
             label={
               isUpdatedNurseryGrowthPhasesEnabled
@@ -379,7 +323,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='activeGrowthQuantity'
             value={record.activeGrowthQuantity}
-            onChange={handleActiveGrowthQuantityChange}
+            onChange={onChange('activeGrowthQuantity')}
             type='number'
             label={
               isUpdatedNurseryGrowthPhasesEnabled
@@ -412,7 +356,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               <Textfield
                 id='hardeningOffQuantity'
                 value={record.hardeningOffQuantity}
-                onChange={handleHardeningOffQuantityChange}
+                onChange={onChange('hardeningOffQuantity')}
                 type='number'
                 label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
@@ -429,7 +373,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='readyQuantity'
             value={record.readyQuantity}
-            onChange={handleReadyQuantityChange}
+            onChange={onChange('readyQuantity')}
             type='number'
             label={
               isUpdatedNurseryGrowthPhasesEnabled
@@ -479,7 +423,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               value={record.substrateNotes}
               type='text'
               label=''
-              onChange={handleSubstrateNotesChange}
+              onChange={onChange('substrateNotes')}
             />
           )}
         </Grid>
@@ -489,7 +433,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             label={strings.TREATMENT}
             selectedValue={record.treatment}
             options={treatments()}
-            onChange={handleTreatmentChange}
+            onChange={onChange('treatment')}
             fullWidth={true}
           />
         </Grid>
@@ -500,7 +444,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               value={record.treatmentNotes}
               type='text'
               label=''
-              onChange={handleTreatmentNotesChange}
+              onChange={onChange('treatmentNotes')}
             />
           )}
         </Grid>
@@ -511,7 +455,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='notes'
             value={record?.notes}
-            onChange={handleNotesChange}
+            onChange={onChange('notes')}
             type='textarea'
             label={strings.NOTES}
           />

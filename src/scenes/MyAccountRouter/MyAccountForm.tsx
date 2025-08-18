@@ -426,7 +426,7 @@ const MyAccountForm = ({
                 type='text'
                 value={record.firstName}
                 display={!edit}
-                onChange={(value) => onChange('firstName', value)}
+                onChange={onChange('firstName')}
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -436,7 +436,7 @@ const MyAccountForm = ({
                 type='text'
                 value={record.lastName}
                 display={!edit}
-                onChange={(value) => onChange('lastName', value)}
+                onChange={onChange('lastName')}
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -543,7 +543,7 @@ const MyAccountForm = ({
                 name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
                 label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
                 value={record.emailNotificationsEnabled}
-                onChange={(value) => onChange('emailNotificationsEnabled', value)}
+                onChange={onChange('emailNotificationsEnabled')}
               />
             </Grid>
             {userIsFunder && disclaimer && (

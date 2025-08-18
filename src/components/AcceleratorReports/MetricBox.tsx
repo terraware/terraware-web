@@ -304,7 +304,7 @@ const MetricBox = ({
                   label={strings.PROGRESS}
                   value={record.value}
                   id={'value'}
-                  onChange={(value: any) => onChange('value', value)}
+                  onChange={onChange('value')}
                   display={!isEditing}
                   required={true}
                   min={0}
@@ -329,7 +329,7 @@ const MetricBox = ({
                   label={strings.STATUS}
                   selectedValue={record.status}
                   options={statusOptions}
-                  onChange={(value: any) => onChange('status', value)}
+                  onChange={onChange('status')}
                   disabled={!isEditing}
                   placeholder={'No Status'}
                 />
@@ -351,7 +351,7 @@ const MetricBox = ({
               label={strings.UNDERPERFORMANCE_JUSTIFICATION}
               value={record.underperformanceJustification}
               id={'underperformanceJustification'}
-              onChange={(value: any) => onChange('underperformanceJustification', value)}
+              onChange={onChange('underperformanceJustification')}
               display={!isEditing}
               styles={textAreaStyles}
               preserveNewlines
@@ -366,7 +366,7 @@ const MetricBox = ({
                 label={strings.PROGRESS_NOTES}
                 value={record.progressNotes}
                 id={'progressNotes'}
-                onChange={(value: any) => onChange('progressNotes', value)}
+                onChange={onChange('progressNotes')}
                 display={!isEditing}
                 styles={textAreaStyles}
                 preserveNewlines

@@ -66,10 +66,6 @@ export default function PersonView(): JSX.Element {
     }
   }, [selectedOrganization, personId]);
 
-  const onChangeRole = (newRole: string) => {
-    onChange('role', newRole);
-  };
-
   const goToPeople = useCallback(() => {
     navigate({ pathname: APP_PATHS.PEOPLE });
   }, [navigate]);
@@ -217,7 +213,7 @@ export default function PersonView(): JSX.Element {
                 id='email'
                 label={strings.EMAIL_REQUIRED}
                 type='text'
-                onChange={(value) => onChange('email', value)}
+                onChange={onChange('email')}
                 value={newPerson.email}
                 disabled={!!personSelectedToEdit}
                 errorText={emailError}
@@ -228,7 +224,7 @@ export default function PersonView(): JSX.Element {
                 id='firstName'
                 label={strings.FIRST_NAME}
                 type='text'
-                onChange={(value) => onChange('firstName', value)}
+                onChange={onChange('firstName')}
                 disabled={true}
                 value={newPerson.firstName}
               />
@@ -238,7 +234,7 @@ export default function PersonView(): JSX.Element {
                 id='lastName'
                 label={strings.LAST_NAME}
                 type='text'
-                onChange={(value) => onChange('lastName', value)}
+                onChange={onChange('lastName')}
                 disabled={true}
                 value={newPerson.lastName}
               />
@@ -249,7 +245,7 @@ export default function PersonView(): JSX.Element {
               <Dropdown
                 id='role'
                 label={strings.ROLE_REQUIRED}
-                onChange={onChangeRole}
+                onChange={onChange('role')}
                 options={roleOptions}
                 disabled={newPerson.role === 'Owner'}
                 selectedValue={newPerson.role}

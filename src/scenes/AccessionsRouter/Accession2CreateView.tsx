@@ -223,7 +223,7 @@ export default function CreateAccession(): JSX.Element | null {
                 <Textfield
                   id='collectionSiteLandowner'
                   value={record.collectionSiteLandowner}
-                  onChange={(value) => onChange('collectionSiteLandowner', value)}
+                  onChange={onChange('collectionSiteLandowner')}
                   type='text'
                   label={strings.LANDOWNER}
                 />
@@ -258,7 +258,7 @@ export default function CreateAccession(): JSX.Element | null {
               <Dropdown
                 id='state'
                 selectedValue={record.state}
-                onChange={(value: string) => onChange('state', value)}
+                onChange={onChange('state')}
                 label={strings.PROCESSING_STATUS_REQUIRED}
                 options={accessionCreateStates()}
                 fullWidth={true}

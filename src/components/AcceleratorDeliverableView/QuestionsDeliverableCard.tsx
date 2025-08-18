@@ -357,9 +357,7 @@ const QuestionBox = ({
                 type='textarea'
                 label={strings.INTERNAL_COMMENTS}
                 id='internalComment'
-                onChange={(value) => {
-                  onChange('internalComment', value as string);
-                }}
+                onChange={onChange('internalComment')}
                 sx={{ marginTop: theme.spacing(1) }}
                 value={workflowDetails.internalComment}
               />
@@ -370,9 +368,7 @@ const QuestionBox = ({
                   type='textarea'
                   label={strings.FEEDBACK_SHARED_WITH_PROJECT}
                   id='feedback'
-                  onChange={(value) => {
-                    onChange('feedback', value as string);
-                  }}
+                  onChange={onChange('feedback')}
                   sx={{ marginTop: theme.spacing(1) }}
                   value={workflowDetails.feedback}
                 />

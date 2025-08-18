@@ -195,7 +195,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.DESCRIPTION}
               type='text'
               id='description'
-              onChange={(value) => onChange('description', value)}
+              onChange={onChange('description')}
               value={newOrganization.description}
             />
           </Grid>
@@ -286,7 +286,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.ORGANIZATION_WEBSITE}
               id='create-org-question-website'
               display={false}
-              onChange={(value) => onChange('website', value)}
+              onChange={onChange('website')}
               value={newOrganization.website}
             />
           </Grid>

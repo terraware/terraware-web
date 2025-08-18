@@ -139,7 +139,7 @@ export default function EditSettings(): JSX.Element {
                   id='logframe'
                   label={strings.LOG_FRAME_AND_ME_PLAN_URL}
                   type='text'
-                  onChange={(value) => onChange('logframeUrl', value)}
+                  onChange={onChange('logframeUrl')}
                   value={newConfig.logframeUrl}
                 />
               </Grid>

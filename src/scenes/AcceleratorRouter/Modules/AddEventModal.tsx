@@ -234,7 +234,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             label={strings.MEETING_URL}
             type='text'
             value={record.meetingUrl}
-            onChange={(value: unknown) => onChange('meetingUrl', value)}
+            onChange={onChange('meetingUrl')}
           />
         </Grid>
         <Grid item xs={12}>
@@ -243,7 +243,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             label={strings.RECORDING_URL}
             type='text'
             value={record.recordingUrl}
-            onChange={(value: unknown) => onChange('recordingUrl', value)}
+            onChange={onChange('recordingUrl')}
           />
         </Grid>
         <Grid item xs={12}>
@@ -252,7 +252,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             label={strings.SLIDES_URL}
             type='text'
             value={record.slidesUrl}
-            onChange={(value: unknown) => onChange('slidesUrl', value)}
+            onChange={onChange('slidesUrl')}
           />
         </Grid>
         <Grid item xs={12}>

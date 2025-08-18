@@ -124,12 +124,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
               </Typography>
             </Box>
           )}
-          <HighlightsBox
-            report={record}
-            projectId={projectId}
-            editing={true}
-            onChange={(value: any) => onChange('highlights', value)}
-          />
+          <HighlightsBox report={record} projectId={projectId} editing={true} onChange={onChange('highlights')} />
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
@@ -150,17 +145,12 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
               />
             ));
           })}
-          <AchievementsBox
-            report={record}
-            projectId={projectId}
-            editing={true}
-            onChange={(value: any) => onChange('achievements', value)}
-          />
+          <AchievementsBox report={record} projectId={projectId} editing={true} onChange={onChange('achievements')} />
           <ChallengesMitigationBox
             report={record}
             projectId={projectId}
             editing={true}
-            onChange={(value: any) => onChange('challenges', value)}
+            onChange={onChange('challenges')}
           />
         </Card>
       </Box>

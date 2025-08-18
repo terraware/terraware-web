@@ -65,8 +65,6 @@ const FunderInviteView = () => {
     setRequestId(request.requestId);
   }, [dispatch, snackbar, record.email, fundingEntityId]);
 
-  const onChangeEmail = useCallback((value: unknown) => onChange('email', value), [onChange]);
-
   useEffect(() => {
     if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') {
       return;
@@ -121,7 +119,7 @@ const FunderInviteView = () => {
                 id='email'
                 label={strings.EMAIL}
                 type='text'
-                onChange={onChangeEmail}
+                onChange={onChange('email')}
                 value={record.email}
                 required={true}
                 errorText={emailError}

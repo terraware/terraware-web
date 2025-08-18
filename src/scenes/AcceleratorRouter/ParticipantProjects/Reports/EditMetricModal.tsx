@@ -84,7 +84,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='name'
             label={strings.NAME}
             type='text'
-            onChange={(value) => onChange('name', value)}
+            onChange={onChange('name')}
             value={record.name}
             required
             errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
@@ -95,7 +95,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='name'
             label={strings.DESCRIPTION}
             type='textarea'
-            onChange={(value) => onChange('description', value)}
+            onChange={onChange('description')}
             value={record.description}
           />
         </Grid>
@@ -103,7 +103,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
           <Dropdown
             id='type'
             label={strings.TYPE}
-            onChange={(newValue: string) => onChange('type', newValue)}
+            onChange={onChange('type')}
             options={metricTypeOptions()}
             selectedValue={record.type}
             fullWidth
@@ -115,7 +115,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             label={strings.UNIT}
             type='text'
             maxLength={25}
-            onChange={(value) => onChange('unit', value)}
+            onChange={onChange('unit')}
             value={record.unit}
           />
         </Grid>
@@ -124,7 +124,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='reference'
             label={strings.REFERENCE}
             type='text'
-            onChange={(value) => onChange('reference', value)}
+            onChange={onChange('reference')}
             value={record.reference}
             required
             errorText={validate && !record.reference ? strings.REQUIRED_FIELD : ''}
@@ -134,7 +134,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
           <Dropdown
             id='component'
             label={strings.COMPONENT}
-            onChange={(newValue: string) => onChange('component', newValue)}
+            onChange={onChange('component')}
             options={metricComponentOptions()}
             selectedValue={record.component}
             fullWidth
@@ -148,7 +148,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             name={'isPublishable'}
             label={strings.PUBLISH_TO_FUNDER_PORTAL}
             value={record.isPublishable}
-            onChange={(newValue: boolean) => onChange('isPublishable', newValue)}
+            onChange={onChange('isPublishable')}
           />
         </Grid>
       </Grid>

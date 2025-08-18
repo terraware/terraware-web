@@ -137,9 +137,7 @@ const ApplicationReviewModal = ({
               <Dropdown
                 fullWidth={true}
                 label={strings.APPLICATION_STATUS}
-                onChange={(value) => {
-                  onChange('status', value);
-                }}
+                onChange={onChange('status')}
                 options={dropdownOptions}
                 required
                 selectedValue={applicationReview.status}
@@ -152,9 +150,7 @@ const ApplicationReviewModal = ({
             type='textarea'
             label={strings.INTERNAL_COMMENTS}
             id='internalComment'
-            onChange={(value) => {
-              onChange('internalComment', value);
-            }}
+            onChange={onChange('internalComment')}
             sx={{ marginTop: theme.spacing(1) }}
             value={applicationReview.internalComment}
           />

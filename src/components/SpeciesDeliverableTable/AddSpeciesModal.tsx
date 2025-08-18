@@ -192,7 +192,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           <Dropdown
             id='speciesNativeCategory'
             selectedValue={record?.speciesNativeCategory}
-            onChange={(value) => onChange('speciesNativeCategory', value)}
+            onChange={onChange('speciesNativeCategory')}
             options={getSpeciesNativeCategoryOptions(activeLocale)}
             label={strings.NATIVE_NON_NATIVE}
             aria-label={strings.NATIVE_NON_NATIVE}

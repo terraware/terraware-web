@@ -113,7 +113,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   id='name'
                   label={strings.NAME}
                   type='text'
-                  onChange={(value) => onChange('name', value)}
+                  onChange={onChange('name')}
                   value={newMetric.name}
                   required
                   errorText={validate && !newMetric.name ? strings.REQUIRED_FIELD : ''}
@@ -124,7 +124,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   id='name'
                   label={strings.DESCRIPTION}
                   type='textarea'
-                  onChange={(value) => onChange('description', value)}
+                  onChange={onChange('description')}
                   value={newMetric.description}
                 />
               </Grid>
@@ -132,7 +132,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                 <Dropdown
                   id='type'
                   label={strings.TYPE}
-                  onChange={(newValue: string) => onChange('type', newValue)}
+                  onChange={onChange('type')}
                   options={metricTypeOptions()}
                   selectedValue={newMetric.type}
                   fullWidth
@@ -143,7 +143,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   id='reference'
                   label={strings.REFERENCE}
                   type='text'
-                  onChange={(value) => onChange('reference', value)}
+                  onChange={onChange('reference')}
                   value={newMetric.reference}
                   required
                   errorText={validate && !newMetric.reference ? strings.REQUIRED_FIELD : ''}
@@ -155,7 +155,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   label={strings.UNIT}
                   type='text'
                   maxLength={25}
-                  onChange={(value) => onChange('unit', value)}
+                  onChange={onChange('unit')}
                   value={newMetric.unit}
                 />
               </Grid>
@@ -163,7 +163,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                 <Dropdown
                   id='component'
                   label={strings.COMPONENT}
-                  onChange={(newValue: string) => onChange('component', newValue)}
+                  onChange={onChange('component')}
                   options={metricComponentOptions()}
                   selectedValue={newMetric.component}
                   fullWidth
@@ -177,7 +177,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   name={'isPublishable'}
                   label={strings.PUBLISH_TO_FUNDER_PORTAL}
                   value={newMetric.isPublishable}
-                  onChange={(newValue: boolean) => onChange('isPublishable', newValue)}
+                  onChange={onChange('isPublishable')}
                 />
               </Grid>
             </Grid>

@@ -91,7 +91,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
               <Textfield
                 label={strings.VIABILITY_RATE}
                 id='viabilityPercent'
-                onChange={(value) => onChange('viabilityPercent', value)}
+                onChange={onChange('viabilityPercent')}
                 type='text'
                 value={record.viabilityPercent?.toString()}
                 errorText={error}

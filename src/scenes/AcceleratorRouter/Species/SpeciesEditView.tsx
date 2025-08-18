@@ -16,7 +16,7 @@ import strings from 'src/strings';
 import { ParticipantProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useForm from 'src/utils/useForm';
+import useForm, { FormChangeHandler } from 'src/utils/useForm';
 
 import SpeciesInternalFieldsForm from './SpeciesInternalFieldsForm';
 
@@ -139,7 +139,7 @@ export default function SpeciesEditView(): JSX.Element {
                 id='rationale'
                 type='text'
                 value={participantProjectSpeciesRecord?.rationale}
-                onChange={(value: unknown) => onChangeParticipantProjectSpecies('rationale', value)}
+                onChange={onChangeParticipantProjectSpecies('rationale')}
               />
             </Grid>
 
@@ -153,7 +153,7 @@ export default function SpeciesEditView(): JSX.Element {
                   gridSize={gridSize()}
                   record={speciesRecord}
                   participantProjectSpeciesRecord={participantProjectSpeciesRecord}
-                  onChange={onChange}
+                  onChange={onChange as FormChangeHandler}
                   nameFormatError={nameFormatError}
                   setNameFormatError={setNameFormatError}
                   additionalFields={<SpeciesInternalFieldsForm speciesRecord={speciesRecord} onChange={onChange} />}

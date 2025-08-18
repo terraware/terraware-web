@@ -118,7 +118,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
             label={strings.SUB_LOCATION}
             selectedSubLocation={record.subLocation}
             subLocations={subLocations.map((obj) => obj.name)}
-            onChange={(value: string) => onChange('subLocation', value)}
+            onChange={onChange('subLocation')}
             disabled={!record.facilityId}
           />
         </Grid>

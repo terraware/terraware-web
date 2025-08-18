@@ -228,15 +228,6 @@ export default function BatchDetailsForm({
 
   const paddingSeparator = useMemo(() => (isMobile ? 0 : 1.5), [isMobile]);
 
-  const getOnChange = useCallback(
-    (id: string) => {
-      return (value: unknown) => {
-        onChange(id, value);
-      };
-    },
-    [onChange]
-  );
-
   const changeDate = useCallback(
     (id: string, value?: Date | null) => {
       const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
@@ -440,7 +431,7 @@ export default function BatchDetailsForm({
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
-                onChange={getOnChange('germinatingQuantity')}
+                onChange={onChange('germinatingQuantity')}
                 type='number'
                 label={
                   isUpdatedNurseryGrowthPhasesEnabled
@@ -487,7 +478,7 @@ export default function BatchDetailsForm({
               <Textfield
                 id='activeGrowthQuantity'
                 value={record.activeGrowthQuantity}
-                onChange={getOnChange('activeGrowthQuantity')}
+                onChange={onChange('activeGrowthQuantity')}
                 type='number'
                 label={
                   isUpdatedNurseryGrowthPhasesEnabled
@@ -537,7 +528,7 @@ export default function BatchDetailsForm({
                     id='hardeningOffQuantity'
                     label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
                     min={0}
-                    onChange={getOnChange('hardeningOffQuantity')}
+                    onChange={onChange('hardeningOffQuantity')}
                     tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
                     type='number'
                     value={record.hardeningOffQuantity}
@@ -552,7 +543,7 @@ export default function BatchDetailsForm({
               <Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
-                onChange={getOnChange('readyQuantity')}
+                onChange={onChange('readyQuantity')}
                 type='number'
                 label={
                   isUpdatedNurseryGrowthPhasesEnabled
@@ -597,7 +588,7 @@ export default function BatchDetailsForm({
               <Textfield
                 id='notes'
                 value={record?.notes}
-                onChange={getOnChange('notes')}
+                onChange={onChange('notes')}
                 type='textarea'
                 label={strings.NOTES}
               />

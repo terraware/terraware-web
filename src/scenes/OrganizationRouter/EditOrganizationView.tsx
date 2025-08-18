@@ -152,7 +152,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               id='name'
               label={strings.ORGANIZATION_NAME_REQUIRED}
               type='text'
-              onChange={(value) => onChange('name', value)}
+              onChange={onChange('name')}
               value={organizationRecord.name}
               errorText={organizationRecord.name ? '' : nameError}
             />
@@ -162,7 +162,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               id='description'
               label={strings.DESCRIPTION}
               type='textarea'
-              onChange={(value) => onChange('description', value)}
+              onChange={onChange('description')}
               value={organizationRecord.description}
             />
           </Grid>
@@ -179,9 +179,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                 })
               );
             }}
-            onChangeCountrySubdivisionCode={(countrySubdivisionCode: string) =>
-              onChange('countrySubdivisionCode', countrySubdivisionCode)
-            }
+            onChangeCountrySubdivisionCode={onChange('countrySubdivisionCode')}
             horizontalLayout
             countryError={countryError}
             countrySubdivisionError={subdivisionError}
@@ -234,7 +232,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                 label={strings.ORGANIZATION_WEBSITE}
                 id='org-website'
                 display={false}
-                onChange={(value) => onChange('website', value)}
+                onChange={onChange('website')}
                 value={organizationRecord.website}
               />
             </Grid>

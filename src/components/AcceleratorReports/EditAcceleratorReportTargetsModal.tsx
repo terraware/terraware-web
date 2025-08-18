@@ -184,7 +184,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='annualTarget'
             label={strings.ANNUAL_TARGET}
             type='text'
-            onChange={(value) => onChange('annualTarget', value)}
+            onChange={onChange('annualTarget')}
             value={record.annualTarget}
           />
         </Grid>
@@ -194,7 +194,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='q1Target'
             label={strings.Q1_TARGET}
             type='text'
-            onChange={(value) => onChange('q1Target', value)}
+            onChange={onChange('q1Target')}
             value={record.q1Target}
           />
         </Grid>
@@ -204,7 +204,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='q2Target'
             label={strings.Q2_TARGET}
             type='text'
-            onChange={(value) => onChange('q2Target', value)}
+            onChange={onChange('q2Target')}
             value={record.q2Target}
           />
         </Grid>
@@ -214,7 +214,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='q3Target'
             label={strings.Q3_TARGET}
             type='text'
-            onChange={(value) => onChange('q3Target', value)}
+            onChange={onChange('q3Target')}
             value={record.q3Target}
           />
         </Grid>
@@ -224,7 +224,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='q4Target'
             label={strings.Q4_TARGET}
             type='text'
-            onChange={(value) => onChange('q4Target', value)}
+            onChange={onChange('q4Target')}
             value={record.q4Target}
           />
         </Grid>

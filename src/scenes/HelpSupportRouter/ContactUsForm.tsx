@@ -204,7 +204,7 @@ const ContactUsForm = () => {
               <Textfield
                 id={'summary'}
                 label={strings.SUMMARY}
-                onChange={(value) => onChangeSupportRequest('summary', value as string)}
+                onChange={onChangeSupportRequest('summary')}
                 value={supportRequest.summary}
                 type={'text'}
                 errorText={errorSummary}
@@ -215,7 +215,7 @@ const ContactUsForm = () => {
               <Textfield
                 id={'description'}
                 label={strings.DESCRIPTION}
-                onChange={(value) => onChangeSupportRequest('description', value as string)}
+                onChange={onChangeSupportRequest('description')}
                 value={supportRequest.description}
                 styles={styles}
                 type={'textarea'}

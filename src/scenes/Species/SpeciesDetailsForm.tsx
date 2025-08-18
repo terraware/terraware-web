@@ -34,6 +34,7 @@ import {
 } from 'src/types/Species';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
+import { FormChangeHandler } from 'src/utils/useForm';
 
 import { ProjectSpecies } from './AddToProjectModal';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
@@ -42,7 +43,7 @@ type SpeciesDetailsFormProps = {
   additionalFields?: JSX.Element;
   gridSize: number;
   nameFormatError: string | string[];
-  onChange: (id: string, value: unknown) => void;
+  onChange: FormChangeHandler;
   participantProjectSpeciesRecord?: ParticipantProjectSpecies;
   record: Species;
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
@@ -189,7 +190,7 @@ export default function SpeciesDetailsForm({
           <Select
             id='commonName'
             selectedValue={record.commonName}
-            onChange={(value) => onChange('commonName', value)}
+            onChange={onChange('commonName')}
             options={optionsForCommonName}
             label={strings.COMMON_NAME}
             aria-label={strings.COMMON_NAME}
@@ -203,7 +204,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'family'}
             label={strings.FAMILY}
-            onChange={(value) => onChange('familyName', value)}
+            onChange={onChange('familyName')}
             value={record.familyName}
             type='text'
           />
@@ -214,7 +215,7 @@ export default function SpeciesDetailsForm({
             label={strings.CONSERVATION_CATEGORY}
             aria-label={strings.CONSERVATION_CATEGORY}
             fullWidth={true}
-            onChange={(value: string) => onChange('conservationCategory', value)}
+            onChange={onChange('conservationCategory')}
             placeholder={strings.SELECT}
             options={conservationCategories()}
             selectedValue={record.conservationCategory}
@@ -278,7 +279,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'nativeEcosystem'}
             label={strings.NATIVE_ECOSYSTEM}
-            onChange={(value) => onChange('nativeEcosystem', value)}
+            onChange={onChange('nativeEcosystem')}
             value={record.nativeEcosystem}
             type='text'
             tooltipTitle={strings.NATIVE_ECOSYSTEM_TOOLTIP}
@@ -338,7 +339,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'ecologicalRoleKnown'}
             label={strings.ECOLOGICAL_ROLE_KNOWN}
-            onChange={(value) => onChange('ecologicalRoleKnown', value)}
+            onChange={onChange('ecologicalRoleKnown')}
             value={record.ecologicalRoleKnown}
             type='text'
             tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
@@ -348,7 +349,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'localUsesKnown'}
             label={strings.LOCAL_USES_KNOWN}
-            onChange={(value) => onChange('localUsesKnown', value)}
+            onChange={onChange('localUsesKnown')}
             value={record.localUsesKnown}
             type='text'
             tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
@@ -358,7 +359,7 @@ export default function SpeciesDetailsForm({
           <Dropdown
             id='seedStorageBehavior'
             selectedValue={record.seedStorageBehavior}
-            onChange={(value) => onChange('seedStorageBehavior', value)}
+            onChange={onChange('seedStorageBehavior')}
             options={storageBehaviors()}
             label={strings.SEED_STORAGE_BEHAVIOR}
             aria-label={strings.SEED_STORAGE_BEHAVIOR}
@@ -418,7 +419,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'otherFacts'}
             label={strings.OTHER_FACTS}
-            onChange={(value) => onChange('otherFacts', value)}
+            onChange={onChange('otherFacts')}
             value={record.otherFacts}
             type='textarea'
           />
