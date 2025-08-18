@@ -136,8 +136,8 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               previousEvent?.type === 'StatusChanged') && (
               <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
-                  id='notReadyQuantityBefore'
-                  value={previousEvent?.notReadyQuantity || 0}
+                  id='activeGrowthQuantityBefore'
+                  value={previousEvent?.activeGrowthQuantity || 0}
                   type='text'
                   label={strings.NOT_READY_QUANTITY_BEFORE}
                   display={true}
@@ -148,7 +148,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='notReadQuantityAfter'
-                  value={selectedEvent.notReadyQuantity}
+                  value={selectedEvent.activeGrowthQuantity}
                   type='text'
                   label={strings.NOT_READY_QUANTITY_AFTER}
                   display={true}
@@ -361,7 +361,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                 id='totalQuantityMoved'
                 value={
                   +selectedEvent.readyQuantityAdded +
-                  +selectedEvent.notReadyQuantityAdded +
+                  +selectedEvent.activeGrowthQuantityAdded +
                   +selectedEvent.hardeningOffQuantityAdded
                 }
                 type='text'

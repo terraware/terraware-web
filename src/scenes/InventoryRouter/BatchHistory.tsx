@@ -191,7 +191,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                   if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
                     changedFields.push(strings.GERMINATING_QUANTITY);
                   }
-                  if (historyItem.notReadyQuantity !== previousEv?.notReadyQuantity) {
+                  if (historyItem.activeGrowthQuantity !== previousEv?.activeGrowthQuantity) {
                     changedFields.push(strings.NOT_READY_QUANTITY);
                   }
                   if (historyItem.hardeningOffQuantity !== previousEv?.hardeningOffQuantity) {

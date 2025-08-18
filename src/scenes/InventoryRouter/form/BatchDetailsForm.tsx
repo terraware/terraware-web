@@ -39,7 +39,12 @@ export interface BatchDetailsFormProps {
 type FormRecord = Partial<SavableBatch> | undefined;
 type SavableFormRecord = Partial<SavableBatch>;
 
-const QUANTITY_FIELDS = ['germinatingQuantity', 'notReadyQuantity', 'hardeningOffQuantity', 'readyQuantity'] as const;
+const QUANTITY_FIELDS = [
+  'germinatingQuantity',
+  'activeGrowthQuantity',
+  'hardeningOffQuantity',
+  'readyQuantity',
+] as const;
 
 type QuantityField = (typeof QUANTITY_FIELDS)[number];
 
@@ -80,10 +85,10 @@ export default function BatchDetailsForm({
   const [timeZone, setTimeZone] = useState('');
 
   const [invalidFields, setInvalidFields] = useState<
-    Record<'germinating' | 'notReady' | 'hardeningOff' | 'ready', string>
+    Record<'germinating' | 'activeGrowth' | 'hardeningOff' | 'ready', string>
   >({
     germinating: '',
-    notReady: '',
+    activeGrowth: '',
     hardeningOff: '',
     ready: '',
   });
@@ -166,10 +171,10 @@ export default function BatchDetailsForm({
 
   useEffect(() => {
     if (record) {
-      const notReadyQuantity = record?.notReadyQuantity ?? 0;
+      const activeGrowthQuantity = record?.activeGrowthQuantity ?? 0;
       const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
       const readyQuantity = record?.readyQuantity ?? 0;
-      setTotalQuantity(+notReadyQuantity + +hardeningOffQuantity + +readyQuantity);
+      setTotalQuantity(+activeGrowthQuantity + +hardeningOffQuantity + +readyQuantity);
     }
   }, [record]);
 
@@ -196,7 +201,7 @@ export default function BatchDetailsForm({
       addedDate: DEFAULT_DATE,
       germinatingQuantity: 0,
       hardeningOffQuantity: 0,
-      notReadyQuantity: 0,
+      activeGrowthQuantity: 0,
       readyQuantity: 0,
       facilityId,
       speciesId,
@@ -276,17 +281,17 @@ export default function BatchDetailsForm({
   }, [availableSubLocations, record?.id, setRecord]);
 
   useEffect(() => {
-    const invalid = { germinating: '', notReady: '', hardeningOff: '', ready: '' };
+    const invalid = { germinating: '', activeGrowth: '', hardeningOff: '', ready: '' };
     const germinatingQuantity = Number(record?.germinatingQuantity ?? 0);
-    const notReadyQuantity = Number(record?.notReadyQuantity ?? 0);
+    const activeGrowthQuantity = Number(record?.activeGrowthQuantity ?? 0);
     const hardeningOffQuantity = Number(record?.hardeningOffQuantity ?? 0);
     const readyQuantity = Number(record?.readyQuantity ?? 0);
 
     if (germinatingQuantity < 0) {
       invalid.germinating = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
     }
-    if (notReadyQuantity < 0) {
-      invalid.notReady = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    if (activeGrowthQuantity < 0) {
+      invalid.activeGrowth = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
     }
     if (hardeningOffQuantity < 0) {
       invalid.hardeningOff = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
@@ -303,15 +308,18 @@ export default function BatchDetailsForm({
         if (germinatingQuantity && germinatingQuantity > remainingSeeds) {
           invalid.germinating = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
-        if (notReadyQuantity && germinatingQuantity + notReadyQuantity > remainingSeeds) {
-          invalid.notReady = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
+        if (activeGrowthQuantity && germinatingQuantity + activeGrowthQuantity > remainingSeeds) {
+          invalid.activeGrowth = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
-        if (hardeningOffQuantity && germinatingQuantity + notReadyQuantity + hardeningOffQuantity > remainingSeeds) {
+        if (
+          hardeningOffQuantity &&
+          germinatingQuantity + activeGrowthQuantity + hardeningOffQuantity > remainingSeeds
+        ) {
           invalid.hardeningOff = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
         if (
           readyQuantity &&
-          germinatingQuantity + notReadyQuantity + hardeningOffQuantity + readyQuantity > remainingSeeds
+          germinatingQuantity + activeGrowthQuantity + hardeningOffQuantity + readyQuantity > remainingSeeds
         ) {
           invalid.ready = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
@@ -323,7 +331,7 @@ export default function BatchDetailsForm({
     accessionQuantity,
     record?.germinatingQuantity,
     record?.hardeningOffQuantity,
-    record?.notReadyQuantity,
+    record?.activeGrowthQuantity,
     record?.readyQuantity,
     selectedAccession,
     strings,
@@ -461,17 +469,17 @@ export default function BatchDetailsForm({
 
             <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
-                id='notReadyQuantity'
-                value={record.notReadyQuantity}
-                onChange={getOnChange('notReadyQuantity')}
+                id='activeGrowthQuantity'
+                value={record.activeGrowthQuantity}
+                onChange={getOnChange('activeGrowthQuantity')}
                 type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                 errorText={
                   validateFields
-                    ? isUndefinedQuantity(record.notReadyQuantity)
+                    ? isUndefinedQuantity(record.activeGrowthQuantity)
                       ? strings.REQUIRED_FIELD
-                      : invalidFields.notReady
+                      : invalidFields.activeGrowth
                     : ''
                 }
                 min={0}

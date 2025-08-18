@@ -47,7 +47,7 @@ export type InventoryResult = {
   species_commonName?: string;
   germinatingQuantity: string;
   hardeningOffQuantity: string;
-  notReadyQuantity: string;
+  activeGrowthQuantity: string;
   readyQuantity: string;
   totalQuantity: string;
   facilityInventories: FacilityName[];
@@ -59,7 +59,7 @@ export type FacilitySpeciesInventoryResult = {
   germinatingQuantity: string;
   hardeningOffQuantity: string;
   readyQuantity: string;
-  notReadyQuantity: string;
+  activeGrowthQuantity: string;
   totalQuantity: string;
   'totalQuantity(raw)': string;
   facilityInventories: {
@@ -91,7 +91,7 @@ export type FacilityInventoryResult = {
   'germinatingQuantity(raw)': string;
   'hardeningOffQuantity(raw)': string;
   'readyQuantity(raw)': string;
-  'notReadyQuantity(raw)': string;
+  'activeGrowthQuantity(raw)': string;
   'totalQuantity(raw)': string;
 };
 
@@ -105,14 +105,14 @@ export type BatchInventoryResult = {
   species_commonName?: string;
   germinatingQuantity: string;
   hardeningOffQuantity: string;
-  notReadyQuantity: string;
+  activeGrowthQuantity: string;
   readyQuantity: string;
   subLocations: string;
   totalQuantity: string;
   'germinatingQuantity(raw)': string;
   'hardeningOffQuantity(raw)': string;
   'readyQuantity(raw)': string;
-  'notReadyQuantity(raw)': string;
+  'activeGrowthQuantity(raw)': string;
   'totalQuantity(raw)': string;
 };
 

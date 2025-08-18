@@ -46,8 +46,8 @@ export default function InventoryTests() {
     await page.getByLabel('Germination Started Date').fill('2024-02-03');
     await page.locator('#germinatingQuantity').getByRole('spinbutton').click();
     await page.locator('#germinatingQuantity').getByRole('spinbutton').fill('0500');
-    await page.locator('#notReadyQuantity').getByRole('spinbutton').click();
-    await page.locator('#notReadyQuantity').getByRole('spinbutton').fill('0100');
+    await page.locator('#activeGrowthQuantity').getByRole('spinbutton').click();
+    await page.locator('#activeGrowthQuantity').getByRole('spinbutton').fill('0100');
     await page.locator('#readyQuantity').getByRole('spinbutton').click();
     await page.locator('#readyQuantity').getByRole('spinbutton').fill('0100');
     await page.locator('textarea').click();
@@ -108,8 +108,8 @@ export default function InventoryTests() {
     await page.getByLabel('Date Added *').fill('2024-02-01');
     await page.locator('#germinatingQuantity').getByRole('spinbutton').click();
     await page.locator('#germinatingQuantity').getByRole('spinbutton').fill('25');
-    await page.locator('#notReadyQuantity').getByRole('spinbutton').click();
-    await page.locator('#notReadyQuantity').getByRole('spinbutton').fill('25');
+    await page.locator('#activeGrowthQuantity').getByRole('spinbutton').click();
+    await page.locator('#activeGrowthQuantity').getByRole('spinbutton').fill('25');
     await page.locator('#readyQuantity').getByRole('spinbutton').click();
     await page.locator('#readyQuantity').getByRole('spinbutton').fill('25');
     await page.locator('textarea').click();
@@ -151,8 +151,8 @@ export default function InventoryTests() {
     await page.getByLabel('Dead').check();
     await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').click();
     await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').fill('5');
-    await page.locator('#notReadyQuantityWithdrawn').getByRole('spinbutton').click();
-    await page.locator('#notReadyQuantityWithdrawn').getByRole('spinbutton').fill('10');
+    await page.locator('#activeGrowthQuantityWithdrawn').getByRole('spinbutton').click();
+    await page.locator('#activeGrowthQuantityWithdrawn').getByRole('spinbutton').fill('10');
     await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').click();
     await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').fill('0');
     await page.getByRole('button', { name: 'Next' }).click();
@@ -169,7 +169,7 @@ export default function InventoryTests() {
     await expect(page.getByRole('link', { name: '-2-2-004' })).toBeVisible();
     await expect(page.locator('#row1-name')).toContainText('Coconut');
     await expect(page.locator('#row1-germinating')).toContainText('5');
-    await expect(page.locator('#row1-notReady')).toContainText('10');
+    await expect(page.locator('#row1-activeGrowth')).toContainText('10');
     await expect(page.locator('#row1-ready')).toContainText('0');
     await expect(page.locator('#row1-total')).toContainText('15');
     await page.getByRole('link', { name: 'Withdrawal History' }).click();
@@ -192,8 +192,8 @@ export default function InventoryTests() {
     await page.getByText('Nursery', { exact: true }).click();
     await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').click();
     await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').fill('50');
-    await page.locator('#notReadyQuantityWithdrawn').getByRole('spinbutton').click();
-    await page.locator('#notReadyQuantityWithdrawn').getByRole('spinbutton').fill('50');
+    await page.locator('#activeGrowthQuantityWithdrawn').getByRole('spinbutton').click();
+    await page.locator('#activeGrowthQuantityWithdrawn').getByRole('spinbutton').fill('50');
     await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').click();
     await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').fill('50');
     await page.getByText('Withdrawal DetailsSelect a').click();
@@ -213,7 +213,7 @@ export default function InventoryTests() {
     await expect(page.getByRole('cell', { name: '-2-2-003' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Banana' })).toBeVisible();
     await expect(page.locator('#row1-germinating')).toBeVisible();
-    await expect(page.locator('#row1-notReady')).toBeVisible();
+    await expect(page.locator('#row1-activeGrowth')).toBeVisible();
     await expect(page.locator('#row1-ready')).toBeVisible();
     await expect(page.getByRole('cell', { name: '150' })).toBeVisible();
     await page.getByRole('link', { name: '-2-2-003' }).click();
@@ -228,7 +228,7 @@ export default function InventoryTests() {
     await page.locator('#row1-germinatingQuantity').click();
     await expect(page.getByRole('cell', { name: '-2-1-003' })).toBeVisible();
     await expect(page.locator('#row1-germinatingQuantity')).toContainText('50');
-    await expect(page.locator('#row1-notReadyQuantity')).toContainText('50');
+    await expect(page.locator('#row1-activeGrowthQuantity')).toContainText('50');
     await expect(page.locator('#row1-readyQuantity')).toContainText('50');
     await expect(page.locator('#row1-totalQuantity')).toContainText('100');
     await expect(page.getByRole('cell', { name: '0', exact: true })).toBeVisible();

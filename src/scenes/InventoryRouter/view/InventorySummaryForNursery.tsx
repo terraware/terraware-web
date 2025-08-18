@@ -51,7 +51,7 @@ export default function InventorySummaryForNursery({
 
     const {
       germinatingQuantity,
-      notReadyQuantity,
+      activeGrowthQuantity,
       hardeningOffQuantity,
       readyQuantity,
       totalQuantity,
@@ -70,7 +70,7 @@ export default function InventorySummaryForNursery({
       },
       {
         label: strings.NOT_READY_QUANTITY,
-        value: notReadyQuantity,
+        value: activeGrowthQuantity,
         tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
         gridColumns,
       },

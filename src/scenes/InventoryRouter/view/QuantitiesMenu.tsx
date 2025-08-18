@@ -64,7 +64,7 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
             id='change-not-ready'
             onClick={(event) => openChangeQuantityHandler(event, 'not-ready')}
             sx={{ padding: theme.spacing(1, 2) }}
-            disabled={Number(batch.notReadyQuantity) === 0}
+            disabled={Number(batch.activeGrowthQuantity) === 0}
           >
             <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
               {strings.CHANGE_NOT_READY_STATUS}
