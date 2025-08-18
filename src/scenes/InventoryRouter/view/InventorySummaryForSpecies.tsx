@@ -61,7 +61,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
     const {
       germinatingQuantity,
-      notReadyQuantity,
+      activeGrowthQuantity,
       hardeningOffQuantity,
       readyQuantity,
       totalQuantity,
@@ -84,7 +84,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
       },
       {
         label: strings.NOT_READY_QUANTITY,
-        value: notReadyQuantity.toString(),
+        value: activeGrowthQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
         gridColumns: topRowColumns,
       },

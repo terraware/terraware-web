@@ -107,10 +107,10 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
 
   useEffect(() => {
     if (record) {
-      const notReadyQuantity = record?.notReadyQuantity ?? 0;
+      const activeGrowthQuantity = record?.activeGrowthQuantity ?? 0;
       const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
       const readyQuantity = record?.readyQuantity ?? 0;
-      setTotalQuantity(+notReadyQuantity + +hardeningOffQuantity + +readyQuantity);
+      setTotalQuantity(+activeGrowthQuantity + +hardeningOffQuantity + +readyQuantity);
     }
   }, [record, selectedOrganization]);
 
@@ -141,7 +141,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   }, [batch, setRecord, selectedOrganization]);
 
   const MANDATORY_FIELDS = useMemo(
-    () => ['germinatingQuantity', 'notReadyQuantity', 'hardeningOffQuantity', 'readyQuantity', 'addedDate'] as const,
+    () =>
+      ['germinatingQuantity', 'activeGrowthQuantity', 'hardeningOffQuantity', 'readyQuantity', 'addedDate'] as const,
     []
   );
   type MandatoryField = (typeof MANDATORY_FIELDS)[number];
@@ -227,9 +228,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [changeDate]
   );
 
-  const handleNotReadyQuantityChange = useCallback(
+  const handleActiveGrowthQuantityChange = useCallback(
     (value: unknown) => {
-      onChange('notReadyQuantity', value);
+      onChange('activeGrowthQuantity', value);
     },
     [onChange]
   );
@@ -360,13 +361,13 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         </Grid>
         <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='notReadyQuantity'
-            value={record.notReadyQuantity}
-            onChange={handleNotReadyQuantityChange}
+            id='activeGrowthQuantity'
+            value={record.activeGrowthQuantity}
+            onChange={handleActiveGrowthQuantityChange}
             type='number'
             label={strings.NOT_READY_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-            errorText={validateFields && !isNumber(record?.notReadyQuantity) ? strings.REQUIRED_FIELD : ''}
+            errorText={validateFields && !isNumber(record?.activeGrowthQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
         </Grid>

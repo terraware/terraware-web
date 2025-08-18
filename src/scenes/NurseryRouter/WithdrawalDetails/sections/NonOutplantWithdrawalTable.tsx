@@ -15,7 +15,7 @@ type SpeciesWithdrawal = {
   name?: string;
   germinating?: number;
   hardeningOff?: number;
-  notReady: number;
+  activeGrowth: number;
   ready: number;
   total: number;
   batchNumber: string;
@@ -42,7 +42,7 @@ export default function NonOutplantWithdrawalTable({
       { key: 'batchNumber', name: strings.BATCH, type: 'string' },
       { key: 'name', name: strings.SPECIES, type: 'string' },
       { key: 'germinating', name: strings.GERMINATING, type: 'number' },
-      { key: 'notReady', name: strings.NOT_READY, type: 'number' },
+      { key: 'activeGrowth', name: strings.NOT_READY, type: 'number' },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
             {
@@ -69,9 +69,10 @@ export default function NonOutplantWithdrawalTable({
 
       if (Object.keys(batchToSpeciesMap).length > 0) {
         withdrawal?.batchWithdrawals?.forEach((batch) => {
-          const { batchId, notReadyQuantityWithdrawn, hardeningOffQuantityWithdrawn, readyQuantityWithdrawn } = batch;
+          const { batchId, activeGrowthQuantityWithdrawn, hardeningOffQuantityWithdrawn, readyQuantityWithdrawn } =
+            batch;
           const { speciesId, batchNumber } = batchToSpeciesMap[batchId];
-          const notReady = notReadyQuantityWithdrawn || 0;
+          const activeGrowth = activeGrowthQuantityWithdrawn || 0;
           const hardeningOff = hardeningOffQuantityWithdrawn || 0;
           const ready = readyQuantityWithdrawn || 0;
           const name = species.find((sp) => sp.id === speciesId)?.scientificName;
@@ -82,9 +83,9 @@ export default function NonOutplantWithdrawalTable({
             name,
             germinating,
             hardeningOff,
-            notReady,
+            activeGrowth,
             ready,
-            total: notReady + hardeningOff + ready + germinating,
+            total: activeGrowth + hardeningOff + ready + germinating,
             batchNumber,
             batchId,
             speciesId,

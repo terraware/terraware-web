@@ -74,7 +74,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [isSingleBatch] = useState<boolean>(batches.length === 1);
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>(0);
   const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>(0);
-  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>(0);
+  const [activeGrowthQuantityWithdrawn, setActiveGrowthQuantityWithdrawn] = useState<number>(0);
   const [hardeningOffQuantityWithdrawn, setHardeningOffQuantityWithdrawn] = useState<number>(0);
   const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>(0);
   const [zones, setZones] = useState<any[]>([]);
@@ -247,11 +247,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
-  const validateGerminatingReadyAndNotReadyQuantities = () => {
+  const validateGerminatingReadyAndActiveGrowthQuantities = () => {
     let allValid = true;
     if (isSingleBatch && !isOutplant) {
       if (
-        notReadyQuantityWithdrawn === 0 &&
+        activeGrowthQuantityWithdrawn === 0 &&
         hardeningOffQuantityWithdrawn === 0 &&
         readyQuantityWithdrawn === 0 &&
         germinatingQuantityWithdrawn === 0
@@ -262,19 +262,19 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         setIndividualError('totalQuantityWithdrawn', '');
       }
 
-      if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
-        setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
+      if (!activeGrowthQuantityWithdrawn && activeGrowthQuantityWithdrawn !== 0) {
+        setIndividualError('activeGrowthQuantityWithdrawn', strings.REQUIRED_FIELD);
         allValid = false;
       } else {
-        if (isNaN(notReadyQuantityWithdrawn)) {
-          setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);
+        if (isNaN(activeGrowthQuantityWithdrawn)) {
+          setIndividualError('activeGrowthQuantityWithdrawn', strings.INVALID_VALUE);
           allValid = false;
         } else {
-          if (Number(notReadyQuantityWithdrawn) > Number(batches[0]['notReadyQuantity(raw)'])) {
-            setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+          if (Number(activeGrowthQuantityWithdrawn) > Number(batches[0]['activeGrowthQuantity(raw)'])) {
+            setIndividualError('activeGrowthQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             allValid = false;
           } else {
-            setIndividualError('notReadyQuantityWithdrawn', '');
+            setIndividualError('activeGrowthQuantityWithdrawn', '');
           }
         }
       }
@@ -367,14 +367,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
     const plantingSiteSubzoneInvalid = !validatePlantingSiteSubzone();
-    const germinatingReadyAndNotReadyInvalid = !validateGerminatingReadyAndNotReadyQuantities();
+    const germinatingReadyAndActiveGrowthInvalid = !validateGerminatingReadyAndActiveGrowthQuantities();
     if (
       fieldsErrors.withdrawnDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
       plantingSiteSubzoneInvalid ||
-      germinatingReadyAndNotReadyInvalid
+      germinatingReadyAndActiveGrowthInvalid
     ) {
       return;
     }
@@ -394,23 +394,30 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             (!isOutplant || Number(batch['readyQuantity(raw)']) > 0)
           );
         })
-        .map(
-          (batch: SearchResponseElement): BatchWithdrawalPayload => ({
+        .map((batch: SearchResponseElement): BatchWithdrawalPayload => {
+          const batchActiveGrowthQuantityWithdrawn = isSingleOutplant
+            ? 0
+            : isSingleBatch
+              ? activeGrowthQuantityWithdrawn || 0
+              : 0;
+
+          return {
             batchId: Number(batch.id),
             germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
-            notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
+            activeGrowthQuantityWithdrawn: batchActiveGrowthQuantityWithdrawn,
             hardeningOffQuantityWithdrawn: isSingleOutplant
               ? 0
               : isSingleBatch
                 ? hardeningOffQuantityWithdrawn || 0
                 : 0,
+            notReadyQuantityWithdrawn: activeGrowthQuantityWithdrawn,
             readyQuantityWithdrawn: isSingleOutplant
               ? withdrawnQuantity || 0
               : isSingleBatch
                 ? readyQuantityWithdrawn || 0
                 : 0,
-          })
-        ),
+          };
+        }),
     });
   };
 
@@ -484,11 +491,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   useEffect(() => {
     setWithdrawnQuantity(
       (readyQuantityWithdrawn ? Number(readyQuantityWithdrawn) : 0) +
-        (notReadyQuantityWithdrawn ? Number(notReadyQuantityWithdrawn) : 0) +
+        (activeGrowthQuantityWithdrawn ? Number(activeGrowthQuantityWithdrawn) : 0) +
         (hardeningOffQuantityWithdrawn ? Number(hardeningOffQuantityWithdrawn) : 0) +
         (germinatingQuantityWithdrawn ? Number(germinatingQuantityWithdrawn) : 0)
     );
-  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, hardeningOffQuantityWithdrawn, germinatingQuantityWithdrawn]);
+  }, [
+    readyQuantityWithdrawn,
+    activeGrowthQuantityWithdrawn,
+    hardeningOffQuantityWithdrawn,
+    germinatingQuantityWithdrawn,
+  ]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
@@ -816,17 +828,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
                         label={strings
-                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].notReadyQuantity))
+                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].activeGrowthQuantity))
                           .toString()}
-                        id='notReadyQuantityWithdrawn'
-                        onChange={(value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
+                        id='activeGrowthQuantityWithdrawn'
+                        onChange={(value: unknown) => setActiveGrowthQuantityWithdrawn(value as number)}
                         type='number'
-                        value={notReadyQuantityWithdrawn}
+                        value={activeGrowthQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                        errorText={fieldsErrors.notReadyQuantityWithdrawn}
+                        errorText={fieldsErrors.activeGrowthQuantityWithdrawn}
                         required
                         sx={{
-                          '&> #notReadyQuantityWithdrawn': {
+                          '&> #activeGrowthQuantityWithdrawn': {
                             height: '44px',
                           },
                         }}

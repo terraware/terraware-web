@@ -87,9 +87,10 @@ export default function OutplantWithdrawalTable({
 
       if (Object.keys(batchToSpeciesMap).length > 0) {
         withdrawal?.batchWithdrawals?.forEach((batch) => {
-          const { batchId, notReadyQuantityWithdrawn, hardeningOffQuantityWithdrawn, readyQuantityWithdrawn } = batch;
+          const { batchId, activeGrowthQuantityWithdrawn, hardeningOffQuantityWithdrawn, readyQuantityWithdrawn } =
+            batch;
           const { speciesId, batchNumber } = batchToSpeciesMap[batchId];
-          const notReady = notReadyQuantityWithdrawn || 0;
+          const activeGrowth = activeGrowthQuantityWithdrawn || 0;
           const hardeningOff = hardeningOffQuantityWithdrawn || 0;
           const ready = readyQuantityWithdrawn || 0;
           const name = species.find((sp) => sp.id === speciesId)?.scientificName;
@@ -97,7 +98,7 @@ export default function OutplantWithdrawalTable({
           const subzoneIds = Object.keys(subzonemap);
           batchesMap.push({
             name,
-            total: notReady + hardeningOff + ready,
+            total: activeGrowth + hardeningOff + ready,
             batchNumber,
             batchId,
             speciesId,

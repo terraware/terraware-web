@@ -78,7 +78,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       germinatingQuantity: 0,
       hardeningOffQuantity: 0,
       notes: '',
-      notReadyQuantity: 0,
+      activeGrowthQuantity: 0,
       readyByDate: undefined,
       readyQuantity: 0,
       withdrawnByUserId: user.id,

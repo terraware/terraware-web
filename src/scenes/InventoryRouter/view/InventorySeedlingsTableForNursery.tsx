@@ -36,7 +36,7 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
         tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
       },
       {
-        key: 'notReadyQuantity',
+        key: 'activeGrowthQuantity',
         name: strings.NOT_READY,
         type: 'number',
         tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,

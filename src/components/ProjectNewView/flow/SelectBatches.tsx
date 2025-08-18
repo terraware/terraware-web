@@ -65,7 +65,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
         type: 'string',
       },
       {
-        key: 'notReadyQuantity',
+        key: 'activeGrowthQuantity',
         name: strings.NOT_READY,
         type: 'string',
       },

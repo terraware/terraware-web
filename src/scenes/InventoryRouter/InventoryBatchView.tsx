@@ -48,7 +48,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
 
   const isWithdrawable =
     Number(batch?.readyQuantity) +
-      Number(batch?.notReadyQuantity) +
+      Number(batch?.activeGrowthQuantity) +
       Number(batch?.hardeningOffQuantity) +
       Number(batch?.germinatingQuantity) >
     0;

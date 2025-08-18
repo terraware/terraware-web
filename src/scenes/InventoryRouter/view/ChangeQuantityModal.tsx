@@ -42,7 +42,7 @@ export default function ChangeQuantityModal({
     ...row,
     germinatingQuantity: +row['germinatingQuantity(raw)'],
     hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
-    notReadyQuantity: +row['notReadyQuantity(raw)'],
+    activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
     readyQuantity: +row['readyQuantity(raw)'],
   });
 
@@ -72,7 +72,7 @@ export default function ChangeQuantityModal({
     } else if (type === 'germinating' && movedValue > +row['germinatingQuantity(raw)']) {
       setErrorText(strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
-    } else if (type === 'not-ready' && movedValue > +row['notReadyQuantity(raw)']) {
+    } else if (type === 'not-ready' && movedValue > +row['activeGrowthQuantity(raw)']) {
       setErrorText(strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
     } else if (type === 'hardeningOff' && movedValue > +row['hardeningOffQuantity(raw)']) {
@@ -87,9 +87,9 @@ export default function ChangeQuantityModal({
 
     if (type === 'germinating') {
       previousPhase = 'Germinating';
-      newPhase = 'NotReady';
+      newPhase = 'ActiveGrowth';
     } else if (type === 'not-ready') {
-      previousPhase = 'NotReady';
+      previousPhase = 'ActiveGrowth';
       newPhase = isUpdatedNurseryGrowthPhasesEnabled ? 'HardeningOff' : 'Ready';
     } else if (type === 'hardening-off') {
       previousPhase = 'HardeningOff';
@@ -127,7 +127,7 @@ export default function ChangeQuantityModal({
           setRecord({
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
-            notReadyQuantity: +row['notReadyQuantity(raw)'] + +valueNumber,
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] + +valueNumber,
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
             readyQuantity: +row['readyQuantity(raw)'],
           });
@@ -135,7 +135,7 @@ export default function ChangeQuantityModal({
           setRecord({
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'],
-            notReadyQuantity: +row['notReadyQuantity(raw)'] - valueNumber,
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
             readyQuantity: +row['readyQuantity(raw)'],
           });
@@ -143,7 +143,7 @@ export default function ChangeQuantityModal({
           setRecord({
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'],
-            notReadyQuantity: +row['notReadyQuantity(raw)'] - valueNumber,
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
             readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
           });
@@ -151,7 +151,7 @@ export default function ChangeQuantityModal({
           setRecord({
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'],
-            notReadyQuantity: +row['notReadyQuantity(raw)'],
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] - valueNumber,
             readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
           });
@@ -178,7 +178,7 @@ export default function ChangeQuantityModal({
     if (type === 'germinating') {
       return numberFormatter.format(record.germinatingQuantity);
     } else if (type === 'not-ready') {
-      return numberFormatter.format(record.notReadyQuantity);
+      return numberFormatter.format(record.activeGrowthQuantity);
     } else {
       return numberFormatter.format(record.hardeningOffQuantity);
     }
@@ -196,7 +196,7 @@ export default function ChangeQuantityModal({
 
   const toValueFormatted = useMemo(() => {
     if (type === 'germinating') {
-      return numberFormatter.format(record.notReadyQuantity);
+      return numberFormatter.format(record.activeGrowthQuantity);
     } else if (type === 'not-ready' && isUpdatedNurseryGrowthPhasesEnabled) {
       return numberFormatter.format(record.hardeningOffQuantity);
     } else {
