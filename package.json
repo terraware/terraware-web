@@ -141,7 +141,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "^axios$": "axios/dist/axios.js"
+      "^axios$": "axios/dist/axios.js",
+      "react-map-gl/mapbox": "react-map-gl/dist/mapbox.cjs"
     }
   },
   "devDependencies": {
