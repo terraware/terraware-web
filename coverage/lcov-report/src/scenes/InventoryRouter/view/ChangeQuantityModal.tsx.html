@@ -619,7 +619,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
     ...row,
     germinatingQuantity: +row['germinatingQuantity(raw)'],
     hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
-    notReadyQuantity: +row['notReadyQuantity(raw)'],
+    activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
     readyQuantity: +row['readyQuantity(raw)'],
   });
 &nbsp;
@@ -649,7 +649,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
     } else <span class="cstat-no" title="statement not covered" >if (type === 'germinating' &amp;&amp; movedValue &gt; +row['germinatingQuantity(raw)']) {</span>
 <span class="cstat-no" title="statement not covered" >      setErrorText(strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
-    } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready' &amp;&amp; movedValue &gt; +row['notReadyQuantity(raw)']) {</span>
+    } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready' &amp;&amp; movedValue &gt; +row['activeGrowthQuantity(raw)']) {</span>
 <span class="cstat-no" title="statement not covered" >      setErrorText(strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'hardeningOff' &amp;&amp; movedValue &gt; +row['hardeningOffQuantity(raw)']) {</span>
@@ -664,9 +664,9 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (type === 'germinating') {</span>
 <span class="cstat-no" title="statement not covered" >      previousPhase = 'Germinating';</span>
-<span class="cstat-no" title="statement not covered" >      newPhase = 'NotReady';</span>
+<span class="cstat-no" title="statement not covered" >      newPhase = 'ActiveGrowth';</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready') {</span>
-<span class="cstat-no" title="statement not covered" >      previousPhase = 'NotReady';</span>
+<span class="cstat-no" title="statement not covered" >      previousPhase = 'ActiveGrowth';</span>
 <span class="cstat-no" title="statement not covered" >      newPhase = isUpdatedNurseryGrowthPhasesEnabled ? 'HardeningOff' : 'Ready';</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'hardening-off') {</span>
 <span class="cstat-no" title="statement not covered" >      previousPhase = 'HardeningOff';</span>
@@ -704,7 +704,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 <span class="cstat-no" title="statement not covered" >          setRecord({</span>
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
-            notReadyQuantity: +row['notReadyQuantity(raw)'] + +valueNumber,
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] + +valueNumber,
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
             readyQuantity: +row['readyQuantity(raw)'],
           });
@@ -712,7 +712,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 <span class="cstat-no" title="statement not covered" >          setRecord({</span>
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'],
-            notReadyQuantity: +row['notReadyQuantity(raw)'] - valueNumber,
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
             readyQuantity: +row['readyQuantity(raw)'],
           });
@@ -720,7 +720,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 <span class="cstat-no" title="statement not covered" >          setRecord({</span>
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'],
-            notReadyQuantity: +row['notReadyQuantity(raw)'] - valueNumber,
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
             readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
           });
@@ -728,7 +728,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 <span class="cstat-no" title="statement not covered" >          setRecord({</span>
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'],
-            notReadyQuantity: +row['notReadyQuantity(raw)'],
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] - valueNumber,
             readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
           });
@@ -755,7 +755,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 <span class="cstat-no" title="statement not covered" >    if (type === 'germinating') {</span>
 <span class="cstat-no" title="statement not covered" >      return numberFormatter.format(record.germinatingQuantity);</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready') {</span>
-<span class="cstat-no" title="statement not covered" >      return numberFormatter.format(record.notReadyQuantity);</span>
+<span class="cstat-no" title="statement not covered" >      return numberFormatter.format(record.activeGrowthQuantity);</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      return numberFormatter.format(record.hardeningOffQuantity);</span>
     }
@@ -773,7 +773,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 &nbsp;
   const toValueFormatted = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (type === 'germinating') {</span>
-<span class="cstat-no" title="statement not covered" >      return numberFormatter.format(record.notReadyQuantity);</span>
+<span class="cstat-no" title="statement not covered" >      return numberFormatter.format(record.activeGrowthQuantity);</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready' &amp;&amp; isUpdatedNurseryGrowthPhasesEnabled) {</span>
 <span class="cstat-no" title="statement not covered" >      return numberFormatter.format(record.hardeningOffQuantity);</span>
     } else {
@@ -838,7 +838,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-18T18:26:14.440Z
+                at 2025-08-18T23:52:10.102Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

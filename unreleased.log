@@ -1,3 +1,4 @@
+707cc945b43 SW-7215: FE - Nursery Phase terminology updates (Use new active growth properties in API) (#4353)
 c930f478aa4 Update dependency @babel/traverse to v7.28.3 (#4349)
 efcfcdd2f95 Update dependency eslint-plugin-jsdoc to v54 (#4347)
 11a79dd201a Update actions/checkout action to v5 (#4345)

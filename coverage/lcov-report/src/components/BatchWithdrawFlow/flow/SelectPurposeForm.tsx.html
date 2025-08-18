@@ -970,7 +970,16 @@
 <a name='L905'></a><a href='#L905'>905</a>
 <a name='L906'></a><a href='#L906'>906</a>
 <a name='L907'></a><a href='#L907'>907</a>
-<a name='L908'></a><a href='#L908'>908</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L908'></a><a href='#L908'>908</a>
+<a name='L909'></a><a href='#L909'>909</a>
+<a name='L910'></a><a href='#L910'>910</a>
+<a name='L911'></a><a href='#L911'>911</a>
+<a name='L912'></a><a href='#L912'>912</a>
+<a name='L913'></a><a href='#L913'>913</a>
+<a name='L914'></a><a href='#L914'>914</a>
+<a name='L915'></a><a href='#L915'>915</a>
+<a name='L916'></a><a href='#L916'>916</a>
+<a name='L917'></a><a href='#L917'>917</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1386,6 +1395,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1455,6 +1468,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1953,7 +1971,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
   const [isSingleBatch] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(batches.length === 1);</span>
   const [withdrawnQuantity, setWithdrawnQuantity] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
   const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
-  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
+  const [activeGrowthQuantityWithdrawn, setActiveGrowthQuantityWithdrawn] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
   const [hardeningOffQuantityWithdrawn, setHardeningOffQuantityWithdrawn] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
   const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
   const [zones, setZones] = <span class="cstat-no" title="statement not covered" >useState&lt;any[]&gt;([]);</span>
@@ -2126,11 +2144,11 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >    return true;</span>
   };
 &nbsp;
-  const validateGerminatingReadyAndNotReadyQuantities = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const validateQuantities = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     let allValid = <span class="cstat-no" title="statement not covered" >true;</span>
 <span class="cstat-no" title="statement not covered" >    if (isSingleBatch &amp;&amp; !isOutplant) {</span>
 <span class="cstat-no" title="statement not covered" >      if (</span>
-        notReadyQuantityWithdrawn === 0 &amp;&amp;
+        activeGrowthQuantityWithdrawn === 0 &amp;&amp;
         hardeningOffQuantityWithdrawn === 0 &amp;&amp;
         readyQuantityWithdrawn === 0 &amp;&amp;
         germinatingQuantityWithdrawn === 0
@@ -2141,19 +2159,19 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >        setIndividualError('totalQuantityWithdrawn', '');</span>
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (!notReadyQuantityWithdrawn &amp;&amp; notReadyQuantityWithdrawn !== 0) {</span>
-<span class="cstat-no" title="statement not covered" >        setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);</span>
+<span class="cstat-no" title="statement not covered" >      if (!activeGrowthQuantityWithdrawn &amp;&amp; activeGrowthQuantityWithdrawn !== 0) {</span>
+<span class="cstat-no" title="statement not covered" >        setIndividualError('activeGrowthQuantityWithdrawn', strings.REQUIRED_FIELD);</span>
 <span class="cstat-no" title="statement not covered" >        allValid = false;</span>
       } else {
-<span class="cstat-no" title="statement not covered" >        if (isNaN(notReadyQuantityWithdrawn)) {</span>
-<span class="cstat-no" title="statement not covered" >          setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);</span>
+<span class="cstat-no" title="statement not covered" >        if (isNaN(activeGrowthQuantityWithdrawn)) {</span>
+<span class="cstat-no" title="statement not covered" >          setIndividualError('activeGrowthQuantityWithdrawn', strings.INVALID_VALUE);</span>
 <span class="cstat-no" title="statement not covered" >          allValid = false;</span>
         } else {
-<span class="cstat-no" title="statement not covered" >          if (Number(notReadyQuantityWithdrawn) &gt; Number(batches[0]['notReadyQuantity(raw)'])) {</span>
-<span class="cstat-no" title="statement not covered" >            setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
+<span class="cstat-no" title="statement not covered" >          if (Number(activeGrowthQuantityWithdrawn) &gt; Number(batches[0]['activeGrowthQuantity(raw)'])) {</span>
+<span class="cstat-no" title="statement not covered" >            setIndividualError('activeGrowthQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >            allValid = false;</span>
           } else {
-<span class="cstat-no" title="statement not covered" >            setIndividualError('notReadyQuantityWithdrawn', '');</span>
+<span class="cstat-no" title="statement not covered" >            setIndividualError('activeGrowthQuantityWithdrawn', '');</span>
           }
         }
       }
@@ -2246,14 +2264,14 @@ export default function <span class="fstat-no" title="function not covered" >Sel
     const selectedNurseryInvalid = <span class="cstat-no" title="statement not covered" >!validateSelectedNursery();</span>
     const withdrawnQuantityInvalid = <span class="cstat-no" title="statement not covered" >!validateWithdrawnQuantity();</span>
     const plantingSiteSubzoneInvalid = <span class="cstat-no" title="statement not covered" >!validatePlantingSiteSubzone();</span>
-    const germinatingReadyAndNotReadyInvalid = <span class="cstat-no" title="statement not covered" >!validateGerminatingReadyAndNotReadyQuantities();</span>
+    const germinatingReadyAndActiveGrowthInvalid = <span class="cstat-no" title="statement not covered" >!validateQuantities();</span>
 <span class="cstat-no" title="statement not covered" >    if (</span>
       fieldsErrors.withdrawnDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
       plantingSiteSubzoneInvalid ||
-      germinatingReadyAndNotReadyInvalid
+      germinatingReadyAndActiveGrowthInvalid
     ) {
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -2277,7 +2295,11 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="fstat-no" title="function not covered" >          (b</span>atch: SearchResponseElement): BatchWithdrawalPayload =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
             batchId: Number(batch.id),
             germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
-            notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
+            activeGrowthQuantityWithdrawn: isSingleOutplant
+              ? 0
+              : isSingleBatch
+                ? activeGrowthQuantityWithdrawn || 0
+                : 0,
             hardeningOffQuantityWithdrawn: isSingleOutplant
               ? 0
               : isSingleBatch
@@ -2363,11 +2385,16 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setWithdrawnQuantity(</span>
       (readyQuantityWithdrawn ? Number(readyQuantityWithdrawn) : 0) +
-        (notReadyQuantityWithdrawn ? Number(notReadyQuantityWithdrawn) : 0) +
+        (activeGrowthQuantityWithdrawn ? Number(activeGrowthQuantityWithdrawn) : 0) +
         (hardeningOffQuantityWithdrawn ? Number(hardeningOffQuantityWithdrawn) : 0) +
         (germinatingQuantityWithdrawn ? Number(germinatingQuantityWithdrawn) : 0)
     );
-  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, hardeningOffQuantityWithdrawn, germinatingQuantityWithdrawn]);
+  }, [
+    readyQuantityWithdrawn,
+    activeGrowthQuantityWithdrawn,
+    hardeningOffQuantityWithdrawn,
+    germinatingQuantityWithdrawn,
+  ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (localRecord.purpose === OUTPLANT) {</span>
@@ -2695,17 +2722,17 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                     &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}&gt;
                       &lt;Textfield
                         label={strings
-                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].notReadyQuantity))
+                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].activeGrowthQuantity))
                           .toString()}
-                        id='notReadyQuantityWithdrawn'
-                        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setNotReadyQuantityWithdrawn(value as number)}</span>
+                        id='activeGrowthQuantityWithdrawn'
+                        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setActiveGrowthQuantityWithdrawn(value as number)}</span>
                         type='number'
-                        value={notReadyQuantityWithdrawn}
+                        value={activeGrowthQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                        errorText={fieldsErrors.notReadyQuantityWithdrawn}
+                        errorText={fieldsErrors.activeGrowthQuantityWithdrawn}
                         required
                         sx={{
-                          '&amp;&gt; #notReadyQuantityWithdrawn': {
+                          '&amp;&gt; #activeGrowthQuantityWithdrawn': {
                             height: '44px',
                           },
                         }}
@@ -2791,7 +2818,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-18T18:26:14.440Z
+                at 2025-08-18T23:52:10.102Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -633,7 +633,15 @@
 <a name='L568'></a><a href='#L568'>568</a>
 <a name='L569'></a><a href='#L569'>569</a>
 <a name='L570'></a><a href='#L570'>570</a>
-<a name='L571'></a><a href='#L571'>571</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L571'></a><a href='#L571'>571</a>
+<a name='L572'></a><a href='#L572'>572</a>
+<a name='L573'></a><a href='#L573'>573</a>
+<a name='L574'></a><a href='#L574'>574</a>
+<a name='L575'></a><a href='#L575'>575</a>
+<a name='L576'></a><a href='#L576'>576</a>
+<a name='L577'></a><a href='#L577'>577</a>
+<a name='L578'></a><a href='#L578'>578</a>
+<a name='L579'></a><a href='#L579'>579</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -678,6 +686,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -942,6 +955,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1244,7 +1260,12 @@ export interface BatchDetailsFormProps {
 type FormRecord = Partial&lt;SavableBatch&gt; | undefined;
 type SavableFormRecord = Partial&lt;SavableBatch&gt;;
 &nbsp;
-const QUANTITY_FIELDS = <span class="cstat-no" title="statement not covered" >['germinatingQuantity', 'notReadyQuantity', 'hardeningOffQuantity', 'readyQuantity'] as const;</span>
+const QUANTITY_FIELDS = <span class="cstat-no" title="statement not covered" >[</span>
+  'germinatingQuantity',
+  'activeGrowthQuantity',
+  'hardeningOffQuantity',
+  'readyQuantity',
+] as const;
 &nbsp;
 type QuantityField = (typeof QUANTITY_FIELDS)[number];
 &nbsp;
@@ -1285,10 +1306,10 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   const [timeZone, setTimeZone] = <span class="cstat-no" title="statement not covered" >useState('');</span>
 &nbsp;
   const [invalidFields, setInvalidFields] = <span class="cstat-no" title="statement not covered" >useState&lt;</span>
-    Record&lt;'germinating' | 'notReady' | 'hardeningOff' | 'ready', string&gt;
+    Record&lt;'germinating' | 'activeGrowth' | 'hardeningOff' | 'ready', string&gt;
   &gt;({
     germinating: '',
-    notReady: '',
+    activeGrowth: '',
     hardeningOff: '',
     ready: '',
   });
@@ -1371,10 +1392,10 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (record) {</span>
-      const notReadyQuantity = <span class="cstat-no" title="statement not covered" >record?.notReadyQuantity ?? 0;</span>
+      const activeGrowthQuantity = <span class="cstat-no" title="statement not covered" >record?.activeGrowthQuantity ?? 0;</span>
       const hardeningOffQuantity = <span class="cstat-no" title="statement not covered" >record?.hardeningOffQuantity ?? 0;</span>
       const readyQuantity = <span class="cstat-no" title="statement not covered" >record?.readyQuantity ?? 0;</span>
-<span class="cstat-no" title="statement not covered" >      setTotalQuantity(+notReadyQuantity + +hardeningOffQuantity + +readyQuantity);</span>
+<span class="cstat-no" title="statement not covered" >      setTotalQuantity(+activeGrowthQuantity + +hardeningOffQuantity + +readyQuantity);</span>
     }
   }, [record]);
 &nbsp;
@@ -1401,7 +1422,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
       addedDate: DEFAULT_DATE,
       germinatingQuantity: 0,
       hardeningOffQuantity: 0,
-      notReadyQuantity: 0,
+      activeGrowthQuantity: 0,
       readyQuantity: 0,
       facilityId,
       speciesId,
@@ -1481,17 +1502,17 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   }, [availableSubLocations, record?.id, setRecord]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const invalid = <span class="cstat-no" title="statement not covered" >{ germinating: '', notReady: '', hardeningOff: '', ready: '' };</span>
+    const invalid = <span class="cstat-no" title="statement not covered" >{ germinating: '', activeGrowth: '', hardeningOff: '', ready: '' };</span>
     const germinatingQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.germinatingQuantity ?? 0);</span>
-    const notReadyQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.notReadyQuantity ?? 0);</span>
+    const activeGrowthQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.activeGrowthQuantity ?? 0);</span>
     const hardeningOffQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.hardeningOffQuantity ?? 0);</span>
     const readyQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.readyQuantity ?? 0);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (germinatingQuantity &lt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      invalid.germinating = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (notReadyQuantity &lt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >      invalid.notReady = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;</span>
+<span class="cstat-no" title="statement not covered" >    if (activeGrowthQuantity &lt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      invalid.activeGrowth = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;</span>
     }
 <span class="cstat-no" title="statement not covered" >    if (hardeningOffQuantity &lt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      invalid.hardeningOff = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;</span>
@@ -1508,15 +1529,18 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 <span class="cstat-no" title="statement not covered" >        if (germinatingQuantity &amp;&amp; germinatingQuantity &gt; remainingSeeds) {</span>
 <span class="cstat-no" title="statement not covered" >          invalid.germinating = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;</span>
         }
-<span class="cstat-no" title="statement not covered" >        if (notReadyQuantity &amp;&amp; germinatingQuantity + notReadyQuantity &gt; remainingSeeds) {</span>
-<span class="cstat-no" title="statement not covered" >          invalid.notReady = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;</span>
+<span class="cstat-no" title="statement not covered" >        if (activeGrowthQuantity &amp;&amp; germinatingQuantity + activeGrowthQuantity &gt; remainingSeeds) {</span>
+<span class="cstat-no" title="statement not covered" >          invalid.activeGrowth = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;</span>
         }
-<span class="cstat-no" title="statement not covered" >        if (hardeningOffQuantity &amp;&amp; germinatingQuantity + notReadyQuantity + hardeningOffQuantity &gt; remainingSeeds) {</span>
+<span class="cstat-no" title="statement not covered" >        if (</span>
+          hardeningOffQuantity &amp;&amp;
+          germinatingQuantity + activeGrowthQuantity + hardeningOffQuantity &gt; remainingSeeds
+        ) {
 <span class="cstat-no" title="statement not covered" >          invalid.hardeningOff = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;</span>
         }
 <span class="cstat-no" title="statement not covered" >        if (</span>
           readyQuantity &amp;&amp;
-          germinatingQuantity + notReadyQuantity + hardeningOffQuantity + readyQuantity &gt; remainingSeeds
+          germinatingQuantity + activeGrowthQuantity + hardeningOffQuantity + readyQuantity &gt; remainingSeeds
         ) {
 <span class="cstat-no" title="statement not covered" >          invalid.ready = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;</span>
         }
@@ -1528,7 +1552,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
     accessionQuantity,
     record?.germinatingQuantity,
     record?.hardeningOffQuantity,
-    record?.notReadyQuantity,
+    record?.activeGrowthQuantity,
     record?.readyQuantity,
     selectedAccession,
     strings,
@@ -1666,17 +1690,17 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 &nbsp;
             &lt;Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}&gt;
               &lt;Textfield
-                id='notReadyQuantity'
-                value={record.notReadyQuantity}
-                onChange={getOnChange('notReadyQuantity')}
+                id='activeGrowthQuantity'
+                value={record.activeGrowthQuantity}
+                onChange={getOnChange('activeGrowthQuantity')}
                 type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                 errorText={
                   validateFields
-                    ? isUndefinedQuantity(record.notReadyQuantity)
+                    ? isUndefinedQuantity(record.activeGrowthQuantity)
                       ? strings.REQUIRED_FIELD
-                      : invalidFields.notReady
+                      : invalidFields.activeGrowth
                     : ''
                 }
                 min={0}
@@ -1780,7 +1804,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-18T18:26:14.440Z
+                at 2025-08-18T23:52:10.102Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
