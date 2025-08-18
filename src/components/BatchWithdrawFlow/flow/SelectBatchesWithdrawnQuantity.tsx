@@ -346,7 +346,6 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           germinatingQuantityWithdrawn: rec.germinatingQuantityWithdrawn,
           activeGrowthQuantityWithdrawn: rec.activeGrowthQuantityWithdrawn,
           hardeningOffQuantityWithdrawn: rec.hardeningOffQuantityWithdrawn,
-          notReadyQuantityWithdrawn: rec.activeGrowthQuantityWithdrawn,
           readyQuantityWithdrawn: rec.readyQuantityWithdrawn,
         };
       });

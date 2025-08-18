@@ -394,30 +394,27 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             (!isOutplant || Number(batch['readyQuantity(raw)']) > 0)
           );
         })
-        .map((batch: SearchResponseElement): BatchWithdrawalPayload => {
-          const batchActiveGrowthQuantityWithdrawn = isSingleOutplant
-            ? 0
-            : isSingleBatch
-              ? activeGrowthQuantityWithdrawn || 0
-              : 0;
-
-          return {
+        .map(
+          (batch: SearchResponseElement): BatchWithdrawalPayload => ({
             batchId: Number(batch.id),
             germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
-            activeGrowthQuantityWithdrawn: batchActiveGrowthQuantityWithdrawn,
+            activeGrowthQuantityWithdrawn: isSingleOutplant
+              ? 0
+              : isSingleBatch
+                ? activeGrowthQuantityWithdrawn || 0
+                : 0,
             hardeningOffQuantityWithdrawn: isSingleOutplant
               ? 0
               : isSingleBatch
                 ? hardeningOffQuantityWithdrawn || 0
                 : 0,
-            notReadyQuantityWithdrawn: activeGrowthQuantityWithdrawn,
             readyQuantityWithdrawn: isSingleOutplant
               ? withdrawnQuantity || 0
               : isSingleBatch
                 ? readyQuantityWithdrawn || 0
                 : 0,
-          };
-        }),
+          })
+        ),
     });
   };
 

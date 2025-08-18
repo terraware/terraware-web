@@ -4579,7 +4579,7 @@ export interface components {
             /** Format: int32 */
             hardeningOffQuantity: number;
             /** Format: int32 */
-            notReadyQuantityWithdrawn: number;
+            notReadyQuantityWithdrawn?: number;
             /** @enum {string} */
             purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
             /** Format: int32 */
@@ -4768,7 +4768,7 @@ export interface components {
              */
             hardeningOffQuantityWithdrawn: number;
             /** Format: int32 */
-            notReadyQuantityWithdrawn: number;
+            notReadyQuantityWithdrawn?: number;
             /** Format: int32 */
             readyQuantityWithdrawn: number;
         };
