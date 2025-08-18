@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
+import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
@@ -241,6 +242,11 @@ type ChartDataProps = {
 const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
 
+  const tooltipRenderer = useCallback((tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
+    const v = tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();
+    return `${v}%`;
+  }, []);
+
   const chartData = useMemo(() => {
     if (!labels?.length || !values?.length) {
       return undefined;
@@ -281,11 +287,7 @@ const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element
           minHeight='100px'
           yLimits={{ min: 0, max: 100 }}
           yStepSize={20}
-          customTooltipLabel={(tooltipItem) => {
-            const v = tooltipItem.dataset.data[tooltipItem.dataIndex];
-            // eslint-disable-next-line @typescript-eslint/no-base-to-string
-            return `${v}%`;
-          }}
+          customTooltipLabel={tooltipRenderer}
         />
       </Box>
 
