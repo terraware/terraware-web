@@ -1,0 +1,47 @@
+.drawer-table {
+  border: none;
+  border-collapse: collapse;
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+
+  th,
+  td {
+    border: none;
+    padding: 4px;
+  }
+
+  th {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    text-align: left;
+  }
+
+  td {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  thead {
+    tr {
+      background-color: #f1f0ec;
+    }
+  }
+
+  tbody {
+    tr {
+      &:nth-child(odd) {
+        background-color: white;
+      }
+
+      &:nth-child(even) {
+        background-color: #f1f0ec;
+      }
+
+      td:nth-child(2) {
+        text-align: right;
+      }
+    }
+  }
+}
