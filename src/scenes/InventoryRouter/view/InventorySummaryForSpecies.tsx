@@ -77,15 +77,21 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
     return [
       {
-        label: strings.GERMINATING_QUANTITY,
+        label: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
+          : strings.GERMINATING_QUANTITY,
         value: germinatingQuantity.toString(),
-        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+          : strings.TOOLTIP_GERMINATING_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
-        label: strings.NOT_READY_QUANTITY,
+        label: isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY,
         value: activeGrowthQuantity.toString(),
-        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
+          : strings.TOOLTIP_NOT_READY_QUANTITY,
         gridColumns: topRowColumns,
       },
       ...(isUpdatedNurseryGrowthPhasesEnabled
@@ -96,14 +102,21 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
               tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
               gridColumns: topRowColumns,
             },
+            {
+              label: strings.READY_TO_PLANT_QUANTITY,
+              value: readyQuantity.toString(),
+              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+              gridColumns: topRowColumns,
+            },
           ]
-        : []),
-      {
-        label: strings.READY_QUANTITY,
-        value: readyQuantity.toString(),
-        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-        gridColumns: topRowColumns,
-      },
+        : [
+            {
+              label: strings.READY_QUANTITY,
+              value: readyQuantity.toString(),
+              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+              gridColumns: topRowColumns,
+            },
+          ]),
       {
         label: strings.TOTAL_QUANTITY,
         value: totalQuantity.toString(),

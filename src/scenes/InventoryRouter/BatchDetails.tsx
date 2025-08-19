@@ -125,7 +125,9 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
-            title={strings.GERMINATING_QUANTITY}
+            title={
+              isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT : strings.GERMINATING_QUANTITY
+            }
             contents={batch.germinatingQuantity}
             grid={true}
             handleEdit={handleEditGerminatingQuantity}
@@ -134,7 +136,11 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={false}
-            title={strings.GERMINATION_STARTED_DATE}
+            title={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                : strings.GERMINATION_STARTED_DATE
+            }
             contents={batch.germinationStartedDate}
             grid={true}
           />
@@ -142,7 +148,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
-            title={strings.NOT_READY_QUANTITY}
+            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY}
             contents={batch.activeGrowthQuantity}
             grid={true}
             handleEdit={handleEditActiveGrowthQuantity}
@@ -173,7 +179,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={false}
-            title={strings.READY_QUANTITY}
+            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY}
             contents={batch.readyQuantity}
             grid={true}
           />

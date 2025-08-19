@@ -78,26 +78,38 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         name: strings.PROJECT,
         type: 'string',
       },
-      {
-        key: 'germinatingQuantityWithdrawn',
-        name: strings.GERMINATING_QUANTITY,
-        type: 'number',
-      },
-      {
-        key: 'activeGrowthQuantityWithdrawn',
-        name: strings.NOT_READY_QUANTITY,
-        type: 'number',
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantityWithdrawn',
+              name: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
+              type: 'number' as const,
+            },
+            {
+              key: 'activeGrowthQuantityWithdrawn',
+              name: strings.ACTIVE_GROWTH_QUANTITY,
+              type: 'number' as const,
+            },
             {
               key: 'hardeningOffQuantityWithdrawn',
               name: strings.HARDENING_OFF_QUANTITY,
               type: 'number' as const,
             },
+            { key: 'readyQuantityWithdrawn', name: strings.READY_TO_PLANT_QUANTITY, type: 'number' as const },
           ]
-        : []),
-      { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
+        : [
+            {
+              key: 'germinatingQuantityWithdrawn',
+              name: strings.GERMINATING_QUANTITY,
+              type: 'number' as const,
+            },
+            {
+              key: 'activeGrowthQuantityWithdrawn',
+              name: strings.NOT_READY_QUANTITY,
+              type: 'number' as const,
+            },
+            { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' as const },
+          ]),
       { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
       {
         key: 'totalWithdraw',
@@ -127,13 +139,13 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       },
       {
         key: 'readyQuantity',
-        name: strings.READY_QUANTITY,
+        name: isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY,
         type: 'string',
         alignment: 'right',
       },
       { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string', alignment: 'right' },
     ],
-    [strings]
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
   );
 
   const columns = useMemo(

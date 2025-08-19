@@ -59,34 +59,53 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         tooltipTitle: strings.TOOLTIP_COMMON_NAME,
       },
       { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-      {
-        key: 'germinatingQuantity',
-        name: strings.GERMINATING,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-      },
-      {
-        key: 'activeGrowthQuantity',
-        name: strings.NOT_READY,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATION_ESTABLISHMENT,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
+            },
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.ACTIVE_GROWTH,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
+            },
             {
               key: 'hardeningOffQuantity',
               name: strings.HARDENING_OFF,
               type: 'number' as const,
               tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
             },
+            {
+              key: 'readyQuantity',
+              name: strings.READY_TO_PLANT,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+            },
           ]
-        : []),
-      {
-        key: 'readyQuantity',
-        name: strings.READY,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-      },
+        : [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATING,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+            },
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.NOT_READY,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+            },
+            {
+              key: 'readyQuantity',
+              name: strings.READY,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+            },
+          ]),
       {
         key: 'totalQuantity',
         name: strings.TOTAL,

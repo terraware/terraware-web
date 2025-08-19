@@ -63,15 +63,21 @@ export default function InventorySummaryForNursery({
 
     return [
       {
-        label: strings.GERMINATING_QUANTITY,
+        label: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
+          : strings.GERMINATING_QUANTITY,
         value: germinatingQuantity || 0,
-        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+          : strings.TOOLTIP_GERMINATING_QUANTITY,
         gridColumns,
       },
       {
-        label: strings.NOT_READY_QUANTITY,
+        label: isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY,
         value: activeGrowthQuantity,
-        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
+          : strings.TOOLTIP_NOT_READY_QUANTITY,
         gridColumns,
       },
       ...(isUpdatedNurseryGrowthPhasesEnabled
@@ -82,14 +88,21 @@ export default function InventorySummaryForNursery({
               tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
               gridColumns,
             },
+            {
+              label: strings.READY_TO_PLANT_QUANTITY,
+              value: readyQuantity,
+              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+              gridColumns,
+            },
           ]
-        : []),
-      {
-        label: strings.READY_QUANTITY,
-        value: readyQuantity,
-        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-        gridColumns,
-      },
+        : [
+            {
+              label: strings.READY_QUANTITY,
+              value: readyQuantity,
+              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+              gridColumns,
+            },
+          ]),
       {
         label: strings.TOTAL_QUANTITY,
         value: totalQuantity,
@@ -97,7 +110,7 @@ export default function InventorySummaryForNursery({
         gridColumns,
       },
       {
-        label: strings.GERMINATION_RATE,
+        label: isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT_RATE : strings.GERMINATION_RATE,
         value: `${germinationRate || 0}%`,
         tooltipTitle: '',
         gridColumns,

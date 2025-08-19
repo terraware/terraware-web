@@ -56,7 +56,9 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
             disabled={Number(batch.germinatingQuantity) === 0}
           >
             <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-              {strings.CHANGE_GERMINATING_STATUS}
+              {isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.CHANGE_GERMINATION_ESTABLISHMENT_STATUS
+                : strings.CHANGE_GERMINATING_STATUS}
             </Typography>
           </MenuItem>
 
@@ -67,7 +69,9 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
             disabled={Number(batch.activeGrowthQuantity) === 0}
           >
             <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-              {strings.CHANGE_NOT_READY_STATUS}
+              {isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.CHANGE_ACTIVE_GROWTH_STATUS
+                : strings.CHANGE_NOT_READY_STATUS}
             </Typography>
           </MenuItem>
 
