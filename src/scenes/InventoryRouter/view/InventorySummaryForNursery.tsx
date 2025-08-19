@@ -88,14 +88,21 @@ export default function InventorySummaryForNursery({
               tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
               gridColumns,
             },
+            {
+              label: strings.READY_TO_PLANT_QUANTITY,
+              value: readyQuantity,
+              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+              gridColumns,
+            },
           ]
-        : []),
-      {
-        label: strings.READY_QUANTITY,
-        value: readyQuantity,
-        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-        gridColumns,
-      },
+        : [
+            {
+              label: strings.READY_QUANTITY,
+              value: readyQuantity,
+              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+              gridColumns,
+            },
+          ]),
       {
         label: strings.TOTAL_QUANTITY,
         value: totalQuantity,

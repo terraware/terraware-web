@@ -554,8 +554,16 @@ export default function BatchDetailsForm({
                 value={record.readyQuantity}
                 onChange={getOnChange('readyQuantity')}
                 type='number'
-                label={strings.READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+                label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.READY_TO_PLANT_QUANTITY_REQUIRED
+                    : strings.READY_QUANTITY_REQUIRED
+                }
+                tooltipTitle={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.TOOLTIP_READY_TO_PLANT_QUANTITY
+                    : strings.TOOLTIP_READY_QUANTITY
+                }
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.readyQuantity)

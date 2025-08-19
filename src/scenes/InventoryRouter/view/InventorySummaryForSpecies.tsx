@@ -102,14 +102,21 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
               tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
               gridColumns: topRowColumns,
             },
+            {
+              label: strings.READY_TO_PLANT_QUANTITY,
+              value: readyQuantity.toString(),
+              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+              gridColumns: topRowColumns,
+            },
           ]
-        : []),
-      {
-        label: strings.READY_QUANTITY,
-        value: readyQuantity.toString(),
-        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-        gridColumns: topRowColumns,
-      },
+        : [
+            {
+              label: strings.READY_QUANTITY,
+              value: readyQuantity.toString(),
+              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+              gridColumns: topRowColumns,
+            },
+          ]),
       {
         label: strings.TOTAL_QUANTITY,
         value: totalQuantity.toString(),

@@ -76,6 +76,11 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
               name: strings.HARDENING_OFF,
               type: 'number' as const,
             },
+            {
+              key: 'readyQuantity',
+              name: strings.READY_TO_PLANT,
+              type: 'string' as const,
+            },
           ]
         : [
             {
@@ -88,12 +93,12 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
               name: strings.NOT_READY,
               type: 'string' as const,
             },
+            {
+              key: 'readyQuantity',
+              name: strings.READY,
+              type: 'string' as const,
+            },
           ]),
-      {
-        key: 'readyQuantity',
-        name: strings.READY,
-        type: 'string',
-      },
       {
         key: 'totalQuantity',
         name: strings.TOTAL,

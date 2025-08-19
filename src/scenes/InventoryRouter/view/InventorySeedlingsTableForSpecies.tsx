@@ -48,6 +48,12 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
               type: 'number' as const,
               tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
             },
+            {
+              key: 'readyQuantity',
+              name: strings.READY_TO_PLANT,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+            },
           ]
         : [
             {
@@ -62,13 +68,13 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
               type: 'number' as const,
               tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
             },
+            {
+              key: 'readyQuantity',
+              name: strings.READY,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+            },
           ]),
-      {
-        key: 'readyQuantity',
-        name: strings.READY,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-      },
       {
         key: 'totalQuantity',
         name: strings.TOTAL,

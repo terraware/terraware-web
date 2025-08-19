@@ -210,7 +210,9 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                     changedFields.push(strings.HARDENING_OFF_QUANTITY);
                   }
                   if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
-                    changedFields.push(strings.READY_QUANTITY);
+                    changedFields.push(
+                      isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY
+                    );
                   }
                 }
                 return {

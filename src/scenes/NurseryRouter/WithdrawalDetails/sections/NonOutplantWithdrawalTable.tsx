@@ -50,12 +50,13 @@ export default function NonOutplantWithdrawalTable({
               name: strings.HARDENING_OFF,
               type: 'number' as const,
             },
+            { key: 'ready', name: strings.READY_TO_PLANT, type: 'number' as const },
           ]
         : [
             { key: 'germinating', name: strings.GERMINATING, type: 'number' as const },
             { key: 'activeGrowth', name: strings.NOT_READY, type: 'number' as const },
+            { key: 'ready', name: strings.READY, type: 'number' as const },
           ]),
-      { key: 'ready', name: strings.READY, type: 'number' },
       { key: 'total', name: strings.TOTAL, type: 'number' },
     ],
     [isUpdatedNurseryGrowthPhasesEnabled, strings]

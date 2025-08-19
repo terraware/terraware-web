@@ -102,7 +102,9 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
           selectedEvent.modifiedFields.includes(
             isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY
           ) ||
-          selectedEvent.modifiedFields.includes(strings.READY_QUANTITY)) && (
+          selectedEvent.modifiedFields.includes(
+            isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY
+          )) && (
           <Grid item xs={12} sx={marginTop}>
             <Divider />
           </Grid>
@@ -212,7 +214,9 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             </>
           )}
 
-        {selectedEvent.modifiedFields.includes(strings.READY_QUANTITY) && (
+        {selectedEvent.modifiedFields.includes(
+          isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY
+        ) && (
           <>
             {(!previousEvent ||
               previousEvent?.type === 'QuantityEdited' ||
@@ -222,7 +226,11 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='readyQuantityBefore'
                   value={previousEvent?.readyQuantity || 0}
                   type='text'
-                  label={strings.READY_QUANTITY_BEFORE}
+                  label={
+                    isUpdatedNurseryGrowthPhasesEnabled
+                      ? strings.READY_TO_PLANT_QUANTITY_BEFORE
+                      : strings.READY_QUANTITY_BEFORE
+                  }
                   display={true}
                 />
               </Grid>
@@ -233,7 +241,11 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='readyQuantityAfter'
                   value={selectedEvent.readyQuantity}
                   type='text'
-                  label={strings.READY_QUANTITY_AFTER}
+                  label={
+                    isUpdatedNurseryGrowthPhasesEnabled
+                      ? strings.READY_TO_PLANT_QUANTITY_AFTER
+                      : strings.READY_QUANTITY_AFTER
+                  }
                   display={true}
                 />
               </Grid>

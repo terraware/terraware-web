@@ -95,6 +95,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
               name: strings.HARDENING_OFF_QUANTITY,
               type: 'number' as const,
             },
+            { key: 'readyQuantityWithdrawn', name: strings.READY_TO_PLANT_QUANTITY, type: 'number' as const },
           ]
         : [
             {
@@ -107,8 +108,8 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
               name: strings.NOT_READY_QUANTITY,
               type: 'number' as const,
             },
+            { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' as const },
           ]),
-      { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
       { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
       {
         key: 'totalWithdraw',
@@ -138,13 +139,13 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       },
       {
         key: 'readyQuantity',
-        name: strings.READY_QUANTITY,
+        name: isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY,
         type: 'string',
         alignment: 'right',
       },
       { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string', alignment: 'right' },
     ],
-    [strings]
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
   );
 
   const columns = useMemo(

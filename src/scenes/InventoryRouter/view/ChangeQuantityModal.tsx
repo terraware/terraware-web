@@ -202,7 +202,7 @@ export default function ChangeQuantityModal({
     } else if (type === 'not-ready' && isUpdatedNurseryGrowthPhasesEnabled) {
       return strings.HARDENING_OFF;
     } else {
-      return strings.READY;
+      return isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT : strings.READY;
     }
   }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 

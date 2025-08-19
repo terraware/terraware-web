@@ -538,7 +538,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return (
       <>
         {strings.PLANTING}
-        {noReadySeedlings && <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_SEEDLINGS} />}
+        {noReadySeedlings && (
+          <IconTooltip
+            placement='top'
+            title={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS
+                : strings.PLANTINGS_REQUIRE_READY_SEEDLINGS
+            }
+          />
+        )}
         {!noReadySeedlings && outplantDisabled && (
           <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
         )}
@@ -759,7 +768,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   </Grid>
                   <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
                     <Textfield
-                      label={strings.TOTAL_READY_QUANTITY}
+                      label={
+                        isUpdatedNurseryGrowthPhasesEnabled
+                          ? strings.TOTAL_READY_TO_PLANT_QUANTITY
+                          : strings.TOTAL_READY_QUANTITY
+                      }
                       id='totalReadyQuantity'
                       type='number'
                       value={numberFormatter.format(totalReadyQuantity)}
@@ -875,13 +888,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
                       <Textfield
                         label={strings
-                          .formatString(strings.READY_QUANTITY_REMAINING, String(batches[0].readyQuantity))
+                          .formatString(
+                            isUpdatedNurseryGrowthPhasesEnabled
+                              ? strings.READY_TO_PLANT_QUANTITY_REMAINING
+                              : strings.READY_QUANTITY_REMAINING,
+                            String(batches[0].readyQuantity)
+                          )
                           .toString()}
                         id='readyQuantityWithdrawn'
                         onChange={(value: unknown) => setReadyQuantityWithdrawn(value as number)}
                         type='number'
                         value={readyQuantityWithdrawn}
-                        tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+                        tooltipTitle={
+                          isUpdatedNurseryGrowthPhasesEnabled
+                            ? strings.TOOLTIP_READY_TO_PLANT_QUANTITY
+                            : strings.TOOLTIP_READY_QUANTITY
+                        }
                         errorText={fieldsErrors.readyQuantityWithdrawn}
                         required
                         sx={{
