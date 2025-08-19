@@ -33,7 +33,7 @@ export default function ChangeQuantityModal({
   const { user } = useUser();
   const numberFormatter = useNumberFormatter(user?.locale);
 
-  const [nextPhase, setNextPhase] = useState<string | undefined>();
+  const [nextPhase, setNextPhase] = useState<ChangeBatchStatusesRequestPayload['newPhase']>();
   const [saving, setSaving] = useState<boolean>(false);
   const [movedValue, setMovedValue] = useState<number | undefined>();
   const [errorText, setErrorText] = useState<string>('');
@@ -82,21 +82,17 @@ export default function ChangeQuantityModal({
     setSaving(true);
 
     let previousPhase: ChangeBatchStatusesRequestPayload['previousPhase'];
-    let newPhase: ChangeBatchStatusesRequestPayload['newPhase'];
 
     if (type === 'germinating') {
       previousPhase = 'Germinating';
-      newPhase = 'ActiveGrowth';
     } else if (type === 'active-growth') {
       previousPhase = 'ActiveGrowth';
-      newPhase = 'HardeningOff';
     } else if (type === 'hardening-off') {
       previousPhase = 'HardeningOff';
-      newPhase = 'Ready';
     }
 
     const response = await NurseryBatchService.changeBatchStatuses(record, {
-      newPhase,
+      newPhase: nextPhase,
       previousPhase,
       quantity: movedValue,
     });
@@ -111,7 +107,7 @@ export default function ChangeQuantityModal({
     } else {
       snackbar.toastError();
     }
-  }, [movedValue, onCloseHandler, record, reload, row, snackbar, type]);
+  }, [movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
 
   const onSave = useCallback(() => {
     void onSubmit();
@@ -130,13 +126,21 @@ export default function ChangeQuantityModal({
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
             readyQuantity: +row['readyQuantity(raw)'],
           });
-        } else if (type === 'active-growth') {
+        } else if (type === 'active-growth' && nextPhase === 'HardeningOff') {
           setRecord({
             ...row,
             germinatingQuantity: +row['germinatingQuantity(raw)'],
             activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
             hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
             readyQuantity: +row['readyQuantity(raw)'],
+          });
+        } else if (type === 'active-growth' && nextPhase === 'Ready') {
+          setRecord({
+            ...row,
+            germinatingQuantity: +row['germinatingQuantity(raw)'],
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
+            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
+            readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
           });
         } else {
           setRecord({
@@ -228,13 +232,13 @@ export default function ChangeQuantityModal({
 
   const onChangeGrowthPhase = useCallback(
     (value: string) => {
-      setNextPhase(value);
+      setNextPhase(value as ChangeBatchStatusesRequestPayload['newPhase']);
     },
     [setNextPhase]
   );
 
   useEffect(() => {
-    setNextPhase(growthPhaseDropdownOptions[0].value);
+    setNextPhase(growthPhaseDropdownOptions[0].value as ChangeBatchStatusesRequestPayload['newPhase']);
   }, [growthPhaseDropdownOptions, setNextPhase]);
 
   return (
