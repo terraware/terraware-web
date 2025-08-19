@@ -17,6 +17,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import OverviewItemCard from '../../components/common/OverviewItemCard';
 import PhotosList from '../../components/common/PhotosList';
 import BatchDetailsModal from './BatchDetailsModal';
+import ChangeQuantityModalPrev from './view/ChangeQuantityModalPrev';
 
 interface BatchDetailsProps {
   batch: Batch;
@@ -104,14 +105,22 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           onClick={openEditModal}
         />
       </Box>
-      {modalValues.openChangeQuantityModal && (
-        <ChangeQuantityModal
-          reload={onUpdate}
-          onClose={onCloseChangeQuantityModal}
-          modalValues={modalValues}
-          row={batchWithRawQtys}
-        />
-      )}
+      {modalValues.openChangeQuantityModal &&
+        (isUpdatedNurseryGrowthPhasesEnabled ? (
+          <ChangeQuantityModal
+            modalValues={modalValues}
+            onClose={onCloseChangeQuantityModal}
+            reload={onUpdate}
+            row={batchWithRawQtys}
+          />
+        ) : (
+          <ChangeQuantityModalPrev
+            modalValues={modalValues}
+            onClose={onCloseChangeQuantityModal}
+            reload={onUpdate}
+            row={batchWithRawQtys}
+          />
+        ))}
       <Grid container>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
