@@ -6,7 +6,7 @@ import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 
-import './styles.scss';
+import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 
 type MapStatsProperties = {
   areaHa: number | undefined;
@@ -89,73 +89,75 @@ const MapStatsDrawer = (featureId: MapLayerFeatureId): JSX.Element | undefined =
     }
   }, [featureId, latestResult, plantingSite, plantingSiteReportedPlants, strings]);
 
+  const rows = useMemo((): MapDrawerTableRow[] => {
+    const results: MapDrawerTableRow[] = [];
+
+    if (properties) {
+      results.push(
+        {
+          key: strings.TYPE,
+          value: properties.type,
+        },
+        {
+          key: strings.AREA_HA,
+          value: properties.areaHa ? `${properties.areaHa}` : strings.UNKNOWN,
+        }
+      );
+
+      if (properties.zoneName) {
+        results.push({
+          key: strings.ZONE,
+          value: properties.zoneName,
+        });
+      }
+
+      if (properties.observed) {
+        results.push(
+          {
+            key: strings.MORTALITY_RATE,
+            value: properties.mortalityRate ? `${properties.mortalityRate}%` : strings.NO_DATA_YET,
+          },
+          {
+            key: strings.PLANTING_DENSITY,
+            value: properties.plantingDensity
+              ? `${properties.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+              : strings.NO_DATA_YET,
+          }
+        );
+      }
+
+      results.push({
+        key: strings.PLANTED_PLANTS,
+        value: properties.plantedPlants ? `${properties.plantedPlants}` : strings.NO_DATA_YET,
+      });
+
+      if (properties.observed) {
+        results.push({
+          key: strings.OBSERVED_PLANTS,
+          value: properties.observedPlants ? `${properties.observedPlants}` : strings.NO_DATA_YET,
+        });
+      }
+
+      results.push({
+        key: strings.PLANTED_SPECIES,
+        value: properties.plantedSpecies ? `${properties.plantedSpecies}` : strings.NO_DATA_YET,
+      });
+
+      if (properties.observed) {
+        results.push({
+          key: strings.OBSERVED_SPECIES,
+          value: properties.observedSpecies ? `${properties.observedSpecies}` : strings.NO_DATA_YET,
+        });
+      }
+    }
+
+    return results;
+  }, [properties, strings]);
+
   return (
     properties && (
       <Box display={'flex'} width={'100%'}>
-        <table className='drawer-table'>
-          <thead>
-            <tr>
-              <th colSpan={2}>{properties.name}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{strings.TYPE}</td>
-              <td>{properties.type}</td>
-            </tr>
-            <tr>
-              <td>{strings.AREA_HA}</td>
-              <td>{properties.areaHa ?? strings.UNKNOWN}</td>
-            </tr>
-            {properties.zoneName && (
-              <tr>
-                <td>{strings.ZONE}</td>
-                <td>{properties.zoneName}</td>
-              </tr>
-            )}
-            {properties.observed && (
-              <tr>
-                <td>{strings.MORTALITY_RATE}</td>
-                <td>{properties.mortalityRate ? `${properties.mortalityRate}%` : strings.NO_DATA_YET}</td>
-              </tr>
-            )}
-            {properties.observed && (
-              <tr>
-                <td>{strings.PLANTING_DENSITY}</td>
-                <td>
-                  {properties.plantingDensity
-                    ? `${properties.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
-                    : strings.NO_DATA_YET}
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>{strings.PLANTED_PLANTS}</td>
-              <td>{properties.plantedPlants ?? strings.NO_DATA_YET}</td>
-            </tr>
-            {properties.observed && (
-              <tr>
-                <td>{strings.OBSERVED_PLANTS}</td>
-                <td>{properties.observedPlants ?? strings.NO_DATA_YET}</td>
-              </tr>
-            )}
-            <tr>
-              <td>{strings.PLANTED_SPECIES}</td>
-              <td>{properties.plantedSpecies ?? strings.NO_DATA_YET}</td>
-            </tr>
-            {properties.observed && (
-              <tr>
-                <td>{strings.OBSERVED_SPECIES}</td>
-                <td>{properties.observedSpecies ?? strings.NO_DATA_YET}</td>
-              </tr>
-            )}
-            {!properties.observed && (
-              <tr>
-                <td>{strings.NOT_OBSERVED}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <MapDrawerTable header={properties.name} rows={rows} />
       </Box>
     )
   );
