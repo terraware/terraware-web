@@ -220,7 +220,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
 
       void fetchResults();
     }
-  }, [users, batchId, findPreviousEvent, nurseryName, filters, search]);
+  }, [users, batchId, findPreviousEvent, nurseryName, filters, search, isUpdatedNurseryGrowthPhasesEnabled]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {
