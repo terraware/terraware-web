@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
@@ -484,7 +484,19 @@
 <a name='L419'></a><a href='#L419'>419</a>
 <a name='L420'></a><a href='#L420'>420</a>
 <a name='L421'></a><a href='#L421'>421</a>
-<a name='L422'></a><a href='#L422'>422</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -549,6 +561,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -985,26 +1009,38 @@ export default function <span class="fstat-no" title="function not covered" >Sel
         name: strings.PROJECT,
         type: 'string',
       },
-      {
-        key: 'germinatingQuantityWithdrawn',
-        name: strings.GERMINATING_QUANTITY,
-        type: 'number',
-      },
-      {
-        key: 'activeGrowthQuantityWithdrawn',
-        name: strings.NOT_READY_QUANTITY,
-        type: 'number',
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantityWithdrawn',
+              name: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
+              type: 'number' as const,
+            },
+            {
+              key: 'activeGrowthQuantityWithdrawn',
+              name: strings.ACTIVE_GROWTH_QUANTITY,
+              type: 'number' as const,
+            },
             {
               key: 'hardeningOffQuantityWithdrawn',
               name: strings.HARDENING_OFF_QUANTITY,
               type: 'number' as const,
             },
+            { key: 'readyQuantityWithdrawn', name: strings.READY_TO_PLANT_QUANTITY, type: 'number' as const },
           ]
-        : []),
-      { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
+        : [
+            {
+              key: 'germinatingQuantityWithdrawn',
+              name: strings.GERMINATING_QUANTITY,
+              type: 'number' as const,
+            },
+            {
+              key: 'activeGrowthQuantityWithdrawn',
+              name: strings.NOT_READY_QUANTITY,
+              type: 'number' as const,
+            },
+            { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' as const },
+          ]),
       { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
       {
         key: 'totalWithdraw',
@@ -1034,13 +1070,13 @@ export default function <span class="fstat-no" title="function not covered" >Sel
       },
       {
         key: 'readyQuantity',
-        name: strings.READY_QUANTITY,
+        name: isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY,
         type: 'string',
         alignment: 'right',
       },
       { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string', alignment: 'right' },
     ],
-    [strings]
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
   );
 &nbsp;
   const columns = <span class="cstat-no" title="statement not covered" >useMemo(</span>
@@ -1333,7 +1369,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T16:37:37.370Z
+                at 2025-08-19T19:24:31.377Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

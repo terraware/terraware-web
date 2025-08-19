@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -319,7 +319,19 @@
 <a name='L254'></a><a href='#L254'>254</a>
 <a name='L255'></a><a href='#L255'>255</a>
 <a name='L256'></a><a href='#L256'>256</a>
-<a name='L257'></a><a href='#L257'>257</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -372,10 +384,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -392,9 +408,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -626,15 +650,19 @@ export default function <span class="fstat-no" title="function not covered" >Cha
   const title = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    switch (type) {</span>
       case 'germinating':
-<span class="cstat-no" title="statement not covered" >        return strings.CHANGE_GERMINATING_STATUS;</span>
+<span class="cstat-no" title="statement not covered" >        return isUpdatedNurseryGrowthPhasesEnabled</span>
+          ? strings.CHANGE_GERMINATION_ESTABLISHMENT_STATUS
+          : strings.CHANGE_GERMINATING_STATUS;
       case 'hardening-off':
 <span class="cstat-no" title="statement not covered" >        return strings.CHANGE_HARDENING_OFF_STATUS;</span>
       case 'not-ready':
-<span class="cstat-no" title="statement not covered" >        return strings.CHANGE_NOT_READY_STATUS;</span>
+<span class="cstat-no" title="statement not covered" >        return isUpdatedNurseryGrowthPhasesEnabled</span>
+          ? strings.CHANGE_ACTIVE_GROWTH_STATUS
+          : strings.CHANGE_NOT_READY_STATUS;
       default:
 <span class="cstat-no" title="statement not covered" >        return '';</span>
     }
-  }, [type]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 &nbsp;
   const onCloseHandler = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setMovedValue(undefined);</span>
@@ -647,10 +675,18 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 <span class="cstat-no" title="statement not covered" >      setErrorText(strings.REQUIRED_FIELD);</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'germinating' &amp;&amp; movedValue &gt; +row['germinatingQuantity(raw)']) {</span>
-<span class="cstat-no" title="statement not covered" >      setErrorText(strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);</span>
+<span class="cstat-no" title="statement not covered" >      setErrorText(</span>
+        isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+          : strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+      );
 <span class="cstat-no" title="statement not covered" >      return;</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready' &amp;&amp; movedValue &gt; +row['activeGrowthQuantity(raw)']) {</span>
-<span class="cstat-no" title="statement not covered" >      setErrorText(strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);</span>
+<span class="cstat-no" title="statement not covered" >      setErrorText(</span>
+        isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+          : strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+      );
 <span class="cstat-no" title="statement not covered" >      return;</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'hardeningOff' &amp;&amp; movedValue &gt; +row['hardeningOffQuantity(raw)']) {</span>
 <span class="cstat-no" title="statement not covered" >      setErrorText(strings.HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);</span>
@@ -743,13 +779,13 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 &nbsp;
   const fromLabel = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (type === 'germinating') {</span>
-<span class="cstat-no" title="statement not covered" >      return strings.GERMINATING;</span>
+<span class="cstat-no" title="statement not covered" >      return isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT : strings.GERMINATING;</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready') {</span>
-<span class="cstat-no" title="statement not covered" >      return strings.NOT_READY;</span>
+<span class="cstat-no" title="statement not covered" >      return isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH : strings.NOT_READY;</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      return strings.HARDENING_OFF;</span>
     }
-  }, [type]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 &nbsp;
   const fromValueFormatted = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (type === 'germinating') {</span>
@@ -763,11 +799,11 @@ export default function <span class="fstat-no" title="function not covered" >Cha
 &nbsp;
   const toLabel = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (type === 'germinating') {</span>
-<span class="cstat-no" title="statement not covered" >      return strings.NOT_READY;</span>
+<span class="cstat-no" title="statement not covered" >      return isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH : strings.NOT_READY;</span>
     } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready' &amp;&amp; isUpdatedNurseryGrowthPhasesEnabled) {</span>
 <span class="cstat-no" title="statement not covered" >      return strings.HARDENING_OFF;</span>
     } else {
-<span class="cstat-no" title="statement not covered" >      return strings.READY;</span>
+<span class="cstat-no" title="statement not covered" >      return isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT : strings.READY;</span>
     }
   }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 &nbsp;
@@ -838,7 +874,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T16:37:37.370Z
+                at 2025-08-19T19:24:31.377Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

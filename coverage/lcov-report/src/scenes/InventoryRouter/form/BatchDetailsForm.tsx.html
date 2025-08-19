@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/140</span>
+                <span class='fraction'>0/156</span>
             </div>
         
             
@@ -641,7 +641,39 @@
 <a name='L576'></a><a href='#L576'>576</a>
 <a name='L577'></a><a href='#L577'>577</a>
 <a name='L578'></a><a href='#L578'>578</a>
-<a name='L579'></a><a href='#L579'>579</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L579'></a><a href='#L579'>579</a>
+<a name='L580'></a><a href='#L580'>580</a>
+<a name='L581'></a><a href='#L581'>581</a>
+<a name='L582'></a><a href='#L582'>582</a>
+<a name='L583'></a><a href='#L583'>583</a>
+<a name='L584'></a><a href='#L584'>584</a>
+<a name='L585'></a><a href='#L585'>585</a>
+<a name='L586'></a><a href='#L586'>586</a>
+<a name='L587'></a><a href='#L587'>587</a>
+<a name='L588'></a><a href='#L588'>588</a>
+<a name='L589'></a><a href='#L589'>589</a>
+<a name='L590'></a><a href='#L590'>590</a>
+<a name='L591'></a><a href='#L591'>591</a>
+<a name='L592'></a><a href='#L592'>592</a>
+<a name='L593'></a><a href='#L593'>593</a>
+<a name='L594'></a><a href='#L594'>594</a>
+<a name='L595'></a><a href='#L595'>595</a>
+<a name='L596'></a><a href='#L596'>596</a>
+<a name='L597'></a><a href='#L597'>597</a>
+<a name='L598'></a><a href='#L598'>598</a>
+<a name='L599'></a><a href='#L599'>599</a>
+<a name='L600'></a><a href='#L600'>600</a>
+<a name='L601'></a><a href='#L601'>601</a>
+<a name='L602'></a><a href='#L602'>602</a>
+<a name='L603'></a><a href='#L603'>603</a>
+<a name='L604'></a><a href='#L604'>604</a>
+<a name='L605'></a><a href='#L605'>605</a>
+<a name='L606'></a><a href='#L606'>606</a>
+<a name='L607'></a><a href='#L607'>607</a>
+<a name='L608'></a><a href='#L608'>608</a>
+<a name='L609'></a><a href='#L609'>609</a>
+<a name='L610'></a><a href='#L610'>610</a>
+<a name='L611'></a><a href='#L611'>611</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -982,6 +1014,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1663,8 +1727,16 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                 value={record.germinatingQuantity}
                 onChange={getOnChange('germinatingQuantity')}
                 type='number'
-                label={strings.GERMINATING_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_REQUIRED
+                    : strings.GERMINATING_QUANTITY_REQUIRED
+                }
+                tooltipTitle={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+                    : strings.TOOLTIP_GERMINATING_QUANTITY
+                }
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.germinatingQuantity)
@@ -1680,8 +1752,16 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             &lt;Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}&gt;
               &lt;DatePicker
                 id='germinationStartedDate'
-                label={strings.GERMINATION_STARTED_DATE}
-                aria-label={strings.GERMINATION_STARTED_DATE}
+                label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                    : strings.GERMINATION_STARTED_DATE
+                }
+                aria-label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                    : strings.GERMINATION_STARTED_DATE
+                }
                 value={record.germinationStartedDate}
                 onChange={getOnChangeDate('germinationStartedDate')}
                 defaultTimeZone={timeZone}
@@ -1694,8 +1774,16 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                 value={record.activeGrowthQuantity}
                 onChange={getOnChange('activeGrowthQuantity')}
                 type='number'
-                label={strings.NOT_READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+                label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.ACTIVE_GROWTH_QUANTITY_REQUIRED
+                    : strings.NOT_READY_QUANTITY_REQUIRED
+                }
+                tooltipTitle={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
+                    : strings.TOOLTIP_NOT_READY_QUANTITY
+                }
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.activeGrowthQuantity)
@@ -1751,8 +1839,16 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                 value={record.readyQuantity}
                 onChange={getOnChange('readyQuantity')}
                 type='number'
-                label={strings.READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+                label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.READY_TO_PLANT_QUANTITY_REQUIRED
+                    : strings.READY_QUANTITY_REQUIRED
+                }
+                tooltipTitle={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.TOOLTIP_READY_TO_PLANT_QUANTITY
+                    : strings.TOOLTIP_READY_QUANTITY
+                }
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.readyQuantity)
@@ -1804,7 +1900,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T16:37:37.370Z
+                at 2025-08-19T19:24:31.377Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
