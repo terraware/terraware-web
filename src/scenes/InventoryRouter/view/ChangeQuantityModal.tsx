@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
-import { BusySpinner, Icon, Textfield } from '@terraware/web-components';
+import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -35,6 +35,7 @@ export default function ChangeQuantityModal({
   const numberFormatter = useNumberFormatter(user?.locale);
   const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
+  const [nextPhase, setNextPhase] = useState<string | undefined>();
   const [saving, setSaving] = useState<boolean>(false);
   const [movedValue, setMovedValue] = useState<number | undefined>();
   const [errorText, setErrorText] = useState<string>('');
@@ -197,24 +198,66 @@ export default function ChangeQuantityModal({
   }, [numberFormatter, record, type]);
 
   const toLabel = useMemo(() => {
-    if (type === 'germinating') {
-      return isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH : strings.NOT_READY;
-    } else if (type === 'not-ready' && isUpdatedNurseryGrowthPhasesEnabled) {
+    if (nextPhase === 'ActiveGrowth') {
+      return strings.ACTIVE_GROWTH;
+    } else if (nextPhase === 'HardeningOff') {
       return strings.HARDENING_OFF;
     } else {
-      return isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT : strings.READY;
+      return strings.READY_TO_PLANT;
     }
-  }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
+  }, [nextPhase]);
 
   const toValueFormatted = useMemo(() => {
-    if (type === 'germinating') {
+    if (nextPhase === 'ActiveGrowth') {
       return numberFormatter.format(record.activeGrowthQuantity);
-    } else if (type === 'not-ready' && isUpdatedNurseryGrowthPhasesEnabled) {
+    } else if (nextPhase === 'HardeningOff') {
       return numberFormatter.format(record.hardeningOffQuantity);
     } else {
       return numberFormatter.format(record.readyQuantity);
     }
-  }, [isUpdatedNurseryGrowthPhasesEnabled, numberFormatter, record, type]);
+  }, [numberFormatter, record, nextPhase]);
+
+  const growthPhaseDropdownOptions = useMemo(() => {
+    if (type === 'germinating') {
+      return [
+        {
+          label: strings.ACTIVE_GROWTH,
+          value: 'ActiveGrowth',
+        },
+      ];
+    } else if (type === 'active-growth') {
+      return [
+        {
+          label: strings.HARDENING_OFF,
+          value: 'HardeningOff',
+        },
+        {
+          label: strings.READY_TO_PLANT,
+          value: 'Ready',
+        },
+      ];
+    } else if (type === 'hardening-off') {
+      return [
+        {
+          label: strings.READY_TO_PLANT,
+          value: 'Ready',
+        },
+      ];
+    }
+
+    return [];
+  }, [type]);
+
+  const onChangeGrowthPhase = useCallback(
+    (value: string) => {
+      setNextPhase(value);
+    },
+    [setNextPhase]
+  );
+
+  useEffect(() => {
+    setNextPhase(growthPhaseDropdownOptions[0].value);
+  }, [growthPhaseDropdownOptions, setNextPhase]);
 
   return (
     <DialogBox
@@ -244,6 +287,19 @@ export default function ChangeQuantityModal({
     >
       <Grid>
         {saving && <BusySpinner withSkrim />}
+
+        <Grid display='flex' item marginBottom='16px' textAlign='left' xs={11}>
+          <Dropdown
+            errorText={undefined}
+            fullWidth
+            label='Next growth phase'
+            options={growthPhaseDropdownOptions}
+            onChange={onChangeGrowthPhase}
+            required
+            selectedValue={nextPhase}
+          />
+        </Grid>
+
         <Grid item xs={11} textAlign='left' display='flex'>
           <Textfield display id='previousValue' label={fromLabel} type='number' value={fromValueFormatted} />
 
