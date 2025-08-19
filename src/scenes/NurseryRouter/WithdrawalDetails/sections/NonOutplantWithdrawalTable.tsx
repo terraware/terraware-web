@@ -42,16 +42,16 @@ export default function NonOutplantWithdrawalTable({
       { key: 'batchNumber', name: strings.BATCH, type: 'string' },
       { key: 'name', name: strings.SPECIES, type: 'string' },
       { key: 'germinating', name: strings.GERMINATING, type: 'number' },
-      { key: 'activeGrowth', name: strings.NOT_READY, type: 'number' },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            { key: 'activeGrowth', name: strings.ACTIVE_GROWTH, type: 'number' as const },
             {
               key: 'hardeningOffQuantity',
               name: strings.HARDENING_OFF,
               type: 'number' as const,
             },
           ]
-        : []),
+        : [{ key: 'activeGrowth', name: strings.NOT_READY, type: 'number' as const }]),
       { key: 'ready', name: strings.READY, type: 'number' },
       { key: 'total', name: strings.TOTAL, type: 'number' },
     ],

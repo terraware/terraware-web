@@ -67,7 +67,9 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
             disabled={Number(batch.activeGrowthQuantity) === 0}
           >
             <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-              {strings.CHANGE_NOT_READY_STATUS}
+              {isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.CHANGE_ACTIVE_GROWTH_STATUS
+                : strings.CHANGE_NOT_READY_STATUS}
             </Typography>
           </MenuItem>
 

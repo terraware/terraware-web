@@ -35,14 +35,14 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
         type: 'number',
         tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
       },
-      {
-        key: 'activeGrowthQuantity',
-        name: strings.NOT_READY,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.ACTIVE_GROWTH,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
+            },
             {
               key: 'hardeningOffQuantity',
               name: strings.HARDENING_OFF,
@@ -50,7 +50,14 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
               tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
             },
           ]
-        : []),
+        : [
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.NOT_READY,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+            },
+          ]),
       {
         key: 'readyQuantity',
         name: strings.READY,

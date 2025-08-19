@@ -64,20 +64,26 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
         name: strings.GERMINATING,
         type: 'string',
       },
-      {
-        key: 'activeGrowthQuantity',
-        name: strings.NOT_READY,
-        type: 'string',
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.ACTIVE_GROWTH,
+              type: 'string' as const,
+            },
             {
               key: 'hardeningOffQuantity',
               name: strings.HARDENING_OFF,
               type: 'number' as const,
             },
           ]
-        : []),
+        : [
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.NOT_READY,
+              type: 'string' as const,
+            },
+          ]),
       {
         key: 'readyQuantity',
         name: strings.READY,

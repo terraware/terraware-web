@@ -53,11 +53,13 @@ export default function ChangeQuantityModal({
       case 'hardening-off':
         return strings.CHANGE_HARDENING_OFF_STATUS;
       case 'not-ready':
-        return strings.CHANGE_NOT_READY_STATUS;
+        return isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.CHANGE_ACTIVE_GROWTH_STATUS
+          : strings.CHANGE_NOT_READY_STATUS;
       default:
         return '';
     }
-  }, [type]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 
   const onCloseHandler = useCallback(() => {
     setMovedValue(undefined);
@@ -73,7 +75,11 @@ export default function ChangeQuantityModal({
       setErrorText(strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
     } else if (type === 'not-ready' && movedValue > +row['activeGrowthQuantity(raw)']) {
-      setErrorText(strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
+      setErrorText(
+        isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+          : strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+      );
       return;
     } else if (type === 'hardeningOff' && movedValue > +row['hardeningOffQuantity(raw)']) {
       setErrorText(strings.HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
@@ -168,11 +174,11 @@ export default function ChangeQuantityModal({
     if (type === 'germinating') {
       return strings.GERMINATING;
     } else if (type === 'not-ready') {
-      return strings.NOT_READY;
+      return isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH : strings.NOT_READY;
     } else {
       return strings.HARDENING_OFF;
     }
-  }, [type]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 
   const fromValueFormatted = useMemo(() => {
     if (type === 'germinating') {
@@ -186,7 +192,7 @@ export default function ChangeQuantityModal({
 
   const toLabel = useMemo(() => {
     if (type === 'germinating') {
-      return strings.NOT_READY;
+      return isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH : strings.NOT_READY;
     } else if (type === 'not-ready' && isUpdatedNurseryGrowthPhasesEnabled) {
       return strings.HARDENING_OFF;
     } else {

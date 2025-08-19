@@ -8,6 +8,7 @@ import Card from 'src/components/common/Card';
 import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { NurseryBatchService, OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
@@ -52,6 +53,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
   const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const filterColumns = useMemo<FilterField[]>(() => {
     return [
@@ -192,7 +194,9 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                     changedFields.push(strings.GERMINATING_QUANTITY);
                   }
                   if (historyItem.activeGrowthQuantity !== previousEv?.activeGrowthQuantity) {
-                    changedFields.push(strings.NOT_READY_QUANTITY);
+                    changedFields.push(
+                      isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY
+                    );
                   }
                   if (historyItem.hardeningOffQuantity !== previousEv?.hardeningOffQuantity) {
                     changedFields.push(strings.HARDENING_OFF_QUANTITY);

@@ -365,8 +365,16 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             value={record.activeGrowthQuantity}
             onChange={handleActiveGrowthQuantityChange}
             type='number'
-            label={strings.NOT_READY_QUANTITY_REQUIRED}
-            tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+            label={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.ACTIVE_GROWTH_QUANTITY_REQUIRED
+                : strings.NOT_READY_QUANTITY_REQUIRED
+            }
+            tooltipTitle={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
+                : strings.TOOLTIP_NOT_READY_QUANTITY
+            }
             errorText={validateFields && !isNumber(record?.activeGrowthQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />

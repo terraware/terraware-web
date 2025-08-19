@@ -473,8 +473,16 @@ export default function BatchDetailsForm({
                 value={record.activeGrowthQuantity}
                 onChange={getOnChange('activeGrowthQuantity')}
                 type='number'
-                label={strings.NOT_READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+                label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.ACTIVE_GROWTH_QUANTITY_REQUIRED
+                    : strings.NOT_READY_QUANTITY_REQUIRED
+                }
+                tooltipTitle={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
+                    : strings.TOOLTIP_NOT_READY_QUANTITY
+                }
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.activeGrowthQuantity)

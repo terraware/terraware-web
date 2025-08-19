@@ -825,13 +825,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
                         label={strings
-                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].activeGrowthQuantity))
+                          .formatString(
+                            isUpdatedNurseryGrowthPhasesEnabled
+                              ? strings.ACTIVE_GROWTH_QUANTITY_REMAINING
+                              : strings.NOT_READY_QUANTITY_REMAINING,
+                            String(batches[0].activeGrowthQuantity)
+                          )
                           .toString()}
                         id='activeGrowthQuantityWithdrawn'
                         onChange={(value: unknown) => setActiveGrowthQuantityWithdrawn(value as number)}
                         type='number'
                         value={activeGrowthQuantityWithdrawn}
-                        tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+                        tooltipTitle={
+                          isUpdatedNurseryGrowthPhasesEnabled
+                            ? strings.ACTIVE_GROWTH_QUANTITY
+                            : strings.TOOLTIP_NOT_READY_QUANTITY
+                        }
                         errorText={fieldsErrors.activeGrowthQuantityWithdrawn}
                         required
                         sx={{

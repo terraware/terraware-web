@@ -83,20 +83,26 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         name: strings.GERMINATING_QUANTITY,
         type: 'number',
       },
-      {
-        key: 'activeGrowthQuantityWithdrawn',
-        name: strings.NOT_READY_QUANTITY,
-        type: 'number',
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'activeGrowthQuantityWithdrawn',
+              name: strings.ACTIVE_GROWTH_QUANTITY,
+              type: 'number' as const,
+            },
             {
               key: 'hardeningOffQuantityWithdrawn',
               name: strings.HARDENING_OFF_QUANTITY,
               type: 'number' as const,
             },
           ]
-        : []),
+        : [
+            {
+              key: 'activeGrowthQuantityWithdrawn',
+              name: strings.NOT_READY_QUANTITY,
+              type: 'number' as const,
+            },
+          ]),
       { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
       { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
       {

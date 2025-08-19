@@ -142,7 +142,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
-            title={strings.NOT_READY_QUANTITY}
+            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY}
             contents={batch.activeGrowthQuantity}
             grid={true}
             handleEdit={handleEditActiveGrowthQuantity}

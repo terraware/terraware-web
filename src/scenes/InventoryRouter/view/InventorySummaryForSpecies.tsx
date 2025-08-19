@@ -83,9 +83,11 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
         gridColumns: topRowColumns,
       },
       {
-        label: strings.NOT_READY_QUANTITY,
+        label: isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY,
         value: activeGrowthQuantity.toString(),
-        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
+          : strings.TOOLTIP_NOT_READY_QUANTITY,
         gridColumns: topRowColumns,
       },
       ...(isUpdatedNurseryGrowthPhasesEnabled
