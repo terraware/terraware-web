@@ -83,7 +83,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   }, [setModalValues]);
 
   const handleEditActiveGrowthQuantity = useCallback(() => {
-    setModalValues({ openChangeQuantityModal: true, type: 'not-ready' });
+    setModalValues({ openChangeQuantityModal: true, type: 'active-growth' });
   }, [setModalValues]);
 
   const handleEditHardeningOffQuantity = useCallback(() => {
