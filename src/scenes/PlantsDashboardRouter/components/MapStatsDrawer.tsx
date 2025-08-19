@@ -2,11 +2,10 @@ import React, { useMemo } from 'react';
 
 import { Box } from '@mui/material';
 
+import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-
-import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 
 type MapStatsProperties = {
   areaHa: number | undefined;
