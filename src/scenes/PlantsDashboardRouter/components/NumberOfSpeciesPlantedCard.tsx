@@ -6,11 +6,11 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
 import { conservationCategories } from 'src/types/Species';
 
 type CategoryData = {
@@ -239,6 +239,7 @@ type ChartDataProps = {
 
 const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
+  const { strings } = useLocalization();
 
   const tooltipRenderer = useCallback((tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
     const v = tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();
