@@ -177,7 +177,11 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                     changedFields.push(strings.TREATMENT);
                   }
                   if ((historyItem.germinationStartedDate || '') !== (previousEv?.germinationStartedDate || '')) {
-                    changedFields.push(strings.GERMINATION_STARTED_DATE);
+                    changedFields.push(
+                      isUpdatedNurseryGrowthPhasesEnabled
+                        ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                        : strings.GERMINATION_STARTED_DATE
+                    );
                   }
                   if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
                     changedFields.push(strings.ESTIMATED_READY_DATE);
@@ -191,7 +195,11 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                   (previousEv?.type === 'QuantityEdited' || previousEv?.type === 'StatusChanged' || !previousEv)
                 ) {
                   if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
-                    changedFields.push(strings.GERMINATING_QUANTITY);
+                    changedFields.push(
+                      isUpdatedNurseryGrowthPhasesEnabled
+                        ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
+                        : strings.GERMINATING_QUANTITY
+                    );
                   }
                   if (historyItem.activeGrowthQuantity !== previousEv?.activeGrowthQuantity) {
                     changedFields.push(

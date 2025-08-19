@@ -28,14 +28,14 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
     (): TableColumnType[] => [
       { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
       { key: 'project_name', name: strings.PROJECT, type: 'string' },
-      {
-        key: 'germinatingQuantity',
-        name: strings.GERMINATING,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATION_ESTABLISHMENT,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
+            },
             {
               key: 'activeGrowthQuantity',
               name: strings.ACTIVE_GROWTH,
@@ -50,6 +50,12 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
             },
           ]
         : [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATING,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+            },
             {
               key: 'activeGrowthQuantity',
               name: strings.NOT_READY,

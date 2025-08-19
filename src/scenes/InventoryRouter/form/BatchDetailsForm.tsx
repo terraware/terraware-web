@@ -442,8 +442,16 @@ export default function BatchDetailsForm({
                 value={record.germinatingQuantity}
                 onChange={getOnChange('germinatingQuantity')}
                 type='number'
-                label={strings.GERMINATING_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_REQUIRED
+                    : strings.GERMINATING_QUANTITY_REQUIRED
+                }
+                tooltipTitle={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+                    : strings.TOOLTIP_GERMINATING_QUANTITY
+                }
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.germinatingQuantity)
@@ -459,8 +467,16 @@ export default function BatchDetailsForm({
             <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
                 id='germinationStartedDate'
-                label={strings.GERMINATION_STARTED_DATE}
-                aria-label={strings.GERMINATION_STARTED_DATE}
+                label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                    : strings.GERMINATION_STARTED_DATE
+                }
+                aria-label={
+                  isUpdatedNurseryGrowthPhasesEnabled
+                    ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                    : strings.GERMINATION_STARTED_DATE
+                }
                 value={record.germinationStartedDate}
                 onChange={getOnChangeDate('germinationStartedDate')}
                 defaultTimeZone={timeZone}

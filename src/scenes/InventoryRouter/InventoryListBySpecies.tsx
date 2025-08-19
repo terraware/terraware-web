@@ -59,14 +59,14 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         tooltipTitle: strings.TOOLTIP_COMMON_NAME,
       },
       { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-      {
-        key: 'germinatingQuantity',
-        name: strings.GERMINATING,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATION_ESTABLISHMENT,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
+            },
             {
               key: 'activeGrowthQuantity',
               name: strings.ACTIVE_GROWTH,
@@ -81,6 +81,12 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
             },
           ]
         : [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATING,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+            },
             {
               key: 'activeGrowthQuantity',
               name: strings.NOT_READY,

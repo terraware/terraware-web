@@ -77,9 +77,13 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
     return [
       {
-        label: strings.GERMINATING_QUANTITY,
+        label: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
+          : strings.GERMINATING_QUANTITY,
         value: germinatingQuantity.toString(),
-        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+          : strings.TOOLTIP_GERMINATING_QUANTITY,
         gridColumns: topRowColumns,
       },
       {

@@ -63,9 +63,13 @@ export default function InventorySummaryForNursery({
 
     return [
       {
-        label: strings.GERMINATING_QUANTITY,
+        label: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
+          : strings.GERMINATING_QUANTITY,
         value: germinatingQuantity || 0,
-        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+          : strings.TOOLTIP_GERMINATING_QUANTITY,
         gridColumns,
       },
       {
@@ -99,7 +103,7 @@ export default function InventorySummaryForNursery({
         gridColumns,
       },
       {
-        label: strings.GERMINATION_RATE,
+        label: isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT_RATE : strings.GERMINATION_RATE,
         value: `${germinationRate || 0}%`,
         tooltipTitle: '',
         gridColumns,

@@ -41,9 +41,9 @@ export default function NonOutplantWithdrawalTable({
     (): TableColumnType[] => [
       { key: 'batchNumber', name: strings.BATCH, type: 'string' },
       { key: 'name', name: strings.SPECIES, type: 'string' },
-      { key: 'germinating', name: strings.GERMINATING, type: 'number' },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            { key: 'germinating', name: strings.GERMINATION_ESTABLISHMENT, type: 'number' as const },
             { key: 'activeGrowth', name: strings.ACTIVE_GROWTH, type: 'number' as const },
             {
               key: 'hardeningOffQuantity',
@@ -51,7 +51,10 @@ export default function NonOutplantWithdrawalTable({
               type: 'number' as const,
             },
           ]
-        : [{ key: 'activeGrowth', name: strings.NOT_READY, type: 'number' as const }]),
+        : [
+            { key: 'germinating', name: strings.GERMINATING, type: 'number' as const },
+            { key: 'activeGrowth', name: strings.NOT_READY, type: 'number' as const },
+          ]),
       { key: 'ready', name: strings.READY, type: 'number' },
       { key: 'total', name: strings.TOTAL, type: 'number' },
     ],

@@ -59,13 +59,13 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
         name: strings.PROJECT,
         type: 'string',
       },
-      {
-        key: 'germinatingQuantity',
-        name: strings.GERMINATING,
-        type: 'string',
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATION_ESTABLISHMENT,
+              type: 'string' as const,
+            },
             {
               key: 'activeGrowthQuantity',
               name: strings.ACTIVE_GROWTH,
@@ -78,6 +78,11 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
             },
           ]
         : [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATING,
+              type: 'string' as const,
+            },
             {
               key: 'activeGrowthQuantity',
               name: strings.NOT_READY,

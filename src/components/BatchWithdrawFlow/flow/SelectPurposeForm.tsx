@@ -776,13 +776,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
                       <Textfield
                         label={strings
-                          .formatString(strings.GERMINATING_QUANTITY_REMAINING, String(batches[0].germinatingQuantity))
+                          .formatString(
+                            isUpdatedNurseryGrowthPhasesEnabled
+                              ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_REMAINING
+                              : strings.GERMINATING_QUANTITY_REMAINING,
+                            String(batches[0].germinatingQuantity)
+                          )
                           .toString()}
                         id='germinatingQuantityWithdrawn'
                         onChange={(value: unknown) => setGerminatingQuantityWithdrawn(value as number)}
                         type='number'
                         value={germinatingQuantityWithdrawn}
-                        tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                        tooltipTitle={
+                          isUpdatedNurseryGrowthPhasesEnabled
+                            ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+                            : strings.TOOLTIP_GERMINATING_QUANTITY
+                        }
                         errorText={fieldsErrors.germinatingQuantityWithdrawn}
                         required
                         sx={{

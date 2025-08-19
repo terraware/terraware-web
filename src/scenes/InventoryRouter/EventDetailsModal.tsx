@@ -94,7 +94,11 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             display={true}
           />
         </Grid>
-        {(selectedEvent.modifiedFields.includes(strings.GERMINATING_QUANTITY) ||
+        {(selectedEvent.modifiedFields.includes(
+          isUpdatedNurseryGrowthPhasesEnabled
+            ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
+            : strings.GERMINATING_QUANTITY
+        ) ||
           selectedEvent.modifiedFields.includes(
             isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY
           ) ||
@@ -113,7 +117,11 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='germinationQuantityBefore'
                   value={previousEvent?.germinatingQuantity || 0}
                   type='text'
-                  label={strings.GERMINATION_QUANTITY_BEFORE}
+                  label={
+                    isUpdatedNurseryGrowthPhasesEnabled
+                      ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_BEFORE
+                      : strings.GERMINATION_QUANTITY_BEFORE
+                  }
                   display={true}
                 />
               </Grid>
@@ -124,7 +132,11 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='germinationQuantityAfter'
                   value={selectedEvent.germinatingQuantity}
                   type='text'
-                  label={strings.GERMINATION_QUANTITY_AFTER}
+                  label={
+                    isUpdatedNurseryGrowthPhasesEnabled
+                      ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_AFTER
+                      : strings.GERMINATION_QUANTITY_AFTER
+                  }
                   display={true}
                 />
               </Grid>
