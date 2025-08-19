@@ -6,7 +6,6 @@ import FunderProjectProfileTests from './funderProjectProfile.spec';
 import FundingEntitiesTests from './fundingEntities.spec';
 import InventoryTests from './inventory.spec';
 import LocationTests from './locations.spec';
-import MatrixViewTests from './matrixView.spec';
 import ObservationDetailsTests from './observationDetails.spec';
 import ObservationTests from './observations.spec';
 import ParticipantPlantsDashboardTests from './participantPlantsDashboard.spec';
@@ -32,4 +31,5 @@ test.describe(ParticipantPlantsDashboardTests);
 test.describe(ObservationTests);
 test.describe(ObservationDetailsTests);
 test.describe(DeliverableTests);
-test.describe(MatrixViewTests);
+// TODO: Enable when BE is ready
+// test.describe(MatrixViewTests);
