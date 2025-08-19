@@ -40,7 +40,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const reportId = String(pathParams.reportId);
   const projectId = String(pathParams.projectId);
 
-  const [record, , onChange] = useForm<AcceleratorReport>(report);
+  const [record, , onChange, onChangeCallback] = useForm<AcceleratorReport>(report);
   const [saveReportRequestId, setSaveReportRequestId] = useState('');
   const saveReportResponse = useAppSelector(selectUpdateAcceleratorReport(saveReportRequestId));
   const snackbar = useSnackbar();
@@ -124,7 +124,12 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
               </Typography>
             </Box>
           )}
-          <HighlightsBox report={record} projectId={projectId} editing={true} onChange={onChange('highlights')} />
+          <HighlightsBox
+            report={record}
+            projectId={projectId}
+            editing={true}
+            onChange={onChangeCallback('highlights')}
+          />
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
@@ -145,12 +150,17 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
               />
             ));
           })}
-          <AchievementsBox report={record} projectId={projectId} editing={true} onChange={onChange('achievements')} />
+          <AchievementsBox
+            report={record}
+            projectId={projectId}
+            editing={true}
+            onChange={onChangeCallback('achievements')}
+          />
           <ChallengesMitigationBox
             report={record}
             projectId={projectId}
             editing={true}
-            onChange={onChange('challenges')}
+            onChange={onChangeCallback('challenges')}
           />
         </Card>
       </Box>

@@ -45,7 +45,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   const { isMobile } = useDeviceInfo();
   const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
-  const [record, setRecord, onChange] = useForm(batch);
+  const [record, setRecord, onChange, onChangeCallback] = useForm(batch);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [photos, setPhotos] = useState<BatchPhotoWithUrl[]>([]);
@@ -285,7 +285,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='germinatingQuantity'
             value={record.germinatingQuantity}
-            onChange={onChange('germinatingQuantity')}
+            onChange={onChangeCallback('germinatingQuantity')}
             type='number'
             label={
               isUpdatedNurseryGrowthPhasesEnabled
@@ -323,7 +323,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='activeGrowthQuantity'
             value={record.activeGrowthQuantity}
-            onChange={onChange('activeGrowthQuantity')}
+            onChange={onChangeCallback('activeGrowthQuantity')}
             type='number'
             label={
               isUpdatedNurseryGrowthPhasesEnabled
@@ -356,7 +356,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               <Textfield
                 id='hardeningOffQuantity'
                 value={record.hardeningOffQuantity}
-                onChange={onChange('hardeningOffQuantity')}
+                onChange={onChangeCallback('hardeningOffQuantity')}
                 type='number'
                 label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
@@ -373,7 +373,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='readyQuantity'
             value={record.readyQuantity}
-            onChange={onChange('readyQuantity')}
+            onChange={onChangeCallback('readyQuantity')}
             type='number'
             label={
               isUpdatedNurseryGrowthPhasesEnabled
@@ -423,7 +423,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               value={record.substrateNotes}
               type='text'
               label=''
-              onChange={onChange('substrateNotes')}
+              onChange={onChangeCallback('substrateNotes')}
             />
           )}
         </Grid>
@@ -433,7 +433,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             label={strings.TREATMENT}
             selectedValue={record.treatment}
             options={treatments()}
-            onChange={onChange('treatment')}
+            onChange={onChangeCallback('treatment')}
             fullWidth={true}
           />
         </Grid>
@@ -444,7 +444,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               value={record.treatmentNotes}
               type='text'
               label=''
-              onChange={onChange('treatmentNotes')}
+              onChange={onChangeCallback('treatmentNotes')}
             />
           )}
         </Grid>
@@ -455,7 +455,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='notes'
             value={record?.notes}
-            onChange={onChange('notes')}
+            onChange={onChangeCallback('notes')}
             type='textarea'
             label={strings.NOTES}
           />

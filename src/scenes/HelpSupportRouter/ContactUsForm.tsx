@@ -83,7 +83,7 @@ const ContactUsForm = () => {
     }
   }, [types, supportRequestType, goToHelpSupport]);
 
-  const [supportRequest, , onChangeSupportRequest] = useForm<SupportRequest>({
+  const [supportRequest, , onChangeSupportRequest, onChangeSupportRequestCallback] = useForm<SupportRequest>({
     attachmentIds: [],
     description: '',
     summary: '',
@@ -204,7 +204,7 @@ const ContactUsForm = () => {
               <Textfield
                 id={'summary'}
                 label={strings.SUMMARY}
-                onChange={onChangeSupportRequest('summary')}
+                onChange={onChangeSupportRequestCallback('summary')}
                 value={supportRequest.summary}
                 type={'text'}
                 errorText={errorSummary}
@@ -215,7 +215,7 @@ const ContactUsForm = () => {
               <Textfield
                 id={'description'}
                 label={strings.DESCRIPTION}
-                onChange={onChangeSupportRequest('description')}
+                onChange={onChangeSupportRequestCallback('description')}
                 value={supportRequest.description}
                 styles={styles}
                 type={'textarea'}

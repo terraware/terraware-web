@@ -16,7 +16,7 @@ import strings from 'src/strings';
 import { ParticipantProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useForm, { FormChangeHandler } from 'src/utils/useForm';
+import useForm from 'src/utils/useForm';
 
 import SpeciesInternalFieldsForm from './SpeciesInternalFieldsForm';
 
@@ -31,8 +31,8 @@ export default function SpeciesEditView(): JSX.Element {
   const { currentDeliverable, deliverableId } = useDeliverableData();
   const { activeLocale } = useLocalization();
 
-  const [speciesRecord, setSpeciesRecord, onChangeSpecies] = useForm<Species | undefined>(undefined);
-  const [participantProjectSpeciesRecord, setParticipantProjectSpeciesRecord, onChangeParticipantProjectSpecies] =
+  const [speciesRecord, setSpeciesRecord, , onChangeSpeciesCallback] = useForm<Species | undefined>(undefined);
+  const [participantProjectSpeciesRecord, setParticipantProjectSpeciesRecord, , onChangeProjectSpeciesCallback] =
     useForm<ParticipantProjectSpecies | undefined>(undefined);
 
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
@@ -42,17 +42,6 @@ export default function SpeciesEditView(): JSX.Element {
       return 12;
     }
     return 4;
-  };
-
-  const onChange = (id: string, value: unknown): void => {
-    if (
-      (['rationale', 'speciesNativeCategory'] as (keyof ParticipantProjectSpecies)[]).includes(
-        id as keyof ParticipantProjectSpecies
-      )
-    ) {
-      return onChangeParticipantProjectSpecies(id, value);
-    }
-    return onChangeSpecies(id, value);
   };
 
   useEffect(() => {
@@ -124,7 +113,7 @@ export default function SpeciesEditView(): JSX.Element {
               <Dropdown
                 id='speciesNativeCategory'
                 selectedValue={participantProjectSpeciesRecord?.speciesNativeCategory}
-                onChange={(value) => onChange('speciesNativeCategory', value)}
+                onChange={onChangeProjectSpeciesCallback('speciesNativeCategory')}
                 options={getSpeciesNativeCategoryOptions(activeLocale)}
                 label={strings.NATIVE_NON_NATIVE}
                 aria-label={strings.NATIVE_NON_NATIVE}
@@ -139,7 +128,7 @@ export default function SpeciesEditView(): JSX.Element {
                 id='rationale'
                 type='text'
                 value={participantProjectSpeciesRecord?.rationale}
-                onChange={onChangeParticipantProjectSpecies('rationale')}
+                onChange={onChangeProjectSpeciesCallback('rationale')}
               />
             </Grid>
 
@@ -153,10 +142,12 @@ export default function SpeciesEditView(): JSX.Element {
                   gridSize={gridSize()}
                   record={speciesRecord}
                   participantProjectSpeciesRecord={participantProjectSpeciesRecord}
-                  onChange={onChange as FormChangeHandler}
+                  onChange={onChangeSpeciesCallback}
                   nameFormatError={nameFormatError}
                   setNameFormatError={setNameFormatError}
-                  additionalFields={<SpeciesInternalFieldsForm speciesRecord={speciesRecord} onChange={onChange} />}
+                  additionalFields={
+                    <SpeciesInternalFieldsForm speciesRecord={speciesRecord} onChange={onChangeSpeciesCallback} />
+                  }
                 />
               </Grid>
             )}

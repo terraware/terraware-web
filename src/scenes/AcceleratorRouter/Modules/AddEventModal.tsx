@@ -87,7 +87,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
   const theme = useTheme();
 
-  const [record, , onChange] = useForm<ModuleEventPartial>(eventToEdit || { id: -1 });
+  const [record, , onChange, onChangeCallback] = useForm<ModuleEventPartial>(eventToEdit || { id: -1 });
 
   const availableCohortsOptions = useMemo(() => {
     const alreadySelectedCohortsIds = projectsSections.map((ps) => ps.cohort?.id?.toString());
@@ -234,7 +234,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             label={strings.MEETING_URL}
             type='text'
             value={record.meetingUrl}
-            onChange={onChange('meetingUrl')}
+            onChange={onChangeCallback('meetingUrl')}
           />
         </Grid>
         <Grid item xs={12}>
@@ -243,7 +243,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             label={strings.RECORDING_URL}
             type='text'
             value={record.recordingUrl}
-            onChange={onChange('recordingUrl')}
+            onChange={onChangeCallback('recordingUrl')}
           />
         </Grid>
         <Grid item xs={12}>
@@ -252,7 +252,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             label={strings.SLIDES_URL}
             type='text'
             value={record.slidesUrl}
-            onChange={onChange('slidesUrl')}
+            onChange={onChangeCallback('slidesUrl')}
           />
         </Grid>
         <Grid item xs={12}>

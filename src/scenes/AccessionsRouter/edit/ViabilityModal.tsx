@@ -26,7 +26,7 @@ export interface ViabilityDialogProps {
 export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Element {
   const { onClose, open, accession, reload, setNewViabilityTestOpened, changeTab } = props;
 
-  const [record, setRecord, onChange] = useForm(accession);
+  const [record, setRecord, , onChangeCallback] = useForm(accession);
   const [error, setError] = useForm('');
   const snackbar = useSnackbar();
 
@@ -91,7 +91,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
               <Textfield
                 label={strings.VIABILITY_RATE}
                 id='viabilityPercent'
-                onChange={onChange('viabilityPercent')}
+                onChange={onChangeCallback('viabilityPercent')}
                 type='text'
                 value={record.viabilityPercent?.toString()}
                 errorText={error}

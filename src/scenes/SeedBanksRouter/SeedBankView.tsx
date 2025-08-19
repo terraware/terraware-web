@@ -42,7 +42,7 @@ export default function SeedBankView(): JSX.Element {
     id: undefined,
   });
 
-  const [record, setRecord, onChange] = useForm<Facility>({
+  const [record, setRecord, , onChangeCallback] = useForm<Facility>({
     name: '',
     id: -1,
     type: 'Seed Bank',
@@ -199,7 +199,7 @@ export default function SeedBankView(): JSX.Element {
                 id='name'
                 label={strings.NAME_REQUIRED}
                 type='text'
-                onChange={onChange('name')}
+                onChange={onChangeCallback('name')}
                 value={record.name}
                 errorText={record.name ? '' : nameError}
               />
@@ -209,7 +209,7 @@ export default function SeedBankView(): JSX.Element {
                 id='description'
                 label={strings.DESCRIPTION_REQUIRED}
                 type='textarea'
-                onChange={onChange('description')}
+                onChange={onChangeCallback('description')}
                 value={record.description}
                 errorText={record.description ? '' : descriptionError}
               />

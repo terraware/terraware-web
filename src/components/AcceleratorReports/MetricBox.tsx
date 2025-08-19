@@ -64,9 +64,9 @@ const MetricBox = ({
   onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) => void;
 } & ReportBoxProps): JSX.Element => {
   const theme = useTheme();
-  const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
-    metric
-  );
+  const [record, setRecord, onChange, onChangeCallback] = useForm<
+    ReportProjectMetric | ReportSystemMetric | ReportStandardMetric
+  >(metric);
   const [progressModalOpened, setProgressModalOpened] = useState<boolean>(false);
   const [resetMetricModalOpened, setResetMetricModalOpened] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -304,7 +304,7 @@ const MetricBox = ({
                   label={strings.PROGRESS}
                   value={record.value}
                   id={'value'}
-                  onChange={onChange('value')}
+                  onChange={onChangeCallback('value')}
                   display={!isEditing}
                   required={true}
                   min={0}
@@ -329,7 +329,7 @@ const MetricBox = ({
                   label={strings.STATUS}
                   selectedValue={record.status}
                   options={statusOptions}
-                  onChange={onChange('status')}
+                  onChange={onChangeCallback('status')}
                   disabled={!isEditing}
                   placeholder={'No Status'}
                 />
@@ -351,7 +351,7 @@ const MetricBox = ({
               label={strings.UNDERPERFORMANCE_JUSTIFICATION}
               value={record.underperformanceJustification}
               id={'underperformanceJustification'}
-              onChange={onChange('underperformanceJustification')}
+              onChange={onChangeCallback('underperformanceJustification')}
               display={!isEditing}
               styles={textAreaStyles}
               preserveNewlines
@@ -366,7 +366,7 @@ const MetricBox = ({
                 label={strings.PROGRESS_NOTES}
                 value={record.progressNotes}
                 id={'progressNotes'}
-                onChange={onChange('progressNotes')}
+                onChange={onChangeCallback('progressNotes')}
                 display={!isEditing}
                 styles={textAreaStyles}
                 preserveNewlines

@@ -79,7 +79,7 @@ export default function CreateAccession(): JSX.Element | null {
       receivedDate: getTodaysDateFormatted(timeZone),
     }) as AccessionPostRequestBody;
 
-  const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
+  const [record, setRecord, onChange, onChangeCallback] = useForm<AccessionPostRequestBody>(defaultAccession());
 
   const { availableProjects } = useProjects();
 
@@ -223,7 +223,7 @@ export default function CreateAccession(): JSX.Element | null {
                 <Textfield
                   id='collectionSiteLandowner'
                   value={record.collectionSiteLandowner}
-                  onChange={onChange('collectionSiteLandowner')}
+                  onChange={onChangeCallback('collectionSiteLandowner')}
                   type='text'
                   label={strings.LANDOWNER}
                 />
@@ -258,7 +258,7 @@ export default function CreateAccession(): JSX.Element | null {
               <Dropdown
                 id='state'
                 selectedValue={record.state}
-                onChange={onChange('state')}
+                onChange={onChangeCallback('state')}
                 label={strings.PROCESSING_STATUS_REQUIRED}
                 options={accessionCreateStates()}
                 fullWidth={true}

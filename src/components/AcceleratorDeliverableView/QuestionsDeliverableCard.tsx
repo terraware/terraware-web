@@ -91,7 +91,7 @@ const QuestionBox = ({
     initialInternalCommnet,
   } = useProjectVariableWorklow(projectId, variable);
 
-  const [workflowDetails, , onChange] = useForm<UpdateVariableWorkflowDetailsPayload>({
+  const [workflowDetails, , , onChangeCallback] = useForm<UpdateVariableWorkflowDetailsPayload>({
     feedback: initialFeedback,
     internalComment: initialInternalCommnet,
     status: initialStatus,
@@ -357,7 +357,7 @@ const QuestionBox = ({
                 type='textarea'
                 label={strings.INTERNAL_COMMENTS}
                 id='internalComment'
-                onChange={onChange('internalComment')}
+                onChange={onChangeCallback('internalComment')}
                 sx={{ marginTop: theme.spacing(1) }}
                 value={workflowDetails.internalComment}
               />
@@ -368,7 +368,7 @@ const QuestionBox = ({
                   type='textarea'
                   label={strings.FEEDBACK_SHARED_WITH_PROJECT}
                   id='feedback'
-                  onChange={onChange('feedback')}
+                  onChange={onChangeCallback('feedback')}
                   sx={{ marginTop: theme.spacing(1) }}
                   value={workflowDetails.feedback}
                 />

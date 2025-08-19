@@ -34,7 +34,6 @@ import {
 } from 'src/types/Species';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
-import { FormChangeHandler } from 'src/utils/useForm';
 
 import { ProjectSpecies } from './AddToProjectModal';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
@@ -43,7 +42,7 @@ type SpeciesDetailsFormProps = {
   additionalFields?: JSX.Element;
   gridSize: number;
   nameFormatError: string | string[];
-  onChange: FormChangeHandler;
+  onChange: (id: string) => (value: unknown) => void;
   participantProjectSpeciesRecord?: ParticipantProjectSpecies;
   record: Species;
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
@@ -152,7 +151,7 @@ export default function SpeciesDetailsForm({
     if (!userSearched) {
       setUserSearched(true);
     }
-    onChange('scientificName', value);
+    onChange('scientificName')(value);
   };
 
   return (
@@ -241,10 +240,10 @@ export default function SpeciesDetailsForm({
             onAdd={(growthForm: GrowthForm) => {
               const selectedGrowthForms = [...(record.growthForms ?? [])];
               selectedGrowthForms.push(growthForm);
-              onChange('growthForms', selectedGrowthForms);
+              onChange('growthForms')(selectedGrowthForms);
             }}
             onRemove={(growthForm: GrowthForm) => {
-              onChange('growthForms', record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
+              onChange('growthForms')(record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
             }}
             options={new Map(growthForms(activeLocale).map((gf) => [gf.value as GrowthForm, gf.label]))}
             valueRenderer={(gfVal: string) => gfVal}
@@ -270,7 +269,7 @@ export default function SpeciesDetailsForm({
             id='Rare'
             name='rare'
             label={strings.RARE}
-            onChange={() => onChange('rare', !record.rare)}
+            onChange={() => onChange('rare')(!record.rare)}
             value={record.rare}
             sx={{ display: 'block' }}
           />
@@ -293,10 +292,10 @@ export default function SpeciesDetailsForm({
             onAdd={(successionalGroup: SuccessionalGroup) => {
               const selectedSuccessionalGroups = [...(record.successionalGroups ?? [])];
               selectedSuccessionalGroups.push(successionalGroup);
-              onChange('successionalGroups', selectedSuccessionalGroups);
+              onChange('successionalGroups')(selectedSuccessionalGroups);
             }}
             onRemove={(successionalGroup: SuccessionalGroup) => {
-              onChange('successionalGroups', record.successionalGroups?.filter((sg) => sg !== successionalGroup) ?? []);
+              onChange('successionalGroups')(record.successionalGroups?.filter((sg) => sg !== successionalGroup) ?? []);
             }}
             options={new Map(successionalGroups().map((sg) => [sg.value, sg.label]))}
             valueRenderer={(sgVal: string) => sgVal}
@@ -324,10 +323,10 @@ export default function SpeciesDetailsForm({
             onAdd={(type: EcosystemType) => {
               const selectedTypes = [...(record.ecosystemTypes ?? [])];
               selectedTypes.push(type);
-              onChange('ecosystemTypes', selectedTypes);
+              onChange('ecosystemTypes')(selectedTypes);
             }}
             onRemove={(type: EcosystemType) => {
-              onChange('ecosystemTypes', record.ecosystemTypes?.filter((et) => et !== type) ?? []);
+              onChange('ecosystemTypes')(record.ecosystemTypes?.filter((et) => et !== type) ?? []);
             }}
             options={new Map(ecosystemTypes().map((type) => [type.value, type.label]))}
             valueRenderer={(typeVal: string) => typeVal}
@@ -389,11 +388,10 @@ export default function SpeciesDetailsForm({
             onAdd={(method: PlantMaterialSourcingMethod) => {
               const selected = [...(record.plantMaterialSourcingMethods ?? [])];
               selected.push(method);
-              onChange('plantMaterialSourcingMethods', selected);
+              onChange('plantMaterialSourcingMethods')(selected);
             }}
             onRemove={(method: PlantMaterialSourcingMethod) => {
-              onChange(
-                'plantMaterialSourcingMethods',
+              onChange('plantMaterialSourcingMethods')(
                 record.plantMaterialSourcingMethods?.filter((_method) => _method !== method) ?? []
               );
             }}

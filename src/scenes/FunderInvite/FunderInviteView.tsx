@@ -28,7 +28,7 @@ const FunderInviteView = () => {
   const pathParams = useParams<{ fundingEntityId: string }>();
   const fundingEntityId = Number(pathParams.fundingEntityId);
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const [record, , onChange] = useForm<Partial<Funder>>({});
+  const [record, , , onChangeCallback] = useForm<Partial<Funder>>({});
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
@@ -119,7 +119,7 @@ const FunderInviteView = () => {
                 id='email'
                 label={strings.EMAIL}
                 type='text'
-                onChange={onChange('email')}
+                onChange={onChangeCallback('email')}
                 value={record.email}
                 required={true}
                 errorText={emailError}

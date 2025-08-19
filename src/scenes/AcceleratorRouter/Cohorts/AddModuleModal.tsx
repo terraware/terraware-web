@@ -23,7 +23,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
 
   const theme = useTheme();
 
-  const [record, , onChange] = useForm<Partial<CohortModule>>(selectedModule ?? {});
+  const [record, , onChange, onChangeCallback] = useForm<Partial<CohortModule>>(selectedModule ?? {});
   const [validate, setValidate] = useState(false);
 
   const save = () => {
@@ -101,7 +101,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
             label={strings.NAME}
             type='text'
             value={record.title}
-            onChange={onChange('title')}
+            onChange={onChangeCallback('title')}
             errorText={validate && !record.title ? strings.REQUIRED_FIELD : undefined}
           />
         </Grid>

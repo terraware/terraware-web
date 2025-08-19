@@ -33,7 +33,7 @@ export default function PersonView(): JSX.Element {
   const [personSelectedToEdit, setPersonSelectedToEdit] = useState<OrganizationUser>();
   const { isDesktop, isMobile, isTablet } = useDeviceInfo();
 
-  const [newPerson, setNewPerson, onChange] = useForm<OrganizationUser>({
+  const [newPerson, setNewPerson, , onChangeCallback] = useForm<OrganizationUser>({
     id: -1,
     email: '',
     role: 'Contributor',
@@ -213,7 +213,7 @@ export default function PersonView(): JSX.Element {
                 id='email'
                 label={strings.EMAIL_REQUIRED}
                 type='text'
-                onChange={onChange('email')}
+                onChange={onChangeCallback('email')}
                 value={newPerson.email}
                 disabled={!!personSelectedToEdit}
                 errorText={emailError}
@@ -224,7 +224,7 @@ export default function PersonView(): JSX.Element {
                 id='firstName'
                 label={strings.FIRST_NAME}
                 type='text'
-                onChange={onChange('firstName')}
+                onChange={onChangeCallback('firstName')}
                 disabled={true}
                 value={newPerson.firstName}
               />
@@ -234,7 +234,7 @@ export default function PersonView(): JSX.Element {
                 id='lastName'
                 label={strings.LAST_NAME}
                 type='text'
-                onChange={onChange('lastName')}
+                onChange={onChangeCallback('lastName')}
                 disabled={true}
                 value={newPerson.lastName}
               />
@@ -245,7 +245,7 @@ export default function PersonView(): JSX.Element {
               <Dropdown
                 id='role'
                 label={strings.ROLE_REQUIRED}
-                onChange={onChange('role')}
+                onChange={onChangeCallback('role')}
                 options={roleOptions}
                 disabled={newPerson.role === 'Owner'}
                 selectedValue={newPerson.role}

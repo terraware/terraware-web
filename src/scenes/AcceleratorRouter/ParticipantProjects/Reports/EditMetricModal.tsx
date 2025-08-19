@@ -33,7 +33,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
   const projectId = Number(pathParams.projectId);
   const [validate, setValidate] = useState(false);
 
-  const [record, , onChange] = useForm<ProjectMetric>(projectMetric);
+  const [record, , , onChangeCallback] = useForm<ProjectMetric>(projectMetric);
 
   useEffect(() => {
     if (updateProjectMetricResponse?.status === 'error') {
@@ -84,7 +84,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='name'
             label={strings.NAME}
             type='text'
-            onChange={onChange('name')}
+            onChange={onChangeCallback('name')}
             value={record.name}
             required
             errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
@@ -95,7 +95,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='name'
             label={strings.DESCRIPTION}
             type='textarea'
-            onChange={onChange('description')}
+            onChange={onChangeCallback('description')}
             value={record.description}
           />
         </Grid>
@@ -103,7 +103,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
           <Dropdown
             id='type'
             label={strings.TYPE}
-            onChange={onChange('type')}
+            onChange={onChangeCallback('type')}
             options={metricTypeOptions()}
             selectedValue={record.type}
             fullWidth
@@ -115,7 +115,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             label={strings.UNIT}
             type='text'
             maxLength={25}
-            onChange={onChange('unit')}
+            onChange={onChangeCallback('unit')}
             value={record.unit}
           />
         </Grid>
@@ -124,7 +124,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='reference'
             label={strings.REFERENCE}
             type='text'
-            onChange={onChange('reference')}
+            onChange={onChangeCallback('reference')}
             value={record.reference}
             required
             errorText={validate && !record.reference ? strings.REQUIRED_FIELD : ''}
@@ -134,7 +134,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
           <Dropdown
             id='component'
             label={strings.COMPONENT}
-            onChange={onChange('component')}
+            onChange={onChangeCallback('component')}
             options={metricComponentOptions()}
             selectedValue={record.component}
             fullWidth
@@ -148,7 +148,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             name={'isPublishable'}
             label={strings.PUBLISH_TO_FUNDER_PORTAL}
             value={record.isPublishable}
-            onChange={onChange('isPublishable')}
+            onChange={onChangeCallback('isPublishable')}
           />
         </Grid>
       </Grid>

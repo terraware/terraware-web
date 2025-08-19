@@ -1,35 +1,27 @@
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 
-export interface FormChangeHandler {
-  (id: string): (value: unknown) => void; // Curried form
-  (id: string, value: unknown): void; // Direct form
-}
+type CurriedChangeHandler = (id: string) => (value: unknown) => void;
+type DirectChangeHandler = (id: string, value: unknown) => void;
 
-const useForm = <T>(originalRecord: T): [T, Dispatch<SetStateAction<T>>, FormChangeHandler] => {
+const useForm = <T>(originalRecord: T): [T, Dispatch<SetStateAction<T>>, DirectChangeHandler, CurriedChangeHandler] => {
   const [record, setRecord] = React.useState(originalRecord);
 
-  const onChange = useCallback(
-    // eslint-disable-next-line
-    function onChangeInternal(id: string, value?: unknown) {
-      // If value is provided, execute immediately (direct form)
-      if (arguments.length === 2) {
-        setRecord((previousRecord: T): T => {
-          return { ...previousRecord, [id]: value };
-        });
-        return;
-      }
+  const onChange = useCallback((id: string, value: unknown) => {
+    setRecord((previousRecord: T): T => {
+      return { ...previousRecord, [id]: value };
+    });
+  }, []);
 
-      // If only id is provided, return a function (curried form)
-      return (newValue: unknown) => {
-        setRecord((previousRecord: T): T => {
-          return { ...previousRecord, [id]: newValue };
-        });
+  const onChangeCallback = useCallback(
+    (id: string) => {
+      return (value: unknown) => {
+        onChange(id, value);
       };
-    } as FormChangeHandler,
-    []
+    },
+    [onChange]
   );
 
-  return [record, setRecord, onChange];
+  return [record, setRecord, onChange, onChangeCallback];
 };
 
 export default useForm;

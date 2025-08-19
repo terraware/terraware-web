@@ -35,7 +35,7 @@ type SpeciesAddViewProps = {
 export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id || -1; // TODO: Add null check for selectedOrganization
-  const [record, setRecord, onChange] = useForm<Species>(initSpecies());
+  const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const navigate = useSyncNavigate();
@@ -102,7 +102,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
             <SpeciesDetailsForm
               gridSize={newGridSize}
               record={record}
-              onChange={onChange}
+              onChange={onChangeCallback}
               setRecord={setRecord}
               nameFormatError={nameFormatError}
               setNameFormatError={setNameFormatError}
