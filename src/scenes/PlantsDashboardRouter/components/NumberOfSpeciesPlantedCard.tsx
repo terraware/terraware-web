@@ -293,7 +293,7 @@ const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element
         />
       </Box>
 
-      <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+      <Typography fontSize={'16px'} fontWeight={600} marginRight={1}>
         {strings.RARE}: {rareSpecies}%
       </Typography>
     </Box>
