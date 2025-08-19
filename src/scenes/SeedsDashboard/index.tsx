@@ -58,16 +58,12 @@ export default function SeedSummary(): JSX.Element {
     'Processing',
     'Drying',
     'In Storage',
+    'Used Up',
   ];
 
   return (
     <TfMain>
-      <PageHeader
-        subtitle={strings.WELCOME_MSG}
-        page={strings.SEED_DASHBOARD}
-        parentPage={strings.SEEDS}
-        snackbarPageKey={'seeds'}
-      />
+      <PageHeader page={strings.SEEDS_DASHBOARD} parentPage={strings.SEEDS} snackbarPageKey={'seeds'} />
       <Container maxWidth={false} sx={{ padding: 0 }}>
         {selectedOrganization && seedBankSummary ? (
           <Grid container spacing={3}>
