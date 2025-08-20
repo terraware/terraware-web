@@ -1,3 +1,4 @@
+1a433cc5705 SW-7253: FE - Allow changing status from any phase to any future phase (#4360)
 97d834c0066 SE-7270 Deal Name column should not be removable (#4364)
 e116c0c6178 SW-7269 Non Variable columns should show up under manage columns (#4362)
 78340059017 SW-7272 Reset columns button not working (#4361)
