@@ -36,6 +36,7 @@ import {
 } from 'src/types/Map';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useMaintainLayerOrder } from '../NewMap/useMaintainLayerOrder';
 import MapBanner from './MapBanner';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import { getMapDrawingLayer } from './utils';
@@ -72,6 +73,7 @@ export type MapProps = {
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
   showSiteMarker?: boolean;
+  layerIdOrder?: string[];
 } & MapControl;
 
 export default function Map(props: MapProps): JSX.Element {
@@ -93,6 +95,7 @@ export default function Map(props: MapProps): JSX.Element {
     disableZoom,
     mapViewStyle: initialMapViewStyle,
     showSiteMarker,
+    layerIdOrder,
   } = props;
   const theme = useTheme();
   const [geoData, setGeoData] = useState<any[]>();
@@ -111,6 +114,8 @@ export default function Map(props: MapProps): JSX.Element {
   const [reloadSources, setReloadSources] = useState(false);
   const visible = useIsVisible(containerRef);
   const snackbar = useSnackbar();
+
+  useMaintainLayerOrder(mapRef, layerIdOrder ?? []);
 
   useEffect(() => {
     // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
