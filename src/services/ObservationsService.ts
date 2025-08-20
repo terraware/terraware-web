@@ -85,6 +85,7 @@ const exportCsv = async (observationId: number): Promise<any> => {
       field: 'id',
       values: [`${observationId}`],
     },
+    count: 0,
   });
 };
 
@@ -127,6 +128,7 @@ const exportBiomassObservationsCsv = async (organizationId: number, plantingSite
         },
       ],
     },
+    count: 0,
   });
 };
 
@@ -168,6 +170,7 @@ const exportBiomassPlotCsv = async (observationId: number): Promise<any> => {
       field: 'id',
       values: [`${observationId}`],
     },
+    count: 0,
   });
 };
 
@@ -187,6 +190,7 @@ const exportBiomassSpeciesCsv = async (observationId: number): Promise<any> => {
       operation: 'and',
       children: [{ operation: 'field', type: 'Exact', field: 'observation_id', values: [`${observationId}`] }],
     },
+    count: 0,
   });
 };
 
@@ -215,6 +219,7 @@ const exportBiomassTreesShrubsCsv = async (observationId: number): Promise<any> 
       field: 'observation_id',
       values: [`${observationId}`],
     },
+    count: 0,
   });
 };
 
