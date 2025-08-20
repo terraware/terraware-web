@@ -8,10 +8,18 @@ import { MapFillComponentStyle, MapLayer, MapLayerFeatureId, MapMarker } from 's
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
+import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import MapPhotoDrawer from './MapPhotoDrawer';
 import MapStatsDrawer from './MapStatsDrawer';
+
+type PlotPhoto = {
+  observationId: number;
+  monitoringPlotId: number;
+  photo: ObservationMonitoringPlotPhoto;
+};
 
 const PlantDashboardMap = (): JSX.Element => {
   const { token, mapId } = useMapboxToken();
@@ -19,6 +27,7 @@ const PlantDashboardMap = (): JSX.Element => {
   const theme = useTheme();
 
   const [selectedFeaturedId, setSelectedFeatureId] = useState<MapLayerFeatureId>();
+  const [selectedPhoto, setSelectedPhoto] = useState<PlotPhoto>();
   const { latestResult, plantingSite } = usePlantingSiteData();
 
   const sitesLayerStyle = useMemo(
@@ -53,12 +62,26 @@ const PlantDashboardMap = (): JSX.Element => {
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [drawerSize, setDrawerSize] = useState<MapDrawerSize>('small');
+  const [drawerTitle, setDrawerTitle] = useState<string>();
 
   const selectFeature = useCallback(
     (layerId: string, featureId: string) => () => {
       setSelectedFeatureId({ layerId, featureId });
+      setSelectedPhoto(undefined);
       setDrawerOpen(true);
       setDrawerSize('small');
+      setDrawerTitle(undefined);
+    },
+    []
+  );
+
+  const selectPhoto = useCallback(
+    (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhoto) => () => {
+      setSelectedFeatureId(undefined);
+      setSelectedPhoto({ monitoringPlotId, observationId, photo });
+      setDrawerOpen(true);
+      setDrawerSize('medium');
+      setDrawerTitle(undefined);
     },
     []
   );
@@ -67,7 +90,16 @@ const PlantDashboardMap = (): JSX.Element => {
     if (selectedFeaturedId) {
       return <MapStatsDrawer layerId={selectedFeaturedId.layerId} featureId={selectedFeaturedId.featureId} />;
     }
-  }, [selectedFeaturedId]);
+    if (selectedPhoto) {
+      return (
+        <MapPhotoDrawer
+          monitoringPlotId={selectedPhoto.monitoringPlotId}
+          observationId={selectedPhoto.observationId}
+          photo={selectedPhoto.photo}
+        />
+      );
+    }
+  }, [selectedFeaturedId, selectedPhoto]);
 
   const extractLayersFromSite = useCallback(
     (site: PlantingSite): MapLayer[] => {
@@ -147,15 +179,18 @@ const PlantDashboardMap = (): JSX.Element => {
     return latestResult.plantingZones
       .flatMap((zone) => zone.plantingSubzones)
       .flatMap((subzone) => subzone.monitoringPlots)
-      .flatMap((plot) => plot.photos)
-      .map(
-        (photo): MapMarker => ({
-          id: `${photo.fileId}`,
-          longitude: photo.gpsCoordinates.coordinates[1],
-          latitude: photo.gpsCoordinates.coordinates[0],
+      .flatMap((plot): MapMarker[] =>
+        plot.photos.map((photo) => {
+          return {
+            id: `${photo.fileId}`,
+            longitude: photo.gpsCoordinates.coordinates[1],
+            latitude: photo.gpsCoordinates.coordinates[0],
+            onClick: selectPhoto(plot.monitoringPlotId, latestResult.observationId, photo),
+            selected: selectedPhoto && photo.fileId === selectedPhoto.photo.fileId,
+          };
         })
       );
-  }, [latestResult]);
+  }, [latestResult, selectPhoto, selectedPhoto]);
 
   const mortalityRateHighlights = useMemo(() => {
     const lessThanTwentyFive: MapLayerFeatureId[] = [];
@@ -207,6 +242,7 @@ const PlantDashboardMap = (): JSX.Element => {
     } else {
       setDrawerOpen(false);
       setSelectedFeatureId(undefined);
+      setSelectedPhoto(undefined);
     }
   }, []);
 
@@ -414,6 +450,7 @@ const PlantDashboardMap = (): JSX.Element => {
       drawerChildren={drawerContent}
       drawerOpen={drawerOpen}
       drawerSize={drawerSize}
+      drawerTitle={drawerTitle}
       features={mapFeatures}
       initialSelectedLayerId={'zones'}
       mapId={mapId}

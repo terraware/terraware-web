@@ -5,6 +5,7 @@ import './styles.scss';
 export type MapDrawerTableRow = {
   key: string;
   value: string;
+  url?: string;
 };
 
 type MapDrawerTableProps = {
@@ -26,7 +27,7 @@ const MapDrawerTable = ({ header, rows }: MapDrawerTableProps): JSX.Element => {
         {rows.map((row, idx) => (
           <tr key={`row-${idx}`}>
             <td>{row.key}</td>
-            <td>{row.value}</td>
+            <td>{row.url ? <a href={row.url}>{row.value}</a> : row.value}</td>
           </tr>
         ))}
       </tbody>
