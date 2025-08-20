@@ -68,7 +68,7 @@ export default function EditSettings(): JSX.Element {
     }
   }, [updateReportConfigResponse, goToProjectReports, snackbar]);
 
-  const [newConfig, , onChange] = useForm<NewAcceleratorReportConfig>({
+  const [newConfig, , onChange, onChangeCallback] = useForm<NewAcceleratorReportConfig>({
     reportingStartDate: projectReportConfig.config?.reportingStartDate || '',
     reportingEndDate: projectReportConfig.config?.reportingEndDate || '',
     logframeUrl: projectReportConfig.config?.logframeUrl,
@@ -139,7 +139,7 @@ export default function EditSettings(): JSX.Element {
                   id='logframe'
                   label={strings.LOG_FRAME_AND_ME_PLAN_URL}
                   type='text'
-                  onChange={(value) => onChange('logframeUrl', value)}
+                  onChange={onChangeCallback('logframeUrl')}
                   value={newConfig.logframeUrl}
                 />
               </Grid>

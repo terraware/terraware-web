@@ -51,7 +51,7 @@ export default function SpeciesEditView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
   const [isBusy, setIsBusy] = useState<boolean>(false);
-  const [record, setRecord, onChange] = useForm<Species>(initSpecies());
+  const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const snackbar = useSnackbar();
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [addedProjectsSpecies, setAddedProjectsSpecies] = useState<ProjectSpecies[]>();
@@ -206,7 +206,7 @@ export default function SpeciesEditView(): JSX.Element {
           <SpeciesDetailsForm
             gridSize={gridSize()}
             record={record}
-            onChange={onChange}
+            onChange={onChangeCallback}
             setRecord={setRecord}
             nameFormatError={nameFormatError}
             setNameFormatError={setNameFormatError}

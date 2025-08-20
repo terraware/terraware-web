@@ -55,7 +55,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     );
   }, [species, participantProjectSpecies]);
 
-  const [record, setRecord, onChange] = useForm<Partial<CreateParticipantProjectSpeciesRequestPayload>>({
+  const [record, setRecord, , onChangeCallback] = useForm<Partial<CreateParticipantProjectSpeciesRequestPayload>>({
     projectId: -1,
   });
   const { activeLocale } = useLocalization();
@@ -192,7 +192,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           <Dropdown
             id='speciesNativeCategory'
             selectedValue={record?.speciesNativeCategory}
-            onChange={(value) => onChange('speciesNativeCategory', value)}
+            onChange={onChangeCallback('speciesNativeCategory')}
             options={getSpeciesNativeCategoryOptions(activeLocale)}
             label={strings.NATIVE_NON_NATIVE}
             aria-label={strings.NATIVE_NON_NATIVE}

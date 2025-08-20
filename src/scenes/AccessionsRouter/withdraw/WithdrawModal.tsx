@@ -45,7 +45,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(true);
-  const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
+  const [viabilityTesting, , , onChangeViabilityCallback] = useForm(newViabilityTesting);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [isNotesOpened, setIsNotesOpened] = useState(false);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
@@ -87,7 +87,8 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   );
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);
-  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
+  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer, onChangeTransferCallback] =
+    useForm(nurseryTransferWithdrawal);
 
   const setIndividualError = useCallback((id: string, error?: string) => {
     setFieldsErrors((prev) => ({
@@ -325,26 +326,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     [onChange, setIsNurseryTransfer]
   );
 
-  const onChangeTestType = useCallback(
-    (value: string) => onChangeViabilityTesting('testType', value),
-    [onChangeViabilityTesting]
-  );
-
-  const onChangeSubstrate = useCallback(
-    (value: string) => onChangeViabilityTesting('substrate', value),
-    [onChangeViabilityTesting]
-  );
-
-  const onChangeTreatment = useCallback(
-    (value: string) => onChangeViabilityTesting('treatment', value),
-    [onChangeViabilityTesting]
-  );
-
-  const onChangeDestinationFacility = useCallback(
-    (value: string) => onChangeNurseryTransfer('destinationFacilityId', value),
-    [onChangeNurseryTransfer]
-  );
-
   const onChangeReadyByDate = useCallback((value: any) => onChangeDate('readyByDate', value), [onChangeDate]);
 
   const onChangeDateHandler = useCallback((value: any) => onChangeDate('date', value), [onChangeDate]);
@@ -422,7 +403,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                   label: nursery.name,
                   value: nursery.id.toString(),
                 }))}
-                onChange={onChangeDestinationFacility}
+                onChange={onChangeTransferCallback('destinationFacilityId')}
                 errorText={fieldsErrors.destinationFacilityId}
                 fullWidth={true}
               />
@@ -436,7 +417,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.TEST_TYPE}
                 placeholder={strings.SELECT}
                 options={withdrawalTypes()}
-                onChange={onChangeTestType}
+                onChange={onChangeViabilityCallback('testType')}
                 selectedValue={viabilityTesting?.testType}
                 fullWidth={true}
               />
@@ -446,7 +427,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.SUBSTRATE}
                 placeholder={strings.SELECT}
                 options={getSubstratesAccordingToType(viabilityTesting?.testType)}
-                onChange={onChangeSubstrate}
+                onChange={onChangeViabilityCallback('substrate')}
                 selectedValue={viabilityTesting.substrate}
                 fullWidth={true}
               />
@@ -456,7 +437,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.TREATMENT}
                 placeholder={strings.SELECT}
                 options={treatments()}
-                onChange={onChangeTreatment}
+                onChange={onChangeViabilityCallback('treatment')}
                 selectedValue={viabilityTesting.treatment}
                 fullWidth={true}
               />

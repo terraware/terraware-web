@@ -42,7 +42,7 @@ type SpeciesDetailsFormProps = {
   additionalFields?: JSX.Element;
   gridSize: number;
   nameFormatError: string | string[];
-  onChange: (id: string, value: unknown) => void;
+  onChange: (id: string) => (value: unknown) => void;
   participantProjectSpeciesRecord?: ParticipantProjectSpecies;
   record: Species;
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
@@ -151,7 +151,7 @@ export default function SpeciesDetailsForm({
     if (!userSearched) {
       setUserSearched(true);
     }
-    onChange('scientificName', value);
+    onChange('scientificName')(value);
   };
 
   return (
@@ -189,7 +189,7 @@ export default function SpeciesDetailsForm({
           <Select
             id='commonName'
             selectedValue={record.commonName}
-            onChange={(value) => onChange('commonName', value)}
+            onChange={onChange('commonName')}
             options={optionsForCommonName}
             label={strings.COMMON_NAME}
             aria-label={strings.COMMON_NAME}
@@ -203,7 +203,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'family'}
             label={strings.FAMILY}
-            onChange={(value) => onChange('familyName', value)}
+            onChange={onChange('familyName')}
             value={record.familyName}
             type='text'
           />
@@ -214,7 +214,7 @@ export default function SpeciesDetailsForm({
             label={strings.CONSERVATION_CATEGORY}
             aria-label={strings.CONSERVATION_CATEGORY}
             fullWidth={true}
-            onChange={(value: string) => onChange('conservationCategory', value)}
+            onChange={onChange('conservationCategory')}
             placeholder={strings.SELECT}
             options={conservationCategories()}
             selectedValue={record.conservationCategory}
@@ -240,10 +240,10 @@ export default function SpeciesDetailsForm({
             onAdd={(growthForm: GrowthForm) => {
               const selectedGrowthForms = [...(record.growthForms ?? [])];
               selectedGrowthForms.push(growthForm);
-              onChange('growthForms', selectedGrowthForms);
+              onChange('growthForms')(selectedGrowthForms);
             }}
             onRemove={(growthForm: GrowthForm) => {
-              onChange('growthForms', record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
+              onChange('growthForms')(record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
             }}
             options={new Map(growthForms(activeLocale).map((gf) => [gf.value as GrowthForm, gf.label]))}
             valueRenderer={(gfVal: string) => gfVal}
@@ -269,7 +269,7 @@ export default function SpeciesDetailsForm({
             id='Rare'
             name='rare'
             label={strings.RARE}
-            onChange={() => onChange('rare', !record.rare)}
+            onChange={() => onChange('rare')(!record.rare)}
             value={record.rare}
             sx={{ display: 'block' }}
           />
@@ -278,7 +278,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'nativeEcosystem'}
             label={strings.NATIVE_ECOSYSTEM}
-            onChange={(value) => onChange('nativeEcosystem', value)}
+            onChange={onChange('nativeEcosystem')}
             value={record.nativeEcosystem}
             type='text'
             tooltipTitle={strings.NATIVE_ECOSYSTEM_TOOLTIP}
@@ -292,10 +292,10 @@ export default function SpeciesDetailsForm({
             onAdd={(successionalGroup: SuccessionalGroup) => {
               const selectedSuccessionalGroups = [...(record.successionalGroups ?? [])];
               selectedSuccessionalGroups.push(successionalGroup);
-              onChange('successionalGroups', selectedSuccessionalGroups);
+              onChange('successionalGroups')(selectedSuccessionalGroups);
             }}
             onRemove={(successionalGroup: SuccessionalGroup) => {
-              onChange('successionalGroups', record.successionalGroups?.filter((sg) => sg !== successionalGroup) ?? []);
+              onChange('successionalGroups')(record.successionalGroups?.filter((sg) => sg !== successionalGroup) ?? []);
             }}
             options={new Map(successionalGroups().map((sg) => [sg.value, sg.label]))}
             valueRenderer={(sgVal: string) => sgVal}
@@ -323,10 +323,10 @@ export default function SpeciesDetailsForm({
             onAdd={(type: EcosystemType) => {
               const selectedTypes = [...(record.ecosystemTypes ?? [])];
               selectedTypes.push(type);
-              onChange('ecosystemTypes', selectedTypes);
+              onChange('ecosystemTypes')(selectedTypes);
             }}
             onRemove={(type: EcosystemType) => {
-              onChange('ecosystemTypes', record.ecosystemTypes?.filter((et) => et !== type) ?? []);
+              onChange('ecosystemTypes')(record.ecosystemTypes?.filter((et) => et !== type) ?? []);
             }}
             options={new Map(ecosystemTypes().map((type) => [type.value, type.label]))}
             valueRenderer={(typeVal: string) => typeVal}
@@ -338,7 +338,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'ecologicalRoleKnown'}
             label={strings.ECOLOGICAL_ROLE_KNOWN}
-            onChange={(value) => onChange('ecologicalRoleKnown', value)}
+            onChange={onChange('ecologicalRoleKnown')}
             value={record.ecologicalRoleKnown}
             type='text'
             tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
@@ -348,7 +348,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'localUsesKnown'}
             label={strings.LOCAL_USES_KNOWN}
-            onChange={(value) => onChange('localUsesKnown', value)}
+            onChange={onChange('localUsesKnown')}
             value={record.localUsesKnown}
             type='text'
             tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
@@ -358,7 +358,7 @@ export default function SpeciesDetailsForm({
           <Dropdown
             id='seedStorageBehavior'
             selectedValue={record.seedStorageBehavior}
-            onChange={(value) => onChange('seedStorageBehavior', value)}
+            onChange={onChange('seedStorageBehavior')}
             options={storageBehaviors()}
             label={strings.SEED_STORAGE_BEHAVIOR}
             aria-label={strings.SEED_STORAGE_BEHAVIOR}
@@ -388,11 +388,10 @@ export default function SpeciesDetailsForm({
             onAdd={(method: PlantMaterialSourcingMethod) => {
               const selected = [...(record.plantMaterialSourcingMethods ?? [])];
               selected.push(method);
-              onChange('plantMaterialSourcingMethods', selected);
+              onChange('plantMaterialSourcingMethods')(selected);
             }}
             onRemove={(method: PlantMaterialSourcingMethod) => {
-              onChange(
-                'plantMaterialSourcingMethods',
+              onChange('plantMaterialSourcingMethods')(
                 record.plantMaterialSourcingMethods?.filter((_method) => _method !== method) ?? []
               );
             }}
@@ -418,7 +417,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'otherFacts'}
             label={strings.OTHER_FACTS}
-            onChange={(value) => onChange('otherFacts', value)}
+            onChange={onChange('otherFacts')}
             value={record.otherFacts}
             type='textarea'
           />

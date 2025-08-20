@@ -28,7 +28,7 @@ const FunderInviteView = () => {
   const pathParams = useParams<{ fundingEntityId: string }>();
   const fundingEntityId = Number(pathParams.fundingEntityId);
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const [record, , onChange] = useForm<Partial<Funder>>({});
+  const [record, , , onChangeCallback] = useForm<Partial<Funder>>({});
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
@@ -64,8 +64,6 @@ const FunderInviteView = () => {
     const request = dispatch(requestFundingEntityInviteFunder({ fundingEntityId, email: record.email }));
     setRequestId(request.requestId);
   }, [dispatch, snackbar, record.email, fundingEntityId]);
-
-  const onChangeEmail = useCallback((value: unknown) => onChange('email', value), [onChange]);
 
   useEffect(() => {
     if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') {
@@ -121,7 +119,7 @@ const FunderInviteView = () => {
                 id='email'
                 label={strings.EMAIL}
                 type='text'
-                onChange={onChangeEmail}
+                onChange={onChangeCallback('email')}
                 value={record.email}
                 required={true}
                 errorText={emailError}
