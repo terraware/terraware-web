@@ -283,6 +283,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   );
 
   const handleResetColumns = useCallback(() => {
+    setSelectedDeliverables(new Set());
     setSelectedColumns(['projectName', 'participantCohortPhase', 'eligibleLand', 'countryName', 'projectLead']);
   }, []);
 
