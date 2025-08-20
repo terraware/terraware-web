@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -483,7 +483,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -493,7 +492,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -503,7 +501,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -513,7 +510,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -523,7 +519,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -579,7 +579,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ projectId: string }&gt;();</span>
   const projectId = <span class="cstat-no" title="statement not covered" >isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id;</span>
 &nbsp;
-  const [record, , onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;RowMetric&gt;(row);</span>
+  const [record, , , onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;RowMetric&gt;(row);</span>
   const [updateRequestId, setUpdateRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
 &nbsp;
   const updateResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUpdateAcceleratorReportTargets(updateRequestId));</span>
@@ -717,7 +717,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             id='annualTarget'
             label={strings.ANNUAL_TARGET}
             type='text'
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('annualTarget', value)}</span>
+            onChange={onChangeCallback('annualTarget')}
             value={record.annualTarget}
           /&gt;
         &lt;/Grid&gt;
@@ -727,7 +727,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             id='q1Target'
             label={strings.Q1_TARGET}
             type='text'
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('q1Target', value)}</span>
+            onChange={onChangeCallback('q1Target')}
             value={record.q1Target}
           /&gt;
         &lt;/Grid&gt;
@@ -737,7 +737,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             id='q2Target'
             label={strings.Q2_TARGET}
             type='text'
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('q2Target', value)}</span>
+            onChange={onChangeCallback('q2Target')}
             value={record.q2Target}
           /&gt;
         &lt;/Grid&gt;
@@ -747,7 +747,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             id='q3Target'
             label={strings.Q3_TARGET}
             type='text'
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('q3Target', value)}</span>
+            onChange={onChangeCallback('q3Target')}
             value={record.q3Target}
           /&gt;
         &lt;/Grid&gt;
@@ -757,7 +757,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             id='q4Target'
             label={strings.Q4_TARGET}
             type='text'
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('q4Target', value)}</span>
+            onChange={onChangeCallback('q4Target')}
             value={record.q4Target}
           /&gt;
         &lt;/Grid&gt;
@@ -772,7 +772,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T20:01:38.332Z
+                at 2025-08-20T15:30:41.149Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

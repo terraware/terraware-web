@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/80</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -756,7 +756,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -781,7 +780,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -803,7 +801,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -818,7 +815,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -903,9 +903,9 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
   onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) =&gt; void;
 } &amp; ReportBoxProps): JSX.Element =&gt; {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;ReportProjectMetric | ReportSystemMetric | ReportStandardMetric&gt;(</span>
-    metric
-  );
+  const [record, setRecord, onChange, onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;</span>
+    ReportProjectMetric | ReportSystemMetric | ReportStandardMetric
+  &gt;(metric);
   const [progressModalOpened, setProgressModalOpened] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [resetMetricModalOpened, setResetMetricModalOpened] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
@@ -1143,7 +1143,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
                   label={strings.PROGRESS}
                   value={record.value}
                   id={'value'}
-                  onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('value', value)}</span>
+                  onChange={onChangeCallback('value')}
                   display={!isEditing}
                   required={true}
                   min={0}
@@ -1168,7 +1168,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
                   label={strings.STATUS}
                   selectedValue={record.status}
                   options={statusOptions}
-                  onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('status', value)}</span>
+                  onChange={onChangeCallback('status')}
                   disabled={!isEditing}
                   placeholder={'No Status'}
                 /&gt;
@@ -1190,7 +1190,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
               label={strings.UNDERPERFORMANCE_JUSTIFICATION}
               value={record.underperformanceJustification}
               id={'underperformanceJustification'}
-              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('underperformanceJustification', value)}</span>
+              onChange={onChangeCallback('underperformanceJustification')}
               display={!isEditing}
               styles={textAreaStyles}
               preserveNewlines
@@ -1205,7 +1205,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
                 label={strings.PROGRESS_NOTES}
                 value={record.progressNotes}
                 id={'progressNotes'}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('progressNotes', value)}</span>
+                onChange={onChangeCallback('progressNotes')}
                 display={!isEditing}
                 styles={textAreaStyles}
                 preserveNewlines
@@ -1231,7 +1231,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T20:01:38.332Z
+                at 2025-08-20T15:30:41.149Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

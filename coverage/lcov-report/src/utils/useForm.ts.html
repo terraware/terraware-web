@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -80,7 +80,18 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -95,22 +106,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Dispatch, SetStateAction } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Dispatch, SetStateAction, useCallback } from 'react';
 &nbsp;
-type Handler = (id: string, value: unknown) =&gt; void;
+type CurriedChangeHandler = (id: string) =&gt; (value: unknown) =&gt; void;
+type DirectChangeHandler = (id: string, value: unknown) =&gt; void;
 &nbsp;
-const useForm = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >&lt;T</span>&gt;(originalRecord: T): [T, Dispatch&lt;SetStateAction&lt;T&gt;&gt;, Handler] =&gt; {</span>
+const useForm = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >&lt;T</span>&gt;(originalRecord: T): [T, Dispatch&lt;SetStateAction&lt;T&gt;&gt;, DirectChangeHandler, CurriedChangeHandler] =&gt; {</span>
   const [record, setRecord] = <span class="cstat-no" title="statement not covered" >React.useState(originalRecord);</span>
 &nbsp;
-  const onChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d: string, value: unknown) =&gt; {</span>
+  const onChange = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(i</span>d: string, value: unknown) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setRecord(<span class="fstat-no" title="function not covered" >(p</span>reviousRecord: T): T =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      return { ...previousRecord, [id]: value };</span>
     });
-  };
+  }, []);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return [record, setRecord, onChange];</span>
+  const onChangeCallback = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (i</span>d: string) =&gt; {
+<span class="cstat-no" title="statement not covered" >      return <span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        onChange(id, value);</span>
+      };
+    },
+    [onChange]
+  );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return [record, setRecord, onChange, onChangeCallback];</span>
 };
 &nbsp;
 export default useForm;
@@ -121,7 +151,7 @@ export default useForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T20:01:38.332Z
+                at 2025-08-20T15:30:41.149Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

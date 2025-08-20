@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -364,28 +364,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -397,6 +375,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -447,7 +447,7 @@ const AcceleratorReportEditForm = <span class="cstat-no" title="statement not co
   const reportId = <span class="cstat-no" title="statement not covered" >String(pathParams.reportId);</span>
   const projectId = <span class="cstat-no" title="statement not covered" >String(pathParams.projectId);</span>
 &nbsp;
-  const [record, , onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;AcceleratorReport&gt;(report);</span>
+  const [record, , onChange, onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;AcceleratorReport&gt;(report);</span>
   const [saveReportRequestId, setSaveReportRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const saveReportResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUpdateAcceleratorReport(saveReportRequestId));</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
@@ -535,7 +535,7 @@ const AcceleratorReportEditForm = <span class="cstat-no" title="statement not co
             report={record}
             projectId={projectId}
             editing={true}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('highlights', value)}</span>
+            onChange={onChangeCallback('highlights')}
           /&gt;
           {['system', 'project', 'standard'].map(<span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; {
             const metrics =
@@ -561,13 +561,13 @@ const AcceleratorReportEditForm = <span class="cstat-no" title="statement not co
             report={record}
             projectId={projectId}
             editing={true}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('achievements', value)}</span>
+            onChange={onChangeCallback('achievements')}
           /&gt;
           &lt;ChallengesMitigationBox
             report={record}
             projectId={projectId}
             editing={true}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('challenges', value)}</span>
+            onChange={onChangeCallback('challenges')}
           /&gt;
         &lt;/Card&gt;
       &lt;/Box&gt;
@@ -583,7 +583,7 @@ export default AcceleratorReportEditForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T20:01:38.332Z
+                at 2025-08-20T15:30:41.149Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

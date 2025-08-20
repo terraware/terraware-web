@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/129</span>
+                <span class='fraction'>0/126</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/123</span>
+                <span class='fraction'>0/120</span>
             </div>
         
             
@@ -664,16 +664,7 @@
 <a name='L599'></a><a href='#L599'>599</a>
 <a name='L600'></a><a href='#L600'>600</a>
 <a name='L601'></a><a href='#L601'>601</a>
-<a name='L602'></a><a href='#L602'>602</a>
-<a name='L603'></a><a href='#L603'>603</a>
-<a name='L604'></a><a href='#L604'>604</a>
-<a name='L605'></a><a href='#L605'>605</a>
-<a name='L606'></a><a href='#L606'>606</a>
-<a name='L607'></a><a href='#L607'>607</a>
-<a name='L608'></a><a href='#L608'>608</a>
-<a name='L609'></a><a href='#L609'>609</a>
-<a name='L610'></a><a href='#L610'>610</a>
-<a name='L611'></a><a href='#L611'>611</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L602'></a><a href='#L602'>602</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -902,15 +893,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1354,7 +1336,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const locationTimezone = <span class="cstat-no" title="statement not covered" >useLocationTimeZone();</span>
   const isUpdatedNurseryGrowthPhasesEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Updated Nursery Growth Phases');</span>
-  const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;FormRecord&gt;(undefined);</span>
+  const [record, setRecord, onChange, onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;FormRecord&gt;(undefined);</span>
 &nbsp;
   const facilityId = <span class="cstat-no" title="statement not covered" >origin === 'Nursery' ? originId : record?.facilityId;</span>
   const speciesId = <span class="cstat-no" title="statement not covered" >origin === 'Species' ? originId : record?.speciesId;</span>
@@ -1512,15 +1494,6 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   const gridSize = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >isMobile ? 12 : 6)</span>, [isMobile]);</span>
 &nbsp;
   const paddingSeparator = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >isMobile ? 0 : 1.5)</span>, [isMobile]);</span>
-&nbsp;
-  const getOnChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (i</span>d: string) =&gt; {
-<span class="cstat-no" title="statement not covered" >      return <span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        onChange(id, value);</span>
-      };
-    },
-    [onChange]
-  );
 &nbsp;
   const changeDate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (i</span>d: string, value?: Date | null) =&gt; {
@@ -1725,7 +1698,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
-                onChange={getOnChange('germinatingQuantity')}
+                onChange={onChangeCallback('germinatingQuantity')}
                 type='number'
                 label={
                   isUpdatedNurseryGrowthPhasesEnabled
@@ -1772,7 +1745,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;Textfield
                 id='activeGrowthQuantity'
                 value={record.activeGrowthQuantity}
-                onChange={getOnChange('activeGrowthQuantity')}
+                onChange={onChangeCallback('activeGrowthQuantity')}
                 type='number'
                 label={
                   isUpdatedNurseryGrowthPhasesEnabled
@@ -1822,7 +1795,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                     id='hardeningOffQuantity'
                     label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
                     min={0}
-                    onChange={getOnChange('hardeningOffQuantity')}
+                    onChange={onChangeCallback('hardeningOffQuantity')}
                     tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
                     type='number'
                     value={record.hardeningOffQuantity}
@@ -1837,7 +1810,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
-                onChange={getOnChange('readyQuantity')}
+                onChange={onChangeCallback('readyQuantity')}
                 type='number'
                 label={
                   isUpdatedNurseryGrowthPhasesEnabled
@@ -1882,7 +1855,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;Textfield
                 id='notes'
                 value={record?.notes}
-                onChange={getOnChange('notes')}
+                onChange={onChangeCallback('notes')}
                 type='textarea'
                 label={strings.NOTES}
               /&gt;
@@ -1900,7 +1873,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T20:01:38.332Z
+                at 2025-08-20T15:30:41.149Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

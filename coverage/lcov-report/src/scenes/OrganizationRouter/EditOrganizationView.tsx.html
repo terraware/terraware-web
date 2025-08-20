@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -307,9 +307,7 @@
 <a name='L242'></a><a href='#L242'>242</a>
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L245'></a><a href='#L245'>245</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -463,7 +461,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -473,7 +470,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -491,8 +489,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -545,7 +541,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -588,7 +584,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const [organizationRecord, setOrganizationRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;Organization&gt;(organization);</span>
+  const [organizationRecord, setOrganizationRecord, onChange, onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;Organization&gt;(organization);</span>
   const [nameError, setNameError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [countryError, setCountryError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [subdivisionError, setSubdivisionError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -709,7 +705,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
               id='name'
               label={strings.ORGANIZATION_NAME_REQUIRED}
               type='text'
-              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('name', value)}</span>
+              onChange={onChangeCallback('name')}
               value={organizationRecord.name}
               errorText={organizationRecord.name ? '' : nameError}
             /&gt;
@@ -719,7 +715,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
               id='description'
               label={strings.DESCRIPTION}
               type='textarea'
-              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('description', value)}</span>
+              onChange={onChangeCallback('description')}
               value={organizationRecord.description}
             /&gt;
           &lt;/Grid&gt;
@@ -736,9 +732,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
                 })
               );
             }}
-            onChangeCountrySubdivisionCode={<span class="fstat-no" title="function not covered" >(c</span>ountrySubdivisionCode: string) =&gt;
-<span class="cstat-no" title="statement not covered" >              onChange('countrySubdivisionCode', countrySubdivisionCode)</span>
-            }
+            onChangeCountrySubdivisionCode={onChangeCallback('countrySubdivisionCode')}
             horizontalLayout
             countryError={countryError}
             countrySubdivisionError={subdivisionError}
@@ -791,7 +785,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
                 label={strings.ORGANIZATION_WEBSITE}
                 id='org-website'
                 display={false}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('website', value)}</span>
+                onChange={onChangeCallback('website')}
                 value={organizationRecord.website}
               /&gt;
             &lt;/Grid&gt;
@@ -808,7 +802,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T20:01:38.332Z
+                at 2025-08-20T15:30:41.149Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

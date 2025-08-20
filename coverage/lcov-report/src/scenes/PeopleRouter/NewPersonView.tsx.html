@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/92</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -333,11 +333,7 @@
 <a name='L268'></a><a href='#L268'>268</a>
 <a name='L269'></a><a href='#L269'>269</a>
 <a name='L270'></a><a href='#L270'>270</a>
-<a name='L271'></a><a href='#L271'>271</a>
-<a name='L272'></a><a href='#L272'>272</a>
-<a name='L273'></a><a href='#L273'>273</a>
-<a name='L274'></a><a href='#L274'>274</a>
-<a name='L275'></a><a href='#L275'>275</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L271'></a><a href='#L271'>271</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -416,13 +412,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -556,7 +548,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -567,7 +558,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -577,7 +567,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -646,7 +638,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
   const [personSelectedToEdit, setPersonSelectedToEdit] = <span class="cstat-no" title="statement not covered" >useState&lt;OrganizationUser&gt;();</span>
   const { isDesktop, isMobile, isTablet } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
-  const [newPerson, setNewPerson, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;OrganizationUser&gt;({</span>
+  const [newPerson, setNewPerson, , onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;OrganizationUser&gt;({</span>
     id: -1,
     email: '',
     role: 'Contributor',
@@ -678,10 +670,6 @@ export default function <span class="fstat-no" title="function not covered" >Per
 <span class="cstat-no" title="statement not covered" >      void populatePeople();</span>
     }
   }, [selectedOrganization, personId]);
-&nbsp;
-  const onChangeRole = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewRole: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    onChange('role', newRole);</span>
-  };
 &nbsp;
   const goToPeople = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    navigate({ pathname: APP_PATHS.PEOPLE });</span>
@@ -830,7 +818,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
                 id='email'
                 label={strings.EMAIL_REQUIRED}
                 type='text'
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('email', value)}</span>
+                onChange={onChangeCallback('email')}
                 value={newPerson.email}
                 disabled={!!personSelectedToEdit}
                 errorText={emailError}
@@ -841,7 +829,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
                 id='firstName'
                 label={strings.FIRST_NAME}
                 type='text'
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('firstName', value)}</span>
+                onChange={onChangeCallback('firstName')}
                 disabled={true}
                 value={newPerson.firstName}
               /&gt;
@@ -851,7 +839,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
                 id='lastName'
                 label={strings.LAST_NAME}
                 type='text'
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('lastName', value)}</span>
+                onChange={onChangeCallback('lastName')}
                 disabled={true}
                 value={newPerson.lastName}
               /&gt;
@@ -862,7 +850,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
               &lt;Dropdown
                 id='role'
                 label={strings.ROLE_REQUIRED}
-                onChange={onChangeRole}
+                onChange={onChangeCallback('role')}
                 options={roleOptions}
                 disabled={newPerson.role === 'Owner'}
                 selectedValue={newPerson.role}
@@ -892,7 +880,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T20:01:38.332Z
+                at 2025-08-20T15:30:41.149Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
