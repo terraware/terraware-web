@@ -41,6 +41,8 @@ type ColumnsModalProps = {
   table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
 };
 
+const BASE_COLUMNS = ['projectName', 'participantCohortPhase', 'eligibleLand', 'countryName', 'projectLead'];
+
 export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   const { onClose, onSave, allVariables, table } = props;
 
@@ -283,14 +285,9 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   );
 
   const handleResetColumns = useCallback(() => {
-    // Reset to default selection - customize as needed
-    const defaultDeliverable = deliverableGroups.find((d) => d.name.toLowerCase().includes('compliance'));
-
-    if (defaultDeliverable) {
-      setSelectedDeliverables(new Set([defaultDeliverable.id]));
-      setSelectedColumns(defaultDeliverable.variables.map((v) => v.stableId));
-    }
-  }, [deliverableGroups]);
+    setSelectedDeliverables(new Set());
+    setSelectedColumns(BASE_COLUMNS);
+  }, []);
 
   const moveColumn = useCallback(
     (fromIndex: number, toIndex: number) => {
@@ -390,6 +387,36 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
     [removeColumn]
   );
 
+  const listElement = (id: string, label?: string) => (
+    <ListItem
+      key={id}
+      sx={{
+        px: 0,
+        py: 0.5,
+        '&:hover': { backgroundColor: 'action.hover' },
+        borderRadius: 1,
+      }}
+    >
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={selectedColumns.includes(id)}
+            onChange={handleVariableToggle}
+            value={id}
+            size='small'
+            disabled={id === 'projectName'}
+          />
+        }
+        label={
+          <Box>
+            <Typography variant='body2'>{label || id}</Typography>
+          </Box>
+        }
+        sx={{ width: '100%', m: 0 }}
+      />
+    </ListItem>
+  );
+
   return (
     <DialogBox
       onClose={onClose}
@@ -471,34 +498,10 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
               />
 
               <List dense>
-                {filteredVariables.map((variable) => (
-                  <ListItem
-                    key={variable.id}
-                    sx={{
-                      px: 0,
-                      py: 0.5,
-                      '&:hover': { backgroundColor: 'action.hover' },
-                      borderRadius: 1,
-                    }}
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={selectedColumns.includes(variable.stableId)}
-                          onChange={handleVariableToggle}
-                          value={variable.stableId}
-                          size='small'
-                        />
-                      }
-                      label={
-                        <Box>
-                          <Typography variant='body2'>{variable.name}</Typography>
-                        </Box>
-                      }
-                      sx={{ width: '100%', m: 0 }}
-                    />
-                  </ListItem>
-                ))}
+                <>
+                  {BASE_COLUMNS.map((col) => listElement(col))}
+                  {filteredVariables.map((variable) => listElement(variable.id.toString(), variable.name))}
+                </>
               </List>
             </>
           ) : (
@@ -622,6 +625,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                         onClick={removeColumnHandler}
                         sx={{ ml: 0.5 }}
                         data-variable-stable-id={variableStableId}
+                        disabled={columnName === 'projectName'}
                       >
                         <CloseIcon sx={{ fontSize: 14 }} />
                       </IconButton>

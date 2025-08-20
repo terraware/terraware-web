@@ -63,8 +63,8 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
           </MenuItem>
 
           <MenuItem
-            id='change-not-ready'
-            onClick={(event) => openChangeQuantityHandler(event, 'not-ready')}
+            id='change-active-growth'
+            onClick={(event) => openChangeQuantityHandler(event, 'active-growth')}
             sx={{ padding: theme.spacing(1, 2) }}
             disabled={Number(batch.activeGrowthQuantity) === 0}
           >
