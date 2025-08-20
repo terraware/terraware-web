@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMap } from 'react-map-gl';
+import { useMap } from 'react-map-gl/mapbox';
 
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';

@@ -41,7 +41,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
     subLocation: accession.subLocation,
   };
 
-  const [record, setRecord, onChange] = useForm(newRecord);
+  const [record, setRecord, , onChangeCallback] = useForm(newRecord);
 
   useEffect(() => {
     setRecord({ facilityId: accession.facilityId || 0, subLocation: accession.subLocation });
@@ -118,7 +118,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
             label={strings.SUB_LOCATION}
             selectedSubLocation={record.subLocation}
             subLocations={subLocations.map((obj) => obj.name)}
-            onChange={(value: string) => onChange('subLocation', value)}
+            onChange={onChangeCallback('subLocation')}
             disabled={!record.facilityId}
           />
         </Grid>

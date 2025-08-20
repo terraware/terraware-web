@@ -47,7 +47,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const [organizationTypeDetailsError, setOrganizationTypeDetailsError] = useState('');
   const [locationTypes, setLocationTypes] = useState<LocationTypesSelected>({} as LocationTypesSelected);
   const [hasStates, setHasStates] = useState<boolean>(false);
-  const [newOrganization, setNewOrganization, onChange] = useForm<Organization>({
+  const [newOrganization, setNewOrganization, onChange, onChangeCallback] = useForm<Organization>({
     id: -1,
     name: '',
     role: 'Owner',
@@ -195,7 +195,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.DESCRIPTION}
               type='text'
               id='description'
-              onChange={(value) => onChange('description', value)}
+              onChange={onChangeCallback('description')}
               value={newOrganization.description}
             />
           </Grid>
@@ -286,7 +286,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.ORGANIZATION_WEBSITE}
               id='create-org-question-website'
               display={false}
-              onChange={(value) => onChange('website', value)}
+              onChange={onChangeCallback('website')}
               value={newOrganization.website}
             />
           </Grid>

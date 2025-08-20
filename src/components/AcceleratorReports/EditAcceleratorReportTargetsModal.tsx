@@ -46,7 +46,7 @@ export default function EditAcceleratorReportTargetsModal({
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id;
 
-  const [record, , onChange] = useForm<RowMetric>(row);
+  const [record, , , onChangeCallback] = useForm<RowMetric>(row);
   const [updateRequestId, setUpdateRequestId] = useState<string>('');
 
   const updateResponse = useAppSelector(selectUpdateAcceleratorReportTargets(updateRequestId));
@@ -184,7 +184,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='annualTarget'
             label={strings.ANNUAL_TARGET}
             type='text'
-            onChange={(value) => onChange('annualTarget', value)}
+            onChange={onChangeCallback('annualTarget')}
             value={record.annualTarget}
           />
         </Grid>
@@ -194,7 +194,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='q1Target'
             label={strings.Q1_TARGET}
             type='text'
-            onChange={(value) => onChange('q1Target', value)}
+            onChange={onChangeCallback('q1Target')}
             value={record.q1Target}
           />
         </Grid>
@@ -204,7 +204,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='q2Target'
             label={strings.Q2_TARGET}
             type='text'
-            onChange={(value) => onChange('q2Target', value)}
+            onChange={onChangeCallback('q2Target')}
             value={record.q2Target}
           />
         </Grid>
@@ -214,7 +214,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='q3Target'
             label={strings.Q3_TARGET}
             type='text'
-            onChange={(value) => onChange('q3Target', value)}
+            onChange={onChangeCallback('q3Target')}
             value={record.q3Target}
           />
         </Grid>
@@ -224,7 +224,7 @@ export default function EditAcceleratorReportTargetsModal({
             id='q4Target'
             label={strings.Q4_TARGET}
             type='text'
-            onChange={(value) => onChange('q4Target', value)}
+            onChange={onChangeCallback('q4Target')}
             value={record.q4Target}
           />
         </Grid>

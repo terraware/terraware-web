@@ -47,7 +47,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, user, reload, viabilityTest } = props;
 
-  const [record, setRecord, onChange] = useForm(viabilityTest);
+  const [record, setRecord, onChange, onChangeCallback] = useForm(viabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
   const [testCompleted, setTestCompleted] = useState<boolean>(false);
   const [totalSeedsTested, setTotalSeedsTested] = useState(0);
@@ -531,7 +531,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               label={strings.SEED_TYPE}
               placeholder={strings.SELECT}
               options={seedTypes()}
-              onChange={(value: string) => onChange('seedType', value)}
+              onChange={onChangeCallback('seedType')}
               selectedValue={record?.seedType}
               fullWidth={true}
               disabled={readOnly}
@@ -557,7 +557,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   label={strings.SUBSTRATE}
                   placeholder={strings.SELECT}
                   options={getSubstratesAccordingToType(record?.testType)}
-                  onChange={(value: string) => onChange('substrate', value)}
+                  onChange={onChangeCallback('substrate')}
                   selectedValue={record?.substrate}
                   fullWidth={true}
                   disabled={readOnly}
@@ -581,7 +581,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   label={strings.TREATMENT}
                   placeholder={strings.SELECT}
                   options={treatments()}
-                  onChange={(value: string) => onChange('treatment', value)}
+                  onChange={onChangeCallback('treatment')}
                   selectedValue={record?.treatment}
                   fullWidth={true}
                   disabled={readOnly}
@@ -780,7 +780,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             <Textfield
               id='notes'
               value={record?.notes}
-              onChange={(value) => onChange('notes', value)}
+              onChange={onChangeCallback('notes')}
               type='textarea'
               label={strings.NOTES}
             />

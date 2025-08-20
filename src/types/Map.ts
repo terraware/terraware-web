@@ -1,6 +1,6 @@
 // flattened info for shapes relating to planting site data
 import React from 'react';
-import { LayerProps } from 'react-map-gl';
+import { LayerProps } from 'react-map-gl/mapbox';
 
 import { SxProps } from '@mui/material';
 import { Feature, FeatureCollection, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';

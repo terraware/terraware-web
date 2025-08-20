@@ -4,13 +4,13 @@ import ReactMapGL, {
   GeolocateControl,
   Layer,
   LngLatBoundsLike,
-  MapLayerMouseEvent,
+  MapGeoJSONFeature,
+  MapMouseEvent,
   MapRef,
-  MapboxGeoJSONFeature,
   NavigationControl,
   Popup,
   Source,
-} from 'react-map-gl';
+} from 'react-map-gl/mapbox';
 
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
@@ -38,7 +38,7 @@ import UndoRedoControl from './UndoRedoControl';
 import { boundariesToViewState, getMapErrorLayer, readOnlyBoundariesToMapLayers } from './utils';
 
 // Callback to select one feature from among list of features on the map that overlap the click target.
-export type LayerFeature = MapboxGeoJSONFeature;
+export type LayerFeature = MapGeoJSONFeature;
 export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
 
 export type EditableMapProps = {
@@ -166,7 +166,7 @@ export default function EditableMap({
 
   // map click to fetch geometry and show a popup at that location
   const onMapClick = useCallback(
-    (event: MapLayerMouseEvent) => {
+    (event: MapMouseEvent) => {
       if (!event?.features) {
         return;
       }
@@ -176,7 +176,7 @@ export default function EditableMap({
       if (feature && feature.properties) {
         const { lat, lng } = event.lngLat;
         const { id, properties, layer } = feature;
-        const sourceId = layer.source as string;
+        const sourceId = layer?.source as string;
 
         if (!readOnlyBoundary?.find((b) => b.id === sourceId)) {
           return;
@@ -227,7 +227,9 @@ export default function EditableMap({
     const markActiveContext = (data: MapEntityId[], value: boolean) => {
       data.forEach((datum) => {
         const { id, sourceId: source } = datum;
-        mapRef?.current?.setFeatureState({ source, id }, { select: value });
+        if (id) {
+          mapRef?.current?.setFeatureState({ source, id }, { select: value });
+        }
       });
     };
 
