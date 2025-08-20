@@ -7,6 +7,7 @@ import MapContainer from './MapContainer';
 import MapDrawer, { MapDrawerSize } from './MapDrawer';
 import MapLegend, { MapHighlightLegendItem, MapLegendGroup } from './MapLegend';
 import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapViewStyle } from './types';
+import { getBoundsZoomLevel } from './utils';
 
 type BaseMapFeatureSection = {
   sectionDisabled?: boolean;
@@ -220,10 +221,12 @@ const MapComponent = (props: MapComponentProps) => {
         const centerLng = (minLng + maxLng) / 2;
         const centerLat = (minLat + maxLat) / 2;
 
+        const zoom = getBoundsZoomLevel({ minLat, minLng, maxLat, maxLng }, 400, 400);
+
         return {
           latitude: centerLat,
           longitude: centerLng,
-          zoom: 12,
+          zoom,
         };
       }
     }
