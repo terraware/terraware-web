@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { MapRef, useControl } from 'react-map-gl';
+import { MapRef, useControl } from 'react-map-gl/mapbox';
 
 import MapboxDraw, {
   DrawCreateEvent,

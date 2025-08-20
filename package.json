@@ -44,7 +44,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.3",
-    "@mapbox/mapbox-gl-draw": "^1.4.2",
+    "@mapbox/mapbox-gl-draw": "^1.5.0",
     "@mapbox/search-js-core": "^1.0.0-beta.21",
     "@mui/base": "^5.0.0-beta.20",
     "@mui/icons-material": "^6.0.0",
@@ -52,7 +52,7 @@
     "@mui/material": "^6.0.0",
     "@mui/styled-engine-sc": "^5.14.12",
     "@reduxjs/toolkit": "^1.9.3",
-    "@terraware/web-components": "^3.5.0",
+    "@terraware/web-components": "^3.5.12-rc.21",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -80,14 +80,14 @@
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "luxon": "^3.3.0",
-    "mapbox-gl": "^3.0.0",
+    "mapbox-gl": "^3.14.0",
     "material-react-table": "^3.2.1",
     "re-reselect": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^6.0.0",
     "react-localization": "^2.0.0",
-    "react-map-gl": "^7.0.21",
+    "react-map-gl": "^8.0.4",
     "react-mixpanel-browser": "^4.1.0",
     "react-multi-carousel": "^2.8.2",
     "react-redux": "^9.0.0",
@@ -141,7 +141,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "^axios$": "axios/dist/axios.js"
+      "^axios$": "axios/dist/axios.js",
+      "react-map-gl/mapbox": "react-map-gl/dist/mapbox.cjs"
     }
   },
   "devDependencies": {

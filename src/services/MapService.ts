@@ -838,6 +838,7 @@ const MapService = {
   getMapDataFromObservation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
+  getRecencyFromTime,
   extractPlantingSite,
   extractPlantingSiteFromHistory,
   extractPlantingZones,
