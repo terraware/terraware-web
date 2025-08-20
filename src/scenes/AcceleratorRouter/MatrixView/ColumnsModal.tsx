@@ -282,9 +282,14 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
     [table]
   );
 
+  const baseColumns = useMemo(
+    () => ['projectName', 'participantCohortPhase', 'elegibleLand', 'countryName', 'projectLead'],
+    []
+  );
+
   const handleResetColumns = useCallback(() => {
-    setSelectedColumns(['projectName', 'participantCohortPhase', 'elegibleLand', 'countryName', 'projectLead']);
-  }, []);
+    setSelectedColumns(baseColumns);
+  }, [baseColumns]);
 
   const moveColumn = useCallback(
     (fromIndex: number, toIndex: number) => {
@@ -465,34 +470,64 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
               />
 
               <List dense>
-                {filteredVariables.map((variable) => (
-                  <ListItem
-                    key={variable.id}
-                    sx={{
-                      px: 0,
-                      py: 0.5,
-                      '&:hover': { backgroundColor: 'action.hover' },
-                      borderRadius: 1,
-                    }}
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={selectedColumns.includes(variable.stableId)}
-                          onChange={handleVariableToggle}
-                          value={variable.stableId}
-                          size='small'
-                        />
-                      }
-                      label={
-                        <Box>
-                          <Typography variant='body2'>{variable.name}</Typography>
-                        </Box>
-                      }
-                      sx={{ width: '100%', m: 0 }}
-                    />
-                  </ListItem>
-                ))}
+                <>
+                  {baseColumns.map((col) => (
+                    <ListItem
+                      key={col}
+                      sx={{
+                        px: 0,
+                        py: 0.5,
+                        '&:hover': { backgroundColor: 'action.hover' },
+                        borderRadius: 1,
+                      }}
+                    >
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={selectedColumns.includes(col)}
+                            onChange={handleVariableToggle}
+                            value={col}
+                            size='small'
+                          />
+                        }
+                        label={
+                          <Box>
+                            <Typography variant='body2'>{col}</Typography>
+                          </Box>
+                        }
+                        sx={{ width: '100%', m: 0 }}
+                      />
+                    </ListItem>
+                  ))}
+                  {filteredVariables.map((variable) => (
+                    <ListItem
+                      key={variable.id}
+                      sx={{
+                        px: 0,
+                        py: 0.5,
+                        '&:hover': { backgroundColor: 'action.hover' },
+                        borderRadius: 1,
+                      }}
+                    >
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={selectedColumns.includes(variable.stableId)}
+                            onChange={handleVariableToggle}
+                            value={variable.stableId}
+                            size='small'
+                          />
+                        }
+                        label={
+                          <Box>
+                            <Typography variant='body2'>{variable.name}</Typography>
+                          </Box>
+                        }
+                        sx={{ width: '100%', m: 0 }}
+                      />
+                    </ListItem>
+                  ))}
+                </>
               </List>
             </>
           ) : (
