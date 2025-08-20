@@ -48,7 +48,7 @@ export default function MatrixViewTests() {
     await expect(columnHeaders).toHaveCount(5);
     await expect(page.locator('li').filter({ hasText: 'projectName' })).toBeVisible();
     await expect(page.locator('li').filter({ hasText: 'participantCohortPhase' })).toBeVisible();
-    await expect(page.locator('li').filter({ hasText: 'elegibleLand' })).toBeVisible();
+    await expect(page.locator('li').filter({ hasText: 'eligibleLand' })).toBeVisible();
     await expect(page.locator('li').filter({ hasText: 'countryName' })).toBeVisible();
     await expect(page.locator('li').filter({ hasText: 'projectLead' })).toBeVisible();
   });
