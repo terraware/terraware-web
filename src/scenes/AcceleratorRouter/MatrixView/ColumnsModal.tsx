@@ -41,6 +41,8 @@ type ColumnsModalProps = {
   table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
 };
 
+const BASE_COLUMNS = ['projectName', 'participantCohortPhase', 'eligibleLand', 'countryName', 'projectLead'];
+
 export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   const { onClose, onSave, allVariables, table } = props;
 
@@ -284,7 +286,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
 
   const handleResetColumns = useCallback(() => {
     setSelectedDeliverables(new Set());
-    setSelectedColumns(['projectName', 'participantCohortPhase', 'eligibleLand', 'countryName', 'projectLead']);
+    setSelectedColumns(BASE_COLUMNS);
   }, []);
 
   const moveColumn = useCallback(
@@ -385,6 +387,30 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
     [removeColumn]
   );
 
+  const listElement = (id: string, label?: string) => (
+    <ListItem
+      key={id}
+      sx={{
+        px: 0,
+        py: 0.5,
+        '&:hover': { backgroundColor: 'action.hover' },
+        borderRadius: 1,
+      }}
+    >
+      <FormControlLabel
+        control={
+          <Checkbox checked={selectedColumns.includes(id)} onChange={handleVariableToggle} value={id} size='small' />
+        }
+        label={
+          <Box>
+            <Typography variant='body2'>{label || id}</Typography>
+          </Box>
+        }
+        sx={{ width: '100%', m: 0 }}
+      />
+    </ListItem>
+  );
+
   return (
     <DialogBox
       onClose={onClose}
@@ -466,34 +492,10 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
               />
 
               <List dense>
-                {filteredVariables.map((variable) => (
-                  <ListItem
-                    key={variable.id}
-                    sx={{
-                      px: 0,
-                      py: 0.5,
-                      '&:hover': { backgroundColor: 'action.hover' },
-                      borderRadius: 1,
-                    }}
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={selectedColumns.includes(variable.stableId)}
-                          onChange={handleVariableToggle}
-                          value={variable.stableId}
-                          size='small'
-                        />
-                      }
-                      label={
-                        <Box>
-                          <Typography variant='body2'>{variable.name}</Typography>
-                        </Box>
-                      }
-                      sx={{ width: '100%', m: 0 }}
-                    />
-                  </ListItem>
-                ))}
+                <>
+                  {BASE_COLUMNS.map((col) => listElement(col))}
+                  {filteredVariables.map((variable) => listElement(variable.id.toString(), variable.name))}
+                </>
               </List>
             </>
           ) : (
