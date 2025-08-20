@@ -1,7 +1,9 @@
+@import '@terraware/web-components/style-dictionary-dist/terraware.scss';
+
 .map-drawer-table {
   border: none;
   border-collapse: collapse;
-  font-family: 'Inter', sans-serif;
+  font-family: $tw-fnt-dlg-bx-message-font-family;
   width: 100%;
 
   th,
@@ -25,18 +27,18 @@
 
   thead {
     tr {
-      background-color: #f1f0ec;
+      background-color: $tw-clr-base-gray-050;
     }
   }
 
   tbody {
     tr {
       &:nth-child(odd) {
-        background-color: white;
+        background-color: $tw-clr-base-white;
       }
 
       &:nth-child(even) {
-        background-color: #f1f0ec;
+        background-color: $tw-clr-base-gray-050;
       }
 
       td:nth-child(2) {
