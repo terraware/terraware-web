@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
-import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-components';
+import { BusySpinner, Icon, Textfield } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import { ChangeBatchStatusesRequestPayload } from 'src/services/NurseryBatchService';
@@ -15,25 +16,25 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { ModalValuesType } from './BatchesCellRenderer';
 
-export interface ChangeQuantityModalProps {
+export interface ChangeQuantityModalPrevProps {
   modalValues: ModalValuesType;
   onClose: () => void;
   reload?: () => void;
   row: any;
 }
 
-export default function ChangeQuantityModal({
+export default function ChangeQuantityModalPrev({
   modalValues,
   onClose,
   reload,
   row,
-}: ChangeQuantityModalProps): JSX.Element {
+}: ChangeQuantityModalPrevProps): JSX.Element {
   const { type } = modalValues;
   const snackbar = useSnackbar();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter(user?.locale);
+  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
-  const [nextPhase, setNextPhase] = useState<ChangeBatchStatusesRequestPayload['newPhase']>();
   const [saving, setSaving] = useState<boolean>(false);
   const [movedValue, setMovedValue] = useState<number | undefined>();
   const [errorText, setErrorText] = useState<string>('');
@@ -48,15 +49,19 @@ export default function ChangeQuantityModal({
   const title = useMemo(() => {
     switch (type) {
       case 'germinating':
-        return strings.CHANGE_GERMINATION_ESTABLISHMENT_STATUS;
+        return isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.CHANGE_GERMINATION_ESTABLISHMENT_STATUS
+          : strings.CHANGE_GERMINATING_STATUS;
       case 'hardening-off':
         return strings.CHANGE_HARDENING_OFF_STATUS;
       case 'active-growth':
-        return strings.CHANGE_ACTIVE_GROWTH_STATUS;
+        return isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.CHANGE_ACTIVE_GROWTH_STATUS
+          : strings.CHANGE_NOT_READY_STATUS;
       default:
         return '';
     }
-  }, [type]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 
   const onCloseHandler = useCallback(() => {
     setMovedValue(undefined);
@@ -69,10 +74,18 @@ export default function ChangeQuantityModal({
       setErrorText(strings.REQUIRED_FIELD);
       return;
     } else if (type === 'germinating' && movedValue > +row['germinatingQuantity(raw)']) {
-      setErrorText(strings.GERMINATION_ESTABLISHMENT_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
+      setErrorText(
+        isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+          : strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+      );
       return;
     } else if (type === 'active-growth' && movedValue > +row['activeGrowthQuantity(raw)']) {
-      setErrorText(strings.ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
+      setErrorText(
+        isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+          : strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO
+      );
       return;
     } else if (type === 'hardeningOff' && movedValue > +row['hardeningOffQuantity(raw)']) {
       setErrorText(strings.HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
@@ -82,17 +95,21 @@ export default function ChangeQuantityModal({
     setSaving(true);
 
     let previousPhase: ChangeBatchStatusesRequestPayload['previousPhase'];
+    let newPhase: ChangeBatchStatusesRequestPayload['newPhase'];
 
     if (type === 'germinating') {
       previousPhase = 'Germinating';
+      newPhase = 'ActiveGrowth';
     } else if (type === 'active-growth') {
       previousPhase = 'ActiveGrowth';
+      newPhase = isUpdatedNurseryGrowthPhasesEnabled ? 'HardeningOff' : 'Ready';
     } else if (type === 'hardening-off') {
       previousPhase = 'HardeningOff';
+      newPhase = 'Ready';
     }
 
     const response = await NurseryBatchService.changeBatchStatuses(record, {
-      newPhase: nextPhase,
+      newPhase,
       previousPhase,
       quantity: movedValue,
     });
@@ -107,7 +124,7 @@ export default function ChangeQuantityModal({
     } else {
       snackbar.toastError();
     }
-  }, [movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, movedValue, onCloseHandler, record, reload, row, snackbar, type]);
 
   const onSave = useCallback(() => {
     void onSubmit();
@@ -115,83 +132,59 @@ export default function ChangeQuantityModal({
 
   const onChangeMovedValue = useCallback(
     (value: unknown) => {
-      const valueNumber = value as number;
-      if (value && !isNaN(valueNumber) && valueNumber > 0) {
+      if (value && !isNaN(value as number) && (value as number) > 0) {
+        const valueNumber = value as number;
         setMovedValue(valueNumber);
+        if (type === 'germinating') {
+          setRecord({
+            ...row,
+            germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] + +valueNumber,
+            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
+            readyQuantity: +row['readyQuantity(raw)'],
+          });
+        } else if (type === 'active-growth' && isUpdatedNurseryGrowthPhasesEnabled) {
+          setRecord({
+            ...row,
+            germinatingQuantity: +row['germinatingQuantity(raw)'],
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
+            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
+            readyQuantity: +row['readyQuantity(raw)'],
+          });
+        } else if (type === 'active-growth' && !isUpdatedNurseryGrowthPhasesEnabled) {
+          setRecord({
+            ...row,
+            germinatingQuantity: +row['germinatingQuantity(raw)'],
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
+            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
+            readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
+          });
+        } else {
+          setRecord({
+            ...row,
+            germinatingQuantity: +row['germinatingQuantity(raw)'],
+            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
+            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] - valueNumber,
+            readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
+          });
+        }
       } else {
+        setRecord(row);
         setMovedValue(undefined);
       }
     },
-    [setMovedValue]
+    [isUpdatedNurseryGrowthPhasesEnabled, row, setMovedValue, setRecord, type]
   );
-
-  const calculateQuantities = useCallback(() => {
-    if (movedValue && !isNaN(movedValue) && movedValue > 0) {
-      const valueNumber = movedValue;
-      if (type === 'germinating' && nextPhase === 'ActiveGrowth') {
-        setRecord({
-          ...row,
-          germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
-          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] + +valueNumber,
-          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
-          readyQuantity: +row['readyQuantity(raw)'],
-        });
-      } else if (type === 'germinating' && nextPhase === 'HardeningOff') {
-        setRecord({
-          ...row,
-          germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
-          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
-          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
-          readyQuantity: +row['readyQuantity(raw)'],
-        });
-      } else if (type === 'germinating' && nextPhase === 'Ready') {
-        setRecord({
-          ...row,
-          germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
-          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
-          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
-          readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
-        });
-      } else if (type === 'active-growth' && nextPhase === 'HardeningOff') {
-        setRecord({
-          ...row,
-          germinatingQuantity: +row['germinatingQuantity(raw)'],
-          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
-          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
-          readyQuantity: +row['readyQuantity(raw)'],
-        });
-      } else if (type === 'active-growth' && nextPhase === 'Ready') {
-        setRecord({
-          ...row,
-          germinatingQuantity: +row['germinatingQuantity(raw)'],
-          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
-          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
-          readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
-        });
-      } else {
-        setRecord({
-          ...row,
-          germinatingQuantity: +row['germinatingQuantity(raw)'],
-          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
-          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] - valueNumber,
-          readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
-        });
-      }
-    } else {
-      setRecord(row);
-      setMovedValue(undefined);
-    }
-  }, [movedValue, nextPhase, row, setRecord, type]);
 
   const fromLabel = useMemo(() => {
     if (type === 'germinating') {
-      return strings.GERMINATION_ESTABLISHMENT;
+      return isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT : strings.GERMINATING;
     } else if (type === 'active-growth') {
-      return strings.ACTIVE_GROWTH;
+      return isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH : strings.NOT_READY;
     } else {
       return strings.HARDENING_OFF;
     }
-  }, [type]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 
   const fromValueFormatted = useMemo(() => {
     if (type === 'germinating') {
@@ -204,64 +197,24 @@ export default function ChangeQuantityModal({
   }, [numberFormatter, record, type]);
 
   const toLabel = useMemo(() => {
-    if (nextPhase === 'ActiveGrowth') {
-      return strings.ACTIVE_GROWTH;
-    } else if (nextPhase === 'HardeningOff') {
+    if (type === 'germinating') {
+      return isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH : strings.NOT_READY;
+    } else if (type === 'active-growth' && isUpdatedNurseryGrowthPhasesEnabled) {
       return strings.HARDENING_OFF;
     } else {
-      return strings.READY_TO_PLANT;
+      return isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT : strings.READY;
     }
-  }, [nextPhase]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, type]);
 
   const toValueFormatted = useMemo(() => {
-    if (nextPhase === 'ActiveGrowth') {
+    if (type === 'germinating') {
       return numberFormatter.format(record.activeGrowthQuantity);
-    } else if (nextPhase === 'HardeningOff') {
+    } else if (type === 'active-growth' && isUpdatedNurseryGrowthPhasesEnabled) {
       return numberFormatter.format(record.hardeningOffQuantity);
     } else {
       return numberFormatter.format(record.readyQuantity);
     }
-  }, [numberFormatter, record, nextPhase]);
-
-  const growthPhaseDropdownOptions = useMemo(() => {
-    return [
-      ...(type === 'germinating'
-        ? [
-            {
-              label: strings.ACTIVE_GROWTH,
-              value: 'ActiveGrowth',
-            },
-          ]
-        : []),
-      ...(type === 'germinating' || type === 'active-growth'
-        ? [
-            {
-              label: strings.HARDENING_OFF,
-              value: 'HardeningOff',
-            },
-          ]
-        : []),
-      {
-        label: strings.READY_TO_PLANT,
-        value: 'Ready',
-      },
-    ];
-  }, [type]);
-
-  const onChangeGrowthPhase = useCallback(
-    (value: string) => {
-      setNextPhase(value as ChangeBatchStatusesRequestPayload['newPhase']);
-    },
-    [setNextPhase]
-  );
-
-  useEffect(() => {
-    setNextPhase(growthPhaseDropdownOptions[0].value as ChangeBatchStatusesRequestPayload['newPhase']);
-  }, [growthPhaseDropdownOptions, setNextPhase]);
-
-  useEffect(() => {
-    calculateQuantities();
-  }, [calculateQuantities]);
+  }, [isUpdatedNurseryGrowthPhasesEnabled, numberFormatter, record, type]);
 
   return (
     <DialogBox
@@ -291,19 +244,6 @@ export default function ChangeQuantityModal({
     >
       <Grid>
         {saving && <BusySpinner withSkrim />}
-
-        <Grid display='flex' item marginBottom='16px' textAlign='left' xs={11}>
-          <Dropdown
-            errorText={undefined}
-            fullWidth
-            label={strings.NEXT_PHASE}
-            options={growthPhaseDropdownOptions}
-            onChange={onChangeGrowthPhase}
-            required
-            selectedValue={nextPhase}
-          />
-        </Grid>
-
         <Grid item xs={11} textAlign='left' display='flex'>
           <Textfield display id='previousValue' label={fromLabel} type='number' value={fromValueFormatted} />
 
