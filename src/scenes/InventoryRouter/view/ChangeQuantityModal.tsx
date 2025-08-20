@@ -156,7 +156,7 @@ export default function ChangeQuantityModal({
         setMovedValue(undefined);
       }
     },
-    [row, setMovedValue, setRecord, type]
+    [nextPhase, row, setRecord, type]
   );
 
   const fromLabel = useMemo(() => {
