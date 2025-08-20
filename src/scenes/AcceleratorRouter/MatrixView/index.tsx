@@ -257,6 +257,7 @@ const MatrixView = () => {
         size: 200,
         id: 'projectName',
         enableEditing: false,
+        enableHiding: false,
       },
       {
         accessorKey: 'participant_cohort_phase',

@@ -399,7 +399,13 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
     >
       <FormControlLabel
         control={
-          <Checkbox checked={selectedColumns.includes(id)} onChange={handleVariableToggle} value={id} size='small' />
+          <Checkbox
+            checked={selectedColumns.includes(id)}
+            onChange={handleVariableToggle}
+            value={id}
+            size='small'
+            disabled={id === 'projectName'}
+          />
         }
         label={
           <Box>
@@ -619,6 +625,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                         onClick={removeColumnHandler}
                         sx={{ ml: 0.5 }}
                         data-variable-stable-id={variableStableId}
+                        disabled={columnName === 'projectName'}
                       >
                         <CloseIcon sx={{ fontSize: 14 }} />
                       </IconButton>
