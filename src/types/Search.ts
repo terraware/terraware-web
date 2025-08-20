@@ -18,8 +18,11 @@ export type SearchValuesResponseElementWithId = SearchValuesResponseElement & { 
 export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
 export type SearchRequestPayloadWithOptionalSearch = components['schemas']['SearchRequestPayload'];
-/** Search request payload that requires a search node to be specified. */
-export type SearchRequestPayload = components['schemas']['SearchRequestPayload'] & { search: SearchNodePayload };
+/** Search request payload that requires a search node and result count to be specified. */
+export type SearchRequestPayload = components['schemas']['SearchRequestPayload'] & {
+  count: number;
+  search: SearchNodePayload;
+};
 export type OptionalSearchRequestPayload = components['schemas']['SearchRequestPayload'];
 
 export const isFieldNodePayload = (node: SearchNodePayload): node is FieldNodePayload => node.operation === 'field';
