@@ -235,6 +235,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
 
   return (
     <Box
+      bgcolor={theme.palette.TwClrBaseWhite}
       display='flex'
       justifyItems='flex-start'
       padding={theme.spacing(2, 1)}
