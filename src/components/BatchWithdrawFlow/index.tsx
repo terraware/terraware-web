@@ -88,7 +88,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       .map((batchWithdrawal) => {
         const {
           readyQuantityWithdrawn,
-          notReadyQuantityWithdrawn,
+          activeGrowthQuantityWithdrawn,
           hardeningOffQuantityWithdrawn,
           germinatingQuantityWithdrawn,
         } = batchWithdrawal;
@@ -96,7 +96,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
         return {
           ...batchWithdrawal,
           readyQuantityWithdrawn: isNaN(readyQuantityWithdrawn) ? 0 : readyQuantityWithdrawn,
-          notReadyQuantityWithdrawn: isNaN(notReadyQuantityWithdrawn) ? 0 : notReadyQuantityWithdrawn,
+          activeGrowthQuantityWithdrawn: isNaN(activeGrowthQuantityWithdrawn) ? 0 : activeGrowthQuantityWithdrawn,
           hardeningOffQuantityWithdrawn: isNaN(hardeningOffQuantityWithdrawn) ? 0 : hardeningOffQuantityWithdrawn,
           // germinating quantity can be undefined in the payload, hence different handling
           germinatingQuantityWithdrawn:
@@ -106,7 +106,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       .filter((batchWithdrawal) => {
         return (
           batchWithdrawal.readyQuantityWithdrawn +
-            batchWithdrawal.notReadyQuantityWithdrawn +
+            batchWithdrawal.activeGrowthQuantityWithdrawn +
             batchWithdrawal.hardeningOffQuantityWithdrawn +
             (batchWithdrawal.germinatingQuantityWithdrawn ?? 0) >
           0
@@ -138,7 +138,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       const {
         batchId,
         germinatingQuantityWithdrawn,
-        notReadyQuantityWithdrawn,
+        activeGrowthQuantityWithdrawn,
         hardeningOffQuantityWithdrawn,
         readyQuantityWithdrawn,
       } = batchWithdrawal;
@@ -146,7 +146,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       return (
         sourceBatch &&
         Number(sourceBatch['germinatingQuantity(raw)']) === Number(germinatingQuantityWithdrawn) &&
-        Number(sourceBatch['notReadyQuantity(raw)']) === Number(notReadyQuantityWithdrawn) &&
+        Number(sourceBatch['activeGrowthQuantity(raw)']) === Number(activeGrowthQuantityWithdrawn) &&
         Number(sourceBatch['hardeningOffQuantity(raw)']) === Number(hardeningOffQuantityWithdrawn) &&
         Number(sourceBatch['readyQuantity(raw)']) === Number(readyQuantityWithdrawn)
       );
@@ -174,15 +174,15 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     const totalWithdrawn = withdrawal.batchWithdrawals?.reduce((total, batchWithdrawal) => {
       const {
         germinatingQuantityWithdrawn,
-        notReadyQuantityWithdrawn,
+        activeGrowthQuantityWithdrawn,
         hardeningOffQuantityWithdrawn,
         readyQuantityWithdrawn,
       } = batchWithdrawal;
       if (germinatingQuantityWithdrawn) {
         total += germinatingQuantityWithdrawn;
       }
-      if (notReadyQuantityWithdrawn) {
-        total += notReadyQuantityWithdrawn;
+      if (activeGrowthQuantityWithdrawn) {
+        total += activeGrowthQuantityWithdrawn;
       }
       if (hardeningOffQuantityWithdrawn) {
         total += hardeningOffQuantityWithdrawn;

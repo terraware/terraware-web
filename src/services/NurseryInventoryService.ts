@@ -30,7 +30,7 @@ export const BE_SORTED_FIELDS = [
   'facilityInventories.facility_name',
   'germinatingQuantity',
   'hardeningOffQuantity',
-  'notReadyQuantity',
+  'activeGrowthQuantity',
   'readyQuantity',
   'totalQuantity',
 ];
@@ -50,13 +50,13 @@ export const FACILITY_SPECIFIC_FIELDS = [
   'facility_name',
   'germinatingQuantity',
   'hardeningOffQuantity',
-  'notReadyQuantity',
+  'activeGrowthQuantity',
   'readyQuantity',
   'totalQuantity',
   'germinatingQuantity(raw)',
   'hardeningOffQuantity(raw)',
   'readyQuantity(raw)',
-  'notReadyQuantity(raw)',
+  'activeGrowthQuantity(raw)',
   'totalQuantity(raw)',
 ];
 
@@ -266,7 +266,7 @@ const searchInventoryByNursery = async ({
     'facilityInventories.species_scientificName',
     'germinatingQuantity',
     'hardeningOffQuantity',
-    'notReadyQuantity',
+    'activeGrowthQuantity',
     'readyQuantity',
     'totalQuantity',
   ];

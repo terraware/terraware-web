@@ -38,7 +38,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     ...batch,
     'germinatingQuantity(raw)': batch.germinatingQuantity,
     'hardeningOffQuantity(raw)': batch.hardeningOffQuantity,
-    'notReadyQuantity(raw)': batch.notReadyQuantity,
+    'activeGrowthQuantity(raw)': batch.activeGrowthQuantity,
     'readyQuantity(raw)': batch.readyQuantity,
   };
 
@@ -81,7 +81,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     setModalValues({ openChangeQuantityModal: true, type: 'germinating' });
   }, [setModalValues]);
 
-  const handleEditNotReadyQuantity = useCallback(() => {
+  const handleEditActiveGrowthQuantity = useCallback(() => {
     setModalValues({ openChangeQuantityModal: true, type: 'not-ready' });
   }, [setModalValues]);
 
@@ -125,7 +125,9 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
-            title={strings.GERMINATING_QUANTITY}
+            title={
+              isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT : strings.GERMINATING_QUANTITY
+            }
             contents={batch.germinatingQuantity}
             grid={true}
             handleEdit={handleEditGerminatingQuantity}
@@ -134,7 +136,11 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={false}
-            title={strings.GERMINATION_STARTED_DATE}
+            title={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                : strings.GERMINATION_STARTED_DATE
+            }
             contents={batch.germinationStartedDate}
             grid={true}
           />
@@ -142,10 +148,10 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
-            title={strings.NOT_READY_QUANTITY}
-            contents={batch.notReadyQuantity}
+            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY}
+            contents={batch.activeGrowthQuantity}
             grid={true}
-            handleEdit={handleEditNotReadyQuantity}
+            handleEdit={handleEditActiveGrowthQuantity}
           />
         </Grid>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
@@ -173,7 +179,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={false}
-            title={strings.READY_QUANTITY}
+            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY}
             contents={batch.readyQuantity}
             grid={true}
           />
@@ -182,7 +188,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           <OverviewItemCard
             isEditable={false}
             title={strings.TOTAL_QUANTITY}
-            contents={batch.readyQuantity + batch.notReadyQuantity}
+            contents={batch.readyQuantity + batch.activeGrowthQuantity}
             grid={true}
           />
         </Grid>

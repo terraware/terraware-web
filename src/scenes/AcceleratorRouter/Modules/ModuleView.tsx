@@ -35,7 +35,7 @@ export type InventoryResult = {
   species_commonName?: string;
   germinatingQuantity: string;
   hardeningOffQuantity: string;
-  notReadyQuantity: string;
+  activeGrowthQuantity: string;
   readyQuantity: string;
   totalQuantity: string;
   facilityInventories: FacilityName[];

@@ -59,30 +59,46 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
         name: strings.PROJECT,
         type: 'string',
       },
-      {
-        key: 'germinatingQuantity',
-        name: strings.GERMINATING,
-        type: 'string',
-      },
-      {
-        key: 'notReadyQuantity',
-        name: strings.NOT_READY,
-        type: 'string',
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATION_ESTABLISHMENT,
+              type: 'string' as const,
+            },
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.ACTIVE_GROWTH,
+              type: 'string' as const,
+            },
             {
               key: 'hardeningOffQuantity',
               name: strings.HARDENING_OFF,
               type: 'number' as const,
             },
+            {
+              key: 'readyQuantity',
+              name: strings.READY_TO_PLANT,
+              type: 'string' as const,
+            },
           ]
-        : []),
-      {
-        key: 'readyQuantity',
-        name: strings.READY,
-        type: 'string',
-      },
+        : [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATING,
+              type: 'string' as const,
+            },
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.NOT_READY,
+              type: 'string' as const,
+            },
+            {
+              key: 'readyQuantity',
+              name: strings.READY,
+              type: 'string' as const,
+            },
+          ]),
       {
         key: 'totalQuantity',
         name: strings.TOTAL,

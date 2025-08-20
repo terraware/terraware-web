@@ -45,7 +45,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   const { isMobile } = useDeviceInfo();
   const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
-  const [record, setRecord, onChange] = useForm(batch);
+  const [record, setRecord, onChange, onChangeCallback] = useForm(batch);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [photos, setPhotos] = useState<BatchPhotoWithUrl[]>([]);
@@ -107,10 +107,10 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
 
   useEffect(() => {
     if (record) {
-      const notReadyQuantity = record?.notReadyQuantity ?? 0;
+      const activeGrowthQuantity = record?.activeGrowthQuantity ?? 0;
       const hardeningOffQuantity = record?.hardeningOffQuantity ?? 0;
       const readyQuantity = record?.readyQuantity ?? 0;
-      setTotalQuantity(+notReadyQuantity + +hardeningOffQuantity + +readyQuantity);
+      setTotalQuantity(+activeGrowthQuantity + +hardeningOffQuantity + +readyQuantity);
     }
   }, [record, selectedOrganization]);
 
@@ -141,7 +141,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   }, [batch, setRecord, selectedOrganization]);
 
   const MANDATORY_FIELDS = useMemo(
-    () => ['germinatingQuantity', 'notReadyQuantity', 'hardeningOffQuantity', 'readyQuantity', 'addedDate'] as const,
+    () =>
+      ['germinatingQuantity', 'activeGrowthQuantity', 'hardeningOffQuantity', 'readyQuantity', 'addedDate'] as const,
     []
   );
   type MandatoryField = (typeof MANDATORY_FIELDS)[number];
@@ -213,25 +214,11 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [changeDate]
   );
 
-  const handleGerminatingQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('germinatingQuantity', value);
-    },
-    [onChange]
-  );
-
   const handleGerminationStartedDateChange = useCallback(
     (value?: Date | null) => {
       changeDate('germinationStartedDate', value);
     },
     [changeDate]
-  );
-
-  const handleNotReadyQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('notReadyQuantity', value);
-    },
-    [onChange]
   );
 
   const handleReadyByDateChange = useCallback(
@@ -241,51 +228,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [changeDate]
   );
 
-  const handleHardeningOffQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('hardeningOffQuantity', value);
-    },
-    [onChange]
-  );
-
-  const handleReadyQuantityChange = useCallback(
-    (value: unknown) => {
-      onChange('readyQuantity', value);
-    },
-    [onChange]
-  );
-
   const handleSubstrateChange = useCallback(
     (value: unknown) => {
       onChange('substrate', batchSubstrateLocalizedToEnum(value as string));
-    },
-    [onChange]
-  );
-
-  const handleSubstrateNotesChange = useCallback(
-    (value: unknown) => {
-      onChange('substrateNotes', value);
-    },
-    [onChange]
-  );
-
-  const handleTreatmentChange = useCallback(
-    (value: unknown) => {
-      onChange('treatment', value);
-    },
-    [onChange]
-  );
-
-  const handleTreatmentNotesChange = useCallback(
-    (value: unknown) => {
-      onChange('treatmentNotes', value);
-    },
-    [onChange]
-  );
-
-  const handleNotesChange = useCallback(
-    (value: unknown) => {
-      onChange('notes', value);
     },
     [onChange]
   );
@@ -340,10 +285,18 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='germinatingQuantity'
             value={record.germinatingQuantity}
-            onChange={handleGerminatingQuantityChange}
+            onChange={onChangeCallback('germinatingQuantity')}
             type='number'
-            label={strings.GERMINATING_QUANTITY_REQUIRED}
-            tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+            label={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_REQUIRED
+                : strings.GERMINATING_QUANTITY_REQUIRED
+            }
+            tooltipTitle={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+                : strings.TOOLTIP_GERMINATING_QUANTITY
+            }
             errorText={validateFields && !isNumber(record?.germinatingQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
@@ -351,8 +304,16 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
           <DatePicker
             id='germinationStartedDate'
-            label={strings.GERMINATION_STARTED_DATE}
-            aria-label={strings.GERMINATION_STARTED_DATE}
+            label={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                : strings.GERMINATION_STARTED_DATE
+            }
+            aria-label={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
+                : strings.GERMINATION_STARTED_DATE
+            }
             value={record.germinationStartedDate}
             onChange={handleGerminationStartedDateChange}
             defaultTimeZone={timeZone}
@@ -360,13 +321,21 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         </Grid>
         <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='notReadyQuantity'
-            value={record.notReadyQuantity}
-            onChange={handleNotReadyQuantityChange}
+            id='activeGrowthQuantity'
+            value={record.activeGrowthQuantity}
+            onChange={onChangeCallback('activeGrowthQuantity')}
             type='number'
-            label={strings.NOT_READY_QUANTITY_REQUIRED}
-            tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-            errorText={validateFields && !isNumber(record?.notReadyQuantity) ? strings.REQUIRED_FIELD : ''}
+            label={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.ACTIVE_GROWTH_QUANTITY_REQUIRED
+                : strings.NOT_READY_QUANTITY_REQUIRED
+            }
+            tooltipTitle={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
+                : strings.TOOLTIP_NOT_READY_QUANTITY
+            }
+            errorText={validateFields && !isNumber(record?.activeGrowthQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
         </Grid>
@@ -387,7 +356,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               <Textfield
                 id='hardeningOffQuantity'
                 value={record.hardeningOffQuantity}
-                onChange={handleHardeningOffQuantityChange}
+                onChange={onChangeCallback('hardeningOffQuantity')}
                 type='number'
                 label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
@@ -404,10 +373,18 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='readyQuantity'
             value={record.readyQuantity}
-            onChange={handleReadyQuantityChange}
+            onChange={onChangeCallback('readyQuantity')}
             type='number'
-            label={strings.READY_QUANTITY_REQUIRED}
-            tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+            label={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.READY_TO_PLANT_QUANTITY_REQUIRED
+                : strings.READY_QUANTITY_REQUIRED
+            }
+            tooltipTitle={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.TOOLTIP_READY_TO_PLANT_QUANTITY
+                : strings.TOOLTIP_READY_QUANTITY
+            }
             errorText={validateFields && !isNumber(record?.readyQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
@@ -446,7 +423,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               value={record.substrateNotes}
               type='text'
               label=''
-              onChange={handleSubstrateNotesChange}
+              onChange={onChangeCallback('substrateNotes')}
             />
           )}
         </Grid>
@@ -456,7 +433,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             label={strings.TREATMENT}
             selectedValue={record.treatment}
             options={treatments()}
-            onChange={handleTreatmentChange}
+            onChange={onChangeCallback('treatment')}
             fullWidth={true}
           />
         </Grid>
@@ -467,7 +444,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
               value={record.treatmentNotes}
               type='text'
               label=''
-              onChange={handleTreatmentNotesChange}
+              onChange={onChangeCallback('treatmentNotes')}
             />
           )}
         </Grid>
@@ -478,7 +455,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           <Textfield
             id='notes'
             value={record?.notes}
-            onChange={handleNotesChange}
+            onChange={onChangeCallback('notes')}
             type='textarea'
             label={strings.NOTES}
           />

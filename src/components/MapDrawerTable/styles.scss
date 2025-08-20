@@ -1,0 +1,54 @@
+@import '@terraware/web-components/style-dictionary-dist/terraware.scss';
+
+.map-drawer-table {
+  border: none;
+  border-collapse: collapse;
+  font-family: $tw-fnt-dlg-bx-message-font-family;
+  width: 100%;
+
+  th,
+  td {
+    border: none;
+    padding: 4px;
+  }
+
+  th {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    text-align: left;
+  }
+
+  td {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+
+    a {
+      color: $tw-clr-base-green-500;
+      text-decoration: none;
+    }
+  }
+
+  thead {
+    tr {
+      background-color: $tw-clr-base-gray-050;
+    }
+  }
+
+  tbody {
+    tr {
+      &:nth-child(odd) {
+        background-color: $tw-clr-base-white;
+      }
+
+      &:nth-child(even) {
+        background-color: $tw-clr-base-gray-050;
+      }
+
+      td:nth-child(2) {
+        text-align: right;
+      }
+    }
+  }
+}

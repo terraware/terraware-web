@@ -31,7 +31,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const [organizationRecord, setOrganizationRecord, onChange] = useForm<Organization>(organization);
+  const [organizationRecord, setOrganizationRecord, onChange, onChangeCallback] = useForm<Organization>(organization);
   const [nameError, setNameError] = useState('');
   const [countryError, setCountryError] = useState('');
   const [subdivisionError, setSubdivisionError] = useState('');
@@ -152,7 +152,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               id='name'
               label={strings.ORGANIZATION_NAME_REQUIRED}
               type='text'
-              onChange={(value) => onChange('name', value)}
+              onChange={onChangeCallback('name')}
               value={organizationRecord.name}
               errorText={organizationRecord.name ? '' : nameError}
             />
@@ -162,7 +162,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               id='description'
               label={strings.DESCRIPTION}
               type='textarea'
-              onChange={(value) => onChange('description', value)}
+              onChange={onChangeCallback('description')}
               value={organizationRecord.description}
             />
           </Grid>
@@ -179,9 +179,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                 })
               );
             }}
-            onChangeCountrySubdivisionCode={(countrySubdivisionCode: string) =>
-              onChange('countrySubdivisionCode', countrySubdivisionCode)
-            }
+            onChangeCountrySubdivisionCode={onChangeCallback('countrySubdivisionCode')}
             horizontalLayout
             countryError={countryError}
             countrySubdivisionError={subdivisionError}
@@ -234,7 +232,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                 label={strings.ORGANIZATION_WEBSITE}
                 id='org-website'
                 display={false}
-                onChange={(value) => onChange('website', value)}
+                onChange={onChangeCallback('website')}
                 value={organizationRecord.website}
               />
             </Grid>

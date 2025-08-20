@@ -26,7 +26,7 @@ export const removeFilter = (id: number, setFilters: React.Dispatch<React.SetSta
 export const isBatchEmpty = (batch: SearchResponseElement): boolean => {
   return (
     Number(batch['readyQuantity(raw)']) +
-      Number(batch['notReadyQuantity(raw)']) +
+      Number(batch['activeGrowthQuantity(raw)']) +
       Number(batch['hardeningOffQuantity(raw)']) +
       Number(batch['germinatingQuantity(raw)']) ===
     0

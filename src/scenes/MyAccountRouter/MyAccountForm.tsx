@@ -98,7 +98,7 @@ const MyAccountForm = ({
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const navigate = useSyncNavigate();
-  const [record, setRecord, onChange] = useForm<User>(user);
+  const [record, setRecord, onChange, onChangeCallback] = useForm<User>(user);
   const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
   const [openDisclaimerModal, setOpenDisclaimerModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();
@@ -426,7 +426,7 @@ const MyAccountForm = ({
                 type='text'
                 value={record.firstName}
                 display={!edit}
-                onChange={(value) => onChange('firstName', value)}
+                onChange={onChangeCallback('firstName')}
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -436,7 +436,7 @@ const MyAccountForm = ({
                 type='text'
                 value={record.lastName}
                 display={!edit}
-                onChange={(value) => onChange('lastName', value)}
+                onChange={onChangeCallback('lastName')}
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -543,7 +543,7 @@ const MyAccountForm = ({
                 name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
                 label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
                 value={record.emailNotificationsEnabled}
-                onChange={(value) => onChange('emailNotificationsEnabled', value)}
+                onChange={onChangeCallback('emailNotificationsEnabled')}
               />
             </Grid>
             {userIsFunder && disclaimer && (

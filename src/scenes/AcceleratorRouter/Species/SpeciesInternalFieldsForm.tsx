@@ -9,7 +9,7 @@ import strings from 'src/strings';
 import { Species, getWoodDensityLevelOptions } from 'src/types/Species';
 
 interface SpeciesInternalFieldsFormProps {
-  onChange: (id: string, value: unknown) => void;
+  onChange: (id: string) => (value: unknown) => void;
   speciesRecord: Species;
 }
 
@@ -68,7 +68,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
               <TextField
                 label={strings.HEIGHT_AT_MATURITY}
                 id='heightAtMaturityValue'
-                onChange={(value) => onChange('heightAtMaturityValue', value)}
+                onChange={onChange('heightAtMaturityValue')}
                 type='number'
                 value={speciesRecord.heightAtMaturityValue}
               />
@@ -78,7 +78,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
                 label={strings.REFERENCE}
                 id='heightAtMaturitySource'
                 helperText={strings.REFERENCE_HEIGHT_AT_MATURITY}
-                onChange={(value) => onChange('heightAtMaturitySource', value)}
+                onChange={onChange('heightAtMaturitySource')}
                 type='text'
                 value={speciesRecord.heightAtMaturitySource}
               />
@@ -90,7 +90,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
               <TextField
                 label={strings.DIAMETER_AT_BREAST_HEIGHT}
                 id='dbhValue'
-                onChange={(value) => onChange('dbhValue', value)}
+                onChange={onChange('dbhValue')}
                 type='number'
                 value={speciesRecord.dbhValue}
               />
@@ -100,7 +100,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
                 label={strings.REFERENCE}
                 id='dbhSource'
                 helperText={strings.REFERENCE_DBH}
-                onChange={(value) => onChange('dbhSource', value)}
+                onChange={onChange('dbhSource')}
                 type='text'
                 value={speciesRecord.dbhSource}
               />
@@ -112,7 +112,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
               <TextField
                 label={strings.AVERAGE_WOOD_DENSITY}
                 id='averageWoodDensity'
-                onChange={(value) => onChange('averageWoodDensity', value)}
+                onChange={onChange('averageWoodDensity')}
                 type='number'
                 value={speciesRecord.averageWoodDensity}
               />
@@ -123,7 +123,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
                 label={strings.WOOD_DENSITY_LEVEL}
                 aria-label={strings.WOOD_DENSITY_LEVEL}
                 fullWidth={true}
-                onChange={(value: string) => onChange('woodDensityLevel', value)}
+                onChange={onChange('woodDensityLevel')}
                 placeholder={strings.SELECT}
                 options={getWoodDensityLevelOptions(activeLocale)}
                 selectedValue={speciesRecord.woodDensityLevel}

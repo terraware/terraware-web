@@ -143,12 +143,12 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     );
   }
 
-  if (column.key === 'notReadyQuantityWithdrawn') {
+  if (column.key === 'activeGrowthQuantityWithdrawn') {
     return (
       <CellRenderer
         index={index}
         column={column}
-        value={createQuantityInput('notReadyQuantityWithdrawn', 'notReadyQuantity')}
+        value={createQuantityInput('activeGrowthQuantityWithdrawn', 'activeGrowthQuantity')}
         row={row}
         sx={[textStyles, cellStyles]}
       />
@@ -178,7 +178,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={numberFormatter.format(
           +row.readyQuantityWithdrawn +
-            +row.notReadyQuantityWithdrawn +
+            +row.activeGrowthQuantityWithdrawn +
             +row.hardeningOffQuantityWithdrawn +
             +row.germinatingQuantityWithdrawn
         )}

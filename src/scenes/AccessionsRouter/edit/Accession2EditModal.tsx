@@ -43,7 +43,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const [record, setRecord, onChange] = useForm(accession);
+  const [record, setRecord, onChange, onChangeCallback] = useForm(accession);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
@@ -169,7 +169,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
               type='text'
               label={strings.ID}
               value={record?.accessionNumber}
-              onChange={(value) => onChange('accessionNumber', value)}
+              onChange={onChangeCallback('accessionNumber')}
               readonly={true}
               tooltipTitle={strings.TOOLTIP_ACCESSIONS_ID}
             />
@@ -209,7 +209,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
               type='text'
               label={strings.LANDOWNER}
               value={record?.collectionSiteLandowner}
-              onChange={(value) => onChange('collectionSiteLandowner', value)}
+              onChange={onChangeCallback('collectionSiteLandowner')}
             />
           </Grid>
           <Accession2Address record={record} onChange={onChange} opened={true} />

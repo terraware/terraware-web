@@ -74,7 +74,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [isSingleBatch] = useState<boolean>(batches.length === 1);
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>(0);
   const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>(0);
-  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>(0);
+  const [activeGrowthQuantityWithdrawn, setActiveGrowthQuantityWithdrawn] = useState<number>(0);
   const [hardeningOffQuantityWithdrawn, setHardeningOffQuantityWithdrawn] = useState<number>(0);
   const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>(0);
   const [zones, setZones] = useState<any[]>([]);
@@ -247,11 +247,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
-  const validateGerminatingReadyAndNotReadyQuantities = () => {
+  const validateQuantities = () => {
     let allValid = true;
     if (isSingleBatch && !isOutplant) {
       if (
-        notReadyQuantityWithdrawn === 0 &&
+        activeGrowthQuantityWithdrawn === 0 &&
         hardeningOffQuantityWithdrawn === 0 &&
         readyQuantityWithdrawn === 0 &&
         germinatingQuantityWithdrawn === 0
@@ -262,19 +262,19 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         setIndividualError('totalQuantityWithdrawn', '');
       }
 
-      if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
-        setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
+      if (!activeGrowthQuantityWithdrawn && activeGrowthQuantityWithdrawn !== 0) {
+        setIndividualError('activeGrowthQuantityWithdrawn', strings.REQUIRED_FIELD);
         allValid = false;
       } else {
-        if (isNaN(notReadyQuantityWithdrawn)) {
-          setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);
+        if (isNaN(activeGrowthQuantityWithdrawn)) {
+          setIndividualError('activeGrowthQuantityWithdrawn', strings.INVALID_VALUE);
           allValid = false;
         } else {
-          if (Number(notReadyQuantityWithdrawn) > Number(batches[0]['notReadyQuantity(raw)'])) {
-            setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+          if (Number(activeGrowthQuantityWithdrawn) > Number(batches[0]['activeGrowthQuantity(raw)'])) {
+            setIndividualError('activeGrowthQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             allValid = false;
           } else {
-            setIndividualError('notReadyQuantityWithdrawn', '');
+            setIndividualError('activeGrowthQuantityWithdrawn', '');
           }
         }
       }
@@ -367,14 +367,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
     const plantingSiteSubzoneInvalid = !validatePlantingSiteSubzone();
-    const germinatingReadyAndNotReadyInvalid = !validateGerminatingReadyAndNotReadyQuantities();
+    const germinatingReadyAndActiveGrowthInvalid = !validateQuantities();
     if (
       fieldsErrors.withdrawnDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
       plantingSiteSubzoneInvalid ||
-      germinatingReadyAndNotReadyInvalid
+      germinatingReadyAndActiveGrowthInvalid
     ) {
       return;
     }
@@ -398,7 +398,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           (batch: SearchResponseElement): BatchWithdrawalPayload => ({
             batchId: Number(batch.id),
             germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
-            notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
+            activeGrowthQuantityWithdrawn: isSingleOutplant
+              ? 0
+              : isSingleBatch
+                ? activeGrowthQuantityWithdrawn || 0
+                : 0,
             hardeningOffQuantityWithdrawn: isSingleOutplant
               ? 0
               : isSingleBatch
@@ -484,11 +488,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   useEffect(() => {
     setWithdrawnQuantity(
       (readyQuantityWithdrawn ? Number(readyQuantityWithdrawn) : 0) +
-        (notReadyQuantityWithdrawn ? Number(notReadyQuantityWithdrawn) : 0) +
+        (activeGrowthQuantityWithdrawn ? Number(activeGrowthQuantityWithdrawn) : 0) +
         (hardeningOffQuantityWithdrawn ? Number(hardeningOffQuantityWithdrawn) : 0) +
         (germinatingQuantityWithdrawn ? Number(germinatingQuantityWithdrawn) : 0)
     );
-  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, hardeningOffQuantityWithdrawn, germinatingQuantityWithdrawn]);
+  }, [
+    readyQuantityWithdrawn,
+    activeGrowthQuantityWithdrawn,
+    hardeningOffQuantityWithdrawn,
+    germinatingQuantityWithdrawn,
+  ]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
@@ -529,7 +538,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return (
       <>
         {strings.PLANTING}
-        {noReadySeedlings && <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_SEEDLINGS} />}
+        {noReadySeedlings && (
+          <IconTooltip
+            placement='top'
+            title={
+              isUpdatedNurseryGrowthPhasesEnabled
+                ? strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS
+                : strings.PLANTINGS_REQUIRE_READY_SEEDLINGS
+            }
+          />
+        )}
         {!noReadySeedlings && outplantDisabled && (
           <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
         )}
@@ -750,7 +768,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   </Grid>
                   <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
                     <Textfield
-                      label={strings.TOTAL_READY_QUANTITY}
+                      label={
+                        isUpdatedNurseryGrowthPhasesEnabled
+                          ? strings.TOTAL_READY_TO_PLANT_QUANTITY
+                          : strings.TOTAL_READY_QUANTITY
+                      }
                       id='totalReadyQuantity'
                       type='number'
                       value={numberFormatter.format(totalReadyQuantity)}
@@ -767,13 +789,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
                       <Textfield
                         label={strings
-                          .formatString(strings.GERMINATING_QUANTITY_REMAINING, String(batches[0].germinatingQuantity))
+                          .formatString(
+                            isUpdatedNurseryGrowthPhasesEnabled
+                              ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_REMAINING
+                              : strings.GERMINATING_QUANTITY_REMAINING,
+                            String(batches[0].germinatingQuantity)
+                          )
                           .toString()}
                         id='germinatingQuantityWithdrawn'
                         onChange={(value: unknown) => setGerminatingQuantityWithdrawn(value as number)}
                         type='number'
                         value={germinatingQuantityWithdrawn}
-                        tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                        tooltipTitle={
+                          isUpdatedNurseryGrowthPhasesEnabled
+                            ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
+                            : strings.TOOLTIP_GERMINATING_QUANTITY
+                        }
                         errorText={fieldsErrors.germinatingQuantityWithdrawn}
                         required
                         sx={{
@@ -816,17 +847,26 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
                         label={strings
-                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].notReadyQuantity))
+                          .formatString(
+                            isUpdatedNurseryGrowthPhasesEnabled
+                              ? strings.ACTIVE_GROWTH_QUANTITY_REMAINING
+                              : strings.NOT_READY_QUANTITY_REMAINING,
+                            String(batches[0].activeGrowthQuantity)
+                          )
                           .toString()}
-                        id='notReadyQuantityWithdrawn'
-                        onChange={(value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
+                        id='activeGrowthQuantityWithdrawn'
+                        onChange={(value: unknown) => setActiveGrowthQuantityWithdrawn(value as number)}
                         type='number'
-                        value={notReadyQuantityWithdrawn}
-                        tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                        errorText={fieldsErrors.notReadyQuantityWithdrawn}
+                        value={activeGrowthQuantityWithdrawn}
+                        tooltipTitle={
+                          isUpdatedNurseryGrowthPhasesEnabled
+                            ? strings.ACTIVE_GROWTH_QUANTITY
+                            : strings.TOOLTIP_NOT_READY_QUANTITY
+                        }
+                        errorText={fieldsErrors.activeGrowthQuantityWithdrawn}
                         required
                         sx={{
-                          '&> #notReadyQuantityWithdrawn': {
+                          '&> #activeGrowthQuantityWithdrawn': {
                             height: '44px',
                           },
                         }}
@@ -848,13 +888,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
                       <Textfield
                         label={strings
-                          .formatString(strings.READY_QUANTITY_REMAINING, String(batches[0].readyQuantity))
+                          .formatString(
+                            isUpdatedNurseryGrowthPhasesEnabled
+                              ? strings.READY_TO_PLANT_QUANTITY_REMAINING
+                              : strings.READY_QUANTITY_REMAINING,
+                            String(batches[0].readyQuantity)
+                          )
                           .toString()}
                         id='readyQuantityWithdrawn'
                         onChange={(value: unknown) => setReadyQuantityWithdrawn(value as number)}
                         type='number'
                         value={readyQuantityWithdrawn}
-                        tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+                        tooltipTitle={
+                          isUpdatedNurseryGrowthPhasesEnabled
+                            ? strings.TOOLTIP_READY_TO_PLANT_QUANTITY
+                            : strings.TOOLTIP_READY_QUANTITY
+                        }
                         errorText={fieldsErrors.readyQuantityWithdrawn}
                         required
                         sx={{

@@ -15,7 +15,7 @@ describe('Nursery Facilities service', () => {
           germinatingQuantity: 100,
           germinationRate: 100,
           lossRate: 50,
-          notReadyQuantity: 0,
+          activeGrowthQuantity: 0,
           readyQuantity: 10,
           species: [
             {

@@ -26,16 +26,16 @@ type SelectBatchesWithdrawnQuantityProps = {
 type BatchWithdrawalForTable = {
   batchId: number;
   batchNumber: string;
-  notReadyQuantityWithdrawn: number;
+  activeGrowthQuantityWithdrawn: number;
   hardeningOffQuantityWithdrawn: number;
   germinatingQuantityWithdrawn: number;
   readyQuantityWithdrawn: number;
   germinatingQuantity: number;
-  notReadyQuantity: number;
+  activeGrowthQuantity: number;
   hardeningOffQuantity: number;
   readyQuantity: number;
   'germinatingQuantity(raw)': number;
-  'notReadyQuantity(raw)': number;
+  'activeGrowthQuantity(raw)': number;
   'hardeningOffQuantity(raw)': number;
   'readyQuantity(raw)': number;
   totalQuantity: number;
@@ -78,26 +78,38 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         name: strings.PROJECT,
         type: 'string',
       },
-      {
-        key: 'germinatingQuantityWithdrawn',
-        name: strings.GERMINATING_QUANTITY,
-        type: 'number',
-      },
-      {
-        key: 'notReadyQuantityWithdrawn',
-        name: strings.NOT_READY_QUANTITY,
-        type: 'number',
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantityWithdrawn',
+              name: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
+              type: 'number' as const,
+            },
+            {
+              key: 'activeGrowthQuantityWithdrawn',
+              name: strings.ACTIVE_GROWTH_QUANTITY,
+              type: 'number' as const,
+            },
             {
               key: 'hardeningOffQuantityWithdrawn',
               name: strings.HARDENING_OFF_QUANTITY,
               type: 'number' as const,
             },
+            { key: 'readyQuantityWithdrawn', name: strings.READY_TO_PLANT_QUANTITY, type: 'number' as const },
           ]
-        : []),
-      { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
+        : [
+            {
+              key: 'germinatingQuantityWithdrawn',
+              name: strings.GERMINATING_QUANTITY,
+              type: 'number' as const,
+            },
+            {
+              key: 'activeGrowthQuantityWithdrawn',
+              name: strings.NOT_READY_QUANTITY,
+              type: 'number' as const,
+            },
+            { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' as const },
+          ]),
       { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
       {
         key: 'totalWithdraw',
@@ -127,13 +139,13 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       },
       {
         key: 'readyQuantity',
-        name: strings.READY_QUANTITY,
+        name: isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY,
         type: 'string',
         alignment: 'right',
       },
       { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string', alignment: 'right' },
     ],
-    [strings]
+    [isUpdatedNurseryGrowthPhasesEnabled, strings]
   );
 
   const columns = useMemo(
@@ -152,15 +164,15 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           acc.push({
             batchId: bw.batchId,
             germinatingQuantityWithdrawn: bw.germinatingQuantityWithdrawn ?? 0,
-            notReadyQuantityWithdrawn: bw.notReadyQuantityWithdrawn,
+            activeGrowthQuantityWithdrawn: bw.activeGrowthQuantityWithdrawn,
             hardeningOffQuantityWithdrawn: bw.hardeningOffQuantityWithdrawn ?? 0,
             readyQuantityWithdrawn: bw.readyQuantityWithdrawn,
             germinatingQuantity: associatedBatch.germinatingQuantity,
-            notReadyQuantity: associatedBatch.notReadyQuantity,
+            activeGrowthQuantity: associatedBatch.activeGrowthQuantity,
             hardeningOffQuantity: associatedBatch.hardeningOffQuantity,
             readyQuantity: associatedBatch.readyQuantity,
             'germinatingQuantity(raw)': +associatedBatch['germinatingQuantity(raw)'],
-            'notReadyQuantity(raw)': +associatedBatch['notReadyQuantity(raw)'],
+            'activeGrowthQuantity(raw)': +associatedBatch['activeGrowthQuantity(raw)'],
             'hardeningOffQuantity(raw)': +associatedBatch['hardeningOffQuantity(raw)'],
             'readyQuantity(raw)': +associatedBatch['readyQuantity(raw)'],
             totalQuantity: associatedBatch.totalQuantity,
@@ -245,7 +257,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       newRecords = record.map((rec) => {
         let germinatingQuantityWithdrawnError = '';
         let readyQuantityWithdrawnError = '';
-        let notReadyQuantityWithdrawnError = '';
+        let activeGrowthQuantityWithdrawnError = '';
         let hardeningOffQuantityWithdrawnError = '';
 
         if (rec.germinatingQuantityWithdrawn) {
@@ -280,16 +292,16 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           unsetValues++;
         }
 
-        if (rec.notReadyQuantityWithdrawn) {
-          if (isInvalidQuantity(rec.notReadyQuantityWithdrawn)) {
-            notReadyQuantityWithdrawnError = strings.INVALID_VALUE;
+        if (rec.activeGrowthQuantityWithdrawn) {
+          if (isInvalidQuantity(rec.activeGrowthQuantityWithdrawn)) {
+            activeGrowthQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
-            if (+rec.notReadyQuantityWithdrawn > +rec['notReadyQuantity(raw)']) {
-              notReadyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+            if (+rec.activeGrowthQuantityWithdrawn > +rec['activeGrowthQuantity(raw)']) {
+              activeGrowthQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
               noErrors = false;
             } else {
-              notReadyQuantityWithdrawnError = '';
+              activeGrowthQuantityWithdrawnError = '';
             }
           }
         } else {
@@ -324,7 +336,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           error: {
             germinatingQuantityWithdrawn: germinatingQuantityWithdrawnError,
             readyQuantityWithdrawn: readyQuantityWithdrawnError,
-            notReadyQuantityWithdrawn: notReadyQuantityWithdrawnError,
+            activeGrowthQuantityWithdrawn: activeGrowthQuantityWithdrawnError,
             hardeningOffQuantityWithdrawn: hardeningOffQuantityWithdrawnError,
           },
         };
@@ -344,7 +356,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         return {
           batchId: rec.batchId,
           germinatingQuantityWithdrawn: rec.germinatingQuantityWithdrawn,
-          notReadyQuantityWithdrawn: rec.notReadyQuantityWithdrawn,
+          activeGrowthQuantityWithdrawn: rec.activeGrowthQuantityWithdrawn,
           hardeningOffQuantityWithdrawn: rec.hardeningOffQuantityWithdrawn,
           readyQuantityWithdrawn: rec.readyQuantityWithdrawn,
         };

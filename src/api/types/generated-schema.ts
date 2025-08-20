@@ -4580,7 +4580,7 @@ export interface components {
             /** Format: int32 */
             hardeningOffQuantity: number;
             /** Format: int32 */
-            notReadyQuantityWithdrawn: number;
+            notReadyQuantityWithdrawn?: number;
             /** @enum {string} */
             purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
             /** Format: int32 */
@@ -4754,6 +4754,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         BatchWithdrawalPayload: {
+            /** Format: int32 */
+            activeGrowthQuantityWithdrawn: number;
             /** Format: int64 */
             batchId: number;
             /**
@@ -4767,7 +4769,7 @@ export interface components {
              */
             hardeningOffQuantityWithdrawn: number;
             /** Format: int32 */
-            notReadyQuantityWithdrawn: number;
+            notReadyQuantityWithdrawn?: number;
             /** Format: int32 */
             readyQuantityWithdrawn: number;
         };
@@ -4979,6 +4981,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CreateBatchRequestPayload: {
+            /** Format: int32 */
+            activeGrowthQuantity: number;
             /** Format: date */
             addedDate: string;
             /** Format: int64 */
@@ -4989,8 +4993,6 @@ export interface components {
             germinationStartedDate?: string;
             /** Format: int32 */
             hardeningOffQuantity: number;
-            /** Format: int32 */
-            notReadyQuantity: number;
             notes?: string;
             /** Format: int64 */
             projectId?: number;
@@ -5179,6 +5181,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CreateNurseryTransferRequestPayload: {
+            /** Format: int32 */
+            activeGrowthQuantity: number;
             /** Format: date */
             date: string;
             /** Format: int64 */
@@ -5187,8 +5191,6 @@ export interface components {
             germinatingQuantity: number;
             /** Format: int32 */
             hardeningOffQuantity?: number;
-            /** Format: int32 */
-            notReadyQuantity: number;
             notes?: string;
             /** Format: date */
             readyByDate?: string;
@@ -9370,11 +9372,11 @@ export interface components {
         };
         UpdateBatchQuantitiesRequestPayload: {
             /** Format: int32 */
+            activeGrowthQuantity: number;
+            /** Format: int32 */
             germinatingQuantity: number;
             /** Format: int32 */
             hardeningOffQuantity?: number;
-            /** Format: int32 */
-            notReadyQuantity: number;
             /** Format: int32 */
             readyQuantity: number;
             /** Format: int32 */

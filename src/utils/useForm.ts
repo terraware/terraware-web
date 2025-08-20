@@ -1,17 +1,27 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
 
-type Handler = (id: string, value: unknown) => void;
+type CurriedChangeHandler = (id: string) => (value: unknown) => void;
+type DirectChangeHandler = (id: string, value: unknown) => void;
 
-const useForm = <T>(originalRecord: T): [T, Dispatch<SetStateAction<T>>, Handler] => {
+const useForm = <T>(originalRecord: T): [T, Dispatch<SetStateAction<T>>, DirectChangeHandler, CurriedChangeHandler] => {
   const [record, setRecord] = React.useState(originalRecord);
 
-  const onChange = (id: string, value: unknown) => {
+  const onChange = useCallback((id: string, value: unknown) => {
     setRecord((previousRecord: T): T => {
       return { ...previousRecord, [id]: value };
     });
-  };
+  }, []);
 
-  return [record, setRecord, onChange];
+  const onChangeCallback = useCallback(
+    (id: string) => {
+      return (value: unknown) => {
+        onChange(id, value);
+      };
+    },
+    [onChange]
+  );
+
+  return [record, setRecord, onChange, onChangeCallback];
 };
 
 export default useForm;

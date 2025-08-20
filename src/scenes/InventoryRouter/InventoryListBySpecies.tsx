@@ -59,34 +59,53 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         tooltipTitle: strings.TOOLTIP_COMMON_NAME,
       },
       { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-      {
-        key: 'germinatingQuantity',
-        name: strings.GERMINATING,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-      },
-      {
-        key: 'notReadyQuantity',
-        name: strings.NOT_READY,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-      },
       ...(isUpdatedNurseryGrowthPhasesEnabled
         ? [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATION_ESTABLISHMENT,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
+            },
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.ACTIVE_GROWTH,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
+            },
             {
               key: 'hardeningOffQuantity',
               name: strings.HARDENING_OFF,
               type: 'number' as const,
               tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
             },
+            {
+              key: 'readyQuantity',
+              name: strings.READY_TO_PLANT,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+            },
           ]
-        : []),
-      {
-        key: 'readyQuantity',
-        name: strings.READY,
-        type: 'number',
-        tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-      },
+        : [
+            {
+              key: 'germinatingQuantity',
+              name: strings.GERMINATING,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+            },
+            {
+              key: 'activeGrowthQuantity',
+              name: strings.NOT_READY,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+            },
+            {
+              key: 'readyQuantity',
+              name: strings.READY,
+              type: 'number' as const,
+              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+            },
+          ]),
       {
         key: 'totalQuantity',
         name: strings.TOTAL,
@@ -138,8 +157,8 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
               hardeningOffQuantity: (
                 Number(existingSpecies.hardeningOffQuantity) + Number(resultTyped['hardeningOffQuantity(raw)'])
               ).toString(),
-              notReadyQuantity: (
-                Number(existingSpecies.notReadyQuantity) + Number(resultTyped['notReadyQuantity(raw)'])
+              activeGrowthQuantity: (
+                Number(existingSpecies.activeGrowthQuantity) + Number(resultTyped['activeGrowthQuantity(raw)'])
               ).toString(),
               readyQuantity: (
                 Number(existingSpecies.readyQuantity) + Number(resultTyped['readyQuantity(raw)'])
@@ -157,7 +176,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
               species_commonName: resultTyped.species_commonName,
               germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
               hardeningOffQuantity: resultTyped['hardeningOffQuantity(raw)'],
-              notReadyQuantity: resultTyped['notReadyQuantity(raw)'],
+              activeGrowthQuantity: resultTyped['activeGrowthQuantity(raw)'],
               readyQuantity: resultTyped['readyQuantity(raw)'],
               totalQuantity: resultTyped['totalQuantity(raw)'],
               facilityInventories: resultTyped.facility_name,
@@ -174,7 +193,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
             ...uR,
             germinatingQuantity: numberFormatter.format(Number(uR.germinatingQuantity)),
             hardeningOffQuantity: numberFormatter.format(Number(uR.hardeningOffQuantity)),
-            notReadyQuantity: numberFormatter.format(Number(uR.notReadyQuantity)),
+            activeGrowthQuantity: numberFormatter.format(Number(uR.activeGrowthQuantity)),
             readyQuantity: numberFormatter.format(Number(uR.readyQuantity)),
             totalQuantity: numberFormatter.format(Number(uR.totalQuantity)),
           };
