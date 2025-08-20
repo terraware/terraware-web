@@ -286,7 +286,7 @@ export default function ChangeQuantityModal({
           <Dropdown
             errorText={undefined}
             fullWidth
-            label='Next growth phase'
+            label={strings.NEXT_PHASE}
             options={growthPhaseDropdownOptions}
             onChange={onChangeGrowthPhase}
             required
