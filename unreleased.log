@@ -1,3 +1,4 @@
+c6c1787db3d Implemented map photo drawer (#4359)
 23b8f42b06f Added MapDrawerTable component, and implemented planting site stats drawer (#4357)
 f2411ea8a50 Use the new map component in place of planting dashboard map (#4352)
 37fd0de45bb Updated translations from Phrase (#4358)
