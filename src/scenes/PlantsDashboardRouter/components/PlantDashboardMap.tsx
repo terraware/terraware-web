@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { useTheme } from '@mui/material';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
+import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
 import { MapFillComponentStyle, MapLayer, MapLayerFeatureId, MapMarker } from 'src/components/NewMap/types';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -10,11 +11,14 @@ import { MapService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import MapStatsDrawer from './MapStatsDrawer';
+
 const PlantDashboardMap = (): JSX.Element => {
   const { token, mapId } = useMapboxToken();
   const { strings } = useLocalization();
   const theme = useTheme();
 
+  const [selectedFeaturedId, setSelectedFeatureId] = useState<MapLayerFeatureId>();
   const { latestResult, plantingSite } = usePlantingSiteData();
 
   const sitesLayerStyle = useMemo(
@@ -47,6 +51,24 @@ const PlantDashboardMap = (): JSX.Element => {
     [theme]
   );
 
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [drawerSize, setDrawerSize] = useState<MapDrawerSize>('small');
+
+  const selectFeature = useCallback(
+    (layerId: string, featureId: string) => () => {
+      setSelectedFeatureId({ layerId, featureId });
+      setDrawerOpen(true);
+      setDrawerSize('small');
+    },
+    []
+  );
+
+  const drawerContent = useMemo(() => {
+    if (selectedFeaturedId) {
+      return <MapStatsDrawer layerId={selectedFeaturedId.layerId} featureId={selectedFeaturedId.featureId} />;
+    }
+  }, [selectedFeaturedId]);
+
   const extractLayersFromSite = useCallback(
     (site: PlantingSite): MapLayer[] => {
       const zones = site.plantingZones ?? [];
@@ -62,6 +84,8 @@ const PlantDashboardMap = (): JSX.Element => {
                 type: 'MultiPolygon',
                 coordinates: site.boundary?.coordinates ?? [],
               },
+              onClick: selectFeature('sites', `${site.id}`),
+              selected: selectedFeaturedId?.layerId === 'sites' && selectedFeaturedId?.featureId === `${site.id}`,
             },
           ],
           label: strings.SITE,
@@ -76,6 +100,8 @@ const PlantDashboardMap = (): JSX.Element => {
               type: 'MultiPolygon',
               coordinates: zone.boundary.coordinates,
             },
+            onClick: selectFeature('zones', `${zone.id}`),
+            selected: selectedFeaturedId?.layerId === 'zones' && selectedFeaturedId?.featureId === `${zone.id}`,
           })),
           label: strings.ZONES,
           layerId: 'zones',
@@ -90,6 +116,8 @@ const PlantDashboardMap = (): JSX.Element => {
                 type: 'MultiPolygon',
                 coordinates: subzone.boundary.coordinates,
               },
+              onClick: selectFeature('subzones', `${subzone.id}`),
+              selected: selectedFeaturedId?.layerId === 'subzones' && selectedFeaturedId?.featureId === `${subzone.id}`,
             })) ?? [],
           label: strings.SUBZONES,
           layerId: 'subzones',
@@ -97,7 +125,7 @@ const PlantDashboardMap = (): JSX.Element => {
         },
       ];
     },
-    [sitesLayerStyle, strings, subzonesLayerStyle, zonesLayerStyle]
+    [selectFeature, selectedFeaturedId, sitesLayerStyle, strings, subzonesLayerStyle, zonesLayerStyle]
   );
 
   const layers = useMemo(() => {
@@ -172,6 +200,15 @@ const PlantDashboardMap = (): JSX.Element => {
       greaterThanFifty,
     };
   }, [latestResult]);
+
+  const setDrawerOpenCallback = useCallback((open: boolean) => {
+    if (open) {
+      setDrawerOpen(true);
+    } else {
+      setDrawerOpen(false);
+      setSelectedFeatureId(undefined);
+    }
+  }, []);
 
   const observationEventsHighlights = useMemo((): MapLayerFeatureId[][] => {
     const recencyHighlights: MapLayerFeatureId[][] = [[], [], [], [], []];
@@ -372,7 +409,18 @@ const PlantDashboardMap = (): JSX.Element => {
     ];
   }, [baseObservationEventStyle, layers, mortalityRateHighlights, observationEventsHighlights, photoMarkers, strings]);
 
-  return <MapComponent features={mapFeatures} initialSelectedLayerId={'zones'} mapId={mapId} token={token ?? ''} />;
+  return (
+    <MapComponent
+      drawerChildren={drawerContent}
+      drawerOpen={drawerOpen}
+      drawerSize={drawerSize}
+      features={mapFeatures}
+      initialSelectedLayerId={'zones'}
+      mapId={mapId}
+      token={token ?? ''}
+      setDrawerOpen={setDrawerOpenCallback}
+    />
+  );
 };
 
 export default PlantDashboardMap;
