@@ -31,6 +31,7 @@ import {
 import { useMaintainLayerOrder } from './useMaintainLayerOrder';
 
 export type MapBoxProps = {
+  clusterMaxZoom?: number;
   clusterRadius?: number;
   containerId?: string;
   controlBottomLeft?: React.ReactNode;
@@ -61,6 +62,7 @@ export type MapBoxProps = {
 
 const MapBox = (props: MapBoxProps): JSX.Element => {
   const {
+    clusterMaxZoom,
     clusterRadius,
     containerId,
     controlBottomLeft,
@@ -123,7 +125,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
   const clusterMarkers = useCallback(
     (map: MapRef | null, markers: MapMarker[]): MapMarker[][] => {
-      if (!map || map.getZoom() > 15) {
+      if (!map || map.getZoom() > (clusterMaxZoom ?? 20)) {
         // Too zoomed in. Return all marker as is
         return markers.map((marker) => [marker]);
       }
@@ -160,7 +162,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
       return clusters;
     },
-    [clusterRadius]
+    [clusterMaxZoom, clusterRadius]
   );
 
   // Find all layers with at least some clickable elements
@@ -461,7 +463,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         }
       });
     });
-  }, [clusterMarkers, markerGroups, theme.palette.TwClrBg, zoom]);
+  }, [clusterMarkers, markerGroups, theme, zoom]);
 
   const onMouseMove = useCallback((event: MapMouseEvent) => {
     if (event.features && event.features.length) {

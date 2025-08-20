@@ -186,7 +186,7 @@ const PlantDashboardMap = (): JSX.Element => {
             longitude: photo.gpsCoordinates.coordinates[1],
             latitude: photo.gpsCoordinates.coordinates[0],
             onClick: selectPhoto(plot.monitoringPlotId, latestResult.observationId, photo),
-            selected: photo.fileId === selectedPhoto?.photo.fileId,
+            selected: selectedPhoto && photo.fileId === selectedPhoto.photo.fileId,
           };
         })
       );
@@ -242,6 +242,7 @@ const PlantDashboardMap = (): JSX.Element => {
     } else {
       setDrawerOpen(false);
       setSelectedFeatureId(undefined);
+      setSelectedPhoto(undefined);
     }
   }, []);
 

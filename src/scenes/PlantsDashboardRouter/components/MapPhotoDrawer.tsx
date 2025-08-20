@@ -10,7 +10,7 @@ import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
+const PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:monitoringPlotId/photos/:fileId';
 
 type MapPhotoDrawerProps = {
   monitoringPlotId: number;
@@ -25,9 +25,9 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
   const { format } = useNumberFormatter(activeLocale);
 
   const photoUrl = useMemo(() => {
-    return PHOTO_URL.replace('{observationId}', `${observationId}`)
-      .replace('{monitoringPlotId}', `${monitoringPlotId}`)
-      .replace('{fileId}', `${photo.fileId}`);
+    return PHOTO_URL.replace(':observationId', `${observationId}`)
+      .replace(':monitoringPlotId', `${monitoringPlotId}`)
+      .replace(':fileId', `${photo.fileId}`);
   }, [observationId, monitoringPlotId, photo]);
 
   const result = useMemo(() => {
@@ -36,8 +36,8 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
 
   const observationUrl = useMemo(() => {
     if (result) {
-      return APP_PATHS.OBSERVATION_DETAILS.replace('{plantingSiteId}', `${result.plantingSiteId}`).replace(
-        '{observationId}',
+      return APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', `${result.plantingSiteId}`).replace(
+        ':observationId',
         `${result.observationId}`
       );
     }
