@@ -254,12 +254,12 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const layerIdOrder = useMemo(
     () =>
       [
-        mapData.temporaryPlot ? `${mapData.temporaryPlot.id}-fill` : undefined,
-        mapData.permanentPlot ? `${mapData.permanentPlot.id}-fill` : undefined,
-        mapData.adHocPlot ? `${mapData.adHocPlot.id}-fill` : undefined,
-        mapData.subzone ? `${mapData.subzone.id}-fill` : undefined,
-        mapData.zone ? `${mapData.zone.id}-fill` : undefined,
         mapData.site ? `${mapData.site.id}-fill` : undefined,
+        mapData.zone ? `${mapData.zone.id}-fill` : undefined,
+        mapData.subzone ? `${mapData.subzone.id}-fill` : undefined,
+        mapData.adHocPlot ? `${mapData.adHocPlot.id}-fill` : undefined,
+        mapData.permanentPlot ? `${mapData.permanentPlot.id}-fill` : undefined,
+        mapData.temporaryPlot ? `${mapData.temporaryPlot.id}-fill` : undefined,
       ].filter((id): id is string => id !== undefined),
     [mapData]
   );
