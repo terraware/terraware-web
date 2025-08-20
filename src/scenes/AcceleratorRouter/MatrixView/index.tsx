@@ -269,7 +269,7 @@ const MatrixView = () => {
         accessorKey: 'acceleratorDetails_confirmedReforestableLand',
         header: strings.ELIGIBLE_LAND,
         size: 200,
-        id: 'elegibleLand',
+        id: 'eligibleLand',
         enableEditing: false,
       },
       {
