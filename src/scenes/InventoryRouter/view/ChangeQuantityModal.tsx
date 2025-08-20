@@ -115,49 +115,57 @@ export default function ChangeQuantityModal({
 
   const onChangeMovedValue = useCallback(
     (value: unknown) => {
-      if (value && !isNaN(value as number) && (value as number) > 0) {
-        const valueNumber = value as number;
+      const valueNumber = value as number;
+      if (value && !isNaN(valueNumber) && valueNumber > 0) {
         setMovedValue(valueNumber);
-        if (type === 'germinating') {
-          setRecord({
-            ...row,
-            germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
-            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] + +valueNumber,
-            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
-            readyQuantity: +row['readyQuantity(raw)'],
-          });
-        } else if (type === 'active-growth' && nextPhase === 'HardeningOff') {
-          setRecord({
-            ...row,
-            germinatingQuantity: +row['germinatingQuantity(raw)'],
-            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
-            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
-            readyQuantity: +row['readyQuantity(raw)'],
-          });
-        } else if (type === 'active-growth' && nextPhase === 'Ready') {
-          setRecord({
-            ...row,
-            germinatingQuantity: +row['germinatingQuantity(raw)'],
-            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
-            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
-            readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
-          });
-        } else {
-          setRecord({
-            ...row,
-            germinatingQuantity: +row['germinatingQuantity(raw)'],
-            activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
-            hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] - valueNumber,
-            readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
-          });
-        }
       } else {
-        setRecord(row);
         setMovedValue(undefined);
       }
     },
-    [nextPhase, row, setRecord, type]
+    [setMovedValue]
   );
+
+  const calculateQuantities = useCallback(() => {
+    if (movedValue && !isNaN(movedValue) && movedValue > 0) {
+      const valueNumber = movedValue;
+      if (type === 'germinating') {
+        setRecord({
+          ...row,
+          germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
+          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] + +valueNumber,
+          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
+          readyQuantity: +row['readyQuantity(raw)'],
+        });
+      } else if (type === 'active-growth' && nextPhase === 'HardeningOff') {
+        setRecord({
+          ...row,
+          germinatingQuantity: +row['germinatingQuantity(raw)'],
+          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
+          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
+          readyQuantity: +row['readyQuantity(raw)'],
+        });
+      } else if (type === 'active-growth' && nextPhase === 'Ready') {
+        setRecord({
+          ...row,
+          germinatingQuantity: +row['germinatingQuantity(raw)'],
+          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] - valueNumber,
+          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
+          readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
+        });
+      } else {
+        setRecord({
+          ...row,
+          germinatingQuantity: +row['germinatingQuantity(raw)'],
+          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
+          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] - valueNumber,
+          readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
+        });
+      }
+    } else {
+      setRecord(row);
+      setMovedValue(undefined);
+    }
+  }, [movedValue, nextPhase, row, setRecord, type]);
 
   const fromLabel = useMemo(() => {
     if (type === 'germinating') {
@@ -240,6 +248,10 @@ export default function ChangeQuantityModal({
   useEffect(() => {
     setNextPhase(growthPhaseDropdownOptions[0].value as ChangeBatchStatusesRequestPayload['newPhase']);
   }, [growthPhaseDropdownOptions, setNextPhase]);
+
+  useEffect(() => {
+    calculateQuantities();
+  }, [calculateQuantities]);
 
   return (
     <DialogBox
