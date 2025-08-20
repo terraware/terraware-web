@@ -565,7 +565,7 @@ export interface paths {
         };
         get?: never;
         /**
-         * Assign a user as the Terraformation contact for an organization.
+         * Assign a user as a Terraformation contact for an organization.
          * @description The user will be added to the organization if they are not already a member.
          */
         put: operations["assignTerraformationContact"];
@@ -2486,6 +2486,44 @@ export interface paths {
          */
         post: operations["assignProject"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}/internalUsers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all internal users for a project. */
+        get: operations["getInternalUsers"];
+        /** Assign a user with global roles with an internal role for a project. */
+        put: operations["assignInternalUser"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}/internalUsers/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove a user with global roles as an internal user for a project.
+         * @description Does not remove Terraformation Contact even if assigned role caused them to be added.
+         */
+        delete: operations["removeInternalUser"];
         options?: never;
         head?: never;
         patch?: never;
@@ -4440,6 +4478,13 @@ export interface components {
             projectIds: number[];
             speciesIds: number[];
         };
+        AssignProjectInternalUserRequestPayload: {
+            /** @enum {string} */
+            role?: "Project Lead" | "Restoration Lead" | "Social Lead" | "GIS Lead" | "Carbon Lead" | "Phase Lead" | "Regional Expert" | "Project Finance Lead" | "Climate Impact Lead" | "Legal Lead" | "Consultant";
+            roleName?: string;
+            /** Format: int64 */
+            userId: number;
+        };
         AssignProjectRequestPayload: {
             accessionIds?: number[];
             batchIds?: number[];
@@ -4580,7 +4625,7 @@ export interface components {
             /** Format: int32 */
             hardeningOffQuantity: number;
             /** Format: int32 */
-            notReadyQuantityWithdrawn?: number;
+            notReadyQuantityWithdrawn: number;
             /** @enum {string} */
             purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
             /** Format: int32 */
@@ -6888,6 +6933,10 @@ export interface components {
             details: components["schemas"]["ProjectAcceleratorDetailsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListProjectInternalUsersResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            users: components["schemas"]["ProjectInternalUserResponsePayload"][];
+        };
         ListProjectMetricsResponsePayload: {
             metrics: components["schemas"]["ExistingProjectMetricPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -8396,6 +8445,16 @@ export interface components {
             /** Format: uri */
             verraLink?: string;
             whatNeedsToBeTrue?: string;
+        };
+        ProjectInternalUserResponsePayload: {
+            email: string;
+            firstName?: string;
+            lastName?: string;
+            /** @enum {string} */
+            role?: "Project Lead" | "Restoration Lead" | "Social Lead" | "GIS Lead" | "Carbon Lead" | "Phase Lead" | "Regional Expert" | "Project Finance Lead" | "Climate Impact Lead" | "Legal Lead" | "Consultant";
+            roleName?: string;
+            /** Format: int64 */
+            userId: number;
         };
         ProjectOverallScorePayload: {
             /** Format: uri */
@@ -15787,6 +15846,77 @@ export interface operations {
                 "application/json": components["schemas"]["AssignProjectRequestPayload"];
             };
         };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getInternalUsers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListProjectInternalUsersResponsePayload"];
+                };
+            };
+        };
+    };
+    assignInternalUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignProjectInternalUserRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    removeInternalUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
