@@ -128,13 +128,29 @@ export default function ChangeQuantityModal({
   const calculateQuantities = useCallback(() => {
     if (movedValue && !isNaN(movedValue) && movedValue > 0) {
       const valueNumber = movedValue;
-      if (type === 'germinating') {
+      if (type === 'germinating' && nextPhase === 'ActiveGrowth') {
         setRecord({
           ...row,
           germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
           activeGrowthQuantity: +row['activeGrowthQuantity(raw)'] + +valueNumber,
           hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
           readyQuantity: +row['readyQuantity(raw)'],
+        });
+      } else if (type === 'germinating' && nextPhase === 'HardeningOff') {
+        setRecord({
+          ...row,
+          germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
+          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
+          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'] + +valueNumber,
+          readyQuantity: +row['readyQuantity(raw)'],
+        });
+      } else if (type === 'germinating' && nextPhase === 'Ready') {
+        setRecord({
+          ...row,
+          germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
+          activeGrowthQuantity: +row['activeGrowthQuantity(raw)'],
+          hardeningOffQuantity: +row['hardeningOffQuantity(raw)'],
+          readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
         });
       } else if (type === 'active-growth' && nextPhase === 'HardeningOff') {
         setRecord({
@@ -208,34 +224,28 @@ export default function ChangeQuantityModal({
   }, [numberFormatter, record, nextPhase]);
 
   const growthPhaseDropdownOptions = useMemo(() => {
-    if (type === 'germinating') {
-      return [
-        {
-          label: strings.ACTIVE_GROWTH,
-          value: 'ActiveGrowth',
-        },
-      ];
-    } else if (type === 'active-growth') {
-      return [
-        {
-          label: strings.HARDENING_OFF,
-          value: 'HardeningOff',
-        },
-        {
-          label: strings.READY_TO_PLANT,
-          value: 'Ready',
-        },
-      ];
-    } else if (type === 'hardening-off') {
-      return [
-        {
-          label: strings.READY_TO_PLANT,
-          value: 'Ready',
-        },
-      ];
-    }
-
-    return [];
+    return [
+      ...(type === 'germinating'
+        ? [
+            {
+              label: strings.ACTIVE_GROWTH,
+              value: 'ActiveGrowth',
+            },
+          ]
+        : []),
+      ...(type === 'germinating' || type === 'active-growth'
+        ? [
+            {
+              label: strings.HARDENING_OFF,
+              value: 'HardeningOff',
+            },
+          ]
+        : []),
+      {
+        label: strings.READY_TO_PLANT,
+        value: 'Ready',
+      },
+    ];
   }, [type]);
 
   const onChangeGrowthPhase = useCallback(
