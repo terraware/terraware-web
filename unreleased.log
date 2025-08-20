@@ -1,3 +1,4 @@
+e116c0c6178 SW-7269 Non Variable columns should show up under manage columns (#4362)
 78340059017 SW-7272 Reset columns button not working (#4361)
 54a1f671daf SW-7267 Don't limit observation CSVs to 25 rows (#4363)
 c6c1787db3d Implemented map photo drawer (#4359)

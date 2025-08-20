@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/186</span>
+                <span class='fraction'>0/190</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/118</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/168</span>
+                <span class='fraction'>0/172</span>
             </div>
         
             
@@ -696,7 +696,9 @@
 <a name='L631'></a><a href='#L631'>631</a>
 <a name='L632'></a><a href='#L632'>632</a>
 <a name='L633'></a><a href='#L633'>633</a>
-<a name='L634'></a><a href='#L634'>634</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L634'></a><a href='#L634'>634</a>
+<a name='L635'></a><a href='#L635'>635</a>
+<a name='L636'></a><a href='#L636'>636</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -739,6 +741,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1084,9 +1088,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1109,6 +1111,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1165,7 +1168,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1191,6 +1193,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1371,6 +1375,8 @@ type ColumnsModalProps = {
   allVariables: VariableUnion[];
   table: MRT_TableInstance&lt;ProjectsWithVariablesSearchResult&gt;;
 };
+&nbsp;
+const BASE_COLUMNS = <span class="cstat-no" title="statement not covered" >['projectName', 'participantCohortPhase', 'eligibleLand', 'countryName', 'projectLead'];</span>
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ColumnsModal(</span>props: ColumnsModalProps): JSX.Element {
   const { onClose, onSave, allVariables, table } = <span class="cstat-no" title="statement not covered" >props;</span>
@@ -1615,7 +1621,7 @@ export default function <span class="fstat-no" title="function not covered" >Col
 &nbsp;
   const handleResetColumns = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedDeliverables(new Set());</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedColumns(['projectName', 'participantCohortPhase', 'eligibleLand', 'countryName', 'projectLead']);</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedColumns(BASE_COLUMNS);</span>
   }, []);
 &nbsp;
   const moveColumn = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -1716,6 +1722,30 @@ export default function <span class="fstat-no" title="function not covered" >Col
     [removeColumn]
   );
 &nbsp;
+  const listElement = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d: string, label?: string) =&gt; (</span>
+<span class="cstat-no" title="statement not covered" >    &lt;ListItem</span>
+      key={id}
+      sx={{
+        px: 0,
+        py: 0.5,
+        '&amp;:hover': { backgroundColor: 'action.hover' },
+        borderRadius: 1,
+      }}
+    &gt;
+      &lt;FormControlLabel
+        control={
+          &lt;Checkbox checked={selectedColumns.includes(id)} onChange={handleVariableToggle} value={id} size='small' /&gt;
+        }
+        label={
+          &lt;Box&gt;
+            &lt;Typography variant='body2'&gt;{label || id}&lt;/Typography&gt;
+          &lt;/Box&gt;
+        }
+        sx={{ width: '100%', m: 0 }}
+      /&gt;
+    &lt;/ListItem&gt;
+  );
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;DialogBox
       onClose={onClose}
@@ -1797,34 +1827,10 @@ export default function <span class="fstat-no" title="function not covered" >Col
               /&gt;
 &nbsp;
               &lt;List dense&gt;
-                {filteredVariables.map(<span class="fstat-no" title="function not covered" >(v</span>ariable) =&gt; (
-<span class="cstat-no" title="statement not covered" >                  &lt;ListItem</span>
-                    key={variable.id}
-                    sx={{
-                      px: 0,
-                      py: 0.5,
-                      '&amp;:hover': { backgroundColor: 'action.hover' },
-                      borderRadius: 1,
-                    }}
-                  &gt;
-                    &lt;FormControlLabel
-                      control={
-                        &lt;Checkbox
-                          checked={selectedColumns.includes(variable.stableId)}
-                          onChange={handleVariableToggle}
-                          value={variable.stableId}
-                          size='small'
-                        /&gt;
-                      }
-                      label={
-                        &lt;Box&gt;
-                          &lt;Typography variant='body2'&gt;{variable.name}&lt;/Typography&gt;
-                        &lt;/Box&gt;
-                      }
-                      sx={{ width: '100%', m: 0 }}
-                    /&gt;
-                  &lt;/ListItem&gt;
-                ))}
+                &lt;&gt;
+                  {BASE_COLUMNS.map(<span class="fstat-no" title="function not covered" >(c</span>ol) =&gt; <span class="cstat-no" title="statement not covered" >listElement(col))</span>}
+                  {filteredVariables.map(<span class="fstat-no" title="function not covered" >(v</span>ariable) =&gt; <span class="cstat-no" title="statement not covered" >listElement(variable.id.toString(), variable.name))</span>}
+                &lt;/&gt;
               &lt;/List&gt;
             &lt;/&gt;
           ) : (
@@ -1969,7 +1975,7 @@ export default function <span class="fstat-no" title="function not covered" >Col
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-20T20:25:01.573Z
+                at 2025-08-20T20:47:13.816Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
