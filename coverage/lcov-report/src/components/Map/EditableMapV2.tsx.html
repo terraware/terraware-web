@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/80</span>
             </div>
         
             
@@ -463,7 +463,9 @@
 <a name='L398'></a><a href='#L398'>398</a>
 <a name='L399'></a><a href='#L399'>399</a>
 <a name='L400'></a><a href='#L400'>400</a>
-<a name='L401'></a><a href='#L401'>401</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -693,6 +695,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -869,13 +873,13 @@ import ReactMapGL, {
   GeolocateControl,
   Layer,
   LngLatBoundsLike,
-  MapLayerMouseEvent,
+  MapGeoJSONFeature,
+  MapMouseEvent,
   MapRef,
-  MapboxGeoJSONFeature,
   NavigationControl,
   Popup,
   Source,
-} from 'react-map-gl';
+} from 'react-map-gl/mapbox';
 &nbsp;
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
@@ -903,7 +907,7 @@ import UndoRedoControl from './UndoRedoControl';
 import { boundariesToViewState, getMapErrorLayer, readOnlyBoundariesToMapLayers } from './utils';
 &nbsp;
 // Callback to select one feature from among list of features on the map that overlap the click target.
-export type LayerFeature = MapboxGeoJSONFeature;
+export type LayerFeature = MapGeoJSONFeature;
 export type FeatureSelectorOnClick = (features: LayerFeature[]) =&gt; LayerFeature | undefined;
 &nbsp;
 export type EditableMapProps = {
@@ -1031,7 +1035,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 &nbsp;
   // map click to fetch geometry and show a popup at that location
   const onMapClick = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (e</span>vent: MapLayerMouseEvent) =&gt; {
+<span class="fstat-no" title="function not covered" >    (e</span>vent: MapMouseEvent) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (!event?.features) {</span>
 <span class="cstat-no" title="statement not covered" >        return;</span>
       }
@@ -1041,7 +1045,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 <span class="cstat-no" title="statement not covered" >      if (feature &amp;&amp; feature.properties) {</span>
         const { lat, lng } = <span class="cstat-no" title="statement not covered" >event.lngLat;</span>
         const { id, properties, layer } = <span class="cstat-no" title="statement not covered" >feature;</span>
-        const sourceId = <span class="cstat-no" title="statement not covered" >layer.source as string;</span>
+        const sourceId = <span class="cstat-no" title="statement not covered" >layer?.source as string;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        if (!readOnlyBoundary?.find(<span class="fstat-no" title="function not covered" >(b</span>) =&gt; <span class="cstat-no" title="statement not covered" >b.id === sourceId)</span>) {</span>
 <span class="cstat-no" title="statement not covered" >          return;</span>
@@ -1092,7 +1096,9 @@ export default function <span class="fstat-no" title="function not covered" >Edi
     const markActiveContext = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ata: MapEntityId[], value: boolean) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      data.forEach(<span class="fstat-no" title="function not covered" >(d</span>atum) =&gt; {</span>
         const { id, sourceId: source } = <span class="cstat-no" title="statement not covered" >datum;</span>
-<span class="cstat-no" title="statement not covered" >        mapRef?.current?.setFeatureState({ source, id }, { select: value });</span>
+<span class="cstat-no" title="statement not covered" >        if (id) {</span>
+<span class="cstat-no" title="statement not covered" >          mapRef?.current?.setFeatureState({ source, id }, { select: value });</span>
+        }
       });
     };
 &nbsp;
@@ -1270,7 +1276,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-20T15:30:41.149Z
+                at 2025-08-20T19:03:40.763Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

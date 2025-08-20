@@ -1,3 +1,4 @@
+f2411ea8a50 Use the new map component in place of planting dashboard map (#4352)
 37fd0de45bb Updated translations from Phrase (#4358)
 5814706ef24 Update useForm to return both a callback and a direct function (#4351)
 0f216c31439 SW-7263 Seeds Dashboard - Add "Used Up" status to Accessions by Status card (#4356)
