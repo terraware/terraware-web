@@ -8,6 +8,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -18,6 +19,7 @@ import { isAfter } from 'src/utils/dateUtils';
 
 import MortalityRateCard from './components/MortalityRateCard';
 import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
+import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
@@ -39,6 +41,8 @@ export default function PlantsDashboardView({
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
+
+  const newMapEnabled = isEnabled('New Plant Dashboard Map');
 
   const {
     setAcceleratorOrganizationId,
@@ -246,11 +250,11 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <ZoneLevelDataMap plantingSiteId={plantingSite.id} />
+            {newMapEnabled ? <PlantDashboardMap /> : <ZoneLevelDataMap plantingSiteId={plantingSite.id} />}
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink, newMapEnabled]
   );
 
   const renderSimpleSiteMap = useCallback(

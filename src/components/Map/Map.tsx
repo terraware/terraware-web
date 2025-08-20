@@ -8,7 +8,7 @@ import ReactMapGL, {
   NavigationControl,
   Popup,
   Source,
-} from 'react-map-gl';
+} from 'react-map-gl/mapbox';
 
 import { Box, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
