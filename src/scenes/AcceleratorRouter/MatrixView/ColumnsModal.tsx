@@ -283,14 +283,8 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   );
 
   const handleResetColumns = useCallback(() => {
-    // Reset to default selection - customize as needed
-    const defaultDeliverable = deliverableGroups.find((d) => d.name.toLowerCase().includes('compliance'));
-
-    if (defaultDeliverable) {
-      setSelectedDeliverables(new Set([defaultDeliverable.id]));
-      setSelectedColumns(defaultDeliverable.variables.map((v) => v.stableId));
-    }
-  }, [deliverableGroups]);
+    setSelectedColumns(['projectName', 'participantCohortPhase', 'elegibleLand', 'countryName', 'projectLead']);
+  }, []);
 
   const moveColumn = useCallback(
     (fromIndex: number, toIndex: number) => {
