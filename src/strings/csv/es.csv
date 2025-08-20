@@ -1121,6 +1121,7 @@ NEW_TEMPLATE_MODAL_DESCRIPTION,Se publicó una nueva versión para documentTempl
 NEW_TEMPLATE_MODAL_TITLE,Actualizar versión de DocumentTemplate,
 NEW_ZONE,Nueva área,
 NEXT,Siguiente,
+NEXT_PHASE,Siguiente fase,
 NEXT_STEPS,Siguientes pasos,
 NEXT_STEPS_INSTRUCTIONS,Resuma las siguientes fases de su proyecto. (Un cuarto de página como máximo.),
 NEXT_STEPS_REQUIRED,Próximos pasos *,
