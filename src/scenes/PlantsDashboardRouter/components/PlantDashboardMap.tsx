@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 
+import { useTheme } from '@mui/material';
+
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
-import { MapLayer, MapLayerFeatureId, MapMarker } from 'src/components/NewMap/types';
+import { MapFillComponentStyle, MapLayer, MapLayerFeatureId, MapMarker } from 'src/components/NewMap/types';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
@@ -11,8 +13,39 @@ import useMapboxToken from 'src/utils/useMapboxToken';
 const PlantDashboardMap = (): JSX.Element => {
   const { token, mapId } = useMapboxToken();
   const { strings } = useLocalization();
+  const theme = useTheme();
 
   const { latestResult, plantingSite } = usePlantingSiteData();
+
+  const sitesLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBaseGreen300,
+      fillColor: theme.palette.TwClrBaseGreen300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
+  const zonesLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBasePurple300,
+      fillColor: theme.palette.TwClrBasePurple300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
+  const subzonesLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBaseBlue300,
+      fillColor: theme.palette.TwClrBaseBlue300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
 
   const extractLayersFromSite = useCallback(
     (site: PlantingSite): MapLayer[] => {
@@ -33,12 +66,7 @@ const PlantDashboardMap = (): JSX.Element => {
           ],
           label: strings.SITE,
           layerId: 'sites',
-          style: {
-            borderColor: '#41C07F',
-            fillColor: '#41C07F',
-            opacity: 0.2,
-            type: 'fill',
-          },
+          style: sitesLayerStyle,
         },
         {
           features: zones.map((zone) => ({
@@ -51,12 +79,7 @@ const PlantDashboardMap = (): JSX.Element => {
           })),
           label: strings.ZONES,
           layerId: 'zones',
-          style: {
-            borderColor: '#BD9FDA',
-            fillColor: '#BD9FDA',
-            opacity: 0.2,
-            type: 'fill',
-          },
+          style: zonesLayerStyle,
         },
         {
           features:
@@ -70,16 +93,11 @@ const PlantDashboardMap = (): JSX.Element => {
             })) ?? [],
           label: strings.SUBZONES,
           layerId: 'subzones',
-          style: {
-            borderColor: '#9EA9D7',
-            fillColor: '#9EA9D7',
-            opacity: 0.2,
-            type: 'fill',
-          },
+          style: subzonesLayerStyle,
         },
       ];
     },
-    [strings]
+    [sitesLayerStyle, strings, subzonesLayerStyle, zonesLayerStyle]
   );
 
   const layers = useMemo(() => {
@@ -184,6 +202,14 @@ const PlantDashboardMap = (): JSX.Element => {
     return recencyHighlights;
   }, [plantingSite]);
 
+  const baseObservationEventStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      fillColor: theme.palette.TwClrBasePink200,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
   const mapFeatures = useMemo((): MapFeatureSection[] => {
     return [
       {
@@ -240,41 +266,36 @@ const PlantDashboardMap = (): JSX.Element => {
             {
               featureIds: observationEventsHighlights[0],
               style: {
-                fillColor: '#E7B9CD',
+                ...baseObservationEventStyle,
                 opacity: 0.9,
-                type: 'fill',
               },
             },
             {
               featureIds: observationEventsHighlights[1],
               style: {
-                fillColor: '#E7B9CD',
+                ...baseObservationEventStyle,
                 opacity: 0.7,
-                type: 'fill',
               },
             },
             {
               featureIds: observationEventsHighlights[2],
               style: {
-                fillColor: '#E7B9CD',
+                ...baseObservationEventStyle,
                 opacity: 0.5,
-                type: 'fill',
               },
             },
             {
               featureIds: observationEventsHighlights[3],
               style: {
-                fillColor: '#E7B9CD',
+                ...baseObservationEventStyle,
                 opacity: 0.3,
-                type: 'fill',
               },
             },
             {
               featureIds: observationEventsHighlights[4],
               style: {
-                fillColor: '#E7B9CD',
+                ...baseObservationEventStyle,
                 opacity: 0.1,
-                type: 'fill',
               },
             },
           ],
@@ -285,9 +306,8 @@ const PlantDashboardMap = (): JSX.Element => {
           {
             label: strings.LATEST_OBSERVATION,
             style: {
-              fillColor: '#E7B9CD',
+              ...baseObservationEventStyle,
               opacity: 1.0,
-              type: 'fill',
             },
           },
         ],
@@ -350,7 +370,7 @@ const PlantDashboardMap = (): JSX.Element => {
         type: 'highlight',
       },
     ];
-  }, [layers, mortalityRateHighlights, observationEventsHighlights, photoMarkers, strings]);
+  }, [baseObservationEventStyle, layers, mortalityRateHighlights, observationEventsHighlights, photoMarkers, strings]);
 
   return <MapComponent features={mapFeatures} initialSelectedLayerId={'zones'} mapId={mapId} token={token ?? ''} />;
 };
