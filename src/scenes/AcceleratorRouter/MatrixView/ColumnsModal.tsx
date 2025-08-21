@@ -41,7 +41,15 @@ type ColumnsModalProps = {
   table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
 };
 
-const BASE_COLUMNS = ['projectName', 'participantCohortPhase', 'eligibleLand', 'countryName', 'projectLead'];
+export function baseColumns() {
+  return [
+    { id: 'projectName', name: strings.DEAL_NAME },
+    { id: 'participantCohortPhase', name: strings.PHASE },
+    { id: 'eligibleLand', name: strings.ELIGIBLE_LAND },
+    { id: 'countryName', name: strings.COUNTRY },
+    { id: 'projectLead', name: strings.PROJECT_LEAD },
+  ];
+}
 
 export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   const { onClose, onSave, allVariables, table } = props;
@@ -57,6 +65,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>();
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const theme = useTheme();
+  const baseColumnsIds = baseColumns().map((c) => c.id);
 
   useEffect(() => {
     const request = dispatch(
@@ -209,8 +218,8 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
       .filter((v) => selectedColumns?.includes(v.stableId))
       .sort((a, b) => (a.position || 0) - (b.position || 0))
       .map((v) => v.stableId);
-    setSelectedColumns([...BASE_COLUMNS, ...orderedColumns]);
-  }, [allVariables, selectedColumns]);
+    setSelectedColumns([...baseColumnsIds, ...orderedColumns]);
+  }, [allVariables, baseColumnsIds, selectedColumns]);
 
   const handleUnpinAll = useCallback(() => {
     // Unpin all columns using Material React Table's functionality
@@ -286,8 +295,8 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
 
   const handleResetColumns = useCallback(() => {
     setSelectedDeliverables(new Set());
-    setSelectedColumns(BASE_COLUMNS);
-  }, []);
+    setSelectedColumns(baseColumnsIds);
+  }, [baseColumnsIds]);
 
   const moveColumn = useCallback(
     (fromIndex: number, toIndex: number) => {
@@ -499,7 +508,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
 
               <List dense>
                 <>
-                  {BASE_COLUMNS.map((col) => listElement(col))}
+                  {baseColumns().map((col) => listElement(col.id, col.name))}
                   {filteredVariables.map((variable) => listElement(variable.stableId, variable.name))}
                 </>
               </List>
@@ -569,7 +578,10 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
           ) : (
             <List dense>
               {selectedColumns.map((variableStableId, index) => {
-                const columnName = allVariables.find((v) => v.stableId === variableStableId)?.name || variableStableId;
+                const columnName =
+                  allVariables.find((v) => v.stableId === variableStableId)?.name ||
+                  baseColumns().find((c) => c.id === variableStableId)?.name ||
+                  variableStableId;
                 return (
                   <ListItem
                     key={columnName}
@@ -625,7 +637,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                         onClick={removeColumnHandler}
                         sx={{ ml: 0.5 }}
                         data-variable-stable-id={variableStableId}
-                        disabled={columnName === 'projectName'}
+                        disabled={columnName === strings.DEAL_NAME}
                       >
                         <CloseIcon sx={{ fontSize: 14 }} />
                       </IconButton>
