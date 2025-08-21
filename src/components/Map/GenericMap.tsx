@@ -25,6 +25,7 @@ type GenericMapProps = {
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
   showSiteMarker?: boolean;
+  layerIdOrder?: string[];
 } & MapControl;
 
 export default function GenericMap(props: GenericMapProps): JSX.Element | null {
@@ -38,6 +39,7 @@ export default function GenericMap(props: GenericMapProps): JSX.Element | null {
     mapImages,
     mapViewStyle,
     showSiteMarker,
+    layerIdOrder,
   } = props;
   const { ...mapControlProps }: MapControl = props;
 
@@ -66,6 +68,7 @@ export default function GenericMap(props: GenericMapProps): JSX.Element | null {
         mapViewStyle={mapViewStyle}
         bottomRightLabel={bottomRightLabel}
         showSiteMarker={showSiteMarker}
+        layerIdOrder={layerIdOrder}
         {...mapControlProps}
       />
     </Box>
