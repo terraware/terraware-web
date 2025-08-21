@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Button, Checkbox, Chip, IconButton, TextField, useTheme } from '@mui/material';
+import { Box, Button, Checkbox, Chip, IconButton, TextField, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
@@ -704,9 +704,11 @@ const MatrixView = () => {
       <Box>
         <MRT_ToggleGlobalFilterButton table={table} />
         <MRT_ToggleFiltersButton table={table} />
-        <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
-          <Icon name='iconColumns' />
-        </IconButton>
+        <Tooltip title={strings.MANAGE_COLUMNS}>
+          <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
+            <Icon name='iconColumns' />
+          </IconButton>
+        </Tooltip>
         <MRT_ToggleDensePaddingButton table={table} />
         <MRT_ToggleFullScreenButton table={table} />
       </Box>
