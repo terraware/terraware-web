@@ -251,6 +251,19 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     [highlightEntities, focusEntities]
   );
 
+  const layerIdOrder = useMemo(
+    () =>
+      [
+        mapData.site ? `${mapData.site.id}-fill` : undefined,
+        mapData.zone ? `${mapData.zone.id}-fill` : undefined,
+        mapData.subzone ? `${mapData.subzone.id}-fill` : undefined,
+        mapData.adHocPlot ? `${mapData.adHocPlot.id}-fill` : undefined,
+        mapData.permanentPlot ? `${mapData.permanentPlot.id}-fill` : undefined,
+        mapData.temporaryPlot ? `${mapData.temporaryPlot.id}-fill` : undefined,
+      ].filter((id): id is string => id !== undefined),
+    [mapData]
+  );
+
   if (!mapOptions) {
     return (
       <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', margin: 'auto' }}>
@@ -268,6 +281,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         entityOptions={entityOptions}
         mapImages={mapImages}
         showSiteMarker={showSiteMarker}
+        layerIdOrder={layerIdOrder}
         {...controlProps}
       />
     </Box>

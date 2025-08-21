@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Button, Checkbox, Chip, IconButton, TextField, useTheme } from '@mui/material';
+import { Box, Button, Checkbox, Chip, IconButton, TextField, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
@@ -43,7 +43,7 @@ import {
 } from 'src/types/documentProducer/VariableValue';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import ColumnsModal from './ColumnsModal';
+import ColumnsModal, { baseColumns } from './ColumnsModal';
 
 const STORAGE_KEYS = {
   SELECTED_COLUMNS: 'matrixView_selectedColumns',
@@ -250,7 +250,7 @@ const MatrixView = () => {
   );
 
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
-    const baseColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
+    const baseNonVariableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
       {
         accessorKey: 'name',
         header: strings.DEAL_NAME,
@@ -672,7 +672,7 @@ const MatrixView = () => {
       };
     });
 
-    return [...baseColumns, ...variableColumns];
+    return [...baseNonVariableColumns, ...variableColumns];
   }, [allVariables, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
 
   useEffect(() => {
@@ -704,9 +704,11 @@ const MatrixView = () => {
       <Box>
         <MRT_ToggleGlobalFilterButton table={table} />
         <MRT_ToggleFiltersButton table={table} />
-        <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
-          <Icon name='iconColumns' />
-        </IconButton>
+        <Tooltip title={strings.MANAGE_COLUMNS}>
+          <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
+            <Icon name='iconColumns' />
+          </IconButton>
+        </Tooltip>
         <MRT_ToggleDensePaddingButton table={table} />
         <MRT_ToggleFullScreenButton table={table} />
       </Box>
@@ -839,6 +841,12 @@ const MatrixView = () => {
   const onColumnsSelected = useCallback(
     (columns: string[]) => {
       const columnVisibility: Record<string, boolean> = {};
+
+      baseColumns().forEach((col) => {
+        if (col.id !== 'projectName') {
+          columnVisibility[col.id] = false;
+        }
+      });
 
       uniqueVariableIds?.forEach((id) => {
         columnVisibility[id] = false;

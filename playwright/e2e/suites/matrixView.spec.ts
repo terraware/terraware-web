@@ -44,13 +44,14 @@ export default function MatrixViewTests() {
     await expect(page.getByText('TEST Number of native species')).toBeVisible();
 
     //selected columns
+    await expect(page.locator('li').filter({ hasText: 'Deal Name' }).nth(1)).toBeVisible();
+    await expect(page.locator('li').filter({ hasText: 'Phase' }).nth(1)).toBeVisible();
+    await expect(page.locator('li').filter({ hasText: 'Eligible Land' }).nth(1)).toBeVisible();
+    await expect(page.locator('li').filter({ hasText: 'Country' }).nth(1)).toBeVisible();
+    await expect(page.locator('li').filter({ hasText: 'Project Lead' }).nth(1)).toBeVisible();
+
     const columnHeaders = page.getByRole('columnheader');
     await expect(columnHeaders).toHaveCount(5);
-    await expect(page.locator('li').filter({ hasText: 'projectName' })).toBeVisible();
-    await expect(page.locator('li').filter({ hasText: 'participantCohortPhase' })).toBeVisible();
-    await expect(page.locator('li').filter({ hasText: 'eligibleLand' })).toBeVisible();
-    await expect(page.locator('li').filter({ hasText: 'countryName' })).toBeVisible();
-    await expect(page.locator('li').filter({ hasText: 'projectLead' })).toBeVisible();
   });
 
   test('Add column to matrix view', async ({ page }, testInfo) => {
