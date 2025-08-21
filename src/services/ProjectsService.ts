@@ -12,6 +12,8 @@ import { parseSearchTerm } from 'src/utils/search';
 const PROJECTS_ENDPOINT = '/api/v1/projects';
 const PROJECT_ENDPOINT = '/api/v1/projects/{id}';
 const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
+const PROJECT_INTERNAL_USERS_ENDPOINT = '/api/v1/projects/{id}/internalUsers';
+const PROJECT_INTERNAL_USER_ENDPOINT = '/api/v1/projects/{id}/internalUsers/{userId}';
 
 type ListProjectsResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -27,11 +29,22 @@ export type DeleteProjectResponsePayload =
 export type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
 export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
 
+type ListProjectInternalUsersResponsePayload =
+  paths[typeof PROJECT_INTERNAL_USERS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+export type AssignProjectInternalUserResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
+export type RemoveProjectInternalUserResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
+export type AssignProjectInternalUserRequestPayload = components['schemas']['AssignProjectInternalUserRequestPayload'];
+
 /**
  * exported type
  */
 export type ProjectsData = {
   projects?: Project[];
+};
+
+export type ProjectsInternalUsersData = {
+  users: ListProjectInternalUsersResponsePayload['users'];
 };
 
 const httpProjects = HttpService.root(PROJECTS_ENDPOINT);
@@ -151,6 +164,34 @@ const deleteProject = (projectId: number) =>
     urlReplacements: { '{id}': `${projectId}` },
   });
 
+const listProjectInternalUsers = async (projectId: number): Promise<ProjectsInternalUsersData & Response> => {
+  const response: ProjectsInternalUsersData & Response = await httpProjects.get<
+    ListProjectInternalUsersResponsePayload,
+    ProjectsInternalUsersData
+  >(
+    {
+      url: PROJECT_INTERNAL_USERS_ENDPOINT,
+      urlReplacements: { '{id}': `${projectId}` },
+    },
+    (data) => ({ users: data?.users || [] })
+  );
+
+  return response;
+};
+
+const assignProjectInternalUser = (projectId: number, payload: AssignProjectInternalUserRequestPayload) =>
+  httpProjects.put2<AssignProjectInternalUserResponsePayload>({
+    url: PROJECT_INTERNAL_USERS_ENDPOINT,
+    urlReplacements: { '{id}': `${projectId}` },
+    entity: payload,
+  });
+
+const removeProjectInternalUser = (projectId: number, userId: number) =>
+  httpProjects.delete2<RemoveProjectInternalUserResponsePayload>({
+    url: PROJECT_INTERNAL_USER_ENDPOINT,
+    urlReplacements: { '{id}': `${projectId}`, '{userId}': `${userId}` },
+  });
+
 /**
  * Exported functions
  */
@@ -162,6 +203,9 @@ const ProjectsService = {
   getProject,
   updateProject,
   deleteProject,
+  listProjectInternalUsers,
+  assignProjectInternalUser,
+  removeProjectInternalUser,
 };
 
 export default ProjectsService;

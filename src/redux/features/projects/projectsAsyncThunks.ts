@@ -2,9 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Response2 } from 'src/services/HttpService';
 import ProjectsService, {
+  AssignProjectInternalUserRequestPayload,
+  AssignProjectInternalUserResponsePayload,
   AssignProjectRequestPayload,
   AssignProjectResponsePayload,
   DeleteProjectResponsePayload,
+  RemoveProjectInternalUserResponsePayload,
   UpdateProjectResponsePayload,
 } from 'src/services/ProjectsService';
 import strings from 'src/strings';
@@ -47,6 +50,49 @@ export const requestProjectAssign = createAsyncThunk(
       projectId,
       entities
     );
+
+    if (response !== null && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestProjectInternalUsersList = createAsyncThunk(
+  'projects/listInternalUsers',
+  async (request: { projectId: number }, { rejectWithValue }) => {
+    const response = await ProjectsService.listProjectInternalUsers(request.projectId);
+
+    if (response !== null && response.requestSucceeded) {
+      return response;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestProjectInternalUserAssign = createAsyncThunk(
+  'projects/assignInternalUser',
+  async (request: { projectId: number; payload: AssignProjectInternalUserRequestPayload }, { rejectWithValue }) => {
+    const { projectId, payload } = request;
+    const response: Response2<AssignProjectInternalUserResponsePayload> =
+      await ProjectsService.assignProjectInternalUser(projectId, payload);
+
+    if (response !== null && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestProjectInternalUserRemove = createAsyncThunk(
+  'projects/removeInternalUser',
+  async (request: { projectId: number; userId: number }, { rejectWithValue }) => {
+    const { projectId, userId } = request;
+    const response: Response2<RemoveProjectInternalUserResponsePayload> =
+      await ProjectsService.removeProjectInternalUser(projectId, userId);
 
     if (response !== null && response.requestSucceeded) {
       return response.data;
