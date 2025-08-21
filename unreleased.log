@@ -1,3 +1,4 @@
+ed9359ea228 SW-7281 Non Variables should display regular text for the field name in column manager (#4370)
 acdeb29f646 SW-7149 Remove EC2 deployment from CI workflow (#4369)
 fa81d00b196 SW-7273 Reset Order button deletes all selected columns instead of resetting the order (#4368)
 0481eb130d0 SW-7271 Hovering on “Manage Columns” icon should display helper text (#4367)

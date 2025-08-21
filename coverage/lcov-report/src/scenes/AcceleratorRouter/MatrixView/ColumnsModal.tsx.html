@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/190</span>
+                <span class='fraction'>0/193</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/118</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/172</span>
+                <span class='fraction'>0/174</span>
             </div>
         
             
@@ -705,7 +705,19 @@
 <a name='L640'></a><a href='#L640'>640</a>
 <a name='L641'></a><a href='#L641'>641</a>
 <a name='L642'></a><a href='#L642'>642</a>
-<a name='L643'></a><a href='#L643'>643</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L643'></a><a href='#L643'>643</a>
+<a name='L644'></a><a href='#L644'>644</a>
+<a name='L645'></a><a href='#L645'>645</a>
+<a name='L646'></a><a href='#L646'>646</a>
+<a name='L647'></a><a href='#L647'>647</a>
+<a name='L648'></a><a href='#L648'>648</a>
+<a name='L649'></a><a href='#L649'>649</a>
+<a name='L650'></a><a href='#L650'>650</a>
+<a name='L651'></a><a href='#L651'>651</a>
+<a name='L652'></a><a href='#L652'>652</a>
+<a name='L653'></a><a href='#L653'>653</a>
+<a name='L654'></a><a href='#L654'>654</a>
+<a name='L655'></a><a href='#L655'>655</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -748,11 +760,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1276,7 +1297,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1390,7 +1414,15 @@ type ColumnsModalProps = {
   table: MRT_TableInstance&lt;ProjectsWithVariablesSearchResult&gt;;
 };
 &nbsp;
-const BASE_COLUMNS = <span class="cstat-no" title="statement not covered" >['projectName', 'participantCohortPhase', 'eligibleLand', 'countryName', 'projectLead'];</span>
+export function <span class="fstat-no" title="function not covered" >baseColumns(</span>) {
+<span class="cstat-no" title="statement not covered" >  return [</span>
+    { id: 'projectName', name: strings.DEAL_NAME },
+    { id: 'participantCohortPhase', name: strings.PHASE },
+    { id: 'eligibleLand', name: strings.ELIGIBLE_LAND },
+    { id: 'countryName', name: strings.COUNTRY },
+    { id: 'projectLead', name: strings.PROJECT_LEAD },
+  ];
+}
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ColumnsModal(</span>props: ColumnsModalProps): JSX.Element {
   const { onClose, onSave, allVariables, table } = <span class="cstat-no" title="statement not covered" >props;</span>
@@ -1406,6 +1438,7 @@ export default function <span class="fstat-no" title="function not covered" >Col
   const [deliverables, setDeliverables] = <span class="cstat-no" title="statement not covered" >useState&lt;ListDeliverablesElementWithOverdue[]&gt;();</span>
   const [draggedIndex, setDraggedIndex] = <span class="cstat-no" title="statement not covered" >useState&lt;number | null&gt;(null);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const baseColumnsIds = <span class="cstat-no" title="statement not covered" >baseColumns().map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.id)</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
@@ -1558,8 +1591,8 @@ export default function <span class="fstat-no" title="function not covered" >Col
       .filter(<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >selectedColumns?.includes(v.stableId))</span>
       .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >(a.position || 0) - (b.position || 0))</span>
       .map(<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >v.stableId)</span>;
-<span class="cstat-no" title="statement not covered" >    setSelectedColumns([...BASE_COLUMNS, ...orderedColumns]);</span>
-  }, [allVariables, selectedColumns]);
+<span class="cstat-no" title="statement not covered" >    setSelectedColumns([...baseColumnsIds, ...orderedColumns]);</span>
+  }, [allVariables, baseColumnsIds, selectedColumns]);
 &nbsp;
   const handleUnpinAll = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     // Unpin all columns using Material React Table's functionality
@@ -1635,8 +1668,8 @@ export default function <span class="fstat-no" title="function not covered" >Col
 &nbsp;
   const handleResetColumns = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedDeliverables(new Set());</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedColumns(BASE_COLUMNS);</span>
-  }, []);
+<span class="cstat-no" title="statement not covered" >    setSelectedColumns(baseColumnsIds);</span>
+  }, [baseColumnsIds]);
 &nbsp;
   const moveColumn = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (f</span>romIndex: number, toIndex: number) =&gt; {
@@ -1848,7 +1881,7 @@ export default function <span class="fstat-no" title="function not covered" >Col
 &nbsp;
               &lt;List dense&gt;
                 &lt;&gt;
-                  {BASE_COLUMNS.map(<span class="fstat-no" title="function not covered" >(c</span>ol) =&gt; <span class="cstat-no" title="statement not covered" >listElement(col))</span>}
+                  {baseColumns().map(<span class="fstat-no" title="function not covered" >(c</span>ol) =&gt; <span class="cstat-no" title="statement not covered" >listElement(col.id, col.name))</span>}
                   {filteredVariables.map(<span class="fstat-no" title="function not covered" >(v</span>ariable) =&gt; <span class="cstat-no" title="statement not covered" >listElement(variable.stableId, variable.name))</span>}
                 &lt;/&gt;
               &lt;/List&gt;
@@ -1918,7 +1951,10 @@ export default function <span class="fstat-no" title="function not covered" >Col
           ) : (
             &lt;List dense&gt;
               {selectedColumns.map(<span class="fstat-no" title="function not covered" >(v</span>ariableStableId, index) =&gt; {
-                const columnName = <span class="cstat-no" title="statement not covered" >allVariables.find(<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >v.stableId === variableStableId)</span>?.name || variableStableId;</span>
+                const columnName =
+<span class="cstat-no" title="statement not covered" >                  allVariables.find(<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >v.stableId === variableStableId)</span>?.name ||</span>
+                  baseColumns().find(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.id === variableStableId)</span>?.name ||
+                  variableStableId;
 <span class="cstat-no" title="statement not covered" >                return (</span>
                   &lt;ListItem
                     key={columnName}
@@ -1974,7 +2010,7 @@ export default function <span class="fstat-no" title="function not covered" >Col
                         onClick={removeColumnHandler}
                         sx={{ ml: 0.5 }}
                         data-variable-stable-id={variableStableId}
-                        disabled={columnName === 'projectName'}
+                        disabled={columnName === strings.DEAL_NAME}
                       &gt;
                         &lt;CloseIcon sx={{ fontSize: 14 }} /&gt;
                       &lt;/IconButton&gt;
@@ -1996,7 +2032,7 @@ export default function <span class="fstat-no" title="function not covered" >Col
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-21T17:46:50.077Z
+                at 2025-08-21T19:23:33.240Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
