@@ -250,7 +250,7 @@ const MatrixView = () => {
   );
 
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
-    const baseColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
+    const baseNonVariableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
       {
         accessorKey: 'name',
         header: strings.DEAL_NAME,
@@ -672,7 +672,7 @@ const MatrixView = () => {
       };
     });
 
-    return [...baseColumns, ...variableColumns];
+    return [...baseNonVariableColumns, ...variableColumns];
   }, [allVariables, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
 
   useEffect(() => {

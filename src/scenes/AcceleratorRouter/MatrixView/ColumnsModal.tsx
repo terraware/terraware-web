@@ -296,7 +296,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   const handleResetColumns = useCallback(() => {
     setSelectedDeliverables(new Set());
     setSelectedColumns(baseColumnsIds);
-  }, []);
+  }, [baseColumnsIds]);
 
   const moveColumn = useCallback(
     (fromIndex: number, toIndex: number) => {
