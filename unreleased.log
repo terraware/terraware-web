@@ -1,3 +1,4 @@
+fa81d00b196 SW-7273 Reset Order button deletes all selected columns instead of resetting the order (#4368)
 0481eb130d0 SW-7271 Hovering on “Manage Columns” icon should display helper text (#4367)
 bb9b2c56fc2 Updated translations from Phrase (#4365)
 ea4a14db7e2 SW-7167 Use maintain order for observation map (#4366)
