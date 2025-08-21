@@ -209,7 +209,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
       .filter((v) => selectedColumns?.includes(v.stableId))
       .sort((a, b) => (a.position || 0) - (b.position || 0))
       .map((v) => v.stableId);
-    setSelectedColumns(orderedColumns);
+    setSelectedColumns([...BASE_COLUMNS, ...orderedColumns]);
   }, [allVariables, selectedColumns]);
 
   const handleUnpinAll = useCallback(() => {
@@ -500,7 +500,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
               <List dense>
                 <>
                   {BASE_COLUMNS.map((col) => listElement(col))}
-                  {filteredVariables.map((variable) => listElement(variable.id.toString(), variable.name))}
+                  {filteredVariables.map((variable) => listElement(variable.stableId, variable.name))}
                 </>
               </List>
             </>
