@@ -1,7 +1,7 @@
 import { components, paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
-import { CreateProjectRequest, Project, UpdateProjectRequest } from 'src/types/Project';
+import { CreateProjectRequest, Project, ProjectInternalUser, UpdateProjectRequest } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -29,7 +29,7 @@ export type DeleteProjectResponsePayload =
 export type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
 export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
 
-type ListProjectInternalUsersResponsePayload =
+export type ListProjectInternalUsersResponsePayload =
   paths[typeof PROJECT_INTERNAL_USERS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 export type AssignProjectInternalUserResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
@@ -44,7 +44,7 @@ export type ProjectsData = {
 };
 
 export type ProjectsInternalUsersData = {
-  users: ListProjectInternalUsersResponsePayload['users'];
+  users: ProjectInternalUser[];
 };
 
 const httpProjects = HttpService.root(PROJECTS_ENDPOINT);

@@ -11,7 +11,7 @@ import ProjectsService, {
   UpdateProjectResponsePayload,
 } from 'src/services/ProjectsService';
 import strings from 'src/strings';
-import { UpdateProjectRequest } from 'src/types/Project';
+import { ProjectInternalUsers, UpdateProjectRequest } from 'src/types/Project';
 
 export const requestProjectUpdate = createAsyncThunk(
   'projects/update',
@@ -99,5 +99,43 @@ export const requestProjectInternalUserRemove = createAsyncThunk(
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestProjectInternalUsersUpdate = createAsyncThunk(
+  'projects/updateInternalUsers',
+  async (
+    request: {
+      projectId: number;
+      usersToAssign: AssignProjectInternalUserRequestPayload[];
+      usersToRemove: ProjectInternalUsers;
+    },
+    { rejectWithValue }
+  ) => {
+    const { usersToRemove, usersToAssign } = request;
+
+    const removePromises = usersToRemove.map((user) =>
+      ProjectsService.removeProjectInternalUser(request.projectId, user.userId)
+    );
+
+    const assignPromises = usersToAssign.map((user) =>
+      ProjectsService.assignProjectInternalUser(request.projectId, user)
+    );
+
+    try {
+      const removeResults = await Promise.all(removePromises);
+      const assignResults = await Promise.all(assignPromises);
+
+      if (
+        removeResults.every((result) => result && result.requestSucceeded) &&
+        assignResults.every((result) => result && result.requestSucceeded)
+      ) {
+        return 'ok';
+      }
+
+      return rejectWithValue(strings.GENERIC_ERROR);
+    } catch (error) {
+      return rejectWithValue(strings.GENERIC_ERROR);
+    }
   }
 );

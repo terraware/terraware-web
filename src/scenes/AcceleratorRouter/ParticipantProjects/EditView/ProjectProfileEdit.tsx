@@ -32,9 +32,18 @@ import { requestListOrganizationUsers } from 'src/redux/features/organizationUse
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
+import {
+  requestProjectInternalUsersList,
+  requestProjectInternalUsersUpdate,
+} from 'src/redux/features/projects/projectsAsyncThunks';
+import {
+  selectProjectInternalUsersListRequest,
+  selectProjectInternalUsersRequest,
+} from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { TFContactType, getTFContactTypeString, tfContactTypes } from 'src/types/Accelerator';
+import { AssignProjectInternalUserRequestPayload } from 'src/services/ProjectsService';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
+import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
 import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { getImagePath } from 'src/utils/images';
@@ -44,9 +53,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import AddNewContactTypeModal from './AddNewContactTypeModal';
 
-type TFContactRow = {
-  name: string;
-  type: TFContactType | undefined;
+type InternalUserItem = Omit<AssignProjectInternalUserRequestPayload, 'userId'> & {
   userId?: number;
 };
 
@@ -93,16 +100,26 @@ const ProjectProfileEdit = () => {
   const [initiatedRequests, setInitiatedRequests] = useState({
     participantProject: false,
     assignTfContact: false,
+    updateInternalUsers: false,
     uploadImages: false,
   });
 
   const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
   const [listUsersRequestId, setListUsersRequestId] = useState('');
+  const [listInternalUsersRequestId, setListInternalUsersRequestId] = useState('');
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
+  const listInternalUsersRequest = useAppSelector((state) =>
+    selectProjectInternalUsersListRequest(state, listInternalUsersRequestId)
+  );
+  const [internalUsers, setInternalUsers] = useState<InternalUserItem[]>([]);
   const [assignTfContactRequestId, setAssignTfContactRequestId] = useState('');
+  const [updateInternalUsersRequestId, setUpdateInternalUsersRequestId] = useState('');
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
   const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
   const assignContactResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
+  const updateInternalUsersResponse = useAppSelector((state) =>
+    selectProjectInternalUsersRequest(state, updateInternalUsersRequestId)
+  );
   const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
 
   const variableValues = useAppSelector((state) =>
@@ -112,7 +129,6 @@ const ProjectProfileEdit = () => {
   const { activeLocale, strings } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
-  const [tfContacts, setTfContacts] = useState<TFContactRow[]>();
   const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
@@ -127,8 +143,8 @@ const ProjectProfileEdit = () => {
 
   const contactTypeDropdownOptions = useMemo(
     () =>
-      tfContactTypes.map((contactType) => ({
-        label: getTFContactTypeString(contactType, strings),
+      projectInternalUserRoles.map((contactType) => ({
+        label: getProjectInternalUserRoleString(contactType, strings),
         value: contactType,
       })),
     [strings]
@@ -156,17 +172,22 @@ const ProjectProfileEdit = () => {
     if (
       isComplete(participantProjectUpdateResponse?.status, initiatedRequests.participantProject) &&
       isComplete(assignContactResponse?.status, initiatedRequests.assignTfContact) &&
+      isComplete(updateInternalUsersResponse?.status, initiatedRequests.updateInternalUsers) &&
       isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages)
     ) {
       setRequestsInProgress(false);
 
       if (
-        [participantProjectUpdateResponse, assignContactResponse, uploadImagesResponse].some(
-          (resp) => resp?.status === 'error'
-        )
+        [
+          participantProjectUpdateResponse,
+          assignContactResponse,
+          updateInternalUsersResponse,
+          uploadImagesResponse,
+        ].some((resp) => resp?.status === 'error')
       ) {
         snackbar.toastError();
         setAssignTfContactRequestId('');
+        setUpdateInternalUsersRequestId('');
         setUploadImagesRequestId('');
         setParticipantProjectRequestId('');
       } else {
@@ -181,16 +202,26 @@ const ProjectProfileEdit = () => {
     initiatedRequests,
     redirectToProjectView,
     snackbar,
+    updateInternalUsersResponse,
   ]);
 
   useEffect(() => {
     if (assignContactResponse?.status === 'success') {
-      // redirectToProjectView();
+      // redirect to project view occurs when image uploads are finished
     } else if (assignContactResponse?.status === 'error') {
       snackbar.toastError();
       setAssignTfContactRequestId('');
     }
   }, [assignContactResponse, snackbar]);
+
+  useEffect(() => {
+    if (updateInternalUsersResponse?.status === 'success') {
+      // redirect to project view occurs when image uploads are finished
+    } else if (updateInternalUsersResponse?.status === 'error') {
+      snackbar.toastError();
+      setUpdateInternalUsersRequestId('');
+    }
+  }, [updateInternalUsersResponse, snackbar]);
 
   useEffect(() => {
     if (uploadImagesResponse?.status === 'success') {
@@ -209,15 +240,9 @@ const ProjectProfileEdit = () => {
   }, [organization?.tfContactUser, globalUsersOptions]);
 
   useEffect(() => {
-    const tfContactUserIds = organization?.tfContactUsers?.map((user) => user.userId);
-    const tfContactsSelected = globalUsersOptions?.filter((userOpt) => tfContactUserIds?.includes(userOpt.value));
-    const tfContactsNextValue: TFContactRow[] = (tfContactsSelected || []).map((userOpt) => ({
-      name: userOpt.label,
-      userId: userOpt.value,
-      type: undefined, // TODO: populate this once value is available from the API
-    }));
-    setTfContacts(tfContactsNextValue);
-  }, [organization?.tfContactUsers, globalUsersOptions]);
+    const request = dispatch(requestProjectInternalUsersList({ projectId }));
+    setListInternalUsersRequestId(request.requestId);
+  }, [dispatch, projectId]);
 
   useEffect(() => {
     const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
@@ -241,6 +266,12 @@ const ProjectProfileEdit = () => {
     }
   }, [listUsersRequest]);
 
+  useEffect(() => {
+    if (listInternalUsersRequest?.status === 'success') {
+      setInternalUsers(listInternalUsersRequest.data?.users || []);
+    }
+  }, [listInternalUsersRequest]);
+
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
       onChangeParticipantProject('countryCode', countryCode);
@@ -263,10 +294,28 @@ const ProjectProfileEdit = () => {
     return false;
   }, [tfContact, dispatch, project?.organizationId]);
 
-  // // TODO: Implement saveTFContacts
-  // const saveTFContacts = useCallback(() => {
-  //   console.log('saveTFContacts - tfContacts:', tfContacts);
-  // }, [tfContacts]);
+  const saveInternalUsers = useCallback(() => {
+    if (listInternalUsersRequest?.data?.users) {
+      const updateRequest = dispatch(
+        requestProjectInternalUsersUpdate({
+          projectId,
+          usersToAssign: (internalUsers || [])
+            .filter((user) => !!user.userId)
+            .map((user) => ({
+              role: user.role,
+              roleName: user.roleName,
+              userId: user.userId as number,
+            })),
+          usersToRemove: listInternalUsersRequest?.data?.users || [],
+        })
+      );
+      setUpdateInternalUsersRequestId(updateRequest.requestId);
+
+      return true;
+    }
+
+    return false;
+  }, [dispatch, internalUsers, listInternalUsersRequest?.data?.users, projectId]);
 
   const handleSave = useCallback(() => {
     if (!stableToVariable) {
@@ -278,6 +327,7 @@ const ProjectProfileEdit = () => {
     const newInitiatedRequests = {
       participantProject: false,
       assignTfContact: false,
+      updateInternalUsers: false,
       uploadImages: false,
     };
 
@@ -304,11 +354,15 @@ const ProjectProfileEdit = () => {
       setParticipantProjectRequestId(dispatched.requestId);
       newInitiatedRequests.participantProject = true;
     }
+
     if (tfContact) {
       saveTFContact();
       newInitiatedRequests.assignTfContact = true;
     }
-    // TODO: Implement saveTFContacts
+
+    saveInternalUsers();
+    newInitiatedRequests.updateInternalUsers = true;
+
     if ((mainPhoto || mapPhoto) && stableToVariable) {
       const imageValues = [];
       if (mainPhoto) {
@@ -342,16 +396,17 @@ const ProjectProfileEdit = () => {
 
     setInitiatedRequests(newInitiatedRequests);
   }, [
+    stableToVariable,
     participantProjectRecord,
-    dispatch,
-    projectId,
+    tfContact,
+    saveInternalUsers,
     mainPhoto,
     mapPhoto,
-    stableToVariable,
-    saveTFContact,
-    redirectToProjectView,
     snackbar,
-    tfContact,
+    dispatch,
+    saveTFContact,
+    projectId,
+    redirectToProjectView,
   ]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
@@ -409,41 +464,40 @@ const ProjectProfileEdit = () => {
     [globalUsersOptions, setTfContact]
   );
 
-  const getOnChangeProjectLead = useCallback(
+  const getOnChangeInternalUser = useCallback(
     (index: number) => (value: string) => {
       const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString());
       if (nextUser) {
-        const tfContactsUpdate = tfContacts?.map((contact) => ({ ...contact }));
-        if (tfContactsUpdate?.[index]) {
-          tfContactsUpdate[index] = {
-            name: nextUser.label,
+        const internalUsersUpdate = internalUsers?.map((user) => ({ ...user }));
+        if (internalUsersUpdate?.[index]) {
+          internalUsersUpdate[index] = {
+            ...internalUsersUpdate[index],
             userId: nextUser.value,
-            type: undefined,
           };
-          setTfContacts(tfContactsUpdate);
+          setInternalUsers(internalUsersUpdate);
         }
       }
     },
-    [globalUsersOptions, tfContacts]
+    [globalUsersOptions, internalUsers]
   );
 
-  const getOnChangeContactType = useCallback(
+  const getOnChangeInternalUserRole = useCallback(
     (index: number) => (value: string) => {
-      const tfContactsUpdate = tfContacts?.map((contact) => ({ ...contact }));
-      if (tfContactsUpdate?.[index]) {
-        tfContactsUpdate[index] = {
-          ...tfContactsUpdate[index],
-          type: value as TFContactType,
+      const internalUsersUpdate = internalUsers?.map((user) => ({ ...user }));
+      if (internalUsersUpdate?.[index]) {
+        internalUsersUpdate[index] = {
+          ...internalUsersUpdate[index],
+          role: value as ProjectInternalUserRole,
         };
-        setTfContacts(tfContactsUpdate);
+        setInternalUsers(internalUsersUpdate);
       }
     },
-    [tfContacts]
+    [internalUsers]
   );
 
   const onClickAddRow = useCallback(() => {
-    setTfContacts((prev) => [...(prev || []), { name: '', userId: undefined, type: undefined }]);
-  }, [setTfContacts]);
+    setInternalUsers((prev) => [...(prev || []), { userId: undefined, role: undefined }]);
+  }, [setInternalUsers]);
 
   const [addNewContactTypeModalOpen, setAddNewContactTypeModalOpen] = useState(false);
 
@@ -549,16 +603,16 @@ const ProjectProfileEdit = () => {
                   </Grid>
                 </Grid>
 
-                {tfContacts?.map((user, index) => (
-                  <Grid container key={`tfContact-user-${index}`} marginBottom='8px'>
+                {internalUsers?.map((user, index) => (
+                  <Grid container key={`internal-user-${index}`} marginBottom='8px'>
                     <Grid item md={6} paddingRight='8px'>
                       <Dropdown
                         autocomplete
                         fullWidth
                         hideClearIcon
-                        id={`tfContact-${index}`}
+                        id={`internal-user-id-${index}`}
                         label=''
-                        onChange={getOnChangeProjectLead(index)}
+                        onChange={getOnChangeInternalUser(index)}
                         options={globalUsersWithNoOwner}
                         placeholder={strings.SELECT}
                         selectedValue={user?.userId}
@@ -570,12 +624,12 @@ const ProjectProfileEdit = () => {
                         autocomplete
                         fullWidth
                         hideClearIcon
-                        id={`tfContact-type-${index}`}
+                        id={`internal-user-role-${index}`}
                         label=''
-                        onChange={getOnChangeContactType(index)}
+                        onChange={getOnChangeInternalUserRole(index)}
                         options={contactTypeDropdownOptions}
                         placeholder={strings.SELECT}
-                        selectedValue={tfContacts?.[index]?.type}
+                        selectedValue={internalUsers?.[index]?.role}
                       />
                     </Grid>
                   </Grid>
