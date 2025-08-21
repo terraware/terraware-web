@@ -1,3 +1,4 @@
+acdeb29f646 SW-7149 Remove EC2 deployment from CI workflow (#4369)
 fa81d00b196 SW-7273 Reset Order button deletes all selected columns instead of resetting the order (#4368)
 0481eb130d0 SW-7271 Hovering on “Manage Columns” icon should display helper text (#4367)
 bb9b2c56fc2 Updated translations from Phrase (#4365)
