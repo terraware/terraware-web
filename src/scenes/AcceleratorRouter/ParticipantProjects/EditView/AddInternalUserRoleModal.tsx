@@ -28,7 +28,6 @@ export default function AddInternalUserRoleModal({
   );
 
   const onSave = useCallback(() => {
-    console.log('Saving new internal user role:', newInternalUserRole);
     const trimmedInternalUserRole = newInternalUserRole.trim();
     if (trimmedInternalUserRole.length) {
       addInternalUserRole(trimmedInternalUserRole);

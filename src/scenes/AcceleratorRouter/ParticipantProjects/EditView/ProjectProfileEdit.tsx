@@ -617,7 +617,6 @@ const ProjectProfileEdit = () => {
             <Grid item md={12}>
               <Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}>
                 <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
-                  {/* TODO: update the tooltip copy below */}
                   <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
                     {strings.INTERNAL_LEADS} <IconTooltip title={strings.INTERNAL_LEADS_TOOLTIP} />
                   </Typography>
