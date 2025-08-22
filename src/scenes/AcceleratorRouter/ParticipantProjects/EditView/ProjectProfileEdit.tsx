@@ -517,6 +517,7 @@ const ProjectProfileEdit = () => {
       <PageForm
         busy={[
           participantProjectUpdateResponse?.status,
+          updateInternalUsersResponse?.status,
           uploadImagesResponse?.status,
         ].includes('pending')}
         cancelID='cancelNewParticipantProject'
