@@ -43,7 +43,7 @@ export default function AddInternalUserRoleModal({
       title='New Contact Type'
       middleButtons={[
         <Button
-          id='cancelChangeQuantity'
+          id='cancelAddInternalUserRole'
           key='button-1'
           label={strings.CANCEL}
           onClick={onClose}
