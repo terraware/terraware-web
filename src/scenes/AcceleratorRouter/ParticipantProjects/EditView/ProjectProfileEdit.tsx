@@ -353,7 +353,7 @@ const ProjectProfileEdit = () => {
       return;
     }
 
-    if (!internalUsers.filter((user) => !!user.userId).every((user) => user.role)) {
+    if (!internalUsers.filter((user) => !!user.userId).every((user) => user.role || user.roleName)) {
       snackbar.toastError(strings.SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS);
       return;
     }
