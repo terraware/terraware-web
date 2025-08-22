@@ -169,7 +169,7 @@ const ProjectProfileEdit = () => {
   );
 
   useEffect(() => {
-    const preExistingCustomInternalUserRoles = (listInternalUsersRequest.data?.users || [])
+    const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
       .filter((user) => user.roleName)
       .map((user) => user.roleName);
 
