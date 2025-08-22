@@ -52,7 +52,7 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
-import AddNewContactTypeModal from './AddNewContactTypeModal';
+import AddInternalUserRoleModal from './AddInternalUserRoleModal';
 
 type InternalUserItem = Omit<AssignProjectInternalUserRequestPayload, 'userId'> & {
   userId?: number;
@@ -133,6 +133,7 @@ const ProjectProfileEdit = () => {
   const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
+  const [customUserRoles, setCustomUserRoles] = useState<string[]>([]);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
 
@@ -142,13 +143,28 @@ const ProjectProfileEdit = () => {
     goToParticipantProject(projectId);
   }, [reload, snackbar, goToParticipantProject, projectId, strings]);
 
-  const contactTypeDropdownOptions = useMemo(
-    () =>
-      projectInternalUserRoles.map((contactType) => ({
-        label: getProjectInternalUserRoleString(contactType, strings),
-        value: contactType,
+  const addInternalUserRole = useCallback(
+    (internalUserRole: string) => {
+      const trimmedRole = internalUserRole.trim();
+      if (trimmedRole.length && !customUserRoles.includes(trimmedRole)) {
+        setCustomUserRoles((prev) => [...prev, trimmedRole]);
+      }
+    },
+    [customUserRoles, setCustomUserRoles]
+  );
+
+  const internalUserRoleOptions = useMemo(
+    () => [
+      ...projectInternalUserRoles.map((role) => ({
+        label: getProjectInternalUserRoleString(role, strings),
+        value: role,
       })),
-    [strings]
+      ...customUserRoles.map((role) => ({
+        label: role,
+        value: role,
+      })),
+    ],
+    [strings, customUserRoles]
   );
 
   useEffect(() => {
@@ -484,12 +500,15 @@ const ProjectProfileEdit = () => {
   );
 
   const getOnChangeInternalUserRole = useCallback(
-    (index: number) => (value: string) => {
+    (index: number) => (nextRole: string) => {
       const internalUsersUpdate = internalUsers?.map((user) => ({ ...user }));
       if (internalUsersUpdate?.[index]) {
+        const isStandardRole = projectInternalUserRoles.includes(nextRole as ProjectInternalUserRole);
         internalUsersUpdate[index] = {
           ...internalUsersUpdate[index],
-          role: value as ProjectInternalUserRole,
+          ...(isStandardRole
+            ? { role: nextRole as ProjectInternalUserRole, roleName: undefined }
+            : { role: undefined, roleName: nextRole }),
         };
         setInternalUsers(internalUsersUpdate);
       }
@@ -508,15 +527,15 @@ const ProjectProfileEdit = () => {
     setInternalUsers((prev) => [...(prev || []), { userId: undefined, role: undefined }]);
   }, [setInternalUsers]);
 
-  const [addNewContactTypeModalOpen, setAddNewContactTypeModalOpen] = useState(false);
+  const [addInternalUserRoleModalOpen, setAddInternalUserRoleModalOpen] = useState(false);
 
   const onClickAddNewContactType = useCallback(() => {
-    setAddNewContactTypeModalOpen(true);
-  }, [setAddNewContactTypeModalOpen]);
+    setAddInternalUserRoleModalOpen(true);
+  }, [setAddInternalUserRoleModalOpen]);
 
-  const onCloseAddNewContactTypeModal = useCallback(() => {
-    setAddNewContactTypeModalOpen(false);
-  }, [setAddNewContactTypeModalOpen]);
+  const onCloseAddInternalUserRoleModal = useCallback(() => {
+    setAddInternalUserRoleModalOpen(false);
+  }, [setAddInternalUserRoleModalOpen]);
 
   const globalUsersWithNoOwner = useMemo(() => {
     const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
@@ -529,7 +548,9 @@ const ProjectProfileEdit = () => {
 
   return (
     <Grid container paddingRight={theme.spacing(3)}>
-      {addNewContactTypeModalOpen && <AddNewContactTypeModal onClose={onCloseAddNewContactTypeModal} />}
+      {addInternalUserRoleModalOpen && (
+        <AddInternalUserRoleModal addInternalUserRole={addInternalUserRole} onClose={onCloseAddInternalUserRoleModal} />
+      )}
       <PageForm
         busy={[
           participantProjectUpdateResponse?.status,
@@ -636,9 +657,9 @@ const ProjectProfileEdit = () => {
                         id={`internal-user-role-${index}`}
                         label=''
                         onChange={getOnChangeInternalUserRole(index)}
-                        options={contactTypeDropdownOptions}
+                        options={internalUserRoleOptions}
                         placeholder={strings.SELECT}
-                        selectedValue={internalUsers?.[index]?.role}
+                        selectedValue={internalUsers?.[index]?.role || internalUsers?.[index]?.roleName}
                       />
                     </Grid>
 

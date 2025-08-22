@@ -1,38 +1,40 @@
 import React, { useCallback, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { BusySpinner, Textfield } from '@terraware/web-components';
+import { Textfield } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
 
-export interface AddNewContactTypeProps {
+export interface AddInternalUserRoleModalProps {
+  addInternalUserRole: (role: string) => void;
   onClose: () => void;
-  reload?: () => void;
 }
 
-export default function AddNewContactType({ onClose, reload }: AddNewContactTypeProps): JSX.Element {
+export default function AddInternalUserRoleModal({
+  addInternalUserRole,
+  onClose,
+}: AddInternalUserRoleModalProps): JSX.Element {
   const { strings } = useLocalization();
 
-  const [saving, setSaving] = useState(false);
-  const [newContactType, setNewContactType] = useState('');
+  const [newInternalUserRole, setNewInternalUserRole] = useState('');
 
   const onChange = useCallback(
-    (value: unknown) => {
-      setNewContactType(value as string);
+    (internalUserRole: unknown) => {
+      setNewInternalUserRole(internalUserRole as string);
     },
-    [setNewContactType]
+    [setNewInternalUserRole]
   );
 
   const onSave = useCallback(() => {
-    console.log('Saving new contact type:', newContactType);
-    setSaving(true);
-    // TODO: save new contact type
-    setSaving(false);
-    reload?.();
+    console.log('Saving new internal user role:', newInternalUserRole);
+    const trimmedInternalUserRole = newInternalUserRole.trim();
+    if (trimmedInternalUserRole.length) {
+      addInternalUserRole(trimmedInternalUserRole);
+    }
     onClose();
-  }, [newContactType, onClose, reload]);
+  }, [addInternalUserRole, newInternalUserRole, onClose]);
 
   return (
     <DialogBox
@@ -61,14 +63,13 @@ export default function AddNewContactType({ onClose, reload }: AddNewContactType
       ]}
     >
       <Grid>
-        {saving && <BusySpinner withSkrim />}
         <Grid display='flex' item textAlign='left' xs={11}>
           <Textfield
             id='newContactType'
             label='New Contact Type'
             onChange={onChange}
             type='text'
-            value={newContactType}
+            value={newInternalUserRole}
           />
         </Grid>
       </Grid>
