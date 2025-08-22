@@ -5,7 +5,6 @@ import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-comp
 
 import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
-import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import ProjectFieldMultiSelect from 'src/components/ProjectField/MultiSelect';
@@ -457,13 +456,6 @@ const ProjectProfileEdit = () => {
     [onChangeParticipantProject]
   );
 
-  const onChangeProjectLead = useCallback(
-    (value: string) => {
-      setTfContact(globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString()));
-    },
-    [globalUsersOptions, setTfContact]
-  );
-
   const getOnChangeInternalUser = useCallback(
     (index: number) => (value: string) => {
       const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString());
@@ -662,21 +654,6 @@ const ProjectProfileEdit = () => {
               </Box>
             </Grid>
 
-            <GridEntryWrapper md={12}>
-              <Box paddingX={theme.spacing(2)}>
-                <Dropdown
-                  id='projectLead'
-                  placeholder={strings.SELECT}
-                  selectedValue={tfContact?.value}
-                  options={globalUsersWithNoOwner}
-                  onChange={onChangeProjectLead}
-                  hideClearIcon={true}
-                  label={strings.PROJECT_LEAD}
-                  fullWidth
-                  autocomplete
-                />
-              </Box>
-            </GridEntryWrapper>
             <ProjectFieldTextAreaEdit
               id={'dealDescription'}
               label={strings.PROJECT_OVERVIEW}
