@@ -13,7 +13,9 @@ import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VariableSelect from 'src/components/ProjectField/VariableSelect';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
+import Icon from 'src/components/common/icon/Icon';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
@@ -404,6 +406,7 @@ const ProjectProfileEdit = () => {
     setInitiatedRequests(newInitiatedRequests);
   }, [
     stableToVariable,
+    internalUsers,
     participantProjectRecord,
     tfContact,
     saveInternalUsers,
@@ -495,6 +498,13 @@ const ProjectProfileEdit = () => {
     [internalUsers]
   );
 
+  const getOnRemoveInternalUser = useCallback(
+    (index: number) => () => {
+      setInternalUsers((prev) => prev?.filter((_, i) => i !== index));
+    },
+    [setInternalUsers]
+  );
+
   const onClickAddRow = useCallback(() => {
     setInternalUsers((prev) => [...(prev || []), { userId: undefined, role: undefined }]);
   }, [setInternalUsers]);
@@ -580,7 +590,7 @@ const ProjectProfileEdit = () => {
                   </Typography>
                 </Box>
 
-                <Grid container>
+                <Grid container marginBottom='4px'>
                   <Grid item md={6}>
                     <Typography
                       color={theme.palette.TwClrTxtSecondary}
@@ -619,7 +629,7 @@ const ProjectProfileEdit = () => {
                       />
                     </Grid>
 
-                    <Grid item md={6}>
+                    <Grid item md={5}>
                       <Dropdown
                         autocomplete
                         fullWidth
@@ -631,6 +641,14 @@ const ProjectProfileEdit = () => {
                         placeholder={strings.SELECT}
                         selectedValue={internalUsers?.[index]?.role}
                       />
+                    </Grid>
+
+                    <Grid item xs={1} display={'flex'} flexDirection={'column'}>
+                      <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
+                        <Box paddingTop='8px'>
+                          <Icon name='iconSubtract' size='medium' />
+                        </Box>
+                      </Link>
                     </Grid>
                   </Grid>
                 ))}
