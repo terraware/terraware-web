@@ -619,7 +619,7 @@ const ProjectProfileEdit = () => {
                 <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
                   {/* TODO: update the tooltip copy below */}
                   <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
-                    {strings.INTERNAL_LEADS} <IconTooltip title='Internal leads tooltip...' />
+                    {strings.INTERNAL_LEADS} <IconTooltip title={strings.INTERNAL_LEADS_TOOLTIP} />
                   </Typography>
                 </Box>
 
