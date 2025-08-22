@@ -163,18 +163,6 @@ const ProjectProfileEdit = () => {
   );
 
   useEffect(() => {
-    const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
-      .filter((user) => user.roleName)
-      .map((user) => user.roleName);
-
-    preExistingCustomInternalUserRoles.forEach((role) => {
-      if (!customUserRoles.includes(role as string)) {
-        setCustomUserRoles((prev) => [...prev, role as string]);
-      }
-    });
-  }, [customUserRoles, listInternalUsersRequest]);
-
-  useEffect(() => {
     if (variableValues.length > 0) {
       setStableToVariable(
         variableValues.reduce<Record<string, VariableWithValues>>((map, variableWithValues) => {
@@ -270,7 +258,13 @@ const ProjectProfileEdit = () => {
 
   useEffect(() => {
     if (listInternalUsersRequest?.status === 'success') {
-      setInternalUsers(listInternalUsersRequest.data?.users || []);
+      setInternalUsers((prev) => [...prev, ...(listInternalUsersRequest.data?.users || [])]);
+
+      const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
+        .filter((user) => user.roleName)
+        .map((user) => user.roleName);
+
+      setCustomUserRoles((prev) => [...prev, ...(preExistingCustomInternalUserRoles as string[])]);
     }
   }, [listInternalUsersRequest]);
 
