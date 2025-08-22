@@ -114,22 +114,18 @@ export const requestProjectInternalUsersUpdate = createAsyncThunk(
   ) => {
     const { usersToRemove, usersToAssign } = request;
 
-    const removePromises = usersToRemove.map((user) =>
-      ProjectsService.removeProjectInternalUser(request.projectId, user.userId)
-    );
-
-    const assignPromises = usersToAssign.map((user) =>
-      ProjectsService.assignProjectInternalUser(request.projectId, user)
-    );
-
     try {
+      const removePromises = usersToRemove.map((user) =>
+        ProjectsService.removeProjectInternalUser(request.projectId, user.userId)
+      );
       const removeResults = await Promise.all(removePromises);
+
+      const assignPromises = usersToAssign.map((user) =>
+        ProjectsService.assignProjectInternalUser(request.projectId, user)
+      );
       const assignResults = await Promise.all(assignPromises);
 
-      if (
-        removeResults.every((result) => result && result.requestSucceeded) &&
-        assignResults.every((result) => result && result.requestSucceeded)
-      ) {
+      if ([...removeResults, ...assignResults].every((result) => result?.requestSucceeded)) {
         return 'ok';
       }
 
