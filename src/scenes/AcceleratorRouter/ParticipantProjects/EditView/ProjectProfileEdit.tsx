@@ -154,17 +154,18 @@ const ProjectProfileEdit = () => {
   );
 
   const internalUserRoleOptions = useMemo(
-    () => [
-      ...projectInternalUserRoles.map((role) => ({
-        label: getProjectInternalUserRoleString(role, strings),
-        value: role,
-      })),
-      ...customUserRoles.map((role) => ({
-        label: role,
-        value: role,
-      })),
-    ],
-    [strings, customUserRoles]
+    () =>
+      [
+        ...projectInternalUserRoles.map((role) => ({
+          label: getProjectInternalUserRoleString(role, strings),
+          value: role,
+        })),
+        ...customUserRoles.map((role) => ({
+          label: role,
+          value: role,
+        })),
+      ].sort((a, b) => a.label.localeCompare(b.label, activeLocale || undefined)),
+    [activeLocale, customUserRoles, strings]
   );
 
   useEffect(() => {
