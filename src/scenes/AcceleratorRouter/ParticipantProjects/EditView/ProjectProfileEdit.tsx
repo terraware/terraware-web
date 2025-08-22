@@ -18,8 +18,6 @@ import PageForm from 'src/components/common/PageForm';
 import Icon from 'src/components/common/icon/Icon';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
-import { selectAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
 import {
   requestListSpecificVariablesValues,
@@ -85,7 +83,7 @@ const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { participantProject, project, projectId, organization, reload } = useParticipantProjectData();
+  const { participantProject, projectId, organization, reload } = useParticipantProjectData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
 
@@ -100,7 +98,6 @@ const ProjectProfileEdit = () => {
   const [requestsInProgress, setRequestsInProgress] = useState(false);
   const [initiatedRequests, setInitiatedRequests] = useState({
     participantProject: false,
-    assignTfContact: false,
     updateInternalUsers: false,
     uploadImages: false,
   });
@@ -113,11 +110,9 @@ const ProjectProfileEdit = () => {
     selectProjectInternalUsersListRequest(state, listInternalUsersRequestId)
   );
   const [internalUsers, setInternalUsers] = useState<InternalUserItem[]>([]);
-  const [assignTfContactRequestId, setAssignTfContactRequestId] = useState('');
   const [updateInternalUsersRequestId, setUpdateInternalUsersRequestId] = useState('');
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
   const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
-  const assignContactResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
   const updateInternalUsersResponse = useAppSelector((state) =>
     selectProjectInternalUsersRequest(state, updateInternalUsersRequestId)
   );
@@ -129,7 +124,6 @@ const ProjectProfileEdit = () => {
   const [stableToVariable, setStableToVariable] = useState<Record<string, VariableWithValues>>();
   const { activeLocale, strings } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
-  const [tfContact, setTfContact] = useState<DropdownItem>();
   const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
@@ -201,22 +195,17 @@ const ProjectProfileEdit = () => {
 
     if (
       isComplete(participantProjectUpdateResponse?.status, initiatedRequests.participantProject) &&
-      isComplete(assignContactResponse?.status, initiatedRequests.assignTfContact) &&
       isComplete(updateInternalUsersResponse?.status, initiatedRequests.updateInternalUsers) &&
       isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages)
     ) {
       setRequestsInProgress(false);
 
       if (
-        [
-          participantProjectUpdateResponse,
-          assignContactResponse,
-          updateInternalUsersResponse,
-          uploadImagesResponse,
-        ].some((resp) => resp?.status === 'error')
+        [participantProjectUpdateResponse, updateInternalUsersResponse, uploadImagesResponse].some(
+          (resp) => resp?.status === 'error'
+        )
       ) {
         snackbar.toastError();
-        setAssignTfContactRequestId('');
         setUpdateInternalUsersRequestId('');
         setUploadImagesRequestId('');
         setParticipantProjectRequestId('');
@@ -226,7 +215,6 @@ const ProjectProfileEdit = () => {
     }
   }, [
     participantProjectUpdateResponse,
-    assignContactResponse,
     uploadImagesResponse,
     requestsInProgress,
     initiatedRequests,
@@ -234,15 +222,6 @@ const ProjectProfileEdit = () => {
     snackbar,
     updateInternalUsersResponse,
   ]);
-
-  useEffect(() => {
-    if (assignContactResponse?.status === 'success') {
-      // redirect to project view occurs when image uploads are finished
-    } else if (assignContactResponse?.status === 'error') {
-      snackbar.toastError();
-      setAssignTfContactRequestId('');
-    }
-  }, [assignContactResponse, snackbar]);
 
   useEffect(() => {
     if (updateInternalUsersResponse?.status === 'success') {
@@ -261,13 +240,6 @@ const ProjectProfileEdit = () => {
       setUploadImagesRequestId('');
     }
   }, [uploadImagesResponse, redirectToProjectView, snackbar]);
-
-  useEffect(() => {
-    const tfContactSelected = globalUsersOptions?.find(
-      (userOpt) => userOpt.value === organization?.tfContactUser?.userId
-    );
-    setTfContact(tfContactSelected);
-  }, [organization?.tfContactUser, globalUsersOptions]);
 
   useEffect(() => {
     const request = dispatch(requestProjectInternalUsersList({ projectId }));
@@ -310,20 +282,6 @@ const ProjectProfileEdit = () => {
     [onChangeParticipantProject]
   );
 
-  const saveTFContact = useCallback(() => {
-    if (project?.organizationId && tfContact) {
-      const assignRequest = dispatch(
-        requestAssignTerraformationContact({
-          organizationId: project?.organizationId,
-          terraformationContactId: tfContact?.value as number,
-        })
-      );
-      setAssignTfContactRequestId(assignRequest.requestId);
-      return true;
-    }
-    return false;
-  }, [tfContact, dispatch, project?.organizationId]);
-
   const saveInternalUsers = useCallback(() => {
     if (listInternalUsersRequest?.data?.users) {
       const updateRequest = dispatch(
@@ -362,7 +320,6 @@ const ProjectProfileEdit = () => {
 
     const newInitiatedRequests = {
       participantProject: false,
-      assignTfContact: false,
       updateInternalUsers: false,
       uploadImages: false,
     };
@@ -389,11 +346,6 @@ const ProjectProfileEdit = () => {
       const dispatched = dispatch(requestUpdateParticipantProject(updatedRecord));
       setParticipantProjectRequestId(dispatched.requestId);
       newInitiatedRequests.participantProject = true;
-    }
-
-    if (tfContact) {
-      saveTFContact();
-      newInitiatedRequests.assignTfContact = true;
     }
 
     saveInternalUsers();
@@ -435,13 +387,11 @@ const ProjectProfileEdit = () => {
     stableToVariable,
     internalUsers,
     participantProjectRecord,
-    tfContact,
     saveInternalUsers,
     mainPhoto,
     mapPhoto,
     snackbar,
     dispatch,
-    saveTFContact,
     projectId,
     redirectToProjectView,
     strings,
@@ -567,7 +517,6 @@ const ProjectProfileEdit = () => {
       <PageForm
         busy={[
           participantProjectUpdateResponse?.status,
-          assignContactResponse?.status,
           uploadImagesResponse?.status,
         ].includes('pending')}
         cancelID='cancelNewParticipantProject'
