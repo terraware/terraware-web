@@ -169,6 +169,18 @@ const ProjectProfileEdit = () => {
   );
 
   useEffect(() => {
+    const preExistingCustomInternalUserRoles = (listInternalUsersRequest.data?.users || [])
+      .filter((user) => user.roleName)
+      .map((user) => user.roleName);
+
+    preExistingCustomInternalUserRoles.forEach((role) => {
+      if (!customUserRoles.includes(role as string)) {
+        setCustomUserRoles((prev) => [...prev, role as string]);
+      }
+    });
+  }, [customUserRoles, listInternalUsersRequest]);
+
+  useEffect(() => {
     if (variableValues.length > 0) {
       setStableToVariable(
         variableValues.reduce<Record<string, VariableWithValues>>((map, variableWithValues) => {
