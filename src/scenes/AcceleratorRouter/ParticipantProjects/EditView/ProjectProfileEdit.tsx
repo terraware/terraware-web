@@ -320,14 +320,12 @@ const ProjectProfileEdit = () => {
 
   const handleSave = useCallback(() => {
     if (!stableToVariable) {
-      // TODO: move UI string to CSV
-      snackbar.toastError("Can't save until page is fully loaded.");
+      snackbar.toastError(strings.CANNOT_SAVE_UNTIL_PAGE_IS_FULLY_LOADED);
       return;
     }
 
     if (!internalUsers.filter((user) => !!user.userId).every((user) => user.role)) {
-      // TODO: move UI string to CSV
-      snackbar.toastError('Please select a contact type for all internal leads.');
+      snackbar.toastError(strings.SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS);
       return;
     }
 
@@ -417,6 +415,7 @@ const ProjectProfileEdit = () => {
     saveTFContact,
     projectId,
     redirectToProjectView,
+    strings,
   ]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);

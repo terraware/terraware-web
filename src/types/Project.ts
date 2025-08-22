@@ -36,27 +36,27 @@ export const getProjectInternalUserRoleString = (
 ): string => {
   switch (type) {
     case 'Carbon Lead':
-      return strings.CONTACT_TYPE_CARBON_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_CARBON_LEAD;
     case 'Climate Impact Lead':
-      return strings.CONTACT_TYPE_CLIMATE_IMPACT_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_CLIMATE_IMPACT_LEAD;
     case 'Consultant':
-      return strings.CONTACT_TYPE_CONSULTANT;
+      return strings.PROJECT_INTERNAL_USER_ROLE_CONSULTANT;
     case 'GIS Lead':
-      return strings.CONTACT_TYPE_GIS_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_GIS_LEAD;
     case 'Legal Lead':
-      return strings.CONTACT_TYPE_LEGAL_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_LEGAL_LEAD;
     case 'Phase Lead':
-      return strings.CONTACT_TYPE_PHASE_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_PHASE_LEAD;
     case 'Project Lead':
-      return strings.CONTACT_TYPE_PROJECT_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_LEAD;
     case 'Project Finance Lead':
-      return strings.CONTACT_TYPE_PROJECT_FINANCE_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_FINANCE_LEAD;
     case 'Regional Expert':
-      return strings.CONTACT_TYPE_REGIONAL_EXPERT;
+      return strings.PROJECT_INTERNAL_USER_ROLE_REGIONAL_EXPERT;
     case 'Restoration Lead':
-      return strings.CONTACT_TYPE_RESTORATION_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD;
     case 'Social Lead':
-      return strings.CONTACT_TYPE_SOCIAL_LEAD;
+      return strings.PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD;
     default:
       return '';
   }
