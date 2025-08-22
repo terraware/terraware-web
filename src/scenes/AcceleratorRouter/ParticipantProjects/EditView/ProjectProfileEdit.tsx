@@ -318,9 +318,17 @@ const ProjectProfileEdit = () => {
 
   const handleSave = useCallback(() => {
     if (!stableToVariable) {
+      // TODO: move UI string to CSV
       snackbar.toastError("Can't save until page is fully loaded.");
       return;
     }
+
+    if (!internalUsers.filter((user) => !!user.userId).every((user) => user.role)) {
+      // TODO: move UI string to CSV
+      snackbar.toastError('Please select a contact type for all internal leads.');
+      return;
+    }
+
     setRequestsInProgress(true);
 
     const newInitiatedRequests = {
