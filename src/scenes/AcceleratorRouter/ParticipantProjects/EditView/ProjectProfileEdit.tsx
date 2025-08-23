@@ -283,7 +283,7 @@ const ProjectProfileEdit = () => {
           projectId,
           payload: {
             internalUsers: (internalUsers || [])
-              .filter((user) => !!user.userId)
+              .filter((user) => !!user.userId && (user.role || user.roleName))
               .map((user) => ({
                 role: user.role,
                 roleName: user.roleName,
