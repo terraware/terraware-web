@@ -2501,29 +2501,9 @@ export interface paths {
         /** Get all internal users for a project. */
         get: operations["getInternalUsers"];
         /** Assign a user with global roles with an internal role for a project. */
-        put: operations["assignInternalUser"];
+        put: operations["updateInternalUser"];
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects/{id}/internalUsers/{userId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Remove a user with global roles as an internal user for a project.
-         * @description Does not remove Terraformation Contact even if assigned role caused them to be added.
-         */
-        delete: operations["removeInternalUser"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3791,6 +3771,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/t0/{monitoringPlotId}/observation/{observationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Assigns an observation as T0 for a monitoring plot. */
+        post: operations["assignT0PlotObservation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/t0/{monitoringPlotId}/species": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Assigns a species and estimated density as T0 for a monitoring plot. */
+        post: operations["assignT0PlotSpeciesDensity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users": {
         parameters: {
             query?: never;
@@ -4478,17 +4492,15 @@ export interface components {
             projectIds: number[];
             speciesIds: number[];
         };
-        AssignProjectInternalUserRequestPayload: {
-            /** @enum {string} */
-            role?: "Project Lead" | "Restoration Lead" | "Social Lead" | "GIS Lead" | "Carbon Lead" | "Phase Lead" | "Regional Expert" | "Project Finance Lead" | "Climate Impact Lead" | "Legal Lead" | "Consultant";
-            roleName?: string;
-            /** Format: int64 */
-            userId: number;
-        };
         AssignProjectRequestPayload: {
             accessionIds?: number[];
             batchIds?: number[];
             plantingSiteIds?: number[];
+        };
+        AssignT0PlotSpeciesPayload: {
+            density: number;
+            /** Format: int64 */
+            speciesId: number;
         };
         AssignTerraformationContactRequestPayload: {
             /** Format: int64 */
@@ -6692,6 +6704,13 @@ export interface components {
             /** @description If true, this internal tag is system-defined and may affect the behavior of the application. If falso, the tag is admin-defined and is only used for reporting. */
             isSystem: boolean;
             name: string;
+        };
+        InternalUserPayload: {
+            /** @enum {string} */
+            role?: "Project Lead" | "Restoration Lead" | "Social Lead" | "GIS Lead" | "Carbon Lead" | "Phase Lead" | "Regional Expert" | "Project Finance Lead" | "Climate Impact Lead" | "Legal Lead" | "Consultant";
+            roleName?: string;
+            /** Format: int64 */
+            userId: number;
         };
         InviteFundingEntityFunderRequestPayload: {
             email: string;
@@ -9750,6 +9769,9 @@ export interface components {
         };
         UpdateProjectAcceleratorReportConfigRequestPayload: {
             config: components["schemas"]["UpdateAcceleratorReportConfigPayload"];
+        };
+        UpdateProjectInternalUserRequestPayload: {
+            internalUsers: components["schemas"]["InternalUserPayload"][];
         };
         UpdateProjectMetricRequestPayload: {
             metric: components["schemas"]["ExistingProjectMetricPayload"];
@@ -15880,7 +15902,7 @@ export interface operations {
             };
         };
     };
-    assignInternalUser: {
+    updateInternalUser: {
         parameters: {
             query?: never;
             header?: never;
@@ -15891,32 +15913,9 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssignProjectInternalUserRequestPayload"];
+                "application/json": components["schemas"]["UpdateProjectInternalUserRequestPayload"];
             };
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-        };
-    };
-    removeInternalUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                userId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -18518,6 +18517,55 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListPlantingSubzoneSpeciesResponsePayload"];
+                };
+            };
+        };
+    };
+    assignT0PlotObservation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                monitoringPlotId: number;
+                observationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    assignT0PlotSpeciesDensity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                monitoringPlotId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignT0PlotSpeciesPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
