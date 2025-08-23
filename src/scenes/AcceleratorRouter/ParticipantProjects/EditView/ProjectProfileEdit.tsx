@@ -445,7 +445,7 @@ const ProjectProfileEdit = () => {
     (index: number) => (value: string) => {
       const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString());
       if (nextUser) {
-        setInternalUsers(prevUsers => {
+        setInternalUsers((prevUsers) => {
           const internalUsersUpdate = prevUsers?.map((user) => ({ ...user }));
           if (internalUsersUpdate?.[index]) {
             internalUsersUpdate[index] = {
@@ -458,7 +458,7 @@ const ProjectProfileEdit = () => {
         });
       }
     },
-    [globalUsersOptions, internalUsers]
+    [globalUsersOptions, setInternalUsers]
   );
 
   const getOnChangeInternalUserRole = useCallback(
