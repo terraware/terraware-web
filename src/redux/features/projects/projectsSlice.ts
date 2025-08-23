@@ -4,15 +4,13 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
   requestProjectAssign,
   requestProjectDelete,
-  requestProjectInternalUserAssign,
-  requestProjectInternalUserRemove,
   requestProjectInternalUsersList,
   requestProjectInternalUsersUpdate,
   requestProjectUpdate,
 } from 'src/redux/features/projects/projectsAsyncThunks';
 import {
-  AssignProjectInternalUserResponsePayload,
   ProjectsInternalUsersData,
+  UpdateProjectInternalUsersResponsePayload,
   UpdateProjectResponsePayload,
 } from 'src/services/ProjectsService';
 import { Project } from 'src/types/Project';
@@ -71,18 +69,15 @@ export const projectsRequestsSlice = createSlice({
 /**
  * Project internal users
  */
-type ProjectInternalUsersResponsesUnion = AssignProjectInternalUserResponsePayload;
-type ProjectInternalUsersState = Record<string, StatusT<ProjectInternalUsersResponsesUnion>>;
+type ProjectInternalUsersUpdateState = Record<string, StatusT<UpdateProjectInternalUsersResponsePayload>>;
 
-const initialStateProjectInternalUsers: ProjectInternalUsersState = {};
+const initialStateProjectInternalUsersUpdate: ProjectInternalUsersUpdateState = {};
 
-export const projectInternalUsersSlice = createSlice({
-  name: 'projectInternalUsersSlice',
-  initialState: initialStateProjectInternalUsers,
+export const projectInternalUsersUpdateSlice = createSlice({
+  name: 'projectInternalUsersUpdateSlice',
+  initialState: initialStateProjectInternalUsersUpdate,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestProjectInternalUserAssign)(builder);
-    buildReducers(requestProjectInternalUserRemove)(builder);
     buildReducers(requestProjectInternalUsersUpdate)(builder);
   },
 });
@@ -102,7 +97,7 @@ export const projectInternalUsersListSlice = createSlice({
 const projectsReducers = {
   projects: projectsSlice.reducer,
   projectsRequests: projectsRequestsSlice.reducer,
-  projectInternalUsers: projectInternalUsersSlice.reducer,
+  projectInternalUsersUpdate: projectInternalUsersUpdateSlice.reducer,
   projectInternalUsersList: projectInternalUsersListSlice.reducer,
 };
 

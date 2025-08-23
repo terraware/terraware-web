@@ -13,7 +13,6 @@ const PROJECTS_ENDPOINT = '/api/v1/projects';
 const PROJECT_ENDPOINT = '/api/v1/projects/{id}';
 const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
 const PROJECT_INTERNAL_USERS_ENDPOINT = '/api/v1/projects/{id}/internalUsers';
-const PROJECT_INTERNAL_USER_ENDPOINT = '/api/v1/projects/{id}/internalUsers/{userId}';
 
 type ListProjectsResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -33,8 +32,9 @@ export type ListProjectInternalUsersResponsePayload =
   paths[typeof PROJECT_INTERNAL_USERS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 export type AssignProjectInternalUserResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
-export type RemoveProjectInternalUserResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
-export type AssignProjectInternalUserRequestPayload = components['schemas']['AssignProjectInternalUserRequestPayload'];
+export type UpdateProjectInternalUsersResponsePayload =
+  paths[typeof PROJECT_INTERNAL_USERS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+export type UpdateProjectInternalUsersRequestPayload = components['schemas']['UpdateProjectInternalUserRequestPayload'];
 
 /**
  * exported type
@@ -179,17 +179,11 @@ const listProjectInternalUsers = async (projectId: number): Promise<ProjectsInte
   return response;
 };
 
-const assignProjectInternalUser = (projectId: number, payload: AssignProjectInternalUserRequestPayload) =>
-  httpProjects.put2<AssignProjectInternalUserResponsePayload>({
+const updateProjectInternalUsers = (projectId: number, payload: UpdateProjectInternalUsersRequestPayload) =>
+  httpProjects.put2<UpdateProjectInternalUsersResponsePayload>({
     url: PROJECT_INTERNAL_USERS_ENDPOINT,
     urlReplacements: { '{id}': `${projectId}` },
     entity: payload,
-  });
-
-const removeProjectInternalUser = (projectId: number, userId: number) =>
-  httpProjects.delete2<RemoveProjectInternalUserResponsePayload>({
-    url: PROJECT_INTERNAL_USER_ENDPOINT,
-    urlReplacements: { '{id}': `${projectId}`, '{userId}': `${userId}` },
   });
 
 /**
@@ -204,8 +198,7 @@ const ProjectsService = {
   updateProject,
   deleteProject,
   listProjectInternalUsers,
-  assignProjectInternalUser,
-  removeProjectInternalUser,
+  updateProjectInternalUsers,
 };
 
 export default ProjectsService;

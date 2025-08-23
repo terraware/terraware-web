@@ -37,10 +37,10 @@ import {
 } from 'src/redux/features/projects/projectsAsyncThunks';
 import {
   selectProjectInternalUsersListRequest,
-  selectProjectInternalUsersRequest,
+  selectProjectInternalUsersUpdateRequest,
 } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { AssignProjectInternalUserRequestPayload } from 'src/services/ProjectsService';
+import { UpdateProjectInternalUsersRequestPayload } from 'src/services/ProjectsService';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
 import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
 import { OrganizationUser } from 'src/types/User';
@@ -52,7 +52,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import AddInternalUserRoleModal from './AddInternalUserRoleModal';
 
-type InternalUserItem = Omit<AssignProjectInternalUserRequestPayload, 'userId'> & {
+type InternalUserItem = Omit<UpdateProjectInternalUsersRequestPayload['internalUsers'][number], 'userId'> & {
   userId?: number;
 };
 
@@ -114,7 +114,7 @@ const ProjectProfileEdit = () => {
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
   const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
   const updateInternalUsersResponse = useAppSelector((state) =>
-    selectProjectInternalUsersRequest(state, updateInternalUsersRequestId)
+    selectProjectInternalUsersUpdateRequest(state, updateInternalUsersRequestId)
   );
   const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
 
@@ -281,14 +281,15 @@ const ProjectProfileEdit = () => {
       const updateRequest = dispatch(
         requestProjectInternalUsersUpdate({
           projectId,
-          usersToAssign: (internalUsers || [])
-            .filter((user) => !!user.userId)
-            .map((user) => ({
-              role: user.role,
-              roleName: user.roleName,
-              userId: user.userId as number,
-            })),
-          usersToRemove: listInternalUsersRequest?.data?.users || [],
+          payload: {
+            internalUsers: (internalUsers || [])
+              .filter((user) => !!user.userId)
+              .map((user) => ({
+                role: user.role,
+                roleName: user.roleName,
+                userId: user.userId as number,
+              })),
+          },
         })
       );
       setUpdateInternalUsersRequestId(updateRequest.requestId);
