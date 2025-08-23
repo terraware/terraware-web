@@ -445,14 +445,17 @@ const ProjectProfileEdit = () => {
     (index: number) => (value: string) => {
       const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString());
       if (nextUser) {
-        const internalUsersUpdate = internalUsers?.map((user) => ({ ...user }));
-        if (internalUsersUpdate?.[index]) {
-          internalUsersUpdate[index] = {
-            ...internalUsersUpdate[index],
-            userId: nextUser.value,
-          };
-          setInternalUsers(internalUsersUpdate);
-        }
+        setInternalUsers(prevUsers => {
+          const internalUsersUpdate = prevUsers?.map((user) => ({ ...user }));
+          if (internalUsersUpdate?.[index]) {
+            internalUsersUpdate[index] = {
+              ...internalUsersUpdate[index],
+              userId: nextUser.value,
+            };
+            return internalUsersUpdate;
+          }
+          return prevUsers;
+        });
       }
     },
     [globalUsersOptions, internalUsers]
