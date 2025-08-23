@@ -301,7 +301,7 @@ const ProjectProfileEdit = () => {
   }, [dispatch, internalUsers, listInternalUsersRequest?.data?.users, projectId]);
 
   const handleSave = useCallback(() => {
-    if (!stableToVariable) {
+    if (!stableToVariable || listInternalUsersRequest?.status !== 'success') {
       snackbar.toastError(strings.CANNOT_SAVE_UNTIL_PAGE_IS_FULLY_LOADED);
       return;
     }
@@ -380,6 +380,7 @@ const ProjectProfileEdit = () => {
     setInitiatedRequests(newInitiatedRequests);
   }, [
     stableToVariable,
+    listInternalUsersRequest?.status,
     internalUsers,
     participantProjectRecord,
     saveInternalUsers,
@@ -559,103 +560,105 @@ const ProjectProfileEdit = () => {
               </Box>
             </Grid>
 
-            <Grid item md={12}>
-              <Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}>
-                <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
-                  <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
-                    {strings.INTERNAL_LEADS} <IconTooltip title={strings.INTERNAL_LEADS_TOOLTIP} />
-                  </Typography>
+            {listInternalUsersRequest?.status === 'success' && (
+              <Grid item md={12}>
+                <Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}>
+                  <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
+                    <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
+                      {strings.INTERNAL_LEADS} <IconTooltip title={strings.INTERNAL_LEADS_TOOLTIP} />
+                    </Typography>
+                  </Box>
+
+                  <Grid container marginBottom='4px'>
+                    <Grid item md={6}>
+                      <Typography
+                        color={theme.palette.TwClrTxtSecondary}
+                        fontSize='14px'
+                        fontWeight={400}
+                        lineHeight='20px'
+                      >
+                        {strings.PERSON}
+                      </Typography>
+                    </Grid>
+                    <Grid item md={6}>
+                      <Typography
+                        color={theme.palette.TwClrTxtSecondary}
+                        fontSize='14px'
+                        fontWeight={400}
+                        lineHeight='20px'
+                      >
+                        {strings.CONTACT_TYPE}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
+                  {internalUsers?.map((user, index) => (
+                    <Grid container key={`internal-user-${index}`} marginBottom='8px'>
+                      <Grid item md={6} paddingRight='8px'>
+                        <Dropdown
+                          autocomplete
+                          fullWidth
+                          hideClearIcon
+                          id={`internal-user-id-${index}`}
+                          label=''
+                          onChange={getOnChangeInternalUser(index)}
+                          options={globalUsersWithNoOwner}
+                          placeholder={strings.SELECT}
+                          selectedValue={user?.userId}
+                        />
+                      </Grid>
+
+                      <Grid item md={5}>
+                        <Dropdown
+                          autocomplete
+                          fullWidth
+                          hideClearIcon
+                          id={`internal-user-role-${index}`}
+                          label=''
+                          onChange={getOnChangeInternalUserRole(index)}
+                          options={internalUserRoleOptions}
+                          placeholder={strings.SELECT}
+                          selectedValue={internalUsers?.[index]?.role || internalUsers?.[index]?.roleName}
+                        />
+                      </Grid>
+
+                      <Grid item xs={1} display={'flex'} flexDirection={'column'}>
+                        <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
+                          <Box paddingTop='8px'>
+                            <Icon name='iconSubtract' size='medium' />
+                          </Box>
+                        </Link>
+                      </Grid>
+                    </Grid>
+                  ))}
+
+                  <Grid container>
+                    <Grid item md={6}>
+                      <Button
+                        icon='iconAdd'
+                        label={strings.EDITABLE_TABLE_ADD_ROW}
+                        onClick={onClickAddRow}
+                        priority='ghost'
+                        size='medium'
+                        style={{ paddingLeft: 0 }}
+                        type='productive'
+                      />
+                    </Grid>
+
+                    <Grid item md={6} textAlign='right'>
+                      <Button
+                        icon='plus'
+                        label='New Contact Type'
+                        onClick={onClickAddNewContactType}
+                        priority='secondary'
+                        size='medium'
+                        type='productive'
+                      />
+                    </Grid>
+                  </Grid>
                 </Box>
-
-                <Grid container marginBottom='4px'>
-                  <Grid item md={6}>
-                    <Typography
-                      color={theme.palette.TwClrTxtSecondary}
-                      fontSize='14px'
-                      fontWeight={400}
-                      lineHeight='20px'
-                    >
-                      {strings.PERSON}
-                    </Typography>
-                  </Grid>
-                  <Grid item md={6}>
-                    <Typography
-                      color={theme.palette.TwClrTxtSecondary}
-                      fontSize='14px'
-                      fontWeight={400}
-                      lineHeight='20px'
-                    >
-                      {strings.CONTACT_TYPE}
-                    </Typography>
-                  </Grid>
-                </Grid>
-
-                {internalUsers?.map((user, index) => (
-                  <Grid container key={`internal-user-${index}`} marginBottom='8px'>
-                    <Grid item md={6} paddingRight='8px'>
-                      <Dropdown
-                        autocomplete
-                        fullWidth
-                        hideClearIcon
-                        id={`internal-user-id-${index}`}
-                        label=''
-                        onChange={getOnChangeInternalUser(index)}
-                        options={globalUsersWithNoOwner}
-                        placeholder={strings.SELECT}
-                        selectedValue={user?.userId}
-                      />
-                    </Grid>
-
-                    <Grid item md={5}>
-                      <Dropdown
-                        autocomplete
-                        fullWidth
-                        hideClearIcon
-                        id={`internal-user-role-${index}`}
-                        label=''
-                        onChange={getOnChangeInternalUserRole(index)}
-                        options={internalUserRoleOptions}
-                        placeholder={strings.SELECT}
-                        selectedValue={internalUsers?.[index]?.role || internalUsers?.[index]?.roleName}
-                      />
-                    </Grid>
-
-                    <Grid item xs={1} display={'flex'} flexDirection={'column'}>
-                      <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
-                        <Box paddingTop='8px'>
-                          <Icon name='iconSubtract' size='medium' />
-                        </Box>
-                      </Link>
-                    </Grid>
-                  </Grid>
-                ))}
-
-                <Grid container>
-                  <Grid item md={6}>
-                    <Button
-                      icon='iconAdd'
-                      label={strings.EDITABLE_TABLE_ADD_ROW}
-                      onClick={onClickAddRow}
-                      priority='ghost'
-                      size='medium'
-                      style={{ paddingLeft: 0 }}
-                      type='productive'
-                    />
-                  </Grid>
-
-                  <Grid item md={6} textAlign='right'>
-                    <Button
-                      icon='plus'
-                      label='New Contact Type'
-                      onClick={onClickAddNewContactType}
-                      priority='secondary'
-                      size='medium'
-                      type='productive'
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
+              </Grid>
+            )}
 
             <ProjectFieldTextAreaEdit
               id={'dealDescription'}
