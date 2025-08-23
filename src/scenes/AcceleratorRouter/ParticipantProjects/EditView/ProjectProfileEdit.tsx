@@ -258,13 +258,13 @@ const ProjectProfileEdit = () => {
 
   useEffect(() => {
     if (listInternalUsersRequest?.status === 'success') {
-      setInternalUsers((prev) => [...prev, ...(listInternalUsersRequest.data?.users || [])]);
+      setInternalUsers(listInternalUsersRequest.data?.users || []);
 
       const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
         .filter((user) => user.roleName)
         .map((user) => user.roleName);
 
-      setCustomUserRoles((prev) => [...prev, ...(preExistingCustomInternalUserRoles as string[])]);
+      setCustomUserRoles(preExistingCustomInternalUserRoles as string[]);
     }
   }, [listInternalUsersRequest]);
 
