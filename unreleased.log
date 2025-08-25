@@ -1,3 +1,4 @@
+cf76d8745f7 SW-7282 Unusual behavior with single select in Matrix View (#4374)
 d7840a1769b SW-7290 Table & photo variables should not be showing up in column manager (#4377)
 57a0b179552 SW-7283 Update multi-select in-cell editing (#4373)
 10ef14adf17 Matrix view reset columns and order tests (#4372)
