@@ -121,7 +121,8 @@ const MatrixView = () => {
 
   useEffect(() => {
     if (allVariablesResponse?.status === 'success') {
-      setAllVariables(allVariablesResponse.data);
+      const noTablePhotoVariables = allVariablesResponse.data?.filter((v) => v.type !== 'Table' && v.type !== 'Image');
+      setAllVariables(noTablePhotoVariables);
     }
   }, [allVariablesResponse]);
 
