@@ -40,7 +40,7 @@ export default function AddInternalUserRoleModal({
       onClose={onClose}
       open
       size='medium'
-      title='New Contact Type'
+      title={strings.NEW_CONTACT_TYPE}
       middleButtons={[
         <Button
           id='cancelAddInternalUserRole'
@@ -66,7 +66,7 @@ export default function AddInternalUserRoleModal({
         <Grid display='flex' item textAlign='left' xs={11}>
           <Textfield
             id='newContactType'
-            label='New Contact Type'
+            label={strings.NEW_CONTACT_TYPE}
             onChange={onChange}
             type='text'
             value={newInternalUserRole}
