@@ -1,3 +1,4 @@
+d7840a1769b SW-7290 Table & photo variables should not be showing up in column manager (#4377)
 57a0b179552 SW-7283 Update multi-select in-cell editing (#4373)
 10ef14adf17 Matrix view reset columns and order tests (#4372)
 cc7e1ed51fd Fixed legend sizing (#4371)
