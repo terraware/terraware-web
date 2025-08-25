@@ -398,7 +398,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             type='text'
             label={strings.TOTAL_QUANTITY}
             display={true}
-            tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
+            tooltipTitle={
+              isUpdatedNurseryGrowthPhasesEnabled ? strings.TOOLTIP_TOTAL_QUANTITY : strings.TOOLTIP_TOTAL_QUANTITY_PREV
+            }
           />
         </Grid>
         <Grid item xs={12} sx={marginTop}>
