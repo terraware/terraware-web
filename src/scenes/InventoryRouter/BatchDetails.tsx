@@ -197,7 +197,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           <OverviewItemCard
             isEditable={false}
             title={strings.TOTAL_QUANTITY}
-            contents={batch.readyQuantity + batch.activeGrowthQuantity}
+            contents={batch.readyQuantity + batch.activeGrowthQuantity + batch.hardeningOffQuantity}
             grid={true}
           />
         </Grid>
