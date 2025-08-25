@@ -70,4 +70,74 @@ export default function MatrixViewTests() {
     const columnHeaders = page.getByRole('columnheader');
     await expect(columnHeaders).toHaveCount(6);
   });
+
+  test('Column reordering and reset in matrix view', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
+    await page.getByRole('link', { name: 'Accelerator Console' }).click();
+    await page.getByRole('button', { name: 'Matrix View' }).click();
+    await page.waitForTimeout(1000);
+    // Get initial column order
+    const initialHeaders = await page.getByRole('columnheader').allTextContents();
+
+    await page.locator('#manageColumns').click();
+    await expect(page.locator('.dialog-box')).toBeVisible();
+    const selectedColumnsList = page.locator('.dialog-box').getByText('Selected Columns').locator('..').locator('ul');
+    const firstColumn = selectedColumnsList.locator('li').nth(1);
+    const secondColumn = selectedColumnsList.locator('li').nth(2);
+    await firstColumn.dragTo(secondColumn);
+    await page.getByRole('button', { name: 'Apply' }).click();
+    await expect(page.locator('.dialog-box')).not.toBeVisible();
+    await page.waitForTimeout(500);
+    const reorderedHeaders = await page.getByRole('columnheader').allTextContents();
+    expect(reorderedHeaders).not.toEqual(initialHeaders);
+
+    await page.locator('#manageColumns').click();
+    await expect(page.locator('.dialog-box')).toBeVisible();
+    // Reset order
+    await page.getByRole('button', { name: 'Reset Order' }).click();
+    await page.getByRole('button', { name: 'Apply' }).click();
+    await expect(page.locator('.dialog-box')).not.toBeVisible();
+    await page.waitForTimeout(500);
+
+    // Check that the column order has been reset to original
+    const resetHeaders = await page.getByRole('columnheader').allTextContents();
+    expect(resetHeaders).toEqual(initialHeaders);
+  });
+
+  test('Add multiple columns and reset columns in matrix view', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
+    await page.getByRole('link', { name: 'Accelerator Console' }).click();
+    await page.getByRole('button', { name: 'Matrix View' }).click();
+    await page.waitForTimeout(1000);
+    await page.locator('#manageColumns').click();
+    await expect(page.locator('.dialog-box')).toBeVisible();
+
+    // Add three columns
+    await page.locator('input[type="checkbox"]').nth(6).click();
+    await page.locator('input[type="checkbox"]').nth(7).click();
+    await page.locator('input[type="checkbox"]').nth(8).click();
+
+    await page.getByRole('button', { name: 'Apply' }).click();
+    await expect(page.locator('.dialog-box')).not.toBeVisible();
+    await page.waitForTimeout(500);
+    const expandedColumnHeaders = page.getByRole('columnheader');
+    await expect(expandedColumnHeaders).toHaveCount(8);
+
+    await page.locator('#manageColumns').click();
+    await expect(page.locator('.dialog-box')).toBeVisible();
+    // Reset columns
+    await page.getByRole('button', { name: 'Reset Columns' }).click();
+    await page.getByRole('button', { name: 'Apply' }).click();
+    await expect(page.locator('.dialog-box')).not.toBeVisible();
+    await page.waitForTimeout(500);
+    const resetColumnHeaders = page.getByRole('columnheader');
+    await expect(resetColumnHeaders).toHaveCount(5);
+    await expect(page.getByRole('columnheader', { name: 'Deal Name' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Phase' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Eligible Land' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Country' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Project Lead' })).toBeVisible();
+  });
 }

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Button, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
+import { Box, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
@@ -368,6 +368,7 @@ const MatrixView = () => {
             const [isOpen, setIsOpen] = useState(false);
             const [position, setPosition] = useState({ top: 0, left: 0 });
             const triggerRef = useRef<HTMLDivElement>(null);
+            const portalRef = useRef<HTMLDivElement>(null);
 
             const optionsMap = useMemo(
               () =>
@@ -387,14 +388,14 @@ const MatrixView = () => {
               }
             }, [optionsMap, selectedLabels]);
 
-            const handleSave = () => {
+            const handleSave = useCallback(() => {
               const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
               const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
               if (variableToProcess) {
                 onSaveHandler(row.original.id, selections, variableToProcess);
               }
               table.setEditingCell(null);
-            };
+            }, [row.original.id, row.original.variables, selections, table]);
 
             const onAdd = (value: string | null) => {
               const updatedValues = [...selections];
@@ -414,7 +415,7 @@ const MatrixView = () => {
               }
             };
 
-            const handleOpen = () => {
+            const handleOpen = useCallback(() => {
               if (triggerRef.current) {
                 const rect = triggerRef.current.getBoundingClientRect();
                 setPosition({
@@ -423,12 +424,34 @@ const MatrixView = () => {
                 });
                 setIsOpen(true);
               }
-            };
+            }, []);
 
-            const handleClose = () => {
+            const handleClose = useCallback(() => {
               handleSave();
               setIsOpen(false);
-            };
+            }, [handleSave]);
+
+            useEffect(() => {
+              const handleClickOutside = (event: MouseEvent) => {
+                if (
+                  isOpen &&
+                  portalRef.current &&
+                  triggerRef.current &&
+                  !portalRef.current.contains(event.target as Node) &&
+                  !triggerRef.current.contains(event.target as Node)
+                ) {
+                  handleClose();
+                }
+              };
+
+              if (isOpen) {
+                document.addEventListener('mousedown', handleClickOutside);
+              }
+
+              return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+              };
+            }, [handleClose, isOpen]);
 
             return (
               <>
@@ -465,6 +488,7 @@ const MatrixView = () => {
                 {isOpen &&
                   createPortal(
                     <div
+                      ref={portalRef}
                       style={{
                         position: 'fixed',
                         top: position.top,
@@ -508,11 +532,6 @@ const MatrixView = () => {
                           {label}
                         </div>
                       ))}
-                      <div style={{ padding: '8px', textAlign: 'right' }}>
-                        <Button size='small' onClick={handleClose}>
-                          {strings.DONE}
-                        </Button>
-                      </div>
                     </div>,
                     document.body
                   )}
