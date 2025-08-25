@@ -105,7 +105,9 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
         key: 'totalQuantity',
         name: strings.TOTAL,
         type: 'number',
-        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_TOTAL_QUANTITY
+          : strings.TOOLTIP_TOTAL_QUANTITY_PREV,
       },
     ],
     [isUpdatedNurseryGrowthPhasesEnabled, strings]

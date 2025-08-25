@@ -124,7 +124,9 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         key: 'totalQuantity',
         name: strings.TOTAL,
         type: 'number',
-        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_TOTAL_QUANTITY
+          : strings.TOOLTIP_TOTAL_QUANTITY_PREV,
       },
       { key: 'quantitiesMenu', name: '', type: 'string' },
     ],

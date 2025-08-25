@@ -80,7 +80,9 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
         key: 'totalQuantity',
         name: strings.TOTAL,
         type: 'number',
-        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
+          ? strings.TOOLTIP_TOTAL_QUANTITY
+          : strings.TOOLTIP_TOTAL_QUANTITY_PREV,
       },
       { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string', alignment: 'right' },
       { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'date' },
