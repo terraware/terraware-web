@@ -100,6 +100,7 @@ describe('ParticipantProjectService', () => {
           name: 'Project 2',
         },
       ],
+      tfContactUsers: [],
     };
 
     const result = await ParticipantProjectService.download({

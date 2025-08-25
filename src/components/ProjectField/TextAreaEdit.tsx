@@ -34,7 +34,7 @@ const ProjectFieldTextAreaEdit = ({ id, label, onChange, value, height }: Projec
   };
 
   return (
-    <GridEntryWrapper md={6} height={height || `${finalHeight}px`}>
+    <GridEntryWrapper md={12} height={height || `${finalHeight}px`}>
       <Box paddingX={theme.spacing(2)}>
         <Textfield id={id} label={label} onChange={handleOnChange} value={localValue} styles={styles} type='textarea' />
       </Box>

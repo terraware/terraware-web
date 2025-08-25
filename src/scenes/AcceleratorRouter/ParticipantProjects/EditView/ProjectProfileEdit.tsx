@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem } from '@terraware/web-components';
+import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';
 
 import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
-import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import ProjectFieldMultiSelect from 'src/components/ProjectField/MultiSelect';
@@ -14,11 +13,11 @@ import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VariableSelect from 'src/components/ProjectField/VariableSelect';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
+import Icon from 'src/components/common/icon/Icon';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
-import { selectAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
 import {
   requestListSpecificVariablesValues,
@@ -32,9 +31,18 @@ import { requestListOrganizationUsers } from 'src/redux/features/organizationUse
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
+import {
+  requestProjectInternalUsersList,
+  requestProjectInternalUsersUpdate,
+} from 'src/redux/features/projects/projectsAsyncThunks';
+import {
+  selectProjectInternalUsersListRequest,
+  selectProjectInternalUsersUpdateRequest,
+} from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import { UpdateProjectInternalUsersRequestPayload } from 'src/services/ProjectsService';
 import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
+import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
 import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { getImagePath } from 'src/utils/images';
@@ -42,6 +50,11 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
+import AddInternalUserRoleModal from './AddInternalUserRoleModal';
+
+type InternalUserItem = Omit<UpdateProjectInternalUsersRequestPayload['internalUsers'][number], 'userId'> & {
+  userId?: number;
+};
 
 const HighlightPhotoStableId = '551';
 const ZoneFigureStableId = '525';
@@ -70,7 +83,7 @@ const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { participantProject, project, projectId, organization, reload } = useParticipantProjectData();
+  const { participantProject, projectId, organization, reload } = useParticipantProjectData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
 
@@ -85,29 +98,36 @@ const ProjectProfileEdit = () => {
   const [requestsInProgress, setRequestsInProgress] = useState(false);
   const [initiatedRequests, setInitiatedRequests] = useState({
     participantProject: false,
-    assignTfContact: false,
+    updateInternalUsers: false,
     uploadImages: false,
   });
 
   const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
   const [listUsersRequestId, setListUsersRequestId] = useState('');
+  const [listInternalUsersRequestId, setListInternalUsersRequestId] = useState('');
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
-  const [assignTfContactRequestId, setAssignTfContactRequestId] = useState('');
+  const listInternalUsersRequest = useAppSelector((state) =>
+    selectProjectInternalUsersListRequest(state, listInternalUsersRequestId)
+  );
+  const [internalUsers, setInternalUsers] = useState<InternalUserItem[]>([]);
+  const [updateInternalUsersRequestId, setUpdateInternalUsersRequestId] = useState('');
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
   const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
-  const assignContactResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
+  const updateInternalUsersResponse = useAppSelector((state) =>
+    selectProjectInternalUsersUpdateRequest(state, updateInternalUsersRequestId)
+  );
   const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
 
   const variableValues = useAppSelector((state) =>
     selectSpecificVariablesWithValues(state, variableStableIds, projectId)
   );
   const [stableToVariable, setStableToVariable] = useState<Record<string, VariableWithValues>>();
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
-  const [tfContact, setTfContact] = useState<DropdownItem>();
   const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
+  const [customUserRoles, setCustomUserRoles] = useState<string[]>([]);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
 
@@ -115,7 +135,32 @@ const ProjectProfileEdit = () => {
     reload();
     snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
     goToParticipantProject(projectId);
-  }, [reload, snackbar, goToParticipantProject, projectId]);
+  }, [reload, snackbar, goToParticipantProject, projectId, strings]);
+
+  const addInternalUserRole = useCallback(
+    (internalUserRole: string) => {
+      const trimmedRole = internalUserRole.trim();
+      if (trimmedRole.length && !customUserRoles.includes(trimmedRole)) {
+        setCustomUserRoles((prev) => [...prev, trimmedRole]);
+      }
+    },
+    [customUserRoles, setCustomUserRoles]
+  );
+
+  const internalUserRoleOptions = useMemo(
+    () =>
+      [
+        ...projectInternalUserRoles.map((role) => ({
+          label: getProjectInternalUserRoleString(role, strings),
+          value: role,
+        })),
+        ...customUserRoles.map((role) => ({
+          label: role,
+          value: role,
+        })),
+      ].sort((a, b) => a.label.localeCompare(b.label, activeLocale || undefined)),
+    [activeLocale, customUserRoles, strings]
+  );
 
   useEffect(() => {
     if (variableValues.length > 0) {
@@ -138,18 +183,18 @@ const ProjectProfileEdit = () => {
 
     if (
       isComplete(participantProjectUpdateResponse?.status, initiatedRequests.participantProject) &&
-      isComplete(assignContactResponse?.status, initiatedRequests.assignTfContact) &&
+      isComplete(updateInternalUsersResponse?.status, initiatedRequests.updateInternalUsers) &&
       isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages)
     ) {
       setRequestsInProgress(false);
 
       if (
-        [participantProjectUpdateResponse, assignContactResponse, uploadImagesResponse].some(
+        [participantProjectUpdateResponse, updateInternalUsersResponse, uploadImagesResponse].some(
           (resp) => resp?.status === 'error'
         )
       ) {
         snackbar.toastError();
-        setAssignTfContactRequestId('');
+        setUpdateInternalUsersRequestId('');
         setUploadImagesRequestId('');
         setParticipantProjectRequestId('');
       } else {
@@ -158,22 +203,22 @@ const ProjectProfileEdit = () => {
     }
   }, [
     participantProjectUpdateResponse,
-    assignContactResponse,
     uploadImagesResponse,
     requestsInProgress,
     initiatedRequests,
     redirectToProjectView,
     snackbar,
+    updateInternalUsersResponse,
   ]);
 
   useEffect(() => {
-    if (assignContactResponse?.status === 'success') {
-      // redirectToProjectView();
-    } else if (assignContactResponse?.status === 'error') {
+    if (updateInternalUsersResponse?.status === 'success') {
+      // redirect to project view occurs when image uploads are finished
+    } else if (updateInternalUsersResponse?.status === 'error') {
       snackbar.toastError();
-      setAssignTfContactRequestId('');
+      setUpdateInternalUsersRequestId('');
     }
-  }, [assignContactResponse, snackbar]);
+  }, [updateInternalUsersResponse, snackbar]);
 
   useEffect(() => {
     if (uploadImagesResponse?.status === 'success') {
@@ -185,11 +230,9 @@ const ProjectProfileEdit = () => {
   }, [uploadImagesResponse, redirectToProjectView, snackbar]);
 
   useEffect(() => {
-    const tfContactSelected = globalUsersOptions?.find(
-      (userOpt) => userOpt.value === organization?.tfContactUser?.userId
-    );
-    setTfContact(tfContactSelected);
-  }, [organization?.tfContactUser, globalUsersOptions]);
+    const request = dispatch(requestProjectInternalUsersList({ projectId }));
+    setListInternalUsersRequestId(request.requestId);
+  }, [dispatch, projectId]);
 
   useEffect(() => {
     const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
@@ -213,6 +256,18 @@ const ProjectProfileEdit = () => {
     }
   }, [listUsersRequest]);
 
+  useEffect(() => {
+    if (listInternalUsersRequest?.status === 'success') {
+      setInternalUsers(listInternalUsersRequest.data?.users || []);
+
+      const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
+        .filter((user) => user.roleName)
+        .map((user) => user.roleName);
+
+      setCustomUserRoles(preExistingCustomInternalUserRoles as string[]);
+    }
+  }, [listInternalUsersRequest]);
+
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
       onChangeParticipantProject('countryCode', countryCode);
@@ -221,30 +276,46 @@ const ProjectProfileEdit = () => {
     [onChangeParticipantProject]
   );
 
-  const saveTFContact = useCallback(() => {
-    if (project?.organizationId && tfContact) {
-      const assignRequest = dispatch(
-        requestAssignTerraformationContact({
-          organizationId: project?.organizationId,
-          terraformationContactId: tfContact?.value as number,
+  const saveInternalUsers = useCallback(() => {
+    if (listInternalUsersRequest?.data?.users) {
+      const updateRequest = dispatch(
+        requestProjectInternalUsersUpdate({
+          projectId,
+          payload: {
+            internalUsers: (internalUsers || [])
+              .filter((user) => !!user.userId && (user.role || user.roleName))
+              .map((user) => ({
+                role: user.role,
+                roleName: user.roleName,
+                userId: user.userId as number,
+              })),
+          },
         })
       );
-      setAssignTfContactRequestId(assignRequest.requestId);
+      setUpdateInternalUsersRequestId(updateRequest.requestId);
+
       return true;
     }
+
     return false;
-  }, [tfContact, dispatch, project?.organizationId]);
+  }, [dispatch, internalUsers, listInternalUsersRequest?.data?.users, projectId]);
 
   const handleSave = useCallback(() => {
-    if (!stableToVariable) {
-      snackbar.toastError("Can't save until page is fully loaded.");
+    if (!stableToVariable || listInternalUsersRequest?.status !== 'success') {
+      snackbar.toastError(strings.CANNOT_SAVE_UNTIL_PAGE_IS_FULLY_LOADED);
       return;
     }
+
+    if (!internalUsers.filter((user) => !!user.userId).every((user) => user.role || user.roleName)) {
+      snackbar.toastError(strings.SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS);
+      return;
+    }
+
     setRequestsInProgress(true);
 
     const newInitiatedRequests = {
       participantProject: false,
-      assignTfContact: false,
+      updateInternalUsers: false,
       uploadImages: false,
     };
 
@@ -271,10 +342,10 @@ const ProjectProfileEdit = () => {
       setParticipantProjectRequestId(dispatched.requestId);
       newInitiatedRequests.participantProject = true;
     }
-    if (tfContact) {
-      saveTFContact();
-      newInitiatedRequests.assignTfContact = true;
-    }
+
+    saveInternalUsers();
+    newInitiatedRequests.updateInternalUsers = true;
+
     if ((mainPhoto || mapPhoto) && stableToVariable) {
       const imageValues = [];
       if (mainPhoto) {
@@ -308,16 +379,18 @@ const ProjectProfileEdit = () => {
 
     setInitiatedRequests(newInitiatedRequests);
   }, [
+    stableToVariable,
+    listInternalUsersRequest?.status,
+    internalUsers,
     participantProjectRecord,
-    dispatch,
-    projectId,
+    saveInternalUsers,
     mainPhoto,
     mapPhoto,
-    stableToVariable,
-    saveTFContact,
-    redirectToProjectView,
     snackbar,
-    tfContact,
+    dispatch,
+    projectId,
+    redirectToProjectView,
+    strings,
   ]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
@@ -347,20 +420,84 @@ const ProjectProfileEdit = () => {
     }
   }, [organization, dispatch]);
 
-  const onChangeLandUseHectares = (type: string, hectares: string) => {
-    const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
-    if (hectares === '') {
-      delete updated[type];
-    }
-    onChangeParticipantProject('landUseModelHectares', updated);
-  };
+  const onChangeLandUseHectares = useCallback(
+    (type: string, hectares: string) => {
+      const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
+      if (hectares === '') {
+        delete updated[type];
+      }
+      onChangeParticipantProject('landUseModelHectares', updated);
+    },
+    [onChangeParticipantProject, participantProjectRecord]
+  );
 
-  const onChangeSdgList = (id: string, newList: string[]) => {
-    onChangeParticipantProject(
-      id,
-      newList.map((item) => Number(item))
-    );
-  };
+  const onChangeSdgList = useCallback(
+    (id: string, newList: string[]) => {
+      onChangeParticipantProject(
+        id,
+        newList.map((item) => Number(item))
+      );
+    },
+    [onChangeParticipantProject]
+  );
+
+  const getOnChangeInternalUser = useCallback(
+    (index: number) => (value: string) => {
+      const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString());
+      if (nextUser) {
+        setInternalUsers((prevUsers) => {
+          const internalUsersUpdate = prevUsers?.map((user) => ({ ...user }));
+          if (internalUsersUpdate?.[index]) {
+            internalUsersUpdate[index] = {
+              ...internalUsersUpdate[index],
+              userId: nextUser.value,
+            };
+            return internalUsersUpdate;
+          }
+          return prevUsers;
+        });
+      }
+    },
+    [globalUsersOptions, setInternalUsers]
+  );
+
+  const getOnChangeInternalUserRole = useCallback(
+    (index: number) => (nextRole: string) => {
+      const internalUsersUpdate = internalUsers?.map((user) => ({ ...user }));
+      if (internalUsersUpdate?.[index]) {
+        const isStandardRole = projectInternalUserRoles.includes(nextRole as ProjectInternalUserRole);
+        internalUsersUpdate[index] = {
+          ...internalUsersUpdate[index],
+          ...(isStandardRole
+            ? { role: nextRole as ProjectInternalUserRole, roleName: undefined }
+            : { role: undefined, roleName: nextRole }),
+        };
+        setInternalUsers(internalUsersUpdate);
+      }
+    },
+    [internalUsers]
+  );
+
+  const getOnRemoveInternalUser = useCallback(
+    (index: number) => () => {
+      setInternalUsers((prev) => prev?.filter((_, i) => i !== index));
+    },
+    [setInternalUsers]
+  );
+
+  const onClickAddRow = useCallback(() => {
+    setInternalUsers((prev) => [...(prev || []), { userId: undefined, role: undefined }]);
+  }, [setInternalUsers]);
+
+  const [addInternalUserRoleModalOpen, setAddInternalUserRoleModalOpen] = useState(false);
+
+  const onClickAddNewContactType = useCallback(() => {
+    setAddInternalUserRoleModalOpen(true);
+  }, [setAddInternalUserRoleModalOpen]);
+
+  const onCloseAddInternalUserRoleModal = useCallback(() => {
+    setAddInternalUserRoleModalOpen(false);
+  }, [setAddInternalUserRoleModalOpen]);
 
   const globalUsersWithNoOwner = useMemo(() => {
     const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
@@ -373,10 +510,13 @@ const ProjectProfileEdit = () => {
 
   return (
     <Grid container paddingRight={theme.spacing(3)}>
+      {addInternalUserRoleModalOpen && (
+        <AddInternalUserRoleModal addInternalUserRole={addInternalUserRole} onClose={onCloseAddInternalUserRoleModal} />
+      )}
       <PageForm
         busy={[
           participantProjectUpdateResponse?.status,
-          assignContactResponse?.status,
+          updateInternalUsersResponse?.status,
           uploadImagesResponse?.status,
         ].includes('pending')}
         cancelID='cancelNewParticipantProject'
@@ -410,31 +550,6 @@ const ProjectProfileEdit = () => {
                 value={participantProjectRecord?.dealName}
               />
             </Grid>
-            <GridEntryWrapper md={6}>
-              <Box paddingX={theme.spacing(2)}>
-                <Dropdown
-                  id='projectLead'
-                  placeholder={strings.SELECT}
-                  selectedValue={tfContact?.value}
-                  options={globalUsersWithNoOwner}
-                  onChange={(value: string) => {
-                    setTfContact(
-                      globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
-                    );
-                  }}
-                  hideClearIcon={true}
-                  label={strings.PROJECT_LEAD}
-                  fullWidth
-                  autocomplete
-                />
-              </Box>
-            </GridEntryWrapper>
-            <ProjectFieldTextAreaEdit
-              id={'dealDescription'}
-              label={strings.PROJECT_OVERVIEW}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.dealDescription}
-            />
             <Grid item md={6} display={'flex'} flexDirection={'column'}>
               <Box width={'100%'}>
                 <CountrySelect
@@ -447,6 +562,113 @@ const ProjectProfileEdit = () => {
                 />
               </Box>
             </Grid>
+
+            {listInternalUsersRequest?.status === 'success' && (
+              <Grid item md={12}>
+                <Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}>
+                  <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
+                    <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
+                      {strings.INTERNAL_LEADS} <IconTooltip title={strings.INTERNAL_LEADS_TOOLTIP} />
+                    </Typography>
+                  </Box>
+
+                  <Grid container marginBottom='4px'>
+                    <Grid item md={6}>
+                      <Typography
+                        color={theme.palette.TwClrTxtSecondary}
+                        fontSize='14px'
+                        fontWeight={400}
+                        lineHeight='20px'
+                      >
+                        {strings.PERSON}
+                      </Typography>
+                    </Grid>
+                    <Grid item md={6}>
+                      <Typography
+                        color={theme.palette.TwClrTxtSecondary}
+                        fontSize='14px'
+                        fontWeight={400}
+                        lineHeight='20px'
+                      >
+                        {strings.CONTACT_TYPE}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
+                  {internalUsers?.map((user, index) => (
+                    <Grid container key={`internal-user-${index}`} marginBottom='8px'>
+                      <Grid item md={6} paddingRight='8px'>
+                        <Dropdown
+                          autocomplete
+                          fullWidth
+                          hideClearIcon
+                          id={`internal-user-id-${index}`}
+                          label=''
+                          onChange={getOnChangeInternalUser(index)}
+                          options={globalUsersWithNoOwner}
+                          placeholder={strings.SELECT}
+                          selectedValue={user?.userId}
+                        />
+                      </Grid>
+
+                      <Grid item md={5}>
+                        <Dropdown
+                          autocomplete
+                          fullWidth
+                          hideClearIcon
+                          id={`internal-user-role-${index}`}
+                          label=''
+                          onChange={getOnChangeInternalUserRole(index)}
+                          options={internalUserRoleOptions}
+                          placeholder={strings.SELECT}
+                          selectedValue={internalUsers?.[index]?.role || internalUsers?.[index]?.roleName}
+                        />
+                      </Grid>
+
+                      <Grid item xs={1} display={'flex'} flexDirection={'column'}>
+                        <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
+                          <Box paddingTop='8px'>
+                            <Icon name='iconSubtract' size='medium' />
+                          </Box>
+                        </Link>
+                      </Grid>
+                    </Grid>
+                  ))}
+
+                  <Grid container>
+                    <Grid item md={6}>
+                      <Button
+                        icon='iconAdd'
+                        label={strings.EDITABLE_TABLE_ADD_ROW}
+                        onClick={onClickAddRow}
+                        priority='ghost'
+                        size='medium'
+                        style={{ paddingLeft: 0 }}
+                        type='productive'
+                      />
+                    </Grid>
+
+                    <Grid item md={6} textAlign='right'>
+                      <Button
+                        icon='plus'
+                        label='New Contact Type'
+                        onClick={onClickAddNewContactType}
+                        priority='secondary'
+                        size='medium'
+                        type='productive'
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Grid>
+            )}
+
+            <ProjectFieldTextAreaEdit
+              id={'dealDescription'}
+              label={strings.PROJECT_OVERVIEW}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.dealDescription}
+            />
             <Grid item md={12}>
               <LandUseMultiSelect
                 id={'landUseModelTypes'}
