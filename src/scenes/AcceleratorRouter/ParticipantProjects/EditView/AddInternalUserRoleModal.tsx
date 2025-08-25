@@ -53,7 +53,7 @@ export default function AddInternalUserRoleModal({
         />,
         <Button
           disabled={!newInternalUserRole.trim().length}
-          id='saveChangeQuantity'
+          id='saveAddInternalUserRole'
           key='button-2'
           label={strings.SAVE}
           onClick={onSave}
