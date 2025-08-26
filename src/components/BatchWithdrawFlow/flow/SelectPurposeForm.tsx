@@ -872,16 +872,18 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         }}
                       />
                     </Grid>
-                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
-                      <DatePicker
-                        id='readyByDate'
-                        label={strings.ESTIMATED_READY_DATE}
-                        aria-label={strings.ESTIMATED_READY_DATE}
-                        value={localRecord.readyByDate}
-                        onChange={(value) => onChangeDate('readyByDate', value, true)}
-                        defaultTimeZone={timeZone}
-                      />
-                    </Grid>
+                    {isNurseryTransfer && (
+                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
+                        <DatePicker
+                          id='readyByDate'
+                          label={strings.ESTIMATED_READY_DATE}
+                          aria-label={strings.ESTIMATED_READY_DATE}
+                          value={localRecord.readyByDate}
+                          onChange={(value) => onChangeDate('readyByDate', value, true)}
+                          defaultTimeZone={timeZone}
+                        />
+                      </Grid>
+                    )}
                   </Grid>
 
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
