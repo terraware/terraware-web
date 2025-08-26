@@ -10,7 +10,7 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { MinimalPlantingSite } from 'src/types/Tracking';
+import { MinimalPlantingSite, MinimalPlantingSubzone } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 /**
@@ -137,6 +137,20 @@ const DetailsRenderer =
           {...props}
           column={column}
           value={createLinkToPlot(row.plotNumber)}
+          row={row}
+          sx={textStyles}
+          title={value as string}
+        />
+      );
+    }
+
+    if (column.key === 'plantingCompleted') {
+      const isPlantingCompleted = row.plantingSubzones.every((psz: MinimalPlantingSubzone) => psz.plantingCompleted);
+      return (
+        <CellRenderer
+          {...props}
+          column={column}
+          value={isPlantingCompleted}
           row={row}
           sx={textStyles}
           title={value as string}
