@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1756238995515" clover="3.2.0">
-  <project timestamp="1756238995515" name="All files">
-    <metrics statements="32354" coveredstatements="1305" conditionals="22800" coveredconditionals="389" methods="9885" coveredmethods="211" elements="65039" coveredelements="1905" complexity="0" loc="32354" ncloc="32354" packages="274" files="1312" classes="1312"/>
+<coverage generated="1756240210609" clover="3.2.0">
+  <project timestamp="1756240210609" name="All files">
+    <metrics statements="32354" coveredstatements="1305" conditionals="22802" coveredconditionals="389" methods="9885" coveredmethods="211" elements="65041" coveredelements="1905" complexity="0" loc="32354" ncloc="32354" packages="274" files="1312" classes="1312"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1732,7 +1732,7 @@
       </file>
     </package>
     <package name="src.components.BatchWithdrawFlow.flow">
-      <metrics statements="449" coveredstatements="0" conditionals="387" coveredconditionals="0" methods="98" coveredmethods="0"/>
+      <metrics statements="449" coveredstatements="0" conditionals="389" coveredconditionals="0" methods="98" coveredmethods="0"/>
       <file name="AddPhotos.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/BatchWithdrawFlow/flow/AddPhotos.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
@@ -1870,7 +1870,7 @@
         <line num="418" count="0" type="stmt"/>
       </file>
       <file name="SelectPurposeForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/BatchWithdrawFlow/flow/SelectPurposeForm.tsx">
-        <metrics statements="285" coveredstatements="0" conditionals="279" coveredconditionals="0" methods="69" coveredmethods="0"/>
+        <metrics statements="285" coveredstatements="0" conditionals="281" coveredconditionals="0" methods="69" coveredmethods="0"/>
         <line num="50" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
@@ -2151,11 +2151,11 @@
         <line num="800" count="0" type="stmt"/>
         <line num="830" count="0" type="stmt"/>
         <line num="858" count="0" type="stmt"/>
-        <line num="881" count="0" type="stmt"/>
-        <line num="899" count="0" type="stmt"/>
-        <line num="920" count="0" type="stmt"/>
-        <line num="936" count="0" type="stmt"/>
-        <line num="946" count="0" type="stmt"/>
+        <line num="882" count="0" type="stmt"/>
+        <line num="901" count="0" type="stmt"/>
+        <line num="922" count="0" type="stmt"/>
+        <line num="938" count="0" type="stmt"/>
+        <line num="948" count="0" type="stmt"/>
       </file>
       <file name="WithdrawalBatchesCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/BatchWithdrawFlow/flow/WithdrawalBatchesCellRenderer.tsx">
         <metrics statements="34" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="6" coveredmethods="0"/>
