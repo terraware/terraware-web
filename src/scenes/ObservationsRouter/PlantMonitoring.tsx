@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -10,6 +10,7 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   selectAdHocObservationResults,
   selectObservationsResults,
@@ -32,6 +33,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const { selectedPlantingSite } = props;
   const [view, setView] = useState<View>('list');
   const theme = useTheme();
+  const navigate = useSyncNavigate();
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const allObservationsResults = useAppSelector(selectObservationsResults);
@@ -61,6 +63,17 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
       return matchesSite;
     });
   }, [allAdHocObservationResults, selectedPlantingSite]);
+
+  const navigateToSurvivalRateSettings = useCallback(
+    () =>
+      navigate({
+        pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(
+          ':plantingSiteId',
+          selectedPlantingSite?.id.toString() || ''
+        ),
+      }),
+    [navigate, selectedPlantingSite?.id]
+  );
 
   return (
     <Card>
@@ -108,11 +121,12 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
             </Box>
           </>
         )}
-        {selectedPlantingSite && selectedPlantingSite.id !== -1 && isSurvivalRateCalculationEnabled && (
+        {selectedPlantingSite && isSurvivalRateCalculationEnabled && (
           <Link
-            to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', selectedPlantingSite.id.toString())}
+            onClick={navigateToSurvivalRateSettings}
             fontSize='16px'
             style={{ paddingLeft: theme.spacing(2) }}
+            disabled={selectedPlantingSite.id === -1}
           >
             {strings.SURVIVAL_RATE_SETTINGS}
           </Link>
