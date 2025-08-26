@@ -4,9 +4,12 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import {
   selectAdHocObservationResults,
   selectObservationsResults,
@@ -32,6 +35,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const allObservationsResults = useAppSelector(selectObservationsResults);
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
       return [];
@@ -95,10 +99,23 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
                   { label: strings.AD_HOC, value: 'adHoc' },
                 ]}
                 selectedValue={selectedPlotSelection}
-                selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
+                selectStyles={{
+                  inputContainer: { maxWidth: '160px' },
+                  optionsContainer: { maxWidth: '160px' },
+                }}
+                fullWidth
               />
             </Box>
           </>
+        )}
+        {selectedPlantingSite && selectedPlantingSite.id !== -1 && isSurvivalRateCalculationEnabled && (
+          <Link
+            to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', selectedPlantingSite.id.toString())}
+            fontSize='16px'
+            style={{ paddingLeft: theme.spacing(2) }}
+          >
+            {strings.SURVIVAL_RATE_SETTINGS}
+          </Link>
         )}
       </Box>
       {(selectedPlotSelection === 'assigned' && observationsResults === undefined) ||
