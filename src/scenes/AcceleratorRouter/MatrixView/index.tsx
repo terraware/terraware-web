@@ -131,17 +131,6 @@ const MatrixView = () => {
     setRequestVarsId(request.requestId);
   }, [dispatch]);
 
-  useEffect(() => {
-    if (allVariablesResponse?.status === 'success') {
-      setAllVariables(allVariablesResponse.data);
-    }
-  }, [allVariablesResponse]);
-
-  useEffect(() => {
-    const request = dispatch(requestListAllVariables());
-    setRequestVarsId(request.requestId);
-  }, [dispatch]);
-
   const uniqueVariableIds = useMemo(
     () =>
       Array.from(
