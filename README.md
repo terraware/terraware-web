@@ -54,6 +54,28 @@ yarn docker:stop
 # Stop the process running the frontend
 ```
 
+### How to Generate Translations
+
+The file `src/strings/csv/en.csv` has all the human-readable strings in the app. If you're going to make text changes (including adding new text), you'll need to edit that file as well as the translation files for other languages.
+
+We use an automatic translation tool that generates translations using OpenAI's API.
+
+Get an OpenAI API key from your OpenAI account administrator or create one using [the OpenAI platform console](https://platform.openai.com/api-keys). It should have write permission on the Responses API.
+
+Put the key in your `.env` file under the name `OPENAI_API_KEY`.
+
+To translate newly-added or edited strings, you have two choices. You can do it as a one-off operation:
+
+```shell
+yarn translate
+```
+
+Or you can run autotranslate in "watch mode," which will watch for changes to `src/strings/csv/en.csv` and automatically request translations as needed. You can leave it running in the background.
+
+```shell
+yarn translate:start &
+```
+
 ## How to Contribute
 
 Before putting up a pull request, make sure to run the following commands. The CI will check that these steps are completed.
@@ -63,6 +85,7 @@ yarn generate-types  # generate types for any server side API changes
 yarn format          # run code formatter
 yarn lint            # run linter to check for code quality issues
 yarn ts              # run the typescript types checker
+yarn translate       # generate translations; requires OpenAI API key
 yarn test            # run the Jest (unit and integration) tests
 # run the end to end tests, see the section below for more details
 ```
