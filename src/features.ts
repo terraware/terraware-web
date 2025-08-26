@@ -73,7 +73,7 @@ export const OPT_IN_FEATURES: Feature[] = [
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Updated Nursery Growth Phases to align terminology'],
+    description: ['New survival rate calculation for Plant Monitoring Observations'],
     disclosure: ['This is a WIP'],
   },
 ];
