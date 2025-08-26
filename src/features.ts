@@ -5,7 +5,8 @@ export type FeatureName =
   | 'Show Production View'
   | 'Matrix View'
   | 'New Plant Dashboard Map'
-  | 'Updated Nursery Growth Phases';
+  | 'Updated Nursery Growth Phases'
+  | 'Survival Rate Calculation';
 
 export type Feature = {
   name: FeatureName;
@@ -64,6 +65,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Updated Nursery Growth Phases to align terminology'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Survival Rate Calculation',
+    preferenceName: 'survivalRateCalculation',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['New survival rate calculation for Plant Monitoring Observations'],
     disclosure: ['This is a WIP'],
   },
 ];
