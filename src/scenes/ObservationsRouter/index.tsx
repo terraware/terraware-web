@@ -6,6 +6,7 @@ import { Option } from '@terraware/web-components/components/table/types';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
@@ -26,6 +27,7 @@ import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import SurvivalRateSettings from '../SurvivalRateSettings';
 import ObservationsHome from './ObservationsHome';
 import ObservationMonitoringPlotDetails from './adhoc';
 import AdHocObservationDetails from './adhoc/AdHocObservationDetails';
@@ -150,6 +152,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
   }, [activeLocale]);
 
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   return (
     <Routes>
@@ -175,6 +178,9 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
         path={'/:plantingSiteId/results/:observationId'}
         element={<ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} reload={reload} />}
       />
+      {isSurvivalRateCalculationEnabled && (
+        <Route path={'/:plantingSiteId/survival-rate-settings'} element={<SurvivalRateSettings />} />
+      )}
       <Route
         path={'/:plantingSiteId'}
         element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} reload={reload} />}
