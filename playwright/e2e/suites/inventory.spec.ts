@@ -229,9 +229,10 @@ export default function InventoryTests() {
     await expect(page.getByRole('cell', { name: '-2-1-003' })).toBeVisible();
     await expect(page.locator('#row1-germinatingQuantity')).toContainText('50');
     await expect(page.locator('#row1-activeGrowthQuantity')).toContainText('50');
+    await expect(page.locator('#row1-hardeningOffQuantity')).toContainText('0');
     await expect(page.locator('#row1-readyQuantity')).toContainText('50');
     await expect(page.locator('#row1-totalQuantity')).toContainText('100');
-    await expect(page.getByRole('cell', { name: '0', exact: true })).toBeVisible();
+    await expect(page.locator('#row1-totalQuantityWithdrawn')).toContainText('0');
     await expect(page.getByRole('cell', { name: 'Nursery', exact: true })).toBeVisible();
 
     await page.mouse.wheel(0, -1000);
