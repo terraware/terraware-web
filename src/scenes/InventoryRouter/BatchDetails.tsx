@@ -123,7 +123,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
-            title={strings.GERMINATION_ESTABLISHMENT}
+            title={strings.GERMINATION_ESTABLISHMENT_QUANTITY}
             contents={batch.germinatingQuantity}
             grid={true}
             handleEdit={handleEditGerminatingQuantity}
