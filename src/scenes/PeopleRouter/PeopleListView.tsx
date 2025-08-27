@@ -109,7 +109,9 @@ export default function PeopleListView(): JSX.Element {
       if (!acc[curr.user_id]) {
         acc[curr.user_id] = [];
       }
-      acc[curr.user_id].push(curr.role);
+      if (!acc[curr.user_id].includes(curr.role)) {
+        acc[curr.user_id].push(curr.role);
+      }
       return acc;
     }, {} as ProjectInternalUserRoles);
     setInternalUserRoles(internalUserRolesByUserId);
