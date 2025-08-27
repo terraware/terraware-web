@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1756333552851" clover="3.2.0">
-  <project timestamp="1756333552851" name="All files">
-    <metrics statements="32381" coveredstatements="1305" conditionals="22817" coveredconditionals="389" methods="9893" coveredmethods="211" elements="65091" coveredelements="1905" complexity="0" loc="32381" ncloc="32381" packages="274" files="1312" classes="1312"/>
+<coverage generated="1756334516532" clover="3.2.0">
+  <project timestamp="1756334516533" name="All files">
+    <metrics statements="32384" coveredstatements="1305" conditionals="22821" coveredconditionals="389" methods="9894" coveredmethods="211" elements="65099" coveredelements="1905" complexity="0" loc="32384" ncloc="32384" packages="274" files="1312" classes="1312"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -18972,7 +18972,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.EditView">
-      <metrics statements="223" coveredstatements="0" conditionals="110" coveredconditionals="0" methods="70" coveredmethods="0"/>
+      <metrics statements="226" coveredstatements="0" conditionals="114" coveredconditionals="0" methods="71" coveredmethods="0"/>
       <file name="AddInternalUserRoleModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/EditView/AddInternalUserRoleModal.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -18987,7 +18987,7 @@
         <line num="38" count="0" type="stmt"/>
       </file>
       <file name="ProjectProfileEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/EditView/ProjectProfileEdit.tsx">
-        <metrics statements="213" coveredstatements="0" conditionals="108" coveredconditionals="0" methods="67" coveredmethods="0"/>
+        <metrics statements="216" coveredstatements="0" conditionals="112" coveredconditionals="0" methods="68" coveredmethods="0"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
@@ -19187,20 +19187,23 @@
         <line num="488" count="0" type="stmt"/>
         <line num="489" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="492" count="0" type="stmt"/>
+        <line num="493" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="494" count="0" type="stmt"/>
-        <line num="495" count="0" type="stmt"/>
         <line num="498" count="0" type="stmt"/>
-        <line num="499" count="0" type="stmt"/>
-        <line num="502" count="0" type="stmt"/>
-        <line num="503" count="0" type="stmt"/>
-        <line num="504" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="507" count="0" type="stmt"/>
+        <line num="500" count="0" type="stmt"/>
+        <line num="501" count="0" type="stmt"/>
+        <line num="504" count="0" type="stmt"/>
+        <line num="505" count="0" type="stmt"/>
         <line num="508" count="0" type="stmt"/>
-        <line num="511" count="0" type="stmt"/>
-        <line num="599" count="0" type="stmt"/>
-        <line num="682" count="0" type="stmt"/>
-        <line num="809" count="0" type="stmt"/>
-        <line num="810" count="0" type="stmt"/>
+        <line num="509" count="0" type="stmt"/>
+        <line num="510" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="513" count="0" type="stmt"/>
+        <line num="514" count="0" type="stmt"/>
+        <line num="517" count="0" type="stmt"/>
+        <line num="605" count="0" type="stmt"/>
+        <line num="688" count="0" type="stmt"/>
+        <line num="815" count="0" type="stmt"/>
+        <line num="816" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.Reports">
