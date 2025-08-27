@@ -20,6 +20,8 @@ import {
 
 import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -248,6 +250,21 @@ const MatrixView = () => {
         id: 'projectName',
         enableEditing: false,
         enableHiding: false,
+        Cell: ({
+          cell,
+          row,
+        }: {
+          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
+          row: MRT_Row<ProjectsWithVariablesSearchResult>;
+        }) => {
+          const projectName = cell.getValue<string>();
+          const projectId = row.original.id;
+          return (
+            <Link to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())}>
+              {projectName}
+            </Link>
+          );
+        },
       },
       {
         accessorKey: 'participant_cohort_phase',
