@@ -19,7 +19,6 @@ import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal
 import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
 import { OrganizationService, OrganizationUserService, Response } from 'src/services';
 import { SearchService } from 'src/services';
-import strings from 'src/strings';
 import { OrganizationRole } from 'src/types/Organization';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
@@ -35,13 +34,7 @@ import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
 import RemovePeopleDialog from './RemovePeopleModal';
 import TableCellRenderer from './TableCellRenderer';
 
-const columns = (): TableColumnType[] => [
-  { key: 'email', name: strings.EMAIL, type: 'string' },
-  { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
-  { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
-  { key: 'role', name: strings.ROLE, type: 'string' },
-  { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
-];
+type ProjectInternalUserRoles = Record<string, string[]>;
 
 export default function PeopleListView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -58,11 +51,82 @@ export default function PeopleListView(): JSX.Element {
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [results, setResults] = useState<OrganizationUser[]>();
+  const [internalUserRoles, setInternalUserRoles] = useState<ProjectInternalUserRoles>({});
+  const [resultsWithInternalRoles, setResultsWithInternalRoles] = useState<OrganizationUser[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
+
+  const columns = useMemo(
+    (): TableColumnType[] => [
+      { key: 'email', name: strings.EMAIL, type: 'string' },
+      { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
+      { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
+      { key: 'role', name: strings.ROLE, type: 'string' },
+      { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
+    ],
+    [strings]
+  );
+
+  const getProjectsWithInternalUsersData = useCallback(async () => {
+    if (!selectedOrganization?.id) {
+      return;
+    }
+
+    const params: SearchRequestPayload = {
+      prefix: 'projects',
+      fields: ['name', 'internalUsers.user_id', 'internalUsers.role', 'internalUsers.roleName'],
+      search: {
+        operation: 'and',
+        children: [
+          {
+            operation: 'field',
+            field: 'organization_id',
+            type: 'Exact',
+            values: [selectedOrganization?.id],
+          },
+        ],
+      },
+      sortOrder: [],
+      count: 0,
+    };
+
+    const searchResults = await SearchService.search(params);
+
+    const flattened =
+      (searchResults || [])
+        .filter((project) => project?.internalUsers)
+        .flatMap((project) => project.internalUsers as { role: string; user_id: string }[]) ?? [];
+
+    const internalUserRolesByUserId = flattened.reduce((acc, curr) => {
+      if (!acc[curr.user_id]) {
+        acc[curr.user_id] = [];
+      }
+      if (!acc[curr.user_id].includes(curr.role)) {
+        acc[curr.user_id].push(curr.role);
+      }
+      return acc;
+    }, {} as ProjectInternalUserRoles);
+    setInternalUserRoles(internalUserRolesByUserId);
+  }, [selectedOrganization?.id]);
+
+  useEffect(() => {
+    void getProjectsWithInternalUsersData();
+  }, [getProjectsWithInternalUsersData]);
+
+  useEffect(() => {
+    if (results) {
+      const resultsWithRoles = results.map((result) => ({
+        ...result,
+        role: (internalUserRoles[result.id]
+          ? `${result.role} - ${internalUserRoles[result.id].join(', ')}`
+          : result.role) as OrganizationRole,
+      }));
+      setResultsWithInternalRoles(resultsWithRoles);
+    }
+  }, [results, internalUserRoles]);
 
   const search = useCallback(
     async (searchTerm: string, skipTfContact = false) => {
@@ -165,6 +229,8 @@ export default function PeopleListView(): JSX.Element {
 
     void findTotalUsers();
   }, [search]);
+
+  const isClickable = useCallback(() => false, []);
 
   const goToNewPerson = () => {
     const newPersonLocation = {
@@ -400,10 +466,10 @@ export default function PeopleListView(): JSX.Element {
                     <Table
                       id='people-table'
                       columns={columns}
-                      rows={results}
+                      rows={resultsWithInternalRoles}
                       orderBy='name'
                       Renderer={TableCellRenderer}
-                      isClickable={() => false}
+                      isClickable={isClickable}
                       showCheckbox={isAdmin(selectedOrganization)}
                       selectedRows={selectedPeopleRows}
                       setSelectedRows={setSelectedPeopleRows}
