@@ -61,7 +61,7 @@ export default function InventoryTests() {
     await expect(page.getByText('-02-03')).toBeVisible();
     await expect(page.getByText('Germination/Establishment Quantity 500')).toBeVisible();
     await expect(page.getByText('Active Growth Quantity 100')).toBeVisible();
-    await expect(page.getByText('Ready Quantity 100', { exact: true })).toBeVisible();
+    await expect(page.getByText('Ready to Plant Quantity 100', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 200')).toBeVisible();
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
     page.mouse.wheel(0, 1000);
@@ -120,7 +120,7 @@ export default function InventoryTests() {
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('Germination/Establishment Quantity 25')).toBeVisible();
     await expect(page.getByText('Active Growth Quantity 25')).toBeVisible();
-    await expect(page.getByText('Ready Quantity 25', { exact: true })).toBeVisible();
+    await expect(page.getByText('Ready to Plant Quantity 25', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 50')).toBeVisible();
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
@@ -157,7 +157,7 @@ export default function InventoryTests() {
     await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').fill('0');
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
-    await expect(page.getByRole('main')).toContainText('Germination Rate 80');
+    await expect(page.getByRole('main')).toContainText('Germination/Establishment Rate 80');
     await expect(page.getByRole('main')).toContainText('Loss Rate 14');
     await expect(page.getByRole('main')).toContainText('Total Withdrawn 15');
     await page.getByRole('tab', { name: 'History' }).click();
@@ -219,7 +219,7 @@ export default function InventoryTests() {
     await page.getByRole('link', { name: '-2-2-003' }).click();
     await expect(page.getByText('Germination/Establishment Quantity 450')).toBeVisible();
     await expect(page.getByText('Active Growth Quantity 50')).toBeVisible();
-    await expect(page.getByText('Ready Quantity 50', { exact: true })).toBeVisible();
+    await expect(page.getByText('Ready to Plant Quantity 50', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 100')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Withdrawal - Nursery Transfer' })).toBeVisible();
@@ -240,7 +240,7 @@ export default function InventoryTests() {
     await page.getByRole('link', { name: 'Nursery', exact: true }).click();
     await expect(page.getByText('Germination/Establishment Quantity 50')).toBeVisible();
     await expect(page.getByText('Active Growth Quantity 50')).toBeVisible();
-    await expect(page.getByText('Ready Quantity 50', { exact: true })).toBeVisible();
+    await expect(page.getByText('Ready to Plant Quantity 50', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 100')).toBeVisible();
     await expect(page.getByText('Batches at Nursery')).toBeVisible();
     await expect(page.getByText('Species Banana')).toBeVisible();
