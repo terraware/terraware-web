@@ -98,12 +98,7 @@ export default function PeopleListView(): JSX.Element {
     const flattened =
       (searchResults || [])
         .filter((project) => project?.internalUsers)
-        .flatMap((project) =>
-          (project.internalUsers as { role: string; user_id: string }[])?.map((internalUser) => ({
-            ...internalUser,
-            projectName: project.name,
-          }))
-        ) ?? [];
+        .flatMap((project) => project.internalUsers as { role: string; user_id: string }[]) ?? [];
 
     const internalUserRolesByUserId = flattened.reduce((acc, curr) => {
       if (!acc[curr.user_id]) {
