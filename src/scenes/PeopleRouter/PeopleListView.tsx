@@ -231,6 +231,8 @@ export default function PeopleListView(): JSX.Element {
     void findTotalUsers();
   }, [search]);
 
+  const isClickable = useCallback(() => false, []);
+
   const goToNewPerson = () => {
     const newPersonLocation = {
       pathname: APP_PATHS.PEOPLE_NEW,
@@ -468,7 +470,7 @@ export default function PeopleListView(): JSX.Element {
                       rows={resultsWithInternalRoles}
                       orderBy='name'
                       Renderer={TableCellRenderer}
-                      isClickable={() => false}
+                      isClickable={isClickable}
                       showCheckbox={isAdmin(selectedOrganization)}
                       selectedRows={selectedPeopleRows}
                       setSelectedRows={setSelectedPeopleRows}
