@@ -258,7 +258,11 @@ const ProjectProfileEdit = () => {
 
   useEffect(() => {
     if (listInternalUsersRequest?.status === 'success') {
-      setInternalUsers(listInternalUsersRequest.data?.users || []);
+      setInternalUsers(
+        listInternalUsersRequest.data?.users?.length
+          ? listInternalUsersRequest.data?.users
+          : [{ userId: undefined, role: undefined }]
+      );
 
       const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
         .filter((user) => user.roleName)
