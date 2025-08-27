@@ -35,6 +35,8 @@ import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
 import RemovePeopleDialog from './RemovePeopleModal';
 import TableCellRenderer from './TableCellRenderer';
 
+type ProjectInternalUserRoles = Record<string, string[]>;
+
 const columns = (): TableColumnType[] => [
   { key: 'email', name: strings.EMAIL, type: 'string' },
   { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
@@ -58,11 +60,74 @@ export default function PeopleListView(): JSX.Element {
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [results, setResults] = useState<OrganizationUser[]>();
+  const [internalUserRoles, setInternalUserRoles] = useState<ProjectInternalUserRoles>({});
+  const [resultsWithInternalRoles, setResultsWithInternalRoles] = useState<OrganizationUser[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
+
+  const getProjectsWithInternalUsersData = useCallback(async () => {
+    if (!selectedOrganization?.id) {
+      return;
+    }
+
+    const params: SearchRequestPayload = {
+      prefix: 'projects',
+      fields: ['name', 'internalUsers.user_id', 'internalUsers.role', 'internalUsers.roleName'],
+      search: {
+        operation: 'and',
+        children: [
+          {
+            operation: 'field',
+            field: 'organization_id',
+            type: 'Exact',
+            values: [selectedOrganization?.id],
+          },
+        ],
+      },
+      sortOrder: [],
+      count: 0,
+    };
+
+    const searchResults = await SearchService.search(params);
+
+    const flattened =
+      (searchResults || [])
+        .filter((project) => project?.internalUsers)
+        .flatMap((project) =>
+          (project.internalUsers as { role: string; user_id: string }[])?.map((internalUser) => ({
+            ...internalUser,
+            projectName: project.name,
+          }))
+        ) ?? [];
+
+    const internalUserRolesByUserId = flattened.reduce((acc, curr) => {
+      if (!acc[curr.user_id]) {
+        acc[curr.user_id] = [];
+      }
+      acc[curr.user_id].push(curr.role);
+      return acc;
+    }, {} as ProjectInternalUserRoles);
+    setInternalUserRoles(internalUserRolesByUserId);
+  }, [selectedOrganization?.id]);
+
+  useEffect(() => {
+    void getProjectsWithInternalUsersData();
+  }, [getProjectsWithInternalUsersData]);
+
+  useEffect(() => {
+    if (results) {
+      const resultsWithRoles = results.map((result) => ({
+        ...result,
+        role: (internalUserRoles[result.id]
+          ? `${result.role} - ${internalUserRoles[result.id].join(', ')}`
+          : result.role) as OrganizationRole,
+      }));
+      setResultsWithInternalRoles(resultsWithRoles);
+    }
+  }, [results, internalUserRoles]);
 
   const search = useCallback(
     async (searchTerm: string, skipTfContact = false) => {
@@ -400,7 +465,7 @@ export default function PeopleListView(): JSX.Element {
                     <Table
                       id='people-table'
                       columns={columns}
-                      rows={results}
+                      rows={resultsWithInternalRoles}
                       orderBy='name'
                       Renderer={TableCellRenderer}
                       isClickable={() => false}
