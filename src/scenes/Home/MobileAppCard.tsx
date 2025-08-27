@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
 import { TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK } from 'src/constants';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 
 type MobileAppCardProps = {
@@ -15,6 +16,8 @@ type MobileAppCardProps = {
   imageSource?: string;
   padding?: number | string;
   title?: string | (string | JSX.Element)[];
+  allowDismiss?: boolean;
+  dismissPreferenceId?: string;
 };
 
 const MobileAppCard = ({
@@ -23,9 +26,36 @@ const MobileAppCard = ({
   imageSource,
   padding = '24px',
   title,
+  allowDismiss,
+  dismissPreferenceId,
 }: MobileAppCardProps): JSX.Element => {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const { updateUserPreferences, userPreferences, reloadUserPreferences } = useUser();
+  const [showCard, setShowCard] = useState(true);
+
+  useEffect(() => {
+    if (!allowDismiss) {
+      setShowCard(true);
+    }
+    if (allowDismiss && dismissPreferenceId && !userPreferences[dismissPreferenceId]) {
+      setShowCard(true);
+    }
+    if (allowDismiss && dismissPreferenceId && userPreferences[dismissPreferenceId]) {
+      setShowCard(false);
+    }
+  }, [allowDismiss, dismissPreferenceId, userPreferences]);
+
+  const dismissMobileAppCard = async () => {
+    if (dismissPreferenceId) {
+      await updateUserPreferences({ [dismissPreferenceId]: true });
+      reloadUserPreferences();
+    }
+  };
+
+  if (!showCard) {
+    return <Box />;
+  }
 
   return (
     <Box
@@ -181,6 +211,13 @@ const MobileAppCard = ({
               window.open(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK, '_blank');
             }}
           />
+        </Box>
+      )}
+      {allowDismiss && (
+        <Box>
+          <Link fontSize='16px' fontWeight={400} onClick={() => void dismissMobileAppCard()}>
+            {strings.DISMISS}
+          </Link>
         </Box>
       )}
     </Box>
