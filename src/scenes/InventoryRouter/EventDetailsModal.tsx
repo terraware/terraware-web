@@ -4,7 +4,6 @@ import { Box, Divider, Grid, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
@@ -26,7 +25,6 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
   const previousEvent = selectedEvent.previousEvent;
   const gridSize = () => (isMobile ? 12 : 6);
   const marginTop = {
@@ -94,17 +92,9 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             display={true}
           />
         </Grid>
-        {(selectedEvent.modifiedFields.includes(
-          isUpdatedNurseryGrowthPhasesEnabled
-            ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
-            : strings.GERMINATING_QUANTITY
-        ) ||
-          selectedEvent.modifiedFields.includes(
-            isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY
-          ) ||
-          selectedEvent.modifiedFields.includes(
-            isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY
-          )) && (
+        {(selectedEvent.modifiedFields.includes(strings.GERMINATION_ESTABLISHMENT_QUANTITY) ||
+          selectedEvent.modifiedFields.includes(strings.ACTIVE_GROWTH_QUANTITY) ||
+          selectedEvent.modifiedFields.includes(strings.READY_TO_PLANT_QUANTITY)) && (
           <Grid item xs={12} sx={marginTop}>
             <Divider />
           </Grid>
@@ -119,11 +109,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='germinationQuantityBefore'
                   value={previousEvent?.germinatingQuantity || 0}
                   type='text'
-                  label={
-                    isUpdatedNurseryGrowthPhasesEnabled
-                      ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_BEFORE
-                      : strings.GERMINATION_QUANTITY_BEFORE
-                  }
+                  label={strings.GERMINATION_ESTABLISHMENT_QUANTITY_BEFORE}
                   display={true}
                 />
               </Grid>
@@ -134,20 +120,14 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='germinationQuantityAfter'
                   value={selectedEvent.germinatingQuantity}
                   type='text'
-                  label={
-                    isUpdatedNurseryGrowthPhasesEnabled
-                      ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_AFTER
-                      : strings.GERMINATION_QUANTITY_AFTER
-                  }
+                  label={strings.GERMINATION_ESTABLISHMENT_QUANTITY_AFTER}
                   display={true}
                 />
               </Grid>
             )}
           </>
         )}
-        {selectedEvent.modifiedFields.includes(
-          isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY
-        ) && (
+        {selectedEvent.modifiedFields.includes(strings.ACTIVE_GROWTH_QUANTITY) && (
           <>
             {(!previousEvent ||
               previousEvent?.type === 'QuantityEdited' ||
@@ -157,11 +137,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='activeGrowthQuantityBefore'
                   value={previousEvent?.activeGrowthQuantity || 0}
                   type='text'
-                  label={
-                    isUpdatedNurseryGrowthPhasesEnabled
-                      ? strings.ACTIVE_GROWTH_QUANTITY_BEFORE
-                      : strings.NOT_READY_QUANTITY_BEFORE
-                  }
+                  label={strings.ACTIVE_GROWTH_QUANTITY_BEFORE}
                   display={true}
                 />
               </Grid>
@@ -172,11 +148,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='notReadQuantityAfter'
                   value={selectedEvent.activeGrowthQuantity}
                   type='text'
-                  label={
-                    isUpdatedNurseryGrowthPhasesEnabled
-                      ? strings.ACTIVE_GROWTH_QUANTITY_AFTER
-                      : strings.NOT_READY_QUANTITY_AFTER
-                  }
+                  label={strings.ACTIVE_GROWTH_QUANTITY_AFTER}
                   display={true}
                 />
               </Grid>
@@ -184,39 +156,36 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
           </>
         )}
 
-        {isUpdatedNurseryGrowthPhasesEnabled &&
-          selectedEvent.modifiedFields.includes(strings.HARDENING_OFF_QUANTITY) && (
-            <>
-              {(!previousEvent ||
-                previousEvent?.type === 'QuantityEdited' ||
-                previousEvent?.type === 'StatusChanged') && (
-                <Grid item paddingRight={paddingSeparator} sx={marginTop} xs={12}>
-                  <Textfield
-                    display
-                    id='hardeningOffQuantityBefore'
-                    label={strings.HARDENING_OFF_QUANTITY_BEFORE}
-                    type='text'
-                    value={previousEvent?.hardeningOffQuantity || 0}
-                  />
-                </Grid>
-              )}
-              {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
-                <Grid item paddingRight={paddingSeparator} sx={marginTop} xs={12}>
-                  <Textfield
-                    display
-                    id='hardeningOffQuantityAfter'
-                    label={strings.HARDENING_OFF_QUANTITY_AFTER}
-                    type='text'
-                    value={selectedEvent.hardeningOffQuantity}
-                  />
-                </Grid>
-              )}
-            </>
-          )}
+        {selectedEvent.modifiedFields.includes(strings.HARDENING_OFF_QUANTITY) && (
+          <>
+            {(!previousEvent ||
+              previousEvent?.type === 'QuantityEdited' ||
+              previousEvent?.type === 'StatusChanged') && (
+              <Grid item paddingRight={paddingSeparator} sx={marginTop} xs={12}>
+                <Textfield
+                  display
+                  id='hardeningOffQuantityBefore'
+                  label={strings.HARDENING_OFF_QUANTITY_BEFORE}
+                  type='text'
+                  value={previousEvent?.hardeningOffQuantity || 0}
+                />
+              </Grid>
+            )}
+            {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
+              <Grid item paddingRight={paddingSeparator} sx={marginTop} xs={12}>
+                <Textfield
+                  display
+                  id='hardeningOffQuantityAfter'
+                  label={strings.HARDENING_OFF_QUANTITY_AFTER}
+                  type='text'
+                  value={selectedEvent.hardeningOffQuantity}
+                />
+              </Grid>
+            )}
+          </>
+        )}
 
-        {selectedEvent.modifiedFields.includes(
-          isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY
-        ) && (
+        {selectedEvent.modifiedFields.includes(strings.READY_TO_PLANT_QUANTITY) && (
           <>
             {(!previousEvent ||
               previousEvent?.type === 'QuantityEdited' ||
@@ -226,11 +195,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='readyQuantityBefore'
                   value={previousEvent?.readyQuantity || 0}
                   type='text'
-                  label={
-                    isUpdatedNurseryGrowthPhasesEnabled
-                      ? strings.READY_TO_PLANT_QUANTITY_BEFORE
-                      : strings.READY_QUANTITY_BEFORE
-                  }
+                  label={strings.READY_TO_PLANT_QUANTITY_BEFORE}
                   display={true}
                 />
               </Grid>
@@ -241,11 +206,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   id='readyQuantityAfter'
                   value={selectedEvent.readyQuantity}
                   type='text'
-                  label={
-                    isUpdatedNurseryGrowthPhasesEnabled
-                      ? strings.READY_TO_PLANT_QUANTITY_AFTER
-                      : strings.READY_QUANTITY_AFTER
-                  }
+                  label={strings.READY_TO_PLANT_QUANTITY_AFTER}
                   display={true}
                 />
               </Grid>

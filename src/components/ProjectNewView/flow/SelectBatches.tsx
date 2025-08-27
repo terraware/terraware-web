@@ -15,7 +15,6 @@ import {
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
@@ -45,7 +44,6 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const columns = useMemo(
     (): TableColumnType[] => [
@@ -59,46 +57,26 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
         name: strings.PROJECT,
         type: 'string',
       },
-      ...(isUpdatedNurseryGrowthPhasesEnabled
-        ? [
-            {
-              key: 'germinatingQuantity',
-              name: strings.GERMINATION_ESTABLISHMENT,
-              type: 'string' as const,
-            },
-            {
-              key: 'activeGrowthQuantity',
-              name: strings.ACTIVE_GROWTH,
-              type: 'string' as const,
-            },
-            {
-              key: 'hardeningOffQuantity',
-              name: strings.HARDENING_OFF,
-              type: 'number' as const,
-            },
-            {
-              key: 'readyQuantity',
-              name: strings.READY_TO_PLANT,
-              type: 'string' as const,
-            },
-          ]
-        : [
-            {
-              key: 'germinatingQuantity',
-              name: strings.GERMINATING,
-              type: 'string' as const,
-            },
-            {
-              key: 'activeGrowthQuantity',
-              name: strings.NOT_READY,
-              type: 'string' as const,
-            },
-            {
-              key: 'readyQuantity',
-              name: strings.READY,
-              type: 'string' as const,
-            },
-          ]),
+      {
+        key: 'germinatingQuantity',
+        name: strings.GERMINATION_ESTABLISHMENT,
+        type: 'string' as const,
+      },
+      {
+        key: 'activeGrowthQuantity',
+        name: strings.ACTIVE_GROWTH,
+        type: 'string' as const,
+      },
+      {
+        key: 'hardeningOffQuantity',
+        name: strings.HARDENING_OFF,
+        type: 'number' as const,
+      },
+      {
+        key: 'readyQuantity',
+        name: strings.READY_TO_PLANT,
+        type: 'string' as const,
+      },
       {
         key: 'totalQuantity',
         name: strings.TOTAL,
@@ -116,7 +94,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
       },
       { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
     ],
-    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+    [strings]
   );
 
   const nurseries = useMemo(

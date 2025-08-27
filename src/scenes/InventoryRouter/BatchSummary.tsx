@@ -6,7 +6,6 @@ import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
@@ -24,7 +23,6 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const { isMobile, isTablet } = useDeviceInfo();
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const onProjectUnAssign = useCallback(async () => {
     const response = await NurseryBatchService.updateBatch({ ...batch, projectId: undefined });
@@ -46,9 +44,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
       <Grid item flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard
           isEditable={false}
-          title={
-            isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT_RATE : strings.GERMINATION_RATE
-          }
+          title={strings.GERMINATION_ESTABLISHMENT_RATE}
           contents={batch.germinationRate || '%'}
         />
       </Grid>

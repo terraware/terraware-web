@@ -4,7 +4,6 @@ import { Grid } from '@mui/material';
 import _ from 'lodash';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
 import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
@@ -22,7 +21,6 @@ interface InventorySummaryProps {
 
 export default function InventorySummaryForSpecies(props: InventorySummaryProps): JSX.Element {
   const { speciesId, modified } = props;
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -77,52 +75,33 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
     return [
       {
-        label: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
-          : strings.GERMINATING_QUANTITY,
+        label: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
         value: germinatingQuantity.toString(),
-        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
-          : strings.TOOLTIP_GERMINATING_QUANTITY,
+        tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
         gridColumns: topRowColumns,
       },
       {
-        label: isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY,
+        label: strings.ACTIVE_GROWTH_QUANTITY,
         value: activeGrowthQuantity.toString(),
-        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
-          : strings.TOOLTIP_NOT_READY_QUANTITY,
+        tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
         gridColumns: topRowColumns,
       },
-      ...(isUpdatedNurseryGrowthPhasesEnabled
-        ? [
-            {
-              label: strings.HARDENING_OFF_QUANTITY,
-              value: hardeningOffQuantity.toString(),
-              tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
-              gridColumns: topRowColumns,
-            },
-            {
-              label: strings.READY_TO_PLANT_QUANTITY,
-              value: readyQuantity.toString(),
-              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
-              gridColumns: topRowColumns,
-            },
-          ]
-        : [
-            {
-              label: strings.READY_QUANTITY,
-              value: readyQuantity.toString(),
-              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-              gridColumns: topRowColumns,
-            },
-          ]),
+      {
+        label: strings.HARDENING_OFF_QUANTITY,
+        value: hardeningOffQuantity.toString(),
+        tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
+        gridColumns: topRowColumns,
+      },
+      {
+        label: strings.READY_TO_PLANT_QUANTITY,
+        value: readyQuantity.toString(),
+        tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+        gridColumns: topRowColumns,
+      },
       {
         label: strings.TOTAL_QUANTITY,
         value: totalQuantity.toString(),
-        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.TOOLTIP_TOTAL_QUANTITY
-          : strings.TOOLTIP_TOTAL_QUANTITY_PREV,
+        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
         gridColumns: topRowColumns,
       },
       {

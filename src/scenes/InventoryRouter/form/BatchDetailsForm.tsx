@@ -7,7 +7,6 @@ import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-comp
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DatePicker from 'src/components/common/DatePicker';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useUser } from 'src/providers';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -68,7 +67,6 @@ export default function BatchDetailsForm({
   const snackBar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const locationTimezone = useLocationTimeZone();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
 
   const facilityId = origin === 'Nursery' ? originId : record?.facilityId;
@@ -433,16 +431,8 @@ export default function BatchDetailsForm({
                 value={record.germinatingQuantity}
                 onChange={onChangeCallback('germinatingQuantity')}
                 type='number'
-                label={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_REQUIRED
-                    : strings.GERMINATING_QUANTITY_REQUIRED
-                }
-                tooltipTitle={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
-                    : strings.TOOLTIP_GERMINATING_QUANTITY
-                }
+                label={strings.GERMINATION_ESTABLISHMENT_QUANTITY_REQUIRED}
+                tooltipTitle={strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY}
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.germinatingQuantity)
@@ -458,16 +448,8 @@ export default function BatchDetailsForm({
             <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
                 id='germinationStartedDate'
-                label={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
-                    : strings.GERMINATION_STARTED_DATE
-                }
-                aria-label={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
-                    : strings.GERMINATION_STARTED_DATE
-                }
+                label={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
+                aria-label={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
                 value={record.germinationStartedDate}
                 onChange={getOnChangeDate('germinationStartedDate')}
                 defaultTimeZone={timeZone}
@@ -480,16 +462,8 @@ export default function BatchDetailsForm({
                 value={record.activeGrowthQuantity}
                 onChange={onChangeCallback('activeGrowthQuantity')}
                 type='number'
-                label={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.ACTIVE_GROWTH_QUANTITY_REQUIRED
-                    : strings.NOT_READY_QUANTITY_REQUIRED
-                }
-                tooltipTitle={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
-                    : strings.TOOLTIP_NOT_READY_QUANTITY
-                }
+                label={strings.ACTIVE_GROWTH_QUANTITY_REQUIRED}
+                tooltipTitle={strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY}
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.activeGrowthQuantity)
@@ -513,31 +487,27 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            {isUpdatedNurseryGrowthPhasesEnabled && (
-              <>
-                <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
-                  <Textfield
-                    errorText={
-                      validateFields
-                        ? isUndefinedQuantity(record.hardeningOffQuantity)
-                          ? strings.REQUIRED_FIELD
-                          : invalidFields.hardeningOff
-                        : ''
-                    }
-                    disabledCharacters={['.']}
-                    id='hardeningOffQuantity'
-                    label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
-                    min={0}
-                    onChange={onChangeCallback('hardeningOffQuantity')}
-                    tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
-                    type='number'
-                    value={record.hardeningOffQuantity}
-                  />
-                </Grid>
+            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                errorText={
+                  validateFields
+                    ? isUndefinedQuantity(record.hardeningOffQuantity)
+                      ? strings.REQUIRED_FIELD
+                      : invalidFields.hardeningOff
+                    : ''
+                }
+                disabledCharacters={['.']}
+                id='hardeningOffQuantity'
+                label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
+                min={0}
+                onChange={onChangeCallback('hardeningOffQuantity')}
+                tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
+                type='number'
+                value={record.hardeningOffQuantity}
+              />
+            </Grid>
 
-                <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
-              </>
-            )}
+            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
 
             <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
@@ -545,16 +515,8 @@ export default function BatchDetailsForm({
                 value={record.readyQuantity}
                 onChange={onChangeCallback('readyQuantity')}
                 type='number'
-                label={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.READY_TO_PLANT_QUANTITY_REQUIRED
-                    : strings.READY_QUANTITY_REQUIRED
-                }
-                tooltipTitle={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.TOOLTIP_READY_TO_PLANT_QUANTITY
-                    : strings.TOOLTIP_READY_QUANTITY
-                }
+                label={strings.READY_TO_PLANT_QUANTITY_REQUIRED}
+                tooltipTitle={strings.TOOLTIP_READY_TO_PLANT_QUANTITY}
                 errorText={
                   validateFields
                     ? isUndefinedQuantity(record.readyQuantity)
@@ -576,11 +538,7 @@ export default function BatchDetailsForm({
                 type='text'
                 label={strings.TOTAL_QUANTITY}
                 display={true}
-                tooltipTitle={
-                  isUpdatedNurseryGrowthPhasesEnabled
-                    ? strings.TOOLTIP_TOTAL_QUANTITY
-                    : strings.TOOLTIP_TOTAL_QUANTITY_PREV
-                }
+                tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
               />
             </Grid>
 

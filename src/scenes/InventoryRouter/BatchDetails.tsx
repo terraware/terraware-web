@@ -5,7 +5,6 @@ import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
 import { NurseryBatchService } from 'src/services';
@@ -17,7 +16,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import OverviewItemCard from '../../components/common/OverviewItemCard';
 import PhotosList from '../../components/common/PhotosList';
 import BatchDetailsModal from './BatchDetailsModal';
-import ChangeQuantityModalPrev from './view/ChangeQuantityModalPrev';
 
 interface BatchDetailsProps {
   batch: Batch;
@@ -29,7 +27,6 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
@@ -105,22 +102,14 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           onClick={openEditModal}
         />
       </Box>
-      {modalValues.openChangeQuantityModal &&
-        (isUpdatedNurseryGrowthPhasesEnabled ? (
-          <ChangeQuantityModal
-            modalValues={modalValues}
-            onClose={onCloseChangeQuantityModal}
-            reload={onUpdate}
-            row={batchWithRawQtys}
-          />
-        ) : (
-          <ChangeQuantityModalPrev
-            modalValues={modalValues}
-            onClose={onCloseChangeQuantityModal}
-            reload={onUpdate}
-            row={batchWithRawQtys}
-          />
-        ))}
+      {modalValues.openChangeQuantityModal && (
+        <ChangeQuantityModal
+          modalValues={modalValues}
+          onClose={onCloseChangeQuantityModal}
+          reload={onUpdate}
+          row={batchWithRawQtys}
+        />
+      )}
       <Grid container>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
@@ -134,9 +123,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
-            title={
-              isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT : strings.GERMINATING_QUANTITY
-            }
+            title={strings.GERMINATION_ESTABLISHMENT}
             contents={batch.germinatingQuantity}
             grid={true}
             handleEdit={handleEditGerminatingQuantity}
@@ -145,11 +132,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={false}
-            title={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
-                : strings.GERMINATION_STARTED_DATE
-            }
+            title={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
             contents={batch.germinationStartedDate}
             grid={true}
           />
@@ -157,7 +140,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={true}
-            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY}
+            title={strings.ACTIVE_GROWTH_QUANTITY}
             contents={batch.activeGrowthQuantity}
             grid={true}
             handleEdit={handleEditActiveGrowthQuantity}
@@ -171,24 +154,20 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
             grid={true}
           />
         </Grid>
-        {isUpdatedNurseryGrowthPhasesEnabled && (
-          <>
-            <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
-              <OverviewItemCard
-                contents={batch.hardeningOffQuantity}
-                grid
-                handleEdit={handleEditHardeningOffQuantity}
-                isEditable
-                title={strings.HARDENING_OFF_QUANTITY}
-              />
-            </Grid>
-            {!isMobile && <Grid item xs={6} paddingRight={theme.spacing(3)} />}
-          </>
-        )}
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
+            contents={batch.hardeningOffQuantity}
+            grid
+            handleEdit={handleEditHardeningOffQuantity}
+            isEditable
+            title={strings.HARDENING_OFF_QUANTITY}
+          />
+        </Grid>
+        {!isMobile && <Grid item xs={6} paddingRight={theme.spacing(3)} />}
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
           <OverviewItemCard
             isEditable={false}
-            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY}
+            title={strings.READY_TO_PLANT_QUANTITY}
             contents={batch.readyQuantity}
             grid={true}
           />

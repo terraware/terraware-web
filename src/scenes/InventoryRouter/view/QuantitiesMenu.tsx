@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { MenuItem, MenuList, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
 import strings from 'src/strings';
 
 import { ModalValuesType } from './BatchesCellRenderer';
@@ -16,7 +15,6 @@ export type QuantitiesMenuProps = {
 export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element {
   const { setModalValues, batch } = props;
   const theme = useTheme();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
   const openMenu = Boolean(menuAnchorEl);
@@ -56,9 +54,7 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
             disabled={Number(batch.germinatingQuantity) === 0}
           >
             <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-              {isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.CHANGE_GERMINATION_ESTABLISHMENT_STATUS
-                : strings.CHANGE_GERMINATING_STATUS}
+              {strings.CHANGE_GERMINATION_ESTABLISHMENT_STATUS}
             </Typography>
           </MenuItem>
 
@@ -69,24 +65,20 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
             disabled={Number(batch.activeGrowthQuantity) === 0}
           >
             <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-              {isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.CHANGE_ACTIVE_GROWTH_STATUS
-                : strings.CHANGE_NOT_READY_STATUS}
+              {strings.CHANGE_ACTIVE_GROWTH_STATUS}
             </Typography>
           </MenuItem>
 
-          {isUpdatedNurseryGrowthPhasesEnabled && (
-            <MenuItem
-              id='change-hardening-off'
-              onClick={(event) => openChangeQuantityHandler(event, 'hardening-off')}
-              sx={{ padding: theme.spacing(1, 2) }}
-              disabled={Number(batch.hardeningOffQuantity) === 0}
-            >
-              <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-                {strings.CHANGE_HARDENING_OFF_STATUS}
-              </Typography>
-            </MenuItem>
-          )}
+          <MenuItem
+            id='change-hardening-off'
+            onClick={(event) => openChangeQuantityHandler(event, 'hardening-off')}
+            sx={{ padding: theme.spacing(1, 2) }}
+            disabled={Number(batch.hardeningOffQuantity) === 0}
+          >
+            <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
+              {strings.CHANGE_HARDENING_OFF_STATUS}
+            </Typography>
+          </MenuItem>
         </MenuList>
       </Popover>
       <Tooltip title={strings.MORE_OPTIONS}>
