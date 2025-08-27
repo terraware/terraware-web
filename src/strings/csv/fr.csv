@@ -1956,6 +1956,7 @@ TOOLTIP_TIME_ZONE_PLANTING_SITE,Nous utilisons les fuseaux horaires pour les not
 TOOLTIP_TIME_ZONE_SEEDBANK,Nous utilisons les fuseaux horaires pour les notifications et pour déterminer la date correcte pour votre région. Sélectionnez le fuseau horaire qui s'applique à cette banque de semences. Tous les travaux effectués dans cette banque de semences utiliseront ce fuseau horaire.,1b3db070
 TOOLTIP_TOTAL_PLANTS,"Le nombre total de plantes observées comprend les plantes vivantes et mortes d'espèces connues et inconnues, mais ne comprend pas les plantes enregistrées comme préexistantes.",d21e64f0
 TOOLTIP_TOTAL_QUANTITY,La quantité totale est la somme des quantités non prêtes et prêtes.,4a6f0489
+TOOLTIP_TOTAL_QUANTITY_PREV,La quantité totale est la somme des quantités prêtes et non prêtes.,0da12307
 TOOLTIP_TOTAL_WITHDRAWN,Le nombre total de plantes retirées pour n'importe quelle raison.,2de74db3
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Un plat qui contient un milieu de croissance composé d'agar solidifié.,7391d8f5
 TOOLTIP_VIABILITY_TEST_CHEMICAL,Traitement des semences avec une hormone de croissance végétale ou un autre produit chimique pour rompre la dormance physiologique.,b836cc92
