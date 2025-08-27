@@ -19,7 +19,6 @@ import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal
 import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
 import { OrganizationService, OrganizationUserService, Response } from 'src/services';
 import { SearchService } from 'src/services';
-import strings from 'src/strings';
 import { OrganizationRole } from 'src/types/Organization';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
@@ -36,14 +35,6 @@ import RemovePeopleDialog from './RemovePeopleModal';
 import TableCellRenderer from './TableCellRenderer';
 
 type ProjectInternalUserRoles = Record<string, string[]>;
-
-const columns = (): TableColumnType[] => [
-  { key: 'email', name: strings.EMAIL, type: 'string' },
-  { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
-  { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
-  { key: 'role', name: strings.ROLE, type: 'string' },
-  { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
-];
 
 export default function PeopleListView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -66,7 +57,18 @@ export default function PeopleListView(): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
+
+  const columns = useMemo(
+    (): TableColumnType[] => [
+      { key: 'email', name: strings.EMAIL, type: 'string' },
+      { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
+      { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
+      { key: 'role', name: strings.ROLE, type: 'string' },
+      { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
+    ],
+    [strings]
+  );
 
   const getProjectsWithInternalUsersData = useCallback(async () => {
     if (!selectedOrganization?.id) {
