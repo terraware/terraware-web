@@ -8,4 +8,4 @@ const { convertAllLocales } = require('../src/strings/export');
 const csvDir = 'src/strings/csv';
 const stringsDir = 'src/strings';
 
-convertAllLocales(csvDir, stringsDir);
+convertAllLocales(csvDir, stringsDir, false);
