@@ -258,11 +258,7 @@ const ProjectProfileEdit = () => {
 
   useEffect(() => {
     if (listInternalUsersRequest?.status === 'success') {
-      setInternalUsers(
-        listInternalUsersRequest.data?.users?.length
-          ? listInternalUsersRequest.data?.users
-          : [{ userId: undefined, role: undefined }]
-      );
+      setInternalUsers(listInternalUsersRequest.data?.users || []);
 
       const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
         .filter((user) => user.roleName)
@@ -492,6 +488,12 @@ const ProjectProfileEdit = () => {
   const onClickAddRow = useCallback(() => {
     setInternalUsers((prev) => [...(prev || []), { userId: undefined, role: undefined }]);
   }, [setInternalUsers]);
+
+  useEffect(() => {
+    if (listInternalUsersRequest?.status === 'success' && internalUsers?.length === 0) {
+      onClickAddRow();
+    }
+  }, [internalUsers, listInternalUsersRequest, onClickAddRow]);
 
   const [addInternalUserRoleModalOpen, setAddInternalUserRoleModalOpen] = useState(false);
 
