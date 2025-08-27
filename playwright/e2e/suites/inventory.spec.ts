@@ -42,8 +42,8 @@ export default function InventoryTests() {
     await page.getByLabel('Date Added *').fill('2024-02-01');
     await page.getByLabel('Seeds Sown Date').fill('2024-02-02');
     await page.getByLabel('Seeds Sown Date').click();
-    await page.getByLabel('Germination Started Date').click();
-    await page.getByLabel('Germination Started Date').fill('2024-02-03');
+    await page.getByLabel('Germination/Establishment Started Date').click();
+    await page.getByLabel('Germination/Establishment Started Date').fill('2024-02-03');
     await page.locator('#germinatingQuantity').getByRole('spinbutton').click();
     await page.locator('#germinatingQuantity').getByRole('spinbutton').fill('0500');
     await page.locator('#activeGrowthQuantity').getByRole('spinbutton').click();
@@ -59,15 +59,15 @@ export default function InventoryTests() {
     await expect(page.getByText('-02-01')).toBeVisible();
     await expect(page.getByText('-02-02')).toBeVisible();
     await expect(page.getByText('-02-03')).toBeVisible();
-    await expect(page.getByText('Germinating Quantity 500')).toBeVisible();
-    await expect(page.getByText('Not Ready Quantity 100')).toBeVisible();
+    await expect(page.getByText('Germination/Establishment Quantity 500')).toBeVisible();
+    await expect(page.getByText('Active Growth Quantity 100')).toBeVisible();
     await expect(page.getByText('Ready Quantity 100', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 200')).toBeVisible();
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
     page.mouse.wheel(0, 1000);
     await page.getByRole('tab', { name: 'History' }).click();
     page.mouse.wheel(0, 1000);
-    await expect(page.getByRole('cell', { name: 'Germinating Quantity, Not' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Germination/Establishment Quantity, Not' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Super Admin' })).toBeVisible();
     await page.getByRole('tab', { name: 'Details' }).click();
   });
@@ -118,13 +118,13 @@ export default function InventoryTests() {
 
     await expect(page.getByText('Coconut', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
-    await expect(page.getByText('Germinating Quantity 25')).toBeVisible();
-    await expect(page.getByText('Not Ready Quantity 25')).toBeVisible();
+    await expect(page.getByText('Germination/Establishment Quantity 25')).toBeVisible();
+    await expect(page.getByText('Active Growth Quantity 25')).toBeVisible();
     await expect(page.getByText('Ready Quantity 25', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 50')).toBeVisible();
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: 'Germinating Quantity, Not' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Germination/Establishment Quantity, Not' })).toBeVisible();
     await expect(page.locator('#row1-editedByName')).toContainText('Super Admin');
     await page.getByRole('tab', { name: 'Details' }).click();
   });
@@ -217,8 +217,8 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-ready')).toBeVisible();
     await expect(page.getByRole('cell', { name: '150' })).toBeVisible();
     await page.getByRole('link', { name: '-2-2-003' }).click();
-    await expect(page.getByText('Germinating Quantity 450')).toBeVisible();
-    await expect(page.getByText('Not Ready Quantity 50')).toBeVisible();
+    await expect(page.getByText('Germination/Establishment Quantity 450')).toBeVisible();
+    await expect(page.getByText('Active Growth Quantity 50')).toBeVisible();
     await expect(page.getByText('Ready Quantity 50', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 100')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
@@ -238,8 +238,8 @@ export default function InventoryTests() {
     await page.getByRole('link', { name: 'Inventory' }).click();
     await page.getByRole('tab', { name: 'By Nursery' }).click();
     await page.getByRole('link', { name: 'Nursery', exact: true }).click();
-    await expect(page.getByText('Germinating Quantity 50')).toBeVisible();
-    await expect(page.getByText('Not Ready Quantity 50')).toBeVisible();
+    await expect(page.getByText('Germination/Establishment Quantity 50')).toBeVisible();
+    await expect(page.getByText('Active Growth Quantity 50')).toBeVisible();
     await expect(page.getByText('Ready Quantity 50', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 100')).toBeVisible();
     await expect(page.getByText('Batches at Nursery')).toBeVisible();
