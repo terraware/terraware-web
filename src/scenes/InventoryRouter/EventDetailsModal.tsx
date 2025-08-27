@@ -99,7 +99,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             <Divider />
           </Grid>
         )}
-        {selectedEvent.modifiedFields.includes(strings.GERMINATING_QUANTITY) && (
+        {selectedEvent.modifiedFields.includes(strings.GERMINATION_ESTABLISHMENT_QUANTITY) && (
           <>
             {(!previousEvent ||
               previousEvent?.type === 'QuantityEdited' ||
