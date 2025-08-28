@@ -256,9 +256,21 @@ const ProjectProfileEdit = () => {
     }
   }, [listUsersRequest]);
 
+  const organizationAndInternalUsersLoaded = useMemo(() => {
+    return organization && listInternalUsersRequest?.status === 'success';
+  }, [listInternalUsersRequest?.status, organization]);
+
   useEffect(() => {
-    if (listInternalUsersRequest?.status === 'success') {
-      setInternalUsers(listInternalUsersRequest.data?.users || []);
+    if (organizationAndInternalUsersLoaded) {
+      const internalUsersNextValue = listInternalUsersRequest.data?.users?.length
+        ? listInternalUsersRequest.data?.users.map((user) => ({ ...user }))
+        : [];
+      organization?.tfContactUsers.forEach((tfContactUser) => {
+        if (!internalUsersNextValue.find((user) => user.userId === tfContactUser.userId)) {
+          internalUsersNextValue.unshift({ ...tfContactUser, role: 'Project Lead' });
+        }
+      });
+      setInternalUsers(internalUsersNextValue);
 
       const preExistingCustomInternalUserRoles = (listInternalUsersRequest?.data?.users || [])
         .filter((user) => user.roleName)
@@ -266,7 +278,7 @@ const ProjectProfileEdit = () => {
 
       setCustomUserRoles(preExistingCustomInternalUserRoles as string[]);
     }
-  }, [listInternalUsersRequest]);
+  }, [listInternalUsersRequest, organization?.tfContactUsers, organizationAndInternalUsersLoaded]);
 
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
@@ -490,10 +502,10 @@ const ProjectProfileEdit = () => {
   }, [setInternalUsers]);
 
   useEffect(() => {
-    if (listInternalUsersRequest?.status === 'success' && internalUsers?.length === 0) {
+    if (organizationAndInternalUsersLoaded && internalUsers?.length === 0) {
       onClickAddRow();
     }
-  }, [internalUsers, listInternalUsersRequest, onClickAddRow]);
+  }, [internalUsers, onClickAddRow, organizationAndInternalUsersLoaded]);
 
   const [addInternalUserRoleModalOpen, setAddInternalUserRoleModalOpen] = useState(false);
 
@@ -569,7 +581,7 @@ const ProjectProfileEdit = () => {
               </Box>
             </Grid>
 
-            {listInternalUsersRequest?.status === 'success' && (
+            {organizationAndInternalUsersLoaded && (
               <Grid item md={12}>
                 <Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}>
                   <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
