@@ -4,7 +4,6 @@ import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import TextTruncated from 'src/components/common/TextTruncated';
-import isEnabled from 'src/features';
 import NurserySummaryService, {
   NurserySummaryPayload,
   NurserySummarySpecies,
@@ -24,7 +23,6 @@ export default function InventorySummaryForNursery({
 }: InventorySummaryForNurseryProps): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
 
@@ -63,56 +61,37 @@ export default function InventorySummaryForNursery({
 
     return [
       {
-        label: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
-          : strings.GERMINATING_QUANTITY,
+        label: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
         value: germinatingQuantity || 0,
-        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
-          : strings.TOOLTIP_GERMINATING_QUANTITY,
+        tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
         gridColumns,
       },
       {
-        label: isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY,
+        label: strings.ACTIVE_GROWTH_QUANTITY,
         value: activeGrowthQuantity,
-        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
-          : strings.TOOLTIP_NOT_READY_QUANTITY,
+        tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
         gridColumns,
       },
-      ...(isUpdatedNurseryGrowthPhasesEnabled
-        ? [
-            {
-              label: strings.HARDENING_OFF_QUANTITY,
-              value: hardeningOffQuantity,
-              tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
-              gridColumns,
-            },
-            {
-              label: strings.READY_TO_PLANT_QUANTITY,
-              value: readyQuantity,
-              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
-              gridColumns,
-            },
-          ]
-        : [
-            {
-              label: strings.READY_QUANTITY,
-              value: readyQuantity,
-              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-              gridColumns,
-            },
-          ]),
+      {
+        label: strings.HARDENING_OFF_QUANTITY,
+        value: hardeningOffQuantity,
+        tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
+        gridColumns,
+      },
+      {
+        label: strings.READY_TO_PLANT_QUANTITY,
+        value: readyQuantity,
+        tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+        gridColumns,
+      },
       {
         label: strings.TOTAL_QUANTITY,
         value: totalQuantity,
-        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.TOOLTIP_TOTAL_QUANTITY
-          : strings.TOOLTIP_TOTAL_QUANTITY_PREV,
+        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
         gridColumns,
       },
       {
-        label: isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT_RATE : strings.GERMINATION_RATE,
+        label: strings.GERMINATION_ESTABLISHMENT_RATE,
         value: `${germinationRate || 0}%`,
         tooltipTitle: '',
         gridColumns,
@@ -143,7 +122,7 @@ export default function InventorySummaryForNursery({
         gridColumns,
       },
     ];
-  }, [isMobile, isUpdatedNurseryGrowthPhasesEnabled, summary]);
+  }, [isMobile, summary]);
 
   return (
     <Grid container spacing={3}>

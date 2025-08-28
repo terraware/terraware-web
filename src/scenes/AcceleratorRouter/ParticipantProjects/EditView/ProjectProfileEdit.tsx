@@ -489,6 +489,12 @@ const ProjectProfileEdit = () => {
     setInternalUsers((prev) => [...(prev || []), { userId: undefined, role: undefined }]);
   }, [setInternalUsers]);
 
+  useEffect(() => {
+    if (listInternalUsersRequest?.status === 'success' && internalUsers?.length === 0) {
+      onClickAddRow();
+    }
+  }, [internalUsers, listInternalUsersRequest, onClickAddRow]);
+
   const [addInternalUserRoleModalOpen, setAddInternalUserRoleModalOpen] = useState(false);
 
   const onClickAddNewContactType = useCallback(() => {

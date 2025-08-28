@@ -20,7 +20,6 @@ import DatePicker from 'src/components/common/DatePicker';
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -59,7 +58,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const { allPlantingSites } = usePlantingSiteData();
   const { species } = useSpeciesData();
@@ -538,16 +536,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return (
       <>
         {strings.PLANTING}
-        {noReadySeedlings && (
-          <IconTooltip
-            placement='top'
-            title={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS
-                : strings.PLANTINGS_REQUIRE_READY_SEEDLINGS
-            }
-          />
-        )}
+        {noReadySeedlings && <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />}
         {!noReadySeedlings && outplantDisabled && (
           <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
         )}
@@ -768,11 +757,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   </Grid>
                   <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
                     <Textfield
-                      label={
-                        isUpdatedNurseryGrowthPhasesEnabled
-                          ? strings.TOTAL_READY_TO_PLANT_QUANTITY
-                          : strings.TOTAL_READY_QUANTITY
-                      }
+                      label={strings.TOTAL_READY_TO_PLANT_QUANTITY}
                       id='totalReadyQuantity'
                       type='number'
                       value={numberFormatter.format(totalReadyQuantity)}
@@ -790,9 +775,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       <Textfield
                         label={strings
                           .formatString(
-                            isUpdatedNurseryGrowthPhasesEnabled
-                              ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_REMAINING
-                              : strings.GERMINATING_QUANTITY_REMAINING,
+                            strings.GERMINATION_ESTABLISHMENT_QUANTITY_REMAINING,
                             String(batches[0].germinatingQuantity)
                           )
                           .toString()}
@@ -800,11 +783,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         onChange={(value: unknown) => setGerminatingQuantityWithdrawn(value as number)}
                         type='number'
                         value={germinatingQuantityWithdrawn}
-                        tooltipTitle={
-                          isUpdatedNurseryGrowthPhasesEnabled
-                            ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
-                            : strings.TOOLTIP_GERMINATING_QUANTITY
-                        }
+                        tooltipTitle={strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY}
                         errorText={fieldsErrors.germinatingQuantityWithdrawn}
                         required
                         sx={{
@@ -816,41 +795,37 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     </Grid>
                   </Grid>
 
-                  {isUpdatedNurseryGrowthPhasesEnabled && (
-                    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
-                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
-                        <Textfield
-                          label={strings
-                            .formatString(
-                              strings.HARDENING_OFF_QUANTITY_REMAINING,
-                              String(batches[0].hardeningOffQuantity)
-                            )
-                            .toString()}
-                          id='hardeningOffQuantityWithdrawn'
-                          onChange={(value: unknown) => setHardeningOffQuantityWithdrawn(value as number)}
-                          type='number'
-                          value={hardeningOffQuantityWithdrawn}
-                          tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
-                          errorText={fieldsErrors.hardeningOffQuantityWithdrawn}
-                          required
-                          sx={{
-                            '&> #hardeningOffQuantityWithdrawn': {
-                              height: '44px',
-                            },
-                          }}
-                        />
-                      </Grid>
+                  <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
+                      <Textfield
+                        label={strings
+                          .formatString(
+                            strings.HARDENING_OFF_QUANTITY_REMAINING,
+                            String(batches[0].hardeningOffQuantity)
+                          )
+                          .toString()}
+                        id='hardeningOffQuantityWithdrawn'
+                        onChange={(value: unknown) => setHardeningOffQuantityWithdrawn(value as number)}
+                        type='number'
+                        value={hardeningOffQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
+                        errorText={fieldsErrors.hardeningOffQuantityWithdrawn}
+                        required
+                        sx={{
+                          '&> #hardeningOffQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
+                      />
                     </Grid>
-                  )}
+                  </Grid>
 
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
                         label={strings
                           .formatString(
-                            isUpdatedNurseryGrowthPhasesEnabled
-                              ? strings.ACTIVE_GROWTH_QUANTITY_REMAINING
-                              : strings.NOT_READY_QUANTITY_REMAINING,
+                            strings.ACTIVE_GROWTH_QUANTITY_REMAINING,
                             String(batches[0].activeGrowthQuantity)
                           )
                           .toString()}
@@ -858,11 +833,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         onChange={(value: unknown) => setActiveGrowthQuantityWithdrawn(value as number)}
                         type='number'
                         value={activeGrowthQuantityWithdrawn}
-                        tooltipTitle={
-                          isUpdatedNurseryGrowthPhasesEnabled
-                            ? strings.ACTIVE_GROWTH_QUANTITY
-                            : strings.TOOLTIP_NOT_READY_QUANTITY
-                        }
+                        tooltipTitle={strings.ACTIVE_GROWTH_QUANTITY}
                         errorText={fieldsErrors.activeGrowthQuantityWithdrawn}
                         required
                         sx={{
@@ -890,22 +861,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
                       <Textfield
                         label={strings
-                          .formatString(
-                            isUpdatedNurseryGrowthPhasesEnabled
-                              ? strings.READY_TO_PLANT_QUANTITY_REMAINING
-                              : strings.READY_QUANTITY_REMAINING,
-                            String(batches[0].readyQuantity)
-                          )
+                          .formatString(strings.READY_TO_PLANT_QUANTITY_REMAINING, String(batches[0].readyQuantity))
                           .toString()}
                         id='readyQuantityWithdrawn'
                         onChange={(value: unknown) => setReadyQuantityWithdrawn(value as number)}
                         type='number'
                         value={readyQuantityWithdrawn}
-                        tooltipTitle={
-                          isUpdatedNurseryGrowthPhasesEnabled
-                            ? strings.TOOLTIP_READY_TO_PLANT_QUANTITY
-                            : strings.TOOLTIP_READY_QUANTITY
-                        }
+                        tooltipTitle={strings.TOOLTIP_READY_TO_PLANT_QUANTITY}
                         errorText={fieldsErrors.readyQuantityWithdrawn}
                         required
                         sx={{

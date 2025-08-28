@@ -8,7 +8,6 @@ import Card from 'src/components/common/Card';
 import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { NurseryBatchService, OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
@@ -53,7 +52,6 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
   const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const filterColumns = useMemo<FilterField[]>(() => {
     return [
@@ -177,11 +175,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                     changedFields.push(strings.TREATMENT);
                   }
                   if ((historyItem.germinationStartedDate || '') !== (previousEv?.germinationStartedDate || '')) {
-                    changedFields.push(
-                      isUpdatedNurseryGrowthPhasesEnabled
-                        ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
-                        : strings.GERMINATION_STARTED_DATE
-                    );
+                    changedFields.push(strings.GERMINATION_ESTABLISHMENT_STARTED_DATE);
                   }
                   if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
                     changedFields.push(strings.ESTIMATED_READY_DATE);
@@ -195,24 +189,16 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                   (previousEv?.type === 'QuantityEdited' || previousEv?.type === 'StatusChanged' || !previousEv)
                 ) {
                   if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
-                    changedFields.push(
-                      isUpdatedNurseryGrowthPhasesEnabled
-                        ? strings.GERMINATION_ESTABLISHMENT_QUANTITY
-                        : strings.GERMINATING_QUANTITY
-                    );
+                    changedFields.push(strings.GERMINATION_ESTABLISHMENT_QUANTITY);
                   }
                   if (historyItem.activeGrowthQuantity !== previousEv?.activeGrowthQuantity) {
-                    changedFields.push(
-                      isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY
-                    );
+                    changedFields.push(strings.ACTIVE_GROWTH_QUANTITY);
                   }
                   if (historyItem.hardeningOffQuantity !== previousEv?.hardeningOffQuantity) {
                     changedFields.push(strings.HARDENING_OFF_QUANTITY);
                   }
                   if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
-                    changedFields.push(
-                      isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY
-                    );
+                    changedFields.push(strings.READY_TO_PLANT_QUANTITY);
                   }
                 }
                 return {
@@ -230,7 +216,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
 
       void fetchResults();
     }
-  }, [users, batchId, findPreviousEvent, nurseryName, filters, search, isUpdatedNurseryGrowthPhasesEnabled]);
+  }, [users, batchId, findPreviousEvent, nurseryName, filters, search]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {

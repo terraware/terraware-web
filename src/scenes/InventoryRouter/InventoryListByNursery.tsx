@@ -6,7 +6,6 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
@@ -25,7 +24,6 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -54,63 +52,38 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
         type: 'string',
         tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
       },
-      ...(isUpdatedNurseryGrowthPhasesEnabled
-        ? [
-            {
-              key: 'germinatingQuantity',
-              name: strings.GERMINATION_ESTABLISHMENT,
-              type: 'number' as const,
-              tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
-            },
-            {
-              key: 'activeGrowthQuantity',
-              name: strings.ACTIVE_GROWTH,
-              type: 'number' as const,
-              tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
-            },
-            {
-              key: 'hardeningOffQuantity',
-              name: strings.HARDENING_OFF,
-              type: 'number' as const,
-              tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
-            },
-            {
-              key: 'readyQuantity',
-              name: strings.READY_TO_PLANT,
-              type: 'number' as const,
-              tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
-            },
-          ]
-        : [
-            {
-              key: 'germinatingQuantity',
-              name: strings.GERMINATING,
-              type: 'number' as const,
-              tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-            },
-            {
-              key: 'activeGrowthQuantity',
-              name: strings.NOT_READY,
-              type: 'number' as const,
-              tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-            },
-            {
-              key: 'readyQuantity',
-              name: strings.READY,
-              type: 'number' as const,
-              tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-            },
-          ]),
+      {
+        key: 'germinatingQuantity',
+        name: strings.GERMINATION_ESTABLISHMENT,
+        type: 'number' as const,
+        tooltipTitle: strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,
+      },
+      {
+        key: 'activeGrowthQuantity',
+        name: strings.ACTIVE_GROWTH,
+        type: 'number' as const,
+        tooltipTitle: strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY,
+      },
+      {
+        key: 'hardeningOffQuantity',
+        name: strings.HARDENING_OFF,
+        type: 'number' as const,
+        tooltipTitle: strings.TOOLTIP_HARDENING_OFF_QUANTITY,
+      },
+      {
+        key: 'readyQuantity',
+        name: strings.READY_TO_PLANT,
+        type: 'number' as const,
+        tooltipTitle: strings.TOOLTIP_READY_TO_PLANT_QUANTITY,
+      },
       {
         key: 'totalQuantity',
         name: strings.TOTAL,
         type: 'number',
-        tooltipTitle: isUpdatedNurseryGrowthPhasesEnabled
-          ? strings.TOOLTIP_TOTAL_QUANTITY
-          : strings.TOOLTIP_TOTAL_QUANTITY_PREV,
+        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
       },
     ],
-    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+    [strings]
   );
 
   const onApplyFilters = useCallback(async () => {

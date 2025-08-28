@@ -59,15 +59,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is a WIP'],
   },
   {
-    name: 'Updated Nursery Growth Phases',
-    preferenceName: 'updatedNurseryGrowthPhases',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Updated Nursery Growth Phases to align terminology'],
-    disclosure: ['This is a WIP'],
-  },
-  {
     name: 'Survival Rate Calculation',
     preferenceName: 'survivalRateCalculation',
     active: true,

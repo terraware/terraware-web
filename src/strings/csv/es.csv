@@ -52,7 +52,6 @@ ADD_A_VIABILITY_TEST,Añadir una prueba de viabilidad,f70c39b0
 ADD_ADDRESS,Añadir dirección,8262aa95
 ADD_AN_ACCESSION,Añadir una accesión,e4b619b4
 ADD_BATCH,Añadir lote,0d9f7a4a
-ADD_BOUNDARY,Incorporar lindero,1ed146ae
 ADD_COHORT,Agregar cohorte,094d5510
 ADD_DOCUMENT,Añadir documento,af87beed
 ADD_FUNDING_ENTITY,Agregar entidad financiadora,47c0142d
@@ -75,7 +74,6 @@ ADD_PEOPLE,Agregar personas,487a4a39
 ADD_PEOPLE_ONBOARDING_DESCRIPTION,"Invite a personas a su organización, las que usarán Terraware. Siempre puede agregar más personas en Configuración.",850d40ff
 ADD_PERSON,Añadir persona,9f8535b1
 ADD_PERSON_DESC,Rellene esta página para añadir una persona a la organización.,5c7054bc
-ADD_PERSON_GENERAL_DESC,Introduzca a continuación los datos de la persona.,3ec7f34e
 ADD_PHOTO,Agregar foto...,5352e66a
 ADD_PHOTOS,Añadir fotos,612b31b1
 ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que se plantarán en la subzona seleccionada. Asegúrese de incluir el retiro entero en la(s) foto(s).,7e265e87
@@ -88,7 +86,6 @@ ADD_PLANTING_SITE_TITLE,Selecciona el tipo de sitio de plantación,e0ce7f80
 ADD_PROJECT,Agregar proyecto,89a74ee0
 ADD_PROJECT_BY_ORGANIZATION,Añadir proyecto según organización,86b77b04
 ADD_PROJECT_SUBTITLE,Organice sus datos por proyectos.,f6e3343c
-ADD_PROJECTS_BY_ORGANIZATION,Añadir proyecto(s) por organización,a44d4086
 ADD_PROPOSED_PROJECT_BOUNDARY,Introducir límite del proyecto propuesto,aae677c3
 ADD_QUANTITY,Añadir Cantidad,7194cf77
 ADD_SEED_BANK,Añadir Banco de Semillas,eaaefa38
@@ -111,7 +108,6 @@ ADDING_ZONE_BOUNDARIES,Añadir límites de zona,901f668b
 ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de corte {0} para crear polígonos dentro de los límites del sitio para las zonas.,06f570cb
 ADDITIONAL_INVASIVE_THREATENED_SPECIES,Especie invasora/en peligro adicional,7d019848
 ADDITIONAL_NURSERY_NOTES,Notas adicionales sobre el vivero,db29c13a
-ADDITIONAL_OBSERVATIONS,Observaciones adicionales,1a8ed320
 ADDITIONAL_PLANTING_SITES_NOTES,Notas adicionales sobre el sitio de plantación,364dcb50
 ADDITIONAL_RESOURCES,Recursos adicionales,13e85f73
 ADDITIONAL_SPECIES_DATA,Datos adicionales de especie (solo para uso interno),9368c322
@@ -134,27 +130,19 @@ ALL_PLANTING_SITES,Todos los terrenos de plantación,344a80c6
 ALL_PROJECT_ZONES,Todas las áreas del proyecto,4c578acc
 ALL_PROJECTS,Todos los proyectos,4eb0ec5d
 ALL_SECTIONS,Todas las secciones,d3d73b24
-ALL_SENSORS_FOUND,Se encontraron todos los sensores.,453d5c86
 ALL_VARIABLES,Todas las variables,1fe9cddb
 ALREADY_INVITED_PERSON_ERROR,Parece que ya añadió o invitó a esta persona. Por favor ingrese un correo electrónico único o vaya al perfil existente de la persona.,67ec2d39
 AMOUNT_EST_COUNT,Cantidad (recuento estimado),e203609b
 AMOUNT_REMAINING,Cantidad ({0} restantes),349aa6d6
 ANIMAL_DAMAGE,Daño animal,754d26fb
-ANNUAL_CARBON_T,Carbono anual (t),4892cce6
 ANNUAL_TARGET,Objetivo anual,ea52c210
 ANSWER_APPROVED,Respuesta aprobada,8a11d452
-ANSWER_NOT_ACCEPETED,Respuesta no aceptada,c23b319b
-ANSWER_REJECTED,Respuesta rechazada,f2df9e77
-ANSWERS_NOT_ACCEPTED,Respuestas no aceptadas,eabf9804
 ANSWERS_UPDATE_NEEDED,Se necesita actualizar las respuestas,5faf2563
 APPLICATION,Uso,83d372a5
 APPLICATION_ERROR_NO_PROJECT_BOUNDARY,Error: No se estableció un límite del proyecto,ebf37eb4
 APPLICATION_FOR_PROJECT,Solicitud para {0},06b35f80
 APPLICATION_INSTRUCTIONS,"Empiece completando la evaluación previa. Luego, responda preguntas más detalladas sobre su proyecto y presente los documentos necesarios con la solicitud. Podrá consultar cada sección de la solicitud una vez que se haya aprobado su preevaluación.",f07fd918
-APPLICATION_INTERNAL_NAME,Nombre interno de la solicitud,186eabd0
 APPLICATION_LIST,Lista de aplicaciones,c328d2fb
-APPLICATION_NOT_ACCEPTED,Su solicitud NO ha sido aceptada.,978eb249
-APPLICATION_NOT_ACCEPTED_BODY,Su solicitud NO ha sido aceptada porque no se cumplían los siguientes criterios:,aa4a39b7
 APPLICATION_PRESCREEN,Evaluación previa a la solicitud,284af72e
 APPLICATION_PRESCREEN_FAILURE_SUBTITLE,"Su Prueba de preselección está completa, pero usted no califica porque no se cumplieron los siguientes criterios:",114abadb
 APPLICATION_PRESCREEN_FAILURE_TITLE,Su Prueba de preselección NO califica.,2c514540
@@ -172,8 +160,6 @@ APPLICATION_STEP_PRESCREEN_NAME,Preseleccionar,9a38127f
 APPLICATION_SUBMIT_SUCCESS,¡Muy bien! Se ha enviado su solicitud.,b594c9eb
 APPLICATION_SUBMIT_SUCCESS_BODY,"Gracias por enviar una solicitud al programa Seed to Carbon Forest Accelerator. Hemos recibido su solicitud y la estamos revisando.
 Puede revisar las respuestas enviadas y el estado de su solicitud en esta cuenta.",d051913e
-APPLICATION_WAITLISTED,Su solicitud ha sido puesta en lista de espera.,50e2b8b0
-APPLICATION_WAITLISTED_BODY,Su solicitud ha sido puesta en lista de espera porque no se cumplían los siguientes criterios:,a15240d4
 APPLICATIONS,Aplicaciones,97e75e41
 APPLY,Aplicar,6c0f6e36
 APPLY_RESULT,Aplicar Resultado,f9c062f6
@@ -203,7 +189,6 @@ AVERAGE_WOOD_DENSITY,Densidad promedio de la madera (kb/m3),b413c9a9
 AWAITING_CHECK_IN,Pendiente de facturación,11dee61b
 AWAITING_PROCESSING,Pendiente procesamiento,802b73ca
 BACK,Atrás,2e8211b0
-BACK_OF_SEED_BANK,Parte de Atrás del Banco de Semillas,1d8deb72
 BACK_TO_TERRAWARE,Volver a Terraware,a22174ad
 BAG_ID,ID de Bolsa,1eaa1440
 BATCH,Lote,9fdfdd9b
@@ -258,7 +243,6 @@ CANNOT_REMOVE_TF_CONTACT,Los contactos de Terraformation no pueden ser eliminado
 CANNOT_SAVE_UNTIL_PAGE_IS_FULLY_LOADED,No se puede guardar hasta que la página haya cargado por completo.,83f60504
 CAPTION,Leyenda,53faec4e
 CARBON,Carbono,f0d582f6
-CARBON_CAPACITY_TC02_HA,Capacidad de carbono (tCO2/ha),a313a17e
 CARBON_CERTIFICATIONS,Certificaciones de carbono,7132f9e8
 CARBON_DATA,Datos del carbono,8a8d2cd9
 CARBON_ELIGIBILITY,Admisibilidad de carbono,90b7ac55
@@ -276,10 +260,8 @@ CHALLENGES_REQUIRED,Desafíos y problemas *,253f97ed
 CHANGE,Cambiar,e276068b
 CHANGE_ACTIVE_GROWTH_STATUS,Cambiar estado de crecimiento activo,969b83ab
 CHANGE_DEFAULT_WEIGHT_SYSTEM,Puede cambiar el sistema de peso por defecto de {0},e1257e91
-CHANGE_GERMINATING_STATUS,Cambiar a estado de germinación,21fd8bfe
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Cambiar estado de germinación/establecimiento,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Cambiar estado de aclimatación,b734dbd7
-CHANGE_NOT_READY_STATUS,"Cambiar el estado ""No listo""",58e5eef9
 CHANGE_TO,Cambiar a {0},8423817d
 CHANGES,Cambios,47809a57
 CHANGES_SAVED,¡Cambios guardados!,709a9559
@@ -313,8 +295,6 @@ COHORT_PHASE_FEASIBILITY_STUDY,Fase 1 - Estudio de factibilidad,94889837
 COHORT_PHASE_IMPLEMENT_AND_MONITOR,Fase 3 - Poner en práctica y supervisar,d8def4af
 COHORT_PHASE_PLAN_AND_SCALE,Fase 2 - Planear y ampliar,a51c9fc2
 COHORTS,Cohortes,b0aca6fa
-COHORTS_AND_PROJECTS,Grupos y proyectos,beee8563
-COHORTS_AND_PROJECTS_DESCRIPTION,"A continuación, verá una lista de grupos y de los proyectos que agregaron a este módulo.",ac20cfef
 COHORTS_EMPTY_STATE,"Aún no tiene cohortes. Cuando agregue cohortes, los verá aquí.",b764b773
 COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
@@ -338,8 +318,6 @@ COMPONENT,Componente,301be073
 CONDITIONAL,Condicional,605c68a6
 CONFIRM,Confirmar,fe564422
 CONFIRMED_RESTORABLE_LAND,Terreno recuperable TF (ha),efa25d21
-CONNECT_FAILED,La conexión ha fallado,f7d9f771
-CONNECTED,Conectado,3b968629
 CONSERVATION_CATEGORY,Categoría de lista roja de la UICN,115916f3
 CONTACT_TYPE,Tipo de contacto,413b6c0e
 CONTACT_US,Contáctenos,34a1b9ca
@@ -415,11 +393,9 @@ DBH_CM,DAP (cm),da5332b9
 DEAD,Muerto,4a414014
 DEAD_PLANTS,Plantas muertas,faa0988b
 DEAD_PLANTS_OBSERVED,Plantas muertas observadas,3ff4f3af
-DEAL_DESCRIPTION,Descripción del trato,cc005cdb
 DEAL_NAME,Nombre de la operación,be1bd4c5
 DECLINE,Rechazar,67618a4e
 DEFAULT_LANGUAGE_SELECTED,Idioma predeterminado: {0},74d18404
-DEGREES_CELSIUS_VALUE,{0}ºC,b9971dc5
 DELETE,Borrar,43cbbd0c
 DELETE_ACCESSION,Borrar accesión,b3a13e44
 DELETE_ACCESSION_MESSAGE,Está a punto de borrar la accesión {0}.,dd39f8dd
@@ -449,9 +425,7 @@ DELIVERABLE_APPROVED,Entregable aprobado,c2a1516b
 DELIVERABLE_CATEGORY,Categoría: {0},bbe96e63
 DELIVERABLE_ID,ID de entrega,425b9463
 DELIVERABLE_NAME,Nombre del entregable,570b3a75
-DELIVERABLE_NOT_ACCEPTED,Entregable no aceptado,8bc5dc93
 DELIVERABLE_PROJECT,Proyecto: {0},4c9d1362
-DELIVERABLE_REJECTED,Entregable descartado,6b33ab97
 DELIVERABLE_STATUS_CHANGE_CONFIRMATION_1,Enviar un documento después de la revisión de un entregable hará que se restablezca el estado del entregable.,4bc59e67
 DELIVERABLE_STATUS_CHANGE_CONFIRMATION_2,¿Seguro que todavía quieres enviar un documento?,d949b3e3
 DELIVERABLE_STATUS_UPDATED,Estado actualizado del entregable,d3bc7b4e
@@ -464,18 +438,12 @@ DELIVERABLES_IMPORT_COMPLETE,¡Completada la importación de datos de los entreg
 DENSITY_COMFORTABLE,Densidad: cómoda,a7f1b4ca
 DENSITY_COMPACT,Densidad: compacta,cab2e914
 DENSITY_ROOMY,Densidad: amplia,bb240ade
-DENSITY_SETTINGS,Configuración de densidad,b9090863
 DESCRIBE_ORGANIZATION_TYPE_DETAILS,Describa su organización,b502c88a
 DESCRIPTION,Descripción,9cb0cc64
 DESCRIPTION_KNOWLEDGE_BASE,Aprenda a utilizar Terraware y encuentre respuestas a sus preguntas sobre las funciones de Terraware.,e04d81cb
 DESCRIPTION_KNOWLEDGE_BASE_WITH_LINK,Aprenda cómo usar Terraware y encuentre respuestas a sus preguntas sobre las funciones de Terraware en {0}.,a7644709
 DESCRIPTION_NOTES,Descripción/Notas,ce46605b
-DESCRIPTION_ORGANIZATION,Su organización podrá incluir personas y especies.,92aa0c96
-DESCRIPTION_PEOPLE,Invite a las personas que contribuyen al éxito de la organización.,7bfbaca9
-DESCRIPTION_REPORT_PROBLEM,"Si tiene algún problema al usar Terraware, comuníquenoslo. Mencione esta versión de compilación: {0}.",94e31352
-DESCRIPTION_REQUEST_FEATURE,Siempre estamos interesados en mejorar su experiencia con Terraware. Coméntenos cómo podemos ayudarlo a sacarle el máximo provecho.,d9bff2cf
 DESCRIPTION_REQUIRED,Descripción,e14d49bc
-DESCRIPTION_SPECIES,Gestione las especies que recolecte o plante.,03683757
 DESTINATION,Destino,d3525c91
 DESTINATION_REQUIRED,Destino *,46e3fd94
 DETAILED_SITE,Terreno detallado,24e93f92
@@ -483,7 +451,6 @@ DETAILS,Detalles,c13bd424
 DEV_SERVER_ERROR,Servidor no disponible (se puede reiniciar con nuevos cambios en el código). ¿Volver a cargar?,d3be39f0
 DIAMETER_AT_BREAST_HEIGHT,Diámetro a la altura del pecho (DAP) en la madurez (cm),6b42a16f
 DIAMETER_CM,Diámetro (cm),242d8114
-DIRECTION_OR_DESCRIPTION,Indicación o descripción,e7c821fd
 DISMISS,Descartar,a56709f4
 DOC_PRODUCER,Productor de documentos,e40f8aa1
 DOCUMENT,Documento,57650c76
@@ -491,27 +458,20 @@ DOCUMENT_DETAILS,Editar detalles del documento,92155983
 DOCUMENT_LIMIT_REACHED,Límite de documentos alcanzado,4d1d87e6
 DOCUMENT_LIMIT_REACHED_MESSAGE,"Puede cargar {0} documentos. Si desea cargar más, comuníquese con su representante de Terraformation.",b24d392e
 DOCUMENT_NAME,Nombre del documento,dc231ee4
-DOCUMENT_OWNER,Propietario del documento,942724e0
 DOCUMENT_STATUS,Estado de documento,773c1388
 DOCUMENT_TEMPLATE,Plantilla del documento,b29f390b
 DOCUMENTS,Documentos,9cebeed0
 DOCUMENTS_ADD_CARD_INSTRUCTIONS,"Aún no tiene documentos. Para empezar, añada uno a continuación.",d341e531
 DOCUMENTS_ADD_CARD_TITLE,Añadir un documento,67f963c2
-DOCUMENTS_ADD_FORM_ASSOC_ORG,Organización asociada,10ebadb6
 DOCUMENTS_ADD_FORM_DOC_NAME,Nombre del documento,dc231ee4
 DOCUMENTS_ADD_FORM_DOC_OWNER,Propietario del documento,942724e0
 DOCUMENTS_ADD_FORM_DOCUMENT_TEMPLATE,Plantilla de documento,b29f390b
-DOCUMENTS_ADD_FORM_METHODOLOGY,Metodología,caae1759
 DONE,Listo,3b96665f
 DONT_SHOW_AGAIN,No mostrar de nuevo,58e2edfd
 DOWNLOAD,Descargar,c60c5234
-DOWNLOAD_COMPLETE,Descarga completa,0935f8bc
 DOWNLOAD_CSV_TEMPLATE,Descargue una plantilla CSV aquí.,ef7ce26a
-DOWNLOAD_FAILED,Descarga fallida,175e113b
-DOWNLOAD_FAILED_DESCRIPTION,La descarga ha fallado. Envía un correo electrónico a {0} para que podamos ayudarle.,2c1fb923
 DOWNLOAD_FOR_ANDROID,Descargar para Android,8ef27e54
 DOWNLOAD_FOR_IOS,Descargar para iOS,65fdc72c
-DOWNLOAD_IN_PROGRESS,Descarga en curso...,6ed401ee
 DOWNLOAD_ON_APP_STORE,Descárguela en Apple Store,7f3f8b5a
 DOWNLOAD_ON_GOOGLE_PLAY,Consígala en Google Play,31db1194
 DOWNLOAD_REPORT_DESCRIPTION,Está a punto de descargar esta tabla como hoja de cálculo (archivo CSV). Asígnele un nombre.,d1f890b5
@@ -522,16 +482,12 @@ DOWNLOAD_THE_TERRAWARE_MOBILE_APP,Descargar la aplicación móvil de Terraware,3
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenga la aplicación móvil y aproveche las funciones de Colección de semillas, Gestión de vivero y Monitoreo de plantas, las cuales puede usar con mayor flexibilidad ¡más allá de su escritorio!",94127206
 DRAFT,Borrador,f766b964
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
-DRAW_PROJECT_BOUNDARY,Trazar los límites del proyecto,426c2abb
 DRAW_PROPOSED_PROJECT_BOUNDARY,Trazar el límite del proyecto propuesto,8b73e819
 DROPBOX_FOLDER_URL,URL de la carpeta de Dropbox,0ebe8363
-DRY_CABINET,Armario de secado,d7cab23e
 DRYING,Secando,97084385
-DRYING_RACKS,Bastidores de secado,4567a9d6
 DUE,Vence: {0},b72aaa1e
 DUE_DATE,Fecha límite,705f0661
 DUE_DATE_PREFIX,Fecha de vencimiento: {0},812dc111
-DUPLICATE_SPECIES_FOUND,Especies duplicadas encontradas.,727064c8
 DUPLICATED_ACCESSION_NUMBER,Encontramos {0} números de acceso duplicados:,80193537
 DUPLICATED_INVENTORY,Encontramos {0} inventario duplicado:,15aac11d
 DUPLICATED_SPECIES,Encontramos {0} especies duplicadas:,2aaaba90
@@ -570,8 +526,6 @@ EDIT_PARTICIPANT,Editar participante,895b68b3
 EDIT_PERSON,Editar persona,5ec719a6
 EDIT_PLANTING_SITE,Editar sitio de plantación,71f7ea28
 EDIT_PROJECT,Editar proyecto,88eb63cb
-EDIT_PROJECT_NAME,Editar nombre del proyecto,aed579cc
-EDIT_PROJECT_NAME_CONFIRMATION,Usted está editando el nombre de un proyecto que en este momento está siendo utilizado por {0} en Terraware.,310081bb
 EDIT_QUANTITY,Editar cantidad,1d60ca38
 EDIT_QUANTITY_DISABLED,"La cantidad no puede editarse cuando el estado es ""Utilizado"".",e04bdf0b
 EDIT_SCORES,Editar las puntuaciones,95db2e9b
@@ -611,21 +565,16 @@ END_OBSERVATION_MODAL_QUESTION,¿Estás seguro de que quieres terminar la observ
 END_TIME,Hora de finalización,7c0eb9ca
 ENDANGERED,En peligro de extinción,1a1991aa
 ENTER_LOCATION,Introducir ubicación,dfde68fa
-ENTER_SIX_DIGIT_KEY,Introduzca la clave de 6 dígitos,adbdf74f
 ENTER_SUBSET_WEIGHT_AND_COUNT,"Introduzca el peso del subconjunto y la proporción de recuento para determinar el recuento de semillas aproximado al extraer por peso de una cantidad de recuento. (Inversamente, la proporción determinará la cantidad restante aproximada cuando se extraiga por recuento de una cantidad en peso). Estos campos son útiles cuando contar semillas muy pequeñas no es práctico y solo se requieren si planea extraer de esta accesión a un vivero.",c02303ee
 ENTRIES,Entradas,065e7c3e
 ERROR,Error,a7dc9f4e
 ERROR_BATCH_SEED_COUNT,Los trasplantes deben incluir al menos 1 semilla,4cb3801a
-ERROR_CREATE_APPLICATION,No se puede crear una nueva aplicación,07fe6475
-ERROR_CREATE_PROJECT,No se puede crear un nuevo proyecto,903723b6
-ERROR_LOAD_SPECIES,No se pudieron cargar las especies para la organización,0e7d1148
 ERROR_LOAD_SUB_LOCATIONS,No se pudieron cargar las sububicaciones para la instalación,9872976c
 ERROR_PROJECT_NAME_CONFLICT,Este nombre de proyecto ya está en uso en la organización.,521631a8
 ERROR_PROJECT_SELECT,No se puede seleccionar este proyecto.,9c2b6c67
 ERROR_SUPPORT_NOTIFIED,Se produjo un error: Nuestro equipo de asistencia técnica está al corriente y trabajando para solucionar el problema.,7f643888
 EST_READY_DATE,Fecha estimada de disponibilidad,27e12633
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Total estimado de plantas (Densidad de plantación x Área),311a283f
-EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA,Plantas totales estimadas (densidad de plantación × superficie),83c1d4b9
 ESTIMATED_BUDGET,Presupuesto estimado,23c1c02a
 ESTIMATED_READY_DATE,Fecha estimada de finalización,d37bedd1
 EVENT,Evento,cc849cd0
@@ -652,9 +601,7 @@ EXIT_APPLICATION,Salir de la solicitud,71aff49c
 EXPANSION_POTENTIAL,Potencial de expansión,cfcbb501
 EXPANSION_POTENTIAL_DESCRIPTION,"Terrenos elegibles aún no protegidos mediante acuerdos, pero se cree que pueden protegerse.",60ac9586
 EXPANSION_POTENTIAL_HA,Potencial de expansión (ha),eb119de5
-EXPERIENCE_AND_UNDERSTANDING,Experiencia y comprensión,82c4c6b4
 EXPORT,Exportar,54546641
-EXPORT_ALL_ZIP,Exportar todo (ZIP),6b986b01
 EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exportar detalles del monitoreo de biomasa (CSV),eb24aa11
 EXPORT_LOCATIONS,Exportar ubicaciones,1e075828
 EXPORT_LOCATIONS_DISABLED_TOOLTIP,Las ubicaciones de las parcelas se determinan al comienzo de la observación,c4219ca7
@@ -662,8 +609,6 @@ EXPORT_OBSERVATION_DETAILS_CSV,Exportar detalles de la observación (CSV),4cc75b
 EXPORT_PROJECT_BOUNDARY,Exportar el límite del proyecto,bc5d40f6
 EXPORT_RECORDS,Exportar los registros,6786a209
 EXPORT_RESULTS,Exportar resultados,ee00e9ae
-EXPORT_SPECIES_CSV,Exportar especies (CSV),4fa71391
-EXPORT_TREES_AND_SHRUBS_CSV,Exportar árboles y arbustos (CSV),8e2ba1e7
 EXTERNAL_PROJECT_LINKS,Enlaces externos del proyecto,121ec2f7
 FACILITY,Instalación,bee31ee0
 FACILITY_BUILD_COMPLETION_DATE,Fecha de finalización de la construcción,3029b355
@@ -676,7 +621,6 @@ FACILITY_OPERATION_START_DATE,Fecha de inicio de la operación,25b7135d
 FACILITY_OPERATION_START_DATE_INVALID,Debe ser igual o posterior a las fechas de inicio y finalización de la construcción.,0b2a914c
 FACILITY_OPERATION_START_DATE_REQUIRED,Fecha de inicio de la operación *,75ac4fc2
 FAILED_PRESCREEN,Prueba de selección fallida,23f61882
-FAILURE_RISK,Riesgo de fracaso,89355cf9
 FAMILY,Familia,7709335f
 FAST_GROWTH,Crecimiento rápido,d52b67d0
 FAVORABLE_WEATHER,Clima favorable,47741ec2
@@ -691,7 +635,6 @@ FIELD_NOTES,Notas de campo,1c50984e
 FILE_NAME,Nombre de archivo,fc9f4f98
 FILE_NAMING,Nombres de archivos,ab7d2f6d
 FILE_SELECTED,Archivo seleccionado,23a60a8d
-FILL_OUT_ALL_FIELDS,Rellene todos los campos obligatorios.,36aae65c
 FILTER,Filtrar,51b390ee
 FILTER_BY_PROJECT,Filtrar por proyecto,cc5c10c0
 FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
@@ -716,14 +659,11 @@ FREEZER_1,Congelador 1,953b9b90
 FREEZER_2,Congelador 2,8e57368e
 FREEZER_3,Congelador 3,333c5d1e
 FRESH,Fresca,79e86995
-FRIDGE,Refrigerador,0907cca3
 FROM,De,3b922b12
 FROM_GIS_DATABASE,(de la base de datos GIS),7b29f44f
 FROM_NURSERY,De: Vivero,21226e82
 FROM_NURSERY_REQUIRED,De: Vivero *,4bcef7f8
 FROM_SUBZONE,De: Subzona,e071d8f7
-FROM_X,de {0},e19960de
-FRONT_OF_SEED_BANK,Frente del banco de semillas,f7fcb078
 FUNDER,Financiador,a66356e6
 FUNDER_ADDED,Financiador agregado,cdcddbaf
 FUNDER_DISCLAIMER_CHECKBOX,"Al marcar esta casilla, reconozco que he leído y comprendido el aviso legal de la plataforma Terraware para financiadores.",24f1c9ed
@@ -745,14 +685,8 @@ GDRIVE_LINK,Enlace de GDrive,0ad2a483
 GENERAL,General,989aa26d
 GENERIC_ERROR,Se ha producido un error,e1abd8bd
 GENUS,Género,893239a9
-GEOLOCATIONS,Geolocalización,03a9c2ac
 GEOMETRY_CHANGED_WARNING_MESSAGE,La geometría de este sitio {0}. Los datos aquí mostrados pueden no ser representativos de lo que hay a día de hoy en las zonas de plantación.,b5d7eb2b
 GERMINATED,Germinado,452ce9c6
-GERMINATING,Germinación,9a93858b
-GERMINATING_QUANTITY,Capacidad de germinación,068c3582
-GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de Germinando no puede ser menor que 0,0e5c6963
-GERMINATING_QUANTITY_REMAINING,Cantidad germinada ({0} restante),01603f34
-GERMINATING_QUANTITY_REQUIRED,Capacidad de germinación *,087aa849
 GERMINATION_ESTABLISHMENT,Germinación/Establecimiento,0da62fe0
 GERMINATION_ESTABLISHMENT_QUANTITY,Cantidad de germinación/establecimiento,630be8de
 GERMINATION_ESTABLISHMENT_QUANTITY_AFTER,Cantidad de germinación/establecimiento (después),869caad0
@@ -776,7 +710,6 @@ GLOBAL_ROLE_READ_ONLY,De solo lectura,28709939
 GLOBAL_ROLE_SUPER_ADMIN,Superadministrador,4e519ab0
 GLOBAL_ROLE_TF_EXPERT,Experto en TF,3edccd76
 GO_TO,Ir a {0},c922d4a7
-GO_TO_DASHBOARD,Ir al panel de control,bc0fd6e7
 GO_TO_NURSERIES,Ir a los viveros,545d3e5a
 GO_TO_PLANTING_SITES,Ir a Sitios de plantación,63065313
 GO_TO_PROFILE,Ir al perfil,c8eef2e3
@@ -799,13 +732,6 @@ HARDENING_OFF_QUANTITY_REMAINING,Cantidad en aclimatación ({0} restantes),19e39
 HARDENING_OFF_QUANTITY_REQUIRED,Cantidad en aclimatación *,8bda8f0f
 HAS_CHANGED,ha cambiado,089c641e
 HECTARES,Hectáreas,316902d7
-HECTARES_PLANTED_CARD_TITLE,"¿Qué superficie de mi terreno se ha marcado como ""Plantación completada""?",659f1f86
-HECTARES_PLANTED_DESCRIPTION_1,Esta es la cantidad de hectáreas que se han plantado basándose en las subzonas que eligió al transplantar.,cfd7590f
-HECTARES_PLANTED_DESCRIPTION_2,"Puede marcar subzonas dentro de su terreno como ""Plantación completada"" en la página Retiradas.",ae89c6b2
-HECTARES_PLANTED_DESCRIPTION_3_COMPLETE,"Actualmente, todas las {0} subzonas están marcadas como tales.",4fbc0c13
-HECTARES_PLANTED_DESCRIPTION_3_INCOMPLETE,"Actualmente, {0} de {1} subzonas están marcadas como tales.",c1544b41
-HECTARES_PLANTED_DESCRIPTION_4,"Para las observaciones, sólo asignamos parcelas de seguimiento que sabemos que forman parte de estas subzonas.",f58d7260
-HECTARES_PLANTED_DESCRIPTION_LINK,Ir a Retiradas,91918733
 HEIGHT_AT_MATURITY,Altura en la madurez (cm),f8025719
 HEIGHT_M,Altura (m),fe61fc34
 HELP_SUPPORT,Ayuda y soporte,477f3e22
@@ -814,15 +740,9 @@ HERBACEOUS_ABUNDANCE_PERCENT,Abundancia herbácea (%),d3693b6c
 HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
 HIGHEST,Más alta,5c2f89d6
-HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,¿Qué zonas tienen las tasas más altas y más bajas de mortalidad?,28ed8b46
-HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,¿Qué especies tienen las tasas más altas y más bajas de mortalidad?,c53b3f03
 HIGHLIGHTS,Destacados,a76b6c49
 HISTORY,Historial,fe7205b3
 HOME,Inicio,8e2553bd
-HOW_MANY_PLANTS_CARD_TITLE,¿De cuántas plantas he reportado su plantación?,7c516ee9
-HOW_MANY_PLANTS_CARD_TITLE_W_OBS,¿Cuántas plantas hay en el sitio desde {0}?,639abe11
-HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION,Este es el número total de plantas con base en el tamaño del sitio y la densidad de plantación según sus últimas observaciones.,c3a7cb81
-HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,"Desde entonces, ha reportado la plantación de {0} plantas. Esto es {1}% mayor que su cantidad total de plantas desde la fecha de observación.",6337936a
 HUBSPOT,HubSpot,94ba94f4
 HUBSPOT_LINK,Enlace HubSpot,93adbf60
 I_AM_THE_ONLY_PERSON,Soy la única persona,7add78fd
@@ -877,7 +797,6 @@ INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de
 INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de plántulas,bafd0703
 INVENTORY_PAGE_DESCRIPTION,Gestione su inventario.,9e99a759
 INVESTMENT_COMMITTEE_VOTES,Votos del Comité de inversión,a7c64c6c
-INVESTMENT_THESIS,Tesis de inversión,3be036e8
 INVITATION_PENDING,Invitación pendiente,6b64d319
 INVITE_FUNDER,Invitar financiador,d885523f
 INVITE_FUNDER_DESCRIPTION,Ingrese un correo electrónico para invitar a un financiador al Portal de Financiación bajo esta entidad. Se enviará un correo de invitación para crear una cuenta. El nombre y el apellido serán ingresados por el titular de la cuenta.,306732c9
@@ -895,11 +814,9 @@ IUCN_VULNERABLE,Vulnerable (VU),ed5dcc89
 JOIN,Únase,43eb6054
 JOIN_EVENT_NAME,Únase {0},14c4bd8e
 KEEP_ORIGINAL,Conservar original,21773616
-KEY_BELONGS_TO_ANOTHER_SEED_BANK,La clave está asociada a otro banco de semillas.,9e452973
 KEY_LESSONS,Lecciones clave aprendidas,24ee85f1
 KEY_LESSONS_INSTRUCTIONS,"Proporcione detalles de las lecciones clave aprendidas durante el periodo de presentación de informes del proyecto, incluidas las consecuencias no intencionadas tanto positivas como negativas, de ser el caso. (Media página como máximo)",e6cf7202
 KEY_LESSONS_REQUIRED,Lecciones clave aprendidas *,74a53101
-KEY_WAS_NOT_RECOGNIZED,No se reconoció la clave.,2a7a14e4
 KG,kg,152e8624
 KG_KILOGRAMS,kg (kilogramos),d64c7670
 KILOGRAMS,Kilogramos,a2ba1914
@@ -936,7 +853,6 @@ LEARN_MORE_GROWTH_FORM_LICHEN,"Un grupo de hongo y alga, en el cual el hongo es 
 LEARN_MORE_GROWTH_FORM_MOSS,"Una planta no vascular y sin flores, típicamente con forma de masas o alfombrillas verdes y densas, a menudo en lugares húmedos o sombreados.",03b3022b
 LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,Una planta que puede crecer en más de una forma.,82f44e29
 LEARN_MORE_GROWTH_FORM_SHRUB,Planta leñosa que es más pequeña que un árbol y posee varios tallos principales que nacen en el suelo o cerca de él.,45d3bbbd
-LEARN_MORE_GROWTH_FORM_SHRUB_TREE,Una planta que puede estar en forma de arbusto o árbol.,e1c1613c
 LEARN_MORE_GROWTH_FORM_SUBSHRUB,Un arbusto enano que usualmente solo es leñoso en la base.,8637bf0a
 LEARN_MORE_GROWTH_FORM_TREE,"Planta leñosa perenne, que suele tener un solo tallo o tronco que crece hasta una altura considerable y posee ramas laterales a cierta distancia del suelo.",49a0eed4
 LEARN_MORE_GROWTH_FORM_VINE,"Cualquier planta con tallos largos, flexibles, trepadores (término que suele usarse para trepadoras herbáceas)",353cf9f4
@@ -959,12 +875,10 @@ LIKELY_INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT,Probablemente intermedio - Tole
 LIKELY_INTERMEDIATE_SHORT_LIVED,Probablemente Intermedio - Corta duración,e4a3ab22
 LIKELY_ORTHODOX,Posiblemente ortodoxa,ba5566d5
 LIKELY_RECALCITRANT,Posiblemente recalcitrante,46d96515
-LIMIT_OBSERVATION_LABEL,Limitar la observación para las subzonas seleccionadas,c2880ffb
 LINK,Enlace,ec1ef684
 LINK_TO_PLOT_OBSERVATION_DETAILS,Enlace a los detalles de observación de la parcela,413c1f2b
 LIST,Lista,f7fa295c
 LIVE,Directo,81bb797e
-LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,¿Cuántas plantas vivas y muertas hay por especie?,51327706
 LIVE_PLANTS,Plantas vivas,0124ea18
 LIVE_PLANTS_OBSERVED,Plantas vivas observadas,08f1dd26
 LIVE_SESSION,Sesión en vivo,baf6b246
@@ -990,12 +904,6 @@ MANAGER_INFO,"Un gestor puede hacer lo anterior y también editar las entradas d
 MANGROVE,Mangle,e9e0158a
 MANGROVES,Manglares,3511a098
 MAP,Mapa,cc1fa56d
-MAP_EDITOR_DRAWING_ADDITIONAL_FEATURE,"Añada puntos a su nuevo límite haciendo clic en el mapa. Para terminar de dibujar, complete el límite haciendo doble clic o volviendo a hacer clic en el punto inicial. El límite original será sustituido por el nuevo cuando termine de dibujarlo.",f0147ecb
-MAP_EDITOR_DRAWING_FIRST_FEATURE,"Para añadir puntos al límite, acerque el zoom hasta el sitio de plantación y haga clic en el mapa. Para terminar de dibujar, complete el límite haciendo doble clic o volviendo a hacer clic en el punto inicial.",0460b30f
-MAP_EDITOR_EDITING_FEATURE,"Haga clic y arrastre una esquina del límite para ajustar su posición. Haga clic en el punto medio entre dos esquinas para añadir otra. Para eliminar una esquina, haga clic en ella y luego en el botón {trash}. Cuando haya terminado, haga clic fuera del límite.",ffcb3d25
-MAP_EDITOR_NO_FEATURES,"Comience a dibujar el límite de su terreno de plantación. Cuando termine, haga clic en el punto inicial o doble clic para completar el límite.",c31452de
-MAP_EDITOR_NO_SELECTION,"Haga clic en el límite de su sitio de plantación si desea ajustar su posición o su forma. Para sustituir el límite por uno nuevo, haga clic en el botón {polygon}.",a09f5bd4
-MAP_EDITOR_SELECTED_FEATURE,"Mantenga pulsado el botón del ratón y arrastre el límite para ajustar su posición. Para empezar a ajustar su forma, vuelva a hacer clic sobre él. Para eliminarlo, haga clic en el botón {trash}.",5998ed85
 MAP_NOT_UPLOADED,Mapa sin subir,2cc4bb13
 MAPS,Mapas,367c1e39
 MAPS_FOR,Mapas para,31f1ee6a
@@ -1035,7 +943,6 @@ METRIC_TYPE_OUTPUT,Resultado,d697f360
 METRIC_VISIBLE_TO_FUNDER,Métrica visible para el financiador,5034bdf9
 MG,mg,cd486375
 MG_MILLIGRAMS,mg (miligramos),1eb6e72c
-MIDDLE_OF_SEED_BANK,Centro del banco de semillas,4f82fc16
 MILLIGRAMS,Miligramos,23d587ba
 MIN,Mínimo,145ecf8a
 MIN_MAX_CARBON_ACCUMULATION,Acumulación de carbono mín-máx,8997b45d
@@ -1056,14 +963,6 @@ MODULE_ID,ID del módulo,9c2e85f6
 MODULES,Módulos,474ac433
 MODULES_IMPORT_COMPLETE,¡Completada la importación de datos de los módulos!,76a99df8
 MONITORING,Monitoreo,c607ad35
-MONITORING_CARD_DESCRIPTION,Añada bancos de semillas a su organización para monitorear aspectos como la temperatura y la humedad a través de sus kits de sensores.,a88f2cfd
-MONITORING_DATE_FORMAT,MMM d h:mma,baedfcb4
-MONITORING_LABEL_HUMIDITY,Humedad,65bfcc5f
-MONITORING_LABEL_HUMIDITY_THRESHOLDS,Umbrales de humedad,08962f9b
-MONITORING_LABEL_STATE_OF_CHARGE,Estado de carga,70bd3014
-MONITORING_LABEL_SYSTEM_POWER,Potencia del sistema,ec54ce68
-MONITORING_LABEL_TEMPERATURE,Temperatura,e1c546b3
-MONITORING_LABEL_TEMPERATURE_THRESHOLDS,Umbrales de temperatura,456c3aa4
 MONITORING_PLOT,Parcela de vigilancia,97de3243
 MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,5269e047
 MONITORING_PLOTS,Control de parcelas,42428fbb
@@ -1100,7 +999,6 @@ MOST_RECENT_OBSERVATION,Observación más reciente,a614018e
 MOVE,Mover,abe6be41
 MULTIPLE_FORMS,Múltiples formas,abad8008
 MY_ACCOUNT,Mi cuenta,8e57f7ad
-MY_ACCOUNT_COOKIES_DESC,"Para obtener más información sobre cómo usamos las cookies para mejorar el rendimiento de Terraware, consulte nuestra política de cookies.",65a8c488
 MY_ACCOUNT_DESC,Gestione la información de su cuenta.,4eff2dde
 MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizaciones importantes sobre sus organizaciones. Las recibirá por correo electrónico.,65644b47
 N_IMAGES,{0} imagen(es),098eae0e
@@ -1147,7 +1045,6 @@ NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PARTICIPANT,Ningún participante,e9f659e8
-NO_PLANTING_SITES_CONTRIBUTOR_MSG,"Antes de poder ver el panel de control de las plantas, deberá tener un sitio de plantación configurado en Terraware. Solo los administradores pueden configurar sitios de plantación; por favor, póngase en contacto con el suyo para obtener ayuda.",c3e60a2f
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
 NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",801ba14c
 NO_PLANTS,No hay plantas.,6706c05b
@@ -1157,12 +1054,7 @@ NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,No hay métricas específicas del proyecto p
 NO_QUANTITY_SET,No se ha establecido una cantidad.,5922c859
 NO_REASSIGNMENTS,No hay reasignaciones.,8152a9dd
 NO_REASSIGNMENTS_TEXT,Seleccione una nueva subzona con cantidad en al menos una fila de lotes de plántulas.,bc6192ed
-NO_REPORTS_TO_SHOW,Sin informes que mostrar.,419954fd
-NO_SEEDBANKS_ADMIN_TITLE,"Un momento, añadamos primero un banco de semillas.",bbeab709
-NO_SEEDBANKS_MONITORING_ADMIN_MSG,"Comience por añadir un banco de semillas. Si su banco de semillas ha sido construido por Terraformation, entonces podrá monitorear aspectos como la temperatura y la humedad del banco de semillas.",3e489f39
-NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG,"Antes de que pueda comenzar a monitorear de forma remota aspectos como la temperatura y la humedad por medio del kit de sensores de un banco de semillas, deberá añadir un banco de semillas dentro de Terraware. Solo los administradores pueden añadir bancos de semillas, así que comuníquese con el suyo para obtener ayuda.",c9344829
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
-NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG,"Si su banco de semillas ha sido construido por Terraformation, está equipado con un kit de sensores que puede monitorear de forma remota aspectos como la temperatura y la humedad del banco de semillas. Su banco de semillas no tiene un kit de sensores o aún no ha sido configurado por su administrador.",ab8dee74
 NO_SPECIES,Ninguna especie,1616e61b
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
@@ -1180,17 +1072,9 @@ NORTHWEST_CORNER_LATITUDE,Latitud de la esquina noroeste,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitud de la esquina noroeste,355e9d22
 NOT_ACCEPTED,No aceptado(a),c3102621
 NOT_COMPLETE,Sin completar,a8606bc8
-NOT_CONNECTED,Sin conexión,11e68964
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be036
 NOT_NEEDED,No es necesario,dc4188cf
 NOT_OBSERVED,No observado,4a9890a2
-NOT_READY,No está listo.,44e66df3
-NOT_READY_QUANTITY,Cantidad no lista,c981ef51
-NOT_READY_QUANTITY_AFTER,Cantidad de no listos (después),a044c809
-NOT_READY_QUANTITY_BEFORE,Cantidad de no listos (antes),bb2b9cbf
-NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de No Listo no puede ser menor que 0,b48e3f4a
-NOT_READY_QUANTITY_REMAINING,Cantidad no lista ({0} restante),dcee9136
-NOT_READY_QUANTITY_REQUIRED,Cantidad no lista *,9393a99c
 NOT_SUBMITTED,No se ha enviado,e40a2b1d
 NOT_YET,Aún no,77976aa8
 NOTE_ANY_ISSUES,¿Todo lo anterior parece correcto? Anote cualquier problema.,133db1c4
@@ -1222,7 +1106,6 @@ NUMBER_OF_SEEDS_TESTED,# Semillas Analizadas,e5253b46
 NUMBER_OF_SEEDS_TESTED_REQUIRED,# Semillas Analizadas *,bd62ced7
 NUMBER_OF_SMALL_TREES,Número de árboles pequeños,8765895c
 NUMBER_OF_SPECIES,Número de especies,370301c7
-NUMBER_OF_SPECIES_PLANTED_CARD_TITLE,¿De cuántas especies he reportado su plantación?,ceeca1b8
 NUMBER_PLANTS_COLLECTED_FROM,Número estimado de plantas de las que se recolectó,40e92d52
 NURSERIES,Viveros,74230ea3
 NURSERY,Vivero,2a9dbfec
@@ -1248,32 +1131,23 @@ OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminu
 OBSERVATION_IN_PROGRESS,Observación en progreso,d5071049
 OBSERVATION_OVERDUE,Observación con atraso,6a4b7931
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
-OBSERVATION_RECENCY,Recencia de la observación,8894a559
 OBSERVATION_RESCHEDULED,Observación reprogramada,583d8d94
 OBSERVATION_SCHEDULED,Observación programada,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Está programando una Observación para un lugar que posiblemente sea demasiado pequeño para la asignación de zonas de seguimiento. Se le notificará si hay problemas con la asignación de las zonas de seguimiento y el inicio de la Observación. También puede realizar una Observación de zona ad hoc para este lugar.,5fa79765
 OBSERVATION_START_DATE,Fecha de inicio de la observación,b1807781
 OBSERVATION_STATUS,Estado de la observación,34c65fd0
-OBSERVATION_STATUS_OUTSTANDING,Pendiente,886ef248
-OBSERVATION_TYPE,Tipo de observación,3f0eda1c
 OBSERVATIONS,Observaciones,8169f17c
 OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,72406de2
 OBSERVATIONS_DOWNLOAD_APP,"Para completar las observaciones, descargue la aplicación de Terraware en App Store o Google Play",26dd8143
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,En este momento no hay observaciones de parcelas asignadas.,90adba3a
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Las observaciones con parcelas asignadas pueden programarse para los sitios de plantación a los que se hayan destinado plantas a través de retiros de inventario.,535c7f37
-OBSERVATIONS_EMPTY_STATE_TITLE,Aún no hay observaciones,40d6124c
 OBSERVATIONS_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, por favor selecciona un solo sitio de plantación.",958c6a9f
 OBSERVATIONS_REQUIRED_BY_DATE,Los parcelas de monitoreo de {0} requieren observación por {1}.,2b640681
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware,7536ab13
-OBSERVED_DATE,Fecha de observación,ee6ba524
 OBSERVED_DENSITY,Densidad constatada,c5003c27
 OBSERVED_DENSITY_PER_ZONE,Densidad observada por zona,c51faa34
-OBSERVED_DENSITY_PER_ZONE_TOOLTIP,La densidad observada se determina con base en el número de plantas detectadas en las zonas que han sido evaluadas al menos una vez en esta observación.,76c8c038
 OBSERVED_DENSITY_TOOLTIP,La densidad observada se determina con base en el número de plantas detectadas en las zonas que fueron evaluadas al menos una vez en esta observación.,655e8e55
 OBSERVED_PLANTS,Plantas observadas,375e69c3
-OBSERVED_PLANTS_CARD_DESCRIPTION_1,Este es el número total de especies halladas en sus observaciones más recientes.,9f06626d
-OBSERVED_PLANTS_CARD_DESCRIPTION_2,"Ha reportado la plantación de {0} en total. La diferencia en estas cantidades puede deberse a que no todas las especies que plantó se hallaron en las parcelas de seguimiento, o que ha plantado más especies desde sus últimas observaciones.",72c56c98
-OBSERVED_PLANTS_CARD_TITLE,¿Cuántas especies se encuentran en el sitio desde el {0}?,7bc1f148
 OBSERVED_SPECIES,Especies observadas,922020f2
 OBSERVER,Observador,89ceb806
 OBSERVER_NAME,Nombre del observador,fc477ae5
@@ -1284,8 +1158,6 @@ ONBOARDING_NON_ADMINS_MESSAGE,"Antes de administrar el inventario de accesiones 
 ONE_ON_ONE_SESSION,Sesión individual,30dd4c46
 ONE_ON_ONE_SESSIONS,Sesiones individuales,6b99a693
 ONE_OR_MORE_ANSWERS_NEEDED_UPDATES,Una o más respuestas necesitan actualizaciones. Revise los comentarios para cada respuesta a continuación.,13444528
-ONE_OR_MORE_ANSWERS_WERE_NOT_ACCEPTED,No se aceptaron una o más respuestas. Véalas a continuación para conocer los comentarios de cada respuesta.,1b11297f
-OPERATION_CAPACITY,Capacidad operativa,f4ccbb9b
 OPPORTUNITIES,Oportunidades,446aabdd
 OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)",98ba6999
 OPPORTUNITIES_REQUIRED,Oportunidades *,8d418e65
@@ -1328,10 +1200,6 @@ OUNCES,Onzas,4ae3cfe8
 OUT_PLANTING,Replantando en el exterior,b2c96a10
 OUTDOORS,En el exterior,38de141f
 OUTPLANT,Replantar en el exterior,47a0a210
-OUTPLANTS_REQUIRE_PLANTING_SITES,Las plantas de campo requieren de un sitio de plantación para su distribución.,4646ac9d
-OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Las replantaciones en el exterior requieren lotes con plántulas que estén ""listas"".",976ca611
-OUTPLANTS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Las plantas en campo requieren lotes con plántulas que están «Listas para plantar».,3b1fb625
-OUTSTANDING,Destacado,964e61b4
 OVER_WORD_LIMIT,Sobre el límite de palabras,8e2d9bd4
 OVERALL_SCORE,Puntaje total,1d6cdabe
 OVERDUE,Atrasado,90d8f429
@@ -1354,13 +1222,7 @@ PENDING,Pendiente,e95f9f79
 PEOPLE,Personas,84bc8e64
 PEOPLE_CARD_DESCRIPTION,¡No podemos hacerlo solos! Añada personas a su organización y asígneles funciones.,9205bab5
 PER_HECTARE_ESTIMATED_BUDGET,Presupuesto estimado por hectárea (USD),71a43325
-PERCENTAGE_OF_SITE_PLANTED,{0}% del sitio,db868b6d
-PERCENTAGE_OF_TARGET_PLANTING_DENSITY,{0}% del Objetivo,4405c63d
 PERCENTAGE_VALUE,{0}%,a3614c0d
-PERIOD_LAST_12_HOURS,Últimas 12 horas,86da144b
-PERIOD_LAST_24_HOURS,Últimas 24 horas,47314278
-PERIOD_LAST_30_DAYS,Últimos 30 días,7a0403df
-PERIOD_LAST_7_DAYS,Últimos 7 días,66e2bd91
 PERLITE_VERMICULITE,Perlita/vermiculita,9fb0ed30
 PERMANENT,Permanente,6c7426f2
 PERSON,Persona,3c8a3d43
@@ -1368,17 +1230,8 @@ PERSON_ADDED,Se ha añadido una persona,5bea0d6f
 PESTS,Plagas,16b7eeed
 PH,pH,8e3a7381
 PHASE,Fase,f9d98417
-PHASE_0,Fase 0 - Diligencia debida,6c20cb46
-PHASE_0_SCORE,Puntaje de la fase 0,bfacb854
-PHASE_0_TRUNC,Fase 0,14e839a9
 PHASE_1,Fase 1 - Estudio de factibilidad,94889837
 PHASE_1_SCORE,Puntuación de la Etapa 1,9f83e45f
-PHASE_1_TRUNC,Fase 1,0ba2a02a
-PHASE_2,Fase 2 - Plano y escala,a51c9fc2
-PHASE_2_TRUNC,Fase 2,b04e4d80
-PHASE_3,Fase 3 - Implementación y supervisión,d8def4af
-PHASE_3_TRUNC,Fase 3,b63d8056
-PHASE_ID,ID de la fase,ddbc6753
 PHOTO_DATE_TIME,Fecha y hora de la foto,22e81710
 PHOTO_NORTHEAST_QUADRAT,Cuadrícula noreste,05b4f331
 PHOTO_NORTHWEST_QUADRAT,Cuadrícula noroeste,9af609f8
@@ -1411,10 +1264,8 @@ PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE,Compra de plántulas: c
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION,"Propagación vegetativa: propagación clonal, por ejemplo, esquejes, acodo aéreo, injerto",1565a014
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST,Recolección silvestre: plántulas recolectadas en bosques naturales y replantadas posteriormente.,c1168454
 PLANT_MONITORING,Monitoreo de plantas,21ade0c5
-PLANTED_NUMBERS_INFO,La cantidad plantada se basa en el número de plantas recogidas en la plantación.,f23cab41
 PLANTED_PLANTS,Plantas plantadas,c3ba4493
 PLANTED_SPECIES,Especies plantadas,0dd1f725
-PLANTED_SPECIES_NUMBER,Especies plantadas ({0}),9ea6707c
 PLANTED_SPECIES_TOOLTIP,"Las ""Especies plantadas"" indican el porcentaje de cada especie plantada. Se nombran las cuatro especies más comunes y el resto se agrupa en ""Otras especies"".",f4a01a11
 PLANTING,Plantación,3fabf341
 PLANTING_COMPLETE,¿Plantación completa?,e348c8a4
@@ -1425,23 +1276,8 @@ PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área 
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
 PLANTING_COMPLETE_TOOLTIP,¿Completó toda la siembra en todas las subzonas de esta zona?,fb7a354d
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
-PLANTING_DENSITY_CARD_TITLE,¿Cuál es mi densidad de plantación desde el {0}?,55abeba9
-PLANTING_DENSITY_DESCRIPTION,Esta es la densidad de su plantación calculada a partir de sus últimas observaciones.,738010df
-PLANTING_DENSITY_MISSING_TOOLTIP,"Cuando se complete una observación, la densidad de plantación calculada aparecerá aquí.",87e15f6e
-PLANTING_DENSITY_OF_PLANTED_ZONES,Densidad de plantación (de zonas plantadas),4e25078f
-PLANTING_DENSITY_PER_ZONE_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo por zona?,37c72934
-PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"Esta es su densidad de plantación objetivo para la zona que ha proporcionado. Si desea modificar esta densidad, póngase en contacto con Terraformation.",6fbdf90d
-PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo y la densidad de plantación por zona para el {0}?,e4b4a7d6
-PLANTING_DENSITY_UPDATE_DESCRIPTION,"Desde entonces, ha reportado nuevas plantaciones que sugieren una densidad de plantación de {0} plantas/ha.",737e145d
 PLANTING_PROGRESS,Avance de plantación,58616da9
-PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación,66b912d5
-PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?,6e73685e
-PLANTING_PROGRESS_DESCRIPTION_1,Este es el progreso de plantación de su sitio calculado a partir de lo que se ha reportado en sus retiros del vivero.,39381c37
-PLANTING_PROGRESS_DESCRIPTION_2,"Una vez que todo el sitio de plantación se haya marcado como completo para la plantación y hayas completado tus observaciones, podrás ver la densidad de plantación de tu centro.",1bd3e443
 PLANTING_PROGRESS_MAP_DESCRIPTION,Haga clic en cada subzona para marcar las áreas donde la plantación se ha completado. La densidad de plantación se calculará una vez que la plantación se haya completado en cada zona.,86a8f71f
-PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,¿Cuál es mi progreso de plantación por zona?,b0377b07
-PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,Este es el progreso de plantación de su zona calculado por lo que se ha reportado en los retiros de su vivero.,9a42998c
-PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Cuando una zona se haya marcado como completa para plantación y usted haya completado sus observaciones, podrá ver la densidad de plantación de dicha zona.",4f65b99f
 PLANTING_PROGRESS_PERCENT,Progreso de la plantación (%),0d372a57
 PLANTING_PROGRESS_TABLE_DESCRIPTION,Use las casillas de selección que están al lado de cada subzona para marcar las áreas donde la plantación se ha completado. La densidad de plantación se calculará una vez que la plantación se haya completado en cada zona.,547b986a
 PLANTING_SEASON_END,Término de temporada de plantación,414309c0
@@ -1460,10 +1296,8 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar 
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Trazar los límites del sitio,1200219a
 PLANTING_SITE_CREATED,¡Se creó el sitio de plantación!,c8fad00a
 PLANTING_SITE_DELETED,¡Sitio de plantación borrado!,61c0d69a
-PLANTING_SITE_PROGRESS,Progreso del sitio de plantación,8a7f8194
 PLANTING_SITE_SAVED,Sitio de plantación guardado,70f9ae14
 PLANTING_SITE_TOTALS,Total de lugares de plantación,f37bb9d8
-PLANTING_SITE_TRENDS,Tendencias de los sitios de plantación,ecfa6c40
 PLANTING_SITE_TYPE,Tipo de sitio de plantación,4f94b3c8
 PLANTING_SITE_TYPE_DETAILED,Detallado,6a25500b
 PLANTING_SITE_TYPE_SIMPLE,Sencillo,33e02624
@@ -1475,21 +1309,17 @@ PLANTINGS_REQUIRE_PLANTING_SITES,Es necesario asignar un sitio de plantación a 
 PLANTINGS_REQUIRE_READY_SEEDLINGS,"Es necesario realizar plantaciones por lotes con plántulas que estén ""listas"".",373cfc92
 PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Las plantaciones requieren lotes con plántulas que están «Listas para plantar».,ed590a8b
 PLANTS,Plantas,f6cde0c3
-PLANTS_AND_SPECIES_STATISTICS,Estadísticas de plantas y especies,302a8e73
-PLANTS_CARD_DESCRIPTION,¡Han echado raíces! Vea todas sus plantas en un solo lugar.,808b2505
 PLANTS_DASHBOARD,Panel de plantas,65ec62dd
 PLANTS_DASHBOARD_ICON,Icono de Tablero de plantas,576ad8cc
 PLANTS_PER_HA,Plantas por hectárea,1b8bb685
 PLANTS_PER_HA_TOOLTIP,"La ""Tendencia de plantas por hectárea"" representa la cantidad de plantas por hectárea registradas en todas las observaciones.",95449181
 PLANTS_PER_HECTARE,plantas/ha,606dca50
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,f37ff0f0
-PLEASE_TRY_AGAIN,"Por favor, inténtelo de nuevo.",7f562f32
 PLOT,Terreno,8d3cefee
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
 PLOT_DESCRIPTION,Descripción del terreno,67e5afa5
 PLOT_LOCATION,Ubicación del terreno,59f1374a
 PLOT_PHOTO,Foto de parcela,969c0fc9
-PLOT_REPLACES_THIS_25M_PLOT,La parcela sustituye a esta parcela de 25 m x 25 m:,c763f5e2
 PLOT_SELECTION,Selección de parcela,ba150031
 PLOT_TYPE,Tipo de terreno,4b579233
 PLOTS_AD_HOC,Parcelas ad hoc,104e30b2
@@ -1501,17 +1331,14 @@ POSITION,Posición,3eb30313
 POUNDS,Libras,d760b127
 PREEXISTING_PLANTS_OBSERVED,Plantas preexistentes observadas,9427a885
 PREFERRED_WEIGHT_SYSTEM,Sistema de peso preferido,d1eb86d6
-PRELIMINARY_SPECIES_USAGE_LIST_NOT_ACCEPTED,No se aceptó la lista preliminar de uso de especies,244b0900
 PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_NEEDED,Se necesita una actualización preliminar de la lista de especies en uso,1b233d2f
 PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_REQUESTED,Actualización preliminar de la lista de especies en uso solicitada,bb890819
 PREPARATION_MATERIALS,Materiales de preparación,c6fd2575
 PRESCREEN,Preselección,9a38127f
 PRESCREEN_FAILED,Prueba de selección fallida,2a2dc3e9
 PREVIEW,Vista previa,a2aefa10
-PREVIEW_ERROR,"No se pudo abrir la vista previa. Por favor, revise los ajustes de bloqueo de las ventanas emergentes.",99ae281e
 PREVIOUS,Anterior,156ee39e
 PREVIOUS_25M_PLOT,Parcela anterior de 25x25 m,d94f2944
-PREVIOUS_25M_PLOT_TOOLTIP,"Esta es la parcela de 25x25 m de la Observación más reciente, reemplazada por la parcela actual de 30x30 m.",f0897621
 PREVIOUS_25M_PLOTS,Parcelas de 25 x 25 m anteriores,f38d3ea7
 PREVIOUS_25M_PLOTS_TOOLTIP,Estas son las parcelas de 25 x 25 m de la Observación más reciente que reemplaza la parcela actual de 30 x 30 m.,88a433bb
 PRIVACY_POLICY,Política de privacidad,47ab3e90
@@ -1579,21 +1406,15 @@ PROPOSED_PROJECT_BOUNDARIES_ADDED,Se agregaron los límites para el proyecto pro
 PROPOSED_PROJECT_BOUNDARY,Límite propuesto del proyecto,0b77fcdf
 PROPOSED_RESTORATION_ACTIVITIES,Actividades de restauración propuestas,4c6b833a
 PUBLISH,Publicar,c1d4ecf7
-PUBLISH_METRIC,Publicar métricas,cd9076df
 PUBLISH_TO_FUNDER_PORTAL,Publicar en el portal del financiador,ec2ddbec
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
 PURPOSE,Propósito,ff06abab
 PURPOSE_REQUIRED,Propósito *,3f585469
-PV_BATTERY,Batería FV,51c3cd0e
-PV_BATTERY_CHARGE,Carga de la batería FV,ce23af79
-PV_SYSTEM,Sistema FV,7a4c7f3a
 Q1_TARGET,Objetivo Q1,e8744fa7
 Q2_TARGET,Objetivo Q2,5275b4cd
 Q3_TARGET,Objetivo Q3,e1a31913
 Q4_TARGET,Objetivo Q4,11f9f81f
 QUADRAT,Cuadrante,ff115cb6
-QUALITATIVE,Cualitativo,7bba541b
-QUALITATIVE_INFO,Información cualitativa,ff171193
 QUANTITY,Cantidad,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La cantidad debe ser mayor o igual a 0,5a55f459
 QUESTION,Pregunta,84cf257d
@@ -1601,11 +1422,6 @@ RARE,Raro/a,c114e991
 RATIONALE,Fundamento,4e68d88e
 REACH_OUT_TO_ADMIN_TITLE,"Por favor, contacte con un administrador de su organización.",24a43465
 READY,Listo,35379dea
-READY_QUANTITY,Cantidad lista,7d26fc1d
-READY_QUANTITY_AFTER,Cantidad de listos (después),1de35ff4
-READY_QUANTITY_BEFORE,Cantidad de listos (antes),98f99027
-READY_QUANTITY_REMAINING,Cantidad lista ({0} restante),29beaa92
-READY_QUANTITY_REQUIRED,Cantidad lista *,8b6b5352
 READY_TO_PLANT,Listas para plantar,e9b178c5
 READY_TO_PLANT_QUANTITY,Cantidad lista para plantar,a6197e31
 READY_TO_PLANT_QUANTITY_AFTER,Cantidad lista para plantar (después),6879991b
@@ -1627,14 +1443,10 @@ REASSIGNMENT_REQUEST_STATUS,Estado de la solicitud de reasignación,f56ec4a5
 RECALCITRANT,Recalcitrante,f95e16a4
 RECEIVE_EMAIL_NOTIFICATIONS,Recibir notificaciones por correo electrónico,378f118d
 RECEIVED_DATE,Fecha de recepción,9814318f
-RECEIVED_ON,Recibido/a el,d839c14d
 RECEIVING_DATE_REQUIRED,Fecha de recepción *,bd66283e
-RECEIVING_NURSERY_REQUIRED,Vivero de recepción *,70a647da
 RECOMMENDED,Recomendado,74c8bc37
-RECORDED_PLANTS,Plantas registradas,dbab8b2c
 RECORDED_SESSION,Sesión grabada,797dfcf5
 RECORDED_SESSIONS,Sesiones grabadas,60a9c3c7
-RECORDED_SPECIES,Especies registradas,f31f152a
 RECORDING_DATE,Fecha de registro,255056cf
 RECORDING_DATE_ERROR,Debe ser posterior a la fecha de inicio,3ca9e68a
 RECORDING_URL,URL de la grabación,0c9daf58
@@ -1642,7 +1454,6 @@ REFERENCE,Referencia,0a82a6a5
 REFERENCE_DBH,"Cite la referencia para el ""DAP en la madurez"".",9e786693
 REFERENCE_HEIGHT_AT_MATURITY,"Cite la referencia para la ""Altura en la madurez"".",40d3e9bd
 REFRESH,Actualizar,aca87218
-REFRESH_DATA,Actualizar datos,d66e79c1
 REFRIGERATOR_1,Refrigerador 1,e8eed3ec
 REFRIGERATOR_2,Refrigerador 2,ab94a835
 REFRIGERATOR_3,Refrigerador 3,6a68c53f
@@ -1658,10 +1469,6 @@ REGION_SOUTH_ASIA,Sudeste Asiático,6110b434
 REGION_SUB_SAHARAN_AFRICA,África subsahariana,2103e526
 REINTRODUCED,Reintroducida/s,f4f1eb2e
 REINTRODUCED_DESCRIPTION,"Plantas que fueron trasplantadas desde un vivero, invernadero u otro sitio a un lugar de restauración.",ebd1c97e
-REJECT,Descartar,cf510f2e
-REJECT_ACTION,Descartar...,ade848b8
-REJECT_REASON,Proporcione una razón para descartar.,2e08d2c4
-REJECTED,Rechazado,18917610
 REMAINING,Restante/s,47ea00be
 REMAINING_QUANTITY_NOTES_PLACEHOLDER,Notas requeridas para cambios de cantidad,3603466e
 REMAINING_SEEDS,Semillas restantes,475182eb
@@ -1710,7 +1517,6 @@ REPORT_NO_PLANTING_SITES,No se incluyeron sitios de siembra en el informe.,bbd3e
 REPORT_NO_SEEDBANKS,No se incluyeron bancos de semillas en el informe.,8d098394
 REPORT_NURSERY_CAPACITY_INFO,"Por favor, enumere el número total de plantas que el vivero puede alojar según las mejores estimaciones.",daa9bfcc
 REPORT_PERIOD,Periodo del informe: {0} - {1},b06927c6
-REPORT_PROBLEM,Informar problema,ea90a09e
 REPORT_PUBLISHED,Informe publicado,4ab6a36f
 REPORT_SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 REPORT_SEEDBANK_BUILD_COMPLETION_DATE,Fecha de finalización de la construcción del banco de semillas *,31433692
@@ -1737,7 +1543,6 @@ REPORTS_SETTINGS_EDIT_SUBTITLE,"Los informes pueden generarse a nivel de organiz
 REPORTS_SETTINGS_GENERATE_FOR_ORG,Generar informes para {0},491ef6ab
 REPORTS_SETTINGS_GENERATE_FOR_PROJECT,Generar informe de proyecto para,91439ec3
 REPORTS_SETUP_CTA,Configure los informes.,389cb962
-REQUEST_FEATURE,Solicitar funcionalidad,f0c1d38a
 REQUEST_REASSIGNMENT,Solicitud de reasignación,9cc0038f
 REQUEST_REASSIGNMENT_JUSTIFICATION,Indique el motivo por el que solicita la reasignación de la ubicación de esta parcela.,cb51aae9
 REQUEST_UPDATE,Solicitar actualización,bce207eb
@@ -1755,7 +1560,6 @@ RESET_METRIC_CONFIRM,¿Está seguro de que quiere restablecer esta métrica? Se 
 RESET_ORDER,Restablecer orden,a30cc4ed
 RESET_STATUS,Restablecer estado,75db6b41
 RESET_STATUS_BODY,Agregar esta especie al/los proyecto(s) seleccionado(s) restablecerá el estado del entregable. Tendrás que volver a enviar el entregable para su aprobación para: {0},357adbe0
-RESPONSIVENESS_AND_ATTENTION_TO_DETAIL,Capacidad de respuesta y atención al detalle,bffadcc1
 RESTART_PRESCREEN,Reanudar prueba de preselección,6dba93aa
 RESTART_PRESCREEN_CONFIRMATION,Está a punto de reiniciar su preselección.,cd9aa0b9
 RESTORABLE_LAND,Terreno recuperable,5e265534
@@ -1774,7 +1578,6 @@ RISK_TRACKER_LINK,Enlace del rastreador de riesgos,2e269fd1
 ROLE,Rol,6016ee0a
 ROLE_REQUIRED,Tarea *,5038b606
 ROLES_INFO,Seleccione un rol para esta persona,6ca3fb03
-ROUNDED_INFO,Redondeado a la milésima más cercana.,c30bf63f
 ROWS_SELECTED,{0} seleccionados,66ca608f
 RUN_A_DATABASE_CHECK,Ejecute el chequeo de la Base de datos,8e1277e7
 SALINITY_PPT,Salinidad (ppt),7d26cb5a
@@ -1785,7 +1588,6 @@ SATELLITE,Satélite,14d51868
 SAVE,Guardar,526a3e42
 SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
-SAVE_ANYWAY,Guardar de todos modos,41580823
 SAVE_CHANGES,Guardar los cambios,cb5e8c33
 SAVE_PROJECT_BOUNDARIES,Guardar límites del proyecto,d206ddd9
 SAVE_VERSION,Guardar versión,5afacff0
@@ -1802,17 +1604,8 @@ SCIENTIFIC_NAME_REQUIRED,Nombre Científico *,1d6383a2
 SCORE,Puntaje,07eba955
 SCORE_DETAILS_LINK,Enlace de detalles del puntaje,c5c68f26
 SCORE_SUMMARY,Resumen del puntaje,c6d2bcda
-SCORE_VALUE_0,0 Neutral,b92363c9
-SCORE_VALUE_N1,"-1 negativo, pero se pueden superar los problemas",26956bf5
-SCORE_VALUE_N2,"-2 negativo, pero no se pueden superar los problemas",73e0e0e1
-SCORE_VALUE_NULL,No se seleccionó ninguna puntuación,d6e6d46b
-SCORE_VALUE_P1,1+ Positivo,af5a9a63
-SCORE_VALUE_P2,2+ muy positivo,40afc88e
 SCORES,Puntuaciones,f74a12f4
 SCORING,Puntuación,758b3ea5
-SCORING_COMPLETED,Puntuación completada,b37091dc
-SCORING_LINK,Enlace de la puntuación,73af4cd4
-SCORING_NOT_COMPLETED,Puntuación no completada,ccf79cb8
 SDG_01,1. No Pobreza,05554106
 SDG_02,2. Hambre Cero,a0cc6807
 SDG_03,3. Buena salud y Bienestar,efde8808
@@ -1836,17 +1629,14 @@ SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
 SECTIONS_USED,Secciones utilizadas,4e682124
 SEE_ALL_ACCESSIONS,Ver todas las accesiones,2d1b160b
-SEE_ALL_MODULES,Ver todos los módulos,ac5ce469
 SEE_IC_VOTES,Ver votos IC,a6e1094b
 SEE_LESS,Ver menos,519e0ef0
 SEE_MORE,Ver más,dfcb6964
 SEE_PROJECT_DETAILS,Ver detalles del proyecto,93dbc5c4
-SEE_SCORECARD,Ver tarjeta de puntuación,fd785c30
 SEE_WITHDRAWAL_HISTORY,Ver historial de retirada,a925fc5e
 SEED,Semilla,aad75809
 SEED_BANK,Banco de semillas,cf278b61
 SEED_BANK_ADDED,Banco de semillas añadido,2e402714
-SEED_BANK_INTERNET,Internet de bancos de semillas,5b4cb83d
 SEED_BANK_NOTES,Notas adicionales del banco de semillas,7d80a96e
 SEED_BANKS,Bancos de semillas,a21548eb
 SEED_BANKS_CARD_DESCRIPTION,¿Cómo procesa y almacena sus semillas? Añada bancos de semillas a su organización.,65f7ec38
@@ -1854,7 +1644,6 @@ SEED_COLLECTION,Colección de semillas,94e33eb6
 SEED_COLLECTION_DETAIL,Detalles de la semilla,532dc7f9
 SEED_COLLECTION_DETAIL_DESC,Ingrese la información de la semilla de esta accesión a continuación.,5d89270f
 SEED_COUNT,Número de semillas,4b4df051
-SEED_DASHBOARD,Ver panel de control,7a25291f
 SEED_FUND_REPORTS,Informes del fondo semilla,c84ab247
 SEED_PRODUCTION,Producción de semillas,3060d062
 SEED_QUANTITY_BY,Cantidad de semillas por,774798ff
@@ -1898,27 +1687,6 @@ SELECTED_SPECIES_UNUSED,"La especie seleccionada para eliminar no está en uso (
 SEND,Enviar,ac09e66e
 SEND_REQUEST,Enviar solicitud,9ac4c080
 SENSITIVE_QUESTION_MARK,¿Es confidencial?,1d6d97f6
-SENSOR_KIT,Kit de sensores,44118715
-SENSOR_KIT_ID_PLACEHOLDER,XXXXXX,0414108f
-SENSOR_KIT_SET_UP_COMPLETE,¡Configuración completa!,5e4fe759
-SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION,Ahora podrá ver la carga de la batería solar y los datos del sensor en el panel de control de su sensor.,7a58da79
-SENSOR_KIT_SET_UP_DESCRIPTION,"Si su banco de semillas cuenta con un kit de sensores, procedamos a configurarlo.",71d7b588
-SENSOR_KIT_SET_UP_DETECT_SENSORS,Detectar sensores,04a4f54a
-SENSOR_KIT_SET_UP_DETECT_SENSORS_DESCRIPTION,"Para encender los sensores, retire las pestañas de papel que bloquean las baterías. Cuando los sensores están encendidos y dentro del alcance, el administrador de dispositivos los detectará automáticamente.",38bc84fe
-SENSOR_KIT_SET_UP_DEVICE_MANAGER,Instalar la actualización del administrador de dispositivos,fafe96bc
-SENSOR_KIT_SET_UP_DEVICE_MANAGER_DESCRIPTION,"Para detectar sus sensores, el administrador de dispositivos en su kit de sensores necesita descargar el código más reciente, esto puede tardar hasta 20 minutos. La descarga comienza en el momento en que su kit de sensores se conecta a Internet, por lo que es posible que ya se haya completado este paso.",3697e8a1
-SENSOR_KIT_SET_UP_PV_SYSTEM,Seleccionar sistema fotovoltaico,14751917
-SENSOR_KIT_SET_UP_PV_SYSTEM_DESCRIPTION,"Nuestros bancos de semillas admiten múltiples tipos de sistemas fotovoltaicos, seleccione cuál posee para que podamos mostrarle con precisión la carga de la batería.",b6290f17
-SENSOR_KIT_SET_UP_SENSOR_KIT_ID,Introducir ID del Kit de sensores,e80ecc78
-SENSOR_KIT_SET_UP_SENSOR_KIT_ID_DESCRIPTION,Encuentre el ID de su kit de sensores en el exterior de su kit de sensores. Este conectará el Administrador de dispositivos dentro del kit a nuestra base de datos.,a5fd5e3e
-SENSOR_KIT_SET_UP_SENSOR_LOCATIONS,Asignar ubicaciones de sensores,0590acba
-SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION,Su kit de sensores incluye 14 sensores de temperatura y humedad. Coloque un sensor en cada ubicación. Elija qué sensor poner en cada ubicación guiándose por el menú desplegable.,07052d73
-SENSOR_KIT_SET_UP_TIME,Esto podría tardar hasta 30 minutos.,ca251763
-SENSOR_KIT_SET_UP_TITLE,¡Vamos a configurar su kit de sensores!,18ae8433
-SENSOR_LOCATION_ERROR,Cada ubicación debe tener un sensor asignado a la misma.,e398292d
-SENSOR_SCAN_TIMEOUT,Tiempo de espera de escaneo de sensor,229597e7
-SENSOR_SCAN_TIMEOUT_ERROR,"Solo se encontró {0}/{1} sensor(es). Asegúrese de que todos los sensores estén encendidos y dentro del rango e intente de nuevo. Si el problema persiste, puede que sus sensores estén dañados. Si piensa que ese es el caso, contáctenos por correo electrónico a {2}.",3c302a00
-SENSORS_FOUND,{0}/{1} sensores encontrados...,cf24ff81
 SERVER_ERROR,Error de servidor,5967c9c9
 SESSION_HAS_ENDED,La sesión finalizó.,41906103
 SESSION_HAS_NOT_STARTED,La sesión no comenzó.,ec7ca566
@@ -1930,11 +1698,8 @@ SET_REMINDER,Establecer recordatorio,ad81e3b3
 SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
-SET_UP_YOUR_SENSOR_KIT,Configure su kit de sensor,755198dc
-SET_UP_YOUR_SENSOR_KIT_MSG,"Si su banco de semillas fue construido por Terraformation, entonces está equipado con un kit de sensores con el que puede monitorear cosas como la temperatura y la humedad del banco de semillas, de forma remota. Para configurar el kit, tendrá que conectar su banco de semillas a la aplicación web de Terraware. Esto podría tardarse unos 30 minutos.",7d225e3a
 SETTINGS,Ajustes,38560978
 SHRUB,Arbusto,af50871c
-SHRUB_TREE,Arbusto o árbol,0f62c260
 SHRUBS,Arbustos,377018f6
 SILVOPASTURE,Sistema selvopastoril,9d942e38
 SIMPLE_SITE,Terreno sencillo,760ab731
@@ -1948,9 +1713,7 @@ SITE_BOUNDARY_DESCRIPTION_1,Use la herramienta de dibujo {0} para trazar el lím
 SITE_BOUNDARY_DESCRIPTION_2,"El límite del lugar debe caber en un cuadro delimitador de menos o igual a 20 000 hectáreas. Si es mayor, considera la posibilidad de dividir el terreno en varios sitios de plantación.",6495bc67
 SITE_BOUNDARY_DESCRIPTION_3,"Acerca el zoom a la ubicación del sitio de plantación. A continuación, haz clic en zonas del mapa para añadir puntos para el límite del sitio. Completa el límite haciendo doble clic o volviendo a hacer clic en el punto inicial.",14d699d1
 SITE_BOUNDARY_DESCRIPTION_4,"Para cambiar la forma del límite del lugar, haz clic en la forma para cambiar los puntos. Para eliminar la forma, haz clic en el botón {0}.",3fd2c49c
-SITE_BOUNDARY_DESCRIPTION_WARN,"El límite debe entrar en un cuadro de delimitación menor o igual a 20 000 hectáreas; de lo contrario, considere dividir el sitio en varias plantaciones.",d08eac83
 SITE_BOUNDARY_ERRORS,Hay errores en los límites del terreno.,916536c6
-SITE_BOUNDARY_POLYGON_TOO_LARGE,El límite con un área de {0} hectáreas excede las {1} hectáreas.,5ff19bff
 SITE_BOUNDARY_POLYGON_TOO_SMALL,Los límites con una superficie de {0} hectáreas son menores que 100 m x 100 m.,e140c0c1
 SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Nota: Por defecto, los Sitios Simples incluirán solo una Zona y una Subzona que conformarán todo el sitio de plantación.",30664f85
 SITE_BOUNDING_AREA_TOO_LARGE,El área de delimitación de {0} hectáreas es demasiado grande.,d32baa28
@@ -1967,7 +1730,6 @@ SITE_MAP,Mapa del sitio,df2fc60a
 SITE_SUBZONE_BOUNDARIES,Límites de las subzonas,7ac3bfe9
 SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0,Cada zona de tu sitio de plantación se divide en una o más subzonas. Una subzona es la zona más pequeña a la que se pueden asignar plántulas durante la plantación. Las subzonas deben tener un tamaño tal que la totalidad de la subzona pueda plantarse durante una sola temporada de plantación. Las subzonas suelen tener entre 50 y 200 hectáreas.,06578b84
 SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,"Dibuja a continuación las subzonas de tu sitio de plantación. Primero, selecciona una zona en la que crear subzonas. Utiliza la herramienta de corte {0} para crear formas de subzonas (polígonos) dentro de las zonas. [Ve un tutorial] sobre cómo añadir límites de subzonas.",ce217578
-SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE,Selecciona una zona para crear subzonas.,509670b6
 SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,Actualmente está seleccionada la zona {0} para crear subzonas.,5e6cd6a3
 SITE_SUBZONE_BOUNDARIES_TOO_SMALL,Una o más subzonas tienen un límite inferior a 25 m x 25 m,c1d1a11f
 SITE_SUBZONE_BOUNDARY_TOO_SMALL,El límite de la subzona es menor que 25 m x 25 m,69d2798b
@@ -2001,7 +1763,6 @@ SPECIES,Especie,bb344d18
 SPECIES_APPROVED,Especie aprobada,448567d6
 SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla y Planta.,834fb3c8
 SPECIES_CATEGORIES,Categorías de especies,b63aa30d
-SPECIES_CATEGORIES_NUMBER,Categorías de especies ({0}),6f417e9f
 SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del total de plantas plantadas que son Raras y en Peligro, según la especie.",e6a1dcfe
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
@@ -2117,14 +1878,10 @@ TABLE_UPDATED,Tabla actualizada,4672dd04
 TAKE_ME_THERE,Llévame allí,a6c46fcb
 TARGET,Objetivo,7f0a4d77
 TARGET_DENSITY,Densidad objetivo,239e7748
-TARGET_DENSITY_PLANTS_PER_HECTARE,Objetivo: {0} plantas/ha,8d266241
-TARGET_DENSITY_TOOLTIP,La densidad objetivo es el número previsto de plantas por hectárea para la zona y que proporcionó el administrador que dirige la plantación.,8286c7d6
 TARGET_HECTARES_PLANTED,Objetivo: {0} ha,8c7d580d
 TARGET_PLANTING_DENSITY,Densidad de plantación objetivo,4f350d39
 TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para la zona (plantas por hectárea).,79af64bc
-TARGET_VS_OBSERVED_DENSITY,Densidad objetivo vs. densidad constatada,6875286d
 TARGETS,Objetivos,afd4bbf9
-TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Datos del sensor de temperatura y humedad,32e73f4f
 TEMPLATE,Plantilla,28afe27c
 TEMPLATES,Plantillas,a66a976a
 TEMPORARY,Temporal,4d5354bb
@@ -2152,14 +1909,11 @@ THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THREATENED,Amenazada,57ca76f3
 TIDE,Marea,9dd490e9
 TIME,Hora,2132441e
-TIME_PERIOD,Periodo de tiempo,0d77489d
 TIME_ZONE,Zona horaria,abc27841
 TIME_ZONE_REQUIRED,Zona horaria *,f1ee0610
 TIME_ZONE_SELECTED,Zona horaria: {0},4a5acdb1
 TITLE,Título,a5f8fc0b
 TITLE_OVERVIEW,{0} Descripción,df4e964c
-TITLE_REPORT_PROBLEM,Informar un problema,340c02c1
-TITLE_REQUEST_FEATURE,Solicitar una funcionalidad,a4e04b30
 TITLE_WELCOME,Bienvenido a Terraware,66882ae5
 TITLE_WELCOME_EXCLAIM,¡Le damos la bienvenida a Terraware!,6da26087
 TO,A,0ec3d25a
@@ -2181,13 +1935,10 @@ TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el públi
 TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todas las accesiones con los estados Pendiente de registro, Pendiente de tratamiento, Tratamiento, Deshidratación y En almacenamiento.",5101036f
 TOOLTIP_ECOSYSTEM_TYPE,"Unidades relativamente grandes de tierra o agua que contienen un conjunto diferenciado de comunidades naturales que comparten una gran mayoría de especies, dinámicas y condiciones medioambientales.",92c6820c
-TOOLTIP_GERMINATING_QUANTITY,En germinación indica que las plántulas aún no han brotado de las semillas. La cantidad en germinación no cuenta para la cantidad total.,d444f7af
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,«Germinación/establecimiento» indica que las plántulas aún no han emergido de las semillas. La cantidad no cuenta para determinar la cantidad total.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Lo que determina que una planta esté en «Curación» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,El ID de la accesión utilizada para crear este lote. No disponible para especies que no tienen ninguna accesión.,a6a3a0af
 TOOLTIP_LIVE_PLANTS,Las plantas vivas observadas solo incluyen las plantas registradas como vivas; no incluyen las plantas registradas como preexistentes.,93092e08
-TOOLTIP_NOT_READY_QUANTITY,"Lo que determina que una planta figure como ""no lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación.",e31e23c4
-TOOLTIP_READY_QUANTITY,"Lo que determina que una planta figure como ""lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación.",dbed048d
 TOOLTIP_READY_TO_PLANT_QUANTITY,Lo que determina que una planta esté «Lista para plantar» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.,be7a8ced
 TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Categoría de conservación de la Lista Roja de la IUCN,83da1fe2
@@ -2223,8 +1974,6 @@ TOOLTIP_VIABILITY_TEST_SUBSTRATE,"La superficie o el material del que un organis
 TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos y químicos utilizados para romper la latencia y/o acelerar la germinación.",560e95e8
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,8950dbea
-TOTAL_AVERAGE_SCORE,Puntuación promedio total,f211ebfa
-TOTAL_CARBON_T,Carbono total (t),8f222c70
 TOTAL_EXPANSION_POTENTIAL,Potencial de expansión total (ha),51e2b16e
 TOTAL_HECTARES_PLANTED,Total de hectáreas plantadas,5410325f
 TOTAL_HECTARES_PLANTED_TOOLTIP,"Este es el número total de hectáreas marcadas con ""Plantación completa"" en este lugar de plantación.",1dd1dbf3
@@ -2238,7 +1987,6 @@ TOTAL_PLANTED_REQUIRED,Plantados en total *,f8c6398b
 TOTAL_PLANTING_AREA,Área total de plantación,d227ef50
 TOTAL_PLANTING_SITE_AREA_HA,Superficie total de la zona de siembra (Ha) *,cf590ea2
 TOTAL_PLANTS,Plantas en total,375e264f
-TOTAL_PLANTS_AND_SPECIES,Plantas y especies totales,8eb24efd
 TOTAL_PLANTS_OBSERVED,Total de plantas observadas,4a3801b1
 TOTAL_PLANTS_PLANTED,Plantas plantadas en total,2db49cb6
 TOTAL_PLANTS_PLANTED_HELPER_TEXT,"Especies no clasificadas como ""árboles"" en la lista de especies.",79c7fb72
@@ -2289,15 +2037,12 @@ TRY_AGAIN,Intente otra vez,1e18e638
 TUTORIAL_PREFIX,Tutorial: {0},71025393
 TWENTY_FIVE_TO_FIFTY_PERCENT,De 25% a 50%,62ebd162
 TYPE,Tipo,c1d026e9
-TYPE_ELLIPSIS,Tipo...,c30f222d
 TYPE_OF_FOREST,Tipo de bosque,6fd02b1c
 UN_SDG,Objetivos de Desarrollo Sostenible (ODS) de las Naciones Unidas,7d6c756a
 UNABLE_TO_ADD_PERSON,No se puede añadir una persona,7d19ff74
-UNABLE_TO_CONNECT_TO_SENSOR_KIT,No hemos podido conectar con su kit de sensores. En ocasiones esto se debe a que no está conectado al suministro eléctrico o a Internet. Envíe un correo electrónico a {0} para que podamos ayudarle.,2f1420ba
 UNABLE_TO_LOAD_NOTIFICATIONS,No se han podido cargar las notificaciones. Vuelva a intentarlo más tarde.,c6aeba80
 UNASSIGNED,Sin asignar,9acb5519
 UNCLAIMED,No reclamado,a4964181
-UNDERPERFORMANCE_DESCRIPTION,Proporcione información del bajo rendimiento.,aace2e15
 UNDERPERFORMANCE_JUSTIFICATION,Justificación del bajo rendimiento,7d6d2cba
 UNDO,Deshacer,5f150050
 UNDO_PLANTING_COMPLETE,Deshacer plantación completa,05a90be7
@@ -2336,9 +2081,6 @@ UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2,"Examine o arrastre y suelte un archivo (JPG, P
 UPLOAD_PHOTO_DESCRIPTION,"Busca o arrastra y coloca aquí un archivo (JPG, PNG).",9c8c3f2c
 UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Buscar archivos (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Cargar foto(s),d20a4173
-UPLOAD_SHAPEFILE,Subir «shapefile»,b9311d11
-UPLOAD_SHAPEFILE_DESCRIPTION,"Subir archivo
-(ejemplos de tipos de archivo: GeoJSON, kml/kmz)",15f8ef39
 UPLOAD_SPATIAL_FILES,Subir archivo(s) espacial(es),953e770a
 USD_PER_HECTARE,${0} por ha,d8525ed1
 USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización,2cf2ac16
@@ -2349,7 +2091,6 @@ USER_NOTIFICATION_ACTION_SETTINGS,"Para cambiar la preferencia, vaya a [Ajustes]
 USER_WITH_EMAIL_DOES_NOT_EXIST,No existe ningún usuario con este correo electrónico.,66a18b2d
 VALUE,Valor,b8e67ab1
 VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%,e78b7737
-VALUES_ALIGNMENT,Alineación de valores,feafa0f3
 VARIABLE_DETAILS,Detalles de las variables,48294b19
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,El valor ha excedido los decimales máximos de {0},3a248e96
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,El valor es superior al valor máximo de {0},4bb003ef
@@ -2358,7 +2099,6 @@ VARIABLE_ERROR_NUMBER_NAN,El valor no es un número,35fecae0
 VARIABLE_HISTORY,Historial variable,62d3bc75
 VARIABLE_STATUS,Estado de variable,dd3169c3
 VARIABLES,Variables,9902c54b
-VCS_TEMPLATE_NAME,"Plantilla de descripción de proyectos VCS, v4.3",632df567
 VERRA,Verra,b73695a0
 VERRA_LINK,Enlace de Verra,09f00e23
 VERRA_NPRT,Herramienta Verra de riesgo de no permanencia (NPRT),8df572d7
@@ -2376,15 +2116,11 @@ VIABILITY_TESTING,Ensayo de viabilidad,cb87d231
 VIABILITY_TESTING_EMPTY_MESSAGE,El Ensayo de viabilidad te ayuda a monitorear la calidad de la semilla. Realizar una prueba de germinación en vivero o laboratorio o una prueba de corte en sus semillas.,d0729b19
 VIABILITY_TESTS,Pruebas de viabilidad,097a958c
 VIEW,Ver,02cff17a
-VIEW_ALL_DELIVERABLES,Ver todos los entregables,dd83a9c2
 VIEW_APPLICATION,Ver solicitud,bbdc193f
-VIEW_DELIVERABLES,Ver entregas,6cbd6a6e
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
 VIEW_HISTORY,Ver historial,a1dbe2ca
 VIEW_INTERNAL_REPORT_FORM,Ver el formulario de informe interno,67f51c8a
-VIEW_LESS,Ver menos,0916aa87
 VIEW_MAP,Ver mapa,8ef1dcc4
-VIEW_MORE,Ver más,27e6bf13
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Ver el informe de financiación publicado,8dbc3bb4
@@ -2396,10 +2132,7 @@ VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
 VOTER,Votante: {0},46578e94
 VOTING_DECISION,Decisión de votación,9bb0be97
-WAITING_TO_DOWNLOAD,Esperando para descargar...,0fa10aa4
-WAITLIST,Lista de espera,9373381f
 WATER_DEPTH_M,Profundidad del agua (m),ca8ca1fb
-WATTS_VALUE,{0}W,5f1a35f1
 WEIGHT,Peso,8d79d02a
 WEIGHT_GRAMS,Peso (g),7f5ac0db
 WEIGHT_KILOGRAMS,Peso (kg),222d89cc
@@ -2408,10 +2141,8 @@ WEIGHT_OUNCES,Peso (Oz),e0818b90
 WEIGHT_POUNDS,Peso (lb),6ad0d2ab
 WEIGHT_SYSTEM_SELECTED,Sistema de pesaje: {0},bc15e8bc
 WELCOME,¡Bienvenido!,09fd702c
-WELCOME_MSG,¡Bienvenido y feliz siembra!,9f33bb3b
 WELCOME_PERSON,"¡Bienvenido, {0}!",db783c9d
 WELCOME_TO_TERRAWARE_PERSON,"¡Bienvenido a Terraware, {0}!",0832a4dc
-WHAT_NEEDS_TO_BE_TRUE,Lo que debe ser cierto,44c32083
 WILD,Silvestre,77d2fd62
 WILD_IN_SITU,Silvestre (in situ),cf764f76
 WILD_IN_SITU_DESCRIPTION,Las plantas que crecen naturalmente en áreas silvestres y que no fueron sembradas por gente.,9b5b2102
@@ -2438,7 +2169,6 @@ WITHDRAWN_BY,Extraída por,4cf942fb
 WITHDRAWN_DATE,Fecha de extracción,0b2aa70b
 WITHDRAWN_QUANTITY_ERROR,Excede la cantidad restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La cantidad de retiro tiene que ser mayor de 0.,75e6b589
-WITHOUT_MAP,Sin mapa,91ef848e
 WOOD_DENSITY_LEVEL,Nivel de densidad de la madera,83a6a766
 WORDS,Palabras,45f70926
 WORKERS_PAID_ENGAGED,Número total de trabajadores pagos involucrados *,3576919b
@@ -2448,7 +2178,6 @@ WORKSHOP,Taller,8092cd5c
 WORKSHOPS,Talleres,1a6fc46c
 X_HA,{0} hectáreas,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha en la Superficie total de plantación,586af003
-X_HA_TOTAL_IN_PLANTING_SITE,{0} ha totales en el sitio de plantación,43a1bb97
 X_HECTARES,{0} hectáreas,6f24cf52
 X_HECTARES_HA,{0} hectáreas (ha),e2af9d30
 YEAR,Año,484bf433
@@ -2468,9 +2197,6 @@ ZERO,Cero,16bd92ef
 ZONE,Zona,17bc60dc
 ZONE_BOUNDARIES,Límites de la zona,15e88feb
 ZONE_GEOMETRY_CHANGED,La geometría para {0} cambió el {1},9eec74cc
-ZONE_LEVEL_DATA,Datos del nivel de zona,6968436f
-ZONE_LEVEL_DATA_MAP_TITLE,¿Qué aspecto tiene el área de plantación según lo que reportamos que se ha plantado?,b072ceb5
-ZONE_LEVEL_DATA_MAP_TITLE_WITH_OBSERVATION,¿Qué aspecto tiene el área de plantación a partir de {0}?,7c6e641c
 ZONE_MORTALITY,Mortalidad por zonas,56e56acb
 ZONE_MORTALITY_TOOLTIP,"La ""Mortalidad por zona"" indica las zonas con las tasas de mortalidad más altas y más bajas de las zonas observadas.",80d7ce42
 ZONE_NAME_IN_USE,El nombre de la zona ya está en uso.,d75e052d
