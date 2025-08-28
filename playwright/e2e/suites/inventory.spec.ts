@@ -142,6 +142,8 @@ export default function InventoryTests() {
     await page.getByRole('spinbutton').fill('20');
     await page.getByRole('button', { name: 'Save' }).click();
     await page.getByLabel('Details').getByRole('button').nth(2).click();
+    await page.locator('#destinationFacilityId').click();
+    await page.getByText('Ready to Plant', { exact: true }).click();
     await page.getByRole('spinbutton').click();
     await page.getByRole('spinbutton').fill('35');
     await page.getByRole('button', { name: 'Save' }).click();
