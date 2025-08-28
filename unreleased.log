@@ -1,3 +1,4 @@
+d6f8906a753 SW-7088 Fail CI on missing translations (#4396)
 c478218fc7e SW-7299 Add mobile app QR code banner to observations page (#4392)
 b12da3c8925 SW-7302 Deal Name column should link to Project Profile (#4393)
 d52fdd3773c SW-7301: Remove feature flag in web (Nursery Phase Change Updates) (#4391)
