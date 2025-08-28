@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -46,12 +46,16 @@ const MobileAppCard = ({
     }
   }, [allowDismiss, dismissPreferenceId, userPreferences]);
 
-  const dismissMobileAppCard = async () => {
+  const dismissMobileAppCard = useCallback(async () => {
     if (dismissPreferenceId) {
       await updateUserPreferences({ [dismissPreferenceId]: true });
       reloadUserPreferences();
     }
-  };
+  }, [dismissPreferenceId, reloadUserPreferences, updateUserPreferences]);
+
+  const handleDismissClick = useCallback(() => {
+    void dismissMobileAppCard();
+  }, [dismissMobileAppCard]);
 
   if (!showCard) {
     return <Box />;
@@ -215,7 +219,7 @@ const MobileAppCard = ({
       )}
       {allowDismiss && (
         <Box>
-          <Link fontSize='16px' fontWeight={400} onClick={() => void dismissMobileAppCard()}>
+          <Link fontSize='16px' fontWeight={400} onClick={handleDismissClick}>
             {strings.DISMISS}
           </Link>
         </Box>
