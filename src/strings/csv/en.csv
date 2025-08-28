@@ -1143,6 +1143,9 @@ OBSERVATIONS_EMPTY_STATE_MESSAGE_1,There are currently no assigned plot observat
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Observations with assigned plots can be scheduled for planting sites that have had plants allocated to them through inventory withdrawals.,
 OBSERVATIONS_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site.",
 OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
+OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"You will need the Terraware Mobile App to complete your observations.
+
+Scan the QR codes with your device to download on the App Store or Google Play.",
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations with the Terraware App,
 OBSERVED_DENSITY,Observed Density,
 OBSERVED_DENSITY_PER_ZONE,Observed Density Per Zone,

@@ -19,6 +19,7 @@ import { FieldOptionsMap } from 'src/types/Search';
 import { isAdmin } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
+import MobileAppCard from '../Home/MobileAppCard';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoring from './PlantMonitoring';
 
@@ -142,6 +143,17 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+      </Box>
+      <Box marginTop={'24px'} sx={{ whiteSpace: 'break-spaces' }}>
+        <MobileAppCard
+          description={strings.OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION}
+          imageAlt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT}
+          imageSource='/assets/terraware-mobile-app.svg'
+          padding='32px'
+          title={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP}
+          allowDismiss
+          dismissPreferenceId='dismissObservationsMobileAppCard'
+        />
       </Box>
     </PlantsPrimaryPage>
   );

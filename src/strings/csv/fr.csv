@@ -158,14 +158,13 @@ APPLICATION_STEP_DUEDILIGENCE_NAME,Diligence raisonnable,82675fa7
 APPLICATION_STEP_PRESCREEN_DESCRIPTION,Dessinez le plan du site de votre projet et répondez aux questions de présélection pour déterminer si vous êtes éligible à notre accelérateur.,ba9cdb8d
 APPLICATION_STEP_PRESCREEN_NAME,Présélection,9a38127f
 APPLICATION_SUBMIT_SUCCESS,Succès ! Votre demande a été soumise.,b594c9eb
-APPLICATION_SUBMIT_SUCCESS_BODY,"Merci d’avoir soumis une demande à l’accélérateur forestier Seed to Carbon. Nous avons reçu votre demande et celle-ci est en cours d’examen.
-Vous pouvez consulter les réponses que vous avez envoyées et l’état d’avancement de votre demande dans ce compte.",d051913e
+APPLICATION_SUBMIT_SUCCESS_BODY,Merci d'avoir soumis une candidature à l’Accélérateur De La Semence à la Forêt. Nous avons bien reçu votre candidature et elle est en cours d’examen. Vous pouvez consulter vos réponses soumises et le statut de votre candidature dans ce compte.,1f08f39c
 APPLICATIONS,Demandes,97e75e41
 APPLY,Appliquer,6c0f6e36
 APPLY_RESULT,Appliquer le résultat,f9c062f6
 APPLY_RESULT_QUESTION,Voulez-vous appliquer ce résultat à l'adhésion ?,36949b1c
 APPLY_TO_ACCELERATOR,Postuler à l'accélérateur,d74e3756
-APPLY_TO_ACCELERATOR_DESCRIPTION,Postulez à notre accélérateur forestier Seed to Carbon ! En savoir plus {0} ou cliquer sur le bouton ci-dessous pour postuler.,2c1f02cf
+APPLY_TO_ACCELERATOR_DESCRIPTION,Postulez à notre Accélérateur De La Semence à la Forêt ! Pour en savoir plus {0} ou cliquez sur le bouton ci-dessous pour postuler.,54a5f1c0
 APPROVE,Approuver,913a9927
 APPROVE_DELIVERABLE,Approuver le livrable,7efd4b07
 APPROVED,Approuvé,b279ed0b
@@ -642,7 +641,7 @@ FILTERS,Filtres,c3d13364
 FINAL_QTY,Qté finale,47530c05
 FINANCE,Finances,ae6619da
 FINANCIAL_VIABILITY,Viabilité financière,50706753
-FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,"En savoir plus sur l'accélérateur forestier du programme Seed to Carbon de Terraformation {0}, et postuler !",cea3bbb2
+FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,En savoir plus sur l’Accélérateur De La Semence à la Forêt de Terraformation {0} et postulez !,e49d8596
 FIRST_ADD_PLANTING_SITE,"Pour afficher le tableau de bord, vous devez détenir un site de plantation.",29adc97e
 FIRST_NAME,Prénom,4728037d
 FIX_HIGHLIGHTED_FIELDS,Remplissez les champs surlignés ci-dessous.,505e80af
@@ -1143,6 +1142,9 @@ OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Il n'y a actuellement aucune observation rela
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Des observations avec des parcelles désignées peuvent être programmées pour les sites de plantations desquelles des végétaux furent précédemment alloués par le biais de retraits d'inventaire.,535c7f37
 OBSERVATIONS_MAP_VIEW_PROMPT,"Pour accéder à la vue cartographique, veuillez sélectionner un seul site de plantation.",958c6a9f
 OBSERVATIONS_REQUIRED_BY_DATE,{0} placettes de surveillance doivent être observées par {1}.,2b640681
+OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Vous aurez besoin de l’application mobile Terraware pour compléter vos observations.
+
+Scannez les codes QR avec votre appareil pour télécharger sur l’App Store ou Google Play.",13be06be
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations avec l'application Terraware,7536ab13
 OBSERVED_DENSITY,Densité observée,c5003c27
 OBSERVED_DENSITY_PER_ZONE,Densité observée par zone,c51faa34
@@ -1862,6 +1864,7 @@ SUMMARY_OF_PROGRESS,Résumé des progrès,c74014f3
 SUMMARY_OF_PROGRESS_DESCRIPTION,Faites un bref résumé de ce projet.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Résumé des progrès accomplis *,35c72f75
 SUPPLEMENTAL_FILES,Fichiers supplémentaires,b655103c
+SURVIVAL_RATE_SETTINGS,Paramètres du taux de survie,1177b667
 SUSTAINABLE_DEVELOPMENT_GOALS,Objectifs de développement durable,905bfc54
 SUSTAINABLE_TIMBER,Bois durable,b9574821
 SW_CORNER_LATITUDE,Latitude du coin sud-ouest : {0},11be73c0
