@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/325</span>
+                <span class='fraction'>0/328</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/96</span>
+                <span class='fraction'>0/97</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/307</span>
+                <span class='fraction'>0/310</span>
             </div>
         
             
@@ -1011,7 +1011,24 @@
 <a name='L946'></a><a href='#L946'>946</a>
 <a name='L947'></a><a href='#L947'>947</a>
 <a name='L948'></a><a href='#L948'>948</a>
-<a name='L949'></a><a href='#L949'>949</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L949'></a><a href='#L949'>949</a>
+<a name='L950'></a><a href='#L950'>950</a>
+<a name='L951'></a><a href='#L951'>951</a>
+<a name='L952'></a><a href='#L952'>952</a>
+<a name='L953'></a><a href='#L953'>953</a>
+<a name='L954'></a><a href='#L954'>954</a>
+<a name='L955'></a><a href='#L955'>955</a>
+<a name='L956'></a><a href='#L956'>956</a>
+<a name='L957'></a><a href='#L957'>957</a>
+<a name='L958'></a><a href='#L958'>958</a>
+<a name='L959'></a><a href='#L959'>959</a>
+<a name='L960'></a><a href='#L960'>960</a>
+<a name='L961'></a><a href='#L961'>961</a>
+<a name='L962'></a><a href='#L962'>962</a>
+<a name='L963'></a><a href='#L963'>963</a>
+<a name='L964'></a><a href='#L964'>964</a>
+<a name='L965'></a><a href='#L965'>965</a>
+<a name='L966'></a><a href='#L966'>966</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1058,6 +1075,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1254,8 +1273,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1981,6 +2015,8 @@ import {
 &nbsp;
 import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -2209,6 +2245,21 @@ const MatrixView = <span class="cstat-no" title="statement not covered" ><span c
         id: 'projectName',
         enableEditing: false,
         enableHiding: false,
+        Cell: <span class="fstat-no" title="function not covered" >({</span>
+          cell,
+          row,
+        }: {
+          cell: MRT_Cell&lt;ProjectsWithVariablesSearchResult&gt;;
+          row: MRT_Row&lt;ProjectsWithVariablesSearchResult&gt;;
+        }) =&gt; {
+          const projectName = <span class="cstat-no" title="statement not covered" >cell.getValue&lt;string&gt;();</span>
+          const projectId = <span class="cstat-no" title="statement not covered" >row.original.id;</span>
+<span class="cstat-no" title="statement not covered" >          return (</span>
+            &lt;Link to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())}&gt;
+              {projectName}
+            &lt;/Link&gt;
+          );
+        },
       },
       {
         accessorKey: 'participant_cohort_phase',
@@ -2914,7 +2965,7 @@ export default MatrixView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-28T02:05:30.370Z
+                at 2025-08-28T12:53:18.052Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
