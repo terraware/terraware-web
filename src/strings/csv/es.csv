@@ -260,10 +260,8 @@ CHALLENGES_REQUIRED,Desafíos y problemas *,253f97ed
 CHANGE,Cambiar,e276068b
 CHANGE_ACTIVE_GROWTH_STATUS,Cambiar estado de crecimiento activo,969b83ab
 CHANGE_DEFAULT_WEIGHT_SYSTEM,Puede cambiar el sistema de peso por defecto de {0},e1257e91
-CHANGE_GERMINATING_STATUS,Cambiar a estado de germinación,21fd8bfe
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Cambiar estado de germinación/establecimiento,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Cambiar estado de aclimatación,b734dbd7
-CHANGE_NOT_READY_STATUS,"Cambiar el estado ""No listo""",58e5eef9
 CHANGE_TO,Cambiar a {0},8423817d
 CHANGES,Cambios,47809a57
 CHANGES_SAVED,¡Cambios guardados!,709a9559
@@ -689,11 +687,6 @@ GENERIC_ERROR,Se ha producido un error,e1abd8bd
 GENUS,Género,893239a9
 GEOMETRY_CHANGED_WARNING_MESSAGE,La geometría de este sitio {0}. Los datos aquí mostrados pueden no ser representativos de lo que hay a día de hoy en las zonas de plantación.,b5d7eb2b
 GERMINATED,Germinado,452ce9c6
-GERMINATING,Germinación,9a93858b
-GERMINATING_QUANTITY,Capacidad de germinación,068c3582
-GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de Germinando no puede ser menor que 0,0e5c6963
-GERMINATING_QUANTITY_REMAINING,Cantidad germinada ({0} restante),01603f34
-GERMINATING_QUANTITY_REQUIRED,Capacidad de germinación *,087aa849
 GERMINATION_ESTABLISHMENT,Germinación/Establecimiento,0da62fe0
 GERMINATION_ESTABLISHMENT_QUANTITY,Cantidad de germinación/establecimiento,630be8de
 GERMINATION_ESTABLISHMENT_QUANTITY_AFTER,Cantidad de germinación/establecimiento (después),869caad0
@@ -1082,13 +1075,6 @@ NOT_COMPLETE,Sin completar,a8606bc8
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be036
 NOT_NEEDED,No es necesario,dc4188cf
 NOT_OBSERVED,No observado,4a9890a2
-NOT_READY,No está listo.,44e66df3
-NOT_READY_QUANTITY,Cantidad no lista,c981ef51
-NOT_READY_QUANTITY_AFTER,Cantidad de no listos (después),a044c809
-NOT_READY_QUANTITY_BEFORE,Cantidad de no listos (antes),bb2b9cbf
-NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de No Listo no puede ser menor que 0,b48e3f4a
-NOT_READY_QUANTITY_REMAINING,Cantidad no lista ({0} restante),dcee9136
-NOT_READY_QUANTITY_REQUIRED,Cantidad no lista *,9393a99c
 NOT_SUBMITTED,No se ha enviado,e40a2b1d
 NOT_YET,Aún no,77976aa8
 NOTE_ANY_ISSUES,¿Todo lo anterior parece correcto? Anote cualquier problema.,133db1c4
@@ -1436,11 +1422,6 @@ RARE,Raro/a,c114e991
 RATIONALE,Fundamento,4e68d88e
 REACH_OUT_TO_ADMIN_TITLE,"Por favor, contacte con un administrador de su organización.",24a43465
 READY,Listo,35379dea
-READY_QUANTITY,Cantidad lista,7d26fc1d
-READY_QUANTITY_AFTER,Cantidad de listos (después),1de35ff4
-READY_QUANTITY_BEFORE,Cantidad de listos (antes),98f99027
-READY_QUANTITY_REMAINING,Cantidad lista ({0} restante),29beaa92
-READY_QUANTITY_REQUIRED,Cantidad lista *,8b6b5352
 READY_TO_PLANT,Listas para plantar,e9b178c5
 READY_TO_PLANT_QUANTITY,Cantidad lista para plantar,a6197e31
 READY_TO_PLANT_QUANTITY_AFTER,Cantidad lista para plantar (después),6879991b
@@ -1954,13 +1935,10 @@ TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el públi
 TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todas las accesiones con los estados Pendiente de registro, Pendiente de tratamiento, Tratamiento, Deshidratación y En almacenamiento.",5101036f
 TOOLTIP_ECOSYSTEM_TYPE,"Unidades relativamente grandes de tierra o agua que contienen un conjunto diferenciado de comunidades naturales que comparten una gran mayoría de especies, dinámicas y condiciones medioambientales.",92c6820c
-TOOLTIP_GERMINATING_QUANTITY,En germinación indica que las plántulas aún no han brotado de las semillas. La cantidad en germinación no cuenta para la cantidad total.,d444f7af
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,«Germinación/establecimiento» indica que las plántulas aún no han emergido de las semillas. La cantidad no cuenta para determinar la cantidad total.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Lo que determina que una planta esté en «Curación» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,El ID de la accesión utilizada para crear este lote. No disponible para especies que no tienen ninguna accesión.,a6a3a0af
 TOOLTIP_LIVE_PLANTS,Las plantas vivas observadas solo incluyen las plantas registradas como vivas; no incluyen las plantas registradas como preexistentes.,93092e08
-TOOLTIP_NOT_READY_QUANTITY,"Lo que determina que una planta figure como ""no lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación.",e31e23c4
-TOOLTIP_READY_QUANTITY,"Lo que determina que una planta figure como ""lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación.",dbed048d
 TOOLTIP_READY_TO_PLANT_QUANTITY,Lo que determina que una planta esté «Lista para plantar» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.,be7a8ced
 TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Categoría de conservación de la Lista Roja de la IUCN,83da1fe2

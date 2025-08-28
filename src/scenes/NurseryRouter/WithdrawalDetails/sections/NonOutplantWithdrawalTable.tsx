@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
@@ -35,31 +34,22 @@ export default function NonOutplantWithdrawalTable({
   batches,
 }: NonOutplantWithdrawalTableProps): JSX.Element {
   const { strings } = useLocalization();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const columns = useMemo(
     (): TableColumnType[] => [
       { key: 'batchNumber', name: strings.BATCH, type: 'string' },
       { key: 'name', name: strings.SPECIES, type: 'string' },
-      ...(isUpdatedNurseryGrowthPhasesEnabled
-        ? [
-            { key: 'germinating', name: strings.GERMINATION_ESTABLISHMENT, type: 'number' as const },
-            { key: 'activeGrowth', name: strings.ACTIVE_GROWTH, type: 'number' as const },
-            {
-              key: 'hardeningOffQuantity',
-              name: strings.HARDENING_OFF,
-              type: 'number' as const,
-            },
-            { key: 'ready', name: strings.READY_TO_PLANT, type: 'number' as const },
-          ]
-        : [
-            { key: 'germinating', name: strings.GERMINATING, type: 'number' as const },
-            { key: 'activeGrowth', name: strings.NOT_READY, type: 'number' as const },
-            { key: 'ready', name: strings.READY, type: 'number' as const },
-          ]),
+      { key: 'germinating', name: strings.GERMINATION_ESTABLISHMENT, type: 'number' as const },
+      { key: 'activeGrowth', name: strings.ACTIVE_GROWTH, type: 'number' as const },
+      {
+        key: 'hardeningOffQuantity',
+        name: strings.HARDENING_OFF,
+        type: 'number' as const,
+      },
+      { key: 'ready', name: strings.READY_TO_PLANT, type: 'number' as const },
       { key: 'total', name: strings.TOTAL, type: 'number' },
     ],
-    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+    [strings]
   );
 
   const rowData = useMemo(() => {

@@ -260,10 +260,8 @@ CHALLENGES_REQUIRED,Défis et revers *,253f97ed
 CHANGE,Changer,e276068b
 CHANGE_ACTIVE_GROWTH_STATUS,Modifier l'état de la croissance active,969b83ab
 CHANGE_DEFAULT_WEIGHT_SYSTEM,Vous pouvez changer votre système de poids par défaut de {0},e1257e91
-CHANGE_GERMINATING_STATUS,Changer l'état de germination,21fd8bfe
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Changer l'état de germination/établissement,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Modifier le statut d’acclimatation,b734dbd7
-CHANGE_NOT_READY_STATUS,Modifier l'état non prêt,58e5eef9
 CHANGE_TO,Passez à {0},8423817d
 CHANGES,Changements,47809a57
 CHANGES_SAVED,Changements sauvés !,709a9559
@@ -689,11 +687,6 @@ GENERIC_ERROR,Une erreur s’est produite,e1abd8bd
 GENUS,Genre,893239a9
 GEOMETRY_CHANGED_WARNING_MESSAGE,La forme du site {0}. Les données présentées ici peuvent ne pas correspondre à l'état actuel des zones du site de plantation.,b5d7eb2b
 GERMINATED,Germiné,452ce9c6
-GERMINATING,En cours de germination,9a93858b
-GERMINATING_QUANTITY,Quantité en germination,068c3582
-GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité de germination ne peut pas être inférieure à 0,0e5c6963
-GERMINATING_QUANTITY_REMAINING,Quantité en germination ({0} restant),01603f34
-GERMINATING_QUANTITY_REQUIRED,Quantité en germination *,087aa849
 GERMINATION_ESTABLISHMENT,Germination/établissement,0da62fe0
 GERMINATION_ESTABLISHMENT_QUANTITY,Quantité de germination/établissement,630be8de
 GERMINATION_ESTABLISHMENT_QUANTITY_AFTER,Quantité de germination/établissement (après),869caad0
@@ -1082,13 +1075,6 @@ NOT_COMPLETE,Pas terminé,a8606bc8
 NOT_ENOUGH_SEEDS_IN_ACCESSION,Pas assez de semences dans l'accession,1d7be036
 NOT_NEEDED,Non nécessaire,dc4188cf
 NOT_OBSERVED,Non observé,4a9890a2
-NOT_READY,Pas Prêt,44e66df3
-NOT_READY_QUANTITY,Quantité pas prête,c981ef51
-NOT_READY_QUANTITY_AFTER,Pas prêt Quantité (après),a044c809
-NOT_READY_QUANTITY_BEFORE,Quantité non prête (avant),bb2b9cbf
-NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité non prête ne peut être inférieure à 0,b48e3f4a
-NOT_READY_QUANTITY_REMAINING,Pas prêt Quantité ({0} restant),dcee9136
-NOT_READY_QUANTITY_REQUIRED,Quantité non disponible *,9393a99c
 NOT_SUBMITTED,Non soumis,e40a2b1d
 NOT_YET,Pas encore,77976aa8
 NOTE_ANY_ISSUES,Est-ce que tout ce qui précède vous semble correct ? Signalez tout problème.,133db1c4
@@ -1436,11 +1422,6 @@ RARE,Rare,c114e991
 RATIONALE,Justification,4e68d88e
 REACH_OUT_TO_ADMIN_TITLE,Veuillez contacter un administrateur de votre organisation.,24a43465
 READY,Prêt,35379dea
-READY_QUANTITY,Quantité prête,7d26fc1d
-READY_QUANTITY_AFTER,Quantité prête (après),1de35ff4
-READY_QUANTITY_BEFORE,Quantité prête (avant),98f99027
-READY_QUANTITY_REMAINING,Quantité prête ({0} restant),29beaa92
-READY_QUANTITY_REQUIRED,Quantité prête *,8b6b5352
 READY_TO_PLANT,Prêt à planter,e9b178c5
 READY_TO_PLANT_QUANTITY,Quantité prête à planter,a6197e31
 READY_TO_PLANT_QUANTITY_AFTER,Quantité prête à planter (après),6879991b
@@ -1954,13 +1935,10 @@ TOOLTIP_COMMON_NAME,"Le nom sous lequel un organisme est connu du grand public, 
 TOOLTIP_COUNTRY_MY_ACCOUNT,Votre pays influence la façon dont nous affichons les numéros et d'autres informations.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Ce numéro représente toutes les accessions dont le statut est « En attente d'enregistrement », « En attente de traitement », « En cours de traitement », « En cours de séchage » et « En cours de stockage ».",5101036f
 TOOLTIP_ECOSYSTEM_TYPE,"Unités relativement grandes de terre ou d'eau contenant un assemblage distinct de communautés naturelles partageant une grande majorité d'espèces, de dynamiques et de conditions environnementales.",92c6820c
-TOOLTIP_GERMINATING_QUANTITY,La germination indique que les semis ne sont pas encore sortis des semences. La quantité en germination ne compte pas dans la quantité totale.,d444f7af
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,La « germination/établissement » indique que les semis n'ont pas encore émergé des graines. La quantité ne compte pas dans la quantité totale.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Les éléments qui déterminent qu'une plante est en phase d'endurcissement peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,L'identifiant de l'accession utilisée pour créer ce lot. Pas disponible pour les espèces qui n'ont pas d'accès.,a6a3a0af
 TOOLTIP_LIVE_PLANTS,Les plantes vivantes observées comprennent uniquement les plantes enregistrées comme vivantes ; elles n'incluent pas les plantes enregistrées comme préexistantes.,93092e08
-TOOLTIP_NOT_READY_QUANTITY,"Ce qui détermine qu'une plante « n'est pas prête » dépend de votre équipe et est souvent spécifique à l'espèce. Par exemple, la taille de la plante ou la durée d'acclimatation.",e31e23c4
-TOOLTIP_READY_QUANTITY,Ce qui détermine qu'une plante est « prête » dépend de votre équipe et est souvent spécifique à l'espèce. Par exemple : la taille de la plante ou le temps d'acclimatation.,dbed048d
 TOOLTIP_READY_TO_PLANT_QUANTITY,Les critères qui déterminent qu'une plante est « prête à être plantée » peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,Le nom latin binomial (genre + espèce) actuellement accepté dans la littérature botanique.,be7a8ced
 TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Catégories de la Liste Rouge de l'UICN,83da1fe2

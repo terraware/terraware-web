@@ -7,7 +7,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
@@ -55,7 +54,6 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
   const [species, setSpecies] = useState<any>([]);
@@ -78,38 +76,22 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         name: strings.PROJECT,
         type: 'string',
       },
-      ...(isUpdatedNurseryGrowthPhasesEnabled
-        ? [
-            {
-              key: 'germinatingQuantityWithdrawn',
-              name: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
-              type: 'number' as const,
-            },
-            {
-              key: 'activeGrowthQuantityWithdrawn',
-              name: strings.ACTIVE_GROWTH_QUANTITY,
-              type: 'number' as const,
-            },
-            {
-              key: 'hardeningOffQuantityWithdrawn',
-              name: strings.HARDENING_OFF_QUANTITY,
-              type: 'number' as const,
-            },
-            { key: 'readyQuantityWithdrawn', name: strings.READY_TO_PLANT_QUANTITY, type: 'number' as const },
-          ]
-        : [
-            {
-              key: 'germinatingQuantityWithdrawn',
-              name: strings.GERMINATING_QUANTITY,
-              type: 'number' as const,
-            },
-            {
-              key: 'activeGrowthQuantityWithdrawn',
-              name: strings.NOT_READY_QUANTITY,
-              type: 'number' as const,
-            },
-            { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' as const },
-          ]),
+      {
+        key: 'germinatingQuantityWithdrawn',
+        name: strings.GERMINATION_ESTABLISHMENT_QUANTITY,
+        type: 'number' as const,
+      },
+      {
+        key: 'activeGrowthQuantityWithdrawn',
+        name: strings.ACTIVE_GROWTH_QUANTITY,
+        type: 'number' as const,
+      },
+      {
+        key: 'hardeningOffQuantityWithdrawn',
+        name: strings.HARDENING_OFF_QUANTITY,
+        type: 'number' as const,
+      },
+      { key: 'readyQuantityWithdrawn', name: strings.READY_TO_PLANT_QUANTITY, type: 'number' as const },
       { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
       {
         key: 'totalWithdraw',
@@ -117,7 +99,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         type: 'number',
       },
     ],
-    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+    [strings]
   );
 
   const outplantTableColumns = useMemo(
@@ -139,13 +121,13 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       },
       {
         key: 'readyQuantity',
-        name: isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY,
+        name: strings.READY_TO_PLANT_QUANTITY,
         type: 'string',
         alignment: 'right',
       },
       { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string', alignment: 'right' },
     ],
-    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+    [strings]
   );
 
   const columns = useMemo(

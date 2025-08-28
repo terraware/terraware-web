@@ -7,7 +7,6 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryBatchService } from 'src/services';
@@ -43,7 +42,6 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   const snackbar = useSnackbar();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const isUpdatedNurseryGrowthPhasesEnabled = isEnabled('Updated Nursery Growth Phases');
 
   const [record, setRecord, onChange, onChangeCallback] = useForm(batch);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -287,16 +285,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             value={record.germinatingQuantity}
             onChange={onChangeCallback('germinatingQuantity')}
             type='number'
-            label={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.GERMINATION_ESTABLISHMENT_QUANTITY_REQUIRED
-                : strings.GERMINATING_QUANTITY_REQUIRED
-            }
-            tooltipTitle={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY
-                : strings.TOOLTIP_GERMINATING_QUANTITY
-            }
+            label={strings.GERMINATION_ESTABLISHMENT_QUANTITY_REQUIRED}
+            tooltipTitle={strings.TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY}
             errorText={validateFields && !isNumber(record?.germinatingQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
@@ -304,16 +294,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
           <DatePicker
             id='germinationStartedDate'
-            label={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
-                : strings.GERMINATION_STARTED_DATE
-            }
-            aria-label={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
-                : strings.GERMINATION_STARTED_DATE
-            }
+            label={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
+            aria-label={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
             value={record.germinationStartedDate}
             onChange={handleGerminationStartedDateChange}
             defaultTimeZone={timeZone}
@@ -325,16 +307,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             value={record.activeGrowthQuantity}
             onChange={onChangeCallback('activeGrowthQuantity')}
             type='number'
-            label={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.ACTIVE_GROWTH_QUANTITY_REQUIRED
-                : strings.NOT_READY_QUANTITY_REQUIRED
-            }
-            tooltipTitle={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY
-                : strings.TOOLTIP_NOT_READY_QUANTITY
-            }
+            label={strings.ACTIVE_GROWTH_QUANTITY_REQUIRED}
+            tooltipTitle={strings.TOOLTIP_ACTIVE_GROWTH_QUANTITY}
             errorText={validateFields && !isNumber(record?.activeGrowthQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
@@ -350,24 +324,20 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           />
         </Grid>
 
-        {isUpdatedNurseryGrowthPhasesEnabled && (
-          <>
-            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='hardeningOffQuantity'
-                value={record.hardeningOffQuantity}
-                onChange={onChangeCallback('hardeningOffQuantity')}
-                type='number'
-                label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
-                errorText={validateFields && !isNumber(record?.hardeningOffQuantity) ? strings.REQUIRED_FIELD : ''}
-                min={0}
-              />
-            </Grid>
+        <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+          <Textfield
+            id='hardeningOffQuantity'
+            value={record.hardeningOffQuantity}
+            onChange={onChangeCallback('hardeningOffQuantity')}
+            type='number'
+            label={strings.HARDENING_OFF_QUANTITY_REQUIRED}
+            tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
+            errorText={validateFields && !isNumber(record?.hardeningOffQuantity) ? strings.REQUIRED_FIELD : ''}
+            min={0}
+          />
+        </Grid>
 
-            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
-          </>
-        )}
+        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
 
         <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
@@ -375,16 +345,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             value={record.readyQuantity}
             onChange={onChangeCallback('readyQuantity')}
             type='number'
-            label={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.READY_TO_PLANT_QUANTITY_REQUIRED
-                : strings.READY_QUANTITY_REQUIRED
-            }
-            tooltipTitle={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.TOOLTIP_READY_TO_PLANT_QUANTITY
-                : strings.TOOLTIP_READY_QUANTITY
-            }
+            label={strings.READY_TO_PLANT_QUANTITY_REQUIRED}
+            tooltipTitle={strings.TOOLTIP_READY_TO_PLANT_QUANTITY}
             errorText={validateFields && !isNumber(record?.readyQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
@@ -398,9 +360,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             type='text'
             label={strings.TOTAL_QUANTITY}
             display={true}
-            tooltipTitle={
-              isUpdatedNurseryGrowthPhasesEnabled ? strings.TOOLTIP_TOTAL_QUANTITY : strings.TOOLTIP_TOTAL_QUANTITY_PREV
-            }
+            tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
           />
         </Grid>
         <Grid item xs={12} sx={marginTop}>
