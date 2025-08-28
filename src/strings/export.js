@@ -73,14 +73,16 @@ function extraStrings(locale) {
   }
 }
 
-async function exportStrings(englishStrings, localizedStrings, locale, targetDir) {
+async function exportStrings(englishStrings, localizedStrings, locale, targetDir, defaultToEnglish = true) {
   const stringsMap = extraStrings(locale);
   for (let key in englishStrings) {
     if (key in localizedStrings) {
       stringsMap[key] = localizedStrings[key];
     } else {
       console.warn(`Locale ${locale} has no translation for ${key}`);
-      stringsMap[key] = englishStrings[key];
+      if (defaultToEnglish) {
+        stringsMap[key] = englishStrings[key];
+      }
     }
   }
 
@@ -99,9 +101,11 @@ async function exportStrings(englishStrings, localizedStrings, locale, targetDir
  * @param {string} [csvPath] - Location of CSV file. The filename is assumed to be the locale
  * code with a ".csv" suffix.
  * @param {string} [targetDir] - Directory to write JS file to
+ * @param {boolean} [defaultToEnglish] - If true, output the English text for any strings that
+ * don't have translations in the CSV file.
  * @return {Promise<void>}
  */
-async function convertCsvFile(csvPath, targetDir) {
+async function convertCsvFile(csvPath, targetDir, defaultToEnglish = true) {
   if (!csvPath.endsWith('.csv')) {
     throw new Error('Cannot convert a non-CSV file');
   }
@@ -119,7 +123,7 @@ async function convertCsvFile(csvPath, targetDir) {
     englishStringsMap = csvToStrings(englishCsvData);
   }
 
-  await exportStrings(englishStringsMap, stringsMap, locale, targetDir);
+  await exportStrings(englishStringsMap, stringsMap, locale, targetDir, defaultToEnglish);
 
   if (locale === 'en') {
     await exportStrings(englishStringsMap, generateGibberish(englishStringsMap), 'gx', targetDir);
@@ -169,13 +173,13 @@ function generateGibberish(english) {
  * Converts the CSV files for all locales to JavaScript source files that export a symbol
  * "strings." The list of locales is determined by the presence of CSV files.
  */
-async function convertAllLocales(csvDir, stringsDir) {
+async function convertAllLocales(csvDir, stringsDir, defaultToEnglish = true) {
   const files = await fs.readdir(csvDir);
   const conversions = files.map(async (filename) => {
     if (filename.endsWith('.csv')) {
       // eslint-disable no-console
       console.log(`Converting ${filename} to JavaScript`);
-      await convertCsvFile(`${csvDir}/${filename}`, stringsDir);
+      await convertCsvFile(`${csvDir}/${filename}`, stringsDir, defaultToEnglish);
     }
   });
 
