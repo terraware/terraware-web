@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -281,28 +281,7 @@
 <a name='L216'></a><a href='#L216'>216</a>
 <a name='L217'></a><a href='#L217'>217</a>
 <a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a>
-<a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a>
-<a name='L224'></a><a href='#L224'>224</a>
-<a name='L225'></a><a href='#L225'>225</a>
-<a name='L226'></a><a href='#L226'>226</a>
-<a name='L227'></a><a href='#L227'>227</a>
-<a name='L228'></a><a href='#L228'>228</a>
-<a name='L229'></a><a href='#L229'>229</a>
-<a name='L230'></a><a href='#L230'>230</a>
-<a name='L231'></a><a href='#L231'>231</a>
-<a name='L232'></a><a href='#L232'>232</a>
-<a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a>
-<a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L219'></a><a href='#L219'>219</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -327,9 +306,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -395,24 +371,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -548,7 +506,6 @@ import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
 import { NurseryBatchService } from 'src/services';
@@ -560,7 +517,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import OverviewItemCard from '../../components/common/OverviewItemCard';
 import PhotosList from '../../components/common/PhotosList';
 import BatchDetailsModal from './BatchDetailsModal';
-import ChangeQuantityModalPrev from './view/ChangeQuantityModalPrev';
 &nbsp;
 interface BatchDetailsProps {
   batch: Batch;
@@ -572,7 +528,6 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const isUpdatedNurseryGrowthPhasesEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Updated Nursery Growth Phases');</span>
 &nbsp;
   const [photoUrls, setPhotoUrls] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;([]);</span>
   const [openEditBatchModal, setOpenEditBatchModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
@@ -648,22 +603,14 @@ export default function <span class="fstat-no" title="function not covered" >Bat
           onClick={openEditModal}
         /&gt;
       &lt;/Box&gt;
-      {modalValues.openChangeQuantityModal &amp;&amp;
-        (isUpdatedNurseryGrowthPhasesEnabled ? (
-          &lt;ChangeQuantityModal
-            modalValues={modalValues}
-            onClose={onCloseChangeQuantityModal}
-            reload={onUpdate}
-            row={batchWithRawQtys}
-          /&gt;
-        ) : (
-          &lt;ChangeQuantityModalPrev
-            modalValues={modalValues}
-            onClose={onCloseChangeQuantityModal}
-            reload={onUpdate}
-            row={batchWithRawQtys}
-          /&gt;
-        ))}
+      {modalValues.openChangeQuantityModal &amp;&amp; (
+        &lt;ChangeQuantityModal
+          modalValues={modalValues}
+          onClose={onCloseChangeQuantityModal}
+          reload={onUpdate}
+          row={batchWithRawQtys}
+        /&gt;
+      )}
       &lt;Grid container&gt;
         &lt;Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}&gt;
           &lt;OverviewItemCard
@@ -677,9 +624,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
         &lt;Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}&gt;
           &lt;OverviewItemCard
             isEditable={true}
-            title={
-              isUpdatedNurseryGrowthPhasesEnabled ? strings.GERMINATION_ESTABLISHMENT : strings.GERMINATING_QUANTITY
-            }
+            title={strings.GERMINATION_ESTABLISHMENT_QUANTITY}
             contents={batch.germinatingQuantity}
             grid={true}
             handleEdit={handleEditGerminatingQuantity}
@@ -688,11 +633,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
         &lt;Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}&gt;
           &lt;OverviewItemCard
             isEditable={false}
-            title={
-              isUpdatedNurseryGrowthPhasesEnabled
-                ? strings.GERMINATION_ESTABLISHMENT_STARTED_DATE
-                : strings.GERMINATION_STARTED_DATE
-            }
+            title={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
             contents={batch.germinationStartedDate}
             grid={true}
           /&gt;
@@ -700,7 +641,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
         &lt;Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}&gt;
           &lt;OverviewItemCard
             isEditable={true}
-            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.ACTIVE_GROWTH_QUANTITY : strings.NOT_READY_QUANTITY}
+            title={strings.ACTIVE_GROWTH_QUANTITY}
             contents={batch.activeGrowthQuantity}
             grid={true}
             handleEdit={handleEditActiveGrowthQuantity}
@@ -714,24 +655,20 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             grid={true}
           /&gt;
         &lt;/Grid&gt;
-        {isUpdatedNurseryGrowthPhasesEnabled &amp;&amp; (
-          &lt;&gt;
-            &lt;Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}&gt;
-              &lt;OverviewItemCard
-                contents={batch.hardeningOffQuantity}
-                grid
-                handleEdit={handleEditHardeningOffQuantity}
-                isEditable
-                title={strings.HARDENING_OFF_QUANTITY}
-              /&gt;
-            &lt;/Grid&gt;
-            {!isMobile &amp;&amp; &lt;Grid item xs={6} paddingRight={theme.spacing(3)} /&gt;}
-          &lt;/&gt;
-        )}
+        &lt;Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}&gt;
+          &lt;OverviewItemCard
+            contents={batch.hardeningOffQuantity}
+            grid
+            handleEdit={handleEditHardeningOffQuantity}
+            isEditable
+            title={strings.HARDENING_OFF_QUANTITY}
+          /&gt;
+        &lt;/Grid&gt;
+        {!isMobile &amp;&amp; &lt;Grid item xs={6} paddingRight={theme.spacing(3)} /&gt;}
         &lt;Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}&gt;
           &lt;OverviewItemCard
             isEditable={false}
-            title={isUpdatedNurseryGrowthPhasesEnabled ? strings.READY_TO_PLANT_QUANTITY : strings.READY_QUANTITY}
+            title={strings.READY_TO_PLANT_QUANTITY}
             contents={batch.readyQuantity}
             grid={true}
           /&gt;
@@ -787,7 +724,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-27T22:41:55.840Z
+                at 2025-08-28T02:05:30.370Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

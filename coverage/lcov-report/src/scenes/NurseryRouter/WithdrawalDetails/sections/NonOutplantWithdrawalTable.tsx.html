@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -168,18 +168,7 @@
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
 <a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L106'></a><a href='#L106'>106</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,18 +204,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,7 +278,6 @@
 import { TableColumnType } from '@terraware/web-components';
 &nbsp;
 import Table from 'src/components/common/table';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
@@ -330,31 +309,22 @@ export default function <span class="fstat-no" title="function not covered" >Non
   batches,
 }: NonOutplantWithdrawalTableProps): JSX.Element {
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const isUpdatedNurseryGrowthPhasesEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Updated Nursery Growth Phases');</span>
 &nbsp;
   const columns = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span>
       { key: 'batchNumber', name: strings.BATCH, type: 'string' },
       { key: 'name', name: strings.SPECIES, type: 'string' },
-      ...(isUpdatedNurseryGrowthPhasesEnabled
-        ? [
-            { key: 'germinating', name: strings.GERMINATION_ESTABLISHMENT, type: 'number' as const },
-            { key: 'activeGrowth', name: strings.ACTIVE_GROWTH, type: 'number' as const },
-            {
-              key: 'hardeningOffQuantity',
-              name: strings.HARDENING_OFF,
-              type: 'number' as const,
-            },
-            { key: 'ready', name: strings.READY_TO_PLANT, type: 'number' as const },
-          ]
-        : [
-            { key: 'germinating', name: strings.GERMINATING, type: 'number' as const },
-            { key: 'activeGrowth', name: strings.NOT_READY, type: 'number' as const },
-            { key: 'ready', name: strings.READY, type: 'number' as const },
-          ]),
+      { key: 'germinating', name: strings.GERMINATION_ESTABLISHMENT, type: 'number' as const },
+      { key: 'activeGrowth', name: strings.ACTIVE_GROWTH, type: 'number' as const },
+      {
+        key: 'hardeningOffQuantity',
+        name: strings.HARDENING_OFF,
+        type: 'number' as const,
+      },
+      { key: 'ready', name: strings.READY_TO_PLANT, type: 'number' as const },
       { key: 'total', name: strings.TOTAL, type: 'number' },
     ],
-    [isUpdatedNurseryGrowthPhasesEnabled, strings]
+    [strings]
   );
 &nbsp;
   const rowData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -415,7 +385,7 @@ export default function <span class="fstat-no" title="function not covered" >Non
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-27T22:41:55.840Z
+                at 2025-08-28T02:05:30.370Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
