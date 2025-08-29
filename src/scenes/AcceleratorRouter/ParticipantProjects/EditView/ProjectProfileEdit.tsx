@@ -505,10 +505,18 @@ const ProjectProfileEdit = () => {
     setAddInternalUserRoleModalOpen(false);
   }, [setAddInternalUserRoleModalOpen]);
 
-  const globalUsersWithNoOwner = useMemo(() => {
-    const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
-    return globalUsersOptions?.filter((opt) => opt.value.toString() !== ownerId?.toString()) || [];
-  }, [organizationUsers, globalUsersOptions]);
+  const ownerId = useMemo(() => organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id, [organizationUsers]);
+
+  const getInternalUserOptions = useCallback(
+    (userId?: number) => {
+      const availableInternalUserIds = internalUsers?.map((user) => user.userId).filter((id) => id !== userId);
+      return (
+        globalUsersOptions?.filter((opt) => opt.value !== ownerId && !availableInternalUserIds.includes(opt.value)) ||
+        []
+      );
+    },
+    [globalUsersOptions, internalUsers, ownerId]
+  );
 
   const sortedSelectedModelTypes = useMemo(() => {
     return LAND_USE_MODEL_TYPES.filter((type) => participantProjectRecord?.landUseModelTypes?.includes(type));
@@ -611,7 +619,7 @@ const ProjectProfileEdit = () => {
                           id={`internal-user-id-${index}`}
                           label=''
                           onChange={getOnChangeInternalUser(index)}
-                          options={globalUsersWithNoOwner}
+                          options={getInternalUserOptions(user.userId)}
                           placeholder={strings.SELECT}
                           selectedValue={user?.userId}
                         />
