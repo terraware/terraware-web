@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
 
 import { Box, Typography } from '@mui/material';
-import { Button, Message } from '@terraware/web-components';
+import { Message } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { getLongDate } from 'src/utils/dateFormatter';
@@ -23,7 +22,6 @@ export type ObservationsEventsNotificationProps = {
 
 export default function ObservationsEventsNotification({ events }: ObservationsEventsNotificationProps): JSX.Element {
   const { activeLocale } = useLocalization();
-  const openTab = (url: string) => window.open(url, '_blank');
 
   const eventsInfo = useMemo<
     {
@@ -61,11 +59,10 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
       <Message
         type='page'
         priority='info'
-        title={strings.OBSERVATIONS_WITH_THE_TERRAWARE_APP}
         body={
           <>
             {eventsInfo.length > 0 && (
-              <Box marginBottom={3}>
+              <Box>
                 {eventsInfo.map((event, index) => (
                   <Box key={index} display='flex'>
                     <Typography sx={{ whiteSpace: 'pre-wrap' }}>
@@ -84,27 +81,8 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
                 ))}
               </Box>
             )}
-            <Box>{strings.OBSERVATIONS_DOWNLOAD_APP}</Box>
           </>
         }
-        pageButtons={[
-          <Button
-            label={strings.DOWNLOAD_ON_APP_STORE}
-            size='small'
-            key='1'
-            priority='secondary'
-            type='passive'
-            onClick={() => openTab(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK)}
-          />,
-          <Button
-            label={strings.DOWNLOAD_ON_GOOGLE_PLAY}
-            size='small'
-            key='2'
-            priority='secondary'
-            type='passive'
-            onClick={() => openTab(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK)}
-          />,
-        ]}
       />
     </Box>
   );

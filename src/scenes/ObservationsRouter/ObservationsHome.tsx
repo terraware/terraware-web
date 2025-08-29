@@ -141,7 +141,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       onSelect={setSelectedPlantingSite}
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
-        <ObservationsEventsNotification events={upcomingObservations} />
+        {upcomingObservations.length > 0 && <ObservationsEventsNotification events={upcomingObservations} />}
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
       <Box marginTop={'24px'} sx={{ whiteSpace: 'break-spaces' }}>
