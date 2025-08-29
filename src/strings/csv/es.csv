@@ -1018,7 +1018,6 @@ NEW,Nuevo,b8096e3b
 NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
-NEW_CONTACT_TYPE,Nuevo tipo de contacto,cc862266
 NEW_SUBZONE,Nueva subzona,e819356e
 NEW_TEMPLATE_MODAL_DESCRIPTION,Se publicó una nueva versión para documentTemplate de este documento. ¿Quiere actualizar?,c11ed4d2
 NEW_TEMPLATE_MODAL_TITLE,Actualizar versión de DocumentTemplate,e7c35c92
@@ -1194,6 +1193,8 @@ ORIGINAL_SUBZONE,Subzona original,988c013f
 ORIGINAL_ZONE,Área original,0e12db66
 ORTHODOX,Ortodoxo,b0a5a550
 OTHER,Otro,626335b2
+OTHER_CONTACT,Otro contacto,4268b0fb
+OTHER_CONTACT_TYPE,Otro tipo de contacto,ec7c7449
 OTHER_FACTS,Otros datos,548f89be
 OTHER_LAND_USE_MODEL,Otro modelo del uso de la tierra,b89ac507
 OTHER_SPECIES,Otras especies,b19f20cd
@@ -1957,7 +1958,6 @@ TOOLTIP_TIME_ZONE_PLANTING_SITE,Usamos zonas horarias para notificaciones y para
 TOOLTIP_TIME_ZONE_SEEDBANK,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este banco de semillas. Todo el trabajo realizado en este banco de semillas usará esta zona horaria.,1b3db070
 TOOLTIP_TOTAL_PLANTS,"Las plantas en total observadas incluyen las plantas vivas y muertas de especies conocidas y desconocidas; no obstante, no incluyen las plantas registradas como preexistentes.",d21e64f0
 TOOLTIP_TOTAL_QUANTITY,La cantidad total es la suma de las cantidades no listas y listas.,4a6f0489
-TOOLTIP_TOTAL_QUANTITY_PREV,La cantidad total es la suma de las cantidades listas y no listas.,0da12307
 TOOLTIP_TOTAL_WITHDRAWN,El número total de plantas extraídas para cualquier fin.,2de74db3
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Plato que contiene un medio de cultivo de agar solidificado.,7391d8f5
 TOOLTIP_VIABILITY_TEST_CHEMICAL,Tratar las semillas con una hormona de crecimiento vegetal u otra sustancia química para romper la latencia fisiológica.,b836cc92

@@ -1017,7 +1017,6 @@ NEW,Nouveau,b8096e3b
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
-NEW_CONTACT_TYPE,Nouveau type de contact,cc862266
 NEW_SUBZONE,Nouvelle sous-zone,e819356e
 NEW_TEMPLATE_MODAL_DESCRIPTION,Une nouvelle version a été publiée pour le documentTemplate de ce document. Souhaitez-vous la mettre à jour ?,c11ed4d2
 NEW_TEMPLATE_MODAL_TITLE,Mise à jour de la version du modèle de document,e7c35c92
@@ -1193,6 +1192,8 @@ ORIGINAL_SUBZONE,Sous-zone d'origine,988c013f
 ORIGINAL_ZONE,Zone d'origine,0e12db66
 ORTHODOX,Orthodoxe,b0a5a550
 OTHER,Autre,626335b2
+OTHER_CONTACT,Autre contact,4268b0fb
+OTHER_CONTACT_TYPE,Autre type de contact,ec7c7449
 OTHER_FACTS,Autres faits,548f89be
 OTHER_LAND_USE_MODEL,Autre modèle d'utilisation des sols,b89ac507
 OTHER_SPECIES,Autres espèces,b19f20cd
@@ -1956,7 +1957,6 @@ TOOLTIP_TIME_ZONE_PLANTING_SITE,Nous utilisons les fuseaux horaires pour les not
 TOOLTIP_TIME_ZONE_SEEDBANK,Nous utilisons les fuseaux horaires pour les notifications et pour déterminer la date correcte pour votre région. Sélectionnez le fuseau horaire qui s'applique à cette banque de semences. Tous les travaux effectués dans cette banque de semences utiliseront ce fuseau horaire.,1b3db070
 TOOLTIP_TOTAL_PLANTS,"Le nombre total de plantes observées comprend les plantes vivantes et mortes d'espèces connues et inconnues, mais ne comprend pas les plantes enregistrées comme préexistantes.",d21e64f0
 TOOLTIP_TOTAL_QUANTITY,La quantité totale est la somme des quantités non prêtes et prêtes.,4a6f0489
-TOOLTIP_TOTAL_QUANTITY_PREV,La quantité totale est la somme des quantités prêtes et non prêtes.,0da12307
 TOOLTIP_TOTAL_WITHDRAWN,Le nombre total de plantes retirées pour n'importe quelle raison.,2de74db3
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Un plat qui contient un milieu de croissance composé d'agar solidifié.,7391d8f5
 TOOLTIP_VIABILITY_TEST_CHEMICAL,Traitement des semences avec une hormone de croissance végétale ou un autre produit chimique pour rompre la dormance physiologique.,b836cc92

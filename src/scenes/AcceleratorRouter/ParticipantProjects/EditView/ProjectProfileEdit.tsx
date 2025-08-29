@@ -497,7 +497,7 @@ const ProjectProfileEdit = () => {
 
   const [addInternalUserRoleModalOpen, setAddInternalUserRoleModalOpen] = useState(false);
 
-  const onClickAddNewContactType = useCallback(() => {
+  const onClickAddOtherContact = useCallback(() => {
     setAddInternalUserRoleModalOpen(true);
   }, [setAddInternalUserRoleModalOpen]);
 
@@ -665,8 +665,8 @@ const ProjectProfileEdit = () => {
                     <Grid item md={6} textAlign='right'>
                       <Button
                         icon='plus'
-                        label='New Contact Type'
-                        onClick={onClickAddNewContactType}
+                        label={strings.OTHER_CONTACT}
+                        onClick={onClickAddOtherContact}
                         priority='secondary'
                         size='medium'
                         type='productive'
