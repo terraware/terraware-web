@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1756397256519" clover="3.2.0">
-  <project timestamp="1756397256519" name="All files">
+<coverage generated="1756470837562" clover="3.2.0">
+  <project timestamp="1756470837562" name="All files">
     <metrics statements="32298" coveredstatements="1305" conditionals="22596" coveredconditionals="389" methods="9888" coveredmethods="211" elements="64782" coveredelements="1905" complexity="0" loc="32298" ncloc="32298" packages="274" files="1311" classes="1311"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -17692,12 +17692,12 @@
         <line num="399" count="0" type="stmt"/>
         <line num="400" count="0" type="stmt"/>
         <line num="429" count="0" type="stmt"/>
-        <line num="511" count="0" type="stmt"/>
-        <line num="512" count="0" type="stmt"/>
-        <line num="524" count="0" type="stmt"/>
-        <line num="582" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="583" count="0" type="stmt"/>
-        <line num="585" count="0" type="stmt"/>
+        <line num="529" count="0" type="stmt"/>
+        <line num="530" count="0" type="stmt"/>
+        <line num="542" count="0" type="stmt"/>
+        <line num="600" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="601" count="0" type="stmt"/>
+        <line num="603" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/MatrixView/index.tsx">
         <metrics statements="310" coveredstatements="0" conditionals="236" coveredconditionals="0" methods="97" coveredmethods="0"/>
@@ -17962,55 +17962,55 @@
         <line num="770" count="0" type="stmt"/>
         <line num="773" count="0" type="stmt"/>
         <line num="781" count="0" type="stmt"/>
-        <line num="812" count="0" type="stmt"/>
-        <line num="813" count="0" type="stmt"/>
-        <line num="815" count="0" type="stmt"/>
-        <line num="816" count="0" type="stmt"/>
-        <line num="818" count="0" type="stmt"/>
-        <line num="857" count="0" type="stmt"/>
-        <line num="861" count="0" type="stmt"/>
-        <line num="862" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="863" count="0" type="stmt"/>
-        <line num="865" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="866" count="0" type="stmt"/>
-        <line num="867" count="0" type="stmt"/>
-        <line num="871" count="0" type="stmt"/>
-        <line num="872" count="0" type="stmt"/>
-        <line num="875" count="0" type="stmt"/>
-        <line num="876" count="0" type="stmt"/>
-        <line num="877" count="0" type="stmt"/>
-        <line num="878" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="834" count="0" type="stmt"/>
+        <line num="835" count="0" type="stmt"/>
+        <line num="837" count="0" type="stmt"/>
+        <line num="838" count="0" type="stmt"/>
+        <line num="840" count="0" type="stmt"/>
         <line num="879" count="0" type="stmt"/>
-        <line num="880" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="882" count="0" type="stmt"/>
+        <line num="883" count="0" type="stmt"/>
+        <line num="884" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="885" count="0" type="stmt"/>
-        <line num="886" count="0" type="stmt"/>
-        <line num="890" count="0" type="stmt"/>
-        <line num="891" count="0" type="stmt"/>
+        <line num="887" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="888" count="0" type="stmt"/>
+        <line num="889" count="0" type="stmt"/>
+        <line num="893" count="0" type="stmt"/>
         <line num="894" count="0" type="stmt"/>
-        <line num="897" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="897" count="0" type="stmt"/>
         <line num="898" count="0" type="stmt"/>
         <line num="899" count="0" type="stmt"/>
-        <line num="900" count="0" type="stmt"/>
-        <line num="903" count="0" type="stmt"/>
-        <line num="909" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="910" count="0" type="stmt"/>
-        <line num="914" count="0" type="stmt"/>
-        <line num="915" count="0" type="stmt"/>
-        <line num="918" count="0" type="stmt"/>
+        <line num="900" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="901" count="0" type="stmt"/>
+        <line num="902" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="904" count="0" type="stmt"/>
+        <line num="907" count="0" type="stmt"/>
+        <line num="908" count="0" type="stmt"/>
+        <line num="912" count="0" type="stmt"/>
+        <line num="913" count="0" type="stmt"/>
+        <line num="916" count="0" type="stmt"/>
+        <line num="919" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="920" count="0" type="stmt"/>
+        <line num="921" count="0" type="stmt"/>
         <line num="922" count="0" type="stmt"/>
-        <line num="923" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="924" count="0" type="stmt"/>
-        <line num="928" count="0" type="stmt"/>
-        <line num="929" count="0" type="stmt"/>
+        <line num="925" count="0" type="stmt"/>
+        <line num="931" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="932" count="0" type="stmt"/>
-        <line num="933" count="0" type="stmt"/>
         <line num="936" count="0" type="stmt"/>
+        <line num="937" count="0" type="stmt"/>
         <line num="940" count="0" type="stmt"/>
-        <line num="943" count="0" type="stmt"/>
+        <line num="942" count="0" type="stmt"/>
         <line num="944" count="0" type="stmt"/>
-        <line num="949" count="0" type="stmt"/>
+        <line num="945" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="946" count="0" type="stmt"/>
+        <line num="950" count="0" type="stmt"/>
+        <line num="951" count="0" type="stmt"/>
+        <line num="954" count="0" type="stmt"/>
+        <line num="955" count="0" type="stmt"/>
+        <line num="958" count="0" type="stmt"/>
+        <line num="962" count="0" type="stmt"/>
+        <line num="965" count="0" type="stmt"/>
+        <line num="966" count="0" type="stmt"/>
+        <line num="971" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Modules">
