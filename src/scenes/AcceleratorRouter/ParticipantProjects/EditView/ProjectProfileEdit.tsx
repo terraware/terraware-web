@@ -441,6 +441,10 @@ const ProjectProfileEdit = () => {
     [onChangeParticipantProject]
   );
 
+  const onClickAddRow = useCallback(() => {
+    setInternalUsers((prev) => [...(prev || []), { userId: undefined, role: undefined }]);
+  }, [setInternalUsers]);
+
   const getOnChangeInternalUser = useCallback(
     (index: number) => (value: string) => {
       const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString());
@@ -481,19 +485,21 @@ const ProjectProfileEdit = () => {
   const getOnRemoveInternalUser = useCallback(
     (index: number) => () => {
       setInternalUsers((prev) => prev?.filter((_, i) => i !== index));
+
+      // add new row if there was only one row before the function was called
+      if (internalUsers.length === 1) {
+        onClickAddRow();
+      }
     },
-    [setInternalUsers]
+    [internalUsers.length, onClickAddRow]
   );
 
-  const onClickAddRow = useCallback(() => {
-    setInternalUsers((prev) => [...(prev || []), { userId: undefined, role: undefined }]);
-  }, [setInternalUsers]);
-
+  // add row, if API returns no internal users
   useEffect(() => {
-    if (listInternalUsersRequest?.status === 'success' && internalUsers?.length === 0) {
+    if (listInternalUsersRequest?.status === 'success' && listInternalUsersRequest?.data?.users?.length === 0) {
       onClickAddRow();
     }
-  }, [internalUsers, listInternalUsersRequest, onClickAddRow]);
+  }, [listInternalUsersRequest, onClickAddRow]);
 
   const [addInternalUserRoleModalOpen, setAddInternalUserRoleModalOpen] = useState(false);
 
@@ -516,6 +522,17 @@ const ProjectProfileEdit = () => {
       );
     },
     [globalUsersOptions, internalUsers, ownerId]
+  );
+
+  const showDeleteInternalUserButton = useMemo(
+    () =>
+      !(
+        internalUsers.length === 1 &&
+        internalUsers[0]?.userId === undefined &&
+        internalUsers[0]?.role === undefined &&
+        internalUsers[0]?.roleName === undefined
+      ),
+    [internalUsers]
   );
 
   const sortedSelectedModelTypes = useMemo(() => {
@@ -609,7 +626,7 @@ const ProjectProfileEdit = () => {
                     </Grid>
                   </Grid>
 
-                  {internalUsers?.map((user, index) => (
+                  {internalUsers.map((user, index) => (
                     <Grid container key={`internal-user-${index}`} marginBottom='8px'>
                       <Grid item md={6} paddingRight='8px'>
                         <Dropdown
@@ -625,7 +642,7 @@ const ProjectProfileEdit = () => {
                         />
                       </Grid>
 
-                      <Grid item md={5}>
+                      <Grid item md={showDeleteInternalUserButton ? 5 : 6}>
                         <Dropdown
                           autocomplete
                           fullWidth
@@ -639,13 +656,15 @@ const ProjectProfileEdit = () => {
                         />
                       </Grid>
 
-                      <Grid item xs={1} display={'flex'} flexDirection={'column'}>
-                        <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
-                          <Box paddingTop='8px'>
-                            <Icon name='iconSubtract' size='medium' />
-                          </Box>
-                        </Link>
-                      </Grid>
+                      {showDeleteInternalUserButton && (
+                        <Grid item xs={1} display={'flex'} flexDirection={'column'}>
+                          <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
+                            <Box paddingTop='8px'>
+                              <Icon name='iconSubtract' size='medium' />
+                            </Box>
+                          </Link>
+                        </Grid>
+                      )}
                     </Grid>
                   ))}
 
