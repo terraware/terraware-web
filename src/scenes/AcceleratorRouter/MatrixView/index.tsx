@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
+import { Box, Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
@@ -807,6 +807,28 @@ const MatrixView = () => {
         },
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+    },
+    muiTableBodyRowProps: {
+      sx: {
+        '& td': {
+          borderBottom: 'none',
+        },
+      },
+    },
+    muiTableBodyCellProps: {
+      sx: {
+        '&[data-pinned="true"]:before': {
+          backgroundColor: 'transparent !important',
+        },
+        '&[data-pinned="true"]': {
+          filter: 'brightness(0.97)',
+          boxShadow: '-4px 0 4px -4px rgba(97, 97, 97, 0.5) inset',
+          zIndex: 1,
+        },
+      },
+    },
   });
 
   const reloadTable = useCallback(() => {
@@ -957,7 +979,9 @@ const MatrixView = () => {
           table={dataForMaterialReactTable}
         />
       )}
-      <MaterialReactTable table={dataForMaterialReactTable} />
+      <Card sx={{ borderRadius: '24px', padding: theme.spacing(3), boxShadow: 'none' }}>
+        <MaterialReactTable table={dataForMaterialReactTable} />
+      </Card>
     </Page>
   );
 };

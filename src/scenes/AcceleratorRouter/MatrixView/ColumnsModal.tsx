@@ -454,7 +454,27 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
           justifyContent: 'space-between',
         }}
       >
-        <Tabs value={activeTab} onChange={onChangeTab}>
+        <Tabs
+          value={activeTab}
+          onChange={onChangeTab}
+          sx={{
+            '.MuiTab-root': {
+              textTransform: 'capitalize',
+              fontSize: '16px',
+              padding: theme.spacing(1, 2),
+              fontWeight: 600,
+
+              '&.Mui-selected': {
+                color: theme.palette.TwClrBaseGreen500,
+              },
+            },
+            '.MuiTabs-indicator': {
+              left: '0px',
+              background: theme.palette.TwClrBaseGreen500,
+              height: '4px',
+            },
+          }}
+        >
           <Tab label={strings.VARIABLES} />
           <Tab label={strings.DELIVERABLES} />
         </Tabs>
@@ -463,8 +483,6 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
-            gap: 2,
-            padding: theme.spacing(1, 3, 1, 3),
           }}
         >
           <Button size='small' priority='ghost' onClick={handleHideAll} label={strings.HIDE_ALL} />
