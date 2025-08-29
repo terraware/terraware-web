@@ -98,14 +98,18 @@ export default function PeopleListView(): JSX.Element {
     const flattened =
       (searchResults || [])
         .filter((project) => project?.internalUsers)
-        .flatMap((project) => project.internalUsers as { role: string; user_id: string }[]) ?? [];
+        .flatMap((project) => project.internalUsers as { role: string; roleName: string; user_id: string }[]) ?? [];
 
     const internalUserRolesByUserId = flattened.reduce((acc, curr) => {
       if (!acc[curr.user_id]) {
         acc[curr.user_id] = [];
       }
-      if (!acc[curr.user_id].includes(curr.role)) {
-        acc[curr.user_id].push(curr.role);
+      if (
+        (curr.role || curr.roleName) &&
+        !acc[curr.user_id].includes(curr.role) &&
+        !acc[curr.user_id].includes(curr.roleName)
+      ) {
+        acc[curr.user_id].push(curr.role || curr.roleName);
       }
       return acc;
     }, {} as ProjectInternalUserRoles);
