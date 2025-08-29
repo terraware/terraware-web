@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/230</span>
+                <span class='fraction'>0/234</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/112</span>
+                <span class='fraction'>0/114</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/216</span>
+                <span class='fraction'>0/218</span>
             </div>
         
             
@@ -1000,7 +1000,15 @@
 <a name='L935'></a><a href='#L935'>935</a>
 <a name='L936'></a><a href='#L936'>936</a>
 <a name='L937'></a><a href='#L937'>937</a>
-<a name='L938'></a><a href='#L938'>938</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L938'></a><a href='#L938'>938</a>
+<a name='L939'></a><a href='#L939'>939</a>
+<a name='L940'></a><a href='#L940'>940</a>
+<a name='L941'></a><a href='#L941'>941</a>
+<a name='L942'></a><a href='#L942'>942</a>
+<a name='L943'></a><a href='#L943'>943</a>
+<a name='L944'></a><a href='#L944'>944</a>
+<a name='L945'></a><a href='#L945'>945</a>
+<a name='L946'></a><a href='#L946'>946</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1508,8 +1516,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2444,10 +2460,18 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
 <span class="cstat-no" title="statement not covered" >    setAddInternalUserRoleModalOpen(false);</span>
   }, [setAddInternalUserRoleModalOpen]);
 &nbsp;
-  const globalUsersWithNoOwner = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const ownerId = <span class="cstat-no" title="statement not covered" >organizationUsers?.find(<span class="fstat-no" title="function not covered" >(o</span>rgUsr) =&gt; <span class="cstat-no" title="statement not covered" >orgUsr.role === 'Owner')</span>?.id;</span>
-<span class="cstat-no" title="statement not covered" >    return globalUsersOptions?.filter(<span class="fstat-no" title="function not covered" >(o</span>pt) =&gt; <span class="cstat-no" title="statement not covered" >opt.value.toString() !== ownerId?.toString())</span> || [];</span>
-  }, [organizationUsers, globalUsersOptions]);
+  const ownerId = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >organizationUsers?.find(<span class="fstat-no" title="function not covered" >(o</span>rgUsr) =&gt; <span class="cstat-no" title="statement not covered" >orgUsr.role === 'Owner')</span>?.id,</span> [organizationUsers]);</span>
+&nbsp;
+  const getInternalUserOptions = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (u</span>serId?: number) =&gt; {
+      const availableInternalUserIds = <span class="cstat-no" title="statement not covered" >internalUsers?.map(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >user.userId)</span>.filter(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >id !== userId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        globalUsersOptions?.filter(<span class="fstat-no" title="function not covered" >(o</span>pt) =&gt; <span class="cstat-no" title="statement not covered" >opt.value !== ownerId &amp;&amp; !availableInternalUserIds.includes(opt.value))</span> ||
+        []
+      );
+    },
+    [globalUsersOptions, internalUsers, ownerId]
+  );
 &nbsp;
   const sortedSelectedModelTypes = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return LAND_USE_MODEL_TYPES.filter(<span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; <span class="cstat-no" title="statement not covered" >participantProjectRecord?.landUseModelTypes?.includes(type))</span>;</span>
@@ -2550,7 +2574,7 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
                           id={`internal-user-id-${index}`}
                           label=''
                           onChange={getOnChangeInternalUser(index)}
-                          options={globalUsersWithNoOwner}
+                          options={getInternalUserOptions(user.userId)}
                           placeholder={strings.SELECT}
                           selectedValue={user?.userId}
                         /&gt;
@@ -2881,7 +2905,7 @@ export default ProjectProfileEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-29T19:08:30.922Z
+                at 2025-08-29T20:22:59.660Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
