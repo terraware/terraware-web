@@ -84,7 +84,7 @@ const ProjectFieldInlineMeta = ({
             )}
             {moreUsersTooltip && (
               <>
-                <Tooltip title={moreUsersTooltip}>
+                <Tooltip placement='bottom' title={moreUsersTooltip}>
                   <Typography
                     component='span'
                     fontSize={fontSize || '14px'}
