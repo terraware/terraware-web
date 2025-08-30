@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1756509790685" clover="3.2.0">
-  <project timestamp="1756509790685" name="All files">
-    <metrics statements="32297" coveredstatements="1305" conditionals="22606" coveredconditionals="389" methods="9888" coveredmethods="211" elements="64791" coveredelements="1905" complexity="0" loc="32297" ncloc="32297" packages="274" files="1311" classes="1311"/>
+<coverage generated="1756515370485" clover="3.2.0">
+  <project timestamp="1756515370485" name="All files">
+    <metrics statements="32301" coveredstatements="1305" conditionals="22616" coveredconditionals="389" methods="9889" coveredmethods="211" elements="64806" coveredelements="1905" complexity="0" loc="32301" ncloc="32301" packages="274" files="1311" classes="1311"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -18972,7 +18972,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.EditView">
-      <metrics statements="228" coveredstatements="0" conditionals="116" coveredconditionals="0" methods="74" coveredmethods="0"/>
+      <metrics statements="232" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="75" coveredmethods="0"/>
       <file name="AddInternalUserRoleModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/EditView/AddInternalUserRoleModal.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -18987,7 +18987,7 @@
         <line num="38" count="0" type="stmt"/>
       </file>
       <file name="ProjectProfileEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/EditView/ProjectProfileEdit.tsx">
-        <metrics statements="218" coveredstatements="0" conditionals="114" coveredconditionals="0" methods="71" coveredmethods="0"/>
+        <metrics statements="222" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="72" coveredmethods="0"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
@@ -19165,47 +19165,51 @@
         <line num="436" count="0" type="stmt"/>
         <line num="438" count="0" type="stmt"/>
         <line num="444" count="0" type="stmt"/>
-        <line num="445" count="0" type="stmt"/>
-        <line num="446" count="0" type="stmt"/>
-        <line num="447" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="445" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="448" count="0" type="stmt"/>
         <line num="449" count="0" type="stmt"/>
-        <line num="450" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="451" count="0" type="stmt"/>
+        <line num="450" count="0" type="stmt"/>
+        <line num="451" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="452" count="0" type="stmt"/>
+        <line num="453" count="0" type="stmt"/>
+        <line num="454" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="455" count="0" type="stmt"/>
-        <line num="457" count="0" type="stmt"/>
-        <line num="464" count="0" type="stmt"/>
-        <line num="465" count="0" type="stmt"/>
-        <line num="466" count="0" type="stmt"/>
-        <line num="467" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="459" count="0" type="stmt"/>
+        <line num="461" count="0" type="stmt"/>
         <line num="468" count="0" type="stmt"/>
         <line num="469" count="0" type="stmt"/>
-        <line num="475" count="0" type="stmt"/>
-        <line num="481" count="0" type="stmt"/>
-        <line num="482" count="0" type="stmt"/>
-        <line num="483" count="0" type="stmt"/>
-        <line num="488" count="0" type="stmt"/>
-        <line num="489" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="492" count="0" type="stmt"/>
-        <line num="493" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="494" count="0" type="stmt"/>
+        <line num="470" count="0" type="stmt"/>
+        <line num="471" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="472" count="0" type="stmt"/>
+        <line num="473" count="0" type="stmt"/>
+        <line num="479" count="0" type="stmt"/>
+        <line num="485" count="0" type="stmt"/>
+        <line num="486" count="0" type="stmt"/>
+        <line num="487" count="0" type="stmt"/>
+        <line num="490" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="491" count="0" type="stmt"/>
         <line num="498" count="0" type="stmt"/>
+        <line num="499" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="500" count="0" type="stmt"/>
-        <line num="501" count="0" type="stmt"/>
         <line num="504" count="0" type="stmt"/>
-        <line num="505" count="0" type="stmt"/>
-        <line num="508" count="0" type="stmt"/>
+        <line num="506" count="0" type="stmt"/>
+        <line num="507" count="0" type="stmt"/>
         <line num="510" count="0" type="stmt"/>
-        <line num="512" count="0" type="stmt"/>
-        <line num="513" count="0" type="stmt"/>
-        <line num="514" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="521" count="0" type="stmt"/>
-        <line num="522" count="0" type="stmt"/>
-        <line num="525" count="0" type="stmt"/>
-        <line num="613" count="0" type="stmt"/>
-        <line num="696" count="0" type="stmt"/>
-        <line num="823" count="0" type="stmt"/>
-        <line num="824" count="0" type="stmt"/>
+        <line num="511" count="0" type="stmt"/>
+        <line num="514" count="0" type="stmt"/>
+        <line num="516" count="0" type="stmt"/>
+        <line num="518" count="0" type="stmt"/>
+        <line num="519" count="0" type="stmt"/>
+        <line num="520" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="527" count="0" type="stmt"/>
+        <line num="529" count="0" type="stmt"/>
+        <line num="538" count="0" type="stmt"/>
+        <line num="539" count="0" type="stmt"/>
+        <line num="542" count="0" type="stmt"/>
+        <line num="630" count="0" type="stmt"/>
+        <line num="715" count="0" type="stmt"/>
+        <line num="842" count="0" type="stmt"/>
+        <line num="843" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.Reports">
