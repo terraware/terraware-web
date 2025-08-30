@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -26,13 +26,16 @@ import { APP_PATHS } from 'src/constants';
 import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
+import { requestProjectInternalUsersList } from 'src/redux/features/projects/projectsAsyncThunks';
+import { selectProjectInternalUsersListRequest } from 'src/redux/features/projects/projectsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { PublishedReport } from 'src/types/AcceleratorReport';
 import { Application } from 'src/types/Application';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import { ParticipantProject } from 'src/types/ParticipantProject';
-import { Project, ProjectMeta } from 'src/types/Project';
+import { Project, ProjectMeta, getProjectInternalUserRoleString } from 'src/types/Project';
 import { Score } from 'src/types/Score';
 import { PhaseVotes } from 'src/types/Votes';
 import { getCountryByCode } from 'src/utils/country';
@@ -65,6 +68,7 @@ const ProjectProfileView = ({
   funderView,
   publishedReports = [],
 }: ProjectProfileViewProps) => {
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { activeLocale, countries } = useLocalization();
@@ -72,7 +76,32 @@ const ProjectProfileView = ({
   const { acceleratorReports } = useProjectReports(projectDetails?.projectId);
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
+  const [listInternalUsersRequestId, setListInternalUsersRequestId] = useState('');
+  const listInternalUsersRequest = useAppSelector((state) =>
+    selectProjectInternalUsersListRequest(state, listInternalUsersRequestId)
+  );
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
+
+  useEffect(() => {
+    if (!project?.id) {
+      return;
+    }
+    const request = dispatch(requestProjectInternalUsersList({ projectId: project.id }));
+    setListInternalUsersRequestId(request.requestId);
+  }, [dispatch, project?.id]);
+
+  const moreUsersTooltip = useMemo(() => {
+    if (listInternalUsersRequest?.status !== 'success') {
+      return '';
+    }
+
+    return (listInternalUsersRequest?.data?.users || [])
+      .map((user) => {
+        const userRole = user.roleName ? user.roleName : getProjectInternalUserRoleString(user.role, strings);
+        return `${userRole}: ${user.firstName} ${user.lastName}`;
+      })
+      .join('\n');
+  }, [listInternalUsersRequest]);
 
   const isProjectInPhase = useMemo(
     () => participantProject?.cohortPhase?.startsWith('Phase'),
@@ -190,6 +219,7 @@ const ProjectProfileView = ({
               fontSize={'16px'}
               lineHeight={'24px'}
               fontWeight={500}
+              moreUsersTooltip={moreUsersTooltip}
             />
           </Box>
         </Grid>

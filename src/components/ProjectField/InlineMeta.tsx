@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
@@ -18,6 +19,7 @@ interface ProjectFieldInlineMetaProps {
   fontSize?: string;
   lineHeight?: string;
   fontWeight?: number;
+  moreUsersTooltip?: string;
 }
 
 const ProjectFieldInlineMeta = ({
@@ -29,6 +31,7 @@ const ProjectFieldInlineMeta = ({
   fontSize,
   lineHeight,
   fontWeight,
+  moreUsersTooltip,
 }: ProjectFieldInlineMetaProps) => {
   const theme = useTheme();
 
@@ -78,6 +81,22 @@ const ProjectFieldInlineMeta = ({
               </Link>
             ) : (
               strings.UNASSIGNED
+            )}
+            {moreUsersTooltip && (
+              <>
+                <Tooltip title={moreUsersTooltip}>
+                  <Typography
+                    component='span'
+                    fontSize={fontSize || '14px'}
+                    lineHeight={lineHeight || '20px'}
+                    marginBottom={theme.spacing(1)}
+                    marginRight={theme.spacing(0.5)}
+                  >
+                    {' | '}
+                    {strings.MORE.toLowerCase()}
+                  </Typography>
+                </Tooltip>
+              </>
             )}
           </Box>
         </Grid>
