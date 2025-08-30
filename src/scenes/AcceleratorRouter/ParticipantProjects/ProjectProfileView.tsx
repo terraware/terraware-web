@@ -219,7 +219,7 @@ const ProjectProfileView = ({
               fontSize={'16px'}
               lineHeight={'24px'}
               fontWeight={500}
-              moreUsersTooltip={moreUsersTooltip}
+              moreTooltip={moreUsersTooltip}
             />
           </Box>
         </Grid>

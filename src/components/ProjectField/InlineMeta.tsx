@@ -19,7 +19,7 @@ interface ProjectFieldInlineMetaProps {
   fontSize?: string;
   lineHeight?: string;
   fontWeight?: number;
-  moreUsersTooltip?: string;
+  moreTooltip?: string;
 }
 
 const ProjectFieldInlineMeta = ({
@@ -31,7 +31,7 @@ const ProjectFieldInlineMeta = ({
   fontSize,
   lineHeight,
   fontWeight,
-  moreUsersTooltip,
+  moreTooltip,
 }: ProjectFieldInlineMetaProps) => {
   const theme = useTheme();
 
@@ -82,9 +82,9 @@ const ProjectFieldInlineMeta = ({
             ) : (
               strings.UNASSIGNED
             )}
-            {moreUsersTooltip && (
+            {moreTooltip && (
               <>
-                <Tooltip placement='bottom' title={moreUsersTooltip}>
+                <Tooltip placement='bottom' title={moreTooltip}>
                   <Typography
                     component='span'
                     fontSize={fontSize || '14px'}
