@@ -264,7 +264,8 @@ const ProjectProfileEdit = () => {
         .filter((user) => user.roleName)
         .map((user) => user.roleName);
 
-      setCustomUserRoles(preExistingCustomInternalUserRoles as string[]);
+      const uniqueCustomRoles = Array.from(new Set(preExistingCustomInternalUserRoles as string[]));
+      setCustomUserRoles(uniqueCustomRoles);
     }
   }, [listInternalUsersRequest]);
 
@@ -542,7 +543,11 @@ const ProjectProfileEdit = () => {
   return (
     <Grid container paddingRight={theme.spacing(3)}>
       {addInternalUserRoleModalOpen && (
-        <AddInternalUserRoleModal addInternalUserRole={addInternalUserRole} onClose={onCloseAddInternalUserRoleModal} />
+        <AddInternalUserRoleModal
+          addInternalUserRole={addInternalUserRole}
+          customUserRoles={customUserRoles}
+          onClose={onCloseAddInternalUserRoleModal}
+        />
       )}
       <PageForm
         busy={[
