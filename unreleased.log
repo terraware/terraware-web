@@ -1,3 +1,4 @@
+069e7a1c73a SW-7327: Project Profile: Other users in the Internal Contacts field are not appearing in the Detail View (#4404)
 3460a0f0c34 SW-7329: Internal Leads field: Extra blank row showing in Edit View (#4403)
 372a17e51a6 SW-7330: Internal Leads field: Inputted Contact Type was not meant to be added to the Contact Type list (#4402)
 4c357e24af0 SW-7331: Internal Leads field: Global User in Person field can be selected multiple times (#4400)
