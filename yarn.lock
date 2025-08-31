@@ -12687,10 +12687,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-llm-autotranslate@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/llm-autotranslate/-/llm-autotranslate-0.1.3.tgz#edb2b17745a20062a76f7a16d2aa2934e11a212d"
-  integrity sha512-EShaaj9yEm8xtXAYT12soZA3DGusA7oUz/+PYThRnp1SbW9QlFZDQLNgZFc7tqHm4gXKjmo91gqMXG9cvyaMvA==
+llm-autotranslate@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/llm-autotranslate/-/llm-autotranslate-0.2.1.tgz#70f0cacf5aec69d66343f4cc32ffba39f743991c"
+  integrity sha512-en7TZEaO8SxP3zkkB9qfM2L5VI3eBqQWh+EwCYL9H9qtBK1Bj8o8SUxYQdHyKgKaRyieqne6cfLP9qWHL+ljyw==
   dependencies:
     chokidar "^4.0.3"
     commander "^11.1.0"
