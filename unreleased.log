@@ -1,3 +1,7 @@
+196d4d827f6 Update dependency llm-autotranslate to v1 (#4411)
+21150a1d010 Update Node.js to v22.19.0 (#4410)
+4b63db24012 Update dependency string-width to v8 (#4408)
+517b6ff2d21 Update dependency slate-dom to ^0.118.0 (#4406)
 069e7a1c73a SW-7327: Project Profile: Other users in the Internal Contacts field are not appearing in the Detail View (#4404)
 3460a0f0c34 SW-7329: Internal Leads field: Extra blank row showing in Edit View (#4403)
 372a17e51a6 SW-7330: Internal Leads field: Inputted Contact Type was not meant to be added to the Contact Type list (#4402)
