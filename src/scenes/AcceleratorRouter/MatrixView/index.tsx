@@ -303,6 +303,10 @@ const MatrixView = () => {
       let Edit: any;
       let editVariant: 'text' | 'select' = 'text';
       let editSelectOptions: { label: string; value: string }[] | undefined;
+      let filterFunction: 'between' | 'fuzzy' | 'arrIncludesSome' = 'fuzzy';
+      let filterVariant: 'text' | 'multi-select' | 'range' = 'text';
+
+      let filterSelectOptions: string[] = [];
 
       if (correspondingValue?.dateValue) {
         // eslint-disable-next-line react/display-name
@@ -340,6 +344,7 @@ const MatrixView = () => {
       }
 
       if (selectedVariable && 'options' in selectedVariable) {
+        filterVariant = 'multi-select';
         const getSelectOptions = () => {
           if (selectedVariable && 'options' in selectedVariable && selectedVariable.options) {
             return selectedVariable.options.map((option) => ({
@@ -349,6 +354,9 @@ const MatrixView = () => {
           }
           return [];
         };
+
+        filterSelectOptions = getSelectOptions().map((opt) => opt.label || '');
+        filterFunction = 'arrIncludesSome';
 
         if (selectedVariable && 'isMultiple' in selectedVariable && selectedVariable.isMultiple) {
           // eslint-disable-next-line react/display-name
@@ -603,6 +611,8 @@ const MatrixView = () => {
         }
       }
       if (correspondingValue?.numberValue !== undefined) {
+        filterVariant = 'range';
+        filterFunction = 'between';
         // Number input
         // eslint-disable-next-line react/display-name
         Edit = ({
@@ -702,6 +712,9 @@ const MatrixView = () => {
         editVariant,
         editSelectOptions,
         Edit,
+        filterVariant,
+        filterSelectOptions,
+        filterFn: filterFunction,
         accessorFn: (row) => {
           const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
           const variableValue = variable?.values?.[0];
