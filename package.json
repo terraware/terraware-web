@@ -74,6 +74,7 @@
     "cookies-js": "^1.2.3",
     "coordinate-parser": "^1.0.7",
     "date-fns": "^4.0.0",
+    "dayjs": "^1.11.18",
     "export-to-csv": "^1.4.0",
     "hex-rgb": "^5.0.0",
     "immer": "^9.0.19",
