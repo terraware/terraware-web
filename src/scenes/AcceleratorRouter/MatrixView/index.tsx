@@ -22,6 +22,7 @@ import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useUser } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -70,6 +71,8 @@ const MatrixView = () => {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
+  const { isAllowed } = useUser();
+  const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
 
   const [columnFilters, setColumnFilters] = useState(() => {
     try {
@@ -701,6 +704,7 @@ const MatrixView = () => {
         size: 150,
         editVariant,
         editSelectOptions,
+        enableEditing: isAllowedEditMatrixView,
         Edit,
         accessorFn: (row) => {
           const variable = row.variables?.find((_variable) => _variable.stableId === variableId);

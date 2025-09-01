@@ -33,7 +33,7 @@ type PermissionApplication =
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
   | 'UPDATE_APPLICATION_STATUS';
 type PermissionCohort = 'CREATE_COHORTS' | 'READ_COHORTS' | 'UPDATE_COHORTS' | 'DELETE_COHORTS';
-type PermissionConsole = 'VIEW_CONSOLE';
+type PermissionConsole = 'VIEW_CONSOLE' | 'UPDATE_MATRIX_VIEW';
 type PermissionDeliverable =
   | 'CREATE_SUBMISSION'
   | 'READ_DELIVERABLE'
@@ -163,6 +163,13 @@ const isAllowedReviewReportsTargets: PermissionCheckFn = (user: User): boolean =
 };
 
 /**
+ * Function related to updating matrix view
+ */
+const isAllowedUpdateMatrixView: PermissionCheckFn = (user: User): boolean => {
+  return isAcceleratorAdmin(user);
+};
+
+/**
  * Function related to updating accelerator report targets, since the permission also applies to
  * org roles, we need to check the passed-in organization
  */
@@ -225,6 +232,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_APPLICATION_STATUS: TFExpertPlus,
   UPDATE_COHORTS: AcceleratorAdminPlus,
   UPDATE_DELIVERABLE: TFExpertPlus,
+  UPDATE_MATRIX_VIEW: isAllowedUpdateMatrixView,
   UPDATE_PARTICIPANTS: AcceleratorAdminPlus,
   UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
   UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
