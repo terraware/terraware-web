@@ -754,7 +754,7 @@ const MatrixView = () => {
     });
 
     return [...baseNonVariableColumns, ...variableColumns];
-  }, [allVariables, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
+  }, [allVariables, isAllowedEditMatrixView, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
 
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {
