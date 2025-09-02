@@ -1,3 +1,4 @@
+de0d58708d1 SW-7119 Remove Tailscale from CI workflow (#4417)
 dc7f8b8c2a5 SW-7305 Filtering should be different for certain variable types (#4414)
 6c989f50298 SW-7343 Survival Rate Settings View (#4416)
 2f5645ed64c SW-7299 Fix style in Observations Page for displaying QR code banner  (#4412)
