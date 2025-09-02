@@ -141,13 +141,6 @@ jobs:
           aws-region: ${{ secrets[env.AWS_REGION_SECRET_NAME] }}
           role-to-assume: ${{ secrets[env.AWS_ROLE_SECRET_NAME] }}
 
-      - name: Connect to Tailscale
-        uses: tailscale/github-action@v3
-        with:
-          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
-          tags: tag:github
-
       - name: Deploy to ECS
         if: vars[env.ECS_CLUSTER_VAR_NAME] != '' && vars[env.ECS_SERVICE_VAR_NAME] != ''
         run: |
