@@ -1,3 +1,4 @@
+2f5645ed64c SW-7299 Fix style in Observations Page for displaying QR code banner  (#4412)
 196d4d827f6 Update dependency llm-autotranslate to v1 (#4411)
 21150a1d010 Update Node.js to v22.19.0 (#4410)
 4b63db24012 Update dependency string-width to v8 (#4408)
