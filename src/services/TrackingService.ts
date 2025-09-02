@@ -26,6 +26,7 @@ const PLANTING_SITE_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/repo
 const PLANTING_SITE_HISTORY_ENDPOINT = '/api/v1/tracking/sites/{id}/history/{historyId}';
 const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
+const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -44,6 +45,9 @@ type ListOrganizationReportedPlantsPayload =
 
 type CreatePlantingSiteResponse =
   paths[typeof PLANTING_SITES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+type PlantingSiteT0ResponsePayload =
+  paths[typeof PLANTING_SITE_T0_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * exported type
@@ -410,6 +414,12 @@ const listPlantingSiteHistories = async (
   ).get2<ListPlantingSiteHistoriesPayload>();
 };
 
+const getPlantingSiteT0 = async (plantingSiteId: number): Promise<Response2<PlantingSiteT0ResponsePayload>> => {
+  return await HttpService.root(
+    PLANTING_SITE_T0_ENDPOINT.replace('{plantingSiteId}', plantingSiteId.toString())
+  ).get2<PlantingSiteT0ResponsePayload>({});
+};
+
 /**
  * Exported functions
  */
@@ -420,6 +430,7 @@ const TrackingService = {
   deletePlantingSite,
   getDelivery,
   getPlantingSite,
+  getPlantingSiteT0,
   getReportedPlants,
   getTotalPlantsInSite,
   getTotalPlantsInZones,

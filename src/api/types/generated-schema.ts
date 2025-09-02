@@ -3771,7 +3771,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/tracking/t0/{monitoringPlotId}/observation/{observationId}": {
+    "/api/v1/tracking/t0/site": {
         parameters: {
             query?: never;
             header?: never;
@@ -3780,25 +3780,28 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Assigns an observation as T0 for a monitoring plot. */
-        post: operations["assignT0PlotObservation"];
+        /**
+         * Assign T0 Data for a planting site
+         * @description Deletes existing densities in the same plot if they don't appear in the payload.
+         */
+        post: operations["assignT0SiteData"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/tracking/t0/{monitoringPlotId}/species": {
+    "/api/v1/tracking/t0/site/{plantingSiteId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get all saved T0 Data for a planting site */
+        get: operations["getT0SiteData"];
         put?: never;
-        /** Assigns a species and estimated density as T0 for a monitoring plot. */
-        post: operations["assignT0PlotSpeciesDensity"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -4497,11 +4500,6 @@ export interface components {
             batchIds?: number[];
             plantingSiteIds?: number[];
         };
-        AssignT0PlotSpeciesPayload: {
-            density: number;
-            /** Format: int64 */
-            speciesId: number;
-        };
         AssignTerraformationContactRequestPayload: {
             /** Format: int64 */
             userId: number;
@@ -4525,6 +4523,7 @@ export interface components {
             /** Format: int64 */
             plantingSubzoneId: number;
             plantingSubzoneName: string;
+            plantingZoneName: string;
             /** Format: int64 */
             plotId: number;
             plotName: string;
@@ -8332,6 +8331,13 @@ export interface components {
             /** Format: int32 */
             totalSpecies: number;
         };
+        PlotT0DataPayload: {
+            densityData: components["schemas"]["SpeciesDensityPayload"][];
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId?: number;
+        };
         Point: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             /**
              * @description A single position consisting of X and Y values in the coordinate system specified by the crs field.
@@ -9016,6 +9022,17 @@ export interface components {
         };
         SimpleSuccessResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
+        };
+        SiteT0DataPayload: {
+            /** Format: int64 */
+            plantingSiteId: number;
+            plots: components["schemas"]["PlotT0DataPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        SpeciesDensityPayload: {
+            plotDensity: number;
+            /** Format: int64 */
+            speciesId: number;
         };
         SpeciesForParticipantProjectPayload: {
             participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
@@ -18521,17 +18538,18 @@ export interface operations {
             };
         };
     };
-    assignT0PlotObservation: {
+    assignT0SiteData: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                monitoringPlotId: number;
-                observationId: number;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiteT0DataPayload"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
@@ -18544,20 +18562,16 @@ export interface operations {
             };
         };
     };
-    assignT0PlotSpeciesDensity: {
+    getT0SiteData: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                monitoringPlotId: number;
+                plantingSiteId: number;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AssignT0PlotSpeciesPayload"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -18565,7 +18579,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                    "application/json": components["schemas"]["SiteT0DataPayload"];
                 };
             };
         };
