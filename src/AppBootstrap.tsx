@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { LocalizationProvider as MuiLocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import {
@@ -66,7 +69,9 @@ export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Eleme
             activeLocale={activeLocale}
             setActiveLocale={setActiveLocale}
           >
-            <BlockingBootstrap>{children}</BlockingBootstrap>
+            <MuiLocalizationProvider dateAdapter={AdapterDayjs}>
+              <BlockingBootstrap>{children}</BlockingBootstrap>
+            </MuiLocalizationProvider>
           </LocalizationProvider>
         </UserFundingEntityProvider>
       </OrganizationProvider>

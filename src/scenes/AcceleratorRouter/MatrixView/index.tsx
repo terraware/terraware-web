@@ -301,10 +301,17 @@ const MatrixView = () => {
       const correspondingVariable = projects?.flatMap((p) => p.variables || []).find((v) => v.stableId === variableId);
       const correspondingValue = correspondingVariable?.values?.[0];
       let Edit: any;
+      let Cell: any;
       let editVariant: 'text' | 'select' = 'text';
       let editSelectOptions: { label: string; value: string }[] | undefined;
+      let filterFunction: 'between' | 'fuzzy' | 'arrIncludesSome' = 'fuzzy';
+      let filterVariant: 'text' | 'multi-select' | 'range' | 'date-range' = 'text';
+
+      let filterSelectOptions: string[] = [];
 
       if (correspondingValue?.dateValue) {
+        filterVariant = 'date-range';
+        filterFunction = 'between';
         // eslint-disable-next-line react/display-name
         Edit = ({
           cell,
@@ -338,8 +345,15 @@ const MatrixView = () => {
           );
         };
       }
+      Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
+        if (cell.getValue()) {
+          return cell.getValue<Date>().toLocaleDateString();
+        }
+      };
 
       if (selectedVariable && 'options' in selectedVariable) {
+        Cell = undefined;
+        filterVariant = 'multi-select';
         const getSelectOptions = () => {
           if (selectedVariable && 'options' in selectedVariable && selectedVariable.options) {
             return selectedVariable.options.map((option) => ({
@@ -349,6 +363,9 @@ const MatrixView = () => {
           }
           return [];
         };
+
+        filterSelectOptions = getSelectOptions().map((opt) => opt.label || '');
+        filterFunction = 'arrIncludesSome';
 
         if (selectedVariable && 'isMultiple' in selectedVariable && selectedVariable.isMultiple) {
           // eslint-disable-next-line react/display-name
@@ -603,6 +620,9 @@ const MatrixView = () => {
         }
       }
       if (correspondingValue?.numberValue !== undefined) {
+        Cell = undefined;
+        filterVariant = 'range';
+        filterFunction = 'between';
         // Number input
         // eslint-disable-next-line react/display-name
         Edit = ({
@@ -650,6 +670,7 @@ const MatrixView = () => {
         };
       }
       if (correspondingValue?.linkUrl) {
+        Cell = undefined;
         // URL input
         // eslint-disable-next-line react/display-name, react/prop-types
         Edit = ({
@@ -702,6 +723,9 @@ const MatrixView = () => {
         editVariant,
         editSelectOptions,
         Edit,
+        filterVariant,
+        filterSelectOptions,
+        filterFn: filterFunction,
         accessorFn: (row) => {
           const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
           const variableValue = variable?.values?.[0];
@@ -717,7 +741,7 @@ const MatrixView = () => {
             return variableValue.textValue;
           }
           if (variableValue.dateValue) {
-            return variableValue.dateValue;
+            return new Date(variableValue.dateValue);
           }
           if (variableValue.options) {
             return variableValue.options.map((option) => option.name).join(', ');
@@ -728,6 +752,7 @@ const MatrixView = () => {
 
           return '';
         },
+        Cell,
         // Handle saving the edited value
         muiEditTextFieldProps: ({
           row,
