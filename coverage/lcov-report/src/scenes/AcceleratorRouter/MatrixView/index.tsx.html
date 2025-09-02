@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/345</span>
+                <span class='fraction'>0/347</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/326</span>
+                <span class='fraction'>0/328</span>
             </div>
         
             
@@ -1077,7 +1077,11 @@
 <a name='L1012'></a><a href='#L1012'>1012</a>
 <a name='L1013'></a><a href='#L1013'>1013</a>
 <a name='L1014'></a><a href='#L1014'>1014</a>
-<a name='L1015'></a><a href='#L1015'>1015</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1015'></a><a href='#L1015'>1015</a>
+<a name='L1016'></a><a href='#L1016'>1016</a>
+<a name='L1017'></a><a href='#L1017'>1017</a>
+<a name='L1018'></a><a href='#L1018'>1018</a>
+<a name='L1019'></a><a href='#L1019'>1019</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1126,6 +1130,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1135,6 +1140,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1149,6 +1155,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1796,6 +1803,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2115,6 +2123,7 @@ import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useUser } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -2163,6 +2172,8 @@ const MatrixView = <span class="cstat-no" title="statement not covered" ><span c
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+  const isAllowedEditMatrixView = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_MATRIX_VIEW');</span>
 &nbsp;
   const [columnFilters, setColumnFilters] = <span class="cstat-no" title="statement not covered" >useState(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
@@ -2815,6 +2826,7 @@ const MatrixView = <span class="cstat-no" title="statement not covered" ><span c
         size: 150,
         editVariant,
         editSelectOptions,
+        enableEditing: isAllowedEditMatrixView,
         Edit,
         filterVariant,
         filterSelectOptions,
@@ -2868,7 +2880,7 @@ const MatrixView = <span class="cstat-no" title="statement not covered" ><span c
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return [...baseNonVariableColumns, ...variableColumns];</span>
-  }, [allVariables, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
+  }, [allVariables, isAllowedEditMatrixView, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (result?.status === 'success' &amp;&amp; result?.data) {</span>
@@ -3112,7 +3124,7 @@ export default MatrixView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T19:03:07.824Z
+                at 2025-09-02T19:45:29.728Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
