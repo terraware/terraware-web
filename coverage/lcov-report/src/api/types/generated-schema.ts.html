@@ -19513,7 +19513,35 @@
 <a name='L19448'></a><a href='#L19448'>19448</a>
 <a name='L19449'></a><a href='#L19449'>19449</a>
 <a name='L19450'></a><a href='#L19450'>19450</a>
-<a name='L19451'></a><a href='#L19451'>19451</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L19451'></a><a href='#L19451'>19451</a>
+<a name='L19452'></a><a href='#L19452'>19452</a>
+<a name='L19453'></a><a href='#L19453'>19453</a>
+<a name='L19454'></a><a href='#L19454'>19454</a>
+<a name='L19455'></a><a href='#L19455'>19455</a>
+<a name='L19456'></a><a href='#L19456'>19456</a>
+<a name='L19457'></a><a href='#L19457'>19457</a>
+<a name='L19458'></a><a href='#L19458'>19458</a>
+<a name='L19459'></a><a href='#L19459'>19459</a>
+<a name='L19460'></a><a href='#L19460'>19460</a>
+<a name='L19461'></a><a href='#L19461'>19461</a>
+<a name='L19462'></a><a href='#L19462'>19462</a>
+<a name='L19463'></a><a href='#L19463'>19463</a>
+<a name='L19464'></a><a href='#L19464'>19464</a>
+<a name='L19465'></a><a href='#L19465'>19465</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -42736,7 +42764,7 @@
         patch?: never;
         trace?: never;
     };
-    "/api/v1/tracking/t0/{monitoringPlotId}/observation/{observationId}": {
+    "/api/v1/tracking/t0/site": {
         parameters: {
             query?: never;
             header?: never;
@@ -42745,25 +42773,28 @@
         };
         get?: never;
         put?: never;
-        /** Assigns an observation as T0 for a monitoring plot. */
-        post: operations["assignT0PlotObservation"];
+        /**
+         * Assign T0 Data for a planting site
+         * @description Deletes existing densities in the same plot if they don't appear in the payload.
+         */
+        post: operations["assignT0SiteData"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/tracking/t0/{monitoringPlotId}/species": {
+    "/api/v1/tracking/t0/site/{plantingSiteId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get all saved T0 Data for a planting site */
+        get: operations["getT0SiteData"];
         put?: never;
-        /** Assigns a species and estimated density as T0 for a monitoring plot. */
-        post: operations["assignT0PlotSpeciesDensity"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -43462,11 +43493,6 @@ export interface components {
             batchIds?: number[];
             plantingSiteIds?: number[];
         };
-        AssignT0PlotSpeciesPayload: {
-            density: number;
-            /** Format: int64 */
-            speciesId: number;
-        };
         AssignTerraformationContactRequestPayload: {
             /** Format: int64 */
             userId: number;
@@ -43490,6 +43516,7 @@ export interface components {
             /** Format: int64 */
             plantingSubzoneId: number;
             plantingSubzoneName: string;
+            plantingZoneName: string;
             /** Format: int64 */
             plotId: number;
             plotName: string;
@@ -47297,6 +47324,13 @@ export interface components {
             /** Format: int32 */
             totalSpecies: number;
         };
+        PlotT0DataPayload: {
+            densityData: components["schemas"]["SpeciesDensityPayload"][];
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId?: number;
+        };
         Point: Omit&lt;WithRequired&lt;components["schemas"]["Geometry"], "type"&gt;, "type"&gt; &amp; {
             /**
              * @description A single position consisting of X and Y values in the coordinate system specified by the crs field.
@@ -47981,6 +48015,17 @@ export interface components {
         };
         SimpleSuccessResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
+        };
+        SiteT0DataPayload: {
+            /** Format: int64 */
+            plantingSiteId: number;
+            plots: components["schemas"]["PlotT0DataPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        SpeciesDensityPayload: {
+            plotDensity: number;
+            /** Format: int64 */
+            speciesId: number;
         };
         SpeciesForParticipantProjectPayload: {
             participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
@@ -57486,17 +57531,18 @@ export interface operations {
             };
         };
     };
-    assignT0PlotObservation: {
+    assignT0SiteData: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                monitoringPlotId: number;
-                observationId: number;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiteT0DataPayload"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
@@ -57509,20 +57555,16 @@ export interface operations {
             };
         };
     };
-    assignT0PlotSpeciesDensity: {
+    getT0SiteData: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                monitoringPlotId: number;
+                plantingSiteId: number;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AssignT0PlotSpeciesPayload"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -57530,7 +57572,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                    "application/json": components["schemas"]["SiteT0DataPayload"];
                 };
             };
         };
@@ -58420,7 +58462,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T17:11:15.913Z
+                at 2025-09-02T17:22:59.143Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
