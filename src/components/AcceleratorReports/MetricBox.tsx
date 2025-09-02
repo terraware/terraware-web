@@ -355,6 +355,7 @@ const MetricBox = ({
               display={!isEditing}
               styles={textAreaStyles}
               preserveNewlines
+              markdown
             />
           </Box>
         </Grid>
@@ -370,6 +371,7 @@ const MetricBox = ({
                 display={!isEditing}
                 styles={textAreaStyles}
                 preserveNewlines
+                markdown
               />
               {isEditing && (
                 <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>

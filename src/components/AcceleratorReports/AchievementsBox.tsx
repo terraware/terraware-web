@@ -51,6 +51,7 @@ const Achievement = ({
           styles={textAreaStyles}
           onChange={(value: any) => setAchievement(value)}
           preserveNewlines
+          markdown
         />
       </Grid>
       {editing && (

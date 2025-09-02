@@ -89,6 +89,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
           styles={textAreaStyles}
           onChange={(value: any) => setHighlights(value)}
           preserveNewlines
+          markdown
         />
       </Grid>
     </EditableReportBox>
