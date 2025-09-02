@@ -778,6 +778,7 @@ INCLUDE_EMPTY_FIELDS,Incluir campos vacíos,a4ba1236
 INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
 INSTANCES,Casos,fcc19322
+INSTRUCTIONS,Instrucciones:,4abbf6f0
 INSUFFICIENT_DATA,Datos insuficientes,8e59cf35
 INTERMEDIATE,Intermedia,09764770
 INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,Intermedio - Sensible a la temperatura fría,86d69e60
@@ -1329,6 +1330,7 @@ PLOT_SELECTION,Selección de parcela,ba150031
 PLOT_TYPE,Tipo de terreno,4b579233
 PLOTS_AD_HOC,Parcelas ad hoc,104e30b2
 PLOTS_PERMANENT,Parcelas fijas,d06e9f3a
+PLOTS_QUANTITY,{0} Parcelas,cef6f681
 PLOTS_SIZE_NOTE,*Datos recolectados con parcelas de 25 m x 25 m,1c6249f4
 PLOTS_TEMPORARY,Parcelas temporales,7d9bceab
 POM_M,MOP (m),279348dc
@@ -1868,6 +1870,8 @@ SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,35c72f75
 SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
 SURVIVAL_RATE_SETTINGS,Configuración de la tasa de supervivencia,1177b667
+SURVIVAL_RATE_SETTINGS_FOR,Configuración de la tasa de supervivencia para {0},f787c873
+SURVIVAL_RATE_SETTINGS_INFO,"{0} Para cada parcela, seleccione o ingrese los datos que se utilizarán para proporcionar la densidad de plantas t0 por parcela para los cálculos de la tasa de supervivencia. Para cada Observación posterior, Terraware usará los datos t0 para calcular las tasas de supervivencia a nivel de Parcela, Subzona, Zona y Sitio de Plantación. Si se cambia la Observación seleccionada para una parcela, las tasas de supervivencia se recalcularán en función de la nueva selección. Alternativamente, si se conoce la cantidad de plantas que fueron plantadas en las parcelas, se pueden usar las densidades de plantas plantadas en lugar de los datos de Observación para los cálculos de la tasa de supervivencia.",d0a2ff5b
 SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible,905bfc54
 SUSTAINABLE_TIMBER,Madera sostenible,b9574821
 SW_CORNER_LATITUDE,Latitud de la esquina SO: {0},11be73c0
