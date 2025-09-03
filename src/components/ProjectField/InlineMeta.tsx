@@ -83,20 +83,22 @@ const ProjectFieldInlineMeta = ({
               strings.UNASSIGNED
             )}
             {moreTooltip && (
-              <>
-                <Tooltip placement='bottom' title={moreTooltip}>
-                  <Typography
-                    component='span'
-                    fontSize={fontSize || '14px'}
-                    lineHeight={lineHeight || '20px'}
-                    marginBottom={theme.spacing(1)}
-                    marginRight={theme.spacing(0.5)}
-                  >
-                    {' | '}
-                    {strings.MORE.toLowerCase()}
-                  </Typography>
-                </Tooltip>
-              </>
+              <Tooltip
+                placement='bottom'
+                slotProps={{ tooltip: { sx: { whiteSpace: 'pre-line' } } }}
+                title={<span style={{ whiteSpace: 'pre-line' }}>{moreTooltip}</span>}
+              >
+                <Typography
+                  component='span'
+                  fontSize={fontSize || '14px'}
+                  lineHeight={lineHeight || '20px'}
+                  marginBottom={theme.spacing(1)}
+                  marginRight={theme.spacing(0.5)}
+                >
+                  {' | '}
+                  {strings.MORE.toLowerCase()}
+                </Typography>
+              </Tooltip>
             )}
           </Box>
         </Grid>

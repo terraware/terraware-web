@@ -4652,10 +4652,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@^3.5.12-rc.21":
-  version "3.5.12-rc.21"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-3.5.12-rc.21.tgz#c9e40408d0f835b8bd71608336f1f9eb9bee4b14"
-  integrity sha512-FLP9wUflHrhqHrihjX+iXNESQnW6D++MYIRb15DTZ/3ULdoC5tIhjH5Nzf8p4vVyAK6+Wfa4ia8jWJIuu57BIw==
+"@terraware/web-components@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-3.7.0.tgz#1ecfdbe1fd477711b978004ad72cdded295ff0ac"
+  integrity sha512-+3ELkOfWcWz/p2R7uWYU1aLa/VtIhEBk6eBU5EzQsJJZf2iRmtcVUVqkx7M7ofslNR1EHT26WZtuvlC/yejIoA==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^7.0.2"
@@ -4668,6 +4668,7 @@
     classnames "^2.3.2"
     geojson "^0.5.0"
     luxon "^3.3.0"
+    marked "^16.2.1"
     react "^18.2.0"
     react-dom "^18.2.0"
     react-intersection-observer "^9.5.2"
@@ -12948,6 +12949,11 @@ markdown-to-jsx@^7.1.8:
   version "7.4.7"
   resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.4.7.tgz#740ee7ec933865ef5cc683a0992797685a75e2ee"
   integrity sha512-0+ls1IQZdU6cwM1yu0ZjjiVWYtkbExSyUIFU2ZeDIFuZM1W42Mh4OlJ4nb4apX4H8smxDHRdFaoIVJGwfv5hkg==
+
+marked@^16.2.1:
+  version "16.2.1"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-16.2.1.tgz#f4b82ffa8e6201bafebc59249492b88b2dcc949f"
+  integrity sha512-r3UrXED9lMlHF97jJByry90cwrZBBvZmjG1L68oYfuPMW+uDTnuMbyJDymCWwbTE+f+3LhpNDKfpR3a3saFyjA==
 
 martinez-polygon-clipping@^0.7.4:
   version "0.7.4"
