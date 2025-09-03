@@ -29,7 +29,7 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
-    if (financialSummaries && financialSummaries !== report?.financialSummaries) {
+    if (financialSummaries !== undefined && financialSummaries !== report?.financialSummaries) {
       onChange?.(financialSummaries);
     }
   }, [financialSummaries, report?.financialSummaries, onChange]);

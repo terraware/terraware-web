@@ -29,7 +29,7 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
-    if (additionalComments && additionalComments !== report?.additionalComments) {
+    if (additionalComments !== undefined && additionalComments !== report?.additionalComments) {
       onChange?.(additionalComments);
     }
   }, [additionalComments, report?.additionalComments, onChange]);

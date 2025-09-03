@@ -29,7 +29,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
-    if (highlights && highlights !== report?.highlights) {
+    if (highlights !== undefined && highlights !== report?.highlights) {
       onChange?.(highlights);
     }
   }, [highlights, report?.highlights, onChange]);
