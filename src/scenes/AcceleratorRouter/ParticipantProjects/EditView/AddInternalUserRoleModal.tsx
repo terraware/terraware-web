@@ -9,11 +9,13 @@ import { useLocalization } from 'src/providers';
 
 export interface AddInternalUserRoleModalProps {
   addInternalUserRole: (role: string) => void;
+  customUserRoles: string[];
   onClose: () => void;
 }
 
 export default function AddInternalUserRoleModal({
   addInternalUserRole,
+  customUserRoles,
   onClose,
 }: AddInternalUserRoleModalProps): JSX.Element {
   const { strings } = useLocalization();
@@ -29,11 +31,11 @@ export default function AddInternalUserRoleModal({
 
   const onSave = useCallback(() => {
     const trimmedInternalUserRole = newInternalUserRole.trim();
-    if (trimmedInternalUserRole.length) {
+    if (trimmedInternalUserRole.length && !customUserRoles.includes(trimmedInternalUserRole)) {
       addInternalUserRole(trimmedInternalUserRole);
     }
     onClose();
-  }, [addInternalUserRole, newInternalUserRole, onClose]);
+  }, [addInternalUserRole, customUserRoles, newInternalUserRole, onClose]);
 
   return (
     <DialogBox
