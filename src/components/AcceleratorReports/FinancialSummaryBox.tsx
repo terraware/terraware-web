@@ -15,24 +15,24 @@ import { ReportBoxProps } from './ReportBox';
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
-const HighlightsBox = (props: ReportBoxProps) => {
+const FinancialSummariesBox = (props: ReportBoxProps) => {
   const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
     props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
-  const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
+  const [financialSummaries, setFinancialSummaries] = useState<string | undefined>(report?.financialSummaries);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
-  useEffect(() => setHighlights(report?.highlights), [report?.highlights]);
+  useEffect(() => setFinancialSummaries(report?.financialSummaries), [report?.financialSummaries]);
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
-    if (highlights && highlights !== report?.highlights) {
-      onChange?.(highlights);
+    if (financialSummaries && financialSummaries !== report?.financialSummaries) {
+      onChange?.(financialSummaries);
     }
-  }, [highlights, report?.highlights, onChange]);
+  }, [financialSummaries, report?.financialSummaries, onChange]);
 
   useEffect(() => {
     if (updateReportResponse?.status === 'error') {
@@ -50,7 +50,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
         requestReviewAcceleratorReport({
           review: {
             ...report,
-            highlights,
+            financialSummaries,
             achievements: report?.achievements || [],
             challenges: report?.challenges || [],
             status: report?.status || 'Not Submitted',
@@ -61,18 +61,18 @@ const HighlightsBox = (props: ReportBoxProps) => {
       );
       setRequestId(request.requestId);
     }
-  }, [dispatch, projectId, highlights, report]);
+  }, [dispatch, projectId, financialSummaries, report]);
 
   const onCancel = useCallback(() => {
-    setHighlights(report?.highlights);
+    setFinancialSummaries(report?.financialSummaries);
     setInternalEditing(false);
-  }, [report?.highlights]);
+  }, [report?.financialSummaries]);
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
   return (
     <EditableReportBox
-      name={funderReportView ? '' : strings.HIGHLIGHTS}
+      name={funderReportView ? '' : strings.FINANCIAL_SUMMARIES}
       canEdit={!!canEdit}
       editing={isEditing}
       onEdit={() => setInternalEditing(true)}
@@ -84,12 +84,12 @@ const HighlightsBox = (props: ReportBoxProps) => {
       <Grid item xs={12}>
         <Textfield
           type='textarea'
-          value={highlights}
-          id={'highlights'}
+          value={financialSummaries}
+          id={'financialSummaries'}
           label={''}
           display={!isEditing}
           styles={textAreaStyles}
-          onChange={(value: any) => setHighlights(value)}
+          onChange={(value: any) => setFinancialSummaries(value)}
           preserveNewlines
           markdown
         />
@@ -98,4 +98,4 @@ const HighlightsBox = (props: ReportBoxProps) => {
   );
 };
 
-export default HighlightsBox;
+export default FinancialSummariesBox;

@@ -231,13 +231,13 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   return (
     <EditableReportBox
       name={''}
-      includeBorder={false}
       canEdit={!!canEdit}
       editing={isEditing}
       onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
+      includeBorder={!funderReportView}
     >
       {funderReportView && !isMobile && (
         <Box width={'100%'}>

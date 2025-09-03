@@ -5,7 +5,9 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox, { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import Card from 'src/components/common/Card';
@@ -161,6 +163,18 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             projectId={projectId}
             editing={true}
             onChange={onChangeCallback('challenges')}
+          />
+          <FinancialSummariesBox
+            report={record}
+            projectId={projectId}
+            editing={true}
+            onChange={onChangeCallback('financialSummaries')}
+          />
+          <AdditionalCommentsBox
+            report={record}
+            projectId={projectId}
+            editing={true}
+            onChange={onChangeCallback('additionalComments')}
           />
         </Card>
       </Box>

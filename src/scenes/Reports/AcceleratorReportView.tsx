@@ -6,8 +6,10 @@ import { Button } from '@terraware/web-components';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
@@ -221,6 +223,8 @@ const AcceleratorReportView = () => {
             })}
             <AchievementsBox report={report} projectId={projectId} reload={reload} />
             <ChallengesMitigationBox report={report} projectId={projectId} reload={reload} />
+            <FinancialSummariesBox report={report} projectId={projectId} reload={reload} />
+            <AdditionalCommentsBox report={report} projectId={projectId} reload={reload} />
           </Card>
         </Box>
       </Page>
