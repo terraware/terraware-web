@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { SectionVariableWithValues, VariableUnion, isSelectVariable } from 'src/types/documentProducer/Variable';
+import {
+  SectionVariableWithValues,
+  SelectVariable,
+  VariableUnion,
+  isSelectVariable,
+  isTableVariable,
+} from 'src/types/documentProducer/Variable';
 import {
   CombinedInjectedValue,
   DateVariableValue,
@@ -34,6 +40,28 @@ const selectVariablePreview = (
 ) => {
   // Attempt to find the source variable which will have the pretty names for the select options
   const sourceVariable: VariableUnion | undefined = getSourceVariable(combinedInjectedValue, sectionVariable);
+
+  // If source variable is a table, the select options are in the columns
+  if (sourceVariable && isTableVariable(sourceVariable)) {
+    const tableColumns = sourceVariable.columns;
+    const columnsVariables = tableColumns.map((col) => col.variable);
+    const selectVariables = columnsVariables.filter((col) => col.type === 'Select');
+    if (selectVariables && selectVariables.length) {
+      const allOptions = selectVariables.flatMap((selVar) => (selVar as SelectVariable).options);
+      return variableValue.optionValues
+        .map((optionValue: number) => {
+          const foundOption = allOptions.find((sourceVariableOption) => sourceVariableOption.id === optionValue);
+
+          if (!foundOption) {
+            return optionValue;
+          }
+
+          return foundOption.renderedText || foundOption.name;
+        })
+        .join(',');
+    }
+  }
+
   if (!sourceVariable || !isSelectVariable(sourceVariable)) {
     return variableValue.optionValues.join(',');
   }
