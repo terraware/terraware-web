@@ -1,3 +1,4 @@
+ef973216997 SW-7330: Internal Leads field: Inputted Contact Type was not meant to be added to the Contact Type list (FOLLOW-UP) (#4407)
 9f6a35a1835 SW-7336 Single select showing option ID instead of value in doc preview (#4419)
 d46815dd6a6 SW-7304 Read Only user should not be able to double click to edit (#4413)
 de0d58708d1 SW-7119 Remove Tailscale from CI workflow (#4417)
