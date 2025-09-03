@@ -1,3 +1,4 @@
+55f97251d39 SW-7327: Project Profile: Other users in the Internal Contacts field are not appearing in the Detail View (FOLLOW-UP) (#4422)
 f7d047a7a56 SW-7318: Project Lead link goes to user's record People under Org, not Console (#4421)
 ef973216997 SW-7330: Internal Leads field: Inputted Contact Type was not meant to be added to the Contact Type list (FOLLOW-UP) (#4407)
 9f6a35a1835 SW-7336 Single select showing option ID instead of value in doc preview (#4419)
