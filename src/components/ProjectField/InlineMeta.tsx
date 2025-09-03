@@ -70,7 +70,7 @@ const ProjectFieldInlineMeta = ({
             >
               {userLabel}
             </Typography>
-            {userName ? (
+            {userId && userName ? (
               <Link
                 to={APP_PATHS.ACCELERATOR_PERSON.replace(':userId', `${userId}`)}
                 fontSize={fontSize || '14px'}
