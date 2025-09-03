@@ -1,3 +1,4 @@
+9f6a35a1835 SW-7336 Single select showing option ID instead of value in doc preview (#4419)
 d46815dd6a6 SW-7304 Read Only user should not be able to double click to edit (#4413)
 de0d58708d1 SW-7119 Remove Tailscale from CI workflow (#4417)
 dc7f8b8c2a5 SW-7305 Filtering should be different for certain variable types (#4414)

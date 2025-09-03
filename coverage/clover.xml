@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1756842330430" clover="3.2.0">
-  <project timestamp="1756842330430" name="All files">
-    <metrics statements="32360" coveredstatements="1307" conditionals="22647" coveredconditionals="389" methods="9903" coveredmethods="211" elements="64910" coveredelements="1907" complexity="0" loc="32360" ncloc="32360" packages="274" files="1311" classes="1311"/>
+<coverage generated="1756910773668" clover="3.2.0">
+  <project timestamp="1756910773668" name="All files">
+    <metrics statements="32371" coveredstatements="1307" conditionals="22659" coveredconditionals="389" methods="9908" coveredmethods="211" elements="64938" coveredelements="1907" complexity="0" loc="32371" ncloc="32371" packages="274" files="1311" classes="1311"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -16987,7 +16987,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.PreviewView">
-      <metrics statements="154" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="51" coveredmethods="0"/>
+      <metrics statements="165" coveredstatements="0" conditionals="141" coveredconditionals="0" methods="56" coveredmethods="0"/>
       <file name="PreviewDocument.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/PreviewView/PreviewDocument.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
@@ -17147,24 +17147,35 @@
         <line num="78" count="0" type="stmt"/>
       </file>
       <file name="render.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/PreviewView/render.tsx">
-        <metrics statements="17" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="8" coveredmethods="0"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <metrics statements="28" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="28" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
-        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="66" count="0" type="cond" truecount="0" falsecount="8"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="65" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="94" count="0" type="cond" truecount="0" falsecount="8"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.PreviewView.util">
