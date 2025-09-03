@@ -8,7 +8,7 @@ export type ProjectsWithVariablesSearchResult = {
   name: string;
   country_name: string;
   acceleratorDetails: {
-    confirmedReforestableLand: string;
+    'confirmedReforestableLand(raw)': string;
     projectLead: string;
   };
   variables: {
@@ -21,7 +21,7 @@ export type ProjectsWithVariablesSearchResult = {
     values?: {
       variableValueId: string;
       options?: { id: string; name: string; position: string }[];
-      numberValue?: string;
+      'numberValue(raw)'?: number;
       textValue?: string;
       dateValue?: string;
       linkUrl?: string;
