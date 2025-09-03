@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1756929833746" clover="3.2.0">
-  <project timestamp="1756929833746" name="All files">
-    <metrics statements="32372" coveredstatements="1307" conditionals="22661" coveredconditionals="389" methods="9908" coveredmethods="211" elements="64941" coveredelements="1907" complexity="0" loc="32372" ncloc="32372" packages="274" files="1311" classes="1311"/>
+<coverage generated="1756937623926" clover="3.2.0">
+  <project timestamp="1756937623926" name="All files">
+    <metrics statements="32372" coveredstatements="1307" conditionals="22663" coveredconditionals="389" methods="9908" coveredmethods="211" elements="64943" coveredelements="1907" complexity="0" loc="32372" ncloc="32372" packages="274" files="1311" classes="1311"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5859,7 +5859,7 @@
       </file>
     </package>
     <package name="src.components.ProjectField">
-      <metrics statements="227" coveredstatements="0" conditionals="168" coveredconditionals="0" methods="77" coveredmethods="0"/>
+      <metrics statements="227" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="77" coveredmethods="0"/>
       <file name="ApplicationStatusLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/ApplicationStatusLink.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -5910,7 +5910,7 @@
         <line num="16" count="0" type="stmt"/>
       </file>
       <file name="InlineMeta.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/InlineMeta.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="3" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
