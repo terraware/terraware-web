@@ -72,7 +72,7 @@ const ProjectFieldInlineMeta = ({
             </Typography>
             {userName ? (
               <Link
-                to={APP_PATHS.PEOPLE_VIEW.replace(':personId', `${userId}`)}
+                to={APP_PATHS.ACCELERATOR_PERSON.replace(':userId', `${userId}`)}
                 fontSize={fontSize || '14px'}
                 fontWeight={fontWeight || 400}
                 lineHeight={lineHeight || '20px'}
