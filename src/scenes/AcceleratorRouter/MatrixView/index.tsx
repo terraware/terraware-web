@@ -287,7 +287,7 @@ const MatrixView = () => {
         filterVariant: 'range',
         filterFn: 'between',
         Cell: ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
-          if (cell.getValue()) {
+          if (cell.getValue() !== undefined) {
             return <FormattedNumber value={cell.getValue<number>()} />;
           }
         },
@@ -299,7 +299,7 @@ const MatrixView = () => {
         id: 'countryName',
         enableEditing: false,
         filterVariant: 'select',
-        filterSelectOptions: countries?.map((country) => country.name || ''),
+        filterSelectOptions: countries.map((country) => country.name || ''),
       },
       {
         accessorKey: 'acceleratorDetails_projectLead',

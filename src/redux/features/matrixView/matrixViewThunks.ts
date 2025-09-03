@@ -8,7 +8,7 @@ export type ProjectsWithVariablesSearchResult = {
   name: string;
   country_name: string;
   acceleratorDetails: {
-    'confirmedReforestableLand(raw)': string;
+    'confirmedReforestableLand(raw)': number;
     projectLead: string;
   };
   variables: {
