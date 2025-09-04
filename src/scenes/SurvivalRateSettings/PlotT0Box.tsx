@@ -19,7 +19,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
 
   return (
     <>
-      <Box display='flex' justify-content='space-between' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
+      <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
         <Box
           minHeight='100px'
           minWidth='80px'
