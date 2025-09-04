@@ -13,6 +13,7 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -47,6 +48,7 @@ export default function NavBar({
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
   const mixpanel = useMixpanel();
+  const isActivityLogEnabled = isEnabled('Activity Log');
 
   const [orgFeaturesRequestId, setOrgFeaturesRequestId] = useState<string>('');
   const orgFeatures = useAppSelector(listOrganizationFeatures(orgFeaturesRequestId));
@@ -79,6 +81,7 @@ export default function NavBar({
   const isProjectsRoute = useMatch({ path: APP_PATHS.PROJECTS + '/', end: true });
   const isProjectRoute = useMatch({ path: APP_PATHS.PROJECT_VIEW + '/', end: true });
   const isProjectModulesRoute = useMatch({ path: APP_PATHS.PROJECT_MODULES + '/', end: false });
+  const isActivityLogRoute = useMatch({ path: APP_PATHS.ACTIVITY_LOG + '/', end: false });
 
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
@@ -259,6 +262,29 @@ export default function NavBar({
     ]
   );
 
+  const activityLogMenu = useMemo<JSX.Element | null>(
+    () =>
+      isActivityLogEnabled && currentParticipantProject && isManagerOrHigher(selectedOrganization) && activeLocale ? (
+        <NavItem
+          icon='checklist'
+          id='activity-log'
+          label={strings.ACTIVITY_LOG}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.ACTIVITY_LOG);
+          }}
+          selected={!!isActivityLogRoute}
+        />
+      ) : null,
+    [
+      activeLocale,
+      closeAndNavigateTo,
+      currentParticipantProject,
+      isActivityLogEnabled,
+      isActivityLogRoute,
+      selectedOrganization,
+    ]
+  );
+
   const applicationMenu = useMemo<JSX.Element | null>(
     () =>
       !!orgFeatures?.data?.applications?.enabled && activeLocale ? (
@@ -334,12 +360,18 @@ export default function NavBar({
         }}
         id='speciesNb'
       />
-      {(applicationMenu || deliverablesMenu || modulesMenu || reportsMenu || seedFundReportsMenu) && (
+      {(applicationMenu ||
+        deliverablesMenu ||
+        modulesMenu ||
+        activityLogMenu ||
+        reportsMenu ||
+        seedFundReportsMenu) && (
         <>
           <NavSection title={acceleratorSectionTitle} />
           {applicationMenu}
           {deliverablesMenu}
           {modulesMenu}
+          {activityLogMenu}
           {reportsMenu}
           {seedFundReportsMenu}
         </>

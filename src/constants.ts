@@ -67,6 +67,7 @@ export enum APP_PATHS {
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
   ACCESSIONS2_EDIT = '/accessions/:accessionId/edit',
+  ACTIVITY_LOG = '/activity-log',
   ADMIN_COHORT_DELIVERABLE = '/admin/cohorts/:cohortId/deliverables/:deliverableId',
   APPLICATIONS = '/applications',
   APPLICATION_OVERVIEW = '/applications/:applicationId',
