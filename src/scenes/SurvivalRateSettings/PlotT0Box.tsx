@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { PlotT0Data } from 'src/types/Tracking';
@@ -16,6 +17,12 @@ type PlotT0BoxProps = {
 
 const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
   const theme = useTheme();
+  const { species } = useSpeciesData();
+
+  const getPlotTotalDensity = useMemo(() => {
+    const total = t0Plot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
+    return total;
+  }, [t0Plot]);
 
   return (
     <>
@@ -32,25 +39,50 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
         <Box flexGrow={1} display={'flex'} alignItems={'center'}>
           {t0Plot ? (
             <Box>
-              <Typography color={theme.palette.TwClrTxtSuccess}>{strings.T0_DATA_IS_SET}</Typography>
-              {t0Plot.observationId && (
-                <Typography color={theme.palette.TwClrTxtSuccess}>
-                  {strings.formatString(
-                    strings.USING_OBSERVATION_DATA_FROM,
-                    <Link
-                      to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSiteId.toString()).replace(
-                        ':observationId',
-                        t0Plot.observationId.toString()
-                      )}
-                    >
-                      {t0Plot.observationId}
-                    </Link>
-                  )}
+              <Box>
+                <Typography color={theme.palette.TwClrTxtSuccess} fontWeight={500}>
+                  {strings.T0_DATA_IS_SET}
                 </Typography>
+                {t0Plot.observationId && (
+                  <Typography color={theme.palette.TwClrTxtSuccess}>
+                    {strings.formatString(
+                      strings.USING_OBSERVATION_DATA_FROM,
+                      <Link
+                        to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSiteId.toString()).replace(
+                          ':observationId',
+                          t0Plot.observationId.toString()
+                        )}
+                      >
+                        {
+                          plot.observationPlots.find((op) => op.observation_id === t0Plot.observationId?.toString())
+                            ?.observation_startDate
+                        }
+                      </Link>
+                    )}
+                  </Typography>
+                )}
+              </Box>
+              {t0Plot.densityData && (
+                <Box>
+                  <table>
+                    <thead>{strings.SPECIES}</thead>
+                    <thead>{strings.PLANT_DENSITY}</thead>
+                    {t0Plot.densityData.map((densityData, index) => (
+                      <tr key={index}>
+                        <td>{species.find((sp) => sp.id === densityData.speciesId)?.scientificName}</td>
+                        <td>{densityData.plotDensity}</td>
+                      </tr>
+                    ))}
+                    <tr>
+                      <td>{strings.ALL_SPECIES}</td>
+                      <td>{getPlotTotalDensity}</td>
+                    </tr>
+                  </table>
+                </Box>
               )}
             </Box>
           ) : (
-            <Typography color={theme.palette.TwClrTxtWarning} padding={1}>
+            <Typography color={theme.palette.TwClrTxtWarning} padding={1} fontWeight={500}>
               {strings.NOT_SET}
             </Typography>
           )}
