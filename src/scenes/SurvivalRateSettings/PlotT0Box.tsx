@@ -65,18 +65,24 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
               {t0Plot.densityData && (
                 <Box>
                   <table>
-                    <thead>{strings.SPECIES}</thead>
-                    <thead>{strings.PLANT_DENSITY}</thead>
-                    {t0Plot.densityData.map((densityData, index) => (
-                      <tr key={index}>
-                        <td>{species.find((sp) => sp.id === densityData.speciesId)?.scientificName}</td>
-                        <td>{densityData.plotDensity}</td>
+                    <thead>
+                      <tr>
+                        <th>{strings.SPECIES}</th>
+                        <th>{strings.PLANT_DENSITY}</th>
                       </tr>
-                    ))}
-                    <tr>
-                      <td>{strings.ALL_SPECIES}</td>
-                      <td>{getPlotTotalDensity}</td>
-                    </tr>
+                    </thead>
+                    <tbody>
+                      {t0Plot.densityData.map((densityData, index) => (
+                        <tr key={index}>
+                          <td>{species.find((sp) => sp.id === densityData.speciesId)?.scientificName}</td>
+                          <td>{densityData.plotDensity}</td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td>{strings.ALL_SPECIES}</td>
+                        <td>{getPlotTotalDensity}</td>
+                      </tr>
+                    </tbody>
                   </table>
                 </Box>
               )}
