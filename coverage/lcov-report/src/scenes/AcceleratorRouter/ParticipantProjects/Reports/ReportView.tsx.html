@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/113</span>
+                <span class='fraction'>0/107</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/105</span>
             </div>
         
             
@@ -560,6 +560,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -737,14 +738,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -768,7 +772,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -776,7 +779,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -792,6 +794,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -817,11 +821,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -869,7 +870,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -985,6 +985,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
@@ -1018,8 +1019,8 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const [selectedReport, setSelectedReport] = <span class="cstat-no" title="statement not covered" >useState&lt;AcceleratorReport&gt;();</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const [showApproveDialog, setShowApproveDialog] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const [showRejectDialog, setShowRejectDialog] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+  const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = <span class="cstat-no" title="statement not covered" >useBoolean(false);</span>
+  const [showRejectDialog, , openRejectDialog, closeRejectDialog] = <span class="cstat-no" title="statement not covered" >useBoolean(false);</span>
   const { crumbs: participantProjectCrumbs, participantProject, project } = <span class="cstat-no" title="statement not covered" >useParticipantProjectData();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const [boxInEdit, setBoxInEdit] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -1028,7 +1029,7 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
   const [publishRequestId, setPublishRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const approveReportResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectReviewAcceleratorReport(approveRequestId));</span>
   const rejectReportResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectReviewAcceleratorReport(rejectRequestId));</span>
-  const [showPublishModal, setShowPublishModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [showPublishModal, , openPublishModal, closePublishModal] = <span class="cstat-no" title="statement not covered" >useBoolean(false);</span>
   const publishReportResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPublishAcceleratorReport(publishRequestId));</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { reload, acceleratorReports: reports } = <span class="cstat-no" title="statement not covered" >useProjectReports(projectId, true, true);</span>
@@ -1037,7 +1038,7 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
   const [publishedReports, setPublishedReports] = <span class="cstat-no" title="statement not covered" >useState&lt;PublishedReport[]&gt;();</span>
   const [selectedPublishedReport, setSelectedPublishedReport] = <span class="cstat-no" title="statement not covered" >useState&lt;PublishedReport&gt;();</span>
 &nbsp;
-  const publishReport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const publishReport = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
       requestPublishAcceleratorReport({
         projectId: Number(projectId),
@@ -1045,8 +1046,8 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
       })
     );
 <span class="cstat-no" title="statement not covered" >    setPublishRequestId(request.requestId);</span>
-<span class="cstat-no" title="statement not covered" >    setShowPublishModal(false);</span>
-  };
+<span class="cstat-no" title="statement not covered" >    closePublishModal();</span>
+  }, [closePublishModal, dispatch, projectId, reportId]);
 &nbsp;
   const approveReport = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedReport) {</span>
@@ -1103,9 +1104,9 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
     }
 <span class="cstat-no" title="statement not covered" >    if (approveReportResponse?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      reload();</span>
-<span class="cstat-no" title="statement not covered" >      setShowApproveDialog(false);</span>
+<span class="cstat-no" title="statement not covered" >      closeApproveDialog();</span>
     }
-  }, [approveReportResponse, reload]);
+  }, [approveReportResponse, closeApproveDialog, reload]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (rejectReportResponse?.status === 'error') {</span>
@@ -1113,9 +1114,9 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
     }
 <span class="cstat-no" title="statement not covered" >    if (rejectReportResponse?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      reload();</span>
-<span class="cstat-no" title="statement not covered" >      setShowRejectDialog(false);</span>
+<span class="cstat-no" title="statement not covered" >      closeRejectDialog();</span>
     }
-  }, [rejectReportResponse, reload]);
+  }, [closeRejectDialog, rejectReportResponse, reload]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (publishReportResponse?.status === 'error') {</span>
@@ -1126,9 +1127,9 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.REPORT_PUBLISHED);</span>
 <span class="cstat-no" title="statement not covered" >      void reloadPublishedReport();</span>
 <span class="cstat-no" title="statement not covered" >      reload();</span>
-<span class="cstat-no" title="statement not covered" >      setShowPublishModal(false);</span>
+<span class="cstat-no" title="statement not covered" >      closePublishModal();</span>
     }
-  }, [publishReportResponse, reload, reloadPublishedReport, snackbar]);
+  }, [closePublishModal, publishReportResponse, reload, reloadPublishedReport, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (reports) {</span>
@@ -1185,14 +1186,17 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
     year,
   ]);
 &nbsp;
-  const onOptionItemClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>ptionItem: DropdownItem) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    switch (optionItem.value) {</span>
-<span class="branch-0 cbranch-no" title="branch not covered" >      case 'publish': {</span>
-<span class="cstat-no" title="statement not covered" >        setShowPublishModal(true);</span>
-<span class="cstat-no" title="statement not covered" >        break;</span>
+  const onOptionItemClick = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (o</span>ptionItem: DropdownItem) =&gt; {
+<span class="cstat-no" title="statement not covered" >      switch (optionItem.value) {</span>
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'publish': {</span>
+<span class="cstat-no" title="statement not covered" >          openPublishModal();</span>
+<span class="cstat-no" title="statement not covered" >          break;</span>
+        }
       }
-    }
-  };
+    },
+    [openPublishModal]
+  );
 &nbsp;
   const optionItems = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span>: DropdownItem[] =&gt;
@@ -1217,7 +1221,7 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
             id='rejectDeliverable'
             label={strings.REQUEST_UPDATE_ACTION}
             priority='secondary'
-            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void setShowRejectDialog(true)}</span>
+            onClick={openRejectDialog}
             size='medium'
             type='destructive'
           /&gt;
@@ -1225,7 +1229,7 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
             disabled={selectedReport?.status === 'Approved'}
             id='approveDeliverable'
             label={strings.APPROVE}
-            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void setShowApproveDialog(true)}</span>
+            onClick={openApprovalDialog}
             size='medium'
           /&gt;
           {isAllowed('PUBLISH_REPORTS') &amp;&amp; (
@@ -1239,7 +1243,7 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
         &lt;/&gt;
       )
     );
-  }, [isAllowed, selectedReport?.status, optionItems]);
+  }, [isAllowed, selectedReport?.status, openRejectDialog, openApprovalDialog, onOptionItemClick, optionItems]);
 &nbsp;
   const rightComponent = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (
@@ -1266,11 +1270,9 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
-      {showPublishModal &amp;&amp; &lt;PublishModal onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowPublishModal(false)}</span> onSubmit={publishReport} /&gt;}
-      {showApproveDialog &amp;&amp; (
-        &lt;ApproveReportDialog onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowApproveDialog(false)}</span> onSubmit={approveReport} /&gt;
-      )}
-      {showRejectDialog &amp;&amp; &lt;RejectDialog onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowRejectDialog(false)}</span> onSubmit={rejectReport} /&gt;}
+      {showPublishModal &amp;&amp; &lt;PublishModal onClose={closePublishModal} onSubmit={publishReport} /&gt;}
+      {showApproveDialog &amp;&amp; &lt;ApproveReportDialog onClose={closeApproveDialog} onSubmit={approveReport} /&gt;}
+      {showRejectDialog &amp;&amp; &lt;RejectDialog onClose={closeRejectDialog} onSubmit={rejectReport} /&gt;}
 &nbsp;
       &lt;Page
         title={
@@ -1317,9 +1319,7 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
         ) : (
           &lt;Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}&gt;
             {selectedReport &amp;&amp; &lt;ApprovedReportMessage report={selectedReport} /&gt;}
-            {selectedReport &amp;&amp; (
-              &lt;RejectedReportMessage report={selectedReport} showRejectDialog={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowRejectDialog(true)}</span> /&gt;
-            )}
+            {selectedReport &amp;&amp; &lt;RejectedReportMessage report={selectedReport} showRejectDialog={openRejectDialog} /&gt;}
             &lt;Card
               style={{
                 display: 'flex',
@@ -1417,7 +1417,7 @@ export default ReportView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-04T21:21:32.906Z
+                at 2025-09-04T23:47:01.544Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

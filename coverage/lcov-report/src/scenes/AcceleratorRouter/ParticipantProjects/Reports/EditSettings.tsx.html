@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -215,7 +215,10 @@
 <a name='L150'></a><a href='#L150'>150</a>
 <a name='L151'></a><a href='#L151'>151</a>
 <a name='L152'></a><a href='#L152'>152</a>
-<a name='L153'></a><a href='#L153'>153</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -304,7 +307,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -335,7 +339,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -346,7 +349,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -443,7 +449,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
     logframeUrl: projectReportConfig.config?.logframeUrl,
   });
 &nbsp;
-  const saveReportConfig = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const saveReportConfig = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const request = <span class="cstat-no" title="statement not covered" >projectReportConfig?.config</span>
       ? dispatch(
           requestUpdateReportConfig({
@@ -453,7 +459,14 @@ export default function <span class="fstat-no" title="function not covered" >Edi
         )
       : dispatch(requestCreateReportConfig({ config: newConfig, projectId }));
 <span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
-  };
+  }, [dispatch, newConfig, projectId, projectReportConfig?.config]);
+&nbsp;
+  const onDateChangeCallback = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (i</span>d: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue?: DateTime) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      onChange(id, value?.toFormat('yyyy-MM-dd'));</span>
+    },
+    [onChange]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}&gt;
@@ -461,7 +474,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
         cancelID='cancelReportConfig'
         saveID='saveReportConfig'
         onCancel={goToProjectReports}
-        onSave={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >saveReportConfig()}</span>
+        onSave={saveReportConfig}
       &gt;
         &lt;Container
           maxWidth={false}
@@ -486,9 +499,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
                   id='reportingStartDate'
                   label={strings.START_DATE}
                   aria-label='reportingStartDate'
-                  onDateChange={<span class="fstat-no" title="function not covered" >(v</span>alue?: DateTime) =&gt; {
-<span class="cstat-no" title="statement not covered" >                    onChange('reportingStartDate', value?.toFormat('yyyy-MM-dd'));</span>
-                  }}
+                  onDateChange={onDateChangeCallback('reportingStartDate')}
                   value={newConfig.reportingStartDate}
                 /&gt;
               &lt;/Grid&gt;
@@ -497,9 +508,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
                   id='reportingEndDate'
                   label={strings.END_DATE}
                   aria-label='reportingEndDate'
-                  onDateChange={<span class="fstat-no" title="function not covered" >(v</span>alue?: DateTime) =&gt; {
-<span class="cstat-no" title="statement not covered" >                    onChange('reportingEndDate', value?.toFormat('yyyy-MM-dd'));</span>
-                  }}
+                  onDateChange={onDateChangeCallback('reportingEndDate')}
                   value={newConfig.reportingEndDate}
                 /&gt;
               &lt;/Grid&gt;
@@ -526,7 +535,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-04T21:21:32.906Z
+                at 2025-09-04T23:47:01.544Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
@@ -370,7 +370,13 @@
 <a name='L305'></a><a href='#L305'>305</a>
 <a name='L306'></a><a href='#L306'>306</a>
 <a name='L307'></a><a href='#L307'>307</a>
-<a name='L308'></a><a href='#L308'>308</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -389,6 +395,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -643,13 +650,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -672,12 +680,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 &nbsp;
 import { Box } from '@mui/material';
@@ -686,6 +698,7 @@ import { DateTime } from 'luxon';
 &nbsp;
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -780,7 +793,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ projectId: string }&gt;();</span>
   const projectId = <span class="cstat-no" title="statement not covered" >isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();</span>
   const [metricsToUse, setMetricsToUse] = <span class="cstat-no" title="statement not covered" >useState&lt;RowMetric[]&gt;();</span>
-  const [editOpenModal, setEditOpenModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [editOpenModal, setEditOpenModal, , setEditOpenModalFalse] = <span class="cstat-no" title="statement not covered" >useBoolean(false);</span>
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;TableRowType[]&gt;([]);</span>
   const [selectedMetric, setSelectedMetric] = <span class="cstat-no" title="statement not covered" >useState&lt;RowMetric&gt;();</span>
   const currentYear = <span class="cstat-no" title="statement not covered" >DateTime.now().year;</span>
@@ -949,16 +962,21 @@ export default function <span class="fstat-no" title="function not covered" >Acc
     [activeLocale, getReportsYearsString, yearFilter]
   );
 &nbsp;
-  const onRowClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>etric: TableRowType) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedMetric(metric as RowMetric);</span>
-<span class="cstat-no" title="statement not covered" >    setEditOpenModal(true);</span>
-  };
+  const onRowClick = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (m</span>etric: TableRowType) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setSelectedMetric(metric as RowMetric);</span>
+<span class="cstat-no" title="statement not covered" >      setEditOpenModal(true);</span>
+    },
+    [setEditOpenModal]
+  );
+&nbsp;
+  const clickable = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >false,</span> []);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       {editOpenModal &amp;&amp; selectedMetric &amp;&amp; (
         &lt;EditAcceleratorReportTargetsModal
-          onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setEditOpenModal(false)}</span>
+          onClose={setEditOpenModalFalse}
           reload={reload}
           reports={reports}
           row={selectedMetric}
@@ -979,7 +997,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
         controlledOnSelect={true}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
-        isClickable={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >false}</span>
+        isClickable={clickable}
       /&gt;
     &lt;/&gt;
   );
@@ -991,7 +1009,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-04T21:21:32.906Z
+                at 2025-09-04T23:47:01.544Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

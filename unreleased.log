@@ -1,3 +1,4 @@
+a708ee56442 SW-7257 Cleaned up report callbacks and params (#4427)
 d4fe6b70559 SW-7257 Added new report sections (#4423)
 2fe66e767dc SW-7358: FE: Add Activity Log Feature Flag (#4426)
 834e5f9e146 SW-7259 Added markdown support to report fields (#4418)
