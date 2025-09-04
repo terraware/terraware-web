@@ -193,7 +193,7 @@ export default function PeopleListView(): JSX.Element {
       const searchResults = await SearchService.search(params);
       const usersResults: OrganizationUser[] = [];
       searchResults?.forEach((result) => {
-        if (skipTfContact && isTfContact(result.roleName as OrganizationRole, strings)) {
+        if (skipTfContact && isTfContact(result.roleName as OrganizationRole)) {
           return;
         }
         usersResults.push({
@@ -207,7 +207,7 @@ export default function PeopleListView(): JSX.Element {
       });
       return usersResults;
     },
-    [selectedOrganization, strings]
+    [selectedOrganization]
   );
 
   useEffect(() => {
@@ -250,7 +250,7 @@ export default function PeopleListView(): JSX.Element {
 
   const removeSelectedPeopleFromOrg = async () => {
     if (selectedOrganization) {
-      const removableUsers = selectedPeopleRows.filter((row) => !isTfContact(row.role, strings));
+      const removableUsers = selectedPeopleRows.filter((row) => !isTfContact(row.role));
       if (removableUsers.length === totalUsers) {
         setCannotRemovePeopleModalOpened(true);
       } else {
@@ -265,7 +265,7 @@ export default function PeopleListView(): JSX.Element {
                 if (found) {
                   return false;
                 }
-                return !isTfContact(person.role, strings);
+                return !isTfContact(person.role);
               })
             );
             if (assignNewOwnerModalOpened) {
@@ -330,7 +330,7 @@ export default function PeopleListView(): JSX.Element {
       const otherUsers = selectedPeopleRows.filter(
         (person) =>
           person.id.toString() !== user.id.toString() &&
-          !isTfContact(person.role, strings) &&
+          !isTfContact(person.role) &&
           person.id.toString() !== keepOneOwnerId
       );
       if (otherUsers.length) {
@@ -368,8 +368,8 @@ export default function PeopleListView(): JSX.Element {
   };
 
   const isRemovingTFContact = useMemo(
-    () => selectedPeopleRows.some((row) => isTfContact(row.role, strings)),
-    [selectedPeopleRows, strings]
+    () => selectedPeopleRows.some((row) => isTfContact(row.role)),
+    [selectedPeopleRows]
   );
 
   return (

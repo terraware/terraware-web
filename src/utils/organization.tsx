@@ -1,4 +1,3 @@
-import defaultStrings from 'src/strings';
 import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
@@ -36,8 +35,7 @@ export const isMember = <T extends Organization>(organization: T | undefined): o
   return !!organization;
 };
 
-export const isTfContact = (role: OrganizationRole | undefined, strings: typeof defaultStrings) =>
-  role === strings.TERRAFORMATION_CONTACT;
+export const isTfContact = (role: OrganizationRole | undefined) => role === 'Terraformation Contact';
 
 export const isContributor = (roleHolder: Organization | OrganizationUser | undefined) => {
   return roleHolder?.role === 'Contributor';
