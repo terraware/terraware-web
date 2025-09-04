@@ -20,9 +20,10 @@ import {
 
 import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -73,6 +74,7 @@ const MatrixView = () => {
   const dispatch = useAppDispatch();
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
+  const { countries } = useLocalization();
 
   const [columnFilters, setColumnFilters] = useState(() => {
     try {
@@ -277,11 +279,18 @@ const MatrixView = () => {
         enableEditing: false,
       },
       {
-        accessorKey: 'acceleratorDetails_confirmedReforestableLand',
+        accessorKey: 'acceleratorDetails_confirmedReforestableLand(raw)',
         header: strings.ELIGIBLE_LAND,
         size: 200,
         id: 'eligibleLand',
         enableEditing: false,
+        filterVariant: 'range',
+        filterFn: 'between',
+        Cell: ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
+          if (cell.getValue() !== undefined) {
+            return <FormattedNumber value={cell.getValue<number>()} />;
+          }
+        },
       },
       {
         accessorKey: 'country_name',
@@ -289,6 +298,8 @@ const MatrixView = () => {
         size: 200,
         id: 'countryName',
         enableEditing: false,
+        filterVariant: 'select',
+        filterSelectOptions: countries.map((country) => country.name || ''),
       },
       {
         accessorKey: 'acceleratorDetails_projectLead',
@@ -622,8 +633,11 @@ const MatrixView = () => {
           };
         }
       }
-      if (correspondingValue?.numberValue !== undefined) {
-        Cell = undefined;
+      if (correspondingValue?.['numberValue(raw)'] !== undefined) {
+        // eslint-disable-next-line react/display-name
+        Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
+          return <FormattedNumber value={cell.getValue<number>()} />;
+        };
         filterVariant = 'range';
         filterFunction = 'between';
         // Number input
@@ -738,8 +752,8 @@ const MatrixView = () => {
             return '';
           }
 
-          if (variableValue.numberValue) {
-            return variableValue.numberValue;
+          if (variableValue['numberValue(raw)']) {
+            return variableValue['numberValue(raw)'];
           }
           if (variableValue.textValue) {
             return variableValue.textValue;
@@ -779,7 +793,7 @@ const MatrixView = () => {
     });
 
     return [...baseNonVariableColumns, ...variableColumns];
-  }, [allVariables, isAllowedEditMatrixView, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
+  }, [allVariables, countries, isAllowedEditMatrixView, onSaveHandler, projects, uniqueVariableIds, variableNameMap]);
 
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {
@@ -805,6 +819,12 @@ const MatrixView = () => {
     enableColumnOrdering: true,
     enableColumnPinning: true,
     enableEditing: true,
+    renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {
+      // remove the last element (show all columns)
+      const columnMenuItemsCopy = [...internalColumnMenuItems];
+      columnMenuItemsCopy.pop();
+      return columnMenuItemsCopy;
+    },
     editDisplayMode: 'cell',
     renderToolbarInternalActions: ({ table }) => (
       <Box>
@@ -872,7 +892,7 @@ const MatrixView = () => {
           'id',
           'name',
           'participant_cohort_phase',
-          'acceleratorDetails_confirmedReforestableLand',
+          'acceleratorDetails_confirmedReforestableLand(raw)',
           'country_name',
           'acceleratorDetails_projectLead',
           'variables.stableId',
@@ -882,7 +902,7 @@ const MatrixView = () => {
           'variables.isList',
           'variables.isMultiSelect',
           'variables.values.textValue',
-          'variables.values.numberValue',
+          'variables.values.numberValue(raw)',
           'variables.values.linkUrl',
           'variables.values.dateValue',
           'variables.values.options.name',
@@ -983,6 +1003,16 @@ const MatrixView = () => {
       columns.forEach((id) => {
         columnVisibility[id] = true;
       });
+
+      // Get all hidden column IDs
+      const hiddenColumnIds = Object.entries(columnVisibility)
+        .filter(([, isVisible]) => !isVisible)
+        .map(([columnId]) => columnId);
+
+      // Remove filters for all hidden columns in one operation
+      dataForMaterialReactTable.setColumnFilters((prev) =>
+        prev.filter((filter) => !hiddenColumnIds.includes(filter.id))
+      );
 
       dataForMaterialReactTable.setColumnVisibility((prev) => ({
         ...prev,
