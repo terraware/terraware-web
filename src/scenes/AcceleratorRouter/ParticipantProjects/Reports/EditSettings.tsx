@@ -74,7 +74,7 @@ export default function EditSettings(): JSX.Element {
     logframeUrl: projectReportConfig.config?.logframeUrl,
   });
 
-  const saveReportConfig = () => {
+  const saveReportConfig = useCallback(() => {
     const request = projectReportConfig?.config
       ? dispatch(
           requestUpdateReportConfig({
@@ -84,7 +84,14 @@ export default function EditSettings(): JSX.Element {
         )
       : dispatch(requestCreateReportConfig({ config: newConfig, projectId }));
     setRequestId(request.requestId);
-  };
+  }, [dispatch, newConfig, projectId, projectReportConfig?.config]);
+
+  const onDateChangeCallback = useCallback(
+    (id: string) => (value?: DateTime) => {
+      onChange(id, value?.toFormat('yyyy-MM-dd'));
+    },
+    [onChange]
+  );
 
   return (
     <Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
@@ -92,7 +99,7 @@ export default function EditSettings(): JSX.Element {
         cancelID='cancelReportConfig'
         saveID='saveReportConfig'
         onCancel={goToProjectReports}
-        onSave={() => saveReportConfig()}
+        onSave={saveReportConfig}
       >
         <Container
           maxWidth={false}
@@ -117,9 +124,7 @@ export default function EditSettings(): JSX.Element {
                   id='reportingStartDate'
                   label={strings.START_DATE}
                   aria-label='reportingStartDate'
-                  onDateChange={(value?: DateTime) => {
-                    onChange('reportingStartDate', value?.toFormat('yyyy-MM-dd'));
-                  }}
+                  onDateChange={onDateChangeCallback('reportingStartDate')}
                   value={newConfig.reportingStartDate}
                 />
               </Grid>
@@ -128,9 +133,7 @@ export default function EditSettings(): JSX.Element {
                   id='reportingEndDate'
                   label={strings.END_DATE}
                   aria-label='reportingEndDate'
-                  onDateChange={(value?: DateTime) => {
-                    onChange('reportingEndDate', value?.toFormat('yyyy-MM-dd'));
-                  }}
+                  onDateChange={onDateChangeCallback('reportingEndDate')}
                   value={newConfig.reportingEndDate}
                 />
               </Grid>

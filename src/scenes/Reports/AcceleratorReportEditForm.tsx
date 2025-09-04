@@ -47,7 +47,11 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const saveReportResponse = useAppSelector(selectUpdateAcceleratorReport(saveReportRequestId));
   const snackbar = useSnackbar();
 
-  const saveReport = () => {
+  const goToReport = useCallback(() => {
+    goToAcceleratorReport(Number(reportId), Number(projectId));
+  }, [goToAcceleratorReport, projectId, reportId]);
+
+  const saveReport = useCallback(() => {
     const request = dispatch(
       requestUpdateAcceleratorReport({
         projectId: Number(projectId),
@@ -56,16 +60,16 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
       })
     );
     setSaveReportRequestId(request.requestId);
-  };
+  }, [dispatch, projectId, record, reportId]);
 
   useEffect(() => {
     if (saveReportResponse?.status === 'error') {
       snackbar.toastError();
     }
     if (saveReportResponse?.status === 'success') {
-      goToAcceleratorReport(Number(reportId), Number(projectId));
+      goToReport();
     }
-  }, [goToAcceleratorReport, projectId, reportId, saveReportResponse, snackbar]);
+  }, [goToReport, projectId, reportId, saveReportResponse, snackbar]);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id?.toString()) {
@@ -93,12 +97,8 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
     <WrappedPageForm
       busy={saveReportResponse?.status === 'pending'}
       cancelID={'cancelEditAcceleratorReport'}
-      onCancel={() => {
-        goToAcceleratorReport(Number(reportId), Number(projectId));
-      }}
-      onSave={() => {
-        saveReport();
-      }}
+      onCancel={goToReport}
+      onSave={saveReport}
       saveID={'saveEditAcceleratorReport'}
       saveDisabled={false}
       style={{ width: '100%' }}

@@ -24,10 +24,10 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
     setIsDialogOpen((prev) => !prev);
   }, []);
 
-  const handleUpdate = () => {
+  const handleUpdate = useCallback(() => {
     update(internalComment, status);
     toggleDialog();
-  };
+  }, [internalComment, status, toggleDialog, update]);
 
   useEffect(() => {
     if (entity.internalComment) {
@@ -38,6 +38,20 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
   useEffect(() => {
     setStatus(entity.status);
   }, [entity.status]);
+
+  const setInternalCommentCallback = useCallback(
+    (value: any) => () => {
+      setInternalComment(value as string);
+    },
+    []
+  );
+
+  const setStatusCallback = useCallback(
+    (value: any) => () => {
+      setStatus(value as AcceleratorReportStatus);
+    },
+    []
+  );
 
   const dropdownOptions: DropdownItem[] = AcceleratorReportStatuses.filter((_status) => _status !== 'Not Needed').map(
     (_status) => ({
@@ -68,7 +82,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
         display
         id='internalComment'
         label={''}
-        onChange={(value) => setInternalComment(value as string)}
+        onChange={setInternalCommentCallback}
         preserveNewlines
         type='textarea'
         value={entity.internalComment ?? strings.NO_COMMENTS_ADDED}
@@ -96,7 +110,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
               label={strings.INTERNAL_COMMENTS}
               type='textarea'
               id='internalComment'
-              onChange={(value) => setInternalComment(value as string)}
+              onChange={setInternalCommentCallback}
               value={internalComment}
               preserveNewlines
             />
@@ -105,7 +119,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
             <Dropdown
               fullWidth={true}
               label={strings.STATUS}
-              onChange={(value) => setStatus(value as AcceleratorReportStatus)}
+              onChange={setStatusCallback}
               options={dropdownOptions}
               required
               disabled={entity.status === 'Not Submitted' || entity.status === 'Not Needed'}

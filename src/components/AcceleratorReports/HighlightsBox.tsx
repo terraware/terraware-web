@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
+import useBoolean from 'src/hooks/useBoolean';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -18,7 +19,7 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const HighlightsBox = (props: ReportBoxProps) => {
   const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
     props;
-  const [internalEditing, setInternalEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
@@ -42,7 +43,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar, reload]);
+  }, [updateReportResponse, snackbar, reload, setInternalEditing]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -51,9 +52,6 @@ const HighlightsBox = (props: ReportBoxProps) => {
           review: {
             ...report,
             highlights,
-            achievements: report?.achievements || [],
-            challenges: report?.challenges || [],
-            status: report?.status || 'Not Submitted',
           },
           projectId: Number(projectId),
           reportId: report?.id || -1,
@@ -66,16 +64,20 @@ const HighlightsBox = (props: ReportBoxProps) => {
   const onCancel = useCallback(() => {
     setHighlights(report?.highlights);
     setInternalEditing(false);
-  }, [report?.highlights]);
+  }, [report?.highlights, setInternalEditing]);
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+
+  const setHighlightsCallback = useCallback((value: any) => {
+    setHighlights(value as string);
+  }, []);
 
   return (
     <EditableReportBox
       name={funderReportView ? '' : strings.HIGHLIGHTS}
       canEdit={!!canEdit}
       editing={isEditing}
-      onEdit={() => setInternalEditing(true)}
+      onEdit={setInternalEditingTrue}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
@@ -89,7 +91,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
           label={''}
           display={!isEditing}
           styles={textAreaStyles}
-          onChange={(value: any) => setHighlights(value)}
+          onChange={setHighlightsCallback}
           preserveNewlines
           markdown
         />
