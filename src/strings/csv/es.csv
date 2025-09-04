@@ -1076,6 +1076,7 @@ NOT_COMPLETE,Sin completar,a8606bc8
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be036
 NOT_NEEDED,No es necesario,dc4188cf
 NOT_OBSERVED,No observado,4a9890a2
+NOT_SET,No establecido,6b047afe
 NOT_SUBMITTED,No se ha enviado,e40a2b1d
 NOT_YET,Aún no,77976aa8
 NOTE_ANY_ISSUES,¿Todo lo anterior parece correcto? Anote cualquier problema.,133db1c4
@@ -1877,6 +1878,7 @@ SUSTAINABLE_TIMBER,Madera sostenible,b9574821
 SW_CORNER_LATITUDE,Latitud de la esquina SO: {0},11be73c0
 SW_CORNER_LONGITUDE,Longitud de la esquina SO: {0},28e4af3d
 SYSTEM_METRICS,Métricas del sistema,c19498b7
+T0_DATA_IS_SET,Los datos t0 están establecidos,cf4c95a7
 TABLE_OF_CONTENTS,Índice,c4c6df6c
 TABLE_SELECT_ALL_ROWS,Seleccione todas las {0} filas.,b2db09d4
 TABLE_SELECT_NONE,Quite la selección.,37fe7c91
@@ -2099,6 +2101,7 @@ USER_ACCESS,Acceso del usuario,a9aa511b
 USER_NOTIFICATION_ACTION,"Para cambiar las preferencias, ve a [Mi cuenta]",8fcbad99
 USER_NOTIFICATION_ACTION_SETTINGS,"Para cambiar la preferencia, vaya a [Ajustes]",e188ba43
 USER_WITH_EMAIL_DOES_NOT_EXIST,No existe ningún usuario con este correo electrónico.,66a18b2d
+USING_OBSERVATION_DATA_FROM,Usando datos de observación de {0},c489a0dd
 VALUE,Valor,b8e67ab1
 VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%,e78b7737
 VARIABLE_DETAILS,Detalles de las variables,48294b19
