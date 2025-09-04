@@ -1,3 +1,4 @@
+3e2e6c98ded SW-7341: People List: When TF Contact's role under an org is changed, the way the new role appears in the list is incorrect (#4424)
 1ad74f82ced SW-7343 Display plots in Survival Rate Settings View (#4425)
 ed9bdf069a0 SW-7305 Follow-up Fix filters in some columns (#4420)
 55f97251d39 SW-7327: Project Profile: Other users in the Internal Contacts field are not appearing in the Detail View (FOLLOW-UP) (#4422)

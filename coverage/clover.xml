@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1757009880031" clover="3.2.0">
-  <project timestamp="1757009880031" name="All files">
-    <metrics statements="32422" coveredstatements="1308" conditionals="22679" coveredconditionals="389" methods="9931" coveredmethods="211" elements="65032" coveredelements="1908" complexity="0" loc="32422" ncloc="32422" packages="274" files="1312" classes="1312"/>
+<coverage generated="1757011978654" clover="3.2.0">
+  <project timestamp="1757011978654" name="All files">
+    <metrics statements="32422" coveredstatements="1308" conditionals="22681" coveredconditionals="389" methods="9931" coveredmethods="211" elements="65034" coveredelements="1908" complexity="0" loc="32422" ncloc="32422" packages="274" files="1312" classes="1312"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -28914,7 +28914,7 @@
       </file>
     </package>
     <package name="src.scenes.PeopleRouter">
-      <metrics statements="285" coveredstatements="0" conditionals="192" coveredconditionals="0" methods="71" coveredmethods="0"/>
+      <metrics statements="285" coveredstatements="0" conditionals="194" coveredconditionals="0" methods="71" coveredmethods="0"/>
       <file name="CannotRemovePeopleModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PeopleRouter/CannotRemovePeopleModal.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -29009,7 +29009,7 @@
         <line num="180" count="0" type="stmt"/>
       </file>
       <file name="PeopleListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PeopleRouter/PeopleListView.tsx">
-        <metrics statements="159" coveredstatements="0" conditionals="99" coveredconditionals="0" methods="45" coveredmethods="0"/>
+        <metrics statements="159" coveredstatements="0" conditionals="101" coveredconditionals="0" methods="45" coveredmethods="0"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
