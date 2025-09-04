@@ -4,10 +4,12 @@ import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers/hooks';
 import { isTfContact } from 'src/utils/organization';
 
 export default function Renderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;
+  const { strings } = useLocalization();
 
   const createLinkToPerson = (iValue: React.ReactNode | unknown[]) => {
     const personLocation = {
@@ -20,7 +22,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
     );
   };
 
-  if (column.key === 'email' && !isTfContact(row.role)) {
+  if (column.key === 'email' && !isTfContact(row.role, strings)) {
     return (
       <CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} title={value as string} />
     );
