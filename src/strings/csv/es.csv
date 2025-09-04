@@ -534,6 +534,7 @@ EDIT_SEED_BANK,Editar banco de semillas,e2400ded
 EDIT_SETTINGS,Editar configuración,f9c91817
 EDIT_SPECIES,Editar especie,0893d9a0
 EDIT_STATUS,Editar estado,6b9a2791
+EDIT_SURVIVAL_RATE_SETTINGS_FOR,Editar configuración de la tasa de supervivencia para {0},669ad74c
 EDIT_VIABILITY,Editar viabilidad,019e694b
 EDIT_VIABILITY_TEST,Editar prueba de viabilidad,71da108b
 EDIT_VOTES,Editar votos,8d6f6fe1
