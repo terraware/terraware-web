@@ -92,6 +92,7 @@ const ChallengeMitigationPlan = ({
               }
               required
               preserveNewlines
+              markdown
             />
           </Box>
         </Grid>
@@ -117,6 +118,7 @@ const ChallengeMitigationPlan = ({
               }
               required
               preserveNewlines
+              markdown
             />
           </Box>
         </Grid>
