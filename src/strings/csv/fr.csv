@@ -106,6 +106,7 @@ ADDING_SUBZONE_BOUNDARIES,Ajout de limites de sous-zones,58f0fb08
 ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil tranche {0} pour créer des formes de sous-zones (polygones) à l'intérieur des zones.,042bd160
 ADDING_ZONE_BOUNDARIES,Ajouter les limites des zones,901f668b
 ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil de découpage {0} pour créer des polygones à l'intérieur des limites du site pour les zones.,06f570cb
+ADDITIONAL_COMMENTS,Commentaires supplémentaires,bf1dfb11
 ADDITIONAL_INVASIVE_THREATENED_SPECIES,Autres espèces envahissantes/menacées,7d019848
 ADDITIONAL_NURSERY_NOTES,Notes supplémentaires sur les pépinières,db29c13a
 ADDITIONAL_PLANTING_SITES_NOTES,Notes supplémentaires sur le site de plantation,364dcb50
@@ -641,6 +642,7 @@ FILTER_SHOW_EMPTY_BATCHES,Afficher les lots vides,f5c7fca1
 FILTERS,Filtres,c3d13364
 FINAL_QTY,Qté finale,47530c05
 FINANCE,Finances,ae6619da
+FINANCIAL_SUMMARIES,Synthèses financières,d26c4f56
 FINANCIAL_VIABILITY,Viabilité financière,50706753
 FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,En savoir plus sur l’Accélérateur De La Semence à la Forêt de Terraformation {0} et postulez !,e49d8596
 FIRST_ADD_PLANTING_SITE,"Pour afficher le tableau de bord, vous devez détenir un site de plantation.",29adc97e

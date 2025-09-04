@@ -2236,6 +2236,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/nursery/withdrawals/plantingSite/{plantingSiteId}/species": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists all the species that have been withdrawn to a planting site. */
+        get: operations["getSpeciesWithdrawnToPlantingSite"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/nursery/withdrawals/{withdrawalId}": {
         parameters: {
             query?: never;
@@ -4215,10 +4232,12 @@ export interface components {
         };
         AcceleratorReportPayload: {
             achievements: string[];
+            additionalComments?: string;
             challenges: components["schemas"]["ReportChallengePayload"][];
             /** Format: date */
             endDate: string;
             feedback?: string;
+            financialSummaries?: string;
             /** @enum {string} */
             frequency: "Quarterly" | "Annual";
             highlights?: string;
@@ -6520,6 +6539,10 @@ export interface components {
             totalSeedsStoredForProject?: number;
             workers: components["schemas"]["WorkersPayloadV1"];
         };
+        GetSitePlotSpeciesResponsePayload: {
+            plots: components["schemas"]["PlotSpeciesDensitiesPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetSpeciesForParticipantProjectsResponsePayload: {
             speciesForParticipantProjects: components["schemas"]["SpeciesForParticipantProjectPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -7612,6 +7635,7 @@ export interface components {
              * @description Number of live plants per hectare.
              */
             plantingDensity: number;
+            plants?: components["schemas"]["RecordedPlantPayload"][];
             /**
              * Format: int32
              * @description Length of each edge of the monitoring plot in meters.
@@ -8331,6 +8355,11 @@ export interface components {
             /** Format: int32 */
             totalSpecies: number;
         };
+        PlotSpeciesDensitiesPayload: {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            species: components["schemas"]["SpeciesDensityPayload"][];
+        };
         PlotT0DataPayload: {
             densityData: components["schemas"]["SpeciesDensityPayload"][];
             /** Format: int64 */
@@ -8551,9 +8580,11 @@ export interface components {
         };
         PublishedReportPayload: {
             achievements: string[];
+            additionalComments?: string;
             challenges: components["schemas"]["ReportChallengePayload"][];
             /** Format: date */
             endDate: string;
+            financialSummaries?: string;
             /** @enum {string} */
             frequency: "Quarterly" | "Annual";
             highlights?: string;
@@ -8768,8 +8799,10 @@ export interface components {
         };
         ReportReviewPayload: {
             achievements: string[];
+            additionalComments?: string;
             challenges: components["schemas"]["ReportChallengePayload"][];
             feedback?: string;
+            financialSummaries?: string;
             highlights?: string;
             internalComment?: string;
             /**
@@ -8813,10 +8846,7 @@ export interface components {
         ReportSystemMetricEntriesPayload: {
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
-            /**
-             * Format: int32
-             * @description If set to null, system metric entry will use Terraware data value.
-             */
+            /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
             /** @enum {string} */
@@ -9390,7 +9420,9 @@ export interface components {
         };
         UpdateAcceleratorReportValuesRequestPayload: {
             achievements: string[];
+            additionalComments?: string;
             challenges: components["schemas"]["ReportChallengePayload"][];
+            financialSummaries?: string;
             highlights?: string;
             projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
             standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
@@ -15263,6 +15295,28 @@ export interface operations {
             };
         };
     };
+    getSpeciesWithdrawnToPlantingSite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSiteId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSitePlotSpeciesResponsePayload"];
+                };
+            };
+        };
+    };
     getNurseryWithdrawal: {
         parameters: {
             query?: never;
@@ -17766,6 +17820,8 @@ export interface operations {
             query?: {
                 organizationId?: number;
                 plantingSiteId?: number;
+                /** @description Whether to include plants in the results. Default to false */
+                includePlants?: boolean;
                 /** @description Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
                 limit?: number;
             };
@@ -17791,6 +17847,8 @@ export interface operations {
             query?: {
                 organizationId?: number;
                 plantingSiteId?: number;
+                /** @description Whether to include plants in the results. Default to false */
+                includePlants?: boolean;
                 /** @description Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
                 limit?: number;
             };
@@ -18230,7 +18288,10 @@ export interface operations {
     };
     getObservationResults: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Whether to include plants in the results. Default to false */
+                includePlants?: boolean;
+            };
             header?: never;
             path: {
                 observationId: number;

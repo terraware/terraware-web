@@ -146,6 +146,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
+      includeBorder={!funderReportView}
     >
       {achievements.map((achievement, index) => (
         <Achievement

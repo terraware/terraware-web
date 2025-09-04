@@ -6,8 +6,10 @@ import { Button, DropdownItem, Message } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
@@ -287,9 +289,9 @@ const ReportView = () => {
 
   const reportName = selectedReport ? getReportName(selectedReport) : '';
 
-  const onEditChange = (isInEdit: boolean) => {
+  const onEditChange = useCallback((isInEdit: boolean) => {
     setBoxInEdit(isInEdit);
-  };
+  }, []);
 
   const changeToFunderView = useCallback(() => {
     setPublishedFunderView(true);
@@ -413,6 +415,22 @@ const ReportView = () => {
                 canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
               />
               <ChallengesMitigationBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <FinancialSummariesBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <AdditionalCommentsBox
                 report={selectedReport}
                 projectId={projectId}
                 reload={reload}

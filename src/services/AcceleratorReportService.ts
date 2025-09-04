@@ -9,7 +9,6 @@ import {
   ReviewAcceleratorReportMetricsRequestPayload,
   SystemMetricName,
   UpdateAcceleratorReportConfigPayload,
-  UpdateAcceleratorReportRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { UpdateReportMetricTargets } from 'src/types/Report';
@@ -224,19 +223,10 @@ const updateAcceleratorReport = async (
 ): Promise<Response2<UpdateAcceleratorReportResponse>> => {
   const { projectId, reportId, report } = params;
 
-  const reportUpdate: UpdateAcceleratorReportRequest = {
-    achievements: [...report.achievements],
-    challenges: [...report.challenges],
-    highlights: report.highlights,
-    projectMetrics: [...report.projectMetrics],
-    standardMetrics: [...report.standardMetrics],
-    systemMetrics: [...report.systemMetrics],
-  };
-
   return HttpService.root(
     ACCELERATOR_REPORT_ENDPOINT.replace('{projectId}', projectId.toString()).replace('{reportId}', reportId.toString())
   ).post2<UpdateAcceleratorReportResponse>({
-    entity: reportUpdate,
+    entity: report,
   });
 };
 

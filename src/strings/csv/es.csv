@@ -106,6 +106,7 @@ ADDING_SUBZONE_BOUNDARIES,Añadir límites de subzona,58f0fb08
 ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de corte {0} para crear formas de subzonas (polígonos) dentro de las zonas.,042bd160
 ADDING_ZONE_BOUNDARIES,Añadir límites de zona,901f668b
 ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de corte {0} para crear polígonos dentro de los límites del sitio para las zonas.,06f570cb
+ADDITIONAL_COMMENTS,Comentarios adicionales,bf1dfb11
 ADDITIONAL_INVASIVE_THREATENED_SPECIES,Especie invasora/en peligro adicional,7d019848
 ADDITIONAL_NURSERY_NOTES,Notas adicionales sobre el vivero,db29c13a
 ADDITIONAL_PLANTING_SITES_NOTES,Notas adicionales sobre el sitio de plantación,364dcb50
@@ -642,6 +643,7 @@ FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
 FILTERS,Filtros,c3d13364
 FINAL_QTY,Cantidad final,47530c05
 FINANCE,Finanzas,ae6619da
+FINANCIAL_SUMMARIES,Resúmenes financieros,d26c4f56
 FINANCIAL_VIABILITY,Viabilidad económica,50706753
 FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,Obtenga más información sobre el Acelerador Seed to Forest de Terraformation {0} y postúlese.,e49d8596
 FIRST_ADD_PLANTING_SITE,"Para ver el tablero, usted debe tener un área de plantación.",29adc97e
