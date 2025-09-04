@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
@@ -16,12 +16,19 @@ export default function RejectDialog({ onClose, onSubmit, initialFeedback }: Rej
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
 
-  const reject = () => {
+  const reject = useCallback(() => {
     setValidate(true);
     if (feedback) {
       onSubmit(feedback);
     }
-  };
+  }, [feedback, onSubmit]);
+
+  const setFeedbackCallback = useCallback(
+    (value: any) => () => {
+      setFeedback(value as string);
+    },
+    []
+  );
 
   return (
     <DialogBox
@@ -57,7 +64,7 @@ export default function RejectDialog({ onClose, onSubmit, initialFeedback }: Rej
           errorText={validate && !feedback.trim() ? strings.REQUIRED_FIELD : ''}
           label={strings.FEEDBACK}
           id='feedback'
-          onChange={(value) => setFeedback(value as string)}
+          onChange={setFeedbackCallback}
           required
           type='textarea'
           value={feedback}

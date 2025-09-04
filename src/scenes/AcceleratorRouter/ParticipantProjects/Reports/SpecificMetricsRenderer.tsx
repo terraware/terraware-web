@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -9,6 +9,10 @@ export default function SpecificMetricsRenderer(props: RendererProps<TableRowTyp
   const { column, row, index, value, onRowClick } = props;
   const { isAllowed } = useUser();
 
+  const onRowClickCallback = useCallback(() => {
+    onRowClick?.();
+  }, [onRowClick]);
+
   if (column.key === 'name' && onRowClick) {
     return (
       <CellRenderer
@@ -16,7 +20,7 @@ export default function SpecificMetricsRenderer(props: RendererProps<TableRowTyp
         column={column}
         value={
           isAllowed('UPDATE_REPORTS_SETTINGS') ? (
-            <Link fontSize='16px' onClick={() => onRowClick()}>
+            <Link fontSize='16px' onClick={onRowClickCallback}>
               {value as React.ReactNode}
             </Link>
           ) : (

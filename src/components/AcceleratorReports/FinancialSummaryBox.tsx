@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
+import useBoolean from 'src/hooks/useBoolean';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -18,7 +19,7 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const FinancialSummariesBox = (props: ReportBoxProps) => {
   const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
     props;
-  const [internalEditing, setInternalEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [financialSummaries, setFinancialSummaries] = useState<string | undefined>(report?.financialSummaries);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
@@ -42,7 +43,7 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar, reload]);
+  }, [updateReportResponse, snackbar, reload, setInternalEditing]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -51,9 +52,6 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
           review: {
             ...report,
             financialSummaries,
-            achievements: report?.achievements || [],
-            challenges: report?.challenges || [],
-            status: report?.status || 'Not Submitted',
           },
           projectId: Number(projectId),
           reportId: report?.id || -1,
@@ -66,7 +64,11 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
   const onCancel = useCallback(() => {
     setFinancialSummaries(report?.financialSummaries);
     setInternalEditing(false);
-  }, [report?.financialSummaries]);
+  }, [report?.financialSummaries, setInternalEditing]);
+
+  const setFinancialSummariesCallback = useCallback((value: any) => {
+    setFinancialSummaries(value as string);
+  }, []);
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
@@ -75,7 +77,7 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
       name={funderReportView ? '' : strings.FINANCIAL_SUMMARIES}
       canEdit={!!canEdit}
       editing={isEditing}
-      onEdit={() => setInternalEditing(true)}
+      onEdit={setInternalEditingTrue}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
@@ -89,7 +91,7 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
           label={''}
           display={!isEditing}
           styles={textAreaStyles}
-          onChange={(value: any) => setFinancialSummaries(value)}
+          onChange={setFinancialSummariesCallback}
           preserveNewlines
           markdown
         />

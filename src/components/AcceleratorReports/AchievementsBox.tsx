@@ -5,6 +5,7 @@ import { Button, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
+import useBoolean from 'src/hooks/useBoolean';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -34,6 +35,13 @@ const Achievement = ({
 }) => {
   const theme = useTheme();
 
+  const setAchievementCallback = useCallback(
+    (value: any) => {
+      setAchievement(value as string);
+    },
+    [setAchievement]
+  );
+
   return (
     <>
       <Grid
@@ -49,7 +57,7 @@ const Achievement = ({
           label={''}
           display={!editing}
           styles={textAreaStyles}
-          onChange={(value: any) => setAchievement(value)}
+          onChange={setAchievementCallback}
           preserveNewlines
           markdown
         />
@@ -70,7 +78,7 @@ const Achievement = ({
 const AchievementsBox = (props: ReportBoxProps) => {
   const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
     props;
-  const [internalEditing, setInternalEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
@@ -106,7 +114,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar, reload]);
+  }, [updateReportResponse, snackbar, reload, setInternalEditing]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -129,11 +137,21 @@ const AchievementsBox = (props: ReportBoxProps) => {
   const onCancel = useCallback(() => {
     setInternalEditing(false);
     setAchievements(report?.achievements || []);
-  }, [report?.achievements]);
+  }, [report?.achievements, setInternalEditing]);
 
-  const updateAchievement = (newAchievement: string, index: number) => {
-    setAchievements(achievements.map((ach, i) => (index === i ? newAchievement : ach)));
-  };
+  const updateAchievement = useCallback(
+    (index: number) => (newAchievement: string) => {
+      setAchievements((_achievements) => _achievements.map((ach, i) => (index === i ? newAchievement : ach)));
+    },
+    []
+  );
+
+  const deleteAchievement = useCallback(
+    (index: number) => () => {
+      setAchievements((_achievements) => _achievements.filter((_, i) => index !== i));
+    },
+    []
+  );
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
@@ -142,7 +160,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
       name={funderReportView ? '' : strings.ACHIEVEMENTS}
       canEdit={!!canEdit}
       editing={isEditing}
-      onEdit={() => setInternalEditing(true)}
+      onEdit={setInternalEditingTrue}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
@@ -155,8 +173,8 @@ const AchievementsBox = (props: ReportBoxProps) => {
           index={index}
           includeBorder={index < achievements.length - 1}
           editing={isEditing}
-          onRemove={() => setAchievements(achievements.filter((_, i) => index !== i))}
-          setAchievement={(ach: string) => updateAchievement(ach, index)}
+          onRemove={deleteAchievement(index)}
+          setAchievement={updateAchievement(index)}
         />
       ))}
       {isEditing && (

@@ -18,6 +18,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -45,7 +46,7 @@ const AcceleratorReportView = () => {
   const [requestId, setRequestId] = useState<string>('');
   const [submitReportRequestId, setSubmitReportRequestId] = useState<string>('');
   const [report, setReport] = useState<AcceleratorReport>();
-  const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
+  const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
 
   const getReportResults = useAppSelector(selectAcceleratorReport(requestId));
   const submitReportResults = useAppSelector(selectSubmitAcceleratorReport(submitReportRequestId));
@@ -99,6 +100,10 @@ const AcceleratorReportView = () => {
     [activeLocale, year]
   );
 
+  const goToReportEdit = useCallback(() => {
+    goToAcceleratorReportEdit(Number(reportId), Number(projectId));
+  }, [goToAcceleratorReportEdit, projectId, reportId]);
+
   const callToAction = useMemo(() => {
     const buttonsDisabled =
       !report?.id ||
@@ -113,9 +118,7 @@ const AcceleratorReportView = () => {
           icon='iconEdit'
           id='editReport'
           label={strings.EDIT}
-          onClick={() => {
-            goToAcceleratorReportEdit(Number(reportId), Number(projectId));
-          }}
+          onClick={goToReportEdit}
           priority='secondary'
           size='medium'
         />
@@ -123,9 +126,7 @@ const AcceleratorReportView = () => {
           disabled={buttonsDisabled}
           id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
-          onClick={() => {
-            setShowApproveDialog(true);
-          }}
+          onClick={openApprovalDialog}
           size='medium'
           sx={{ '&.button': { whiteSpace: 'nowrap' } }}
         />
@@ -133,11 +134,10 @@ const AcceleratorReportView = () => {
     );
   }, [
     getReportResults?.status,
-    goToAcceleratorReportEdit,
-    projectId,
+    goToReportEdit,
+    openApprovalDialog,
     report?.id,
     report?.status,
-    reportId,
     submitReportResults?.status,
   ]);
 
@@ -153,14 +153,14 @@ const AcceleratorReportView = () => {
   const submitReport = useCallback(() => {
     const request = dispatch(requestSubmitAcceleratorReport({ projectId, reportId }));
     setSubmitReportRequestId(request.requestId);
-    setShowApproveDialog(false);
-  }, [dispatch, projectId, reportId]);
+    closeApproveDialog();
+  }, [closeApproveDialog, dispatch, projectId, reportId]);
 
   const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
 
   return (
     <>
-      {showApproveDialog && <SubmitReportDialog onClose={() => setShowApproveDialog(false)} onSubmit={submitReport} />}
+      {showApproveDialog && <SubmitReportDialog onClose={closeApproveDialog} onSubmit={submitReport} />}
 
       <Page
         crumbs={crumbs}
