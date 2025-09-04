@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
+import useBoolean from 'src/hooks/useBoolean';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -18,7 +19,7 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const AdditionalCommentsBox = (props: ReportBoxProps) => {
   const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
     props;
-  const [internalEditing, setInternalEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [additionalComments, setAdditionalComments] = useState<string | undefined>(report?.additionalComments);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
@@ -42,7 +43,7 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar, reload]);
+  }, [updateReportResponse, snackbar, reload, setInternalEditing]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -66,7 +67,11 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
   const onCancel = useCallback(() => {
     setAdditionalComments(report?.additionalComments);
     setInternalEditing(false);
-  }, [report?.additionalComments]);
+  }, [report?.additionalComments, setInternalEditing]);
+
+  const setAdditionalCommentsCallback = useCallback((value: any) => {
+    setAdditionalComments(value as string);
+  }, []);
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
@@ -75,7 +80,7 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
       name={funderReportView ? '' : strings.ADDITIONAL_COMMENTS}
       canEdit={!!canEdit}
       editing={isEditing}
-      onEdit={() => setInternalEditing(true)}
+      onEdit={setInternalEditingTrue}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
@@ -89,7 +94,7 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
           label={''}
           display={!isEditing}
           styles={textAreaStyles}
-          onChange={(value: any) => setAdditionalComments(value)}
+          onChange={setAdditionalCommentsCallback}
           preserveNewlines
           markdown
         />

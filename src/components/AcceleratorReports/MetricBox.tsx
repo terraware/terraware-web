@@ -4,6 +4,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Textfield, Tooltip } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
+import useBoolean from 'src/hooks/useBoolean';
 import {
   selectRefreshAcceleratorReportSystemMetrics,
   selectReviewAcceleratorReportMetric,
@@ -67,11 +68,11 @@ const MetricBox = ({
   const [record, setRecord, onChange, onChangeCallback] = useForm<
     ReportProjectMetric | ReportSystemMetric | ReportStandardMetric
   >(metric);
-  const [progressModalOpened, setProgressModalOpened] = useState<boolean>(false);
-  const [resetMetricModalOpened, setResetMetricModalOpened] = useState<boolean>(false);
+  const [progressModalOpened, , openProgressModal, closeProgresModal] = useBoolean(false);
+  const [resetMetricModalOpened, , openResetMetricModal, closeResetMetricModal] = useBoolean(false);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
-  const [internalEditing, setInternalEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing, setInternalEditingTrue, setInternalEditingFalse] = useBoolean(false);
   const [refreshRequestId, setRefreshRequestId] = useState<string>('');
   const updateReportMetricResponse = useAppSelector(selectReviewAcceleratorReportMetric(requestId));
   const refreshReportMetricResponse = useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));
@@ -93,7 +94,7 @@ const MetricBox = ({
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload?.();
     }
-  }, [updateReportMetricResponse, snackbar, reload]);
+  }, [updateReportMetricResponse, snackbar, reload, setInternalEditing]);
 
   const onChangeProgress = useCallback(
     (newValue: string) => {
@@ -110,7 +111,7 @@ const MetricBox = ({
     if (refreshReportMetricResponse?.status === 'error') {
       snackbar.toastError();
     } else if (refreshReportMetricResponse?.status === 'success') {
-      setResetMetricModalOpened(false);
+      closeResetMetricModal();
       setInternalEditing(false);
       if (isReportSystemMetric(metric)) {
         onChangeProgress(metric.systemValue.toString());
@@ -118,7 +119,15 @@ const MetricBox = ({
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload?.();
     }
-  }, [metric, onChangeProgress, refreshReportMetricResponse, reload, snackbar]);
+  }, [
+    closeResetMetricModal,
+    metric,
+    onChangeProgress,
+    refreshReportMetricResponse,
+    reload,
+    setInternalEditing,
+    snackbar,
+  ]);
 
   const getUpdateBody = useCallback(() => {
     const baseMetric = {
@@ -200,7 +209,7 @@ const MetricBox = ({
     }
   };
 
-  const onResetMetricHandler = () => {
+  const onResetMetricHandler = useCallback(() => {
     if (isReportSystemMetric(metric)) {
       const request = dispatch(
         requestRefreshAcceleratorReportSystemMetrics({
@@ -211,14 +220,14 @@ const MetricBox = ({
       );
       setRefreshRequestId(request.requestId);
     }
-  };
+  }, [dispatch, metric, projectId, reportId]);
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setRecord(metric);
-    setInternalEditing(false);
-  };
+    setInternalEditingFalse();
+  }, [metric, setInternalEditingFalse, setRecord]);
 
   return (
     <>
@@ -228,16 +237,14 @@ const MetricBox = ({
           target={metric.target || 0}
           onChange={onChangeProgress}
           value={getProgressValue()}
-          onClose={() => setProgressModalOpened(false)}
+          onClose={closeProgresModal}
         />
       )}
-      {resetMetricModalOpened && (
-        <ResetMetricModal onClose={() => setResetMetricModalOpened(false)} onSubmit={onResetMetricHandler} />
-      )}
+      {resetMetricModalOpened && <ResetMetricModal onClose={closeResetMetricModal} onSubmit={onResetMetricHandler} />}
       <EditableReportBox
         name={getMetricName()}
         canEdit={!!canEdit}
-        onEdit={() => setInternalEditing(true)}
+        onEdit={setInternalEditingTrue}
         onCancel={handleCancel}
         onSave={onSave}
         editing={isEditing}
@@ -265,7 +272,7 @@ const MetricBox = ({
                 {isEditing && metric.overrideValue && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconUndo'
-                    onClick={() => setResetMetricModalOpened(true)}
+                    onClick={openResetMetricModal}
                     priority='ghost'
                     size='small'
                     type='passive'
@@ -278,7 +285,7 @@ const MetricBox = ({
                 {isEditing && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconEdit'
-                    onClick={() => setProgressModalOpened(true)}
+                    onClick={openProgressModal}
                     priority='ghost'
                     size='small'
                     type='passive'
