@@ -12,10 +12,12 @@ import {
 
 import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
 import {
+  PlotsWithObservationsSearchResult,
   requestGetPlantingSiteHistory,
   requestListPlantingSiteHistories,
   requestListPlantingSites,
   requestOrganizationReportedPlants,
+  requestPermanentPlotsWithObservations,
   requestPlantingSiteReportedPlants,
   requestPlantingSiteT0,
 } from './trackingThunks';
@@ -216,6 +218,17 @@ export const plantingSiteT0Slice = createSlice({
   },
 });
 
+const initialPlotsWithObservationsState: { [key: string]: StatusT<PlotsWithObservationsSearchResult[]> } = {};
+
+export const plotsWithObservations = createSlice({
+  name: 'plotsWithObservationsSlice',
+  initialState: initialPlotsWithObservationsState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestPermanentPlotsWithObservations, true)(builder);
+  },
+});
+
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
@@ -228,6 +241,7 @@ const trackingReducers = {
   plantingSiteReportedPlants: plantingSiteReportedPlantsSlice.reducer,
   organizationReportedPlants: organizationReportedPlantsSlice.reducer,
   plantingSiteT0: plantingSiteT0Slice.reducer,
+  plotsWithObservations: plotsWithObservations.reducer,
 };
 
 export default trackingReducers;

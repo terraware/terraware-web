@@ -130,6 +130,7 @@ ALL_PLANTING_SITES,Tous les sites de plantation,344a80c6
 ALL_PROJECT_ZONES,Toutes les zones du projet,4c578acc
 ALL_PROJECTS,Tous les projets,4eb0ec5d
 ALL_SECTIONS,Toutes les sections,d3d73b24
+ALL_SPECIES,Toutes les espèces,5622801f
 ALL_VARIABLES,Toutes les variables,1fe9cddb
 ALREADY_INVITED_PERSON_ERROR,Il semble que vous ayez déjà ajouté ou invité cette personne. Veuillez saisir une adresse électronique unique ou accéder au profil de la personne existante.,67ec2d39
 AMOUNT_EST_COUNT,Quantité (nombre estimé),e203609b
@@ -1075,6 +1076,7 @@ NOT_COMPLETE,Pas terminé,a8606bc8
 NOT_ENOUGH_SEEDS_IN_ACCESSION,Pas assez de semences dans l'accession,1d7be036
 NOT_NEEDED,Non nécessaire,dc4188cf
 NOT_OBSERVED,Non observé,4a9890a2
+NOT_SET,Non défini,6b047afe
 NOT_SUBMITTED,Non soumis,e40a2b1d
 NOT_YET,Pas encore,77976aa8
 NOTE_ANY_ISSUES,Est-ce que tout ce qui précède vous semble correct ? Signalez tout problème.,133db1c4
@@ -1876,6 +1878,7 @@ SUSTAINABLE_TIMBER,Bois durable,b9574821
 SW_CORNER_LATITUDE,Latitude du coin sud-ouest : {0},11be73c0
 SW_CORNER_LONGITUDE,Longitude du coin sud-ouest : {0},28e4af3d
 SYSTEM_METRICS,Mesures du système,c19498b7
+T0_DATA_IS_SET,Les données t0 sont définies,cf4c95a7
 TABLE_OF_CONTENTS,Table des matières,c4c6df6c
 TABLE_SELECT_ALL_ROWS,Sélectionnez toutes les {0} lignes.,b2db09d4
 TABLE_SELECT_NONE,Effacer la sélection.,37fe7c91
@@ -2098,6 +2101,7 @@ USER_ACCESS,Accès utilisateur,a9aa511b
 USER_NOTIFICATION_ACTION,"Pour modifier vos préférences, rendez-vous sur [Mon compte]",8fcbad99
 USER_NOTIFICATION_ACTION_SETTINGS,"Pour modifier vos préférences, rendez-vous sur [Paramètres]",e188ba43
 USER_WITH_EMAIL_DOES_NOT_EXIST,L'utilisateur avec cet e-mail n'existe pas,66a18b2d
+USING_OBSERVATION_DATA_FROM,Utilisation des données d'observation de {0},c489a0dd
 VALUE,Valeur,b8e67ab1
 VALUE_CANT_EXCEED_100,La valeur ne peut pas dépasser 100 %,e78b7737
 VARIABLE_DETAILS,Détails de la variable,48294b19

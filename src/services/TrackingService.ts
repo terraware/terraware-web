@@ -5,7 +5,13 @@ import {
   Population,
   ValidatePlantingSiteResponsePayload,
 } from 'src/types/PlantingSite';
-import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
+import {
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchRequestPayloadWithOptionalSearch,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/types/Search';
 import { Delivery, PlantingSite } from 'src/types/Tracking';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
 
@@ -420,6 +426,51 @@ const getPlantingSiteT0 = async (plantingSiteId: number): Promise<Response2<Plan
   ).get2<PlantingSiteT0ResponsePayload>({});
 };
 
+const getPermanentPlotsWithObservations = async <T extends SearchResponseElement>(
+  plantingSiteId: number
+): Promise<T[] | null> => {
+  const params: SearchRequestPayloadWithOptionalSearch = {
+    prefix: 'plantingSites.monitoringPlots',
+    fields: [
+      'id',
+      'name',
+      'plantingSubzone_name',
+      'plantingSubzone_plantingZone_name',
+      'observationPlots.observation_id',
+      'observationPlots.observation_startDate',
+    ],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'plantingSite_id',
+          type: 'Exact',
+          values: [plantingSiteId],
+        },
+        {
+          operation: 'field',
+          field: 'observationPlots.isPermanent',
+          type: 'Exact',
+          values: [true],
+        },
+        {
+          operation: 'not',
+          child: {
+            operation: 'field',
+            field: 'observationPlots.completedTime',
+            type: 'Exact',
+            values: [null],
+          },
+        },
+      ],
+    },
+    count: 1000,
+  };
+
+  return SearchService.search<T>(params);
+};
+
 /**
  * Exported functions
  */
@@ -442,6 +493,7 @@ const TrackingService = {
   getPlantingSiteHistory,
   listPlantingSiteHistories,
   listOrganizationReportedPlants,
+  getPermanentPlotsWithObservations,
 };
 
 export default TrackingService;

@@ -37,3 +37,6 @@ export const selectOrganizationReportedPlants = (requestId: string) => (state: R
   state.organizationReportedPlants[requestId];
 
 export const selectPlantingSiteT0 = (requestId: string) => (state: RootState) => state.plantingSiteT0[requestId];
+
+export const selectPermanentPlotsWithObservations = (requestId: string) => (state: RootState) =>
+  state.plotsWithObservations[requestId];
