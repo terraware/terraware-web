@@ -8,8 +8,9 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import Table from 'src/components/common/table';
+import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import {
   selectListReportMetrics,
   selectListStandardMetrics,
@@ -23,7 +24,6 @@ import {
   requestProjectReportConfig,
 } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
 import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
 
 import EditMetricModal from './EditMetricModal';
@@ -32,6 +32,7 @@ import SystemMetricsRenderer from './SystemMetricsRenderer';
 
 export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const { strings } = useLocalization();
   const theme = useTheme();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = String(pathParams.projectId);
@@ -48,7 +49,7 @@ export default function ReportsSettings(): JSX.Element {
   const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
   const [selectedMetric, setSelectedMetric] = useState<ProjectMetric>();
-  const [editMetricModalOpened, setEditMetricModalOpened] = useState<boolean>(false);
+  const [editMetricModalOpened, , openEditMetricModal, closeEditMetricModal] = useBoolean(false);
   const { isAllowed } = useUser();
 
   useEffect(() => {
@@ -107,7 +108,7 @@ export default function ReportsSettings(): JSX.Element {
       { label: strings.START_DATE, value: projectReportConfig.config?.reportingStartDate },
       { label: strings.END_DATE, value: projectReportConfig.config?.reportingEndDate },
     ];
-  }, [projectReportConfig]);
+  }, [projectReportConfig, strings]);
 
   const title = (text: string, marginTop?: number, marginBottom?: number) => (
     <Typography
@@ -121,56 +122,64 @@ export default function ReportsSettings(): JSX.Element {
     </Typography>
   );
 
-  const goToEditSettings = () => {
+  const goToEditSettings = useCallback(() => {
     goToAcceleratorEditReportSettings(projectId);
-  };
+  }, [goToAcceleratorEditReportSettings, projectId]);
 
-  const columns = (): TableColumnType[] => [
-    {
-      key: 'name',
-      name: strings.NAME,
-      type: 'string',
-    },
-    {
-      key: 'type',
-      name: strings.TYPE,
-      type: 'string',
-    },
-    {
-      key: 'reference',
-      name: strings.REFERENCE,
-      type: 'string',
-    },
-    {
-      key: 'component',
-      name: strings.COMPONENT,
-      type: 'string',
-    },
-    {
-      key: 'unit',
-      name: strings.UNIT,
-      type: 'string',
-    },
-    {
-      key: 'isPublishable',
-      name: strings.PUBLISH,
-      type: 'boolean',
-    },
-  ];
+  const columns = useCallback(
+    (): TableColumnType[] => [
+      {
+        key: 'name',
+        name: strings.NAME,
+        type: 'string',
+      },
+      {
+        key: 'type',
+        name: strings.TYPE,
+        type: 'string',
+      },
+      {
+        key: 'reference',
+        name: strings.REFERENCE,
+        type: 'string',
+      },
+      {
+        key: 'component',
+        name: strings.COMPONENT,
+        type: 'string',
+      },
+      {
+        key: 'unit',
+        name: strings.UNIT,
+        type: 'string',
+      },
+      {
+        key: 'isPublishable',
+        name: strings.PUBLISH,
+        type: 'boolean',
+      },
+    ],
+    [strings]
+  );
 
-  const onRowClick = (metric: ProjectMetric) => {
-    setSelectedMetric(metric);
-    setEditMetricModalOpened(true);
-  };
+  const onRowClick = useCallback(
+    (metric: ProjectMetric) => {
+      setSelectedMetric(metric);
+      openEditMetricModal();
+    },
+    [openEditMetricModal]
+  );
+
+  const goToAddMetric = useCallback(() => {
+    goToNewProjectMetric(projectId);
+  }, [goToNewProjectMetric, projectId]);
+
+  const clickable = useCallback(() => false, []);
 
   return (
     <>
       {editMetricModalOpened && selectedMetric && (
-        <EditMetricModal
-          onClose={() => setEditMetricModalOpened(false)}
-          projectMetric={selectedMetric}
-          reload={reloadSpecificMetrics}
-        />
+        <EditMetricModal onClose={closeEditMetricModal} projectMetric={selectedMetric} reload={reloadSpecificMetrics} />
       )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
@@ -215,12 +224,7 @@ export default function ReportsSettings(): JSX.Element {
             {title(strings.PROJECT_SPECIFIC_METRICS)}
             {isAllowed('UPDATE_REPORTS_SETTINGS') && (
               <Box>
-                <Button
-                  label={strings.ADD_METRIC}
-                  icon='plus'
-                  onClick={() => goToNewProjectMetric(projectId)}
-                  priority='secondary'
-                />
+                <Button label={strings.ADD_METRIC} icon='plus' onClick={goToAddMetric} priority='secondary' />
               </Box>
             )}
           </Grid>
@@ -242,7 +246,7 @@ export default function ReportsSettings(): JSX.Element {
                 Renderer={SpecificMetricsRenderer}
                 onSelect={onRowClick}
                 controlledOnSelect={true}
-                isClickable={() => false}
+                isClickable={clickable}
               />
             ) : (
               <Typography>{strings.NO_PROJECT_SPECIFIC_METRICS_TO_SHOW}</Typography>

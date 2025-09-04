@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid } from '@mui/material';
@@ -45,7 +45,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
     }
   }, [updateProjectMetricResponse, snackbar, onClose, reload]);
 
-  const save = () => {
+  const save = useCallback(() => {
     if (!record.name || !record.reference) {
       setValidate(true);
       return;
@@ -58,7 +58,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
       })
     );
     setRequestId(request.requestId);
-  };
+  }, [dispatch, projectId, projectMetric.id, record]);
 
   return (
     <DialogBox

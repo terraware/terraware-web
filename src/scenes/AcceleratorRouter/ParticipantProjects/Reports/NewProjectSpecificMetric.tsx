@@ -73,23 +73,18 @@ export default function NewProjectSpecificMetric(): JSX.Element {
     isPublishable: true,
   });
 
-  const saveNewMetric = () => {
+  const saveNewMetric = useCallback(() => {
     if (!newMetric.name || !newMetric.reference) {
       setValidate(true);
       return;
     }
     const request = dispatch(requestCreateProjectMetric({ metric: newMetric, projectId }));
     setRequestId(request.requestId);
-  };
+  }, [dispatch, newMetric, projectId]);
 
   return (
     <Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
-      <PageForm
-        cancelID='cancelNewMetric'
-        saveID='saveNewMetric'
-        onCancel={goToProjectReports}
-        onSave={() => saveNewMetric()}
-      >
+      <PageForm cancelID='cancelNewMetric' saveID='saveNewMetric' onCancel={goToProjectReports} onSave={saveNewMetric}>
         <Container
           maxWidth={false}
           sx={{
