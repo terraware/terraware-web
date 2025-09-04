@@ -124,13 +124,13 @@ export default function PeopleListView(): JSX.Element {
     if (results) {
       const resultsWithRoles = results.map((result) => ({
         ...result,
-        role: (internalUserRoles[result.id]
+        role: (result.role === strings.TERRAFORMATION_CONTACT && internalUserRoles[result.id]?.length
           ? `${result.role} - ${internalUserRoles[result.id].join(', ')}`
           : result.role) as OrganizationRole,
       }));
       setResultsWithInternalRoles(resultsWithRoles);
     }
-  }, [results, internalUserRoles]);
+  }, [results, internalUserRoles, strings]);
 
   const search = useCallback(
     async (searchTerm: string, skipTfContact = false) => {
