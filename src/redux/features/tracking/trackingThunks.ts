@@ -14,6 +14,17 @@ import {
   setSiteReportedPlantsAction,
 } from './trackingSlice';
 
+export type PlotsWithObservationsSearchResult = {
+  id: number;
+  name: string;
+  plantingSubzone_name: string;
+  plantingSubzone_plantingZone_name: string;
+  observationPlots: {
+    observation_id: string;
+    observation_startDate: string;
+  }[];
+};
+
 export const requestPlantingSite = (plantingSiteId: number, locale?: string | null) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
@@ -153,6 +164,19 @@ export const requestPlantingSiteT0 = createAsyncThunk(
 
     if (response !== null && response.requestSucceeded && response.data?.plots) {
       return response.data.plots;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestPermanentPlotsWithObservations = createAsyncThunk(
+  'permanentPlotsWithObservations',
+  async (plantingSiteId: number, { rejectWithValue }) => {
+    const response = await TrackingService.getPermanentPlotsWithObservations(plantingSiteId);
+
+    if (response) {
+      return response;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
