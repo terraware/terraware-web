@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from 'react';
 
 import Page from 'src/components/Page';
+import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-
-import PageHeaderProjectFilter from './PageHeaderProjectFilter';
 
 export default function ActivityLogView(): JSX.Element {
   const { strings } = useLocalization();
