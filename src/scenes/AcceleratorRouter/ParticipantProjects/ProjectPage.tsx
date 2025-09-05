@@ -5,6 +5,7 @@ import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-componen
 
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
@@ -19,6 +20,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
+import ProjectActivityLogView from './ProjectActivityLogView';
 import ProjectDeliverablesView from './ProjectDeliverablesView';
 import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
@@ -43,6 +45,7 @@ const ProjectPage = () => {
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
+  const isActivityLogEnabled = isEnabled('Activity Log');
 
   const projectApplication = useMemo(
     () => getApplicationByProjectId(projectData.projectId),
@@ -68,6 +71,15 @@ const ProjectPage = () => {
           />
         ),
       },
+      ...(isActivityLogEnabled
+        ? [
+            {
+              id: 'activityLog',
+              label: strings.PROJECT_ACTIVITY,
+              children: <ProjectActivityLogView />,
+            },
+          ]
+        : []),
       {
         id: 'deliverables',
         label: strings.DELIVERABLES,
@@ -94,7 +106,7 @@ const ProjectPage = () => {
         ),
       },
     ];
-  }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
+  }, [activeLocale, isActivityLogEnabled, projectData, projectApplication, projectScore, phaseVotes]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
