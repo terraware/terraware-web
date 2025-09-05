@@ -206,7 +206,16 @@ const ProjectPage = () => {
         </Box>
       </Box>
     ),
-    [activeTab, goToDocumentNew, goToProjectEdit, isAllowedEdit, isAllowedPublish, onOptionItemClick, theme]
+    [
+      activeTab,
+      goToDocumentNew,
+      goToProjectEdit,
+      handleAddActivity,
+      isAllowedEdit,
+      isAllowedPublish,
+      onOptionItemClick,
+      theme,
+    ]
   );
 
   const projectViewTitle = (
