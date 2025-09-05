@@ -119,6 +119,10 @@ const ProjectPage = () => {
     [goToParticipantProjectEdit, projectData.projectId]
   );
 
+  const handleAddActivity = useCallback(() => {
+    // TODO: Implement add activity logic
+  }, []);
+
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
 
   const publishProfile = useCallback(() => {
@@ -174,6 +178,18 @@ const ProjectPage = () => {
                 />
               )}
             </>
+          )}
+
+          {activeTab === 'activityLog' && (
+            <Button
+              icon='plus'
+              id='addActivity'
+              label={strings.ADD_ACTIVITY}
+              onClick={handleAddActivity}
+              priority='primary'
+              size='medium'
+              type='productive'
+            />
           )}
 
           {activeTab === 'documents' && (
