@@ -26,7 +26,7 @@ export default function ActivityLogView(): JSX.Element {
 
   return (
     <Page hierarchicalCrumbs={false} leftComponent={PageHeaderLeftComponent} title={strings.ACTIVITY_LOG}>
-      <p>Content here</p>
+      <div>Content for Project ID: {currentParticipantProject?.id}</div>
     </Page>
   );
 }

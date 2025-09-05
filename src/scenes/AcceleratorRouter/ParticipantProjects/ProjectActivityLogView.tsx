@@ -4,7 +4,11 @@ import { useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 
-const ProjectActivityLogView = () => {
+type ProjectActivityLogViewProps = {
+  projectId: number;
+};
+
+const ProjectActivityLogView = ({ projectId }: ProjectActivityLogViewProps) => {
   const theme = useTheme();
 
   return (
@@ -14,7 +18,7 @@ const ProjectActivityLogView = () => {
         padding: 0,
       }}
     >
-      <p>Content here</p>
+      <div>Content for Project ID: {projectId}</div>
     </Card>
   );
 };

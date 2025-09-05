@@ -76,7 +76,7 @@ const ProjectPage = () => {
             {
               id: 'activityLog',
               label: strings.PROJECT_ACTIVITY,
-              children: <ProjectActivityLogView />,
+              children: <ProjectActivityLogView projectId={projectData.projectId} />,
             },
           ]
         : []),
