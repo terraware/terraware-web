@@ -38,6 +38,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Cantidad de crecimiento activo (antes),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de crecimiento activo no puede ser menor que 0.,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Cantidad de crecimiento activo ({0} restante),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Cantidad de crecimiento activo *,b8c156d3
+ACTIVITY_LOG,Registro de actividades,112b2d64
 ACTUAL,Real,1235cf68
 AD_HOC,Ad hoc,2acaf742
 AD_HOC_PLANT_MONITORING,Monitoreo de plantas ad hoc,589a6d6c
@@ -49,6 +50,7 @@ ADD_A_PROJECT,Agregar un proyecto,8e2222bc
 ADD_A_SEED_BANK,Añadir un banco de semillas,b5eceab7
 ADD_A_SPECIES,Añadir una especie,aa4e7200
 ADD_A_VIABILITY_TEST,Añadir una prueba de viabilidad,f70c39b0
+ADD_ACTIVITY,Agregar actividad,0ed95a7d
 ADD_ADDRESS,Añadir dirección,8262aa95
 ADD_AN_ACCESSION,Añadir una accesión,e4b619b4
 ADD_BATCH,Añadir lote,0d9f7a4a
@@ -1362,6 +1364,7 @@ PROGRESS_NOTES,Notas sobre el progreso,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Proporcione información que pueda publicarse a los financiadores.,a42ffda7
 PROGRESS_REPORT,Informe sobre el avance,69cf80ea
 PROJECT,Proyecto,162b4c3f
+PROJECT_ACTIVITY,Actividad del proyecto,74a61b7a
 PROJECT_ADDED,{0} Añadido,c579a852
 PROJECT_ADDED_ACCESSION,Accesión {0},48fadd3b
 PROJECT_ADDED_ACCESSIONS,{0} accesiones,b962589a
