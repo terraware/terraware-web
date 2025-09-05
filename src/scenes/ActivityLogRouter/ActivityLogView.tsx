@@ -10,7 +10,7 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import theme from 'src/theme';
 
 export default function ActivityLogView(): JSX.Element {
-  const { activeLocale, strings } = useLocalization();
+  const { strings } = useLocalization();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
@@ -30,36 +30,33 @@ export default function ActivityLogView(): JSX.Element {
   }, [allParticipantProjects, projectFilter.projectId, setCurrentParticipantProject]);
 
   const PageHeaderLeftComponent = useMemo(
-    () =>
-      activeLocale ? (
-        <>
-          <Grid container sx={{ alignItems: 'center', flexWrap: 'nowrap', marginTop: theme.spacing(0.5) }}>
-            <Grid item>
-              <Separator height={'40px'} />
-            </Grid>
-            {allParticipantProjects?.length > 0 && (
-              <Grid item>
-                {allParticipantProjects?.length > 1 ? (
-                  <Box display='flex'>
-                    <Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}>
-                      {strings.PROJECT}
-                    </Typography>
-                    <ProjectsDropdown
-                      availableProjects={allParticipantProjects}
-                      label=''
-                      record={projectFilter}
-                      setRecord={setProjectFilter}
-                    />
-                  </Box>
-                ) : (
-                  <Typography>{allParticipantProjects[0].name}</Typography>
-                )}
-              </Grid>
+    () => (
+      <Grid container sx={{ alignItems: 'center', flexWrap: 'nowrap', marginTop: theme.spacing(0.5) }}>
+        <Grid item>
+          <Separator height='40px' />
+        </Grid>
+        {allParticipantProjects?.length > 0 && (
+          <Grid item>
+            {allParticipantProjects?.length > 1 ? (
+              <Box display='flex'>
+                <Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component='span'>
+                  {strings.PROJECT}
+                </Typography>
+                <ProjectsDropdown
+                  availableProjects={allParticipantProjects}
+                  label=''
+                  record={projectFilter}
+                  setRecord={setProjectFilter}
+                />
+              </Box>
+            ) : (
+              <Typography>{allParticipantProjects[0].name}</Typography>
             )}
           </Grid>
-        </>
-      ) : undefined,
-    [activeLocale, allParticipantProjects, projectFilter, strings]
+        )}
+      </Grid>
+    ),
+    [allParticipantProjects, projectFilter, strings]
   );
 
   return (
