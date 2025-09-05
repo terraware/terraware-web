@@ -12,7 +12,7 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { Delivery, PlantingSite } from 'src/types/Tracking';
+import { Delivery, PlantingSite, SiteT0Data } from 'src/types/Tracking';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { isArray } from '../types/utils';
@@ -33,6 +33,7 @@ const PLANTING_SITE_HISTORY_ENDPOINT = '/api/v1/tracking/sites/{id}/history/{his
 const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
 const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
+const PLANTING_SITES_T0_ENDPOINT = '/api/v1/tracking/t0/site';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -87,6 +88,9 @@ export type GetPlantingSiteHistoryPayload =
 
 export type ListPlantingSiteHistoriesPayload =
   paths[typeof PLANTING_SITE_HISTORIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+export type AssignT0SiteDataResponsePayload =
+  paths[typeof PLANTING_SITES_T0_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
 const httpPlantingSitesValidate = HttpService.root(PLANTING_SITES_VALIDATE_ENDPOINT);
@@ -471,6 +475,11 @@ const getPermanentPlotsWithObservations = async <T extends SearchResponseElement
   return SearchService.search<T>(params);
 };
 
+const assignT0SiteData = (payload: SiteT0Data): Promise<Response2<AssignT0SiteDataResponsePayload>> =>
+  HttpService.root(PLANTING_SITES_T0_ENDPOINT).post({
+    entity: payload,
+  });
+
 /**
  * Exported functions
  */
@@ -494,6 +503,7 @@ const TrackingService = {
   listPlantingSiteHistories,
   listOrganizationReportedPlants,
   getPermanentPlotsWithObservations,
+  assignT0SiteData,
 };
 
 export default TrackingService;

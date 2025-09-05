@@ -10,7 +10,7 @@ import {
 } from 'src/types/Search';
 import { Delivery } from 'src/types/Tracking';
 
-import HttpService, { Response } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 import PhotoService from './PhotoService';
 import SearchService from './SearchService';
 
@@ -23,6 +23,7 @@ const WITHDRAWAL_PHOTOS_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/p
 const NURSERY_WITHDRAWAL_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}';
 const NURSERY_WITHDRAWAL_LIST_PHOTOS_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos';
 const UNDO_WITHDRAWAL_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/undo';
+const PLANTING_SITE_WITHDRAWN_SPECIES_ENDPOINT = '/api/v1/nursery/withdrawals/plantingSite/{plantingSiteId}/species';
 
 /**
  * Exported types
@@ -50,6 +51,9 @@ type GetNurseryWithdrawalResponsePayload =
 
 type GetNurseryWithdrawalListPhotosResponsePayload =
   paths[typeof NURSERY_WITHDRAWAL_LIST_PHOTOS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type GetSitePlotSpeciesResponsePayload =
+  paths[typeof PLANTING_SITE_WITHDRAWN_SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * Create a batch withdrawal
@@ -283,6 +287,17 @@ const undoNurseryWithdrawal = async (withdrawalId: number): Promise<Response> =>
 
   return serverResponse;
 };
+
+const getPlantingSiteWithdrawnSpecies = async (
+  plantingSiteId: number
+): Promise<Response2<GetSitePlotSpeciesResponsePayload>> => {
+  return HttpService.root(PLANTING_SITE_WITHDRAWN_SPECIES_ENDPOINT).get2<GetSitePlotSpeciesResponsePayload>({
+    urlReplacements: {
+      '{plantingSiteId}': plantingSiteId.toString(),
+    },
+  });
+};
+
 /**
  * Exported functions
  */
@@ -295,6 +310,7 @@ const NurseryWithdrawalService = {
   getWithdrawalPhotosList,
   getFilterOptions,
   undoNurseryWithdrawal,
+  getPlantingSiteWithdrawnSpecies,
 };
 
 export default NurseryWithdrawalService;
