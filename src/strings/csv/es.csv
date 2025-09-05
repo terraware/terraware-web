@@ -38,6 +38,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Cantidad de crecimiento activo (antes),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de crecimiento activo no puede ser menor que 0.,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Cantidad de crecimiento activo ({0} restante),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Cantidad de crecimiento activo *,b8c156d3
+ACTIVITY_LOG,Registro de actividades,112b2d64
 ACTUAL,Real,1235cf68
 AD_HOC,Ad hoc,2acaf742
 AD_HOC_PLANT_MONITORING,Monitoreo de plantas ad hoc,589a6d6c
@@ -1362,6 +1363,7 @@ PROGRESS_NOTES,Notas sobre el progreso,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Proporcione información que pueda publicarse a los financiadores.,a42ffda7
 PROGRESS_REPORT,Informe sobre el avance,69cf80ea
 PROJECT,Proyecto,162b4c3f
+PROJECT_ACTIVITY,Actividad del proyecto,74a61b7a
 PROJECT_ADDED,{0} Añadido,c579a852
 PROJECT_ADDED_ACCESSION,Accesión {0},48fadd3b
 PROJECT_ADDED_ACCESSIONS,{0} accesiones,b962589a
