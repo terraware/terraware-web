@@ -19,8 +19,11 @@ export default function ActivityLogMapSplitView({ children, topComponent }: Acti
           <Box
             display='flex'
             sx={{
+              alignItems: 'center',
               backgroundColor: 'darkGray',
               borderRadius: theme.spacing(1),
+              justifyContent: 'center',
+              marginRight: theme.spacing(2),
               minHeight: '500px',
               padding: theme.spacing(2),
             }}
