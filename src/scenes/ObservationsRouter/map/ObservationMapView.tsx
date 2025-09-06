@@ -270,7 +270,6 @@ export default function ObservationMapView({
                 />
               )
             }
-            zoneInteractive={true}
             contextRenderer={{
               render: contextRenderer,
               sx: {
