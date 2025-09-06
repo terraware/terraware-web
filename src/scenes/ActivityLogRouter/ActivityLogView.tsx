@@ -138,7 +138,11 @@ const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
         </Typography>
         <Typography>TODO: render badges</Typography>
         <Typography>{activity.description}</Typography>
-        <Typography variant='caption'>{activity.date}</Typography>
+        <Typography sx={{ display: { xs: 'block', sm: 'none' } }}>{activity.date}</Typography>
+      </Grid>
+
+      <Grid item xs='auto' sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <Typography>{activity.date}</Typography>
       </Grid>
     </Grid>
   );
