@@ -98,10 +98,23 @@ const ProjectProfileView = ({
     return (listInternalUsersRequest?.data?.users || [])
       .map((user) => {
         const userRole = user.roleName ? user.roleName : getProjectInternalUserRoleString(user.role, strings);
-        return `${userRole}: ${user.firstName} ${user.lastName}`;
+        return { userRole, firstName: user.firstName || '', lastName: user.lastName || '' };
       })
+      .sort((a, b) => {
+        // first sort by user role alphabetically
+        if (a.userRole !== b.userRole) {
+          return a.userRole.localeCompare(b.userRole, activeLocale || undefined);
+        }
+        // then sort by first name alphabetically
+        if (a.firstName !== b.firstName) {
+          return a.firstName.localeCompare(b.firstName, activeLocale || undefined);
+        }
+        // finally sort by last name alphabetically
+        return a.lastName.localeCompare(b.lastName, activeLocale || undefined);
+      })
+      .map((user) => `${user.userRole}: ${user.firstName} ${user.lastName}`)
       .join('\n');
-  }, [listInternalUsersRequest]);
+  }, [activeLocale, listInternalUsersRequest]);
 
   const isProjectInPhase = useMemo(
     () => participantProject?.cohortPhase?.startsWith('Phase'),
