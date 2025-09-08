@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Divider, FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
-import { SelectT } from '@terraware/web-components';
+import { Box, Divider, FormControlLabel, Radio, RadioGroup, TextField, Typography, useTheme } from '@mui/material';
+import { Checkbox, Message, SelectT } from '@terraware/web-components';
 
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
@@ -13,12 +14,15 @@ type PlotT0EditBoxProps = {
   plantingSiteId: number;
   t0Plot?: PlotT0Data;
   record: SiteT0Data;
-  speciesPlot?: SpeciesPlot;
+  setRecord: React.Dispatch<React.SetStateAction<SiteT0Data>>;
+  withdrawnSpeciesPlot?: SpeciesPlot;
 };
 
-const PlotT0EditBox = ({ plot }: PlotT0EditBoxProps) => {
+const PlotT0EditBox = ({ plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0EditBoxProps) => {
   const theme = useTheme();
   const [t0Origin, setT0Origin] = useState<string>('useObservation');
+
+  const { species } = useSpeciesData();
 
   const onChangeT0Origin = useCallback((event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     setT0Origin(value);
@@ -44,6 +48,33 @@ const PlotT0EditBox = ({ plot }: PlotT0EditBoxProps) => {
     []
   );
 
+  useEffect(() => {
+    console.log('withdrawnSpeciesPlot', withdrawnSpeciesPlot);
+  }, [withdrawnSpeciesPlot]);
+
+  useEffect(() => {
+    console.log('plot', plot);
+  }, [plot]);
+
+  useEffect(() => {
+    if (t0Origin === 'useObservation' && selectedObservation) {
+      const plotToSave = record.plots.find((rPlot) => rPlot.monitoringPlotId === plot.id);
+      if (plotToSave) {
+        const plotCopy = { ...plotToSave, observationId: Number(selectedObservation.observation_id) };
+
+        // Remove the existing plot, then add the updated one
+        const otherPlots = record.plots.filter((p) => p.monitoringPlotId !== plot.id);
+        setRecord({ ...record, plots: otherPlots ? [...otherPlots, plotCopy] : [plotCopy] });
+      }
+    }
+  }, [plot.id, record, record.plots, selectedObservation, setRecord, t0Origin]);
+
+  const getPlotTotalDensity = useMemo(() => {
+    const selectedPlot = record.plots.find((pl) => pl.monitoringPlotId === plot.id);
+    const total = selectedPlot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
+    return total;
+  }, [plot.id, record]);
+
   return (
     <>
       <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
@@ -56,30 +87,74 @@ const PlotT0EditBox = ({ plot }: PlotT0EditBoxProps) => {
         >
           <Typography>{plot.name}</Typography>
         </Box>
-        <Box flexGrow={1} display={'flex'} alignItems={'center'}>
-          <RadioGroup name='radio-buttons-t0' onChange={onChangeT0Origin} value={t0Origin}>
-            <Box display='flex'>
+        <Box>
+          <Box flexGrow={1} display={'flex'} alignItems={'center'}>
+            <RadioGroup name='radio-buttons-t0' onChange={onChangeT0Origin} value={t0Origin}>
+              <Box display='flex'>
+                <FormControlLabel
+                  control={<Radio />}
+                  disabled={(plot.observationPlots.length || 0) < 1}
+                  label={strings.USE_OBSERVATION_DATA}
+                  value={'useObservation'}
+                />
+                <SelectT<PlotT0Observation>
+                  options={plot.observationPlots}
+                  placeholder={strings.SELECT}
+                  onChange={onChangeObservation}
+                  isEqual={isEqualObservation}
+                  renderOption={renderOptionObservation}
+                  displayLabel={displayLabelObservation}
+                  selectedValue={selectedObservation}
+                  toT={toTObservation}
+                  fullWidth={true}
+                  disabled={t0Origin === 'manual'}
+                />
+              </Box>
               <FormControlLabel
                 control={<Radio />}
-                disabled={(plot.observationPlots.length || 0) < 1}
-                label={strings.USE_OBSERVATION_DATA}
-                value={'useObservation'}
+                label={strings.PROVIDE_PLANT_DENSITY_PER_SPECIES}
+                value={'manual'}
               />
-              <SelectT<PlotT0Observation>
-                options={plot.observationPlots}
-                placeholder={strings.SELECT}
-                onChange={onChangeObservation}
-                isEqual={isEqualObservation}
-                renderOption={renderOptionObservation}
-                displayLabel={displayLabelObservation}
-                selectedValue={selectedObservation}
-                toT={toTObservation}
-                fullWidth={true}
-                disabled={t0Origin === 'manual'}
-              />
+            </RadioGroup>
+          </Box>
+          {t0Origin === 'manual' && (
+            <Box>
+              <Message type='page' priority='info' body={strings.T0_PLANT_DENSITY_WARNING} />
+              <Box>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>{strings.SPECIES_FROM_WITHDRAWALS}</th>
+                      <th>{strings.PLANT_DENSITY}</th>
+                      <th>{strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {withdrawnSpeciesPlot?.species.map((withdrawnSpecies, index) => (
+                      <tr key={index}>
+                        <td>{species.find((sp) => sp.id === withdrawnSpecies.speciesId)?.scientificName}</td>
+                        <td>
+                          <TextField />
+                        </td>
+                        <td>
+                          <Checkbox
+                            id={`density-${withdrawnSpecies.speciesId}`}
+                            label={withdrawnSpecies.density}
+                            name={`density-${withdrawnSpecies.speciesId}`}
+                            onChange={() => true}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                    <tr>
+                      <td>{strings.ALL_SPECIES}</td>
+                      <td>{getPlotTotalDensity}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </Box>
             </Box>
-            <FormControlLabel control={<Radio />} label={strings.PROVIDE_PLANT_DENSITY_PER_SPECIES} value={'manual'} />
-          </RadioGroup>
+          )}
         </Box>
         <Box>
           <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1}>

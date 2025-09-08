@@ -237,6 +237,7 @@ BY,Por,e8fbe470
 BY_BATCH,Por lotes,68c5092f
 BY_NURSERY,Por vivero,a0a2faa5
 BY_SPECIES,Por especies,602624ab
+CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir de retiros,d06a4b56
 CANCEL,Cancelar,e73dc4d4
 CANCEL_DATA_CHECK,Cancelar comprobación de datos,5f140f00
 CANNOT_DELETE_APPLICATION_PROJECT,Este proyecto no se puede eliminar porque se ha presentado una solicitud para nuestro programa acelerador en relación con este proyecto.,5c1b8d4f
@@ -1783,6 +1784,7 @@ SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del to
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,20250069
+SPECIES_FROM_WITHDRAWALS,Especies a partir de retiros,66d674b5
 SPECIES_IMPORT_COMPLETE,¡Se completó la importación de los datos de especies!,74b00dc5
 SPECIES_LAST_UPDATED,Última especie actualizada,062c5811
 SPECIES_LIST,Lista de especies,d31336cb
@@ -1887,6 +1889,7 @@ SW_CORNER_LATITUDE,Latitud de la esquina SO: {0},11be73c0
 SW_CORNER_LONGITUDE,Longitud de la esquina SO: {0},28e4af3d
 SYSTEM_METRICS,Métricas del sistema,c19498b7
 T0_DATA_IS_SET,Los datos t0 están establecidos,cf4c95a7
+T0_PLANT_DENSITY_WARNING,"Proporcione las densidades de plantas para todas las especies que se utilizarán en los cálculos de la tasa de supervivencia para esta parcela. Se muestran las especies a partir de retiros. Es posible que esta no sea la lista completa de especies representadas en la parcela. Para agregar otras especies, utilice Agregar especie.",8f270545
 TABLE_OF_CONTENTS,Índice,c4c6df6c
 TABLE_SELECT_ALL_ROWS,Seleccione todas las {0} filas.,b2db09d4
 TABLE_SELECT_NONE,Quite la selección.,37fe7c91

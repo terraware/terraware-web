@@ -42,7 +42,7 @@ const EditSurvivalRateSettings = () => {
   const [speciesRequestId, setSpeciesRequestId] = useState('');
   const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
-  const [speciesPlots, setSpeciesPlots] = useState<SpeciesPlot[]>();
+  const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
   const [assignRequestId, setAssignRequestId] = useState('');
   const saveResponse = useAppSelector(selectAssignT0SiteData(assignRequestId));
   const dispatch = useAppDispatch();
@@ -77,7 +77,7 @@ const EditSurvivalRateSettings = () => {
 
   useEffect(() => {
     if (withdrawnSpeciesResponse?.status === 'success') {
-      setSpeciesPlots(withdrawnSpeciesResponse.data);
+      setWithdrawnSpeciesPlots(withdrawnSpeciesResponse.data);
     }
   }, [withdrawnSpeciesResponse]);
 
@@ -93,8 +93,8 @@ const EditSurvivalRateSettings = () => {
     }
   }, [plotsWithObservationsResponse]);
 
-  const [record] = useForm<SiteT0Data>({
-    plantingSiteId: 0,
+  const [record, setRecord] = useForm<SiteT0Data>({
+    plantingSiteId,
     plots: [],
   });
 
@@ -140,7 +140,10 @@ const EditSurvivalRateSettings = () => {
                 plantingSiteId={plantingSiteId}
                 t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId === plot.id)}
                 record={record}
-                speciesPlot={speciesPlots?.find((spPlot) => spPlot.monitoringPlotId === plot.id)}
+                setRecord={setRecord}
+                withdrawnSpeciesPlot={withdrawnSpeciesPlots?.find(
+                  (spPlot) => spPlot.monitoringPlotId.toString() === plot.id.toString()
+                )}
               />
             ))}
         </Card>
