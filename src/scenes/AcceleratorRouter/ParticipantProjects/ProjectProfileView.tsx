@@ -110,6 +110,7 @@ const ProjectProfileView = ({
     }
 
     return (listInternalUsersRequest?.data?.users || [])
+      .filter((user) => (firstProjectLead ? user.userId !== firstProjectLead.userId : true))
       .map((user) => {
         const userRole = user.roleName ? user.roleName : getProjectInternalUserRoleString(user.role, strings);
         return { userRole, firstName: user.firstName || '', lastName: user.lastName || '' };
