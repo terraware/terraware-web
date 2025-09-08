@@ -61,7 +61,6 @@ const ProjectProfileView = ({
   projectDetails,
   project,
   projectMeta,
-  organization,
   projectApplication,
   projectScore,
   phaseVotes,
@@ -89,6 +88,21 @@ const ProjectProfileView = ({
     const request = dispatch(requestProjectInternalUsersList({ projectId: project.id }));
     setListInternalUsersRequestId(request.requestId);
   }, [dispatch, project?.id]);
+
+  const firstProjectLead = useMemo(() => {
+    if (listInternalUsersRequest?.status !== 'success') {
+      return undefined;
+    }
+
+    return listInternalUsersRequest.data?.users
+      ?.filter((user) => user.role === 'Project Lead')
+      ?.sort((a, b) => {
+        // sort by modifiedTime ascending
+        const timeA = a.modifiedTime ? new Date(a.modifiedTime).getTime() : 0;
+        const timeB = b.modifiedTime ? new Date(b.modifiedTime).getTime() : 0;
+        return timeA - timeB;
+      })?.[0];
+  }, [listInternalUsersRequest]);
 
   const moreUsersTooltip = useMemo(() => {
     if (listInternalUsersRequest?.status !== 'success') {
@@ -224,11 +238,8 @@ const ProjectProfileView = ({
           <Box justifySelf={'flex-end'}>
             <ProjectFieldInlineMeta
               userLabel={strings.PROJECT_LEAD}
-              userId={organization?.tfContactUser?.userId}
-              userName={
-                organization?.tfContactUser &&
-                `${organization?.tfContactUser?.firstName} ${organization?.tfContactUser?.lastName}`
-              }
+              userId={firstProjectLead?.userId}
+              userName={firstProjectLead && `${firstProjectLead?.firstName} ${firstProjectLead?.lastName}`}
               fontSize={'16px'}
               lineHeight={'24px'}
               fontWeight={500}
