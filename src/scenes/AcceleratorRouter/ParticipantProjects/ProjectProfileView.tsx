@@ -129,7 +129,7 @@ const ProjectProfileView = ({
       })
       .map((user) => `${user.userRole}: ${user.firstName} ${user.lastName}`)
       .join('\n');
-  }, [activeLocale, listInternalUsersRequest]);
+  }, [activeLocale, firstProjectLead, listInternalUsersRequest]);
 
   const isProjectInPhase = useMemo(
     () => participantProject?.cohortPhase?.startsWith('Phase'),
