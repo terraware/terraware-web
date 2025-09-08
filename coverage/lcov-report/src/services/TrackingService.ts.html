@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.44% </span>
+                <span class="strong">45.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>32/72</span>
+                <span class='fraction'>34/75</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45.07% </span>
+                <span class="strong">45.94% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/71</span>
+                <span class='fraction'>34/74</span>
             </div>
         
             
@@ -562,7 +562,17 @@
 <a name='L497'></a><a href='#L497'>497</a>
 <a name='L498'></a><a href='#L498'>498</a>
 <a name='L499'></a><a href='#L499'>499</a>
-<a name='L500'></a><a href='#L500'>500</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L500'></a><a href='#L500'>500</a>
+<a name='L501'></a><a href='#L501'>501</a>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -597,6 +607,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1035,10 +1049,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1075,7 +1095,7 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { Delivery, PlantingSite } from 'src/types/Tracking';
+import { Delivery, PlantingSite, SiteT0Data } from 'src/types/Tracking';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
 &nbsp;
 import { isArray } from '../types/utils';
@@ -1096,6 +1116,7 @@ const PLANTING_SITE_HISTORY_ENDPOINT = '/api/v1/tracking/sites/{id}/history/{his
 const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
 const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
+const PLANTING_SITES_T0_ENDPOINT = '/api/v1/tracking/t0/site';
 &nbsp;
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -1150,6 +1171,9 @@ export type GetPlantingSiteHistoryPayload =
 &nbsp;
 export type ListPlantingSiteHistoriesPayload =
   paths[typeof PLANTING_SITE_HISTORIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+&nbsp;
+export type AssignT0SiteDataResponsePayload =
+  paths[typeof PLANTING_SITES_T0_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 &nbsp;
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
 const httpPlantingSitesValidate = HttpService.root(PLANTING_SITES_VALIDATE_ENDPOINT);
@@ -1534,6 +1558,11 @@ const getPermanentPlotsWithObservations = <span class="fstat-no" title="function
 <span class="cstat-no" title="statement not covered" >  return SearchService.search&lt;T&gt;(params);</span>
 };
 &nbsp;
+const assignT0SiteData = <span class="fstat-no" title="function not covered" >(p</span>ayload: SiteT0Data): Promise&lt;Response2&lt;AssignT0SiteDataResponsePayload&gt;&gt; =&gt;
+<span class="cstat-no" title="statement not covered" >  HttpService.root(PLANTING_SITES_T0_ENDPOINT).post({</span>
+    entity: payload,
+  });
+&nbsp;
 /**
  * Exported functions
  */
@@ -1557,6 +1586,7 @@ const TrackingService = {
   listPlantingSiteHistories,
   listOrganizationReportedPlants,
   getPermanentPlotsWithObservations,
+  assignT0SiteData,
 };
 &nbsp;
 export default TrackingService;
@@ -1567,7 +1597,7 @@ export default TrackingService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-08T13:59:04.861Z
+                at 2025-09-08T17:14:39.056Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
