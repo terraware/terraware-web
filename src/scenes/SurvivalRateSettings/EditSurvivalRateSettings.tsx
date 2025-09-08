@@ -120,7 +120,7 @@ const EditSurvivalRateSettings = () => {
       reload();
       goToViewSettings();
     }
-    if (saveResponse.status === 'error') {
+    if (saveResponse?.status === 'error') {
       snackbar.toastError();
     }
   }, [goToViewSettings, reload, saveResponse, snackbar]);
