@@ -6,9 +6,9 @@ import strings from 'src/strings';
 export type SpeciesPlot = {
   monitoringPlotId: number;
   species: {
-    plotDensity: number;
+    density: number;
     speciesId: number;
-  };
+  }[];
 };
 
 export const requestPlantingSiteWithdrawnSpecies = createAsyncThunk(
