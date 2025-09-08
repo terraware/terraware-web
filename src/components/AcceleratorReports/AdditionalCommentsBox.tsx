@@ -16,24 +16,24 @@ import { ReportBoxProps } from './ReportBox';
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
-const HighlightsBox = (props: ReportBoxProps) => {
+const AdditionalCommentsBox = (props: ReportBoxProps) => {
   const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
     props;
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
-  const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
+  const [additionalComments, setAdditionalComments] = useState<string | undefined>(report?.additionalComments);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
-  useEffect(() => setHighlights(report?.highlights), [report?.highlights]);
+  useEffect(() => setAdditionalComments(report?.additionalComments), [report?.additionalComments]);
   useEffect(() => onEditChange?.(internalEditing), [internalEditing, onEditChange]);
 
   useEffect(() => {
-    if (highlights !== undefined && highlights !== report?.highlights) {
-      onChange?.(highlights);
+    if (additionalComments !== undefined && additionalComments !== report?.additionalComments) {
+      onChange?.(additionalComments);
     }
-  }, [highlights, report?.highlights, onChange]);
+  }, [additionalComments, report?.additionalComments, onChange]);
 
   useEffect(() => {
     if (updateReportResponse?.status === 'error') {
@@ -51,7 +51,10 @@ const HighlightsBox = (props: ReportBoxProps) => {
         requestReviewAcceleratorReport({
           review: {
             ...report,
-            highlights,
+            additionalComments,
+            achievements: report?.achievements || [],
+            challenges: report?.challenges || [],
+            status: report?.status || 'Not Submitted',
           },
           projectId: Number(projectId),
           reportId: report?.id || -1,
@@ -59,39 +62,39 @@ const HighlightsBox = (props: ReportBoxProps) => {
       );
       setRequestId(request.requestId);
     }
-  }, [dispatch, projectId, highlights, report]);
+  }, [dispatch, projectId, additionalComments, report]);
 
   const onCancel = useCallback(() => {
-    setHighlights(report?.highlights);
+    setAdditionalComments(report?.additionalComments);
     setInternalEditing(false);
-  }, [report?.highlights, setInternalEditing]);
+  }, [report?.additionalComments, setInternalEditing]);
+
+  const setAdditionalCommentsCallback = useCallback((value: any) => {
+    setAdditionalComments(value as string);
+  }, []);
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
-  const setHighlightsCallback = useCallback((value: any) => {
-    setHighlights(value as string);
-  }, []);
-
   return (
     <EditableReportBox
-      name={funderReportView ? '' : strings.HIGHLIGHTS}
+      name={funderReportView ? '' : strings.ADDITIONAL_COMMENTS}
       canEdit={!!canEdit}
       editing={isEditing}
       onEdit={setInternalEditingTrue}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
-      includeBorder={!funderReportView}
+      includeBorder={false}
     >
       <Grid item xs={12}>
         <Textfield
           type='textarea'
-          value={highlights}
-          id={'highlights'}
+          value={additionalComments}
+          id={'additionalComments'}
           label={''}
           display={!isEditing}
           styles={textAreaStyles}
-          onChange={setHighlightsCallback}
+          onChange={setAdditionalCommentsCallback}
           preserveNewlines
           markdown
         />
@@ -100,4 +103,4 @@ const HighlightsBox = (props: ReportBoxProps) => {
   );
 };
 
-export default HighlightsBox;
+export default AdditionalCommentsBox;

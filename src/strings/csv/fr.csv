@@ -38,6 +38,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Quantité de croissance active (avant),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité de croissance active ne peut être inférieure à 0,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Quantité de croissance active ({0} restant),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Quantité de croissance active *,b8c156d3
+ACTIVITY_LOG,Journal d'activité,112b2d64
 ACTUAL,Réel,1235cf68
 AD_HOC,Ad Hoc,2acaf742
 AD_HOC_PLANT_MONITORING,Surveillance ad hoc des installations,589a6d6c
@@ -49,6 +50,7 @@ ADD_A_PROJECT,Ajouter un projet,8e2222bc
 ADD_A_SEED_BANK,Ajouter une banque de semences,b5eceab7
 ADD_A_SPECIES,Ajouter une espèce,aa4e7200
 ADD_A_VIABILITY_TEST,Ajouter un test de viabilité,f70c39b0
+ADD_ACTIVITY,Ajouter une activité,0ed95a7d
 ADD_ADDRESS,Ajouter une adresse,8262aa95
 ADD_AN_ACCESSION,Ajouter une accession,e4b619b4
 ADD_BATCH,Ajouter un lot,0d9f7a4a
@@ -106,6 +108,7 @@ ADDING_SUBZONE_BOUNDARIES,Ajout de limites de sous-zones,58f0fb08
 ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil tranche {0} pour créer des formes de sous-zones (polygones) à l'intérieur des zones.,042bd160
 ADDING_ZONE_BOUNDARIES,Ajouter les limites des zones,901f668b
 ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil de découpage {0} pour créer des polygones à l'intérieur des limites du site pour les zones.,06f570cb
+ADDITIONAL_COMMENTS,Commentaires supplémentaires,bf1dfb11
 ADDITIONAL_INVASIVE_THREATENED_SPECIES,Autres espèces envahissantes/menacées,7d019848
 ADDITIONAL_NURSERY_NOTES,Notes supplémentaires sur les pépinières,db29c13a
 ADDITIONAL_PLANTING_SITES_NOTES,Notes supplémentaires sur le site de plantation,364dcb50
@@ -642,6 +645,7 @@ FILTER_SHOW_EMPTY_BATCHES,Afficher les lots vides,f5c7fca1
 FILTERS,Filtres,c3d13364
 FINAL_QTY,Qté finale,47530c05
 FINANCE,Finances,ae6619da
+FINANCIAL_SUMMARIES,Synthèses financières,d26c4f56
 FINANCIAL_VIABILITY,Viabilité financière,50706753
 FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,En savoir plus sur l’Accélérateur De La Semence à la Forêt de Terraformation {0} et postulez !,e49d8596
 FIRST_ADD_PLANTING_SITE,"Pour afficher le tableau de bord, vous devez détenir un site de plantation.",29adc97e
@@ -1360,6 +1364,7 @@ PROGRESS_NOTES,Notes sur l'état d'avancement,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Fournissez des informations qui peuvent être publiées à l'intention des bailleurs de fonds.,a42ffda7
 PROGRESS_REPORT,Rapport d’avancement,69cf80ea
 PROJECT,Projet,162b4c3f
+PROJECT_ACTIVITY,Activité du projet,74a61b7a
 PROJECT_ADDED,{0} ajoutés,c579a852
 PROJECT_ADDED_ACCESSION,Adhésion {0},48fadd3b
 PROJECT_ADDED_ACCESSIONS,{0} accessions,b962589a

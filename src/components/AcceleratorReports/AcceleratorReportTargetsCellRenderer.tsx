@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -15,13 +15,17 @@ export default function AcceleratorReportTargetsCellRenderer(props: RendererProp
     [isAllowed, selectedOrganization]
   );
 
+  const onRowClickCallback = useCallback(() => {
+    onRowClick?.();
+  }, [onRowClick]);
+
   if (column.key === 'name' && onRowClick) {
     return (
       <CellRenderer
         column={column}
         value={
           isAllowedUpdateReportsTargets ? (
-            <Link fontSize='16px' onClick={() => onRowClick()}>
+            <Link fontSize='16px' onClick={onRowClickCallback}>
               {value as React.ReactNode}
             </Link>
           ) : (

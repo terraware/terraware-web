@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
 
@@ -20,17 +20,21 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
 
   const [newProgress, setNewProgress] = useState(value);
 
-  const save = () => {
+  const save = useCallback(() => {
     if (newProgress) {
       onChange(newProgress.toString());
       onClose();
     }
-  };
+  }, [newProgress, onChange, onClose]);
 
-  const onCloseHandler = () => {
+  const onCloseHandler = useCallback(() => {
     onChange(value?.toString() || '');
     onClose();
-  };
+  }, [onChange, onClose, value]);
+
+  const setNewProgressCallback = useCallback((newValue: any) => {
+    setNewProgress(newValue as number);
+  }, []);
 
   return (
     <DialogBox
@@ -58,7 +62,7 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
               label={strings.PROGRESS}
               value={newProgress}
               id={'progress'}
-              onChange={(newValue: any) => setNewProgress(newValue)}
+              onChange={setNewProgressCallback}
             />
             {
               <Typography paddingTop={3} paddingLeft={0.5}>

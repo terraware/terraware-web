@@ -93,6 +93,7 @@ const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) => 
             display
             preserveNewlines
             id='progressNotes'
+            markdown
             type='textarea'
             value={metric.progressNotes}
             truncateConfig={{

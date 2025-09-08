@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -101,7 +102,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
   const [metricsToUse, setMetricsToUse] = useState<RowMetric[]>();
-  const [editOpenModal, setEditOpenModal] = useState(false);
+  const [editOpenModal, setEditOpenModal, , setEditOpenModalFalse] = useBoolean(false);
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<RowMetric>();
   const currentYear = DateTime.now().year;
@@ -270,16 +271,21 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [activeLocale, getReportsYearsString, yearFilter]
   );
 
-  const onRowClick = (metric: TableRowType) => {
-    setSelectedMetric(metric as RowMetric);
-    setEditOpenModal(true);
-  };
+  const onRowClick = useCallback(
+    (metric: TableRowType) => {
+      setSelectedMetric(metric as RowMetric);
+      setEditOpenModal(true);
+    },
+    [setEditOpenModal]
+  );
+
+  const clickable = useCallback(() => false, []);
 
   return (
     <>
       {editOpenModal && selectedMetric && (
         <EditAcceleratorReportTargetsModal
-          onClose={() => setEditOpenModal(false)}
+          onClose={setEditOpenModalFalse}
           reload={reload}
           reports={reports}
           row={selectedMetric}
@@ -300,7 +306,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         controlledOnSelect={true}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
-        isClickable={() => false}
+        isClickable={clickable}
       />
     </>
   );

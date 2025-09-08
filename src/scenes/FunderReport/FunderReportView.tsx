@@ -4,7 +4,10 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
+import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
@@ -13,7 +16,7 @@ import { PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorRep
 import MetricBox from './MetricBox';
 
 type FunderReportViewProps = {
-  selectedProjectId?: number;
+  selectedProjectId: number;
   selectedReport?: PublishedReport;
 };
 
@@ -45,6 +48,10 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
 
   const metricBoxStyle = { borderRadius: '8px', paddingTop: 0 };
 
+  if (!selectedReport) {
+    return;
+  }
+
   return (
     <Box>
       <Box display={isDesktop ? 'flex' : 'block'}>
@@ -58,9 +65,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           <Typography fontSize={20} fontWeight={600}>
             {strings.HIGHLIGHTS}
           </Typography>
-          <Typography marginTop={3} whiteSpace={'pre-line'}>
-            {selectedReport?.highlights}
-          </Typography>
+          <HighlightsBox report={selectedReport} projectId={selectedProjectId?.toString()} funderReportView />
         </Card>
         <Card
           style={{
@@ -197,6 +202,34 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
               projectId={selectedProjectId.toString()}
               funderReportView
             />
+          </Card>
+        </Box>
+      )}
+      {selectedProjectId && selectedReport?.financialSummaries && (
+        <Box width='100%'>
+          <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+            {strings.FINANCIAL_SUMMARIES}
+          </Typography>
+          <Card
+            style={{
+              borderRadius: '8px',
+            }}
+          >
+            <FinancialSummariesBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
+          </Card>
+        </Box>
+      )}
+      {selectedProjectId && selectedReport?.additionalComments && (
+        <Box width='100%'>
+          <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+            {strings.ADDITIONAL_COMMENTS}
+          </Typography>
+          <Card
+            style={{
+              borderRadius: '8px',
+            }}
+          >
+            <AdditionalCommentsBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
           </Card>
         </Box>
       )}

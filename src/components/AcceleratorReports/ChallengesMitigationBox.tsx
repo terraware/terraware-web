@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
+import useBoolean from 'src/hooks/useBoolean';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -40,9 +41,15 @@ const ChallengeMitigationPlan = ({
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
-  const setChallenge = (value: any) => setChallengeMitigation({ ...challengeMitigation, challenge: value });
+  const setChallenge = useCallback(
+    (value: any) => setChallengeMitigation({ ...challengeMitigation, challenge: value }),
+    [challengeMitigation, setChallengeMitigation]
+  );
 
-  const setMitigation = (value: any) => setChallengeMitigation({ ...challengeMitigation, mitigationPlan: value });
+  const setMitigation = useCallback(
+    (value: any) => setChallengeMitigation({ ...challengeMitigation, mitigationPlan: value }),
+    [challengeMitigation, setChallengeMitigation]
+  );
 
   return (
     <Grid item xs={12} marginBottom={1}>
@@ -92,6 +99,7 @@ const ChallengeMitigationPlan = ({
               }
               required
               preserveNewlines
+              markdown
             />
           </Box>
         </Grid>
@@ -117,6 +125,7 @@ const ChallengeMitigationPlan = ({
               }
               required
               preserveNewlines
+              markdown
             />
           </Box>
         </Grid>
@@ -137,7 +146,7 @@ const ChallengeMitigationPlan = ({
 const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
     props;
-  const [internalEditing, setInternalEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -189,7 +198,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       setInternalEditing(false);
       reload?.();
     }
-  }, [updateReportResponse, snackbar, reload]);
+  }, [updateReportResponse, snackbar, reload, setInternalEditing]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -218,24 +227,36 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const onCancel = useCallback(() => {
     setInternalEditing(false);
     setChallengeMitigations(report?.challenges || []);
-  }, [report?.challenges]);
+  }, [report?.challenges, setInternalEditing]);
 
-  const updateChallenge = (newChal: ChallengeMitigation, index: number) => {
-    setChallengeMitigations(challengeMitigations.map((chal, i) => (index === i ? newChal : chal)));
-  };
+  const updateChallenge = useCallback(
+    (index: number) => (newChal: ChallengeMitigation) => {
+      setChallengeMitigations((_challengeMitigations) =>
+        _challengeMitigations.map((chal, i) => (index === i ? newChal : chal))
+      );
+    },
+    []
+  );
+
+  const deleteChallenge = useCallback(
+    (index: number) => () => {
+      setChallengeMitigations((_challengeMitigations) => _challengeMitigations.filter((_, i) => index !== i));
+    },
+    []
+  );
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
   return (
     <EditableReportBox
       name={''}
-      includeBorder={false}
       canEdit={!!canEdit}
       editing={isEditing}
-      onEdit={() => setInternalEditing(true)}
+      onEdit={setInternalEditingTrue}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
+      includeBorder={!funderReportView}
     >
       {funderReportView && !isMobile && (
         <Box width={'100%'}>
@@ -260,8 +281,8 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
           index={index}
           includeBorder={index < challengeMitigations.length - 1}
           editing={isEditing}
-          onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
-          setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
+          onRemove={deleteChallenge(index)}
+          setChallengeMitigation={updateChallenge(index)}
           validateFields={validateFields}
           funderReportView={funderReportView}
         />

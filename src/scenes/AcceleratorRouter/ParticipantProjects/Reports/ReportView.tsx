@@ -6,8 +6,10 @@ import { Button, DropdownItem, Message } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
@@ -20,6 +22,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
@@ -53,8 +56,8 @@ const ReportView = () => {
   const dispatch = useAppDispatch();
   const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
   const { isAllowed } = useUser();
-  const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
-  const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
+  const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
+  const [showRejectDialog, , openRejectDialog, closeRejectDialog] = useBoolean(false);
   const { crumbs: participantProjectCrumbs, participantProject, project } = useParticipantProjectData();
   const theme = useTheme();
   const [boxInEdit, setBoxInEdit] = useState<boolean>(false);
@@ -63,7 +66,7 @@ const ReportView = () => {
   const [publishRequestId, setPublishRequestId] = useState('');
   const approveReportResponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
   const rejectReportResponse = useAppSelector(selectReviewAcceleratorReport(rejectRequestId));
-  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showPublishModal, , openPublishModal, closePublishModal] = useBoolean(false);
   const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
   const snackbar = useSnackbar();
   const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
@@ -72,7 +75,7 @@ const ReportView = () => {
   const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
   const [selectedPublishedReport, setSelectedPublishedReport] = useState<PublishedReport>();
 
-  const publishReport = () => {
+  const publishReport = useCallback(() => {
     const request = dispatch(
       requestPublishAcceleratorReport({
         projectId: Number(projectId),
@@ -80,8 +83,8 @@ const ReportView = () => {
       })
     );
     setPublishRequestId(request.requestId);
-    setShowPublishModal(false);
-  };
+    closePublishModal();
+  }, [closePublishModal, dispatch, projectId, reportId]);
 
   const approveReport = useCallback(() => {
     if (selectedReport) {
@@ -138,9 +141,9 @@ const ReportView = () => {
     }
     if (approveReportResponse?.status === 'success') {
       reload();
-      setShowApproveDialog(false);
+      closeApproveDialog();
     }
-  }, [approveReportResponse, reload]);
+  }, [approveReportResponse, closeApproveDialog, reload]);
 
   useEffect(() => {
     if (rejectReportResponse?.status === 'error') {
@@ -148,9 +151,9 @@ const ReportView = () => {
     }
     if (rejectReportResponse?.status === 'success') {
       reload();
-      setShowRejectDialog(false);
+      closeRejectDialog();
     }
-  }, [rejectReportResponse, reload]);
+  }, [closeRejectDialog, rejectReportResponse, reload]);
 
   useEffect(() => {
     if (publishReportResponse?.status === 'error') {
@@ -161,9 +164,9 @@ const ReportView = () => {
       snackbar.toastSuccess(strings.REPORT_PUBLISHED);
       void reloadPublishedReport();
       reload();
-      setShowPublishModal(false);
+      closePublishModal();
     }
-  }, [publishReportResponse, reload, reloadPublishedReport, snackbar]);
+  }, [closePublishModal, publishReportResponse, reload, reloadPublishedReport, snackbar]);
 
   useEffect(() => {
     if (reports) {
@@ -220,14 +223,17 @@ const ReportView = () => {
     year,
   ]);
 
-  const onOptionItemClick = (optionItem: DropdownItem) => {
-    switch (optionItem.value) {
-      case 'publish': {
-        setShowPublishModal(true);
-        break;
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'publish': {
+          openPublishModal();
+          break;
+        }
       }
-    }
-  };
+    },
+    [openPublishModal]
+  );
 
   const optionItems = useMemo(
     (): DropdownItem[] =>
@@ -252,7 +258,7 @@ const ReportView = () => {
             id='rejectDeliverable'
             label={strings.REQUEST_UPDATE_ACTION}
             priority='secondary'
-            onClick={() => void setShowRejectDialog(true)}
+            onClick={openRejectDialog}
             size='medium'
             type='destructive'
           />
@@ -260,7 +266,7 @@ const ReportView = () => {
             disabled={selectedReport?.status === 'Approved'}
             id='approveDeliverable'
             label={strings.APPROVE}
-            onClick={() => void setShowApproveDialog(true)}
+            onClick={openApprovalDialog}
             size='medium'
           />
           {isAllowed('PUBLISH_REPORTS') && (
@@ -274,7 +280,7 @@ const ReportView = () => {
         </>
       )
     );
-  }, [isAllowed, selectedReport?.status, optionItems]);
+  }, [isAllowed, selectedReport?.status, openRejectDialog, openApprovalDialog, onOptionItemClick, optionItems]);
 
   const rightComponent = useMemo(
     () => (
@@ -287,9 +293,9 @@ const ReportView = () => {
 
   const reportName = selectedReport ? getReportName(selectedReport) : '';
 
-  const onEditChange = (isInEdit: boolean) => {
+  const onEditChange = useCallback((isInEdit: boolean) => {
     setBoxInEdit(isInEdit);
-  };
+  }, []);
 
   const changeToFunderView = useCallback(() => {
     setPublishedFunderView(true);
@@ -301,11 +307,9 @@ const ReportView = () => {
 
   return (
     <>
-      {showPublishModal && <PublishModal onClose={() => setShowPublishModal(false)} onSubmit={publishReport} />}
-      {showApproveDialog && (
-        <ApproveReportDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveReport} />
-      )}
-      {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectReport} />}
+      {showPublishModal && <PublishModal onClose={closePublishModal} onSubmit={publishReport} />}
+      {showApproveDialog && <ApproveReportDialog onClose={closeApproveDialog} onSubmit={approveReport} />}
+      {showRejectDialog && <RejectDialog onClose={closeRejectDialog} onSubmit={rejectReport} />}
 
       <Page
         title={
@@ -352,9 +356,7 @@ const ReportView = () => {
         ) : (
           <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
             {selectedReport && <ApprovedReportMessage report={selectedReport} />}
-            {selectedReport && (
-              <RejectedReportMessage report={selectedReport} showRejectDialog={() => setShowRejectDialog(true)} />
-            )}
+            {selectedReport && <RejectedReportMessage report={selectedReport} showRejectDialog={openRejectDialog} />}
             <Card
               style={{
                 display: 'flex',
@@ -413,6 +415,22 @@ const ReportView = () => {
                 canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
               />
               <ChallengesMitigationBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <FinancialSummariesBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <AdditionalCommentsBox
                 report={selectedReport}
                 projectId={projectId}
                 reload={reload}
