@@ -12,7 +12,7 @@ export type SpeciesPlot = {
 };
 
 export const requestPlantingSiteWithdrawnSpecies = createAsyncThunk(
-  'projectsWithVariables/get',
+  'plantingSiteWithdrawnSpecies/get',
   async (plantingSiteId: number, { rejectWithValue }) => {
     const response = await NurseryWithdrawalService.getPlantingSiteWithdrawnSpecies(plantingSiteId);
 

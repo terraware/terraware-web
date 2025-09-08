@@ -230,7 +230,7 @@ export const plotsWithObservations = createSlice({
   },
 });
 
-const initialAssignT0SiteDataState: Record<string, SiteReportedPlantsData> = {};
+const initialAssignT0SiteDataState: { [key: string]: StatusT<number> } = {};
 
 export const assignT0SiteData = createSlice({
   name: 'assignT0SiteDataSlice',
