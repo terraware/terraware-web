@@ -18,13 +18,7 @@ type PlotT0EditBoxProps = {
 
 const PlotT0EditBox = ({ plot }: PlotT0EditBoxProps) => {
   const theme = useTheme();
-  // const { species } = useSpeciesData();
   const [t0Origin, setT0Origin] = useState<string>('useObservation');
-
-  // const getPlotTotalDensity = useMemo(() => {
-  //   const total = t0Plot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
-  //   return total;
-  // }, [t0Plot]);
 
   const onChangeT0Origin = useCallback((event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     setT0Origin(value);
