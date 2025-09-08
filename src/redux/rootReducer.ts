@@ -20,6 +20,7 @@ import locationReducers from './features/location/locationSlice';
 import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
+import nurseryWithdrawalsReducers from './features/nurseryWithdrawals/nurseryWithdrawalsSlice';
 import observationsReducers from './features/observations/observationsSlice';
 import organizationUsersReducers from './features/organizationUser/organizationUsersSlice';
 import organizationsReducers from './features/organizations/organizationsSlice';
@@ -67,6 +68,7 @@ export const reducers = {
   ...messageReducers,
   ...matrixViewReducers,
   ...moduleReducers,
+  ...nurseryWithdrawalsReducers,
   ...observationsReducers,
   ...organizationsReducers,
   ...organizationUsersReducers,

@@ -1,4 +1,79 @@
 export interface paths {
+    "/api/v1/accelerator/activities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists all of a project's activities. */
+        get: operations["listActivities"];
+        put?: never;
+        /** Creates a new activity. */
+        post: operations["createActivity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/activities/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists all of a project's activities with accelerator-admin-only details. */
+        get: operations["adminListActivities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/activities/admin/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets information about a single activity with accelerator-admin-only details. */
+        get: operations["adminGetActivity"];
+        /** Updates an activity including its accelerator-admin-only details. */
+        put: operations["adminUpdateActivity"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/activities/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets information about a single activity. */
+        get: operations["getActivity"];
+        /** Updates an activity. */
+        put: operations["updateActivity"];
+        post?: never;
+        /**
+         * Deletes an activity.
+         * @description Only activities that have not been published may be deleted.
+         */
+        delete: operations["deleteActivity"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/applications": {
         parameters: {
             query?: never;
@@ -4375,10 +4450,60 @@ export interface components {
             viabilityTests?: components["schemas"]["GetViabilityTestPayload"][];
             withdrawals?: components["schemas"]["GetWithdrawalPayload"][];
         };
+        ActivityPayload: {
+            /** Format: date */
+            date: string;
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            isHighlight: boolean;
+            /** @enum {string} */
+            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
+        };
         AddOrganizationUserRequestPayload: {
             email: string;
             /** @enum {string} */
             role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+        };
+        AdminActivityPayload: {
+            /** Format: int64 */
+            createdBy: number;
+            /** Format: date-time */
+            createdTime: string;
+            /** Format: date */
+            date: string;
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            isHighlight: boolean;
+            isVerified: boolean;
+            /** Format: int64 */
+            modifiedBy: number;
+            /** Format: date-time */
+            modifiedTime: string;
+            /** @enum {string} */
+            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
+            /** Format: int64 */
+            verifiedBy?: number;
+            /** Format: date-time */
+            verifiedTime?: string;
+        };
+        AdminGetActivityResponsePayload: {
+            activity: components["schemas"]["AdminActivityPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        AdminListActivitiesResponsePayload: {
+            activities: components["schemas"]["AdminActivityPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        AdminUpdateActivityRequestPayload: {
+            /** Format: date */
+            date: string;
+            description?: string;
+            isHighlight: boolean;
+            isVerified: boolean;
+            /** @enum {string} */
+            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
         /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
         AndNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
@@ -5016,6 +5141,15 @@ export interface components {
         CreateAccessionResponsePayloadV2: {
             accession: components["schemas"]["AccessionPayloadV2"];
             status: components["schemas"]["SuccessOrError"];
+        };
+        CreateActivityRequestPayload: {
+            /** Format: date */
+            date: string;
+            description?: string;
+            /** Format: int64 */
+            projectId: number;
+            /** @enum {string} */
+            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
         CreateApplicationRequestPayload: {
             /** Format: int64 */
@@ -6207,6 +6341,10 @@ export interface components {
             accession: components["schemas"]["AccessionPayloadV2"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetActivityResponsePayload: {
+            activity: components["schemas"]["ActivityPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetApplicationDeliverablesResponsePayload: {
             deliverables: components["schemas"]["ApplicationDeliverablePayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -6543,6 +6681,10 @@ export interface components {
             plots: components["schemas"]["PlotSpeciesDensitiesPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetSiteT0DataResponsePayload: {
+            data: components["schemas"]["SiteT0DataPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetSpeciesForParticipantProjectsResponsePayload: {
             speciesForParticipantProjects: components["schemas"]["SpeciesForParticipantProjectPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -6769,6 +6911,10 @@ export interface components {
         };
         ListAcceleratorReportsResponsePayload: {
             reports: components["schemas"]["AcceleratorReportPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListActivitiesResponsePayload: {
+            activities: components["schemas"]["ActivityPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListAdHocObservationResultsResponsePayload: {
@@ -7646,6 +7792,11 @@ export interface components {
             status: "Unclaimed" | "Claimed" | "Completed" | "Not Observed";
             /**
              * Format: int32
+             * @description If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data.
+             */
+            survivalRate?: number;
+            /**
+             * Format: int32
              * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
              */
             totalPlants: number;
@@ -7731,6 +7882,10 @@ export interface components {
              */
             plantingSubzoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /** Format: int32 */
+            survivalRate?: number;
+            /** Format: int32 */
+            survivalRateStdDev?: number;
             /**
              * Format: int32
              * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
@@ -7774,6 +7929,13 @@ export interface components {
              */
             plantingZoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /**
+             * Format: int32
+             * @description Percentage of plants of all species in this zone's permanent monitoring plots that have survived since the t0 point.
+             */
+            survivalRate?: number;
+            /** Format: int32 */
+            survivalRateStdDev?: number;
             /**
              * Format: int32
              * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
@@ -7822,6 +7984,10 @@ export interface components {
             /** @enum {string} */
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
             /** Format: int32 */
+            survivalRate?: number;
+            /** Format: int32 */
+            survivalRateStdDev?: number;
+            /** Format: int32 */
             totalPlants: number;
             /** Format: int32 */
             totalSpecies: number;
@@ -7854,6 +8020,11 @@ export interface components {
             speciesId?: number;
             /** @description If certainty is Other, the user-supplied name of the species. Null if certainty is Known or Unknown. */
             speciesName?: string;
+            /**
+             * Format: int32
+             * @description Percentage of plants in permanent monitoring plots that have survived since the t0 point. If there are no permanent monitoring plots (or if this is a plot-level result for a temporary monitoring plot) this will be null.
+             */
+            survivalRate?: number;
             /**
              * Format: int32
              * @description Number of dead plants observed in this observation.
@@ -8142,6 +8313,13 @@ export interface components {
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
              * Format: int32
+             * @description Percentage of plants of all species in this site's permanent monitoring plots that have survived since the t0 point.
+             */
+            survivalRate?: number;
+            /** Format: int32 */
+            survivalRateStdDev?: number;
+            /**
+             * Format: int32
              * @description Total number of plants recorded from the latest observations of each subzone within each zone. Includes all plants, regardless of live/dead status or species.
              */
             totalPlants: number;
@@ -8307,6 +8485,13 @@ export interface components {
             plantingZoneId: number;
             /** @description Combined list of observed species and their statuses from the latest observation of each subzone. */
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /**
+             * Format: int32
+             * @description Percentage of plants of all species in this zone's permanent monitoring plots that have survived since the t0 point.
+             */
+            survivalRate?: number;
+            /** Format: int32 */
+            survivalRateStdDev?: number;
             /**
              * Format: int32
              * @description Total number of plants recorded from the latest observations of each subzone. Includes all plants, regardless of live/dead status or species.
@@ -9057,7 +9242,6 @@ export interface components {
             /** Format: int64 */
             plantingSiteId: number;
             plots: components["schemas"]["PlotT0DataPayload"][];
-            status: components["schemas"]["SuccessOrError"];
         };
         SpeciesDensityPayload: {
             plotDensity: number;
@@ -9476,6 +9660,13 @@ export interface components {
         UpdateAccessionResponsePayloadV2: {
             accession: components["schemas"]["AccessionPayloadV2"];
             status: components["schemas"]["SuccessOrError"];
+        };
+        UpdateActivityRequestPayload: {
+            /** Format: date */
+            date: string;
+            description?: string;
+            /** @enum {string} */
+            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
         UpdateApplicationBoundaryRequestPayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
@@ -10271,6 +10462,192 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    listActivities: {
+        parameters: {
+            query: {
+                projectId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListActivitiesResponsePayload"];
+                };
+            };
+        };
+    };
+    createActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateActivityRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetActivityResponsePayload"];
+                };
+            };
+        };
+    };
+    adminListActivities: {
+        parameters: {
+            query: {
+                projectId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminListActivitiesResponsePayload"];
+                };
+            };
+        };
+    };
+    adminGetActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminGetActivityResponsePayload"];
+                };
+            };
+        };
+    };
+    adminUpdateActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminUpdateActivityRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetActivityResponsePayload"];
+                };
+            };
+        };
+    };
+    updateActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateActivityRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
     listApplications: {
         parameters: {
             query?: {
@@ -18640,7 +19017,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SiteT0DataPayload"];
+                    "application/json": components["schemas"]["GetSiteT0DataResponsePayload"];
                 };
             };
         };

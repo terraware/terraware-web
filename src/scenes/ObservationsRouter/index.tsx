@@ -28,6 +28,7 @@ import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import SurvivalRateSettings from '../SurvivalRateSettings';
+import EditSurvivalRateSettings from '../SurvivalRateSettings/EditSurvivalRateSettings';
 import ObservationsHome from './ObservationsHome';
 import ObservationMonitoringPlotDetails from './adhoc';
 import AdHocObservationDetails from './adhoc/AdHocObservationDetails';
@@ -179,7 +180,10 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
         element={<ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} reload={reload} />}
       />
       {isSurvivalRateCalculationEnabled && (
-        <Route path={'/:plantingSiteId/survival-rate-settings'} element={<SurvivalRateSettings />} />
+        <>
+          <Route path={'/:plantingSiteId/survival-rate-settings'} element={<SurvivalRateSettings />} />
+          <Route path={'/:plantingSiteId/survival-rate-settings/edit'} element={<EditSurvivalRateSettings />} />
+        </>
       )}
       <Route
         path={'/:plantingSiteId'}

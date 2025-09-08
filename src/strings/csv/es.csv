@@ -537,6 +537,7 @@ EDIT_SEED_BANK,Editar banco de semillas,e2400ded
 EDIT_SETTINGS,Editar configuración,f9c91817
 EDIT_SPECIES,Editar especie,0893d9a0
 EDIT_STATUS,Editar estado,6b9a2791
+EDIT_SURVIVAL_RATE_SETTINGS_FOR,Editar configuración de la tasa de supervivencia para {0},669ad74c
 EDIT_VIABILITY,Editar viabilidad,019e694b
 EDIT_VIABILITY_TEST,Editar prueba de viabilidad,71da108b
 EDIT_VOTES,Editar votos,8d6f6fe1
@@ -1419,6 +1420,7 @@ PROJECTS,Proyectos,07b3b475
 PROPOSED_PROJECT_BOUNDARIES_ADDED,Se agregaron los límites para el proyecto propuesto,2787f20d
 PROPOSED_PROJECT_BOUNDARY,Límite propuesto del proyecto,0b77fcdf
 PROPOSED_RESTORATION_ACTIVITIES,Actividades de restauración propuestas,4c6b833a
+PROVIDE_PLANT_DENSITY_PER_SPECIES,Proporcione la densidad de plantas por especie,846ce9aa
 PUBLISH,Publicar,c1d4ecf7
 PUBLISH_TO_FUNDER_PORTAL,Publicar en el portal del financiador,ec2ddbec
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
@@ -2101,6 +2103,7 @@ UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Buscar archivos (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Cargar foto(s),d20a4173
 UPLOAD_SPATIAL_FILES,Subir archivo(s) espacial(es),953e770a
 USD_PER_HECTARE,${0} por ha,d8525ed1
+USE_OBSERVATION_DATA,Usar datos de observación,37c30404
 USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización,2cf2ac16
 USED_UP,Agotado,323bdb79
 USER_ACCESS,Acceso del usuario,a9aa511b

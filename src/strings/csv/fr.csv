@@ -536,6 +536,7 @@ EDIT_SEED_BANK,Modifier la banque de semences,e2400ded
 EDIT_SETTINGS,Modifier les paramètres,f9c91817
 EDIT_SPECIES,Modifier les espèces,0893d9a0
 EDIT_STATUS,Modifier le statut,6b9a2791
+EDIT_SURVIVAL_RATE_SETTINGS_FOR,Modifier les paramètres du taux de survie pour {0},669ad74c
 EDIT_VIABILITY,Modifier la viabilité,019e694b
 EDIT_VIABILITY_TEST,Modifier le test de viabilité,71da108b
 EDIT_VOTES,Votes d'édition,8d6f6fe1
@@ -1418,6 +1419,7 @@ PROJECTS,Projets,07b3b475
 PROPOSED_PROJECT_BOUNDARIES_ADDED,Ajout des limites du projet proposé,2787f20d
 PROPOSED_PROJECT_BOUNDARY,Limite du projet proposé,0b77fcdf
 PROPOSED_RESTORATION_ACTIVITIES,Activités de restauration proposées,4c6b833a
+PROVIDE_PLANT_DENSITY_PER_SPECIES,Indiquer la densité de plants par espèce,846ce9aa
 PUBLISH,Publier,c1d4ecf7
 PUBLISH_TO_FUNDER_PORTAL,Publier sur le portail des financeurs,ec2ddbec
 PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, celui fourni aux donateurs sur leur portail.",64413dc4
@@ -2100,6 +2102,7 @@ UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Parcourir les fichiers (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Téléverser une (des) photo(s),d20a4173
 UPLOAD_SPATIAL_FILES,Envoyer de(s) fichier(s) spatial(aux),953e770a
 USD_PER_HECTARE,$ {0} per ha,d8525ed1
+USE_OBSERVATION_DATA,Utiliser les données d’observation,37c30404
 USE_ORGANIZATION_TIME_ZONE,Utiliser le fuseau horaire de l'organisation,2cf2ac16
 USED_UP,Épuisé,323bdb79
 USER_ACCESS,Accès utilisateur,a9aa511b
