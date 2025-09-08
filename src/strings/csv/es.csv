@@ -2113,6 +2113,7 @@ USER_ACCESS,Acceso del usuario,a9aa511b
 USER_NOTIFICATION_ACTION,"Para cambiar las preferencias, ve a [Mi cuenta]",8fcbad99
 USER_NOTIFICATION_ACTION_SETTINGS,"Para cambiar la preferencia, vaya a [Ajustes]",e188ba43
 USER_WITH_EMAIL_DOES_NOT_EXIST,No existe ningún usuario con este correo electrónico.,66a18b2d
+USING_ENTERED_PLANT_DENSITY,Usando la densidad de plantas ingresada por especie,a6a7dac3
 USING_OBSERVATION_DATA_FROM,Usando datos de observación de {0},c489a0dd
 VALUE,Valor,b8e67ab1
 VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%,e78b7737

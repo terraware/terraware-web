@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Divider, FormControlLabel, Radio, RadioGroup, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Divider, FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Checkbox, Message, SelectT } from '@terraware/web-components';
 
+import TextField from 'src/components/common/TextField';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
@@ -18,7 +19,7 @@ type PlotT0EditBoxProps = {
   withdrawnSpeciesPlot?: SpeciesPlot;
 };
 
-const PlotT0EditBox = ({ plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0EditBoxProps) => {
+const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0EditBoxProps) => {
   const theme = useTheme();
   const [t0Origin, setT0Origin] = useState<string>('useObservation');
 
@@ -28,11 +29,7 @@ const PlotT0EditBox = ({ plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0
     setT0Origin(value);
   }, []);
 
-  const [selectedObservation, setSelectedObservation] = useState<PlotT0Observation>();
-
-  const onChangeObservation = useCallback((newValue: PlotT0Observation) => {
-    setSelectedObservation(newValue);
-  }, []);
+  const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
 
   const isEqualObservation = useCallback(
     (a: PlotT0Observation, b: PlotT0Observation) => a.observation_id === b.observation_id,
@@ -49,31 +46,94 @@ const PlotT0EditBox = ({ plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0
   );
 
   useEffect(() => {
-    console.log('withdrawnSpeciesPlot', withdrawnSpeciesPlot);
-  }, [withdrawnSpeciesPlot]);
+    if (t0Plot && !t0Plot.observationId) {
+      setT0Origin('manual');
+    }
+  }, [t0Plot]);
 
-  useEffect(() => {
-    console.log('plot', plot);
-  }, [plot]);
+  const plotToSave = useMemo(() => {
+    const existingPlot = record.plots.find((rPlot) => rPlot.monitoringPlotId.toString() === plot.id.toString());
+    if (existingPlot) {
+      return existingPlot;
+    }
+    return {
+      monitoringPlotId: plot.id,
+      densityData: [],
+    };
+  }, [plot.id, record]);
 
-  useEffect(() => {
-    if (t0Origin === 'useObservation' && selectedObservation) {
-      const plotToSave = record.plots.find((rPlot) => rPlot.monitoringPlotId === plot.id);
+  const onChangeObservation = useCallback(
+    (newValue: PlotT0Observation) => {
       if (plotToSave) {
-        const plotCopy = { ...plotToSave, observationId: Number(selectedObservation.observation_id) };
-
+        const plotCopy = { ...plotToSave };
+        plotCopy.observationId = Number(newValue.observation_id);
+        plotCopy.densityData = [];
         // Remove the existing plot, then add the updated one
-        const otherPlots = record.plots.filter((p) => p.monitoringPlotId !== plot.id);
+        const otherPlots = record.plots.filter((p) => p.monitoringPlotId.toString() !== plot.id.toString());
         setRecord({ ...record, plots: otherPlots ? [...otherPlots, plotCopy] : [plotCopy] });
       }
-    }
-  }, [plot.id, record, record.plots, selectedObservation, setRecord, t0Origin]);
+    },
+    [plot.id, plotToSave, record, setRecord]
+  );
 
-  const getPlotTotalDensity = useMemo(() => {
+  const plotTotalDensity = useMemo(() => {
     const selectedPlot = record.plots.find((pl) => pl.monitoringPlotId === plot.id);
     const total = selectedPlot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
     return total;
   }, [plot.id, record]);
+
+  const onChangeDensity = useCallback(
+    (id: string, value: unknown) => {
+      if (plotToSave) {
+        const densityDataToUpdate = plotToSave.densityData.find(
+          (densityData) => densityData.speciesId.toString() === id
+        );
+        let plotCopy: PlotT0Data;
+
+        if (densityDataToUpdate?.plotDensity !== undefined) {
+          const densityDataToUpdateCopy = { ...densityDataToUpdate, plotDensity: Number(value) };
+
+          // Udated plot with modified densityData array
+          plotCopy = {
+            ...plotToSave,
+            densityData: plotToSave.densityData.map((densityData) =>
+              densityData.speciesId.toString() === id ? densityDataToUpdateCopy : densityData
+            ),
+          };
+        } else {
+          plotCopy = {
+            ...plotToSave,
+            densityData: [...plotToSave.densityData, { plotDensity: Number(value), speciesId: Number(id) }],
+          };
+        }
+
+        // Remove the existing plot, then add the updated one
+        const otherPlots = record.plots.filter((p) => p.monitoringPlotId.toString() !== plot.id.toString());
+        setRecord({ ...record, plots: otherPlots ? [...otherPlots, plotCopy] : [plotCopy] });
+      }
+    },
+    [plot.id, plotToSave, record, setRecord]
+  );
+
+  const onWithdrawalValueSelected = useCallback(
+    (speciesId: number) => (value: boolean) => {
+      const newSelected = new Set(selectedWithdrawalCheckboxes);
+
+      if (value) {
+        newSelected.add(speciesId);
+        const withdrawnValue = withdrawnSpeciesPlot?.species.find(
+          (iWithdrawnSpeciesPlot) => iWithdrawnSpeciesPlot.speciesId.toString() === speciesId.toString()
+        )?.density;
+        onChangeDensity(speciesId.toString(), withdrawnValue);
+      } else {
+        newSelected.delete(speciesId);
+        onChangeDensity(speciesId.toString(), 0);
+      }
+
+      setSelectedWithdrawalCheckboxes(newSelected);
+    },
+    [onChangeDensity, withdrawnSpeciesPlot, selectedWithdrawalCheckboxes]
+  );
 
   return (
     <>
@@ -104,7 +164,9 @@ const PlotT0EditBox = ({ plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0
                   isEqual={isEqualObservation}
                   renderOption={renderOptionObservation}
                   displayLabel={displayLabelObservation}
-                  selectedValue={selectedObservation}
+                  selectedValue={plot.observationPlots.find(
+                    (obsPlot) => obsPlot.observation_id === plotToSave.observationId?.toString()
+                  )}
                   toT={toTObservation}
                   fullWidth={true}
                   disabled={t0Origin === 'manual'}
@@ -119,14 +181,16 @@ const PlotT0EditBox = ({ plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0
           </Box>
           {t0Origin === 'manual' && (
             <Box>
-              <Message type='page' priority='info' body={strings.T0_PLANT_DENSITY_WARNING} />
+              <Box paddingY={'16px'}>
+                <Message type='page' priority='info' body={strings.T0_PLANT_DENSITY_WARNING} />
+              </Box>
               <Box>
                 <table>
                   <thead>
                     <tr>
-                      <th>{strings.SPECIES_FROM_WITHDRAWALS}</th>
-                      <th>{strings.PLANT_DENSITY}</th>
-                      <th>{strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}</th>
+                      <th style={{ textAlign: 'left' }}>{strings.SPECIES_FROM_WITHDRAWALS}</th>
+                      <th style={{ textAlign: 'left' }}>{strings.PLANT_DENSITY}</th>
+                      <th style={{ textAlign: 'left' }}>{strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -134,21 +198,36 @@ const PlotT0EditBox = ({ plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0
                       <tr key={index}>
                         <td>{species.find((sp) => sp.id === withdrawnSpecies.speciesId)?.scientificName}</td>
                         <td>
-                          <TextField />
+                          <TextField
+                            type='number'
+                            id={`${withdrawnSpecies.speciesId}`}
+                            value={
+                              plotToSave?.densityData.find(
+                                (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
+                              )?.plotDensity
+                            }
+                            onChange={onChangeDensity}
+                            label={''}
+                          />
                         </td>
                         <td>
                           <Checkbox
                             id={`density-${withdrawnSpecies.speciesId}`}
                             label={withdrawnSpecies.density}
                             name={`density-${withdrawnSpecies.speciesId}`}
-                            onChange={() => true}
+                            value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
+                            onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
                           />
                         </td>
                       </tr>
                     ))}
                     <tr>
-                      <td>{strings.ALL_SPECIES}</td>
-                      <td>{getPlotTotalDensity}</td>
+                      <td>
+                        <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
+                      </td>
+                      <td>
+                        <Typography fontWeight={600}>{plotTotalDensity}</Typography>
+                      </td>
                     </tr>
                   </tbody>
                 </table>

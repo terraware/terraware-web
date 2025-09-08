@@ -39,11 +39,11 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
         <Box flexGrow={1} display={'flex'} alignItems={'center'}>
           {t0Plot ? (
             <Box>
-              <Box>
-                <Typography color={theme.palette.TwClrTxtSuccess} fontWeight={500}>
+              <Box display='flex' paddingBottom={3}>
+                <Typography color={theme.palette.TwClrTxtSuccess} fontWeight={500} paddingRight={2}>
                   {strings.T0_DATA_IS_SET}
                 </Typography>
-                {t0Plot.observationId && (
+                {t0Plot.observationId ? (
                   <Typography color={theme.palette.TwClrTxtSuccess}>
                     {strings.formatString(
                       strings.USING_OBSERVATION_DATA_FROM,
@@ -60,12 +60,14 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
                       </Link>
                     )}
                   </Typography>
+                ) : (
+                  <Typography>{strings.USING_ENTERED_PLANT_DENSITY}</Typography>
                 )}
               </Box>
               {t0Plot.densityData && (
                 <Box>
                   <table>
-                    <thead>
+                    <thead style={{ textAlign: 'left' }}>
                       <tr>
                         <th>{strings.SPECIES}</th>
                         <th>{strings.PLANT_DENSITY}</th>
@@ -79,8 +81,12 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
                         </tr>
                       ))}
                       <tr>
-                        <td>{strings.ALL_SPECIES}</td>
-                        <td>{getPlotTotalDensity}</td>
+                        <td>
+                          <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
+                        </td>
+                        <td>
+                          <Typography fontWeight={600}>{getPlotTotalDensity}</Typography>
+                        </td>
                       </tr>
                     </tbody>
                   </table>

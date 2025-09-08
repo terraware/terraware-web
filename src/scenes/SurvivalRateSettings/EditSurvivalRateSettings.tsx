@@ -29,6 +29,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlotT0Data, SiteT0Data } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import PlotT0EditBox from './PlotT0EditBox';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
@@ -51,6 +52,7 @@ const EditSurvivalRateSettings = () => {
   const params = useParams<{
     plantingSiteId: string;
   }>();
+  const snackbar = useSnackbar();
 
   const reload = useCallback(() => {
     if (plantingSite) {
@@ -87,16 +89,22 @@ const EditSurvivalRateSettings = () => {
     }
   }, [plantingSiteT0Response]);
 
+  const [record, setRecord] = useForm<SiteT0Data>({
+    plantingSiteId,
+    plots: t0Plots ?? [],
+  });
+
+  useEffect(() => {
+    if (t0Plots) {
+      setRecord({ plantingSiteId, plots: t0Plots });
+    }
+  }, [plantingSiteId, setRecord, t0Plots]);
+
   useEffect(() => {
     if (plotsWithObservationsResponse?.status === 'success') {
       setPlotsWithObservations(plotsWithObservationsResponse.data);
     }
   }, [plotsWithObservationsResponse]);
-
-  const [record, setRecord] = useForm<SiteT0Data>({
-    plantingSiteId,
-    plots: [],
-  });
 
   const goToViewSettings = useCallback(() => {
     navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));
@@ -112,7 +120,10 @@ const EditSurvivalRateSettings = () => {
       reload();
       goToViewSettings();
     }
-  }, [goToViewSettings, reload, saveResponse]);
+    if (saveResponse.status === 'error') {
+      snackbar.toastError();
+    }
+  }, [goToViewSettings, reload, saveResponse, snackbar]);
 
   return (
     <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
@@ -138,7 +149,7 @@ const EditSurvivalRateSettings = () => {
                 plot={plot}
                 key={plot.id}
                 plantingSiteId={plantingSiteId}
-                t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId === plot.id)}
+                t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId.toString() === plot.id.toString())}
                 record={record}
                 setRecord={setRecord}
                 withdrawnSpeciesPlot={withdrawnSpeciesPlots?.find(

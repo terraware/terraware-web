@@ -97,7 +97,7 @@ const SurvivalRateSettings = () => {
               plot={plot}
               key={plot.id}
               plantingSiteId={plantingSiteId}
-              t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId === plot.id)}
+              t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId.toString() === plot.id.toString())}
             />
           ))}
       </Card>
