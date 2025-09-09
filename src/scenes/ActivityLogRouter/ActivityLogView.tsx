@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
@@ -11,6 +11,7 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { SearchNodePayload } from 'src/types/Search';
 
 import ActivityLogMapSplitView from './ActivityLogMapSplitView';
+import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 
 type MockActivity = {
@@ -18,10 +19,14 @@ type MockActivity = {
   description: string;
   imageCount: number;
   imageURL: string;
+  statusChanged?: boolean;
   statusDoNotUse: boolean;
+  statusPublished?: boolean;
   statusVerified: boolean;
   type: string;
 };
+
+export type MockActivityStatus = 'Changed' | 'Do Not Use' | 'Not Verified' | 'Published' | 'Verified';
 
 const MOCK_ACTIVITIES: MockActivity[] = [
   {
@@ -41,6 +46,7 @@ const MOCK_ACTIVITIES: MockActivity[] = [
     imageCount: 12,
     imageURL: '',
     statusDoNotUse: false,
+    statusPublished: true,
     statusVerified: true,
     type: 'Planting',
   },
@@ -50,6 +56,7 @@ const MOCK_ACTIVITIES: MockActivity[] = [
     imageCount: 0,
     imageURL: '',
     statusDoNotUse: false,
+    statusPublished: true,
     statusVerified: true,
     type: 'Site Visit',
   },
@@ -59,6 +66,7 @@ const MOCK_ACTIVITIES: MockActivity[] = [
     imageCount: 1,
     imageURL: '',
     statusDoNotUse: false,
+    statusPublished: true,
     statusVerified: true,
     type: 'Community Impact',
   },
@@ -67,7 +75,9 @@ const MOCK_ACTIVITIES: MockActivity[] = [
     description: 'Trees planted in the north zone',
     imageCount: 1,
     imageURL: '',
+    statusChanged: true,
     statusDoNotUse: false,
+    statusPublished: true,
     statusVerified: true,
     type: 'Planting',
   },
@@ -95,6 +105,7 @@ const MOCK_ACTIVITIES: MockActivity[] = [
     imageCount: 1,
     imageURL: '',
     statusDoNotUse: false,
+    statusPublished: true,
     statusVerified: true,
     type: 'Planting',
   },
@@ -104,6 +115,7 @@ const MOCK_ACTIVITIES: MockActivity[] = [
     imageCount: 1,
     imageURL: '',
     statusDoNotUse: false,
+    statusPublished: true,
     statusVerified: true,
     type: 'Planting',
   },
@@ -136,7 +148,12 @@ const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
         <Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'>
           {activity.type}
         </Typography>
-        <Typography>TODO: render badges</Typography>
+        <Box>
+          {activity.statusChanged && <ActivityStatusBadge status='Changed' />}
+          <ActivityStatusBadge status={activity.statusVerified ? 'Verified' : 'Not Verified'} />
+          {activity.statusDoNotUse && <ActivityStatusBadge status='Do Not Use' />}
+          {activity.statusPublished && <ActivityStatusBadge status='Published' />}
+        </Box>
         <Typography>{activity.description}</Typography>
         <Typography sx={{ display: { xs: 'block', sm: 'none' } }}>{activity.date}</Typography>
       </Grid>
