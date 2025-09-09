@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -210,6 +210,44 @@ export default function ActivityLogView(): JSX.Element {
     // TODO: Implement add activity logic
   }, []);
 
+  // group activities by quarter and year
+  const groupedActivities = useMemo(() => {
+    const groups: Record<string, MockActivity[]> = {};
+
+    MOCK_ACTIVITIES.forEach((activity) => {
+      const date = new Date(activity.activityDate);
+      const year = date.getFullYear();
+      const quarter = Math.ceil((date.getMonth() + 1) / 3);
+      const quarterKey = `Q${quarter} ${year}`;
+
+      if (!groups[quarterKey]) {
+        groups[quarterKey] = [];
+      }
+      groups[quarterKey].push(activity);
+    });
+
+    // sort quarters in descending order (most recent first)
+    const sortedQuarters = Object.keys(groups).sort((a, b) => {
+      const [aQuarter, aYear] = a.split(' ');
+      const [bQuarter, bYear] = b.split(' ');
+
+      if (aYear !== bYear) {
+        return parseInt(bYear, 10) - parseInt(aYear, 10);
+      }
+      return parseInt(bQuarter.substring(1), 10) - parseInt(aQuarter.substring(1), 10);
+    });
+
+    // sort activities within each quarter by date (most recent first)
+    sortedQuarters.forEach((quarterKey) => {
+      groups[quarterKey].sort((a, b) => new Date(b.activityDate).getTime() - new Date(a.activityDate).getTime());
+    });
+
+    return sortedQuarters.map((quarterKey) => ({
+      quarter: quarterKey,
+      activities: groups[quarterKey],
+    }));
+  }, []);
+
   const PageHeaderLeftComponent = useMemo(
     () => (
       <PageHeaderProjectFilter
@@ -252,8 +290,22 @@ export default function ActivityLogView(): JSX.Element {
             />
           }
         >
-          {MOCK_ACTIVITIES.map((activity, index) => (
-            <ActivityLogItem key={index} activity={activity} />
+          {groupedActivities.map(({ quarter, activities }) => (
+            <Fragment key={quarter}>
+              <Typography
+                color={theme.palette.TwClrTxt}
+                fontSize='20px'
+                fontWeight={600}
+                lineHeight='28px'
+                marginY={theme.spacing(1)}
+              >
+                {quarter}
+              </Typography>
+
+              {activities.map((activity, index) => (
+                <ActivityLogItem key={`${quarter}-${index}`} activity={activity} />
+              ))}
+            </Fragment>
           ))}
         </ActivityLogMapSplitView>
       </Card>
