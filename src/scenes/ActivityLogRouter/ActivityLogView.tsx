@@ -15,118 +15,119 @@ import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 
 type MockActivity = {
-  date: string;
+  activityDate: string;
+  activityType: string;
   description: string;
   imageCount: number;
   imageURL: string;
-  statusChanged?: boolean;
-  statusDoNotUse: boolean;
-  statusPublished?: boolean;
-  statusVerified: boolean;
-  type: string;
+  isChanged?: boolean;
+  isDoNotUse?: boolean;
+  isHighlight?: boolean;
+  isPublished?: boolean;
+  isVerified: boolean;
 };
 
 export type MockActivityStatus = 'Changed' | 'Do Not Use' | 'Not Verified' | 'Published' | 'Verified';
 
 const MOCK_ACTIVITIES: MockActivity[] = [
   {
-    date: '2025-07-22',
+    activityDate: '2025-07-22',
     description:
       'Trees planted in the north zone over a 2 week period that will need to be continually monitored over the next month or so...',
     imageCount: 1,
     imageURL: '',
-    statusDoNotUse: false,
-    statusVerified: false,
-    type: 'Nursery Work',
+    isDoNotUse: false,
+    isVerified: false,
+    activityType: 'Nursery Work',
   },
   {
-    date: '2025-07-22',
+    activityDate: '2025-07-22',
     description:
       'Trees planted in the north zone over a 2 week period that will need to be continually monitored over the next month or so... ',
     imageCount: 12,
     imageURL: '',
-    statusDoNotUse: false,
-    statusPublished: true,
-    statusVerified: true,
-    type: 'Planting',
+    isDoNotUse: false,
+    isPublished: true,
+    isVerified: true,
+    activityType: 'Planting',
   },
   {
-    date: '2025-07-21',
+    activityDate: '2025-07-21',
     description: 'Trees planted in the north zone',
     imageCount: 0,
     imageURL: '',
-    statusDoNotUse: false,
-    statusPublished: true,
-    statusVerified: true,
-    type: 'Site Visit',
+    isDoNotUse: false,
+    isPublished: true,
+    isVerified: true,
+    activityType: 'Site Visit',
   },
   {
-    date: '2025-07-20',
+    activityDate: '2025-07-20',
     description: 'Trees planted in the north zone',
     imageCount: 1,
     imageURL: '',
-    statusDoNotUse: false,
-    statusPublished: true,
-    statusVerified: true,
-    type: 'Community Impact',
+    isDoNotUse: false,
+    isPublished: true,
+    isVerified: true,
+    activityType: 'Community Impact',
   },
   {
-    date: '2025-07-17',
+    activityDate: '2025-07-17',
     description: 'Trees planted in the north zone',
     imageCount: 1,
     imageURL: '',
-    statusChanged: true,
-    statusDoNotUse: false,
-    statusPublished: true,
-    statusVerified: true,
-    type: 'Planting',
+    isChanged: true,
+    isDoNotUse: false,
+    isPublished: true,
+    isVerified: true,
+    activityType: 'Planting',
   },
   {
-    date: '2025-07-06',
+    activityDate: '2025-07-06',
     description: 'Trees planted in the north zone',
     imageCount: 1,
     imageURL: '',
-    statusDoNotUse: true,
-    statusVerified: false,
-    type: 'Site Visit',
+    isDoNotUse: true,
+    isVerified: false,
+    activityType: 'Site Visit',
   },
   {
-    date: '2025-06-24',
+    activityDate: '2025-06-24',
     description: 'Trees planted in the north zone',
     imageCount: 0,
     imageURL: '',
-    statusDoNotUse: false,
-    statusVerified: true,
-    type: 'Seed Collection',
+    isDoNotUse: false,
+    isVerified: true,
+    activityType: 'Seed Collection',
   },
   {
-    date: '2025-06-21',
+    activityDate: '2025-06-21',
     description: 'Trees planted in the north zone',
     imageCount: 1,
     imageURL: '',
-    statusDoNotUse: false,
-    statusPublished: true,
-    statusVerified: true,
-    type: 'Planting',
+    isDoNotUse: false,
+    isPublished: true,
+    isVerified: true,
+    activityType: 'Planting',
   },
   {
-    date: '2025-06-19',
+    activityDate: '2025-06-19',
     description: 'Trees planted in the north zone',
     imageCount: 1,
     imageURL: '',
-    statusDoNotUse: false,
-    statusPublished: true,
-    statusVerified: true,
-    type: 'Planting',
+    isDoNotUse: false,
+    isPublished: true,
+    isVerified: true,
+    activityType: 'Planting',
   },
   {
-    date: '2025-06-07',
+    activityDate: '2025-06-07',
     description: 'Trees planted in the north zone',
     imageCount: 1,
     imageURL: '',
-    statusDoNotUse: false,
-    statusVerified: false,
-    type: 'Planting',
+    isDoNotUse: false,
+    isVerified: false,
+    activityType: 'Planting',
   },
 ];
 
@@ -146,20 +147,20 @@ const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
 
       <Grid item xs={true}>
         <Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'>
-          {activity.type}
+          {activity.activityType}
         </Typography>
         <Box>
-          {activity.statusChanged && <ActivityStatusBadge status='Changed' />}
-          <ActivityStatusBadge status={activity.statusVerified ? 'Verified' : 'Not Verified'} />
-          {activity.statusDoNotUse && <ActivityStatusBadge status='Do Not Use' />}
-          {activity.statusPublished && <ActivityStatusBadge status='Published' />}
+          {activity.isChanged && <ActivityStatusBadge status='Changed' />}
+          <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
+          {activity.isDoNotUse && <ActivityStatusBadge status='Do Not Use' />}
+          {activity.isPublished && <ActivityStatusBadge status='Published' />}
         </Box>
         <Typography>{activity.description}</Typography>
-        <Typography sx={{ display: { xs: 'block', sm: 'none' } }}>{activity.date}</Typography>
+        <Typography sx={{ display: { xs: 'block', sm: 'none' } }}>{activity.activityDate}</Typography>
       </Grid>
 
       <Grid item xs='auto' sx={{ display: { xs: 'none', sm: 'block' } }}>
-        <Typography>{activity.date}</Typography>
+        <Typography>{activity.activityDate}</Typography>
       </Grid>
     </Grid>
   );
