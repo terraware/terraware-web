@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { Button, Icon } from '@terraware/web-components';
+import { Box, Divider, Typography } from '@mui/material';
+import { Button } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import {
   selectPermanentPlotsWithObservations,
@@ -21,10 +23,10 @@ import strings from 'src/strings';
 import { PlotT0Data } from 'src/types/Tracking';
 
 import PlotT0Box from './PlotT0Box';
+import SurvivalRateInstructions from './SurvivalRateInstructions';
 
 const SurvivalRateSettings = () => {
   const { plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
-  const theme = useTheme();
   const [requestId, setRequestId] = useState('');
   const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
   const [plotsRequestId, setPlotsRequestId] = useState('');
@@ -32,6 +34,7 @@ const SurvivalRateSettings = () => {
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const dispatch = useAppDispatch();
   const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
+  const navigate = useSyncNavigate();
   const params = useParams<{
     plantingSiteId: string;
   }>();
@@ -63,22 +66,25 @@ const SurvivalRateSettings = () => {
     }
   }, [plotsWithObservationsResponse]);
 
+  const goToEditSurvivalRateSettings = useCallback(() => {
+    navigate({ pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()) });
+  }, [navigate, plantingSiteId]);
+
   return (
     <Page
       title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}
       rightComponent={
-        <Button icon='iconEdit' label={strings.EDIT_SETTINGS} onClick={() => true} size='medium' id='editSettings' />
+        <Button
+          icon='iconEdit'
+          label={strings.EDIT_SETTINGS}
+          onClick={goToEditSurvivalRateSettings}
+          size='medium'
+          id='editSettings'
+        />
       }
     >
       <Card radius='8px'>
-        <Box display='flex'>
-          <Box paddingRight={theme.spacing(2)}>
-            <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} />
-          </Box>
-          <Typography fontSize={'14px'}>
-            {strings.formatString(strings.SURVIVAL_RATE_SETTINGS_INFO, <b>{strings.INSTRUCTIONS}</b>)}
-          </Typography>
-        </Box>
+        <SurvivalRateInstructions />
         <Box paddingY={3}>
           <Typography fontWeight={600}>
             {strings.formatString(strings.PLOTS_QUANTITY, plotsWithObservations?.length || 0)}
@@ -91,7 +97,7 @@ const SurvivalRateSettings = () => {
               plot={plot}
               key={plot.id}
               plantingSiteId={plantingSiteId}
-              t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId === plot.id)}
+              t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId.toString() === plot.id.toString())}
             />
           ))}
       </Card>

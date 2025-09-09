@@ -236,6 +236,7 @@ BY,Par,e8fbe470
 BY_BATCH,Par lot,68c5092f
 BY_NURSERY,Par pépinière,a0a2faa5
 BY_SPECIES,Par espèce,602624ab
+CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densité de plants calculée à partir des retraits,d06a4b56
 CANCEL,Annuler,e73dc4d4
 CANCEL_DATA_CHECK,Annuler la vérification des données,5f140f00
 CANNOT_DELETE_APPLICATION_PROJECT,"Ce projet ne peut pas être supprimé, car une candidature à notre programme d'accélération a été initiée pour celui-ci.",5c1b8d4f
@@ -536,6 +537,7 @@ EDIT_SEED_BANK,Modifier la banque de semences,e2400ded
 EDIT_SETTINGS,Modifier les paramètres,f9c91817
 EDIT_SPECIES,Modifier les espèces,0893d9a0
 EDIT_STATUS,Modifier le statut,6b9a2791
+EDIT_SURVIVAL_RATE_SETTINGS_FOR,Modifier les paramètres du taux de survie pour {0},669ad74c
 EDIT_VIABILITY,Modifier la viabilité,019e694b
 EDIT_VIABILITY_TEST,Modifier le test de viabilité,71da108b
 EDIT_VOTES,Votes d'édition,8d6f6fe1
@@ -1202,6 +1204,7 @@ ORTHODOX,Orthodoxe,b0a5a550
 OTHER,Autre,626335b2
 OTHER_CONTACT,Autre contact,4268b0fb
 OTHER_CONTACT_TYPE,Autre type de contact,ec7c7449
+OTHER_CONTACTS,Autres contacts,18906a13
 OTHER_FACTS,Autres faits,548f89be
 OTHER_LAND_USE_MODEL,Autre modèle d'utilisation des sols,b89ac507
 OTHER_SPECIES,Autres espèces,b19f20cd
@@ -1418,6 +1421,7 @@ PROJECTS,Projets,07b3b475
 PROPOSED_PROJECT_BOUNDARIES_ADDED,Ajout des limites du projet proposé,2787f20d
 PROPOSED_PROJECT_BOUNDARY,Limite du projet proposé,0b77fcdf
 PROPOSED_RESTORATION_ACTIVITIES,Activités de restauration proposées,4c6b833a
+PROVIDE_PLANT_DENSITY_PER_SPECIES,Indiquer la densité de plants par espèce,846ce9aa
 PUBLISH,Publier,c1d4ecf7
 PUBLISH_TO_FUNDER_PORTAL,Publier sur le portail des financeurs,ec2ddbec
 PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, celui fourni aux donateurs sur leur portail.",64413dc4
@@ -1780,6 +1784,7 @@ SPECIES_CATEGORIES_TOOLTIP,Les catégories d'espèces indiquent le pourcentage d
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
 SPECIES_DESCRIPTION,"Gérez la liste des espèces de votre organisation pour la planification, les opérations et les rapports.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Saisissez les espèces que vous collectez ou plantez actuellement pour simplifier votre expérience lorsque vous êtes sur le terrain.,20250069
+SPECIES_FROM_WITHDRAWALS,Espèces issues des retraits,66d674b5
 SPECIES_IMPORT_COMPLETE,L'importation des données sur les espèces est terminée !,74b00dc5
 SPECIES_LAST_UPDATED,Espèces récemment mises à jour,062c5811
 SPECIES_LIST,Liste d'espèces,d31336cb
@@ -1884,6 +1889,7 @@ SW_CORNER_LATITUDE,Latitude du coin sud-ouest : {0},11be73c0
 SW_CORNER_LONGITUDE,Longitude du coin sud-ouest : {0},28e4af3d
 SYSTEM_METRICS,Mesures du système,c19498b7
 T0_DATA_IS_SET,Les données t0 sont définies,cf4c95a7
+T0_PLANT_DENSITY_WARNING,"Indiquez les densités de plants pour toutes les espèces à utiliser dans le calcul du taux de survie pour cette parcelle. Les espèces issues des retraits sont affichées. Il se peut que cette liste ne représente pas toutes les espèces présentes dans la parcelle. Pour ajouter d'autres espèces, utilisez Ajouter une espèce.",8f270545
 TABLE_OF_CONTENTS,Table des matières,c4c6df6c
 TABLE_SELECT_ALL_ROWS,Sélectionnez toutes les {0} lignes.,b2db09d4
 TABLE_SELECT_NONE,Effacer la sélection.,37fe7c91
@@ -2100,12 +2106,14 @@ UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Parcourir les fichiers (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Téléverser une (des) photo(s),d20a4173
 UPLOAD_SPATIAL_FILES,Envoyer de(s) fichier(s) spatial(aux),953e770a
 USD_PER_HECTARE,$ {0} per ha,d8525ed1
+USE_OBSERVATION_DATA,Utiliser les données d’observation,37c30404
 USE_ORGANIZATION_TIME_ZONE,Utiliser le fuseau horaire de l'organisation,2cf2ac16
 USED_UP,Épuisé,323bdb79
 USER_ACCESS,Accès utilisateur,a9aa511b
 USER_NOTIFICATION_ACTION,"Pour modifier vos préférences, rendez-vous sur [Mon compte]",8fcbad99
 USER_NOTIFICATION_ACTION_SETTINGS,"Pour modifier vos préférences, rendez-vous sur [Paramètres]",e188ba43
 USER_WITH_EMAIL_DOES_NOT_EXIST,L'utilisateur avec cet e-mail n'existe pas,66a18b2d
+USING_ENTERED_PLANT_DENSITY,Utilisation de la densité de plants saisie par espèce,a6a7dac3
 USING_OBSERVATION_DATA_FROM,Utilisation des données d'observation de {0},c489a0dd
 VALUE,Valeur,b8e67ab1
 VALUE_CANT_EXCEED_100,La valeur ne peut pas dépasser 100 %,e78b7737
