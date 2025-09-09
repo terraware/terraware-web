@@ -205,6 +205,11 @@ const ProjectProfileView = ({
     [funderView, lastPublishedReport, lastSubmittedReport]
   );
 
+  const reportMetricCardFormatter = useCallback(
+    (value: number | undefined) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0'),
+    []
+  );
+
   return (
     <Card
       flushMobile
@@ -365,7 +370,7 @@ const ProjectProfileView = ({
               metrics={lastSubmittedReport.systemMetrics}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
-              formatter={(value) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0')}
+              formatter={reportMetricCardFormatter}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
@@ -390,7 +395,7 @@ const ProjectProfileView = ({
               publishedMetrics={lastPublishedReport.systemMetrics}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
-              formatter={(value) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0')}
+              formatter={reportMetricCardFormatter}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
