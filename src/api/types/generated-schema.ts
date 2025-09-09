@@ -52,7 +52,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/accelerator/activities/{id}": {
+    "/api/v1/accelerator/activities/{activityId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -74,7 +74,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/accelerator/activities/{id}/media": {
+    "/api/v1/accelerator/activities/{activityId}/media": {
         parameters: {
             query?: never;
             header?: never;
@@ -86,6 +86,28 @@ export interface paths {
         /** Uploads media for an activity. */
         post: operations["uploadActivityMedia"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/activities/{activityId}/media/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets a media file for an activity.
+         * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+         */
+        get: operations["getActivityMedia"];
+        /** Updates information about a media file for an activity. */
+        put: operations["updateActivityMedia"];
+        post?: never;
+        /** Deletes a media file from an activity. */
+        delete: operations["deleteActivityMedia"];
         options?: never;
         head?: never;
         patch?: never;
@@ -951,6 +973,45 @@ export interface paths {
         /** Review metric entries for a report */
         post: operations["reviewAcceleratorReportMetrics"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Uploads a photo to a report. */
+        post: operations["uploadAcceleratorReportPhoto"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieves a specific photo from a report
+         * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+         */
+        get: operations["getAcceleratorReportPhoto"];
+        /** Updates a report photo caption */
+        put: operations["updateAcceleratorReportPhoto"];
+        post?: never;
+        /** Deletes a report photo */
+        delete: operations["deleteAcceleratorReportPhoto"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1877,6 +1938,26 @@ export interface paths {
         };
         /** Get the published reports for a specific project. */
         get: operations["listPublishedReports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/funder/reports/{reportId}/photos/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieves a specific photo from a published report
+         * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+         */
+        get: operations["getPublishedReportPhoto"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4468,6 +4549,17 @@ export interface components {
             viabilityTests?: components["schemas"]["GetViabilityTestPayload"][];
             withdrawals?: components["schemas"]["GetWithdrawalPayload"][];
         };
+        ActivityMediaFilePayload: {
+            caption?: string;
+            /** Format: date */
+            capturedDate: string;
+            /** Format: int64 */
+            fileId: number;
+            geolocation?: components["schemas"]["Point"];
+            isCoverPhoto: boolean;
+            /** @enum {string} */
+            type: "Photo" | "Video";
+        };
         ActivityPayload: {
             /** Format: date */
             date: string;
@@ -4475,6 +4567,7 @@ export interface components {
             /** Format: int64 */
             id: number;
             isHighlight: boolean;
+            media: components["schemas"]["ActivityMediaFilePayload"][];
             /** @enum {string} */
             type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
@@ -9629,6 +9722,9 @@ export interface components {
         UpdateAcceleratorReportConfigRequestPayload: {
             config: components["schemas"]["UpdateAcceleratorReportConfigPayload"];
         };
+        UpdateAcceleratorReportPhotoRequestPayload: {
+            caption?: string;
+        };
         UpdateAcceleratorReportValuesRequestPayload: {
             achievements: string[];
             additionalComments?: string;
@@ -9687,6 +9783,10 @@ export interface components {
         UpdateAccessionResponsePayloadV2: {
             accession: components["schemas"]["AccessionPayloadV2"];
             status: components["schemas"]["SuccessOrError"];
+        };
+        UpdateActivityMediaRequestPayload: {
+            caption?: string;
+            isCoverPhoto: boolean;
         };
         UpdateActivityRequestPayload: {
             /** Format: date */
@@ -10246,6 +10346,14 @@ export interface components {
              */
             variableManifestId: number;
         };
+        UploadAcceleratorReportPhotoRequestPayload: {
+            caption?: string;
+        };
+        UploadAcceleratorReportPhotoResponsePayload: {
+            /** Format: int64 */
+            fileId: number;
+            status: components["schemas"]["SuccessOrError"];
+        };
         UploadActivityMediaResponsePayload: {
             /** Format: int64 */
             fileId: number;
@@ -10498,6 +10606,8 @@ export interface operations {
         parameters: {
             query: {
                 projectId: number;
+                /** @description If true, include a list of media files for each activity. */
+                includeMedia?: boolean;
             };
             header?: never;
             path?: never;
@@ -10615,7 +10725,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: number;
+                activityId: number;
             };
             cookie?: never;
         };
@@ -10637,7 +10747,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: number;
+                activityId: number;
             };
             cookie?: never;
         };
@@ -10663,7 +10773,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: number;
+                activityId: number;
             };
             cookie?: never;
         };
@@ -10685,7 +10795,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: number;
+                activityId: number;
             };
             cookie?: never;
         };
@@ -10705,6 +10815,84 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UploadActivityMediaResponsePayload"];
+                };
+            };
+        };
+    };
+    getActivityMedia: {
+        parameters: {
+            query?: {
+                /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+                maxWidth?: number;
+                /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+                maxHeight?: number;
+            };
+            header?: never;
+            path: {
+                activityId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    updateActivityMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                activityId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateActivityMediaRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteActivityMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                activityId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
@@ -12754,6 +12942,128 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    uploadAcceleratorReportPhoto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                    payload: components["schemas"]["UploadAcceleratorReportPhotoRequestPayload"];
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadAcceleratorReportPhotoResponsePayload"];
+                };
+            };
+        };
+    };
+    getAcceleratorReportPhoto: {
+        parameters: {
+            query?: {
+                /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+                maxWidth?: number;
+                /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+                maxHeight?: number;
+            };
+            header?: never;
+            path: {
+                reportId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The photo was successfully retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/jpeg": string;
+                    "image/png": string;
+                };
+            };
+            /** @description The report does not exist, or does not have a photo with the requested ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updateAcceleratorReportPhoto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reportId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAcceleratorReportPhotoRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteAcceleratorReportPhoto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reportId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": unknown;
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
@@ -14851,6 +15161,44 @@ export interface operations {
                 };
             };
             /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getPublishedReportPhoto: {
+        parameters: {
+            query?: {
+                /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+                maxWidth?: number;
+                /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+                maxHeight?: number;
+            };
+            header?: never;
+            path: {
+                reportId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The photo was successfully retrieved. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/jpeg": string;
+                    "image/png": string;
+                };
+            };
+            /** @description The report does not exist, or does not have a photo with the requested ID. */
             404: {
                 headers: {
                     [name: string]: unknown;
