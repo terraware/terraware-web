@@ -149,12 +149,14 @@ const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
         <Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'>
           {activity.activityType}
         </Typography>
-        <Box>
+
+        <Box marginY={theme.spacing(1)}>
           {activity.isChanged && <ActivityStatusBadge status='Changed' />}
           <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
           {activity.isDoNotUse && <ActivityStatusBadge status='Do Not Use' />}
           {activity.isPublished && <ActivityStatusBadge status='Published' />}
         </Box>
+
         <Typography>{activity.description}</Typography>
         <Typography sx={{ display: { xs: 'block', sm: 'none' } }}>{activity.activityDate}</Typography>
       </Grid>
