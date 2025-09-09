@@ -74,6 +74,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/activities/{id}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Uploads media for an activity. */
+        post: operations["uploadActivityMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/applications": {
         parameters: {
             query?: never;
@@ -4323,6 +4340,7 @@ export interface components {
             modifiedBy: number;
             /** Format: date-time */
             modifiedTime: string;
+            photos: components["schemas"]["ReportPhotoPayload"][];
             /** Format: int64 */
             projectId: number;
             projectMetrics: components["schemas"]["ReportProjectMetricPayload"][];
@@ -8686,9 +8704,13 @@ export interface components {
             whatNeedsToBeTrue?: string;
         };
         ProjectInternalUserResponsePayload: {
+            /** Format: date-time */
+            createdTime: string;
             email: string;
             firstName?: string;
             lastName?: string;
+            /** Format: date-time */
+            modifiedTime: string;
             /** @enum {string} */
             role?: "Project Lead" | "Restoration Lead" | "Social Lead" | "GIS Lead" | "Carbon Lead" | "Phase Lead" | "Regional Expert" | "Project Finance Lead" | "Climate Impact Lead" | "Legal Lead" | "Consultant";
             roleName?: string;
@@ -8948,6 +8970,11 @@ export interface components {
             reportId: number;
             /** Format: int32 */
             target?: number;
+        };
+        ReportPhotoPayload: {
+            caption?: string;
+            /** Format: int64 */
+            fileId: number;
         };
         ReportProjectMetricEntriesPayload: {
             /** Format: int64 */
@@ -10219,6 +10246,11 @@ export interface components {
              */
             variableManifestId: number;
         };
+        UploadActivityMediaResponsePayload: {
+            /** Format: int64 */
+            fileId: number;
+            status: components["schemas"]["SuccessOrError"];
+        };
         UploadAttachmentResponsePayload: {
             attachments: components["schemas"]["TemporaryAttachment"][];
             status: components["schemas"]["SuccessOrError"];
@@ -10644,6 +10676,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    uploadActivityMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadActivityMediaResponsePayload"];
                 };
             };
         };

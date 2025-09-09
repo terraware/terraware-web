@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -61,7 +61,6 @@ const ProjectProfileView = ({
   projectDetails,
   project,
   projectMeta,
-  organization,
   projectApplication,
   projectScore,
   phaseVotes,
@@ -90,18 +89,47 @@ const ProjectProfileView = ({
     setListInternalUsersRequestId(request.requestId);
   }, [dispatch, project?.id]);
 
+  const firstProjectLead = useMemo(() => {
+    if (listInternalUsersRequest?.status !== 'success') {
+      return undefined;
+    }
+
+    return listInternalUsersRequest.data?.users
+      ?.filter((user) => user.role === 'Project Lead')
+      ?.sort((a, b) => {
+        // sort by modifiedTime ascending
+        const timeA = a.modifiedTime ? new Date(a.modifiedTime).getTime() : 0;
+        const timeB = b.modifiedTime ? new Date(b.modifiedTime).getTime() : 0;
+        return timeA - timeB;
+      })?.[0];
+  }, [listInternalUsersRequest]);
+
   const moreUsersTooltip = useMemo(() => {
     if (listInternalUsersRequest?.status !== 'success') {
       return '';
     }
 
     return (listInternalUsersRequest?.data?.users || [])
+      .filter((user) => (firstProjectLead ? user.userId !== firstProjectLead.userId : true))
       .map((user) => {
         const userRole = user.roleName ? user.roleName : getProjectInternalUserRoleString(user.role, strings);
-        return `${userRole}: ${user.firstName} ${user.lastName}`;
+        return { userRole, firstName: user.firstName || '', lastName: user.lastName || '' };
       })
+      .sort((a, b) => {
+        // first sort by user role alphabetically
+        if (a.userRole !== b.userRole) {
+          return a.userRole.localeCompare(b.userRole, activeLocale || undefined);
+        }
+        // then sort by first name alphabetically
+        if (a.firstName !== b.firstName) {
+          return a.firstName.localeCompare(b.firstName, activeLocale || undefined);
+        }
+        // finally sort by last name alphabetically
+        return a.lastName.localeCompare(b.lastName, activeLocale || undefined);
+      })
+      .map((user) => `${user.userRole}: ${user.firstName} ${user.lastName}`)
       .join('\n');
-  }, [listInternalUsersRequest]);
+  }, [activeLocale, firstProjectLead, listInternalUsersRequest]);
 
   const isProjectInPhase = useMemo(
     () => participantProject?.cohortPhase?.startsWith('Phase'),
@@ -177,6 +205,11 @@ const ProjectProfileView = ({
     [funderView, lastPublishedReport, lastSubmittedReport]
   );
 
+  const reportMetricCardFormatter = useCallback(
+    (value: number | undefined) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0'),
+    []
+  );
+
   return (
     <Card
       flushMobile
@@ -211,11 +244,8 @@ const ProjectProfileView = ({
           <Box justifySelf={'flex-end'}>
             <ProjectFieldInlineMeta
               userLabel={strings.PROJECT_LEAD}
-              userId={organization?.tfContactUser?.userId}
-              userName={
-                organization?.tfContactUser &&
-                `${organization?.tfContactUser?.firstName} ${organization?.tfContactUser?.lastName}`
-              }
+              userId={firstProjectLead?.userId}
+              userName={firstProjectLead && `${firstProjectLead?.firstName} ${firstProjectLead?.lastName}`}
               fontSize={'16px'}
               lineHeight={'24px'}
               fontWeight={500}
@@ -340,7 +370,7 @@ const ProjectProfileView = ({
               metrics={lastSubmittedReport.systemMetrics}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
-              formatter={(value) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0')}
+              formatter={reportMetricCardFormatter}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
@@ -365,7 +395,7 @@ const ProjectProfileView = ({
               publishedMetrics={lastPublishedReport.systemMetrics}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
-              formatter={(value) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0')}
+              formatter={reportMetricCardFormatter}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}

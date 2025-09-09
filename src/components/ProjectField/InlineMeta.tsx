@@ -96,7 +96,7 @@ const ProjectFieldInlineMeta = ({
                   marginRight={theme.spacing(0.5)}
                 >
                   {' | '}
-                  {strings.MORE.toLowerCase()}
+                  {strings.OTHER_CONTACTS}
                 </Typography>
               </Tooltip>
             )}
