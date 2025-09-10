@@ -10,6 +10,7 @@ import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { SearchNodePayload } from 'src/types/Search';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ActivityLogMapSplitView from './ActivityLogMapSplitView';
 import ActivityStatusBadge from './ActivityStatusBadge';
@@ -134,6 +135,7 @@ const MOCK_ACTIVITIES: MockActivity[] = [
 
 const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
 
   const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
 
@@ -165,12 +167,14 @@ const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
         </Box>
 
         <Typography>{activity.description}</Typography>
-        <Typography sx={{ display: { xs: 'block', sm: 'none' } }}>{activity.activityDate}</Typography>
+        {!isDesktop && <Typography>{activity.date}</Typography>}
       </Grid>
 
-      <Grid item xs='auto' sx={{ display: { xs: 'none', sm: 'block' } }}>
-        <Typography>{activity.activityDate}</Typography>
-      </Grid>
+      {isDesktop && (
+        <Grid item xs='auto'>
+          <Typography>{activity.date}</Typography>
+        </Grid>
+      )}
     </Grid>
   );
 };
