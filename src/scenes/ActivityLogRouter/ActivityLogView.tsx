@@ -198,8 +198,6 @@ const ActivityLogItem = ({ activity }: { activity: Activity }) => {
         <Box marginY={theme.spacing(1)}>
           {isChanged && <ActivityStatusBadge status='Changed' />}
           <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
-          {/* {activity.isDoNotUse && <ActivityStatusBadge status='Do Not Use' />} */}
-          {/* {activity.isPublished && <ActivityStatusBadge status='Published' />} */}
         </Box>
 
         <Typography>{activity.description}</Typography>
