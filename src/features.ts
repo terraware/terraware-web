@@ -3,7 +3,6 @@ import env from 'src/utils/useEnvironment';
 
 export type FeatureName =
   | 'Show Production View'
-  | 'Matrix View'
   | 'New Plant Dashboard Map'
   | 'Updated Nursery Growth Phases'
   | 'Survival Rate Calculation'
@@ -40,15 +39,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Matrix View',
-    preferenceName: 'enableMatrixView',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Enable Matrix View'],
-    disclosure: ['This is a WIP'],
   },
   {
     name: 'New Plant Dashboard Map',

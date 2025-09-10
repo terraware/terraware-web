@@ -13285,7 +13285,7 @@ COPY public.user_preferences (user_id, organization_id, preferences) FROM stdin;
 1	1	{"lastPlantingSiteSelected": -1, "plants.dashboard.lastVisitedPlantingSite": {"plantingSiteId": 1}, "plants.observations.lastVisitedPlantingSite": {"plantingSiteId": -1}}
 6	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric"}
 6	1	{"lastPlantingSiteSelected": -1}
-1	\N	{"lastVisitedOrg": 1, "enableMatrixView": true, "preferredWeightSystem": "metric", "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
+1	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric", "dont-show-site-boundary-instructions": true, "dont-show-site-zone-boundaries-instructions": true}
 \.
 
 
