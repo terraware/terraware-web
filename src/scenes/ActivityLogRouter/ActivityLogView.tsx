@@ -3,6 +3,7 @@ import React, { Fragment, useCallback, useMemo, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import { components } from 'src/api/types/generated-schema';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
@@ -15,124 +16,126 @@ import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 
 type MockActivity = {
-  activityDate: string;
-  activityType: string;
-  description: string;
-  imageCount: number;
-  imageURL: string;
-  isChanged?: boolean;
-  isDoNotUse?: boolean;
+  date: string;
+  description?: string;
+  id: number;
+  isChanged?: boolean; // TODO: update this property
+  isDoNotUse?: boolean; // TODO: update this property
   isHighlight?: boolean;
-  isPublished?: boolean;
+  isPublished?: boolean; // TODO: update this property
   isVerified: boolean;
+  media: components['schemas']['ActivityMediaFilePayload'][];
+  type: string;
 };
 
 export type MockActivityStatus = 'Changed' | 'Do Not Use' | 'Not Verified' | 'Published' | 'Verified';
 
 const MOCK_ACTIVITIES: MockActivity[] = [
   {
-    activityDate: '2025-07-22',
+    date: '2025-07-22',
     description:
       'Trees planted in the north zone over a 2 week period that will need to be continually monitored over the next month or so...',
-    imageCount: 1,
-    imageURL: '',
+    id: 1,
     isDoNotUse: false,
     isVerified: false,
-    activityType: 'Nursery Work',
+    media: [],
+    type: 'Nursery Work',
   },
   {
-    activityDate: '2025-07-22',
+    date: '2025-07-22',
     description:
       'Trees planted in the north zone over a 2 week period that will need to be continually monitored over the next month or so... ',
-    imageCount: 12,
-    imageURL: '',
+    id: 2,
     isDoNotUse: false,
     isPublished: true,
     isVerified: true,
-    activityType: 'Planting',
+    media: [],
+    type: 'Planting',
   },
   {
-    activityDate: '2025-07-21',
+    date: '2025-07-21',
     description: 'Trees planted in the north zone',
-    imageCount: 0,
-    imageURL: '',
+    id: 3,
     isDoNotUse: false,
     isPublished: true,
     isVerified: true,
-    activityType: 'Site Visit',
+    media: [],
+    type: 'Site Visit',
   },
   {
-    activityDate: '2025-07-20',
+    date: '2025-07-20',
     description: 'Trees planted in the north zone',
-    imageCount: 1,
-    imageURL: '',
+    id: 4,
     isDoNotUse: false,
     isPublished: true,
     isVerified: true,
-    activityType: 'Community Impact',
+    media: [],
+    type: 'Community Impact',
   },
   {
-    activityDate: '2025-07-17',
+    date: '2025-07-17',
     description: 'Trees planted in the north zone',
-    imageCount: 1,
-    imageURL: '',
+    id: 5,
     isChanged: true,
     isDoNotUse: false,
     isPublished: true,
     isVerified: true,
-    activityType: 'Planting',
+    media: [],
+    type: 'Planting',
   },
   {
-    activityDate: '2025-07-06',
+    date: '2025-07-06',
     description: 'Trees planted in the north zone',
-    imageCount: 1,
-    imageURL: '',
+    id: 6,
     isDoNotUse: true,
     isVerified: false,
-    activityType: 'Site Visit',
+    media: [],
+    type: 'Site Visit',
   },
   {
-    activityDate: '2025-06-24',
+    date: '2025-06-24',
     description: 'Trees planted in the north zone',
-    imageCount: 0,
-    imageURL: '',
+    id: 7,
     isDoNotUse: false,
     isVerified: true,
-    activityType: 'Seed Collection',
+    media: [],
+    type: 'Seed Collection',
   },
   {
-    activityDate: '2025-06-21',
+    date: '2025-06-21',
     description: 'Trees planted in the north zone',
-    imageCount: 1,
-    imageURL: '',
-    isDoNotUse: false,
-    isPublished: true,
-    isVerified: true,
-    activityType: 'Planting',
-  },
-  {
-    activityDate: '2025-06-19',
-    description: 'Trees planted in the north zone',
-    imageCount: 1,
-    imageURL: '',
+    id: 8,
     isDoNotUse: false,
     isPublished: true,
     isVerified: true,
-    activityType: 'Planting',
+    media: [],
+    type: 'Planting',
   },
   {
-    activityDate: '2025-06-07',
+    date: '2025-06-19',
     description: 'Trees planted in the north zone',
-    imageCount: 1,
-    imageURL: '',
+    id: 9,
+    isDoNotUse: false,
+    isPublished: true,
+    isVerified: true,
+    media: [],
+    type: 'Planting',
+  },
+  {
+    date: '2025-06-07',
+    description: 'Trees planted in the north zone',
+    id: 10,
     isDoNotUse: false,
     isVerified: false,
-    activityType: 'Planting',
+    media: [],
+    type: 'Planting',
   },
 ];
 
 const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
   const theme = useTheme();
+
+  const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
 
   return (
     <Grid
@@ -141,13 +144,17 @@ const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
       sx={{ borderBottom: '1px solid', borderColor: theme.palette.TwClrBrdrTertiary }}
     >
       <Grid item paddingRight={theme.spacing(2)} xs='auto'>
-        {/* TODO: add image alt text & src */}
-        <img alt='' src='https://placehold.co/100' />
+        {/* TODO: add image src & alt text */}
+        {coverPhoto ? (
+          <img alt={coverPhoto.caption} src='https://placehold.co/100' />
+        ) : (
+          <img alt='' src='https://placehold.co/100' />
+        )}
       </Grid>
 
       <Grid item xs={true}>
         <Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'>
-          {activity.activityType}
+          {activity.type}
         </Typography>
 
         <Box marginY={theme.spacing(1)}>
@@ -215,7 +222,7 @@ export default function ActivityLogView(): JSX.Element {
     const groups: Record<string, MockActivity[]> = {};
 
     MOCK_ACTIVITIES.forEach((activity) => {
-      const date = new Date(activity.activityDate);
+      const date = new Date(activity.date);
       const year = date.getFullYear();
       const quarter = Math.ceil((date.getMonth() + 1) / 3);
       const quarterKey = `Q${quarter} ${year}`;
@@ -239,7 +246,7 @@ export default function ActivityLogView(): JSX.Element {
 
     // sort activities within each quarter by date (most recent first)
     sortedQuarters.forEach((quarterKey) => {
-      groups[quarterKey].sort((a, b) => new Date(b.activityDate).getTime() - new Date(a.activityDate).getTime());
+      groups[quarterKey].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     });
 
     return sortedQuarters.map((quarterKey) => ({
