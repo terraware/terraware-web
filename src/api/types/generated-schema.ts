@@ -6388,6 +6388,7 @@ export interface components {
             };
             landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
             methodologyNumber?: string;
+            metricProgress: components["schemas"]["MetricProgressPayload"][];
             minProjectArea?: number;
             /** Format: int32 */
             numNativeSpecies?: number;
@@ -7360,6 +7361,12 @@ export interface components {
              * @description ID of the existing species that the Other species' recorded plants should be merged into.
              */
             speciesId: number;
+        };
+        MetricProgressPayload: {
+            /** @enum {string} */
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            /** Format: int32 */
+            progress: number;
         };
         ModuleDeliverablePayload: {
             /** @enum {string} */
@@ -8759,6 +8766,7 @@ export interface components {
             landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
             maxCarbonAccumulation?: number;
             methodologyNumber?: string;
+            metricProgress: components["schemas"]["MetricProgressPayload"][];
             minCarbonAccumulation?: number;
             minProjectArea?: number;
             /** Format: int32 */
@@ -8888,6 +8896,7 @@ export interface components {
             /** @enum {string} */
             frequency: "Quarterly" | "Annual";
             highlights?: string;
+            photos: components["schemas"]["ReportPhotoPayload"][];
             /** Format: int64 */
             projectId: number;
             projectMetrics: components["schemas"]["PublishedReportMetricPayload"][];

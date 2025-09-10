@@ -9,6 +9,7 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
+import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
 import { PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorReport';
@@ -230,6 +231,20 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
             }}
           >
             <AdditionalCommentsBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
+          </Card>
+        </Box>
+      )}
+      {selectedProjectId && selectedReport?.photos && (
+        <Box width='100%'>
+          <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+            {strings.PHOTOS}
+          </Typography>
+          <Card
+            style={{
+              borderRadius: '8px',
+            }}
+          >
+            <PhotosBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
           </Card>
         </Box>
       )}

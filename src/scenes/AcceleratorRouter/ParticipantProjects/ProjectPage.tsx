@@ -132,6 +132,7 @@ const ProjectPage = () => {
       carbonCertifications: projectData.participantProject?.carbonCertifications || [],
       landUseModelTypes: projectData.participantProject?.landUseModelTypes || [],
       landUseModelHectares: projectData.participantProject?.landUseModelHectares || {},
+      metricProgress: projectData.participantProject?.metricProgress ?? [],
       sdgList: projectData.participantProject?.sdgList || [],
     };
     const request = dispatch(requestPublishFunderProject(funderProjectDetails));

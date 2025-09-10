@@ -12,6 +12,7 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
+import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -225,6 +226,7 @@ const AcceleratorReportView = () => {
             <ChallengesMitigationBox report={report} projectId={projectId} reload={reload} />
             <FinancialSummariesBox report={report} projectId={projectId} reload={reload} />
             <AdditionalCommentsBox report={report} projectId={projectId} reload={reload} />
+            <PhotosBox report={report} projectId={projectId} reload={reload} />
           </Card>
         </Box>
       </Page>

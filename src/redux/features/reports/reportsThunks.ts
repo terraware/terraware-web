@@ -5,8 +5,10 @@ import { RootState } from 'src/redux/rootReducer';
 import AcceleratorReportService, { UpdateAcceleratorReportParams } from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
 import {
+  AcceleratorReportPhoto,
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
+  NewAcceleratorReportPhoto,
   PublishAcceleratorReportRequest,
   RefreshAcceleratorReportSystemMetricsRequest,
   ReviewAcceleratorReportMetricRequest,
@@ -287,5 +289,64 @@ export const requestPublishAcceleratorReport = createAsyncThunk(
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestDeleteManyAcceleratorReportPhotos = createAsyncThunk(
+  'deleteManyAcceleratorReportPhotos',
+  async (request: { projectId: string; reportId: string; fileIds: string[] }, { rejectWithValue }) => {
+    const promises = request.fileIds.map((fileId) => {
+      return AcceleratorReportService.deleteAcceleratorReportPhoto(request.projectId, request.reportId, fileId);
+    });
+
+    const responses = await Promise.all(promises);
+
+    if (!responses.every((response) => response.requestSucceeded)) {
+      return rejectWithValue(strings.GENERIC_ERROR);
+    } else {
+      return { status: 'ok' };
+    }
+  }
+);
+
+export const requestUpdateManyAcceleratorReportPhotos = createAsyncThunk(
+  'updateManyAcceleratorReportPhotos',
+  async (request: { projectId: string; reportId: string; photos: AcceleratorReportPhoto[] }, { rejectWithValue }) => {
+    const promises = request.photos.map(({ fileId, caption }) => {
+      return AcceleratorReportService.updateAcceleratorReportPhoto(
+        request.projectId,
+        request.reportId,
+        fileId.toString(),
+        caption
+      );
+    });
+
+    const responses = await Promise.all(promises);
+
+    if (!responses.every((response) => response.requestSucceeded)) {
+      return rejectWithValue(strings.GENERIC_ERROR);
+    } else {
+      return { status: 'ok' };
+    }
+  }
+);
+
+export const requestUploadManyAcceleratorReportPhotos = createAsyncThunk(
+  'uploadManyAcceleratorReportPhotos',
+  async (
+    request: { projectId: string; reportId: string; photos: NewAcceleratorReportPhoto[] },
+    { rejectWithValue }
+  ) => {
+    const promises = request.photos.map(({ file, caption }) => {
+      return AcceleratorReportService.uploadAcceleratorReportPhoto(request.projectId, request.reportId, caption, file);
+    });
+
+    const responses = await Promise.all(promises);
+
+    if (!responses.every((response) => response.requestSucceeded)) {
+      return rejectWithValue(strings.GENERIC_ERROR);
+    } else {
+      return { fileIds: responses.map((response) => response.fileId), status: 'ok' };
+    }
   }
 );
