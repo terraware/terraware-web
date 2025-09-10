@@ -265,7 +265,7 @@ export default function ActivityLogView(): JSX.Element {
       const date = new Date(activity.date);
       const year = date.getFullYear();
       const quarter = Math.ceil((date.getMonth() + 1) / 3);
-      const quarterKey = `Q${quarter} ${year}`;
+      const quarterKey = strings.formatString(strings.QUARTER_YEAR, quarter, year)?.toString() || '';
 
       if (!groups[quarterKey]) {
         groups[quarterKey] = [];
@@ -293,7 +293,7 @@ export default function ActivityLogView(): JSX.Element {
       quarter: quarterKey,
       activities: groups[quarterKey],
     }));
-  }, []);
+  }, [strings]);
 
   const PageHeaderLeftComponent = useMemo(
     () => (

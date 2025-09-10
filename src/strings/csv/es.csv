@@ -1435,6 +1435,7 @@ Q4_TARGET,Objetivo Q4,11f9f81f
 QUADRAT,Cuadrante,ff115cb6
 QUANTITY,Cantidad,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La cantidad debe ser mayor o igual a 0,5a55f459
+QUARTER_YEAR,T{0} {1},637ce0a5
 QUESTION,Pregunta,84cf257d
 RARE,Raro/a,c114e991
 RATIONALE,Fundamento,4e68d88e
