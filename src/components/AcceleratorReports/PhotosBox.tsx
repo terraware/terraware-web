@@ -141,12 +141,12 @@ const PhotosBox = (props: ReportBoxProps) => {
   const [dispatched, setDispatched] = useState(false);
   const [deletePhotosRequestId, setDeletePhotosRequestId] = useState<string>('');
   const [updatePhotosRequestId, setUpdatePhotosRequestId] = useState<string>('');
-  const [uploadPhotosReqeustId, setUploadPhotosReqeustId] = useState<string>('');
+  const [uploadPhotosRequestId, setUploadPhotosRequestId] = useState<string>('');
 
   const snackbar = useSnackbar();
   const deletePhotosResult = useAppSelector(selectDeleteManyAcceleratorReportPhotos(deletePhotosRequestId));
   const updatePhotosResult = useAppSelector(selectUpdateManyAcceleratorReportPhotos(updatePhotosRequestId));
-  const uploadPhotosResult = useAppSelector(selectUploadManyAcceleratorReportPhotos(uploadPhotosReqeustId));
+  const uploadPhotosResult = useAppSelector(selectUploadManyAcceleratorReportPhotos(uploadPhotosRequestId));
 
   useEffect(() => {
     if (!editing) {
@@ -241,7 +241,7 @@ const PhotosBox = (props: ReportBoxProps) => {
             photos: newPhotos,
           })
         );
-        setUploadPhotosReqeustId(uploadDispatch.requestId);
+        setUploadPhotosRequestId(uploadDispatch.requestId);
         nextDispatched = true;
       }
 
