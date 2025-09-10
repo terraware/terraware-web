@@ -5,6 +5,7 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { isValid } from 'date-fns';
 
 import DatePicker from 'src/components/common/DatePicker';
+import { useLocalization } from 'src/providers/hooks';
 import { FieldNodePayload } from 'src/types/Search';
 
 interface DateRangeProps {
@@ -16,6 +17,8 @@ interface DateRangeProps {
 
 export default function DateRange({ field, onChange, onDelete, values }: DateRangeProps): JSX.Element {
   const theme = useTheme();
+  const { strings } = useLocalization();
+
   const [startDate, setStartDate] = useState(values[0]);
   const [endDate, setEndDate] = useState(values[1]);
 
@@ -57,7 +60,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
     <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' sx={{ marginBottom: theme.spacing(3) }}>
       <Box alignItems='center' display='flex' flexDirection='row'>
         <DatePicker
-          aria-label='Start date'
+          aria-label={strings.START_DATE}
           id='startDate'
           label=''
           onChange={getOnChangeDate('startDate')}
@@ -68,7 +71,13 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
       </Box>
 
       <Box alignItems='center' display='flex' flexDirection='row'>
-        <DatePicker aria-label='End date' id='endDate' label='' onChange={getOnChangeDate('endDate')} value={endDate} />
+        <DatePicker
+          aria-label={strings.END_DATE}
+          id='endDate'
+          label=''
+          onChange={getOnChangeDate('endDate')}
+          value={endDate}
+        />
       </Box>
     </Box>
   );
