@@ -70,11 +70,11 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const [photosDispatched, setPhotosDispatched] = useState(false);
   const [deletePhotosRequestId, setDeletePhotosRequestId] = useState<string>('');
   const [updatePhotosRequestId, setUpdatePhotosRequestId] = useState<string>('');
-  const [uploadPhotosReqeustId, setUploadPhotosReqeustId] = useState<string>('');
+  const [uploadPhotosRequestId, setUploadPhotosRequestId] = useState<string>('');
 
   const deletePhotosResult = useAppSelector(selectDeleteManyAcceleratorReportPhotos(deletePhotosRequestId));
   const updatePhotosResult = useAppSelector(selectUpdateManyAcceleratorReportPhotos(updatePhotosRequestId));
-  const uploadPhotosResult = useAppSelector(selectUploadManyAcceleratorReportPhotos(uploadPhotosReqeustId));
+  const uploadPhotosResult = useAppSelector(selectUploadManyAcceleratorReportPhotos(uploadPhotosRequestId));
 
   const goToReport = useCallback(() => {
     goToAcceleratorReport(Number(reportId), Number(projectId));
@@ -114,7 +114,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
           photos: photos.toAdd,
         })
       );
-      setUploadPhotosReqeustId(uploadDispatch.requestId);
+      setUploadPhotosRequestId(uploadDispatch.requestId);
       nextDispatched = true;
     }
 
