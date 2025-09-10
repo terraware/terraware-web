@@ -344,7 +344,7 @@ const uploadAcceleratorReportPhoto = async (
 
   return {
     ...response,
-    fileId: response?.data?.id ?? null,
+    fileId: response?.data?.fileId ?? null,
   };
 };
 

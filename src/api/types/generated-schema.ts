@@ -10355,9 +10355,6 @@ export interface components {
              */
             variableManifestId: number;
         };
-        UploadAcceleratorReportPhotoRequestPayload: {
-            caption?: string;
-        };
         UploadAcceleratorReportPhotoResponsePayload: {
             /** Format: int64 */
             fileId: number;
@@ -12967,9 +12964,9 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
+                    caption?: string;
                     /** Format: binary */
                     file: string;
-                    payload: components["schemas"]["UploadAcceleratorReportPhotoRequestPayload"];
                 };
             };
         };
