@@ -169,7 +169,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           )}
         </>
       )}
-      {selectedProjectId && selectedReport?.achievements && (
+      {selectedProjectId && selectedReport?.achievements?.length && (
         <Box width='100%'>
           <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
             {strings.ACHIEVEMENTS}
@@ -188,7 +188,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           </Card>
         </Box>
       )}
-      {selectedProjectId && selectedReport?.challenges && (
+      {selectedProjectId && selectedReport?.challenges?.length && (
         <Box width='100%'>
           <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
             {strings.CHALLENGES_AND_MITIGATION_PLAN}
@@ -234,7 +234,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           </Card>
         </Box>
       )}
-      {selectedProjectId && selectedReport?.photos && (
+      {selectedProjectId && selectedReport?.photos?.length && (
         <Box width='100%'>
           <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
             {strings.PHOTOS}

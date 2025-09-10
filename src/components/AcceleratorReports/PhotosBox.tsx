@@ -47,7 +47,7 @@ const ExistingPhoto = ({ imageUrl, includeBorder, caption, editing, setCaption, 
 
   if (editing) {
     return (
-      <Box display='flex' width='100%' margin={theme.spacing(1)}>
+      <Box display='flex' width='100%' padding={theme.spacing(1)}>
         <Box marginRight={isMobile ? theme.spacing(2) : theme.spacing(3)} marginTop={theme.spacing(1)}>
           <PhotoPreview imgUrl={imageUrl} includeTrashIcon onTrashClick={onDelete} />
         </Box>
@@ -65,7 +65,7 @@ const ExistingPhoto = ({ imageUrl, includeBorder, caption, editing, setCaption, 
           flexDirection: 'column',
           alignItems: 'center',
           width: '100%',
-          margin: theme.spacing(1),
+          padding: theme.spacing(1),
         }}
         borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
       >
