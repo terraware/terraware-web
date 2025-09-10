@@ -1,19 +1,15 @@
 import { components } from 'src/api/types/generated-schema';
 
-export type Activity = {
+export type Activity = Omit<
+  components['schemas']['AdminActivityPayload'],
+  'createdBy' | 'createdTime' | 'isVerified' | 'modifiedBy' | 'modifiedTime'
+> & {
   createdBy?: number;
   createdTime?: string;
-  date: string;
-  description?: string;
-  id: number;
-  isHighlight: boolean;
   isVerified?: boolean;
   media: components['schemas']['ActivityMediaFilePayload'][];
   modifiedBy?: number;
   modifiedTime?: string;
-  type: components['schemas']['ActivityPayload']['type'];
-  verifiedBy?: number;
-  verifiedTime?: string;
 };
 
 export type ActivityPayload = components['schemas']['ActivityPayload'];
