@@ -2,8 +2,8 @@ import React from 'react';
 
 import { useTheme } from '@mui/material';
 
+import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
 import Card from 'src/components/common/Card';
-import ActivitiesListView from 'src/scenes/ActivityLogRouter/ActivitiesListView';
 
 type ProjectActivityLogViewProps = {
   projectId: number;

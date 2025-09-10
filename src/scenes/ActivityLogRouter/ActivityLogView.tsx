@@ -3,13 +3,12 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-
-import ActivitiesListView from './ActivitiesListView';
 
 export default function ActivityLogView(): JSX.Element {
   const { strings } = useLocalization();
