@@ -4,12 +4,12 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-type ActivityLogMapSplitViewProps = {
+type MapSplitViewProps = {
   children: React.ReactNode;
   topComponent?: React.ReactNode;
 };
 
-export default function ActivityLogMapSplitView({ children, topComponent }: ActivityLogMapSplitViewProps): JSX.Element {
+export default function MapSplitView({ children, topComponent }: MapSplitViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 

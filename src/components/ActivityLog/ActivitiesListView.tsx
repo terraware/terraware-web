@@ -7,9 +7,9 @@ import { Activity, MOCK_ACTIVITIES } from 'src/types/Activity';
 import { SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import ActivityLogMapSplitView from './ActivityLogMapSplitView';
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
+import MapSplitView from './MapSplitView';
 
 const ActivityLogItem = ({ activity }: { activity: Activity }) => {
   const theme = useTheme();
@@ -142,7 +142,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   }, [strings]);
 
   return (
-    <ActivityLogMapSplitView
+    <MapSplitView
       topComponent={
         <DateRange
           field='dateRange'
@@ -169,7 +169,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
           ))}
         </Fragment>
       ))}
-    </ActivityLogMapSplitView>
+    </MapSplitView>
   );
 };
 
