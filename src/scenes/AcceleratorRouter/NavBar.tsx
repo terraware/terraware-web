@@ -9,7 +9,6 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUser } from 'src/providers';
@@ -41,7 +40,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
 
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
   const isAllowedViewFundingEntities = isAllowed('READ_FUNDING_ENTITIES');
-  const isMatrixViewEnabled = isEnabled('Matrix View');
 
   const closeAndNavigateTo = (path: string) => {
     closeNavBar();
@@ -82,15 +80,13 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         selected={!!isOverviewRoute || !!isParticipantsRoute || !!isScoringRoute || !!isVotingRoute}
       />
 
-      {isMatrixViewEnabled && (
-        <NavItem
-          icon='iconModule'
-          id='matrix'
-          label={strings.MATRIX_VIEW}
-          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MATRIX_VIEW)}
-          selected={!!isMatrixViewRoute}
-        />
-      )}
+      <NavItem
+        icon='iconModule'
+        id='matrix'
+        label={strings.MATRIX_VIEW}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MATRIX_VIEW)}
+        selected={!!isMatrixViewRoute}
+      />
 
       <NavSection />
 
