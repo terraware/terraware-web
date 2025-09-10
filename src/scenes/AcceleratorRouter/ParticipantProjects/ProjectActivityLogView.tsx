@@ -11,7 +11,6 @@ type ProjectActivityLogViewProps = {
 
 const ProjectActivityLogView = ({ projectId }: ProjectActivityLogViewProps) => {
   const theme = useTheme();
-  console.log('ProjectActivityLogView for projectId:', projectId);
 
   return (
     <Card
