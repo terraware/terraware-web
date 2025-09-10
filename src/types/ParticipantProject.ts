@@ -24,6 +24,8 @@ export type ParticipantProjectSearchResult = {
 
 export type LandUseModelType = ParticipantProject['landUseModelTypes'][0];
 
+export type MetricProgress = ParticipantProject['metricProgress'][0];
+
 // Types are in the preferred sorting order:
 export const LAND_USE_MODEL_TYPES: LandUseModelType[] = [
   'Native Forest',

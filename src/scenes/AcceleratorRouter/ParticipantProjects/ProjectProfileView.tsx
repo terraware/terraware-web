@@ -355,51 +355,25 @@ const ProjectProfileView = ({
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
       </Grid>
-
-      {lastSubmittedReport && (
+      {projectDetails?.metricProgress.length && (
         <>
           <Grid container>
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metrics={lastSubmittedReport.systemMetrics}
+              metricProgress={projectDetails.metricProgress}
               metricName={'Hectares Planted'}
               units={'ha'}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metrics={lastSubmittedReport.systemMetrics}
+              metricProgress={projectDetails.metricProgress}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
               formatter={reportMetricCardFormatter}
             />
             <ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metrics={lastSubmittedReport.systemMetrics}
-              metricName={'Species Planted'}
-              units={strings.SPECIES}
-            />
-          </Grid>
-        </>
-      )}
-      {lastPublishedReport && (
-        <>
-          <Grid container>
-            <ReportMetricCard
-              label={strings.TOTAL_PLANTED}
-              publishedMetrics={lastPublishedReport.systemMetrics}
-              metricName={'Hectares Planted'}
-              units={'ha'}
-            />
-            <ReportMetricCard
-              label={strings.TOTAL_PLANTED}
-              publishedMetrics={lastPublishedReport.systemMetrics}
-              metricName={'Trees Planted'}
-              units={strings.PLANTS}
-              formatter={reportMetricCardFormatter}
-            />
-            <ReportMetricCard
-              label={strings.TOTAL_PLANTED}
-              publishedMetrics={lastPublishedReport.systemMetrics}
+              metricProgress={projectDetails.metricProgress}
               metricName={'Species Planted'}
               units={strings.SPECIES}
             />
