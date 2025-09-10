@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
-import { MockActivityStatus } from './ActivityLogView';
+import { MockActivityStatus } from 'src/types/Activity';
 
 type ActivityStatusBadgeProps = {
   status: MockActivityStatus;

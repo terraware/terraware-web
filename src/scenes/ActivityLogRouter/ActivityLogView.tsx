@@ -3,12 +3,12 @@ import React, { Fragment, useCallback, useMemo, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
-import { components } from 'src/api/types/generated-schema';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { Activity } from 'src/types/Activity';
 import { SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -16,128 +16,164 @@ import ActivityLogMapSplitView from './ActivityLogMapSplitView';
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 
-type MockActivity = {
-  date: string;
-  description?: string;
-  id: number;
-  isChanged?: boolean; // TODO: update this property
-  isDoNotUse?: boolean; // TODO: update this property
-  isHighlight?: boolean;
-  isPublished?: boolean; // TODO: update this property
-  isVerified: boolean;
-  media: components['schemas']['ActivityMediaFilePayload'][];
-  type: string;
-};
-
-export type MockActivityStatus = 'Changed' | 'Do Not Use' | 'Not Verified' | 'Published' | 'Verified';
-
-const MOCK_ACTIVITIES: MockActivity[] = [
+const MOCK_ACTIVITIES: Activity[] = [
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-07-22',
     description:
       'Trees planted in the north zone over a 2 week period that will need to be continually monitored over the next month or so...',
     id: 1,
-    isDoNotUse: false,
+    isHighlight: false,
     isVerified: false,
     media: [],
-    type: 'Nursery Work',
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
+    type: 'Nursery',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-07-22',
     description:
       'Trees planted in the north zone over a 2 week period that will need to be continually monitored over the next month or so... ',
     id: 2,
-    isDoNotUse: false,
-    isPublished: true,
+    isHighlight: false,
     isVerified: true,
     media: [],
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
     type: 'Planting',
+    verifiedBy: 1,
+    verifiedTime: '2025-07-22T10:00:00Z',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-07-21',
     description: 'Trees planted in the north zone',
     id: 3,
-    isDoNotUse: false,
-    isPublished: true,
+    isHighlight: false,
     isVerified: true,
     media: [],
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
     type: 'Site Visit',
+    verifiedBy: 1,
+    verifiedTime: '2025-07-22T10:00:00Z',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-07-20',
     description: 'Trees planted in the north zone',
     id: 4,
-    isDoNotUse: false,
-    isPublished: true,
+    isHighlight: false,
     isVerified: true,
     media: [],
-    type: 'Community Impact',
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
+    type: 'Planting',
+    verifiedBy: 1,
+    verifiedTime: '2025-07-22T10:00:00Z',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-07-17',
     description: 'Trees planted in the north zone',
     id: 5,
-    isChanged: true,
-    isDoNotUse: false,
-    isPublished: true,
+    isHighlight: false,
     isVerified: true,
     media: [],
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
     type: 'Planting',
+    verifiedBy: 1,
+    verifiedTime: '2025-07-22T10:00:00Z',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-07-06',
     description: 'Trees planted in the north zone',
     id: 6,
-    isDoNotUse: true,
+    isHighlight: false,
     isVerified: false,
     media: [],
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
     type: 'Site Visit',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-06-24',
     description: 'Trees planted in the north zone',
     id: 7,
-    isDoNotUse: false,
+    isHighlight: false,
     isVerified: true,
     media: [],
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
     type: 'Seed Collection',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-06-21',
     description: 'Trees planted in the north zone',
     id: 8,
-    isDoNotUse: false,
-    isPublished: true,
+    isHighlight: false,
     isVerified: true,
     media: [],
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
     type: 'Planting',
+    verifiedBy: 1,
+    verifiedTime: '2025-07-22T10:00:00Z',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-06-19',
     description: 'Trees planted in the north zone',
     id: 9,
-    isDoNotUse: false,
-    isPublished: true,
+    isHighlight: false,
     isVerified: true,
     media: [],
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
     type: 'Planting',
+    verifiedBy: 1,
+    verifiedTime: '2025-07-22T10:00:00Z',
   },
   {
+    createdBy: 1,
+    createdTime: '2025-07-22T10:00:00Z',
     date: '2025-06-07',
     description: 'Trees planted in the north zone',
     id: 10,
-    isDoNotUse: false,
+    isHighlight: false,
     isVerified: false,
     media: [],
+    modifiedBy: 1,
+    modifiedTime: '2025-07-22T10:00:00Z',
     type: 'Planting',
   },
 ];
 
-const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
+const ActivityLogItem = ({ activity }: { activity: Activity }) => {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
   const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
+
+  const isChanged = useMemo(() => {
+    return (
+      activity.modifiedTime && activity.createdTime && new Date(activity.modifiedTime) > new Date(activity.createdTime)
+    );
+  }, [activity.modifiedTime, activity.createdTime]);
 
   return (
     <Grid
@@ -160,10 +196,10 @@ const ActivityLogItem = ({ activity }: { activity: MockActivity }) => {
         </Typography>
 
         <Box marginY={theme.spacing(1)}>
-          {activity.isChanged && <ActivityStatusBadge status='Changed' />}
+          {isChanged && <ActivityStatusBadge status='Changed' />}
           <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
-          {activity.isDoNotUse && <ActivityStatusBadge status='Do Not Use' />}
-          {activity.isPublished && <ActivityStatusBadge status='Published' />}
+          {/* {activity.isDoNotUse && <ActivityStatusBadge status='Do Not Use' />} */}
+          {/* {activity.isPublished && <ActivityStatusBadge status='Published' />} */}
         </Box>
 
         <Typography>{activity.description}</Typography>
@@ -223,7 +259,7 @@ export default function ActivityLogView(): JSX.Element {
 
   // group activities by quarter and year
   const groupedActivities = useMemo(() => {
-    const groups: Record<string, MockActivity[]> = {};
+    const groups: Record<string, Activity[]> = {};
 
     MOCK_ACTIVITIES.forEach((activity) => {
       const date = new Date(activity.date);
