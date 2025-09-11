@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/200</span>
+                <span class='fraction'>0/198</span>
             </div>
         
             
@@ -720,33 +720,7 @@
 <a name='L655'></a><a href='#L655'>655</a>
 <a name='L656'></a><a href='#L656'>656</a>
 <a name='L657'></a><a href='#L657'>657</a>
-<a name='L658'></a><a href='#L658'>658</a>
-<a name='L659'></a><a href='#L659'>659</a>
-<a name='L660'></a><a href='#L660'>660</a>
-<a name='L661'></a><a href='#L661'>661</a>
-<a name='L662'></a><a href='#L662'>662</a>
-<a name='L663'></a><a href='#L663'>663</a>
-<a name='L664'></a><a href='#L664'>664</a>
-<a name='L665'></a><a href='#L665'>665</a>
-<a name='L666'></a><a href='#L666'>666</a>
-<a name='L667'></a><a href='#L667'>667</a>
-<a name='L668'></a><a href='#L668'>668</a>
-<a name='L669'></a><a href='#L669'>669</a>
-<a name='L670'></a><a href='#L670'>670</a>
-<a name='L671'></a><a href='#L671'>671</a>
-<a name='L672'></a><a href='#L672'>672</a>
-<a name='L673'></a><a href='#L673'>673</a>
-<a name='L674'></a><a href='#L674'>674</a>
-<a name='L675'></a><a href='#L675'>675</a>
-<a name='L676'></a><a href='#L676'>676</a>
-<a name='L677'></a><a href='#L677'>677</a>
-<a name='L678'></a><a href='#L678'>678</a>
-<a name='L679'></a><a href='#L679'>679</a>
-<a name='L680'></a><a href='#L680'>680</a>
-<a name='L681'></a><a href='#L681'>681</a>
-<a name='L682'></a><a href='#L682'>682</a>
-<a name='L683'></a><a href='#L683'>683</a>
-<a name='L684'></a><a href='#L684'>684</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L658'></a><a href='#L658'>658</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -959,32 +933,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1786,51 +1734,25 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
           backgroundColor={theme.palette.TwClrBaseGray050}
         /&gt;
       &lt;/Grid&gt;
-&nbsp;
-      {lastSubmittedReport &amp;&amp; (
+      {projectDetails?.metricProgress.length &amp;&amp; (
         &lt;&gt;
           &lt;Grid container&gt;
             &lt;ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metrics={lastSubmittedReport.systemMetrics}
+              metricProgress={projectDetails.metricProgress}
               metricName={'Hectares Planted'}
               units={'ha'}
             /&gt;
             &lt;ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metrics={lastSubmittedReport.systemMetrics}
+              metricProgress={projectDetails.metricProgress}
               metricName={'Trees Planted'}
               units={strings.PLANTS}
               formatter={reportMetricCardFormatter}
             /&gt;
             &lt;ReportMetricCard
               label={strings.TOTAL_PLANTED}
-              metrics={lastSubmittedReport.systemMetrics}
-              metricName={'Species Planted'}
-              units={strings.SPECIES}
-            /&gt;
-          &lt;/Grid&gt;
-        &lt;/&gt;
-      )}
-      {lastPublishedReport &amp;&amp; (
-        &lt;&gt;
-          &lt;Grid container&gt;
-            &lt;ReportMetricCard
-              label={strings.TOTAL_PLANTED}
-              publishedMetrics={lastPublishedReport.systemMetrics}
-              metricName={'Hectares Planted'}
-              units={'ha'}
-            /&gt;
-            &lt;ReportMetricCard
-              label={strings.TOTAL_PLANTED}
-              publishedMetrics={lastPublishedReport.systemMetrics}
-              metricName={'Trees Planted'}
-              units={strings.PLANTS}
-              formatter={reportMetricCardFormatter}
-            /&gt;
-            &lt;ReportMetricCard
-              label={strings.TOTAL_PLANTED}
-              publishedMetrics={lastPublishedReport.systemMetrics}
+              metricProgress={projectDetails.metricProgress}
               metricName={'Species Planted'}
               units={strings.SPECIES}
             /&gt;
@@ -2119,7 +2041,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-11T17:26:35.897Z
+                at 2025-09-11T19:06:13.503Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
