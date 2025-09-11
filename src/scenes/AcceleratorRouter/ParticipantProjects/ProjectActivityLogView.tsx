@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@mui/material';
 
+import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
 import Card from 'src/components/common/Card';
 
 type ProjectActivityLogViewProps = {
@@ -15,10 +16,11 @@ const ProjectActivityLogView = ({ projectId }: ProjectActivityLogViewProps) => {
     <Card
       style={{
         borderRadius: theme.spacing(1),
-        padding: 0,
+        padding: theme.spacing(3),
+        width: '100%',
       }}
     >
-      <div>Content for Project ID: {projectId}</div>
+      <ActivitiesListView projectId={projectId} />
     </Card>
   );
 };
