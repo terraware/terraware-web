@@ -12,6 +12,7 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
+import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -431,6 +432,14 @@ const ReportView = () => {
                 canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
               />
               <AdditionalCommentsBox
+                report={selectedReport}
+                projectId={projectId}
+                reload={reload}
+                isConsoleView={true}
+                onEditChange={onEditChange}
+                canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
+              />
+              <PhotosBox
                 report={selectedReport}
                 projectId={projectId}
                 reload={reload}

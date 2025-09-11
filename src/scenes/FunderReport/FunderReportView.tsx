@@ -9,6 +9,7 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
+import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
 import { PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorReport';
@@ -168,7 +169,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           )}
         </>
       )}
-      {selectedProjectId && selectedReport?.achievements && (
+      {selectedProjectId && selectedReport?.achievements?.length > 0 && (
         <Box width='100%'>
           <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
             {strings.ACHIEVEMENTS}
@@ -187,7 +188,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           </Card>
         </Box>
       )}
-      {selectedProjectId && selectedReport?.challenges && (
+      {selectedProjectId && selectedReport?.challenges?.length > 0 && (
         <Box width='100%'>
           <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
             {strings.CHALLENGES_AND_MITIGATION_PLAN}
@@ -230,6 +231,20 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
             }}
           >
             <AdditionalCommentsBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
+          </Card>
+        </Box>
+      )}
+      {selectedProjectId && selectedReport?.photos?.length > 0 && (
+        <Box width='100%'>
+          <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+            {strings.PHOTOS}
+          </Typography>
+          <Card
+            style={{
+              borderRadius: '8px',
+            }}
+          >
+            <PhotosBox report={selectedReport} projectId={selectedProjectId.toString()} funderReportView />
           </Card>
         </Box>
       )}

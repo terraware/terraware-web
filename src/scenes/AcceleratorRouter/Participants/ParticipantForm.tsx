@@ -178,7 +178,12 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const addOrgProjectsSection = useCallback(() => {
     setOrgProjectsSections((prev) => [
       ...prev,
-      { id: sectionSeq + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] }, isNew: true },
+      {
+        id: sectionSeq + 1,
+        projectId: -1,
+        projectDetails: { projectId: -1, landUseModelTypes: [], metricProgress: [] },
+        isNew: true,
+      },
     ]);
     setSectionSeq((prev) => prev + 1);
   }, [sectionSeq]);
@@ -191,7 +196,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
         id: index + 1,
         org: acceleratorOrgs.find((org) => org.projects.some((proj) => proj.id === projectId)),
         projectId,
-        projectDetails: { projectId, landUseModelTypes: [] },
+        projectDetails: { projectId, landUseModelTypes: [], metricProgress: [] },
       });
     });
 
@@ -204,7 +209,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
         {
           id: 1,
           projectId: -1,
-          projectDetails: { projectId: -1, landUseModelTypes: [] },
+          projectDetails: { projectId: -1, landUseModelTypes: [], metricProgress: [] },
           isNew: true,
         },
       ]);
@@ -230,7 +235,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
         return prev;
       }
 
-      let newDetails: ParticipantProjectType = { landUseModelTypes: [], projectId };
+      let newDetails: ParticipantProjectType = { landUseModelTypes: [], metricProgress: [], projectId };
 
       if (field && value !== undefined) {
         newDetails = { ...sectionToUpdate.projectDetails, [field]: value };

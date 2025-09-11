@@ -49,6 +49,7 @@ describe('ParticipantProjectService', () => {
       investmentThesis: undefined,
       landUseModelTypes: ['Monoculture', 'Other Timber'],
       maxCarbonAccumulation: undefined,
+      metricProgress: [],
       minCarbonAccumulation: undefined,
       numCommunities: undefined,
       numNativeSpecies: undefined,

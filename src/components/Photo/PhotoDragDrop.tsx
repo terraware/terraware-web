@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
@@ -37,39 +37,48 @@ const PhotoDragDrop = (props: PhotoDragDropProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState<boolean>(false);
 
-  const addFiles = (fileList: FileList) => {
-    const newFiles: File[] = [];
+  const addFiles = useCallback(
+    (fileList: FileList) => {
+      const newFiles: File[] = [];
 
-    for (let i = 0; i < fileList.length; i++) {
-      const fileItem = fileList.item(i);
-      if (fileItem) {
-        newFiles.push(fileItem);
+      for (let i = 0; i < fileList.length; i++) {
+        const fileItem = fileList.item(i);
+        if (fileItem) {
+          newFiles.push(fileItem);
+        }
       }
-    }
 
-    if (newFiles.length) {
-      setFiles([...files, ...newFiles].slice(0, maxPhotos));
-    }
-  };
+      if (newFiles.length) {
+        setFiles([...files, ...newFiles].slice(0, maxPhotos));
+      }
+    },
+    [files, maxPhotos, setFiles]
+  );
 
-  const dropHandler = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    addFiles(event.dataTransfer.files);
-  };
+  const dropHandler = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      addFiles(event.dataTransfer.files);
+    },
+    [addFiles]
+  );
 
-  const onFileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (editing) {
-      setEditing(false);
-    }
-    if (event.currentTarget.files) {
-      addFiles(event.currentTarget.files);
-    }
-  };
+  const onFileChosen = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (editing) {
+        setEditing(false);
+      }
+      if (event.currentTarget.files) {
+        addFiles(event.currentTarget.files);
+      }
+    },
+    [addFiles, editing]
+  );
 
-  const onChooseFileHandler = () => {
+  const onChooseFileHandler = useCallback(() => {
     inputRef.current?.click();
     document.querySelectorAll<HTMLElement>('.photo-button').forEach((el) => el.blur());
-  };
+  }, []);
 
   return (
     <Box

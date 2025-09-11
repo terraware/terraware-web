@@ -10,23 +10,42 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox, { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
+import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectUpdateAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestUpdateAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
+import {
+  selectDeleteManyAcceleratorReportPhotos,
+  selectUpdateAcceleratorReport,
+  selectUpdateManyAcceleratorReportPhotos,
+  selectUploadManyAcceleratorReportPhotos,
+} from 'src/redux/features/reports/reportsSelectors';
+import {
+  requestDeleteManyAcceleratorReportPhotos,
+  requestUpdateAcceleratorReport,
+  requestUpdateManyAcceleratorReportPhotos,
+  requestUploadManyAcceleratorReportPhotos,
+} from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   AcceleratorReport,
+  AcceleratorReportPhoto,
   MetricType,
+  NewAcceleratorReportPhoto,
   ReportProjectMetric,
   ReportStandardMetric,
   ReportSystemMetric,
 } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+
+type AcceleratorReportPhotoActions = {
+  toAdd: NewAcceleratorReportPhoto[];
+  toDelete: AcceleratorReportPhoto[];
+  toUpdate: AcceleratorReportPhoto[];
+};
 
 type AcceleratorReportEditFormProps = {
   report: AcceleratorReport;
@@ -43,13 +62,65 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const projectId = String(pathParams.projectId);
 
   const [record, , onChange, onChangeCallback] = useForm<AcceleratorReport>(report);
+  const [photos, setPhotos] = useState<AcceleratorReportPhotoActions>({ toAdd: [], toDelete: [], toUpdate: [] });
   const [saveReportRequestId, setSaveReportRequestId] = useState('');
   const saveReportResponse = useAppSelector(selectUpdateAcceleratorReport(saveReportRequestId));
   const snackbar = useSnackbar();
 
+  const [photosDispatched, setPhotosDispatched] = useState(false);
+  const [deletePhotosRequestId, setDeletePhotosRequestId] = useState<string>('');
+  const [updatePhotosRequestId, setUpdatePhotosRequestId] = useState<string>('');
+  const [uploadPhotosRequestId, setUploadPhotosRequestId] = useState<string>('');
+
+  const deletePhotosResult = useAppSelector(selectDeleteManyAcceleratorReportPhotos(deletePhotosRequestId));
+  const updatePhotosResult = useAppSelector(selectUpdateManyAcceleratorReportPhotos(updatePhotosRequestId));
+  const uploadPhotosResult = useAppSelector(selectUploadManyAcceleratorReportPhotos(uploadPhotosRequestId));
+
   const goToReport = useCallback(() => {
     goToAcceleratorReport(Number(reportId), Number(projectId));
   }, [goToAcceleratorReport, projectId, reportId]);
+
+  const saveReportPhotos = useCallback(() => {
+    let nextDispatched = false;
+    if (photos.toDelete.length) {
+      const deleteDispatch = dispatch(
+        requestDeleteManyAcceleratorReportPhotos({
+          projectId,
+          reportId: report.id.toString(),
+          fileIds: photos.toDelete.map((photo) => photo.fileId.toString()),
+        })
+      );
+      setDeletePhotosRequestId(deleteDispatch.requestId);
+      nextDispatched = true;
+    }
+
+    if (photos.toUpdate.length) {
+      const updateDispatch = dispatch(
+        requestUpdateManyAcceleratorReportPhotos({
+          projectId,
+          reportId: report.id.toString(),
+          photos: photos.toUpdate,
+        })
+      );
+      setUpdatePhotosRequestId(updateDispatch.requestId);
+      nextDispatched = true;
+    }
+
+    if (photos.toAdd.length) {
+      const uploadDispatch = dispatch(
+        requestUploadManyAcceleratorReportPhotos({
+          projectId,
+          reportId: report.id.toString(),
+          photos: photos.toAdd,
+        })
+      );
+      setUploadPhotosRequestId(uploadDispatch.requestId);
+      nextDispatched = true;
+    }
+
+    setPhotosDispatched(nextDispatched);
+    return nextDispatched;
+  }, [report, photos, dispatch, projectId]);
 
   const saveReport = useCallback(() => {
     const request = dispatch(
@@ -67,9 +138,37 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
       snackbar.toastError();
     }
     if (saveReportResponse?.status === 'success') {
+      if (!saveReportPhotos()) {
+        // If no photos update has occured
+        goToReport();
+      } // else, wait for second effect to navigate back
+    }
+  }, [goToReport, projectId, reportId, saveReportPhotos, saveReportResponse, snackbar]);
+
+  useEffect(() => {
+    if (photosDispatched) {
+      const deletePhotosPending = deletePhotosResult ? deletePhotosResult.status === 'pending' : false;
+      const updatePhotosPending = updatePhotosResult ? updatePhotosResult.status === 'pending' : false;
+      const uploadPhotosPending = uploadPhotosResult ? uploadPhotosResult.status === 'pending' : false;
+
+      if (deletePhotosPending || updatePhotosPending || uploadPhotosPending) {
+        return;
+      }
+
+      const deletePhotosError = deletePhotosResult ? deletePhotosResult.status !== 'success' : false;
+      const updatePhotosError = updatePhotosResult ? updatePhotosResult.status !== 'success' : false;
+      const uploadPhotosError = uploadPhotosResult ? uploadPhotosResult.status !== 'success' : false;
+
+      if (deletePhotosError || updatePhotosError || uploadPhotosError) {
+        snackbar.toastError();
+      } else {
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+      }
+
+      // Error or not, navigate back and force reload, becasue the report is partially updated
       goToReport();
     }
-  }, [goToReport, projectId, reportId, saveReportResponse, snackbar]);
+  }, [deletePhotosResult, goToReport, photosDispatched, snackbar, updatePhotosResult, uploadPhotosResult]);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id?.toString()) {
@@ -92,6 +191,10 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
     },
     [onChange, record]
   );
+
+  const onChangePhotosCallback = useCallback((value: any) => {
+    setPhotos(value as AcceleratorReportPhotoActions);
+  }, []);
 
   return (
     <WrappedPageForm
@@ -176,6 +279,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             editing={true}
             onChange={onChangeCallback('additionalComments')}
           />
+          <PhotosBox report={report} projectId={projectId} editing={true} onChange={onChangePhotosCallback} />
         </Card>
       </Box>
     </WrappedPageForm>

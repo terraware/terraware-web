@@ -119,3 +119,10 @@ export type PublishedReportMetric = components['schemas']['PublishedReportMetric
 export const isAcceleratorReport = (report: any): report is AcceleratorReport => {
   return report && 'id' in report && 'status' in report;
 };
+
+export type AcceleratorReportPhoto = components['schemas']['ReportPhotoPayload'];
+
+export type NewAcceleratorReportPhoto = {
+  file: File;
+  caption?: string;
+};

@@ -84,7 +84,7 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
-      includeBorder={false}
+      includeBorder={!funderReportView}
     >
       <Grid item xs={12}>
         <Textfield
