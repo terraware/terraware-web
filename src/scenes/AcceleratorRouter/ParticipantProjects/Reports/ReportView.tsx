@@ -71,6 +71,7 @@ const ReportView = () => {
   const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
   const snackbar = useSnackbar();
   const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
+  const { reload: reloadProject } = useParticipantProjectData();
   const [publishedFunderView, setPublishedFunderView] = useState(false);
   const reportsResponse = useAppSelector(selectListFunderReports(projectId ?? ''));
   const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
@@ -165,9 +166,10 @@ const ReportView = () => {
       snackbar.toastSuccess(strings.REPORT_PUBLISHED);
       void reloadPublishedReport();
       reload();
+      reloadProject();
       closePublishModal();
     }
-  }, [closePublishModal, publishReportResponse, reload, reloadPublishedReport, snackbar]);
+  }, [closePublishModal, publishReportResponse, reload, reloadProject, reloadPublishedReport, snackbar]);
 
   useEffect(() => {
     if (reports) {
