@@ -32,10 +32,6 @@ type UpdateActivityMediaResponse =
 type DeleteActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
-type ListActivitiesParams = paths[typeof ACTIVITIES_ENDPOINT]['get']['parameters']['query'];
-type AdminListActivitiesParams = paths[typeof ACTIVITIES_ADMIN_ENDPOINT]['get']['parameters']['query'];
-type GetActivityMediaParams = paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['get']['parameters']['query'];
-
 export type ActivitiesData = {
   activities?: ActivityPayload[];
 };
@@ -51,7 +47,8 @@ export type AdminActivitiesResponse = Response & AdminActivitiesData;
  * List all activities for a project
  */
 const listActivities = async (
-  params?: ListActivitiesParams,
+  projectId: number,
+  includeMedia?: boolean | undefined,
   locale?: string,
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
@@ -64,12 +61,10 @@ const listActivities = async (
     };
   }
 
-  const queryParams = params
-    ? {
-        ...(params.projectId !== undefined && { projectId: params.projectId.toString() }),
-        ...(params.includeMedia !== undefined && { includeMedia: params.includeMedia.toString() }),
-      }
-    : undefined;
+  const queryParams = {
+    projectId: projectId.toString(),
+    ...(includeMedia !== undefined && { includeMedia: includeMedia.toString() }),
+  };
 
   return await HttpService.root(ACTIVITIES_ENDPOINT).get<ListActivitiesResponse, ActivitiesData>(
     { params: queryParams },
@@ -92,7 +87,8 @@ const createActivity = async (activity: ActivityPayload): Promise<Response2<Crea
  * List all activities for a project with admin details
  */
 const adminListActivities = async (
-  params?: AdminListActivitiesParams,
+  projectId: number,
+  includeMedia?: boolean | undefined,
   locale?: string,
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
@@ -105,11 +101,10 @@ const adminListActivities = async (
     };
   }
 
-  const queryParams = params
-    ? {
-        ...(params.projectId !== undefined && { projectId: params.projectId.toString() }),
-      }
-    : undefined;
+  const queryParams = {
+    projectId: projectId.toString(),
+    ...(includeMedia !== undefined && { includeMedia: includeMedia.toString() }),
+  };
 
   return await HttpService.root(ACTIVITIES_ADMIN_ENDPOINT).get<AdminListActivitiesResponse, AdminActivitiesData>(
     { params: queryParams },
@@ -184,14 +179,13 @@ const uploadActivityMedia = async (
 const getActivityMedia = async (
   activityId: string,
   fileId: string,
-  params?: GetActivityMediaParams
+  maxWidth?: number | undefined,
+  maxHeight?: number | undefined
 ): Promise<Response2<any>> => {
-  const queryParams = params
-    ? {
-        ...(params.maxWidth !== undefined && { maxWidth: params.maxWidth.toString() }),
-        ...(params.maxHeight !== undefined && { maxHeight: params.maxHeight.toString() }),
-      }
-    : undefined;
+  const queryParams = {
+    ...(maxWidth !== undefined && { maxWidth: maxWidth.toString() }),
+    ...(maxHeight !== undefined && { maxHeight: maxHeight.toString() }),
+  };
 
   return HttpService.root(
     ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activityId).replace('{fileId}', fileId)
