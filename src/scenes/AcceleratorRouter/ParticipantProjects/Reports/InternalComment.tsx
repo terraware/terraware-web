@@ -39,19 +39,13 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
     setStatus(entity.status);
   }, [entity.status]);
 
-  const setInternalCommentCallback = useCallback(
-    (value: any) => {
-      setInternalComment(value as string);
-    },
-    []
-  );
+  const setInternalCommentCallback = useCallback((value: any) => {
+    setInternalComment(value as string);
+  }, []);
 
-  const setStatusCallback = useCallback(
-    (value: any) => {
-      setStatus(value as AcceleratorReportStatus);
-    },
-    []
-  );
+  const setStatusCallback = useCallback((value: any) => {
+    setStatus(value as AcceleratorReportStatus);
+  }, []);
 
   const dropdownOptions: DropdownItem[] = AcceleratorReportStatuses.filter((_status) => _status !== 'Not Needed').map(
     (_status) => ({
