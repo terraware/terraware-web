@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1757619275345" clover="3.2.0">
-  <project timestamp="1757619275346" name="All files">
-    <metrics statements="32960" coveredstatements="1312" conditionals="22972" coveredconditionals="389" methods="10098" coveredmethods="211" elements="66030" coveredelements="1912" complexity="0" loc="32960" ncloc="32960" packages="277" files="1331" classes="1331"/>
+<coverage generated="1757704293348" clover="3.2.0">
+  <project timestamp="1757704293348" name="All files">
+    <metrics statements="33000" coveredstatements="1312" conditionals="22992" coveredconditionals="389" methods="10112" coveredmethods="211" elements="66104" coveredelements="1912" complexity="0" loc="33000" ncloc="33000" packages="277" files="1332" classes="1332"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -33564,7 +33564,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="2061" coveredstatements="650" conditionals="723" coveredconditionals="96" methods="570" coveredmethods="71"/>
+      <metrics statements="2101" coveredstatements="650" conditionals="743" coveredconditionals="96" methods="584" coveredmethods="71"/>
       <file name="AcceleratorReportService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AcceleratorReportService.ts">
         <metrics statements="79" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="22" coveredmethods="0"/>
         <line num="30" count="0" type="stmt"/>
@@ -33723,6 +33723,49 @@
         <line num="234" count="1" type="stmt"/>
         <line num="237" count="7" type="stmt"/>
         <line num="243" count="2" type="stmt"/>
+      </file>
+      <file name="ActivityService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ActivityService.ts">
+        <metrics statements="40" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="14" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="97" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="165" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="205" count="0" type="stmt"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="219" count="0" type="stmt"/>
+        <line num="227" count="0" type="stmt"/>
       </file>
       <file name="ApplicationService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ApplicationService.ts">
         <metrics statements="53" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="14" coveredmethods="0"/>
