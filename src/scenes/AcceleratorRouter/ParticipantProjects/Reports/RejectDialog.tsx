@@ -24,7 +24,7 @@ export default function RejectDialog({ onClose, onSubmit, initialFeedback }: Rej
   }, [feedback, onSubmit]);
 
   const setFeedbackCallback = useCallback(
-    (value: any) => () => {
+    (value: any) => {
       setFeedback(value as string);
     },
     []

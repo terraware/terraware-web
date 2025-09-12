@@ -40,14 +40,14 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
   }, [entity.status]);
 
   const setInternalCommentCallback = useCallback(
-    (value: any) => () => {
+    (value: any) => {
       setInternalComment(value as string);
     },
     []
   );
 
   const setStatusCallback = useCallback(
-    (value: any) => () => {
+    (value: any) => {
       setStatus(value as AcceleratorReportStatus);
     },
     []
