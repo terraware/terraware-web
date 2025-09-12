@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1757704293348" clover="3.2.0">
-  <project timestamp="1757704293348" name="All files">
-    <metrics statements="33000" coveredstatements="1312" conditionals="22992" coveredconditionals="389" methods="10112" coveredmethods="211" elements="66104" coveredelements="1912" complexity="0" loc="33000" ncloc="33000" packages="277" files="1332" classes="1332"/>
+<coverage generated="1757712044631" clover="3.2.0">
+  <project timestamp="1757712044631" name="All files">
+    <metrics statements="32997" coveredstatements="1312" conditionals="22992" coveredconditionals="389" methods="10109" coveredmethods="211" elements="66098" coveredelements="1912" complexity="0" loc="32997" ncloc="32997" packages="277" files="1332" classes="1332"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -19681,7 +19681,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.Reports">
-      <metrics statements="334" coveredstatements="0" conditionals="235" coveredconditionals="0" methods="90" coveredmethods="0"/>
+      <metrics statements="331" coveredstatements="0" conditionals="235" coveredconditionals="0" methods="87" coveredmethods="0"/>
       <file name="ApproveReportDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/ApproveReportDialog.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -19751,7 +19751,7 @@
         <line num="96" count="0" type="stmt"/>
       </file>
       <file name="InternalComment.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/InternalComment.tsx">
-        <metrics statements="22" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="20" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -19767,13 +19767,11 @@
         <line num="39" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
       </file>
       <file name="Metadata.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/Metadata.tsx">
         <metrics statements="18" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -19834,7 +19832,7 @@
         <line num="16" count="0" type="stmt"/>
       </file>
       <file name="RejectDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/RejectDialog.tsx">
-        <metrics statements="11" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
@@ -19844,8 +19842,7 @@
         <line num="22" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
       </file>
       <file name="ReportView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/ReportView.tsx">
         <metrics statements="107" coveredstatements="0" conditionals="95" coveredconditionals="0" methods="25" coveredmethods="0"/>
