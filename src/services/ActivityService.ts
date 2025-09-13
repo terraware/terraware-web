@@ -59,7 +59,7 @@ const listActivities = async (
 
   const response = await HttpService.root(ACTIVITIES_ENDPOINT).get2<ListActivitiesResponse>({ params: queryParams });
 
-  if (response && response.data) {
+  if (response?.data) {
     response.data.activities = searchAndSort(response?.data?.activities || [], search, searchOrderConfig);
   }
 
@@ -102,7 +102,7 @@ const adminListActivities = async (
     params: queryParams,
   });
 
-  if (response && response.data) {
+  if (response?.data) {
     response.data.activities = searchAndSort(response?.data?.activities || [], search, searchOrderConfig);
   }
 
