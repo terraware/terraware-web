@@ -7,7 +7,10 @@ export type Activity = Omit<
   createdBy?: number;
   createdTime?: string;
   isVerified?: boolean;
-  media: components['schemas']['ActivityMediaFilePayload'][];
+  media: (Omit<components['schemas']['AdminActivityMediaFilePayload'], 'createdBy' | 'createdTime'> & {
+    createdBy?: number;
+    createdTime?: string;
+  })[];
   modifiedBy?: number;
   modifiedTime?: string;
 };
@@ -15,6 +18,7 @@ export type Activity = Omit<
 export type ActivityPayload = components['schemas']['ActivityPayload'];
 export type ActivityMediaFile = components['schemas']['ActivityMediaFilePayload'];
 export type AdminActivityPayload = components['schemas']['AdminActivityPayload'];
+export type AdminActivityMediaFile = components['schemas']['AdminActivityMediaFilePayload'];
 
 export type MockActivityStatus = 'Changed' | 'Do Not Use' | 'Not Verified' | 'Published' | 'Verified';
 
