@@ -3,7 +3,7 @@ import { ActivityMediaFile, ActivityPayload, AdminActivityPayload } from 'src/ty
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
-import HttpService, { Response, Response2 } from './HttpService';
+import HttpService, { Response2 } from './HttpService';
 
 const ACTIVITIES_ENDPOINT = '/api/v1/accelerator/activities';
 const ACTIVITIES_ADMIN_ENDPOINT = '/api/v1/accelerator/activities/admin';
@@ -27,21 +27,12 @@ type DeleteActivityResponse =
   paths[typeof ACTIVITY_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 type UploadActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type GetActivityMediaResponse =
+  paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 type DeleteActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
-
-export type ActivitiesData = {
-  activities?: ActivityPayload[];
-};
-
-export type AdminActivitiesData = {
-  activities?: AdminActivityPayload[];
-};
-
-export type ActivitiesResponse = Response & ActivitiesData;
-export type AdminActivitiesResponse = Response & AdminActivitiesData;
 
 /**
  * List all activities for a project
@@ -52,7 +43,7 @@ const listActivities = async (
   locale?: string,
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
-): Promise<ActivitiesResponse> => {
+): Promise<Response2<ListActivitiesResponse>> => {
   let searchOrderConfig: SearchOrderConfig | undefined;
   if (sortOrder) {
     searchOrderConfig = {
@@ -66,12 +57,13 @@ const listActivities = async (
     ...(includeMedia !== undefined && { includeMedia: includeMedia.toString() }),
   };
 
-  return await HttpService.root(ACTIVITIES_ENDPOINT).get<ListActivitiesResponse, ActivitiesData>(
-    { params: queryParams },
-    (data) => ({
-      activities: searchAndSort(data?.activities || [], search, searchOrderConfig),
-    })
-  );
+  const response = await HttpService.root(ACTIVITIES_ENDPOINT).get2<ListActivitiesResponse>({ params: queryParams });
+
+  if (response && response.data) {
+    response.data.activities = searchAndSort(response?.data?.activities || [], search, searchOrderConfig);
+  }
+
+  return response;
 };
 
 /**
@@ -92,7 +84,7 @@ const adminListActivities = async (
   locale?: string,
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
-): Promise<AdminActivitiesResponse> => {
+): Promise<Response2<AdminListActivitiesResponse>> => {
   let searchOrderConfig: SearchOrderConfig | undefined;
   if (sortOrder) {
     searchOrderConfig = {
@@ -106,70 +98,80 @@ const adminListActivities = async (
     ...(includeMedia !== undefined && { includeMedia: includeMedia.toString() }),
   };
 
-  return await HttpService.root(ACTIVITIES_ADMIN_ENDPOINT).get<AdminListActivitiesResponse, AdminActivitiesData>(
-    { params: queryParams },
-    (data) => ({
-      activities: searchAndSort(data?.activities || [], search, searchOrderConfig),
-    })
-  );
+  const response = await HttpService.root(ACTIVITIES_ADMIN_ENDPOINT).get2<AdminListActivitiesResponse>({
+    params: queryParams,
+  });
+
+  if (response && response.data) {
+    response.data.activities = searchAndSort(response?.data?.activities || [], search, searchOrderConfig);
+  }
+
+  return response;
 };
 
 /**
  * Get a single activity with admin details
  */
 const adminGetActivity = async (activityId: string): Promise<Response2<AdminGetActivityResponse>> => {
-  return HttpService.root(ACTIVITY_ADMIN_ENDPOINT.replace('{id}', activityId)).get2<AdminGetActivityResponse>();
+  return HttpService.root(ACTIVITY_ADMIN_ENDPOINT).get2<AdminGetActivityResponse>({
+    urlReplacements: { '{id}': activityId },
+  });
 };
 
 /**
  * Update an activity with admin details
  */
 const adminUpdateActivity = async (
-  activityId: string,
+  activityId: number,
   activity: AdminActivityPayload
 ): Promise<Response2<AdminUpdateActivityResponse>> => {
-  return HttpService.root(ACTIVITY_ADMIN_ENDPOINT.replace('{id}', activityId)).put2<AdminUpdateActivityResponse>({
+  return HttpService.root(ACTIVITY_ADMIN_ENDPOINT).put2<AdminUpdateActivityResponse>({
     entity: activity,
+    urlReplacements: { '{id}': activityId.toString() },
   });
 };
 
 /**
  * Get a single activity
  */
-const getActivity = async (activityId: string): Promise<Response2<GetActivityResponse>> => {
-  return HttpService.root(ACTIVITY_ENDPOINT.replace('{activityId}', activityId)).get2<GetActivityResponse>();
+const getActivity = async (activityId: number): Promise<Response2<GetActivityResponse>> => {
+  return HttpService.root(ACTIVITY_ENDPOINT).get2<GetActivityResponse>({
+    urlReplacements: { '{activityId}': activityId.toString() },
+  });
 };
 
 /**
  * Update an activity
  */
 const updateActivity = async (
-  activityId: string,
+  activityId: number,
   activity: ActivityPayload
 ): Promise<Response2<UpdateActivityResponse>> => {
-  return HttpService.root(ACTIVITY_ENDPOINT.replace('{activityId}', activityId)).put2<UpdateActivityResponse>({
+  return HttpService.root(ACTIVITY_ENDPOINT).put2<UpdateActivityResponse>({
     entity: activity,
+    urlReplacements: { '{activityId}': activityId.toString() },
   });
 };
 
 /**
  * Delete an activity
  */
-const deleteActivity = async (activityId: string): Promise<Response2<DeleteActivityResponse>> => {
-  return HttpService.root(ACTIVITY_ENDPOINT.replace('{activityId}', activityId)).delete2<DeleteActivityResponse>();
+const deleteActivity = async (activityId: number): Promise<Response2<DeleteActivityResponse>> => {
+  return HttpService.root(ACTIVITY_ENDPOINT).delete2<DeleteActivityResponse>({
+    urlReplacements: { '{activityId}': activityId.toString() },
+  });
 };
 
 /**
  * Upload media for an activity
  */
 const uploadActivityMedia = async (
-  activityId: string,
+  activityId: number,
   mediaData: FormData
 ): Promise<Response2<UploadActivityMediaResponse>> => {
-  return HttpService.root(
-    ACTIVITY_MEDIA_ENDPOINT.replace('{activityId}', activityId)
-  ).post2<UploadActivityMediaResponse>({
+  return HttpService.root(ACTIVITY_MEDIA_ENDPOINT).post2<UploadActivityMediaResponse>({
     entity: mediaData,
+    urlReplacements: { '{activityId}': activityId.toString() },
   });
 };
 
@@ -177,20 +179,19 @@ const uploadActivityMedia = async (
  * Get activity media file
  */
 const getActivityMedia = async (
-  activityId: string,
-  fileId: string,
+  activityId: number,
+  fileId: number,
   maxWidth?: number | undefined,
   maxHeight?: number | undefined
-): Promise<Response2<any>> => {
+): Promise<Response2<GetActivityMediaResponse>> => {
   const queryParams = {
     ...(maxWidth !== undefined && { maxWidth: maxWidth.toString() }),
     ...(maxHeight !== undefined && { maxHeight: maxHeight.toString() }),
   };
 
-  return HttpService.root(
-    ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activityId).replace('{fileId}', fileId)
-  ).get2<any>({
+  return HttpService.root(ACTIVITY_MEDIA_FILE_ENDPOINT).get2<any>({
     params: queryParams,
+    urlReplacements: { '{activityId}': activityId.toString(), '{fileId}': fileId.toString() },
   });
 };
 
@@ -198,14 +199,13 @@ const getActivityMedia = async (
  * Update activity media file information
  */
 const updateActivityMedia = async (
-  activityId: string,
-  fileId: string,
+  activityId: number,
+  fileId: number,
   mediaData: ActivityMediaFile
 ): Promise<Response2<UpdateActivityMediaResponse>> => {
-  return HttpService.root(
-    ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activityId).replace('{fileId}', fileId)
-  ).put2<UpdateActivityMediaResponse>({
+  return HttpService.root(ACTIVITY_MEDIA_FILE_ENDPOINT).put2<UpdateActivityMediaResponse>({
     entity: mediaData,
+    urlReplacements: { '{activityId}': activityId.toString(), '{fileId}': fileId.toString() },
   });
 };
 
@@ -213,12 +213,12 @@ const updateActivityMedia = async (
  * Delete activity media file
  */
 const deleteActivityMedia = async (
-  activityId: string,
-  fileId: string
+  activityId: number,
+  fileId: number
 ): Promise<Response2<DeleteActivityMediaResponse>> => {
-  return HttpService.root(
-    ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activityId).replace('{fileId}', fileId)
-  ).delete2<DeleteActivityMediaResponse>();
+  return HttpService.root(ACTIVITY_MEDIA_FILE_ENDPOINT).delete2<DeleteActivityMediaResponse>({
+    urlReplacements: { '{activityId}': activityId.toString(), '{fileId}': fileId.toString() },
+  });
 };
 
 /**
