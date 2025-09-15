@@ -3,6 +3,7 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
+import { Species } from 'src/types/Species';
 import { PlantingSite } from 'src/types/Tracking';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 import downloadZipFile from 'src/utils/downloadZipFile';
@@ -58,13 +59,7 @@ const makeAdHocObservationsResultsCsv = ({
   return makeCsv(columnHeaders, data);
 };
 
-const makeAdHocObservationCsv = ({
-  adHocObservation,
-  plantingSite,
-}: {
-  adHocObservation: AdHocObservationResults;
-  plantingSite: PlantingSite;
-}): Blob => {
+const makeAdHocObservationCsv = (adHocObservation: AdHocObservationResults, plantingSite: PlantingSite): Blob => {
   if (!adHocObservation?.adHocPlot) {
     return new Blob([], { type: 'text/csv' });
   }
@@ -195,7 +190,7 @@ const makeAdHocObservationCsv = ({
   return makeCsv(columnHeaders, data);
 };
 
-const makeAdHocObservationSpeciesCsv = ({ adHocObservation }: { adHocObservation: AdHocObservationResults }): Blob => {
+const makeAdHocObservationSpeciesCsv = (adHocObservation: AdHocObservationResults, speciesData: Species[]): Blob => {
   if (!adHocObservation?.adHocPlot) {
     return new Blob([], { type: 'text/csv' });
   }
@@ -227,12 +222,23 @@ const makeAdHocObservationSpeciesCsv = ({ adHocObservation }: { adHocObservation
     },
   ];
 
+  const speciesNames = speciesData.reduce(
+    (acc, curr: Species) => {
+      const name = curr.scientificName || curr.commonName;
+      if (name) {
+        acc[curr.id] = name;
+      }
+      return acc;
+    },
+    {} as Record<number, string>
+  );
+
   const monitoringPlotNumber = adHocObservation.adHocPlot.monitoringPlotNumber;
 
   const data =
     adHocObservation.adHocPlot.species.map((species) => ({
       monitoringPlotNumber,
-      speciesScientificName: species.speciesName,
+      speciesScientificName: speciesNames[species.speciesId || -1] || species.speciesName,
       totalPlants: species.totalPlants,
       preExistingPlants: species.totalExisting,
       livePlants: species.totalLive,
@@ -258,13 +264,11 @@ export const exportAdHocObservationsResults = async ({
   downloadCsv(filename, fileContent);
 };
 
-export const exportAdHocObservationDetails = ({
-  adHocObservation,
-  plantingSite,
-}: {
-  adHocObservation: AdHocObservationResults;
-  plantingSite: PlantingSite;
-}) => {
+export const exportAdHocObservationDetails = (
+  adHocObservation: AdHocObservationResults,
+  plantingSite: PlantingSite,
+  speciesData: Species[]
+) => {
   const dateObserved = adHocObservation.completedTime
     ? getDateDisplayValue(adHocObservation.completedTime || '', plantingSite.timeZone)
     : '';
@@ -275,11 +279,11 @@ export const exportAdHocObservationDetails = ({
     files: [
       {
         fileName: `${dirName}-${strings.PLOT}`,
-        content: makeAdHocObservationCsv({ adHocObservation, plantingSite }),
+        content: makeAdHocObservationCsv(adHocObservation, plantingSite),
       },
       {
         fileName: `${dirName}-${strings.SPECIES}`,
-        content: makeAdHocObservationSpeciesCsv({ adHocObservation }),
+        content: makeAdHocObservationSpeciesCsv(adHocObservation, speciesData),
       },
     ],
     suffix: '.csv',
