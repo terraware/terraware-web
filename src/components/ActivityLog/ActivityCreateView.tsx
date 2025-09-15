@@ -13,7 +13,7 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 
 import MapSplitView from './MapSplitView';
 
-export default function InventoryCreateView(): JSX.Element {
+export default function ActivityCreateView(): JSX.Element {
   const { strings } = useLocalization();
   const theme = useTheme();
   const navigate = useSyncNavigate();
