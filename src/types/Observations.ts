@@ -158,6 +158,9 @@ export const getReplaceObservationPlotDuration = (duration: ReplaceObservationPl
   }
 };
 
+export type RecordedPlant = components['schemas']['RecordedPlantPayload'];
+export type RecordedPlantStatus = RecordedPlant['status'];
+
 export type ObservationSummary = components['schemas']['PlantingSiteObservationSummaryPayload'];
 
 export type PlantingZoneObservationSummary = components['schemas']['PlantingZoneObservationSummaryPayload'];

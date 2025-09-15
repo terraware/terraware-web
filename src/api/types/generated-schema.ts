@@ -9018,6 +9018,7 @@ export interface components {
             certainty: "Known" | "Other" | "Unknown";
             /** @description GPS coordinates where plant was observed. */
             gpsCoordinates: Omit<components["schemas"]["Point"], "type">;
+            id: number;
             /**
              * Format: int64
              * @description Required if certainty is Known. Ignored if certainty is Other or Unknown.

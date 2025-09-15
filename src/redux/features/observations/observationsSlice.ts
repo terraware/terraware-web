@@ -15,6 +15,8 @@ import {
   requestScheduleObservation,
 } from './observationsAsyncThunks';
 import {
+  requestOneObservation,
+  requestOneObservationResult,
   requestOrganizationAdHocObservationResults,
   requestOrganizationAdHocObservations,
   requestOrganizationObservationResults,
@@ -271,9 +273,32 @@ export const plantingSiteObservationsSummariesSlice = createSlice({
   },
 });
 
+// Get One
+const initialStateGetOneObservation: { [key: string]: StatusT<Observation> } = {};
+export const getOneObservationSlice = createSlice({
+  name: 'getOneObservationSlice',
+  initialState: initialStateGetOneObservation,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestOneObservation)(builder);
+  },
+});
+
+const initialStateGetOneObservationResults: { [key: string]: StatusT<ObservationResultsPayload> } = {};
+export const getOneObservationResultsSlice = createSlice({
+  name: 'getOneObservationResultSlice',
+  initialState: initialStateGetOneObservationResults,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestOneObservationResult)(builder);
+  },
+});
+
 const observationsReducers = {
   observationsResults: observationsResultsSlice.reducer,
   observations: observationsSlice.reducer,
+  oneObservation: getOneObservationSlice.reducer,
+  oneObservationResults: getOneObservationResultsSlice.reducer,
   adHocObservations: adHocObservationsSlice.reducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsSlice.reducer,
   scheduleObservation: scheduleObservationSlice.reducer,
