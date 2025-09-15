@@ -48,8 +48,16 @@ export default function ActivityLogView(): JSX.Element {
   );
 
   const PageHeaderRightComponent = useMemo(
-    () => <Button icon='plus' label={strings.ADD_ACTIVITY} onClick={goToActivityCreate} size='medium' />,
-    [goToActivityCreate, strings]
+    () => (
+      <Button
+        disabled={!projectFilter.projectId}
+        icon='plus'
+        label={strings.ADD_ACTIVITY}
+        onClick={goToActivityCreate}
+        size='medium'
+      />
+    ),
+    [goToActivityCreate, projectFilter.projectId, strings]
   );
 
   return (
