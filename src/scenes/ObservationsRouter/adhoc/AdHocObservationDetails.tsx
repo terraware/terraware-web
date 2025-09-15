@@ -82,7 +82,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
         void exportAdHocObservationDetails(observation as AdHocObservationResults, plantingSite, species);
       }
     },
-    [observation, plantingSite]
+    [observation, plantingSite, species]
   );
 
   const data: Record<string, any>[] = useMemo(() => {
