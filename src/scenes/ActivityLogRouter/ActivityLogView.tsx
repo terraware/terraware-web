@@ -7,19 +7,32 @@ import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
 export default function ActivityLogView(): JSX.Element {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const navigate = useSyncNavigate();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
-  const handleAddActivity = useCallback(() => {
-    // TODO: Implement add activity logic
-  }, []);
+  const activityCreateLocation = useMemo(
+    () => ({
+      pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(
+        ':projectId',
+        projectFilter.projectId ? String(projectFilter.projectId) : ''
+      ),
+    }),
+    [projectFilter]
+  );
+
+  const goToActivityCreate = useCallback(() => {
+    navigate(activityCreateLocation);
+  }, [navigate, activityCreateLocation]);
 
   const PageHeaderLeftComponent = useMemo(
     () => (
@@ -35,8 +48,8 @@ export default function ActivityLogView(): JSX.Element {
   );
 
   const PageHeaderRightComponent = useMemo(
-    () => <Button icon='plus' label={strings.ADD_ACTIVITY} onClick={handleAddActivity} size='medium' />,
-    [handleAddActivity, strings]
+    () => <Button icon='plus' label={strings.ADD_ACTIVITY} onClick={goToActivityCreate} size='medium' />,
+    [goToActivityCreate, strings]
   );
 
   return (
