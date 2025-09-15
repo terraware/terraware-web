@@ -79,10 +79,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       if (optionItem.value === 'match') {
         return setShowMatchSpeciesModal(true);
       } else if (optionItem.value === 'export' && observation && plantingSite) {
-        void exportAdHocObservationDetails({
-          adHocObservation: observation as AdHocObservationResults,
-          plantingSite,
-        });
+        void exportAdHocObservationDetails(observation as AdHocObservationResults, plantingSite, species);
       }
     },
     [observation, plantingSite]
