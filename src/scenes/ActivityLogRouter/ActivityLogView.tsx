@@ -22,10 +22,7 @@ export default function ActivityLogView(): JSX.Element {
 
   const activityCreateLocation = useMemo(
     () => ({
-      pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(
-        ':projectId',
-        projectFilter.projectId ? String(projectFilter.projectId) : ''
-      ),
+      pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', String(projectFilter.projectId)),
     }),
     [projectFilter]
   );
