@@ -248,10 +248,12 @@ const ProjectProfileEdit = () => {
 
   useEffect(() => {
     if (listUsersRequest?.status === 'success') {
-      const userOptions = listUsersRequest.data?.users.map((user) => ({
-        label: `${user.firstName} ${user.lastName}`,
-        value: user.id,
-      }));
+      const userOptions = listUsersRequest.data?.users
+        .filter((user) => !!user.firstName)
+        .map((user) => ({
+          label: `${user.firstName} ${user.lastName}`,
+          value: user.id,
+        }));
       setGlobalUsersOptions(userOptions);
     }
   }, [listUsersRequest]);
