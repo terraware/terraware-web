@@ -67,10 +67,10 @@ type ActivitiesListViewProps = {
   projectId: number;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  console.log('projectId:', projectId);
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
 

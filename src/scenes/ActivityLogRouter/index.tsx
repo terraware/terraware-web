@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
 
+import ActivityCreateView from 'src/components/ActivityLog/ActivityCreateView';
+import ActivityEditView from 'src/components/ActivityLog/ActivityEditView';
 import isEnabled from 'src/features';
 
 import ActivityLogView from './ActivityLogView';
@@ -12,6 +14,12 @@ const ActivityLogRouter = () => {
     <Routes>
       {/* @see /src/constants.ts:APP_PATHS.ACTIVITY_LOG */}
       {isActivityLogEnabled && <Route path='' element={<ActivityLogView />} />}
+
+      {/* @see /src/constants.ts:APP_PATHS.ACTIVITY_LOG_EDIT */}
+      {isActivityLogEnabled && <Route path='/:projectId/:activityId/edit' element={<ActivityEditView />} />}
+
+      {/* @see /src/constants.ts:APP_PATHS.ACTIVITY_LOG_NEW */}
+      {isActivityLogEnabled && <Route path='/:projectId/new' element={<ActivityCreateView />} />}
     </Routes>
   );
 };
