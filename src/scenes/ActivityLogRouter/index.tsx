@@ -14,6 +14,9 @@ const ActivityLogRouter = () => {
       {/* @see /src/constants.ts:APP_PATHS.ACTIVITY_LOG */}
       {isActivityLogEnabled && <Route path='' element={<ActivityLogView />} />}
 
+      {/* @see /src/constants.ts:APP_PATHS.ACTIVITY_LOG_EDIT */}
+      {isActivityLogEnabled && <Route path='/:projectId/:activityId/edit' element={<ActivityEditView />} />}
+
       {/* @see /src/constants.ts:APP_PATHS.ACTIVITY_LOG_NEW */}
       {isActivityLogEnabled && <Route path='/:projectId/new' element={<ActivityCreateView />} />}
     </Routes>
