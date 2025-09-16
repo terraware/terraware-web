@@ -1810,11 +1810,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1832,10 +1827,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2701,31 +2701,6 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                   &lt;/Grid&gt;
 &nbsp;
                   &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
-                    &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}&gt;
-                      &lt;Textfield
-                        label={strings
-                          .formatString(
-                            strings.HARDENING_OFF_QUANTITY_REMAINING,
-                            String(batches[0].hardeningOffQuantity)
-                          )
-                          .toString()}
-                        id='hardeningOffQuantityWithdrawn'
-                        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setHardeningOffQuantityWithdrawn(value as number)}</span>
-                        type='number'
-                        value={hardeningOffQuantityWithdrawn}
-                        tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
-                        errorText={fieldsErrors.hardeningOffQuantityWithdrawn}
-                        required
-                        sx={{
-                          '&amp;&gt; #hardeningOffQuantityWithdrawn': {
-                            height: '44px',
-                          },
-                        }}
-                      /&gt;
-                    &lt;/Grid&gt;
-                  &lt;/Grid&gt;
-&nbsp;
-                  &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
                     &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}&gt;
                       &lt;Textfield
                         label={strings
@@ -2760,6 +2735,31 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                         /&gt;
                       &lt;/Grid&gt;
                     )}
+                  &lt;/Grid&gt;
+&nbsp;
+                  &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
+                    &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}&gt;
+                      &lt;Textfield
+                        label={strings
+                          .formatString(
+                            strings.HARDENING_OFF_QUANTITY_REMAINING,
+                            String(batches[0].hardeningOffQuantity)
+                          )
+                          .toString()}
+                        id='hardeningOffQuantityWithdrawn'
+                        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setHardeningOffQuantityWithdrawn(value as number)}</span>
+                        type='number'
+                        value={hardeningOffQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
+                        errorText={fieldsErrors.hardeningOffQuantityWithdrawn}
+                        required
+                        sx={{
+                          '&amp;&gt; #hardeningOffQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
+                      /&gt;
+                    &lt;/Grid&gt;
                   &lt;/Grid&gt;
 &nbsp;
                   &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
@@ -2830,7 +2830,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-16T19:21:21.579Z
+                at 2025-09-16T20:09:52.261Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
