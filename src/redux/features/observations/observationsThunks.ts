@@ -186,6 +186,28 @@ export const requestOrganizationAdHocObservationResults = createAsyncThunk(
   }
 );
 
+export const requestOneObservation = createAsyncThunk(
+  'observations/getOne',
+  async (request: { observationId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.getOneObservation(request.observationId);
+    if (response !== null && response.requestSucceeded && response?.data?.observation !== undefined) {
+      return response.data.observation;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestOneObservationResult = createAsyncThunk(
+  'observations/getOneResult',
+  async (request: { observationId: number; includePlants?: boolean }, { rejectWithValue }) => {
+    const response = await ObservationsService.getOneObservationResult(request.observationId, request.includePlants);
+    if (response !== null && response.requestSucceeded && response?.data?.observation !== undefined) {
+      return response.data.observation;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 /**
  * Fetch observation results
  */

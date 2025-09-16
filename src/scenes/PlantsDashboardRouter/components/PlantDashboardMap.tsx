@@ -5,20 +5,28 @@ import { useTheme } from '@mui/material';
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
 import { MapFillComponentStyle, MapLayer, MapLayerFeatureId, MapMarker } from 'src/components/NewMap/types';
+import useObservation from 'src/hooks/useObservation';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
-import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
+import { ObservationMonitoringPlotPhoto, RecordedPlant, RecordedPlantStatus } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapPhotoDrawer from './MapPhotoDrawer';
+import MapPlantDrawer from './MapPlantDrawer';
 import MapStatsDrawer from './MapStatsDrawer';
 
 type PlotPhoto = {
   observationId: number;
   monitoringPlotId: number;
   photo: ObservationMonitoringPlotPhoto;
+};
+
+type PlotPlant = {
+  observationId: number;
+  monitoringPlotId: number;
+  plant: RecordedPlant;
 };
 
 const PlantDashboardMap = (): JSX.Element => {
@@ -28,7 +36,9 @@ const PlantDashboardMap = (): JSX.Element => {
 
   const [selectedFeaturedId, setSelectedFeatureId] = useState<MapLayerFeatureId>();
   const [selectedPhoto, setSelectedPhoto] = useState<PlotPhoto>();
+  const [selectedPlant, setSelectedPlant] = useState<PlotPlant>();
   const { latestResult, plantingSite } = usePlantingSiteData();
+  const { observationResults } = useObservation(latestResult?.observationId);
 
   const sitesLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
@@ -79,8 +89,21 @@ const PlantDashboardMap = (): JSX.Element => {
     (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhoto) => () => {
       setSelectedFeatureId(undefined);
       setSelectedPhoto({ monitoringPlotId, observationId, photo });
+      setSelectedPlant(undefined);
       setDrawerOpen(true);
       setDrawerSize('medium');
+      setDrawerTitle(undefined);
+    },
+    []
+  );
+
+  const selectPlant = useCallback(
+    (monitoringPlotId: number, observationId: number, plant: RecordedPlant) => () => {
+      setSelectedFeatureId(undefined);
+      setSelectedPhoto(undefined);
+      setSelectedPlant({ monitoringPlotId, observationId, plant });
+      setDrawerOpen(true);
+      setDrawerSize('small');
       setDrawerTitle(undefined);
     },
     []
@@ -99,7 +122,16 @@ const PlantDashboardMap = (): JSX.Element => {
         />
       );
     }
-  }, [selectedFeaturedId, selectedPhoto]);
+    if (selectedPlant) {
+      return (
+        <MapPlantDrawer
+          monitoringPlotId={selectedPlant.monitoringPlotId}
+          observationId={selectedPlant.observationId}
+          plant={selectedPlant.plant}
+        />
+      );
+    }
+  }, [selectedFeaturedId, selectedPhoto, selectedPlant]);
 
   const extractLayersFromSite = useCallback(
     (site: PlantingSite): MapLayer[] => {
@@ -164,19 +196,19 @@ const PlantDashboardMap = (): JSX.Element => {
     if (!plantingSite) {
       return [];
     }
-    if (!latestResult) {
+    if (!observationResults) {
       return extractLayersFromSite(plantingSite);
     } else {
       return extractLayersFromSite(plantingSite);
     }
-  }, [extractLayersFromSite, latestResult, plantingSite]);
+  }, [extractLayersFromSite, observationResults, plantingSite]);
 
   const photoMarkers = useMemo((): MapMarker[] => {
-    if (!latestResult) {
+    if (!observationResults) {
       return [];
     }
 
-    return latestResult.plantingZones
+    return observationResults.plantingZones
       .flatMap((zone) => zone.plantingSubzones)
       .flatMap((subzone) => subzone.monitoringPlots)
       .flatMap((plot): MapMarker[] =>
@@ -185,19 +217,48 @@ const PlantDashboardMap = (): JSX.Element => {
             id: `${photo.fileId}`,
             longitude: photo.gpsCoordinates.coordinates[1],
             latitude: photo.gpsCoordinates.coordinates[0],
-            onClick: selectPhoto(plot.monitoringPlotId, latestResult.observationId, photo),
+            onClick: selectPhoto(plot.monitoringPlotId, observationResults.observationId, photo),
             selected: selectedPhoto && photo.fileId === selectedPhoto.photo.fileId,
           };
         })
       );
-  }, [latestResult, selectPhoto, selectedPhoto]);
+  }, [observationResults, selectPhoto, selectedPhoto]);
+
+  const plantsMarkers = useCallback(
+    (status: RecordedPlantStatus): MapMarker[] => {
+      if (!observationResults) {
+        return [];
+      }
+
+      return observationResults.plantingZones
+        .flatMap((zone) => zone.plantingSubzones)
+        .flatMap((subzone) => subzone.monitoringPlots)
+        .flatMap((plot): MapMarker[] => {
+          if (plot.plants) {
+            const filteredPlants = plot.plants.filter((plant) => plant.status === status);
+            return filteredPlants.map(
+              (plant): MapMarker => ({
+                id: `${plant.id}`,
+                longitude: plant.gpsCoordinates.coordinates[1],
+                latitude: plant.gpsCoordinates.coordinates[0],
+                onClick: selectPlant(plot.monitoringPlotId, observationResults.observationId, plant),
+                selected: selectedPlant && selectedPlant.plant.id === plant.id,
+              })
+            );
+          } else {
+            return [];
+          }
+        });
+    },
+    [observationResults, selectPlant, selectedPlant]
+  );
 
   const mortalityRateHighlights = useMemo(() => {
     const lessThanTwentyFive: MapLayerFeatureId[] = [];
     const lessThanFifty: MapLayerFeatureId[] = [];
     const greaterThanFifty: MapLayerFeatureId[] = [];
 
-    if (!latestResult) {
+    if (!observationResults) {
       return {
         lessThanTwentyFive,
         lessThanFifty,
@@ -217,10 +278,10 @@ const PlantDashboardMap = (): JSX.Element => {
       }
     };
 
-    const siteId = { layerId: 'sites', featureId: `${latestResult.plantingSiteId}` };
-    sortFeatureByMortalityRate(siteId, latestResult.mortalityRate);
+    const siteId = { layerId: 'sites', featureId: `${observationResults.plantingSiteId}` };
+    sortFeatureByMortalityRate(siteId, observationResults.mortalityRate);
 
-    latestResult.plantingZones.forEach((zone) => {
+    observationResults.plantingZones.forEach((zone) => {
       const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
       sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
       zone.plantingSubzones.forEach((subzone) => {
@@ -234,7 +295,7 @@ const PlantDashboardMap = (): JSX.Element => {
       lessThanFifty,
       greaterThanFifty,
     };
-  }, [latestResult]);
+  }, [observationResults]);
 
   const setDrawerOpenCallback = useCallback((open: boolean) => {
     if (open) {
@@ -243,6 +304,7 @@ const PlantDashboardMap = (): JSX.Element => {
       setDrawerOpen(false);
       setSelectedFeatureId(undefined);
       setSelectedPhoto(undefined);
+      setSelectedPlant(undefined);
     }
   }, []);
 
@@ -310,7 +372,7 @@ const PlantDashboardMap = (): JSX.Element => {
         groups: [
           {
             label: strings.LIVE_PLANTS,
-            markers: [],
+            markers: plantsMarkers('Live'),
             markerGroupId: 'live-plants',
             style: {
               iconColor: '#40B0A6',
@@ -320,7 +382,7 @@ const PlantDashboardMap = (): JSX.Element => {
           },
           {
             label: strings.DEAD_PLANTS,
-            markers: [],
+            markers: plantsMarkers('Dead'),
             markerGroupId: 'dead-plants',
             style: {
               iconColor: '#E1BE6A',
@@ -443,7 +505,17 @@ const PlantDashboardMap = (): JSX.Element => {
         type: 'highlight',
       },
     ];
-  }, [baseObservationEventStyle, layers, mortalityRateHighlights, observationEventsHighlights, photoMarkers, strings]);
+  }, [
+    baseObservationEventStyle,
+    layers,
+    mortalityRateHighlights.greaterThanFifty,
+    mortalityRateHighlights.lessThanFifty,
+    mortalityRateHighlights.lessThanTwentyFive,
+    observationEventsHighlights,
+    photoMarkers,
+    plantsMarkers,
+    strings,
+  ]);
 
   return (
     <MapComponent

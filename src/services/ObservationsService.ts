@@ -19,8 +19,9 @@ import SearchService from './SearchService';
 const AD_HOC_OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations/adHoc';
 const AD_HOC_OBSERVATION_RESULTS_ENDPOINT = '/api/v1/tracking/observations/adHoc/results';
 const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
-const OBSERVATION_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
+const OBSERVATIONS_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
+const OBSERVATION_RESULTS_ENDPOINT = '/api/v1/tracking/observations/{observationId}/results';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
 const PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT = '/api/v1/tracking/observations/results/summaries';
@@ -33,10 +34,16 @@ type AdHocObservationResultsPayload =
   paths[typeof AD_HOC_OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type ObservationResultsResponsePayload =
-  paths[typeof OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+  paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type ObservationsResponsePayload =
   paths[typeof OBSERVATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type GetOneObservationRepsonsePayload =
+  paths[typeof OBSERVATION_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type GetOneObservationResultsRepsonsePayload =
+  paths[typeof OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 export type GetPlantingSiteObservationSummariesPayload =
   paths[typeof PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -54,7 +61,7 @@ export type ObservationsData = {
 
 const httpAdHocObservations = HttpService.root(AD_HOC_OBSERVATIONS_ENDPOINT);
 const httpAdHocObservationResults = HttpService.root(AD_HOC_OBSERVATION_RESULTS_ENDPOINT);
-const httpObservationResults = HttpService.root(OBSERVATION_RESULTS_ENDPOINT);
+const httpObservationResults = HttpService.root(OBSERVATIONS_RESULTS_ENDPOINT);
 const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
 const httpObservation = HttpService.root(OBSERVATION_ENDPOINT);
 const httpObservationExport = HttpService.root(OBSERVATION_EXPORT_ENDPOINT);
@@ -430,6 +437,28 @@ const replaceObservationPlot = async (
   });
 };
 
+const getOneObservation = async (observationId: number): Promise<Response2<GetOneObservationRepsonsePayload>> => {
+  return HttpService.root(OBSERVATION_ENDPOINT).get2<GetOneObservationRepsonsePayload>({
+    urlReplacements: {
+      '{observationId}': observationId.toString(),
+    },
+  });
+};
+
+const getOneObservationResults = async (
+  observationId: number,
+  includePlants?: boolean
+): Promise<Response2<GetOneObservationResultsRepsonsePayload>> => {
+  const params = { includePlants: (!!includePlants).toString() };
+
+  return HttpService.root(OBSERVATION_RESULTS_ENDPOINT).get2<GetOneObservationResultsRepsonsePayload>({
+    urlReplacements: {
+      '{observationId}': observationId.toString(),
+    },
+    params,
+  });
+};
+
 const getPlantingSiteObservationsSummaries = async (
   plantingSiteId: number
 ): Promise<Response2<GetPlantingSiteObservationSummariesPayload>> => {
@@ -487,6 +516,8 @@ const ObservationsService = {
   replaceObservationPlot,
   rescheduleObservation,
   scheduleObservation,
+  getOneObservation,
+  getOneObservationResult: getOneObservationResults,
   getPlantingSiteObservationsSummaries,
   abandonObservation,
   listAdHocObservationResults,

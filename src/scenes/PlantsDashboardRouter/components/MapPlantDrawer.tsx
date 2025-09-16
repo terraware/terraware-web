@@ -5,30 +5,25 @@ import { Box } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
+import { RecordedPlant } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-const PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:monitoringPlotId/photos/:fileId';
-
-type MapPhotoDrawerProps = {
+type MapPlantDrawerProps = {
   monitoringPlotId: number;
   observationId: number;
-  photo: ObservationMonitoringPlotPhoto;
+  plant: RecordedPlant;
 };
 
-const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDrawerProps): JSX.Element | undefined => {
+const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDrawerProps): JSX.Element | undefined => {
   const { observationResults } = usePlantingSiteData();
   const { activeLocale, strings } = useLocalization();
 
   const { format } = useNumberFormatter(activeLocale);
 
-  const photoUrl = useMemo(() => {
-    return PHOTO_URL.replace(':observationId', `${observationId}`)
-      .replace(':monitoringPlotId', `${monitoringPlotId}`)
-      .replace(':fileId', `${photo.fileId}`);
-  }, [observationId, monitoringPlotId, photo]);
+  const { species } = useSpeciesData();
 
   const result = useMemo(() => {
     return observationResults?.find((_result) => _result.observationId === observationId);
@@ -68,14 +63,40 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
     [format]
   );
 
+  const plantStatus = useMemo(() => {
+    switch (plant.status) {
+      case 'Live':
+        return strings.LIVE;
+      case 'Dead':
+        return strings.DEAD;
+      case 'Existing':
+        return strings.EXISTING;
+    }
+  }, [plant.status, strings]);
+
+  const plantSpecies = useMemo(() => {
+    if (plant.speciesId) {
+      return species.find((_species) => _species.id === plant.speciesId)?.scientificName ?? strings.UNKNOWN;
+    } else {
+      return plant.speciesName ?? strings.UNKNOWN;
+    }
+  }, [plant.speciesId, plant.speciesName, species, strings.UNKNOWN]);
+
   const rows = useMemo((): MapDrawerTableRow[] => {
     if (result) {
-      const zone = result.plantingZones.find((_zone) =>
-        _zone.plantingSubzones.some((subzone) =>
-          subzone.monitoringPlots.some((plot) => plot.monitoringPlotId === monitoringPlotId)
-        )
-      );
       return [
+        {
+          key: strings.ACTIVITY_TYPE,
+          value: strings.PLANTS,
+        },
+        {
+          key: strings.STATUS,
+          value: plantStatus,
+        },
+        {
+          key: strings.SPECIES,
+          value: plantSpecies,
+        },
         {
           key: strings.OBSERVATION_DATE,
           value: result.completedTime ? getShortDate(result.completedTime, activeLocale) : strings.UNKNOWN,
@@ -86,25 +107,30 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
           value: observer ?? strings.UNKNOWN,
         },
         {
-          key: strings.ZONE,
-          value: zone?.name ?? '',
-        },
-        {
           key: strings.LOCATION,
-          value: formatGPS(photo.gpsCoordinates.coordinates[0], photo.gpsCoordinates.coordinates[1]),
+          value: formatGPS(plant.gpsCoordinates.coordinates[0], plant.gpsCoordinates.coordinates[1]),
         },
       ];
     } else {
       return [];
     }
-  }, [activeLocale, formatGPS, monitoringPlotId, observationUrl, observer, photo, result, strings]);
+  }, [
+    activeLocale,
+    formatGPS,
+    observationUrl,
+    observer,
+    plant.gpsCoordinates.coordinates,
+    plantSpecies,
+    plantStatus,
+    result,
+    strings,
+  ]);
 
   return (
     <Box display={'flex'} flexDirection={'column'} width={'100%'}>
-      <img src={`${photoUrl}?maxWidth=377`} />
       <MapDrawerTable rows={rows} />
     </Box>
   );
 };
 
-export default MapPhotoDrawer;
+export default MapPlantDrawer;

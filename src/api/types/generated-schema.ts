@@ -7400,7 +7400,7 @@ export interface components {
         };
         MetricProgressPayload: {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             progress: number;
         };
@@ -9054,6 +9054,8 @@ export interface components {
             certainty: "Known" | "Other" | "Unknown";
             /** @description GPS coordinates where plant was observed. */
             gpsCoordinates: Omit<components["schemas"]["Point"], "type">;
+            /** Format: int64 */
+            id: number;
             /**
              * Format: int64
              * @description Required if certainty is Known. Ignored if certainty is Other or Unknown.
@@ -9195,7 +9197,7 @@ export interface components {
         };
         ReportSystemMetricEntriesPayload: {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
@@ -9211,7 +9213,7 @@ export interface components {
             description?: string;
             isPublishable: boolean;
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
@@ -9651,7 +9653,7 @@ export interface components {
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             description: string;
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
             name: string;
             reference: string;
             /** @enum {string} */
@@ -10250,7 +10252,7 @@ export interface components {
         };
         UpdateSystemMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -12903,7 +12905,7 @@ export interface operations {
     refreshAcceleratorReportSystemMetrics: {
         parameters: {
             query: {
-                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted")[];
+                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate")[];
             };
             header?: never;
             path: {

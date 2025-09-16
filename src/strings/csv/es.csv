@@ -39,6 +39,7 @@ ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de crecimiento activ
 ACTIVE_GROWTH_QUANTITY_REMAINING,Cantidad de crecimiento activo ({0} restante),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Cantidad de crecimiento activo *,b8c156d3
 ACTIVITY_LOG,Registro de actividades,112b2d64
+ACTIVITY_TYPE,Tipo de actividad,5f057b66
 ACTUAL,Real,1235cf68
 AD_HOC,Ad hoc,2acaf742
 AD_HOC_PLANT_MONITORING,Monitoreo de plantas ad hoc,589a6d6c
@@ -596,6 +597,7 @@ EVENT_RECORDED_SESSION_DESCRIPTION_1,Puedes ver esta sesión grabada cuando quie
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Altavoces o auriculares: integrados, con conexión USB o inalámbricos con tecnología Bluetooth.",b87be889
 EVENTS,Eventos,a18b73bc
 EXCLUSION_AREAS,Zonas de exclusión,08c7d391
+EXISTING,Existente,fa67ac1d
 EXISTING_PROJECT_ACCESSIONS_BODY,"Hay accesiones que ya se añadieron a un proyecto existente. Si selecciona dichas accesiones aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",a23f695b
 EXISTING_PROJECT_ACCESSIONS_TITLE,Proyecto existente con accesiones,278f1f38
 EXISTING_PROJECT_BATCHES_BODY,"Hay lotes que ya se añadieron a un proyecto existente. Si selecciona dichos lotes aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",426c8254

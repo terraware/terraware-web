@@ -352,3 +352,8 @@ export const searchAdHocObservations: (
   (_state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
     `${plantingSiteId}_${defaultTimeZone}_${search}`
 );
+
+export const selectOneObservation = (requestId: string) => (state: RootState) => state.oneObservation[requestId];
+
+export const selectOneObservationResults = (requestId: string) => (state: RootState) =>
+  state.oneObservationResults[requestId];

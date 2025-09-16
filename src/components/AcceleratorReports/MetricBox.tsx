@@ -21,7 +21,6 @@ import {
   ReportProjectMetric,
   ReportStandardMetric,
   ReportSystemMetric,
-  SystemMetricName,
 } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -140,7 +139,7 @@ const MetricBox = ({
         systemMetrics: [
           {
             ...record,
-            metric: record.metric as SystemMetricName,
+            metric: record.metric,
             overrideValue: record.overrideValue,
             ...baseMetric,
           },
