@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  selectOneObservaiton,
-  selectOneObservaitonResults,
+  selectOneObservation,
+  selectOneObservationResults,
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestOneObservation, requestOneObservationResult } from 'src/redux/features/observations/observationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -17,8 +17,8 @@ const useObservation = (observationId?: number) => {
   const [observationRequestId, setObservationRequestId] = useState('');
   const [observationResultsRequestId, setObservationResultsRequestId] = useState('');
 
-  const observationResponse = useAppSelector(selectOneObservaiton(observationRequestId));
-  const observationResultsResponse = useAppSelector(selectOneObservaitonResults(observationResultsRequestId));
+  const observationResponse = useAppSelector(selectOneObservation(observationRequestId));
+  const observationResultsResponse = useAppSelector(selectOneObservationResults(observationResultsRequestId));
 
   const reload = useCallback(() => {
     if (observationId !== undefined) {
