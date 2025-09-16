@@ -30,18 +30,14 @@ const useObservation = (observationId?: number) => {
   }, [dispatch, observationId]);
 
   useEffect(() => {
-    if (observationResponse) {
-      if (observationResponse.status === 'success' && observationResponse.data) {
-        setObservation(observationResponse.data);
-      }
+    if (observationResponse?.status === 'success' && observationResponse.data) {
+      setObservation(observationResponse.data);
     }
   }, [observationResponse]);
 
   useEffect(() => {
-    if (observationResultsResponse) {
-      if (observationResultsResponse.status === 'success' && observationResultsResponse.data) {
-        setObservationResults(observationResultsResponse.data);
-      }
+    if (observationResultsResponse?.status === 'success' && observationResultsResponse.data) {
+      setObservationResults(observationResultsResponse.data);
     }
   }, [observationResultsResponse]);
 

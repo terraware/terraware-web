@@ -1788,6 +1788,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/files/tokens/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets the contents of the file associated with a file access token.
+         * @description This endpoint does not require authentication; it's intended to offer temporary file access for third-party services such as video transcoding.
+         */
+        get: operations["getFileForToken"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/entities": {
         parameters: {
             query?: never;
@@ -4576,6 +4596,21 @@ export interface components {
             /** @enum {string} */
             role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
         };
+        AdminActivityMediaFilePayload: {
+            caption?: string;
+            /** Format: date */
+            capturedDate: string;
+            /** Format: int64 */
+            createdBy: number;
+            /** Format: date-time */
+            createdTime: string;
+            /** Format: int64 */
+            fileId: number;
+            geolocation?: components["schemas"]["Point"];
+            isCoverPhoto: boolean;
+            /** @enum {string} */
+            type: "Photo" | "Video";
+        };
         AdminActivityPayload: {
             /** Format: int64 */
             createdBy: number;
@@ -4588,6 +4623,7 @@ export interface components {
             id: number;
             isHighlight: boolean;
             isVerified: boolean;
+            media: components["schemas"]["AdminActivityMediaFilePayload"][];
             /** Format: int64 */
             modifiedBy: number;
             /** Format: date-time */
@@ -7364,7 +7400,7 @@ export interface components {
         };
         MetricProgressPayload: {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             progress: number;
         };
@@ -9018,6 +9054,7 @@ export interface components {
             certainty: "Known" | "Other" | "Unknown";
             /** @description GPS coordinates where plant was observed. */
             gpsCoordinates: Omit<components["schemas"]["Point"], "type">;
+            /** Format: int64 */
             id: number;
             /**
              * Format: int64
@@ -9160,7 +9197,7 @@ export interface components {
         };
         ReportSystemMetricEntriesPayload: {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
@@ -9176,7 +9213,7 @@ export interface components {
             description?: string;
             isPublishable: boolean;
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
@@ -9616,7 +9653,7 @@ export interface components {
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             description: string;
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
             name: string;
             reference: string;
             /** @enum {string} */
@@ -10215,7 +10252,7 @@ export interface components {
         };
         UpdateSystemMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -12868,7 +12905,7 @@ export interface operations {
     refreshAcceleratorReportSystemMetrics: {
         parameters: {
             query: {
-                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted")[];
+                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate")[];
             };
             header?: never;
             path: {
@@ -14825,6 +14862,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getFileForToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
                 };
             };
         };
