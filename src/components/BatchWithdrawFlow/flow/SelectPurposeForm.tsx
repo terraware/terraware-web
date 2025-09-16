@@ -796,31 +796,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   </Grid>
 
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
-                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
-                      <Textfield
-                        label={strings
-                          .formatString(
-                            strings.HARDENING_OFF_QUANTITY_REMAINING,
-                            String(batches[0].hardeningOffQuantity)
-                          )
-                          .toString()}
-                        id='hardeningOffQuantityWithdrawn'
-                        onChange={(value: unknown) => setHardeningOffQuantityWithdrawn(value as number)}
-                        type='number'
-                        value={hardeningOffQuantityWithdrawn}
-                        tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
-                        errorText={fieldsErrors.hardeningOffQuantityWithdrawn}
-                        required
-                        sx={{
-                          '&> #hardeningOffQuantityWithdrawn': {
-                            height: '44px',
-                          },
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
                         label={strings
@@ -855,6 +830,31 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         />
                       </Grid>
                     )}
+                  </Grid>
+
+                  <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
+                      <Textfield
+                        label={strings
+                          .formatString(
+                            strings.HARDENING_OFF_QUANTITY_REMAINING,
+                            String(batches[0].hardeningOffQuantity)
+                          )
+                          .toString()}
+                        id='hardeningOffQuantityWithdrawn'
+                        onChange={(value: unknown) => setHardeningOffQuantityWithdrawn(value as number)}
+                        type='number'
+                        value={hardeningOffQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_HARDENING_OFF_QUANTITY}
+                        errorText={fieldsErrors.hardeningOffQuantityWithdrawn}
+                        required
+                        sx={{
+                          '&> #hardeningOffQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
+                      />
+                    </Grid>
                   </Grid>
 
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
