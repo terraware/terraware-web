@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1758045095444" clover="3.2.0">
-  <project timestamp="1758045095444" name="All files">
-    <metrics statements="33239" coveredstatements="1334" conditionals="23095" coveredconditionals="389" methods="10193" coveredmethods="211" elements="66527" coveredelements="1934" complexity="0" loc="33239" ncloc="33239" packages="278" files="1337" classes="1337"/>
+<coverage generated="1758050482305" clover="3.2.0">
+  <project timestamp="1758050482305" name="All files">
+    <metrics statements="33265" coveredstatements="1334" conditionals="23103" coveredconditionals="389" methods="10200" coveredmethods="211" elements="66568" coveredelements="1934" complexity="0" loc="33265" ncloc="33265" packages="278" files="1339" classes="1339"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1759,9 +1759,9 @@
       </file>
     </package>
     <package name="src.components.ActivityLog">
-      <metrics statements="81" coveredstatements="0" conditionals="53" coveredconditionals="0" methods="24" coveredmethods="0"/>
+      <metrics statements="103" coveredstatements="0" conditionals="57" coveredconditionals="0" methods="30" coveredmethods="0"/>
       <file name="ActivitiesListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesListView.tsx">
-        <metrics statements="45" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="17" coveredmethods="0"/>
+        <metrics statements="44" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="17" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
@@ -1769,7 +1769,6 @@
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
@@ -1807,6 +1806,35 @@
         <line num="144" count="0" type="stmt"/>
         <line num="156" count="0" type="stmt"/>
         <line num="168" count="0" type="stmt"/>
+      </file>
+      <file name="ActivityCreateView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityCreateView.tsx">
+        <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+      </file>
+      <file name="ActivityEditView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityEditView.tsx">
+        <metrics statements="12" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
       </file>
       <file name="ActivityStatusBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityStatusBadge.tsx">
         <metrics statements="11" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -22872,25 +22900,29 @@
       </file>
     </package>
     <package name="src.scenes.ActivityLogRouter">
-      <metrics statements="13" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
+      <metrics statements="17" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
       <file name="ActivityLogView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ActivityLogRouter/ActivityLogView.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
+        <metrics statements="14" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ActivityLogRouter/index.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
+        <metrics statements="3" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter">
