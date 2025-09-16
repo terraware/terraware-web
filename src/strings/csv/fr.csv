@@ -517,6 +517,7 @@ EDIT,Modifier,9d1278d8
 EDIT_ACCESSION,Modifier l'accession,3df43588
 EDIT_ACCESSION_DETAIL,Modifier les détails de l'accession,9b3e32a8
 EDIT_ACCOUNT,Modifier le compte,b77ad44d
+EDIT_ACTIVITY,Modifier l’activité,5b6476f3
 EDIT_BATCH_DETAILS,Modifier les détails du lot,d2f2112a
 EDIT_COHORT,Modifier la cohorte,4c88b04a
 EDIT_COHORT_TO_ADD_MODULES,Modifier cette cohorte pour ajouter des modules.,376bbb6d
