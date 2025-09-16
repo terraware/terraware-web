@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router';
 
 import ActivityCreateView from 'src/components/ActivityLog/ActivityCreateView';
+import ActivityEditView from 'src/components/ActivityLog/ActivityEditView';
 import isEnabled from 'src/features';
 
 import ActivityLogView from './ActivityLogView';
