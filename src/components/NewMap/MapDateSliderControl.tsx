@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 import { Slider } from '@terraware/web-components';
@@ -34,6 +34,13 @@ const MapDateSliderControl = ({ dates, selectedDate, onChange }: MapDateSliderCo
 
   const getDateLabel = (date: DateTime) => <Typography fontSize='12px'>{getDateString(date)}</Typography>;
 
+  const onDateChange = useCallback(
+    (value: number) => {
+      onChange(DateTime.fromMillis(value));
+    },
+    [onChange]
+  );
+
   return (
     <Card
       style={{
@@ -59,7 +66,7 @@ const MapDateSliderControl = ({ dates, selectedDate, onChange }: MapDateSliderCo
             max={latestDate.valueOf()}
             marks={marks}
             valueLabelDisplay='off'
-            onChange={(value) => onChange(DateTime.fromMillis(value))}
+            onChange={onDateChange}
           />
           <Box display='flex' justifyContent='space-between'>
             {getDateLabel(earliestDate)}

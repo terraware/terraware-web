@@ -254,6 +254,10 @@ const MapComponent = (props: MapComponentProps) => {
     return Array.from(imageUrls);
   }, [features]);
 
+  const closeDrawer = useCallback(() => {
+    setDrawerOpen?.(false);
+  }, [setDrawerOpen]);
+
   return (
     <MapContainer
       containerId={mapContainerId ?? 'map-container'}
@@ -286,7 +290,7 @@ const MapComponent = (props: MapComponentProps) => {
       drawer={
         <MapDrawer
           open={drawerOpen ?? false}
-          onClose={() => setDrawerOpen?.(false)}
+          onClose={closeDrawer}
           size={drawerSize ?? 'small'}
           title={drawerTitle ?? ''}
         >

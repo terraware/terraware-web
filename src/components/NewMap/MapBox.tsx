@@ -4,6 +4,7 @@ import Map, {
   Layer,
   MapRef,
   Marker,
+  MarkerEvent,
   NavigationControl,
   Source,
   ViewStateChangeEvent,
@@ -398,6 +399,26 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     );
   }, [highlightGroups]);
 
+  const onMarkerClick = useCallback(
+    (marker: MapMarker) => (event: MarkerEvent<MouseEvent>) => {
+      marker.onClick?.();
+      event.originalEvent.stopPropagation();
+    },
+    []
+  );
+
+  const onMarkerClusterClick = useCallback(
+    (latitude: number, longitude: number) => (event: MarkerEvent<MouseEvent>) => {
+      mapRef.current?.easeTo({
+        center: { lat: latitude, lon: longitude },
+        zoom: (zoom ?? 10) + 1,
+        duration: 500,
+      });
+      event.originalEvent.stopPropagation();
+    },
+    [zoom]
+  );
+
   const markersComponents = useMemo(() => {
     return markerGroups?.flatMap((markerGroup) => {
       // cluster markers here
@@ -410,14 +431,11 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
           return (
             <Marker
               className='map-marker'
-              key={`marker-${i}`}
+              key={`group-${markerGroup.markerGroupId}-marker-${i}`}
               longitude={marker.longitude}
               latitude={marker.latitude}
               anchor='center'
-              onClick={(event) => {
-                marker.onClick?.();
-                event.originalEvent.stopPropagation();
-              }}
+              onClick={onMarkerClick(marker)}
               style={{ backgroundColor: marker.selected ? markerGroup.style.iconColor : theme.palette.TwClrBg }}
             >
               <Icon
@@ -438,18 +456,11 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
           return (
             <Marker
               className='map-marker map-marker--cluster'
-              key={`marker-${i}`}
+              key={`group-${markerGroup.markerGroupId}-marker-cluster-${i}`}
               longitude={lngAvg}
               latitude={latAvg}
               anchor='center'
-              onClick={(event) => {
-                mapRef.current?.easeTo({
-                  center: { lat: latAvg, lon: lngAvg },
-                  zoom: (zoom ?? 10) + 1,
-                  duration: 500,
-                });
-                event.originalEvent.stopPropagation();
-              }}
+              onClick={onMarkerClusterClick(latAvg, lngAvg)}
               style={{ backgroundColor: selected ? markerGroup.style.iconColor : theme.palette.TwClrBg }}
             >
               <p className='count'>{markers.length}</p>
@@ -463,7 +474,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         }
       });
     });
-  }, [clusterMarkers, markerGroups, theme, zoom]);
+  }, [clusterMarkers, markerGroups, onMarkerClick, onMarkerClusterClick, theme]);
 
   const onMouseMove = useCallback((event: MapMouseEvent) => {
     if (event.features && event.features.length) {
