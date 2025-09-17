@@ -4,7 +4,9 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Textfield, Tooltip } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import {
   selectRefreshAcceleratorReportSystemMetrics,
   selectReviewAcceleratorReportMetric,
@@ -67,6 +69,9 @@ const MetricBox = ({
   const [record, setRecord, onChange, onChangeCallback] = useForm<
     ReportProjectMetric | ReportSystemMetric | ReportStandardMetric
   >(metric);
+
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isFunderRoute } = useFunderPortal();
   const [progressModalOpened, , openProgressModal, closeProgresModal] = useBoolean(false);
   const [resetMetricModalOpened, , openResetMetricModal, closeResetMetricModal] = useBoolean(false);
   const dispatch = useAppDispatch();
@@ -130,7 +135,7 @@ const MetricBox = ({
 
   const getUpdateBody = useCallback(() => {
     const baseMetric = {
-      underperformanceJustification: record.underperformanceJustification,
+      projectsComments: record.projectsComments,
       progressNotes: record.progressNotes,
       status: record.status,
     };
@@ -354,10 +359,10 @@ const MetricBox = ({
           <Box paddingRight={theme.spacing(2)}>
             <Textfield
               type='textarea'
-              label={strings.UNDERPERFORMANCE_JUSTIFICATION}
-              value={record.underperformanceJustification}
-              id={'underperformanceJustification'}
-              onChange={onChangeCallback('underperformanceJustification')}
+              label={isAcceleratorRoute || isFunderRoute ? strings.PROJECTS_COMMENTS : strings.COMMENTS}
+              value={record.projectsComments}
+              id={'projectsComments'}
+              onChange={onChangeCallback('projectsComments')}
               display={!isEditing}
               styles={textAreaStyles}
               preserveNewlines

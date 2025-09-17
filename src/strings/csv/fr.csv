@@ -1422,6 +1422,7 @@ PROJECT_ZONE_FIGURE,Figure de la zone de projet,7b0c1adc
 PROJECT_ZONE_FIGURE_VARIABLE,Variable de figure de la zone du projet,12181fad
 PROJECT_ZONES,Zones du projet,0b21c99c
 PROJECTS,Projets,07b3b475
+PROJECTS_COMMENTS,Commentaires du projet,96175bc7
 PROPOSED_PROJECT_BOUNDARIES_ADDED,Ajout des limites du projet proposé,2787f20d
 PROPOSED_PROJECT_BOUNDARY,Limite du projet proposé,0b77fcdf
 PROPOSED_RESTORATION_ACTIVITIES,Activités de restauration proposées,4c6b833a
@@ -2071,7 +2072,6 @@ UNABLE_TO_ADD_PERSON,Impossible d'ajouter une personne,7d19ff74
 UNABLE_TO_LOAD_NOTIFICATIONS,Impossible de charger les notifications. Réessayez plus tard.,c6aeba80
 UNASSIGNED,Non assigné·e,9acb5519
 UNCLAIMED,Non réclamé,a4964181
-UNDERPERFORMANCE_JUSTIFICATION,Justification du sous-rendement,7d6d2cba
 UNDO,Annuler,5f150050
 UNDO_PLANTING_COMPLETE,Annuler la plantation terminée,05a90be7
 UNDO_WITHDRAWAL,Annuler le retrait,eba70c5e
