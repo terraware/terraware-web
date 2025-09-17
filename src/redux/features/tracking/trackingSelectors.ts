@@ -21,6 +21,8 @@ export const selectPlantingSitesError = (state: RootState) => state.tracking?.er
 export const selectPlantingSite = (state: RootState, plantingSiteId: number) =>
   selectPlantingSites(state)?.find((site: PlantingSite) => site.id === plantingSiteId);
 
+export const selectOnePlantingSite = (requestId: string) => (state: RootState) => state.plantingSite[requestId];
+
 export const selectMonitoringPlots = (state: RootState, requestId: string) => state.monitoringPlots[requestId];
 
 export const selectPlantingSiteList = (requestId: string) => (state: RootState) => state.plantingSiteList[requestId];
