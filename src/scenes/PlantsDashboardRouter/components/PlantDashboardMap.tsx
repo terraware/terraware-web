@@ -4,12 +4,21 @@ import { useTheme } from '@mui/material';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
-import { MapFillComponentStyle, MapLayer, MapLayerFeatureId, MapMarker } from 'src/components/NewMap/types';
-import useObservation from 'src/hooks/useObservation';
+import {
+  MapFillComponentStyle,
+  MapLayer,
+  MapLayerFeature,
+  MapLayerFeatureId,
+  MapMarker,
+} from 'src/components/NewMap/types';
 import { useLocalization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
-import { ObservationMonitoringPlotPhoto, RecordedPlant, RecordedPlantStatus } from 'src/types/Observations';
+import {
+  ObservationMonitoringPlotPhoto,
+  ObservationResultsPayload,
+  RecordedPlant,
+  RecordedPlantStatus,
+} from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -29,7 +38,23 @@ type PlotPlant = {
   plant: RecordedPlant;
 };
 
-const PlantDashboardMap = (): JSX.Element => {
+type PlantDashboardMapProps = {
+  disablePhotoMarkers?: boolean;
+  disablePlantMarkers?: boolean;
+  disableMortalityRate?: boolean;
+  disableObserationEvents?: boolean;
+  plantingSites: PlantingSite[];
+  observationResults: ObservationResultsPayload[];
+};
+
+const PlantDashboardMap = ({
+  disablePhotoMarkers,
+  disablePlantMarkers,
+  disableMortalityRate,
+  disableObserationEvents,
+  plantingSites,
+  observationResults,
+}: PlantDashboardMapProps): JSX.Element => {
   const { token, mapId } = useMapboxToken();
   const { strings } = useLocalization();
   const theme = useTheme();
@@ -37,8 +62,6 @@ const PlantDashboardMap = (): JSX.Element => {
   const [selectedFeaturedId, setSelectedFeatureId] = useState<MapLayerFeatureId>();
   const [selectedPhoto, setSelectedPhoto] = useState<PlotPhoto>();
   const [selectedPlant, setSelectedPlant] = useState<PlotPlant>();
-  const { latestResult, plantingSite } = usePlantingSiteData();
-  const { observationResults } = useObservation(latestResult?.observationId);
 
   const sitesLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
@@ -133,122 +156,135 @@ const PlantDashboardMap = (): JSX.Element => {
     }
   }, [selectedFeaturedId, selectedPhoto, selectedPlant]);
 
-  const extractLayersFromSite = useCallback(
-    (site: PlantingSite): MapLayer[] => {
+  const extractFeaturesFromSite = useCallback(
+    (
+      site: PlantingSite
+    ): {
+      siteFeatures: MapLayerFeature[];
+      zoneFeatures: MapLayerFeature[];
+      subzoneFeatures: MapLayerFeature[];
+    } => {
       const zones = site.plantingZones ?? [];
       const subzones = site.plantingZones?.flatMap((zone) => zone.plantingSubzones);
 
-      return [
-        {
-          features: [
-            {
-              featureId: `${site.id}`,
-              label: site.name,
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: site.boundary?.coordinates ?? [],
-              },
-              onClick: selectFeature('sites', `${site.id}`),
-              selected: selectedFeaturedId?.layerId === 'sites' && selectedFeaturedId?.featureId === `${site.id}`,
-            },
-          ],
-          label: strings.SITE,
-          layerId: 'sites',
-          style: sitesLayerStyle,
-        },
-        {
-          features: zones.map((zone) => ({
-            featureId: `${zone.id}`,
-            label: zone.name,
+      return {
+        siteFeatures: [
+          {
+            featureId: `${site.id}`,
+            label: site.name,
             geometry: {
               type: 'MultiPolygon',
-              coordinates: zone.boundary.coordinates,
+              coordinates: site.boundary?.coordinates ?? [],
             },
-            onClick: selectFeature('zones', `${zone.id}`),
-            selected: selectedFeaturedId?.layerId === 'zones' && selectedFeaturedId?.featureId === `${zone.id}`,
-          })),
-          label: strings.ZONES,
-          layerId: 'zones',
-          style: zonesLayerStyle,
-        },
-        {
-          features:
-            subzones?.map((subzone) => ({
-              featureId: `${subzone.id}`,
-              label: subzone.name,
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: subzone.boundary.coordinates,
-              },
-              onClick: selectFeature('subzones', `${subzone.id}`),
-              selected: selectedFeaturedId?.layerId === 'subzones' && selectedFeaturedId?.featureId === `${subzone.id}`,
-            })) ?? [],
-          label: strings.SUBZONES,
-          layerId: 'subzones',
-          style: subzonesLayerStyle,
-        },
-      ];
+            onClick: selectFeature('sites', `${site.id}`),
+            selected: selectedFeaturedId?.layerId === 'sites' && selectedFeaturedId?.featureId === `${site.id}`,
+          },
+        ],
+        zoneFeatures: zones.map((zone) => ({
+          featureId: `${zone.id}`,
+          label: zone.name,
+          geometry: {
+            type: 'MultiPolygon',
+            coordinates: zone.boundary.coordinates,
+          },
+          onClick: selectFeature('zones', `${zone.id}`),
+          selected: selectedFeaturedId?.layerId === 'zones' && selectedFeaturedId?.featureId === `${zone.id}`,
+        })),
+        subzoneFeatures:
+          subzones?.map((subzone) => ({
+            featureId: `${subzone.id}`,
+            label: subzone.name,
+            geometry: {
+              type: 'MultiPolygon',
+              coordinates: subzone.boundary.coordinates,
+            },
+            onClick: selectFeature('subzones', `${subzone.id}`),
+            selected: selectedFeaturedId?.layerId === 'subzones' && selectedFeaturedId?.featureId === `${subzone.id}`,
+          })) ?? [],
+      };
     },
-    [selectFeature, selectedFeaturedId, sitesLayerStyle, strings, subzonesLayerStyle, zonesLayerStyle]
+    [selectFeature, selectedFeaturedId]
   );
 
-  const layers = useMemo(() => {
-    if (!plantingSite) {
+  const layers = useMemo((): MapLayer[] => {
+    if (plantingSites.length === 0) {
       return [];
     }
-    if (!observationResults) {
-      return extractLayersFromSite(plantingSite);
-    } else {
-      return extractLayersFromSite(plantingSite);
-    }
-  }, [extractLayersFromSite, observationResults, plantingSite]);
+
+    const features = plantingSites.map((site) => extractFeaturesFromSite(site));
+
+    return [
+      {
+        features: features.flatMap(({ siteFeatures }) => siteFeatures),
+        label: strings.SITE,
+        layerId: 'sites',
+        style: sitesLayerStyle,
+      },
+      {
+        features: features.flatMap(({ zoneFeatures }) => zoneFeatures),
+        label: strings.ZONES,
+        layerId: 'zones',
+        style: zonesLayerStyle,
+      },
+      {
+        features: features.flatMap(({ subzoneFeatures }) => subzoneFeatures),
+        label: strings.SUBZONES,
+        layerId: 'subzones',
+        style: subzonesLayerStyle,
+      },
+    ];
+  }, [extractFeaturesFromSite, plantingSites, sitesLayerStyle, strings, subzonesLayerStyle, zonesLayerStyle]);
 
   const photoMarkers = useMemo((): MapMarker[] => {
-    if (!observationResults) {
+    if (observationResults.length === 0) {
       return [];
     }
 
-    return observationResults.plantingZones
-      .flatMap((zone) => zone.plantingSubzones)
-      .flatMap((subzone) => subzone.monitoringPlots)
-      .flatMap((plot): MapMarker[] =>
-        plot.photos.map((photo) => {
-          return {
-            id: `${photo.fileId}`,
-            longitude: photo.gpsCoordinates.coordinates[1],
-            latitude: photo.gpsCoordinates.coordinates[0],
-            onClick: selectPhoto(plot.monitoringPlotId, observationResults.observationId, photo),
-            selected: selectedPhoto && photo.fileId === selectedPhoto.photo.fileId,
-          };
-        })
-      );
+    return observationResults.flatMap((results) =>
+      results.plantingZones
+        .flatMap((zone) => zone.plantingSubzones)
+        .flatMap((subzone) => subzone.monitoringPlots)
+        .flatMap((plot): MapMarker[] =>
+          plot.photos.map((photo) => {
+            return {
+              id: `${photo.fileId}`,
+              longitude: photo.gpsCoordinates.coordinates[1],
+              latitude: photo.gpsCoordinates.coordinates[0],
+              onClick: selectPhoto(plot.monitoringPlotId, results.observationId, photo),
+              selected: selectedPhoto && photo.fileId === selectedPhoto.photo.fileId,
+            };
+          })
+        )
+    );
   }, [observationResults, selectPhoto, selectedPhoto]);
 
   const plantsMarkers = useCallback(
     (status: RecordedPlantStatus): MapMarker[] => {
-      if (!observationResults) {
+      if (observationResults.length === 0) {
         return [];
       }
 
-      return observationResults.plantingZones
-        .flatMap((zone) => zone.plantingSubzones)
-        .flatMap((subzone) => subzone.monitoringPlots)
-        .flatMap((plot): MapMarker[] => {
-          if (plot.plants) {
-            const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-            return filteredPlants.map(
-              (plant): MapMarker => ({
-                id: `${plant.id}`,
-                longitude: plant.gpsCoordinates.coordinates[1],
-                latitude: plant.gpsCoordinates.coordinates[0],
-                onClick: selectPlant(plot.monitoringPlotId, observationResults.observationId, plant),
-                selected: selectedPlant && selectedPlant.plant.id === plant.id,
-              })
-            );
-          } else {
-            return [];
-          }
-        });
+      return observationResults.flatMap((results) =>
+        results.plantingZones
+          .flatMap((zone) => zone.plantingSubzones)
+          .flatMap((subzone) => subzone.monitoringPlots)
+          .flatMap((plot): MapMarker[] => {
+            if (plot.plants) {
+              const filteredPlants = plot.plants.filter((plant) => plant.status === status);
+              return filteredPlants.map(
+                (plant): MapMarker => ({
+                  id: `${plant.id}`,
+                  longitude: plant.gpsCoordinates.coordinates[1],
+                  latitude: plant.gpsCoordinates.coordinates[0],
+                  onClick: selectPlant(plot.monitoringPlotId, results.observationId, plant),
+                  selected: selectedPlant && selectedPlant.plant.id === plant.id,
+                })
+              );
+            } else {
+              return [];
+            }
+          })
+      );
     },
     [observationResults, selectPlant, selectedPlant]
   );
@@ -258,7 +294,7 @@ const PlantDashboardMap = (): JSX.Element => {
     const lessThanFifty: MapLayerFeatureId[] = [];
     const greaterThanFifty: MapLayerFeatureId[] = [];
 
-    if (!observationResults) {
+    if (observationResults.length === 0) {
       return {
         lessThanTwentyFive,
         lessThanFifty,
@@ -278,15 +314,17 @@ const PlantDashboardMap = (): JSX.Element => {
       }
     };
 
-    const siteId = { layerId: 'sites', featureId: `${observationResults.plantingSiteId}` };
-    sortFeatureByMortalityRate(siteId, observationResults.mortalityRate);
+    observationResults.forEach((results) => {
+      const siteId = { layerId: 'sites', featureId: `${results.plantingSiteId}` };
+      sortFeatureByMortalityRate(siteId, results.mortalityRate);
 
-    observationResults.plantingZones.forEach((zone) => {
-      const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
-      sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
-      zone.plantingSubzones.forEach((subzone) => {
-        const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
-        sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
+      results.plantingZones.forEach((zone) => {
+        const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
+        sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
+        zone.plantingSubzones.forEach((subzone) => {
+          const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
+          sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
+        });
       });
     });
 
@@ -311,7 +349,7 @@ const PlantDashboardMap = (): JSX.Element => {
   const observationEventsHighlights = useMemo((): MapLayerFeatureId[][] => {
     const recencyHighlights: MapLayerFeatureId[][] = [[], [], [], [], []];
 
-    if (!plantingSite) {
+    if (plantingSites.length === 0) {
       return recencyHighlights;
     }
 
@@ -322,20 +360,22 @@ const PlantDashboardMap = (): JSX.Element => {
       }
     };
 
-    const siteId = { layerId: 'sites', featureId: `${plantingSite.id}` };
-    sortFeatureByObservationRecency(siteId, plantingSite.latestObservationCompletedTime);
+    plantingSites.forEach((plantingSite) => {
+      const siteId = { layerId: 'sites', featureId: `${plantingSite.id}` };
+      sortFeatureByObservationRecency(siteId, plantingSite.latestObservationCompletedTime);
 
-    plantingSite.plantingZones?.forEach((zone) => {
-      const zoneId = { layerId: 'zones', featureId: `${zone.id}` };
-      sortFeatureByObservationRecency(zoneId, zone.latestObservationCompletedTime);
-      zone.plantingSubzones.forEach((subzone) => {
-        const subzoneId = { layerId: 'subzones', featureId: `${subzone.id}` };
-        sortFeatureByObservationRecency(subzoneId, subzone.latestObservationCompletedTime);
+      plantingSite.plantingZones?.forEach((zone) => {
+        const zoneId = { layerId: 'zones', featureId: `${zone.id}` };
+        sortFeatureByObservationRecency(zoneId, zone.latestObservationCompletedTime);
+        zone.plantingSubzones.forEach((subzone) => {
+          const subzoneId = { layerId: 'subzones', featureId: `${subzone.id}` };
+          sortFeatureByObservationRecency(subzoneId, subzone.latestObservationCompletedTime);
+        });
       });
     });
 
     return recencyHighlights;
-  }, [plantingSite]);
+  }, [plantingSites]);
 
   const baseObservationEventStyle = useMemo(
     (): MapFillComponentStyle => ({
@@ -365,6 +405,7 @@ const PlantDashboardMap = (): JSX.Element => {
             },
           },
         ],
+        sectionDisabled: disablePhotoMarkers,
         sectionTitle: strings.PHOTOS,
         type: 'marker',
       },
@@ -391,6 +432,7 @@ const PlantDashboardMap = (): JSX.Element => {
             },
           },
         ],
+        sectionDisabled: disablePlantMarkers,
         sectionTitle: strings.PLANTS,
         type: 'marker',
       },
@@ -435,6 +477,7 @@ const PlantDashboardMap = (): JSX.Element => {
             },
           ],
         },
+        sectionDisabled: disableObserationEvents,
         sectionTitle: strings.OBSERVATION_EVENTS,
         sectionTooltip: strings.OBSERVATION_EVENTS_TOOLTIP,
         legendItems: [
@@ -475,6 +518,7 @@ const PlantDashboardMap = (): JSX.Element => {
             },
           ],
         },
+        sectionDisabled: disableMortalityRate,
         sectionTitle: strings.MORTALITY_RATE,
         legendItems: [
           {
@@ -507,6 +551,10 @@ const PlantDashboardMap = (): JSX.Element => {
     ];
   }, [
     baseObservationEventStyle,
+    disableMortalityRate,
+    disableObserationEvents,
+    disablePhotoMarkers,
+    disablePlantMarkers,
     layers,
     mortalityRateHighlights.greaterThanFifty,
     mortalityRateHighlights.lessThanFifty,

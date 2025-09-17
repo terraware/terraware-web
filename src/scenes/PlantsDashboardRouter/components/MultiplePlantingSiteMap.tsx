@@ -6,11 +6,14 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { PlantingSiteMap } from 'src/components/Map';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
+import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { getRgbaFromHex } from 'src/utils/color';
+
+import PlantDashboardMap from './PlantDashboardMap';
 
 type MultiplePlantingSiteMapProps = {
   projectId: number;
@@ -29,6 +32,7 @@ export default function MultiplePlantingSiteMap({
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
+  const newMapEnabled = isEnabled('New Plant Dashboard Map');
 
   useEffect(() => {
     if (allPlantingSites) {
@@ -130,15 +134,25 @@ export default function MultiplePlantingSiteMap({
             <FormattedNumber value={Math.round(totalArea * 100) / 100} />
           )}
         </Typography>
-        <Box display={'flex'} flexDirection={isDesktop ? 'row' : 'column-reverse'}>
-          <MapLegend legends={legends} />
-          <PlantingSiteMap
-            mapData={mapData!}
-            style={{ width: '100%', borderRadius: '24px', ...style }}
-            layers={['Planting Site', 'Zones', 'Sub-Zones']}
-            hideAllControls={hideAllControls}
+        {newMapEnabled ? (
+          <PlantDashboardMap
+            disablePhotoMarkers
+            disablePlantMarkers
+            disableMortalityRate
+            plantingSites={plantingSites}
+            observationResults={[]}
           />
-        </Box>
+        ) : (
+          <Box display={'flex'} flexDirection={isDesktop ? 'row' : 'column-reverse'}>
+            <MapLegend legends={legends} />
+            <PlantingSiteMap
+              mapData={mapData!}
+              style={{ width: '100%', borderRadius: '24px', ...style }}
+              layers={['Planting Site', 'Zones', 'Sub-Zones']}
+              hideAllControls={hideAllControls}
+            />
+          </Box>
+        )}
       </Box>
     );
   } else {

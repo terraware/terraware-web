@@ -10,6 +10,7 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useObservation from 'src/hooks/useObservation';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useAppDispatch } from 'src/redux/store';
@@ -65,6 +66,8 @@ export default function PlantsDashboardView({
   const latestResultId = useMemo(() => {
     return latestResult?.observationId;
   }, [latestResult]);
+
+  const { observationResults } = useObservation(latestResultId);
 
   const geometryChangedNote = useMemo(() => {
     if (latestResult?.completedTime && plantingSite?.plantingZones?.length) {
@@ -250,11 +253,18 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            {newMapEnabled ? <PlantDashboardMap /> : <ZoneLevelDataMap plantingSiteId={plantingSite.id} />}
+            {newMapEnabled ? (
+              <PlantDashboardMap
+                observationResults={observationResults ? [observationResults] : []}
+                plantingSites={plantingSite ? [plantingSite] : []}
+              />
+            ) : (
+              <ZoneLevelDataMap plantingSiteId={plantingSite.id} />
+            )}
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink, newMapEnabled]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink, newMapEnabled, observationResults]
   );
 
   const renderSimpleSiteMap = useCallback(
