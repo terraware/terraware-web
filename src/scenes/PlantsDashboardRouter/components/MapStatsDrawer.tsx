@@ -92,16 +92,10 @@ const MapStatsDrawer = (featureId: MapLayerFeatureId): JSX.Element | undefined =
     const results: MapDrawerTableRow[] = [];
 
     if (properties) {
-      results.push(
-        {
-          key: strings.TYPE,
-          value: properties.type,
-        },
-        {
-          key: strings.AREA_HA,
-          value: properties.areaHa ? `${properties.areaHa}` : strings.UNKNOWN,
-        }
-      );
+      results.push({
+        key: strings.TYPE,
+        value: properties.type,
+      });
 
       if (properties.zoneName) {
         results.push({
@@ -109,6 +103,11 @@ const MapStatsDrawer = (featureId: MapLayerFeatureId): JSX.Element | undefined =
           value: properties.zoneName,
         });
       }
+
+      results.push({
+        key: strings.AREA_HA,
+        value: properties.areaHa ? `${properties.areaHa}` : strings.UNKNOWN,
+      });
 
       if (properties.observed) {
         results.push(
