@@ -180,8 +180,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
   if (delayedLoading) {
     return (
       <Box display={'flex'} width={'100%'} justifyContent={'center'}>
-        {' '}
-        <CircularProgress />{' '}
+        <CircularProgress />
       </Box>
     );
   }
