@@ -458,7 +458,7 @@ DETAILS,Detalles,c13bd424
 DEV_SERVER_ERROR,Servidor no disponible (se puede reiniciar con nuevos cambios en el código). ¿Volver a cargar?,d3be39f0
 DIAMETER_AT_BREAST_HEIGHT,Diámetro a la altura del pecho (DAP) en la madurez (cm),6b42a16f
 DIAMETER_CM,Diámetro (cm),242d8114
-DISMISS,Descartar,a56709f4
+DISMISS,Cerrar notificación,a56709f4
 DOC_PRODUCER,Productor de documentos,e40f8aa1
 DOCUMENT,Documento,57650c76
 DOCUMENT_DETAILS,Editar detalles del documento,92155983
@@ -928,9 +928,9 @@ MARK_AS_SUBMITTED,Marcar como enviado,b7f9a33e
 MARK_AS_SUBMITTED_UNDO,Deshacer marcar como enviado,4ad82823
 MARK_AS_UNREAD,Marcar como no leído,e4cb0534
 MARKED_AS_PLANTING_COMPLETE,Marcadas como plantación completa (%),aee9023f
-MATCH_SPECIES,Cotejar especies,8dc1bd1d
-MATCH_SPECIES_MODAL_DESCRIPTION,"Seleccione parejas para las especies no identificadas. Una vez que haya emparejado las especies, no podrá cambiar ni anular la pareja.",788bcc85
-MATCH_UNRECOGNIZED_SPECIES,Cotejar especies no reconocidas,e8523786
+MATCH_SPECIES,Verificar coincidencias,8dc1bd1d
+MATCH_SPECIES_MODAL_DESCRIPTION,"Seleccionar coincidencias para las especies no reconocidas. Una vez realizado, no podrá modificarla ni deshacerla.",788bcc85
+MATCH_UNRECOGNIZED_SPECIES,Verificar especies no reconocidas,e8523786
 MATRIX_VIEW,Vista de la matriz,0aeb01d3
 MAX,Máximo,7b696111
 MAXIMUM_CARBON_ACCUMULATION,Acumulación máxima de carbono (tCO2/ha/año),41212921
@@ -2086,7 +2086,7 @@ UNKNOWN,Desconocido,97ccc176
 UNLIKELY,Poco probable,961eba8d
 UNPIN_ALL,Desanclar todas,97a06369
 UNRECOGNIZED_SPECIES,Especies no reconocidas,74b081bb
-UNRECOGNIZED_SPECIES_MESSAGE,Cotejar las siguientes entradas con especies que ya están en Terraware:,d9fc89e5
+UNRECOGNIZED_SPECIES_MESSAGE,Asociar los siguientes datos con especies existentes en Terraware:,d9fc89e5
 UNSPECIFIED,No especificado,be62b890
 UPCOMING,Venidero,fa1930e2
 UPCOMING_PLANTING_SEASONS,Próximas temporadas de plantación,3ad28e65
