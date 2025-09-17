@@ -338,12 +338,14 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
           source={'mapData'}
           type={'symbol'}
           layout={{
-            'text-field': ['get', 'label'],
-            'text-size': 14,
-            'text-line-height': 20,
-            'text-font': ['Open Sans Bold', 'Arial Unicode MS Regular'],
+            'text-allow-overlap': false,
             'text-anchor': 'center',
+            'text-field': ['get', 'label'],
+            'text-font': ['Open Sans Bold', 'Arial Unicode MS Regular'],
+            'text-ignore-placement': false,
             'text-justify': 'center',
+            'text-line-height': 20,
+            'text-size': 14,
           }}
           paint={{
             'text-color': '#ffffff',
