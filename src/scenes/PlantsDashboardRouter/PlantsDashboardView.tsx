@@ -361,6 +361,10 @@ export default function PlantsDashboardView({
     [setSelectedPlantingSite]
   );
 
+  const onSelectProject = useCallback((newProjectId: number) => {
+    setProjectId(newProjectId === -1 ? undefined : newProjectId);
+  }, []);
+
   const renderMapWithSites = useCallback(() => {
     return (
       <>
@@ -411,7 +415,7 @@ export default function PlantsDashboardView({
       showGeometryNote={geometryChangedNote}
       latestObservationId={latestResultId}
       projectId={projectId}
-      onSelectProjectId={(newProjectId: number) => setProjectId(newProjectId === -1 ? undefined : newProjectId)}
+      onSelectProjectId={onSelectProject}
       organizationId={organizationId}
       isEmptyState={isLoading ? false : (allPlantingSites?.length ?? 0) <= 1}
       onSelect={onSelect}

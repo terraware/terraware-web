@@ -41,6 +41,19 @@ export const requestPlantingSite = (plantingSiteId: number, locale?: string | nu
   };
 };
 
+export const requestOnePlantingSite = createAsyncThunk(
+  'requestOnePlantingSite',
+  async (plantingSiteId: number, { rejectWithValue }) => {
+    const response = await TrackingService.getPlantingSite(plantingSiteId);
+
+    if (response !== null && response.requestSucceeded && response?.site !== undefined) {
+      return response.site;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestPlantingSites = createAsyncThunk(
   'requestPlantingSites',
   async (organizationId: number, { dispatch, getState, rejectWithValue, fulfillWithValue }) => {

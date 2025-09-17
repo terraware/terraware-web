@@ -38,6 +38,11 @@ type PlotPlant = {
   plant: RecordedPlant;
 };
 
+type LayerFeature = {
+  plantingSiteId: number;
+  layerFeatureId: MapLayerFeatureId;
+};
+
 type PlantDashboardMapProps = {
   disablePhotoMarkers?: boolean;
   disablePlantMarkers?: boolean;
@@ -59,7 +64,7 @@ const PlantDashboardMap = ({
   const { strings } = useLocalization();
   const theme = useTheme();
 
-  const [selectedFeaturedId, setSelectedFeatureId] = useState<MapLayerFeatureId>();
+  const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
   const [selectedPhoto, setSelectedPhoto] = useState<PlotPhoto>();
   const [selectedPlant, setSelectedPlant] = useState<PlotPlant>();
 
@@ -98,8 +103,8 @@ const PlantDashboardMap = ({
   const [drawerTitle, setDrawerTitle] = useState<string>();
 
   const selectFeature = useCallback(
-    (layerId: string, featureId: string) => () => {
-      setSelectedFeatureId({ layerId, featureId });
+    (plantingSiteId: number) => (layerId: string, featureId: string) => () => {
+      setSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId });
       setSelectedPhoto(undefined);
       setDrawerOpen(true);
       setDrawerSize('small');
@@ -110,7 +115,7 @@ const PlantDashboardMap = ({
 
   const selectPhoto = useCallback(
     (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhoto) => () => {
-      setSelectedFeatureId(undefined);
+      setSelectedFeature(undefined);
       setSelectedPhoto({ monitoringPlotId, observationId, photo });
       setSelectedPlant(undefined);
       setDrawerOpen(true);
@@ -122,7 +127,7 @@ const PlantDashboardMap = ({
 
   const selectPlant = useCallback(
     (monitoringPlotId: number, observationId: number, plant: RecordedPlant) => () => {
-      setSelectedFeatureId(undefined);
+      setSelectedFeature(undefined);
       setSelectedPhoto(undefined);
       setSelectedPlant({ monitoringPlotId, observationId, plant });
       setDrawerOpen(true);
@@ -133,8 +138,13 @@ const PlantDashboardMap = ({
   );
 
   const drawerContent = useMemo(() => {
-    if (selectedFeaturedId) {
-      return <MapStatsDrawer layerId={selectedFeaturedId.layerId} featureId={selectedFeaturedId.featureId} />;
+    if (selectedFeature) {
+      return (
+        <MapStatsDrawer
+          layerFeatureId={selectedFeature.layerFeatureId}
+          plantingSiteId={selectedFeature.plantingSiteId}
+        />
+      );
     }
     if (selectedPhoto) {
       return (
@@ -154,7 +164,7 @@ const PlantDashboardMap = ({
         />
       );
     }
-  }, [selectedFeaturedId, selectedPhoto, selectedPlant]);
+  }, [selectedFeature, selectedPhoto, selectedPlant]);
 
   const extractFeaturesFromSite = useCallback(
     (
@@ -176,8 +186,10 @@ const PlantDashboardMap = ({
               type: 'MultiPolygon',
               coordinates: site.boundary?.coordinates ?? [],
             },
-            onClick: selectFeature('sites', `${site.id}`),
-            selected: selectedFeaturedId?.layerId === 'sites' && selectedFeaturedId?.featureId === `${site.id}`,
+            onClick: selectFeature(site.id)('sites', `${site.id}`),
+            selected:
+              selectedFeature?.layerFeatureId.layerId === 'sites' &&
+              selectedFeature?.layerFeatureId.featureId === `${site.id}`,
           },
         ],
         zoneFeatures: zones.map((zone) => ({
@@ -187,8 +199,10 @@ const PlantDashboardMap = ({
             type: 'MultiPolygon',
             coordinates: zone.boundary.coordinates,
           },
-          onClick: selectFeature('zones', `${zone.id}`),
-          selected: selectedFeaturedId?.layerId === 'zones' && selectedFeaturedId?.featureId === `${zone.id}`,
+          onClick: selectFeature(site.id)('zones', `${zone.id}`),
+          selected:
+            selectedFeature?.layerFeatureId.layerId === 'zones' &&
+            selectedFeature?.layerFeatureId.featureId === `${zone.id}`,
         })),
         subzoneFeatures:
           subzones?.map((subzone) => ({
@@ -198,12 +212,14 @@ const PlantDashboardMap = ({
               type: 'MultiPolygon',
               coordinates: subzone.boundary.coordinates,
             },
-            onClick: selectFeature('subzones', `${subzone.id}`),
-            selected: selectedFeaturedId?.layerId === 'subzones' && selectedFeaturedId?.featureId === `${subzone.id}`,
+            onClick: selectFeature(site.id)('subzones', `${subzone.id}`),
+            selected:
+              selectedFeature?.layerFeatureId.layerId === 'subzones' &&
+              selectedFeature?.layerFeatureId.featureId === `${subzone.id}`,
           })) ?? [],
       };
     },
-    [selectFeature, selectedFeaturedId]
+    [selectFeature, selectedFeature]
   );
 
   const layers = useMemo((): MapLayer[] => {
@@ -340,7 +356,7 @@ const PlantDashboardMap = ({
       setDrawerOpen(true);
     } else {
       setDrawerOpen(false);
-      setSelectedFeatureId(undefined);
+      setSelectedFeature(undefined);
       setSelectedPhoto(undefined);
       setSelectedPlant(undefined);
     }

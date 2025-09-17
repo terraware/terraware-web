@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 
 type MapStatsProperties = {
   areaHa: number | undefined;
@@ -21,12 +21,34 @@ type MapStatsProperties = {
   zoneName?: string;
 };
 
-const MapStatsDrawer = (featureId: MapLayerFeatureId): JSX.Element | undefined => {
-  const { latestResult, plantingSite, plantingSiteReportedPlants } = usePlantingSiteData();
+type MapStatsDrawerProps = {
+  layerFeatureId: MapLayerFeatureId;
+  plantingSiteId: number;
+};
+
+const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
+  const { isLoading, latestResult, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
+  const [delayedLoading, setDelayedLoading] = useState(isLoading);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (isLoading) {
+      // immediately set to loading
+      setDelayedLoading(true);
+    } else {
+      // delay setting loading to false until a timer has passed.
+      timeout = setTimeout(() => {
+        setDelayedLoading(false);
+      }, 500);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
 
   const properties = useMemo((): MapStatsProperties | undefined => {
-    if (featureId.layerId === 'sites') {
+    if (layerFeatureId.layerId === 'sites') {
       return {
         type: strings.SITE,
         areaHa: plantingSite?.areaHa,
@@ -39,11 +61,13 @@ const MapStatsDrawer = (featureId: MapLayerFeatureId): JSX.Element | undefined =
         plantedSpecies: plantingSiteReportedPlants?.species.length,
         plantingDensity: latestResult?.plantingDensity,
       };
-    } else if (featureId.layerId === 'zones') {
-      const zone = plantingSite?.plantingZones?.find((_zone) => `${_zone.id}` === featureId.featureId);
-      const zoneResult = latestResult?.plantingZones.find((_zone) => `${_zone.plantingZoneId}` === featureId.featureId);
+    } else if (layerFeatureId.layerId === 'zones') {
+      const zone = plantingSite?.plantingZones?.find((_zone) => `${_zone.id}` === layerFeatureId.featureId);
+      const zoneResult = latestResult?.plantingZones.find(
+        (_zone) => `${_zone.plantingZoneId}` === layerFeatureId.featureId
+      );
       const zoneStats = plantingSiteReportedPlants?.plantingZones.find(
-        (_zone) => `${_zone.id}` === featureId.featureId
+        (_zone) => `${_zone.id}` === layerFeatureId.featureId
       );
 
       return {
@@ -58,17 +82,17 @@ const MapStatsDrawer = (featureId: MapLayerFeatureId): JSX.Element | undefined =
         plantedSpecies: zoneStats?.species.length,
         plantingDensity: zoneResult?.plantingDensity,
       };
-    } else if (featureId.layerId === 'subzones') {
+    } else if (layerFeatureId.layerId === 'subzones') {
       const zone = plantingSite?.plantingZones?.find((_zone) =>
-        _zone.plantingSubzones.some((_subzone) => `${_subzone.id}` === featureId.featureId)
+        _zone.plantingSubzones.some((_subzone) => `${_subzone.id}` === layerFeatureId.featureId)
       );
-      const subzone = zone?.plantingSubzones.find((_subzone) => `${_subzone.id}` === featureId.featureId);
+      const subzone = zone?.plantingSubzones.find((_subzone) => `${_subzone.id}` === layerFeatureId.featureId);
       const subzoneResult = latestResult?.plantingZones
         .flatMap((_zone) => _zone.plantingSubzones)
-        .find((_subzone) => `${_subzone.plantingSubzoneId}` === featureId.featureId);
+        .find((_subzone) => `${_subzone.plantingSubzoneId}` === layerFeatureId.featureId);
       const subzoneStats = plantingSiteReportedPlants?.plantingZones
         .flatMap((_zone) => _zone.plantingSubzones)
-        .find((_subzone) => `${_subzone.id}` === featureId.featureId);
+        .find((_subzone) => `${_subzone.id}` === layerFeatureId.featureId);
 
       return {
         type: strings.SUBZONE,
@@ -86,7 +110,7 @@ const MapStatsDrawer = (featureId: MapLayerFeatureId): JSX.Element | undefined =
     } else {
       return undefined;
     }
-  }, [featureId, latestResult, plantingSite, plantingSiteReportedPlants, strings]);
+  }, [latestResult, layerFeatureId, plantingSite, plantingSiteReportedPlants, strings]);
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     const results: MapDrawerTableRow[] = [];
@@ -152,6 +176,15 @@ const MapStatsDrawer = (featureId: MapLayerFeatureId): JSX.Element | undefined =
 
     return results;
   }, [properties, strings]);
+
+  if (delayedLoading) {
+    return (
+      <Box display={'flex'} width={'100%'} justifyContent={'center'}>
+        {' '}
+        <CircularProgress />{' '}
+      </Box>
+    );
+  }
 
   return (
     properties && (

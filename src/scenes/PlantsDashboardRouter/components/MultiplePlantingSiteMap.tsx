@@ -139,6 +139,7 @@ export default function MultiplePlantingSiteMap({
             disablePhotoMarkers
             disablePlantMarkers
             disableMortalityRate
+            disableObserationEvents
             plantingSites={plantingSites}
             observationResults={[]}
           />
