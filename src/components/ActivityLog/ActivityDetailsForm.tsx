@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { Checkbox, Dropdown, Textfield } from '@terraware/web-components';
+import { Checkbox, Dropdown, FileChooser, Textfield } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
@@ -26,10 +26,14 @@ type SavableActivity = (CreateActivityRequestPayload | UpdateActivityRequestPayl
 
 type FormRecord = Partial<SavableActivity> | undefined;
 
+const MAX_FILES = 20;
+
 export default function ActivityDetailsForm({ projectId }: ActivityDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
+  const [mediaFiles, setMediaFiles] = useState<File[]>([]);
 
   // initialize record, if creating new
   useEffect(() => {
@@ -73,6 +77,12 @@ export default function ActivityDetailsForm({ projectId }: ActivityDetailsFormPr
     },
     [onChange]
   );
+
+  const onSetFiles = useCallback((files: File[]) => {
+    setMediaFiles((prevFiles) => [...prevFiles, ...files]);
+  }, []);
+
+  const fileLimitReached = useMemo(() => (MAX_FILES ? mediaFiles.length >= MAX_FILES : false), [mediaFiles.length]);
 
   if (!record) {
     return <></>;
@@ -124,7 +134,19 @@ export default function ActivityDetailsForm({ projectId }: ActivityDetailsFormPr
         />
       </Grid>
 
-      {/* TODO: render media upload component */}
+      <Grid item xs={12}>
+        {!fileLimitReached && (
+          <FileChooser
+            acceptFileType='image/*, video/*'
+            chooseFileText={strings.CHOOSE_FILE}
+            maxFiles={20}
+            multipleSelection
+            setFiles={onSetFiles}
+            uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
+            uploadText={strings.ATTACH_IMAGES_OR_VIDEOS}
+          />
+        )}
+      </Grid>
 
       {/* TODO: render media items */}
     </Grid>
