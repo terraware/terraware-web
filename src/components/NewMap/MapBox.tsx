@@ -344,7 +344,6 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
             'text-font': ['Open Sans Bold', 'Arial Unicode MS Regular'],
             'text-ignore-placement': false,
             'text-justify': 'center',
-            'text-line-height': 20,
             'text-size': 14,
           }}
           paint={{
