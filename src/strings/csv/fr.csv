@@ -392,6 +392,7 @@ DATE_OBSERVATION,{0} observation,62c68b2c
 DATE_OBSERVED,Date de l'observation,7f96dd16
 DATE_OF_LAST_OBSERVATION,Date de la dernière observation,8db1d5cb
 DATE_RANGE,{0} - {1},4d9ee337
+DATE_REQUIRED,Date *,9421d984
 DATE_SUBMITTED,Date de soumission,1619a78b
 DATE_UPDATED,Date de mise à jour,277ca991
 DATE_UPLOADED,Date de téléchargement,d8be0362
@@ -489,6 +490,7 @@ DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenez l'application mobile pour
 DRAFT,Projet,f766b964
 DRAW_BOUNDARY_WITHIN_MAP,Tracer les limites sur une carte,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Tracer les limites du projet proposé,8b73e819
+DRONE_FLIGHT,Vol de drone,af8ec693
 DROPBOX_FOLDER_URL,URL du dossier Dropbox,0ebe8363
 DRYING,Séchage en cours,97084385
 DUE,Échéance : {0},b72aaa1e
@@ -1755,6 +1757,7 @@ SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,Dessinez ci-dessous les sous-zones de votr
 SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,La zone {0} est actuellement sélectionnée pour la création de sous-zones.,5e6cd6a3
 SITE_SUBZONE_BOUNDARIES_TOO_SMALL,Les limites d’une ou plusieurs sous-zones sont inférieures à 25 m x 25 m.,c1d1a11f
 SITE_SUBZONE_BOUNDARY_TOO_SMALL,Les limites de la sous-zone sont inférieures à 25 m x 25 m,69d2798b
+SITE_VISIT,Visite du site,01a6a6fc
 SITE_WITH_NAME_EXISTS,Un site portant ce nom existe déjà.,8a2a38fc
 SITE_ZONE_BOUNDARIES,Limites de la zone,15e88feb
 SITE_ZONE_BOUNDARIES_DESCRIPTION_0,"Une zone est une strate (couche de végétation) du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une zone et généralement pas plus de cinq. Un exemple de zone est la pente d'une colline orientée vers l'est, où les conditions d'ensoleillement et de sol sont similaires.",3781c2ed
@@ -1811,6 +1814,7 @@ SPECIES_SCIENTIFIC_NAME,Nom scientifique des espèces,bc37b10f
 SPECIES_SELECTED,Espèce sélectionnée,820edb46
 SPECIES_USAGE,Utilisation des espèces,0669cb85
 STAFF,Personnel,6b242686
+STAKEHOLDER_ENGAGEMENT,Engagement des parties prenantes,2c5cfa82
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Parties prenantes et impact communautaire,a0af66ae
 STANDARD,Norme,88d7d08c
 STANDARD_DEVIATION,Écart type,f2864fab
@@ -2130,6 +2134,7 @@ VARIABLE_ERROR_NUMBER_NAN,La valeur n'est pas un nombre,35fecae0
 VARIABLE_HISTORY,Historique des variables,62d3bc75
 VARIABLE_STATUS,Statut de la variable,dd3169c3
 VARIABLES,Variables,9902c54b
+VERIFIED,Vérifié,17f92e17
 VERRA,Verra,b73695a0
 VERRA_LINK,Lien Verra,09f00e23
 VERRA_NPRT,Outil Verra pour le risque de non-permanence (NPRT),8df572d7
