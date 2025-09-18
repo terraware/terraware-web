@@ -40,7 +40,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
 
     t0Plot?.densityData.forEach((dd) => {
       if (!withdrawnSpeciesIds.includes(dd.speciesId)) {
-        const newRowId = `new-species-${Date.now()}`;
+        const newRowId = `new-species-${crypto.randomUUID()}`;
         speciesToShow.push({ id: newRowId, speciesId: dd.speciesId, density: dd.plotDensity.toString() });
       }
     });
@@ -163,7 +163,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
   }, [species, withdrawnSpeciesPlot, newSpeciesRows]);
 
   const onAddNewSpecies = useCallback(() => {
-    const newRowId = `new-species-${Date.now()}`;
+    const newRowId = `new-species-${crypto.randomUUID()}`;
     setNewSpeciesRows((prev) => [...prev, { id: newRowId, density: '' }]);
   }, []);
 
