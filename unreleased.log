@@ -1,3 +1,5 @@
+5898df81ad1 Update dependency @babel/traverse to v7.28.4 (#4447)
+4c6079bd40b Update dependency axios to v1.12.0 [SECURITY] (#4446)
 f7ef33145c7 SW-7298 Added multiple planting sites support to plant dashboard map (#4460)
 d3042e4d962 SW-7206 - Update Spanish translations for matching unrecognized species (#4456)
 2ccf688d435 SW-7287 Fixed map text placement issues (#4458)
