@@ -493,7 +493,7 @@ const PlantDashboardMap = ({
             },
           ],
         },
-        sectionDisabled: disableObserationEvents,
+        sectionDisabled: disableObserationEvents || observationResults.length === 0,
         sectionTitle: strings.OBSERVATION_EVENTS,
         sectionTooltip: strings.OBSERVATION_EVENTS_TOOLTIP,
         legendItems: [
@@ -534,7 +534,7 @@ const PlantDashboardMap = ({
             },
           ],
         },
-        sectionDisabled: disableMortalityRate,
+        sectionDisabled: disableMortalityRate || observationResults.length === 0,
         sectionTitle: strings.MORTALITY_RATE,
         legendItems: [
           {
@@ -576,6 +576,7 @@ const PlantDashboardMap = ({
     mortalityRateHighlights.lessThanFifty,
     mortalityRateHighlights.lessThanTwentyFive,
     observationEventsHighlights,
+    observationResults,
     photoMarkers,
     plantsMarkers,
     strings,
