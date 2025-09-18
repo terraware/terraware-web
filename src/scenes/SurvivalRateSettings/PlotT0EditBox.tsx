@@ -11,6 +11,8 @@ import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { PlotT0Data, SiteT0Data } from 'src/types/Tracking';
 
+type AddedSpecies = { id: string; speciesId?: number; density: string };
+
 type PlotT0EditBoxProps = {
   plot: PlotsWithObservationsSearchResult;
   plantingSiteId: number;
@@ -34,7 +36,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
 
   const initialNewSpecies = useMemo(() => {
     const withdrawnSpeciesIds = withdrawnSpeciesPlot?.species.map((ws) => ws.speciesId) || [];
-    const speciesToShow: { id: string; speciesId?: number; density: string }[] = [];
+    const speciesToShow: AddedSpecies[] = [];
 
     t0Plot?.densityData.forEach((dd) => {
       if (!withdrawnSpeciesIds.includes(dd.speciesId)) {
@@ -46,8 +48,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     return speciesToShow;
   }, [t0Plot?.densityData, withdrawnSpeciesPlot?.species]);
 
-  const [newSpeciesRows, setNewSpeciesRows] =
-    useState<{ id: string; speciesId?: number; density: string }[]>(initialNewSpecies);
+  const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
 
   const isEqualObservation = useCallback(
     (a: PlotT0Observation, b: PlotT0Observation) => a.observation_id === b.observation_id,
@@ -227,7 +228,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
   );
 
   const speciesSelectedValueHandler = useCallback(
-    (row: { id: string; speciesId?: number; density: string }) => {
+    (row: AddedSpecies) => {
       return species.find((s) => s.id.toString() === row.speciesId?.toString());
     },
     [species]
