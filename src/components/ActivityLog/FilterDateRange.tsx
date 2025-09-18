@@ -8,6 +8,13 @@ import DatePicker from 'src/components/common/DatePicker';
 import { useLocalization } from 'src/providers/hooks';
 import { FieldNodePayload } from 'src/types/Search';
 
+const datePickerStyles = {
+  '& .MuiInputBase-input': {
+    paddingRight: 0,
+  },
+  maxWidth: '180px',
+};
+
 interface DateRangeProps {
   field: string;
   onChange: (filter: FieldNodePayload) => void;
@@ -64,6 +71,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
           id='startDate'
           label=''
           onChange={getOnChangeDate('startDate')}
+          sx={datePickerStyles}
           value={startDate}
         />
 
@@ -76,6 +84,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
           id='endDate'
           label=''
           onChange={getOnChangeDate('endDate')}
+          sx={datePickerStyles}
           value={endDate}
         />
       </Box>
