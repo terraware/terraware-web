@@ -310,14 +310,6 @@ export default function InventoryTests() {
     await expect(page.getByText('1 Species', { exact: true })).toBeVisible();
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(6000); //Wait for map to load
-    await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
-    await page.locator('.mapboxgl-map').click({
-      position: {
-        x: 526,
-        y: 172,
-      },
-    });
-    await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
   });
 
   test('Withdrawals after outplanting', async ({ page }, testInfo) => {

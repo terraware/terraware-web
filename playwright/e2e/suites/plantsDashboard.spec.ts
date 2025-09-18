@@ -238,12 +238,12 @@ export default function PlantsDashboardTests() {
         .locator('div')
         .filter({ hasText: /^Observation Events$/ })
         .getByRole('checkbox')
-    ).toBeChecked();
+    ).toBeChecked({ checked: false });
     await expect(
       page
         .locator('div')
         .filter({ hasText: /^Mortality Rate$/ })
         .getByRole('checkbox')
-    ).toBeChecked();
+    ).toBeChecked({ checked: false });
   });
 }

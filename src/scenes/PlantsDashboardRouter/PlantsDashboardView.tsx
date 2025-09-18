@@ -8,7 +8,6 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useObservation from 'src/hooks/useObservation';
 import { useOrganization } from 'src/providers';
@@ -24,7 +23,6 @@ import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
-import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 
 type PlantsDashboardViewProps = {
   projectId?: number;
@@ -42,8 +40,6 @@ export default function PlantsDashboardView({
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
-
-  const newMapEnabled = isEnabled('New Plant Dashboard Map');
 
   const {
     setAcceleratorOrganizationId,
@@ -253,18 +249,32 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            {newMapEnabled ? (
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                background: theme.palette.TwClrBg,
+                borderRadius: '8px',
+                padding: theme.spacing(1),
+                gap: theme.spacing(3),
+              }}
+            >
+              <Typography fontSize='20px' fontWeight={600}>
+                {plantingSite?.areaHa !== undefined &&
+                  strings.formatString(
+                    strings.X_HA_IN_TOTAL_PLANTING_AREA,
+                    <FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} />
+                  )}
+              </Typography>
               <PlantDashboardMap
                 observationResults={observationResults ? [observationResults] : []}
                 plantingSites={plantingSite ? [plantingSite] : []}
               />
-            ) : (
-              <ZoneLevelDataMap plantingSiteId={plantingSite.id} />
-            )}
+            </Box>
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink, newMapEnabled, observationResults]
+    [hasObservations, isMobile, observationResults, plantingSite, renderLatestObservationLink, theme]
   );
 
   const renderSimpleSiteMap = useCallback(
