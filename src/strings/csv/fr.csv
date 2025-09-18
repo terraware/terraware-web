@@ -106,6 +106,7 @@ ADD_TO_PROJECT,Ajouter au projet,3e56c71f
 ADD_VIABILITY,Ajouter la viabilité,a4672790
 ADD_VIABILITY_TEST,Ajouter un test de viabilité,4648a184
 ADDED,Ajouté·e,d441aa1d
+ADDED_SPECIES,Espèces ajoutées,f2342d09
 ADDING_SUBZONE_BOUNDARIES,Ajout de limites de sous-zones,58f0fb08
 ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil tranche {0} pour créer des formes de sous-zones (polygones) à l'intérieur des zones.,042bd160
 ADDING_ZONE_BOUNDARIES,Ajouter les limites des zones,901f668b

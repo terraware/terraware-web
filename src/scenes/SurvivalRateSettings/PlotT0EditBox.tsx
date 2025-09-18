@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Divider, FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
-import { Checkbox, Message, SelectT } from '@terraware/web-components';
+import { Box, Divider, FormControlLabel, IconButton, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
+import { Button, Checkbox, Icon, Message, SelectT } from '@terraware/web-components';
 
 import TextField from 'src/components/common/TextField';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
+import { Species } from 'src/types/Species';
 import { PlotT0Data, SiteT0Data } from 'src/types/Tracking';
+
+type AddedSpecies = { id: string; speciesId?: number; density: string };
 
 type PlotT0EditBoxProps = {
   plot: PlotsWithObservationsSearchResult;
@@ -26,6 +29,22 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
   const { species } = useSpeciesData();
 
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
+
+  const initialNewSpecies = useMemo(() => {
+    const withdrawnSpeciesIds = withdrawnSpeciesPlot?.species.map((ws) => ws.speciesId) || [];
+    const speciesToShow: AddedSpecies[] = [];
+
+    t0Plot?.densityData.forEach((dd) => {
+      if (!withdrawnSpeciesIds.includes(dd.speciesId)) {
+        const newRowId = `new-species-${crypto.randomUUID()}`;
+        speciesToShow.push({ id: newRowId, speciesId: dd.speciesId, density: dd.plotDensity.toString() });
+      }
+    });
+
+    return speciesToShow;
+  }, [t0Plot?.densityData, withdrawnSpeciesPlot?.species]);
+
+  const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
 
   const isEqualObservation = useCallback(
     (a: PlotT0Observation, b: PlotT0Observation) => a.observation_id === b.observation_id,
@@ -45,7 +64,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     if (t0Plot && !t0Plot.observationId) {
       setT0Origin('manual');
     }
-  }, [t0Plot]);
+  }, [t0Plot, withdrawnSpeciesPlot?.species]);
 
   const plotToSave = useMemo(() => {
     const existingPlot = record.plots.find((rPlot) => rPlot.monitoringPlotId.toString() === plot.id.toString());
@@ -89,8 +108,10 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
   );
 
   const plotTotalDensity = useMemo(() => {
-    const selectedPlot = record.plots.find((pl) => pl.monitoringPlotId === plot.id);
-    const total = selectedPlot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
+    const selectedPlot = record.plots.find((pl) => pl.monitoringPlotId.toString() === plot.id.toString());
+    const total = selectedPlot?.densityData.reduce((sum, density) => {
+      return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;
+    }, 0);
     return total;
   }, [plot.id, record]);
 
@@ -145,6 +166,84 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
       setSelectedWithdrawalCheckboxes(newSelected);
     },
     [onChangeDensity, withdrawnSpeciesPlot, selectedWithdrawalCheckboxes]
+  );
+
+  const availableSpecies = useMemo(() => {
+    const withdrawnSpeciesIds = withdrawnSpeciesPlot?.species.map((ws) => ws.speciesId) || [];
+    const existingNewSpeciesIds = newSpeciesRows.map((row) => row.speciesId).filter((id) => id !== undefined);
+    return species.filter((s) => !withdrawnSpeciesIds.includes(s.id) && !existingNewSpeciesIds.includes(s.id));
+  }, [species, withdrawnSpeciesPlot, newSpeciesRows]);
+
+  const onAddNewSpecies = useCallback(() => {
+    const newRowId = `new-species-${crypto.randomUUID()}`;
+    setNewSpeciesRows((prev) => [...prev, { id: newRowId, density: '' }]);
+  }, []);
+
+  const onNewSpeciesChange = useCallback((rowId: string, speciesId: number) => {
+    setNewSpeciesRows((prev) => prev.map((row) => (row.id === rowId ? { ...row, speciesId } : row)));
+  }, []);
+
+  const onNewSpeciesDensityChange = useCallback(
+    (rowId: string, density: string) => {
+      setNewSpeciesRows((prev) => prev.map((prevRow) => (prevRow.id === rowId ? { ...prevRow, density } : prevRow)));
+
+      const row = newSpeciesRows.find((r) => r.id === rowId);
+      if (row?.speciesId) {
+        onChangeDensity(row.speciesId.toString(), density);
+      }
+    },
+    [newSpeciesRows, onChangeDensity]
+  );
+
+  const handleNewSpeciesDensityChange = useCallback(
+    (rowId: string) => (id: string, value: unknown) => {
+      return onNewSpeciesDensityChange(rowId, value as string);
+    },
+    [onNewSpeciesDensityChange]
+  );
+
+  const handleSpeciesChange = useCallback(
+    (rowId: string) => (selectedSpecies: Species) => {
+      onNewSpeciesChange(rowId, selectedSpecies.id);
+    },
+    [onNewSpeciesChange]
+  );
+
+  const isEqualSpecies = useCallback(
+    (a: { id: number; scientificName: string }, b: { id: number; scientificName: string }) => a.id === b.id,
+    []
+  );
+
+  const renderOptionSpecies = useCallback((option: Species) => {
+    return option?.scientificName;
+  }, []);
+
+  const toTSpecies = useCallback((scientificName: string) => ({ scientificName }) as Species, []);
+
+  const onDeleteInput = useCallback(
+    (rowId: string) => {
+      setNewSpeciesRows((prev) => prev.filter((r) => r.id !== rowId));
+
+      const row = newSpeciesRows.find((r) => r.id === rowId);
+      if (row?.speciesId) {
+        onChangeDensity(row.speciesId.toString(), undefined);
+      }
+    },
+    [newSpeciesRows, onChangeDensity]
+  );
+
+  const onDeleteInputHandler = useCallback(
+    (rowId: string) => () => {
+      onDeleteInput(rowId);
+    },
+    [onDeleteInput]
+  );
+
+  const speciesSelectedValueHandler = useCallback(
+    (row: AddedSpecies) => {
+      return species.find((s) => s.id.toString() === row.speciesId?.toString());
+    },
+    [species]
   );
 
   return (
@@ -233,6 +332,64 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                         </td>
                       </tr>
                     ))}
+                    {newSpeciesRows.length > 0 && (
+                      <tr>
+                        <td colSpan={3}>
+                          <Typography fontWeight={600}>{strings.ADDED_SPECIES}</Typography>{' '}
+                        </td>
+                      </tr>
+                    )}
+                    {newSpeciesRows.map((row) => {
+                      return (
+                        <tr key={row.id}>
+                          <td>
+                            <SelectT<Species>
+                              options={availableSpecies}
+                              placeholder={strings.SELECT}
+                              onChange={handleSpeciesChange(row.id)}
+                              isEqual={isEqualSpecies}
+                              renderOption={renderOptionSpecies}
+                              displayLabel={renderOptionSpecies}
+                              selectedValue={speciesSelectedValueHandler(row)}
+                              fullWidth={true}
+                              toT={toTSpecies}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              type='number'
+                              id={`new-${row.id}`}
+                              value={row.density}
+                              onChange={handleNewSpeciesDensityChange(row.id)}
+                              label={''}
+                            />
+                          </td>
+                          <td>
+                            <IconButton
+                              id={`delete-input-${row.id}`}
+                              aria-label='delete'
+                              size='small'
+                              onClick={onDeleteInputHandler(row.id)}
+                              sx={{ cursor: 'pointer' }}
+                            >
+                              <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
+                            </IconButton>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    <tr>
+                      <td>
+                        <Button
+                          label={strings.ADD_SPECIES}
+                          type='productive'
+                          priority='ghost'
+                          onClick={onAddNewSpecies}
+                          icon='iconAdd'
+                          style={{ paddingLeft: 0, marginLeft: 0 }}
+                        />
+                      </td>
+                    </tr>
                     <tr>
                       <td>
                         <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
