@@ -89,7 +89,7 @@ export default function ActivityDetailsForm({ projectId }: ActivityDetailsFormPr
   }
 
   return (
-    <Grid container spacing={1} textAlign='left' xs={12}>
+    <Grid container spacing={1} textAlign='left'>
       <Grid item lg={6} xs={12}>
         <Dropdown
           fullWidth
