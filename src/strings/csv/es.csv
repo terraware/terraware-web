@@ -106,6 +106,7 @@ ADD_TO_PROJECT,Añadir al proyecto,3e56c71f
 ADD_VIABILITY,Añadir Viabilidad,a4672790
 ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad,4648a184
 ADDED,Agregado,d441aa1d
+ADDED_SPECIES,Especies añadidas,f2342d09
 ADDING_SUBZONE_BOUNDARIES,Añadir límites de subzona,58f0fb08
 ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de corte {0} para crear formas de subzonas (polígonos) dentro de las zonas.,042bd160
 ADDING_ZONE_BOUNDARIES,Añadir límites de zona,901f668b
