@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -323,7 +323,19 @@
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
 <a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -351,10 +363,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -382,6 +390,22 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -610,10 +634,6 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
 &nbsp;
   const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
 &nbsp;
-  const onChangeT0Origin = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(e</span>vent: React.ChangeEvent&lt;HTMLInputElement&gt;, value: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setT0Origin(value);</span>
-  }, []);
-&nbsp;
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = <span class="cstat-no" title="statement not covered" >useState&lt;Set&lt;number&gt;&gt;(new Set());</span>
 &nbsp;
   const isEqualObservation = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -646,6 +666,22 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
       densityData: [],
     };
   }, [plot.id, record]);
+&nbsp;
+  const onChangeT0Origin = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (e</span>vent: React.ChangeEvent&lt;HTMLInputElement&gt;, value: string) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setT0Origin(value);</span>
+<span class="cstat-no" title="statement not covered" >      if (value === 'manual') {</span>
+<span class="cstat-no" title="statement not covered" >        if (plotToSave) {</span>
+          const plotCopy = <span class="cstat-no" title="statement not covered" >{ ...plotToSave };</span>
+<span class="cstat-no" title="statement not covered" >          plotCopy.observationId = undefined;</span>
+          // Remove the existing plot, then add the updated one
+          const otherPlots = <span class="cstat-no" title="statement not covered" >record.plots.filter(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.monitoringPlotId.toString() !== plot.id.toString())</span>;</span>
+<span class="cstat-no" title="statement not covered" >          setRecord({ ...record, plots: otherPlots ? [...otherPlots, plotCopy] : [plotCopy] });</span>
+        }
+      }
+    },
+    [plot.id, plotToSave, record, setRecord]
+  );
 &nbsp;
   const onChangeObservation = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (n</span>ewValue: PlotT0Observation) =&gt; {
@@ -850,7 +886,7 @@ export default PlotT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-18T13:02:05.892Z
+                at 2025-09-18T15:31:27.938Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
