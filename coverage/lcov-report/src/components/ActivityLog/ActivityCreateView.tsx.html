@@ -132,7 +132,8 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,21 +145,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,9 +152,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -214,16 +216,15 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 &nbsp;
+import ActivityDetailsForm from './ActivityDetailsForm';
 import MapSplitView from './MapSplitView';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ActivityCreateView(</span>): JSX.Element {
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-&nbsp;
   const { currentParticipantProject } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ projectId: string }&gt;();</span>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const projectId = <span class="cstat-no" title="statement not covered" >Number(pathParams.projectId);</span>
 &nbsp;
   const activityLogLocation = <span class="cstat-no" title="statement not covered" >useMemo(</span>
@@ -246,7 +247,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
         saveButtonText={strings.SAVE}
         saveID='saveAddActivity'
       &gt;
-        &lt;Box marginBottom='32px' paddingLeft={theme.spacing(3)}&gt;
+        &lt;Box marginBottom='32px' marginTop='2px' paddingLeft={theme.spacing(4)}&gt;
           &lt;Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'&gt;
             {strings.formatString(strings.ADD_ACTIVITY_FOR_PROJECT, currentParticipantProject?.name || '...')}
           &lt;/Typography&gt;
@@ -261,9 +262,11 @@ export default function <span class="fstat-no" title="function not covered" >Act
           }}
         &gt;
           &lt;MapSplitView&gt;
-            &lt;Typography fontSize='20px' fontWeight='bold' variant='h2'&gt;
+            &lt;Typography fontSize='20px' fontWeight='bold' marginBottom='24px' variant='h2'&gt;
               {strings.ADD_ACTIVITY}
             &lt;/Typography&gt;
+&nbsp;
+            &lt;ActivityDetailsForm projectId={projectId} /&gt;
           &lt;/MapSplitView&gt;
         &lt;/Card&gt;
       &lt;/PageForm&gt;
@@ -277,7 +280,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-18T16:32:49.005Z
+                at 2025-09-18T19:34:46.556Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
