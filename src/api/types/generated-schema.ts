@@ -27,7 +27,8 @@ export interface paths {
         /** Lists all of a project's activities with accelerator-admin-only details. */
         get: operations["adminListActivities"];
         put?: never;
-        post?: never;
+        /** Creates a new activity including accelerator-admin-only details. */
+        post: operations["adminCreateActivity"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4161,6 +4162,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/webhooks/mux": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Endpoint for webhook requests from Mux. */
+        post: operations["handleMuxWebhook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/accelerator/projects/{projectId}/scores": {
         parameters: {
             query?: never;
@@ -4634,6 +4652,17 @@ export interface components {
             verifiedBy?: number;
             /** Format: date-time */
             verifiedTime?: string;
+        };
+        AdminCreateActivityRequestPayload: {
+            /** Format: date */
+            date: string;
+            description?: string;
+            isHighlight: boolean;
+            isVerified: boolean;
+            /** Format: int64 */
+            projectId: number;
+            /** @enum {string} */
+            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
         AdminGetActivityResponsePayload: {
             activity: components["schemas"]["AdminActivityPayload"];
@@ -8910,6 +8939,7 @@ export interface components {
             description?: string;
             name: string;
             progressNotes?: string;
+            projectsComments?: string;
             reference: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
@@ -8917,7 +8947,6 @@ export interface components {
             target?: number;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
-            underperformanceJustification?: string;
             unit?: string;
             /** Format: int32 */
             value?: number;
@@ -9120,11 +9149,11 @@ export interface components {
             /** Format: int64 */
             id: number;
             progressNotes?: string;
+            projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: int32 */
             target?: number;
-            underperformanceJustification?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -9137,6 +9166,7 @@ export interface components {
             isPublishable: boolean;
             name: string;
             progressNotes?: string;
+            projectsComments?: string;
             reference: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
@@ -9144,7 +9174,6 @@ export interface components {
             target?: number;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
-            underperformanceJustification?: string;
             unit?: string;
             /** Format: int32 */
             value?: number;
@@ -9167,11 +9196,11 @@ export interface components {
             /** Format: int64 */
             id: number;
             progressNotes?: string;
+            projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: int32 */
             target?: number;
-            underperformanceJustification?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -9184,6 +9213,7 @@ export interface components {
             isPublishable: boolean;
             name: string;
             progressNotes?: string;
+            projectsComments?: string;
             reference: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
@@ -9191,7 +9221,6 @@ export interface components {
             target?: number;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
-            underperformanceJustification?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -9201,11 +9230,11 @@ export interface components {
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
+            projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: int32 */
             target?: number;
-            underperformanceJustification?: string;
         };
         ReportSystemMetricPayload: {
             /** @enum {string} */
@@ -9217,6 +9246,7 @@ export interface components {
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
+            projectsComments?: string;
             reference: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
@@ -9228,7 +9258,6 @@ export interface components {
             target?: number;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
-            underperformanceJustification?: string;
         };
         ReportedSpeciesPayload: {
             /** Format: int64 */
@@ -10712,6 +10741,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminListActivitiesResponsePayload"];
+                };
+            };
+        };
+    };
+    adminCreateActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminCreateActivityRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminGetActivityResponsePayload"];
                 };
             };
         };
@@ -19794,6 +19847,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VersionsResponsePayload"];
+                };
+            };
+        };
+    };
+    handleMuxWebhook: {
+        parameters: {
+            query?: never;
+            header?: {
+                "Mux-Signature"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string;
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
                 };
             };
         };
