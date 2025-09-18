@@ -249,6 +249,13 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
+            <Typography fontSize='20px' fontWeight={600}>
+              {plantingSite?.areaHa !== undefined &&
+                strings.formatString(
+                  strings.X_HA_IN_TOTAL_PLANTING_AREA,
+                  <FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} />
+                )}
+            </Typography>
             <PlantDashboardMap
               observationResults={observationResults ? [observationResults] : []}
               plantingSites={plantingSite ? [plantingSite] : []}
