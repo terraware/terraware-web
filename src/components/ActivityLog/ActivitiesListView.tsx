@@ -142,16 +142,13 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   }, [strings]);
 
   return (
-    <MapSplitView
-      topComponent={
-        <DateRange
-          field='dateRange'
-          onChange={onChangeDateRange}
-          onDelete={onDeleteDateRange}
-          values={filters.dateRange?.values ?? []}
-        />
-      }
-    >
+    <MapSplitView>
+      <DateRange
+        field='dateRange'
+        onChange={onChangeDateRange}
+        onDelete={onDeleteDateRange}
+        values={filters.dateRange?.values ?? []}
+      />
       {groupedActivities.map(({ quarter, activities: groupActivities }) => (
         <Fragment key={quarter}>
           <Typography
