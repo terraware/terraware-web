@@ -25,10 +25,6 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
 
   const { species } = useSpeciesData();
 
-  const onChangeT0Origin = useCallback((event: React.ChangeEvent<HTMLInputElement>, value: string) => {
-    setT0Origin(value);
-  }, []);
-
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
 
   const isEqualObservation = useCallback(
@@ -61,6 +57,22 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
       densityData: [],
     };
   }, [plot.id, record]);
+
+  const onChangeT0Origin = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
+      setT0Origin(value);
+      if (value === 'manual') {
+        if (plotToSave) {
+          const plotCopy = { ...plotToSave };
+          plotCopy.observationId = undefined;
+          // Remove the existing plot, then add the updated one
+          const otherPlots = record.plots.filter((p) => p.monitoringPlotId.toString() !== plot.id.toString());
+          setRecord({ ...record, plots: otherPlots ? [...otherPlots, plotCopy] : [plotCopy] });
+        }
+      }
+    },
+    [plot.id, plotToSave, record, setRecord]
+  );
 
   const onChangeObservation = useCallback(
     (newValue: PlotT0Observation) => {
