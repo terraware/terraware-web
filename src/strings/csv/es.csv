@@ -393,6 +393,7 @@ DATE_OBSERVATION,{0} Observación,62c68b2c
 DATE_OBSERVED,Fecha observada,7f96dd16
 DATE_OF_LAST_OBSERVATION,Fecha de la última observación,8db1d5cb
 DATE_RANGE,{0} - {1},4d9ee337
+DATE_REQUIRED,Fecha *,9421d984
 DATE_SUBMITTED,Fecha de envío,1619a78b
 DATE_UPDATED,Fecha de actualización,277ca991
 DATE_UPLOADED,Fecha de carga,d8be0362
@@ -490,6 +491,7 @@ DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenga la aplicación móvil y a
 DRAFT,Borrador,f766b964
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Trazar el límite del proyecto propuesto,8b73e819
+DRONE_FLIGHT,Vuelo de dron,af8ec693
 DROPBOX_FOLDER_URL,URL de la carpeta de Dropbox,0ebe8363
 DRYING,Secando,97084385
 DUE,Vence: {0},b72aaa1e
@@ -1757,6 +1759,7 @@ SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,"Dibuja a continuación las subzonas de tu
 SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,Actualmente está seleccionada la zona {0} para crear subzonas.,5e6cd6a3
 SITE_SUBZONE_BOUNDARIES_TOO_SMALL,Una o más subzonas tienen un límite inferior a 25 m x 25 m,c1d1a11f
 SITE_SUBZONE_BOUNDARY_TOO_SMALL,El límite de la subzona es menor que 25 m x 25 m,69d2798b
+SITE_VISIT,Visita al sitio,01a6a6fc
 SITE_WITH_NAME_EXISTS,Ya existe un sitio con este nombre.,8a2a38fc
 SITE_ZONE_BOUNDARIES,Límites de la zona,15e88feb
 SITE_ZONE_BOUNDARIES_DESCRIPTION_0,"Una Zona es un estrato (capa de vegetación) del sitio de plantación en el que las condiciones de plantación y de crecimiento son similares. Cada sitio de plantación debe tener al menos una zona y generalmente no más de cinco. Un ejemplo de Zona es la pendiente de una colina que da al este, donde la luz solar y las condiciones del suelo son similares.",3781c2ed
@@ -1813,6 +1816,7 @@ SPECIES_SCIENTIFIC_NAME,Nombre científico de la especie,bc37b10f
 SPECIES_SELECTED,Especie seleccionada,820edb46
 SPECIES_USAGE,Uso de la especie,0669cb85
 STAFF,Personal,6b242686
+STAKEHOLDER_ENGAGEMENT,Participación de partes interesadas,2c5cfa82
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Grupos de interés e impacto en la comunidad,a0af66ae
 STANDARD,Estándar,88d7d08c
 STANDARD_DEVIATION,Desviación estándar,f2864fab
@@ -2131,6 +2135,7 @@ VARIABLE_ERROR_NUMBER_NAN,El valor no es un número,35fecae0
 VARIABLE_HISTORY,Historial variable,62d3bc75
 VARIABLE_STATUS,Estado de variable,dd3169c3
 VARIABLES,Variables,9902c54b
+VERIFIED,Verificado,17f92e17
 VERRA,Verra,b73695a0
 VERRA_LINK,Enlace de Verra,09f00e23
 VERRA_NPRT,Herramienta Verra de riesgo de no permanencia (NPRT),8df572d7
