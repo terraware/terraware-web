@@ -249,21 +249,32 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Typography fontSize='20px' fontWeight={600}>
-              {plantingSite?.areaHa !== undefined &&
-                strings.formatString(
-                  strings.X_HA_IN_TOTAL_PLANTING_AREA,
-                  <FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} />
-                )}
-            </Typography>
-            <PlantDashboardMap
-              observationResults={observationResults ? [observationResults] : []}
-              plantingSites={plantingSite ? [plantingSite] : []}
-            />
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                background: theme.palette.TwClrBg,
+                borderRadius: '8px',
+                padding: theme.spacing(1),
+                gap: theme.spacing(3),
+              }}
+            >
+              <Typography fontSize='20px' fontWeight={600}>
+                {plantingSite?.areaHa !== undefined &&
+                  strings.formatString(
+                    strings.X_HA_IN_TOTAL_PLANTING_AREA,
+                    <FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} />
+                  )}
+              </Typography>
+              <PlantDashboardMap
+                observationResults={observationResults ? [observationResults] : []}
+                plantingSites={plantingSite ? [plantingSite] : []}
+              />
+            </Box>
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink, observationResults]
+    [hasObservations, isMobile, observationResults, plantingSite, renderLatestObservationLink, theme]
   );
 
   const renderSimpleSiteMap = useCallback(
