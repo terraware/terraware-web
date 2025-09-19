@@ -2,14 +2,17 @@ import React, { CSSProperties, ReactNode } from 'react';
 
 import { Box, IconButton, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
-import '@terraware/web-components/components/Map/styles.scss';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-export type MapDrawerSize = 'small' | 'medium';
+import './styles.scss';
+
+export type MapDrawerSize = 'small' | 'medium' | 'large';
 
 export type MapDrawerProp = {
   children?: ReactNode;
+  hideCloseButton?: boolean;
+  hideHeader?: boolean;
   onClose?: () => void;
   open: boolean;
   size: MapDrawerSize;
@@ -18,7 +21,7 @@ export type MapDrawerProp = {
 };
 
 const MapDrawer = (props: MapDrawerProp) => {
-  const { children, onClose, open, size, style, title } = props;
+  const { children, hideCloseButton, hideHeader, onClose, open, size, style, title } = props;
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -29,12 +32,16 @@ const MapDrawer = (props: MapDrawerProp) => {
       borderRight={isDesktop ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined}
       style={style}
     >
-      <Box className='map-drawer--header'>
-        <p className='title'>{title}</p>
-        <IconButton onClick={onClose} size='small'>
-          <Icon name='close' className='icon-close' />
-        </IconButton>
-      </Box>
+      {!hideHeader && (
+        <Box className='map-drawer--header'>
+          <p className='title'>{title}</p>
+          {!hideCloseButton && (
+            <IconButton onClick={onClose} size='small'>
+              <Icon name='close' className='icon-close' />
+            </IconButton>
+          )}
+        </Box>
+      )}
       <Box className={'map-drawer--body'}>{children}</Box>
     </Box>
   ) : null;
