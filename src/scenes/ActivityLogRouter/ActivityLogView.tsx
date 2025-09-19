@@ -7,41 +7,67 @@ import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
 export default function ActivityLogView(): JSX.Element {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const navigate = useSyncNavigate();
+  const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
+  const { availableParticipants } = useParticipants();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
-  const activityCreateLocation = useMemo(
-    () => ({
-      pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', String(projectFilter.projectId)),
-    }),
-    [projectFilter]
-  );
+  const availableProjects = useMemo(() => {
+    return availableParticipants
+      .flatMap((participant) =>
+        participant.projects.map((project) => ({
+          dealName: project.projectDealName,
+          id: project.projectId,
+          name: project.projectName,
+          organizationId: project.organizationId,
+        }))
+      )
+      .filter((project) => project.dealName)
+      .sort((a, b) => a.dealName!.localeCompare(b.dealName!));
+  }, [availableParticipants]);
 
-  const goToActivityCreate = useCallback(() => {
-    navigate(activityCreateLocation);
-  }, [navigate, activityCreateLocation]);
+  const goToProjectActivityCreate = useCallback(() => {
+    const projectId = Number(projectFilter.projectId);
+    if (!projectId) {
+      return;
+    }
+
+    if (isAcceleratorRoute) {
+      goToAcceleratorActivityCreate(projectId);
+    } else {
+      goToActivityCreate(projectId);
+    }
+  }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectFilter.projectId]);
 
   const PageHeaderLeftComponent = useMemo(
     () => (
       <PageHeaderProjectFilter
-        allParticipantProjects={allParticipantProjects}
         currentParticipantProject={currentParticipantProject}
         projectFilter={projectFilter}
+        projects={isAcceleratorRoute ? availableProjects : allParticipantProjects}
         setCurrentParticipantProject={setCurrentParticipantProject}
         setProjectFilter={setProjectFilter}
       />
     ),
-    [allParticipantProjects, currentParticipantProject, projectFilter, setCurrentParticipantProject, setProjectFilter]
+    [
+      allParticipantProjects,
+      availableProjects,
+      currentParticipantProject,
+      isAcceleratorRoute,
+      projectFilter,
+      setCurrentParticipantProject,
+    ]
   );
 
   const PageHeaderRightComponent = useMemo(
@@ -50,11 +76,11 @@ export default function ActivityLogView(): JSX.Element {
         disabled={!projectFilter.projectId}
         icon='plus'
         label={strings.ADD_ACTIVITY}
-        onClick={goToActivityCreate}
+        onClick={goToProjectActivityCreate}
         size='medium'
       />
     ),
-    [goToActivityCreate, projectFilter.projectId, strings]
+    [goToProjectActivityCreate, projectFilter.projectId, strings]
   );
 
   return (

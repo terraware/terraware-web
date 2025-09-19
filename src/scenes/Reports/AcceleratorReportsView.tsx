@@ -41,9 +41,9 @@ const AcceleratorReportsView = () => {
   const PageHeaderLeftComponent = useMemo(
     () => (
       <PageHeaderProjectFilter
-        allParticipantProjects={allParticipantProjects}
         currentParticipantProject={currentParticipantProject}
         projectFilter={projectFilter}
+        projects={allParticipantProjects}
         setCurrentParticipantProject={setCurrentParticipantProject}
         setProjectFilter={setProjectFilter}
       />
