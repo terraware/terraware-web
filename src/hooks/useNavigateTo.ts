@@ -15,6 +15,18 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR });
       },
 
+      goToAcceleratorActivityCreate: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`) });
+      },
+
+      goToAcceleratorActivityEdit: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`) });
+      },
+
+      goToAcceleratorActivityLog: () => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG });
+      },
+
       goToAcceleratorApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${applicationId}`) });
       },
@@ -63,6 +75,18 @@ export default function useNavigateTo() {
         navigate({
           pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
         }),
+
+      goToActivityCreate: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`) });
+      },
+
+      goToActivityEdit: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`) });
+      },
+
+      goToActivityLog: () => {
+        navigate({ pathname: APP_PATHS.ACTIVITY_LOG });
+      },
 
       goToApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });

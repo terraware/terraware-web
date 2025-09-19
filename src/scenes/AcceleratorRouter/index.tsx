@@ -12,6 +12,7 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
+import ActivityLogRouter from '../ActivityLogRouter';
 import Applications from './Applications';
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
@@ -88,6 +89,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
               <Routes>
                 <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_MATRIX_VIEW}/*`} element={<MatrixView />} />
+                <Route path={`${APP_PATHS.ACCELERATOR_ACTIVITY_LOG}/*`} element={<ActivityLogRouter />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />

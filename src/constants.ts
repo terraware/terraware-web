@@ -16,6 +16,9 @@ export const EMAIL_REGEX =
 
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
+  ACCELERATOR_ACTIVITY_LOG = '/accelerator/activity-log',
+  ACCELERATOR_ACTIVITY_LOG_EDIT = '/accelerator/activity-log/:projectId/:activityId/edit',
+  ACCELERATOR_ACTIVITY_LOG_NEW = '/accelerator/activity-log/:projectId/new',
   ACCELERATOR_APPLICATION = '/accelerator/applications/:applicationId',
   ACCELERATOR_APPLICATION_DELIVERABLE = '/accelerator/applications/:applicationId/deliverable/:deliverableId',
   ACCELERATOR_APPLICATION_MAP = '/accelerator/applications/:applicationId/map',
