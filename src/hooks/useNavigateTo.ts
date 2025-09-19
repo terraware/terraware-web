@@ -19,8 +19,13 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`) });
       },
 
-      goToAcceleratorActivityEdit: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`) });
+      goToAcceleratorActivityEdit: (projectId: number, activityId: number) => {
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
+            ':activityId',
+            `${activityId}`
+          ),
+        });
       },
 
       goToAcceleratorActivityLog: () => {
@@ -80,8 +85,13 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`) });
       },
 
-      goToActivityEdit: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`) });
+      goToActivityEdit: (projectId: number, activityId: number) => {
+        navigate({
+          pathname: APP_PATHS.ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
+            ':activityId',
+            `${activityId}`
+          ),
+        });
       },
 
       goToActivityLog: () => {
