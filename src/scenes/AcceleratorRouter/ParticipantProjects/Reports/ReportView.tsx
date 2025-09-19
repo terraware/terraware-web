@@ -22,6 +22,7 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
@@ -76,6 +77,7 @@ const ReportView = () => {
   const reportsResponse = useAppSelector(selectListFunderReports(projectId ?? ''));
   const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
   const [selectedPublishedReport, setSelectedPublishedReport] = useState<PublishedReport>();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const publishReport = useCallback(() => {
     const request = dispatch(
@@ -390,7 +392,9 @@ const ReportView = () => {
               {['system', 'project', 'standard'].map((type) => {
                 const metrics =
                   type === 'system'
-                    ? selectedReport?.systemMetrics
+                    ? selectedReport?.systemMetrics?.filter(
+                        (m) => isSurvivalRateCalculationEnabled || m.metric !== 'Survival Rate'
+                      )
                     : type === 'project'
                       ? selectedReport?.projectMetrics
                       : selectedReport?.standardMetrics;

@@ -19,6 +19,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
@@ -48,6 +49,7 @@ const AcceleratorReportView = () => {
   const [submitReportRequestId, setSubmitReportRequestId] = useState<string>('');
   const [report, setReport] = useState<AcceleratorReport>();
   const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const getReportResults = useAppSelector(selectAcceleratorReport(requestId));
   const submitReportResults = useAppSelector(selectSubmitAcceleratorReport(submitReportRequestId));
@@ -206,7 +208,9 @@ const AcceleratorReportView = () => {
             {['system', 'project', 'standard'].map((type) => {
               const metrics =
                 type === 'system'
-                  ? report?.systemMetrics
+                  ? report?.systemMetrics?.filter(
+                      (m) => isSurvivalRateCalculationEnabled || m.metric !== 'Survival Rate'
+                    )
                   : type === 'project'
                     ? report?.projectMetrics
                     : report?.standardMetrics;
