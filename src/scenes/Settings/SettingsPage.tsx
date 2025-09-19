@@ -139,7 +139,7 @@ const SettingsPage = () => {
                 marginBottom: theme.spacing(2),
               }}
             />
-            {!isEditingAccount && (
+            {!isEditingAccount && activeTab === 'my-account' && (
               <Box display='flex' height='fit-content'>
                 <Button
                   id='edit-account'
