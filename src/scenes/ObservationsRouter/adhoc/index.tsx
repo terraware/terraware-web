@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
@@ -7,7 +7,9 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -53,6 +55,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const [plantingZoneResult, setPlantingZoneResult] = useState<ObservationPlantingZoneResultsPayload>();
   const [plantingSubzoneResult, setPlantingSubzoneResult] = useState<ObservationPlantingSubzoneResultsPayload>();
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const result = useMemo(() => {
     if (!Number.isNaN(observationId)) {
@@ -202,6 +205,14 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
     }
   }, [navigate, monitoringPlotResult, observationId, plantingZoneName, plantingSiteId]);
 
+  const goToSurvivalRateSettings = useCallback(
+    () =>
+      navigate({
+        pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()),
+      }),
+    [navigate, plantingSiteId]
+  );
+
   const getReplacedPlotsNames = (): JSX.Element[] => {
     const names =
       monitoringPlotResult?.overlapsWithPlotIds.map((plotId, index) => {
@@ -248,6 +259,19 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
       plantingZoneName={plantingZoneName}
+      rightComponent={
+        isSurvivalRateCalculationEnabled ? (
+          <OptionsMenu
+            onOptionItemClick={goToSurvivalRateSettings}
+            optionItems={[
+              {
+                label: strings.SURVIVAL_RATE_SETTINGS,
+                value: 'survivalRate',
+              },
+            ]}
+          />
+        ) : undefined
+      }
     >
       <Grid container>
         <Grid item xs={12}>
