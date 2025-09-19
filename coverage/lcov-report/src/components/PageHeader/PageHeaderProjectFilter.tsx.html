@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -133,7 +133,17 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -145,6 +155,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,21 +170,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -175,6 +186,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -209,62 +229,72 @@ import { Box, Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 &nbsp;
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import theme from 'src/theme';
 import { Project } from 'src/types/Project';
 &nbsp;
 type PageHeaderProjectFilterProps = {
-  allParticipantProjects: Project[];
   currentParticipantProject?: Project;
   projectFilter: { projectId?: number | string };
+  projects: Project[];
   setCurrentParticipantProject: (projectId: string | number) =&gt; void;
   setProjectFilter: React.Dispatch&lt;React.SetStateAction&lt;{ projectId?: number | string }&gt;&gt;;
 };
 &nbsp;
 const PageHeaderProjectFilter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
-  allParticipantProjects,
   currentParticipantProject,
   projectFilter,
+  projects,
   setCurrentParticipantProject,
   setProjectFilter,
 }: PageHeaderProjectFilterProps) =&gt; {
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
 &nbsp;
+  // set project filter to current participant project or first project, if not set
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!projectFilter.projectId &amp;&amp; currentParticipantProject?.id) {</span>
-<span class="cstat-no" title="statement not covered" >      setProjectFilter({ projectId: currentParticipantProject?.id });</span>
+<span class="cstat-no" title="statement not covered" >    if (projectFilter.projectId) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
     }
-  }, [currentParticipantProject?.id, projectFilter.projectId, setProjectFilter]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (currentParticipantProject?.id) {</span>
+<span class="cstat-no" title="statement not covered" >      setProjectFilter({ projectId: currentParticipantProject.id });</span>
+    } else <span class="cstat-no" title="statement not covered" >if (projects.length) {</span>
+<span class="cstat-no" title="statement not covered" >      setProjectFilter({ projectId: projects[0].id });</span>
+    }
+  }, [currentParticipantProject?.id, projectFilter.projectId, projects, setProjectFilter]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (projectFilter.projectId) {</span>
 <span class="cstat-no" title="statement not covered" >      setCurrentParticipantProject(projectFilter.projectId);</span>
-    } else <span class="cstat-no" title="statement not covered" >if (allParticipantProjects.length === 1) {</span>
-<span class="cstat-no" title="statement not covered" >      setCurrentParticipantProject(allParticipantProjects[0].id);</span>
+    } else <span class="cstat-no" title="statement not covered" >if (projects.length === 1) {</span>
+<span class="cstat-no" title="statement not covered" >      setCurrentParticipantProject(projects[0].id);</span>
     }
-  }, [allParticipantProjects, projectFilter.projectId, setCurrentParticipantProject]);
+  }, [projects, projectFilter.projectId, setCurrentParticipantProject]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid container sx={{ alignItems: 'center', flexWrap: 'nowrap', marginTop: theme.spacing(0.5) }}&gt;
       &lt;Grid item&gt;
         &lt;Separator height='40px' /&gt;
       &lt;/Grid&gt;
-      {allParticipantProjects?.length &gt; 0 &amp;&amp; (
+      {projects?.length &gt; 0 &amp;&amp; (
         &lt;Grid item&gt;
-          {allParticipantProjects?.length &gt; 1 ? (
+          {projects?.length &gt; 1 ? (
             &lt;Box display='flex'&gt;
-              &lt;Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component='span'&gt;
-                {strings.PROJECT}
+              &lt;Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'&gt;
+                {isAcceleratorRoute ? strings.DEAL_NAME : strings.PROJECT}
               &lt;/Typography&gt;
               &lt;ProjectsDropdown
-                availableProjects={allParticipantProjects}
+                availableProjects={projects}
                 label=''
                 record={projectFilter}
                 setRecord={setProjectFilter}
+                useDealName={isAcceleratorRoute}
               /&gt;
             &lt;/Box&gt;
           ) : (
-            &lt;Typography&gt;{allParticipantProjects[0].name}&lt;/Typography&gt;
+            &lt;Typography&gt;{projects[0].name}&lt;/Typography&gt;
           )}
         &lt;/Grid&gt;
       )}
@@ -280,7 +310,7 @@ export default PageHeaderProjectFilter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-19T23:13:52.243Z
+                at 2025-09-19T23:58:15.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
