@@ -1895,6 +1895,8 @@ SUPPLEMENTAL_FILES,Supplemental Files,
 SURVIVAL_RATE_SETTINGS,Survival Rate Settings,
 SURVIVAL_RATE_SETTINGS_FOR,Survival Rate Settings For {0},
 SURVIVAL_RATE_SETTINGS_INFO,"{0} For every plot, select or enter the data that will be used to provide the t0 plant density per plot for survival rate calculations. For each subsequent Observation, Terraware will use the t0 data to calculate survival rates at the Plot, Subzone, Zone, and Planting Site levels. If the Observation selected for a plot is changed, survival rates will be re-calulated based on the new selection. Alternatively, if the number of plants that were planted in the plots is known, the planted plant densities can be used instead of Observation data for survival rate calculations.",
+SURVIVAL_RATES_UNAVAILABLE_BODY,Set t0 data in the {0} and learn more about survival rate calculations in our {1}.
+SURVIVAL_RATES_UNAVAILABLE_TITLE,Survival Rates are not able to be calculated because not all required t0 data has been set.,
 SUSTAINABLE_DEVELOPMENT_GOALS,Sustainable Development Goals,
 SUSTAINABLE_TIMBER,Sustainable Timber,
 SW_CORNER_LATITUDE,SW Corner Latitude: {0},

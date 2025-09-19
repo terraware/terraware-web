@@ -1895,6 +1895,8 @@ SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
 SURVIVAL_RATE_SETTINGS,Configuración de la tasa de supervivencia,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Configuración de la tasa de supervivencia para {0},f787c873
 SURVIVAL_RATE_SETTINGS_INFO,"{0} Para cada parcela, seleccione o ingrese los datos que se utilizarán para proporcionar la densidad de plantas t0 por parcela para los cálculos de la tasa de supervivencia. Para cada Observación posterior, Terraware usará los datos t0 para calcular las tasas de supervivencia a nivel de Parcela, Subzona, Zona y Sitio de Plantación. Si se cambia la Observación seleccionada para una parcela, las tasas de supervivencia se recalcularán en función de la nueva selección. Alternativamente, si se conoce la cantidad de plantas que fueron plantadas en las parcelas, se pueden usar las densidades de plantas plantadas en lugar de los datos de Observación para los cálculos de la tasa de supervivencia.",d0a2ff5b
+SURVIVAL_RATES_UNAVAILABLE_BODY,Ingrese los datos t0 en el {0} y obtenga más información sobre el cálculo de tasas de supervivencia en nuestro {1}.,c885f470
+SURVIVAL_RATES_UNAVAILABLE_TITLE,No es posible calcular las tasas de supervivencia porque no se han ingresado todos los datos t0 requeridos.,1d27b799
 SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible,905bfc54
 SUSTAINABLE_TIMBER,Madera sostenible,b9574821
 SW_CORNER_LATITUDE,Latitud de la esquina SO: {0},11be73c0

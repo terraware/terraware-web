@@ -10,6 +10,7 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
 import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -40,6 +41,7 @@ export type PlantsPrimaryPageViewProps = {
   title: string;
   newHeader?: boolean;
   showGeometryNote?: boolean;
+  showSurvivalRateMessage?: boolean;
   latestObservationId?: number;
   projectId?: number;
   onSelectProjectId?: (projectId: number) => void;
@@ -53,6 +55,7 @@ export default function PlantsPrimaryPageView({
   style,
   text,
   showGeometryNote,
+  showSurvivalRateMessage,
   latestObservationId,
   projectId,
   isEmptyState,
@@ -71,6 +74,7 @@ export default function PlantsPrimaryPageView({
   const dispatch = useAppDispatch();
   const { allPlantingSites, isLoading, isInitiated, plantingSite } = usePlantingSiteData();
   const [delayedIsPlantingSiteSet, setDelayedIsPlantingSiteSet] = useState(false);
+  const knowledgeBaseLinks = useKnowledgeBaseLinks();
 
   const hasSites = useMemo(() => {
     return (
@@ -191,6 +195,34 @@ export default function PlantsPrimaryPageView({
                       )
                     )}
                   </span>
+                }
+                priority='info'
+                type='page'
+              />
+            </Box>
+          )}
+          {showSurvivalRateMessage && selectedPlantingSiteId && (
+            <Box marginBottom={theme.spacing(4)}>
+              <Message
+                title={strings.SURVIVAL_RATES_UNAVAILABLE_TITLE}
+                body={
+                  <Typography>
+                    {strings.formatString(
+                      strings.SURVIVAL_RATES_UNAVAILABLE_BODY,
+                      <Link
+                        fontSize={'16px'}
+                        to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(
+                          ':plantingSiteId',
+                          selectedPlantingSiteId.toString()
+                        )}
+                      >
+                        {strings.SURVIVAL_RATE_SETTINGS}
+                      </Link>,
+                      <Link to={knowledgeBaseLinks['/home']} fontSize={'16px'}>
+                        {strings.KNOWLEDGE_BASE}
+                      </Link>
+                    )}
+                  </Typography>
                 }
                 priority='info'
                 type='page'

@@ -1894,6 +1894,8 @@ SUPPLEMENTAL_FILES,Fichiers supplémentaires,b655103c
 SURVIVAL_RATE_SETTINGS,Paramètres du taux de survie,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Paramètres du taux de survie pour {0},f787c873
 SURVIVAL_RATE_SETTINGS_INFO,"{0} Pour chaque parcelle, sélectionnez ou saisissez les données qui seront utilisées pour fournir la densité de plantes t0 par parcelle pour le calcul du taux de survie. Pour chaque observation ultérieure, Terraware utilisera les données t0 pour calculer les taux de survie aux niveaux de la parcelle, de la sous-zone, de la zone et du site de plantation. Si l'observation sélectionnée pour une parcelle est modifiée, les taux de survie seront recalculés en fonction de la nouvelle sélection. Alternativement, si le nombre de plantes qui ont été plantées dans les parcelles est connu, les densités de plantes plantées peuvent être utilisées à la place des données d'observation pour le calcul du taux de survie.",d0a2ff5b
+SURVIVAL_RATES_UNAVAILABLE_BODY,Saisissez les données t0 dans le {0} et apprenez-en plus sur le calcul des taux de survie dans notre {1}.,c885f470
+SURVIVAL_RATES_UNAVAILABLE_TITLE,Les taux de survie ne peuvent pas être calculés car toutes les données t0 requises n'ont pas été saisies.,1d27b799
 SUSTAINABLE_DEVELOPMENT_GOALS,Objectifs de développement durable,905bfc54
 SUSTAINABLE_TIMBER,Bois durable,b9574821
 SW_CORNER_LATITUDE,Latitude du coin sud-ouest : {0},11be73c0
