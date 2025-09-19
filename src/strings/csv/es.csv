@@ -1815,6 +1815,10 @@ SPECIES_PROBLEM_NAME_NOT_FOUND,No se encontró el nombre,6f1d18da
 SPECIES_REQUIRED,Especie *,1d0d4b75
 SPECIES_SCIENTIFIC_NAME,Nombre científico de la especie,bc37b10f
 SPECIES_SELECTED,Especie seleccionada,820edb46
+SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
+SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
+SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra la cantidad de plantas por especie que fueron registradas como vivas y muertas dentro de todas las zonas observadas.,8e100f36
+SPECIES_SURVIVAL_TOOLTIP,"La Supervivencia de Especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las zonas que fueron observadas.",dfaff418
 SPECIES_USAGE,Uso de la especie,0669cb85
 STAFF,Personal,6b242686
 STAKEHOLDER_ENGAGEMENT,Participación de partes interesadas,2c5cfa82
@@ -1892,9 +1896,12 @@ SUMMARY_OF_PROGRESS,Resumen del progreso,c74014f3
 SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,35c72f75
 SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
+SURVIVAL_RATE,Tasa de supervivencia,b1a831cf
 SURVIVAL_RATE_SETTINGS,Configuración de la tasa de supervivencia,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Configuración de la tasa de supervivencia para {0},f787c873
 SURVIVAL_RATE_SETTINGS_INFO,"{0} Para cada parcela, seleccione o ingrese los datos que se utilizarán para proporcionar la densidad de plantas t0 por parcela para los cálculos de la tasa de supervivencia. Para cada Observación posterior, Terraware usará los datos t0 para calcular las tasas de supervivencia a nivel de Parcela, Subzona, Zona y Sitio de Plantación. Si se cambia la Observación seleccionada para una parcela, las tasas de supervivencia se recalcularán en función de la nueva selección. Alternativamente, si se conoce la cantidad de plantas que fueron plantadas en las parcelas, se pueden usar las densidades de plantas plantadas en lugar de los datos de Observación para los cálculos de la tasa de supervivencia.",d0a2ff5b
+SURVIVAL_RATE_TOOLTIP,La tasa de supervivencia se basa en la cantidad de plantas que fueron observadas como vivas dentro de todas las zonas que fueron observadas.,faa56121
+SURVIVAL_RATE_TREND_TOOLTIP,"La tendencia de la tasa de supervivencia representa los porcentajes de plantas que fueron registradas como vivas en parcelas permanentes dentro de todas las observaciones. Si los datos t0 no están establecidos para todas las parcelas dentro de una Observación, la tasa de supervivencia para la Observación no se representará en la tendencia.",63f175eb
 SURVIVAL_RATES_UNAVAILABLE_BODY,Ingrese los datos t0 en el {0} y obtenga más información sobre el cálculo de tasas de supervivencia en nuestro {1}.,c885f470
 SURVIVAL_RATES_UNAVAILABLE_TITLE,No es posible calcular las tasas de supervivencia porque no se han ingresado todos los datos t0 requeridos.,1d27b799
 SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible,905bfc54
@@ -2242,5 +2249,7 @@ ZONE_MORTALITY_TOOLTIP,"La ""Mortalidad por zona"" indica las zonas con las tasa
 ZONE_NAME_IN_USE,El nombre de la zona ya está en uso.,d75e052d
 ZONE_NAME_MAXIMUM_LENGTH,El nombre de la zona debe tener 15 caracteres o menos.,73baca0a
 ZONE_REQUIRED,Zona *,548cc1ed
+ZONE_SURVIVAL,Supervivencia por Zona,673673ec
+ZONE_SURVIVAL_TOOLTIP,"La Supervivencia por Zona muestra las zonas con las tasas de supervivencia más altas y más bajas, entre las zonas que fueron observadas.",41e612cd
 ZONE_TRENDS,Tendencias por zona,8f734112
 ZONES,Zonas,5fc4b33f

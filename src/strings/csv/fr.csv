@@ -1814,6 +1814,10 @@ SPECIES_PROBLEM_NAME_NOT_FOUND,Nom introuvable,6f1d18da
 SPECIES_REQUIRED,Espèce *,1d0d4b75
 SPECIES_SCIENTIFIC_NAME,Nom scientifique des espèces,bc37b10f
 SPECIES_SELECTED,Espèce sélectionnée,820edb46
+SPECIES_SURVIVAL,Survie des espèces,20e77844
+SPECIES_SURVIVAL_BREAKDOWN,Répartition de la survie des espèces,837eaa3b
+SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,La répartition de la survie indique le nombre de plants par espèce enregistrés comme vivants ou morts dans l'ensemble des zones observées.,8e100f36
+SPECIES_SURVIVAL_TOOLTIP,La survie des espèces affiche les espèces ayant les taux de survie les plus élevés et les plus faibles parmi les zones observées.,dfaff418
 SPECIES_USAGE,Utilisation des espèces,0669cb85
 STAFF,Personnel,6b242686
 STAKEHOLDER_ENGAGEMENT,Engagement des parties prenantes,2c5cfa82
@@ -1891,9 +1895,12 @@ SUMMARY_OF_PROGRESS,Résumé des progrès,c74014f3
 SUMMARY_OF_PROGRESS_DESCRIPTION,Faites un bref résumé de ce projet.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Résumé des progrès accomplis *,35c72f75
 SUPPLEMENTAL_FILES,Fichiers supplémentaires,b655103c
+SURVIVAL_RATE,Taux de survie,b1a831cf
 SURVIVAL_RATE_SETTINGS,Paramètres du taux de survie,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Paramètres du taux de survie pour {0},f787c873
 SURVIVAL_RATE_SETTINGS_INFO,"{0} Pour chaque parcelle, sélectionnez ou saisissez les données qui seront utilisées pour fournir la densité de plantes t0 par parcelle pour le calcul du taux de survie. Pour chaque observation ultérieure, Terraware utilisera les données t0 pour calculer les taux de survie aux niveaux de la parcelle, de la sous-zone, de la zone et du site de plantation. Si l'observation sélectionnée pour une parcelle est modifiée, les taux de survie seront recalculés en fonction de la nouvelle sélection. Alternativement, si le nombre de plantes qui ont été plantées dans les parcelles est connu, les densités de plantes plantées peuvent être utilisées à la place des données d'observation pour le calcul du taux de survie.",d0a2ff5b
+SURVIVAL_RATE_TOOLTIP,Le taux de survie est basé sur le nombre de plants observés comme vivants dans l'ensemble des zones observées.,faa56121
+SURVIVAL_RATE_TREND_TOOLTIP,"La tendance du taux de survie représente les pourcentages de plants enregistrés comme vivants dans les placettes permanentes lors de toutes les observations. Si les données t0 ne sont pas renseignées pour toutes les placettes d'une observation, le taux de survie de cette observation ne sera pas représenté dans la tendance.",63f175eb
 SURVIVAL_RATES_UNAVAILABLE_BODY,Saisissez les données t0 dans le {0} et apprenez-en plus sur le calcul des taux de survie dans notre {1}.,c885f470
 SURVIVAL_RATES_UNAVAILABLE_TITLE,Les taux de survie ne peuvent pas être calculés car toutes les données t0 requises n'ont pas été saisies.,1d27b799
 SUSTAINABLE_DEVELOPMENT_GOALS,Objectifs de développement durable,905bfc54
@@ -2241,5 +2248,7 @@ ZONE_MORTALITY_TOOLTIP,"La rubrique « Mortalité de la zone » indique les zone
 ZONE_NAME_IN_USE,Le nom de la zone est déjà utilisé.,d75e052d
 ZONE_NAME_MAXIMUM_LENGTH,Le nom de la zone ne doit pas comporter plus de 15 caractères.,73baca0a
 ZONE_REQUIRED,Zone *,548cc1ed
+ZONE_SURVIVAL,Survie par zone,673673ec
+ZONE_SURVIVAL_TOOLTIP,La survie par zone affiche les zones ayant les taux de survie les plus élevés et les plus faibles parmi les zones observées.,41e612cd
 ZONE_TRENDS,Tendances par zone,8f734112
 ZONES,Zones,5fc4b33f

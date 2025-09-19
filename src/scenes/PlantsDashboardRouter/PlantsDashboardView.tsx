@@ -8,6 +8,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useObservation from 'src/hooks/useObservation';
 import { useOrganization } from 'src/providers';
@@ -46,6 +47,7 @@ export default function PlantsDashboardView({
   const [requestId, setRequestId] = useState('');
   const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
   const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const {
     setAcceleratorOrganizationId,
@@ -115,8 +117,8 @@ export default function PlantsDashboardView({
     const allPlotsLength =
       plantingSite?.plantingZones?.flatMap((z) => z.plantingSubzones?.flatMap((sz) => sz.monitoringPlots) || [])
         ?.length || 0;
-    return (t0Plots?.length || 0) < (allPlotsLength || 0);
-  }, [plantingSite?.plantingZones, t0Plots?.length]);
+    return isSurvivalRateCalculationEnabled && (t0Plots?.length || 0) < (allPlotsLength || 0);
+  }, [isSurvivalRateCalculationEnabled, plantingSite?.plantingZones, t0Plots?.length]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -167,7 +169,7 @@ export default function PlantsDashboardView({
               }}
             >
               <Typography fontWeight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}>
-                {strings.MORTALITY_RATE}
+                {isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE}
               </Typography>
               {hasObservations && (
                 <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
@@ -179,7 +181,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
+    [plantingSite, isMobile, isSurvivalRateCalculationEnabled, hasObservations, renderLatestObservationLink]
   );
 
   const renderTotalPlantsAndSpecies = () => (

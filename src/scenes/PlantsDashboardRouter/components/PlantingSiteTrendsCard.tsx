@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
+import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
@@ -15,6 +16,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
   const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<number>();
   const [selectedMortalityZone, setSelectedMortalityZone] = useState<number>();
   const { plantingSite, observationSummaries } = usePlantingSiteData();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {
@@ -164,9 +166,15 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
         >
           <Box display={'flex'} alignItems={'center'}>
             <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-              {strings.MORTALITY_RATE}
+              {isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE}
             </Typography>
-            <Tooltip title={strings.MORTALITY_RATE_TREND_TOOLTIP}>
+            <Tooltip
+              title={
+                isSurvivalRateCalculationEnabled
+                  ? strings.SURVIVAL_RATE_TREND_TOOLTIP
+                  : strings.MORTALITY_RATE_TREND_TOOLTIP
+              }
+            >
               <Box display='flex' marginRight={1}>
                 <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
               </Box>
