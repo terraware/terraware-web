@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -177,7 +177,24 @@
 <a name='L112'></a><a href='#L112'>112</a>
 <a name='L113'></a><a href='#L113'>113</a>
 <a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,6 +211,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,6 +222,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -297,6 +329,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 &nbsp;
@@ -308,6 +341,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { latestResult } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
+  const isSurvivalRateCalculationEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Survival Rate Calculation');</span>
 &nbsp;
   const separatorStyles = <span class="cstat-no" title="statement not covered" >{</span>
     width: '1px',
@@ -325,9 +359,11 @@ export default function <span class="fstat-no" title="function not covered" >Mor
       &lt;Box flexBasis='100%'&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
-            {strings.MORTALITY_RATE}
+            {isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE}
           &lt;/Typography&gt;
-          &lt;Tooltip title={strings.MORTALITY_RATE_TOOLTIP}&gt;
+          &lt;Tooltip
+            title={isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_TOOLTIP : strings.MORTALITY_RATE_TOOLTIP}
+          &gt;
             &lt;Box display='flex'&gt;
               &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
             &lt;/Box&gt;
@@ -358,9 +394,11 @@ export default function <span class="fstat-no" title="function not covered" >Mor
       &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
-            {strings.ZONE_MORTALITY}
+            {isSurvivalRateCalculationEnabled ? strings.ZONE_SURVIVAL : strings.ZONE_MORTALITY}
           &lt;/Typography&gt;
-          &lt;Tooltip title={strings.ZONE_MORTALITY_TOOLTIP}&gt;
+          &lt;Tooltip
+            title={isSurvivalRateCalculationEnabled ? strings.ZONE_SURVIVAL_TOOLTIP : strings.ZONE_MORTALITY_TOOLTIP}
+          &gt;
             &lt;Box display='flex'&gt;
               &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
             &lt;/Box&gt;
@@ -374,9 +412,13 @@ export default function <span class="fstat-no" title="function not covered" >Mor
       &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
-            {strings.SPECIES_MORTALITY}
+            {isSurvivalRateCalculationEnabled ? strings.SPECIES_SURVIVAL : strings.SPECIES_MORTALITY}
           &lt;/Typography&gt;
-          &lt;Tooltip title={strings.SPECIES_MORTALITY_TOOLTIP}&gt;
+          &lt;Tooltip
+            title={
+              isSurvivalRateCalculationEnabled ? strings.SPECIES_SURVIVAL_TOOLTIP : strings.SPECIES_MORTALITY_TOOLTIP
+            }
+          &gt;
             &lt;Box display='flex'&gt;
               &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
             &lt;/Box&gt;
@@ -390,9 +432,15 @@ export default function <span class="fstat-no" title="function not covered" >Mor
       &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
-            {strings.MORTALITY_BREAKDOWN}
+            {isSurvivalRateCalculationEnabled ? strings.SPECIES_SURVIVAL_BREAKDOWN : strings.MORTALITY_BREAKDOWN}
           &lt;/Typography&gt;
-          &lt;Tooltip title={strings.MORTALITY_BREAKDOWN_TOOLTIP}&gt;
+          &lt;Tooltip
+            title={
+              isSurvivalRateCalculationEnabled
+                ? strings.SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP
+                : strings.MORTALITY_BREAKDOWN_TOOLTIP
+            }
+          &gt;
             &lt;Box display='flex'&gt;
               &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
             &lt;/Box&gt;
@@ -412,7 +460,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-19T18:37:15.351Z
+                at 2025-09-19T19:07:31.969Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
