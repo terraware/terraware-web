@@ -22,10 +22,10 @@ export default function ActivityCreateView(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { goToAcceleratorActivityLog, goToActivityLog } = useNavigateTo();
   const pathParams = useParams<{ projectId: string }>();
-  const { selectedProject } = useProjects({
-    projectId: pathParams.projectId ? Number(pathParams.projectId) : undefined,
-  });
   const projectId = Number(pathParams.projectId);
+  const { selectedProject } = useProjects({
+    projectId: projectId ? projectId : undefined,
+  });
 
   const selectedParticipantProject = useMemo(() => {
     return availableParticipants
