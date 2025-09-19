@@ -117,8 +117,12 @@ export default function PlantsDashboardView({
     const allPlotsLength =
       plantingSite?.plantingZones?.flatMap((z) => z.plantingSubzones?.flatMap((sz) => sz.monitoringPlots) || [])
         ?.length || 0;
-    return isSurvivalRateCalculationEnabled && (t0Plots?.length || 0) < (allPlotsLength || 0);
-  }, [isSurvivalRateCalculationEnabled, plantingSite?.plantingZones, t0Plots?.length]);
+    return (
+      isSurvivalRateCalculationEnabled &&
+      plantingSiteT0Response?.status === 'success' &&
+      (t0Plots?.length || 0) < (allPlotsLength || 0)
+    );
+  }, [isSurvivalRateCalculationEnabled, plantingSite?.plantingZones, plantingSiteT0Response?.status, t0Plots?.length]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
