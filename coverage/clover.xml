@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1758319013375" clover="3.2.0">
-  <project timestamp="1758319013375" name="All files">
-    <metrics statements="33469" coveredstatements="1334" conditionals="23247" coveredconditionals="389" methods="10290" coveredmethods="211" elements="67006" coveredelements="1934" complexity="0" loc="33469" ncloc="33469" packages="278" files="1341" classes="1341"/>
+<coverage generated="1758320848322" clover="3.2.0">
+  <project timestamp="1758320848322" name="All files">
+    <metrics statements="33468" coveredstatements="1334" conditionals="23245" coveredconditionals="389" methods="10290" coveredmethods="211" elements="67003" coveredelements="1934" complexity="0" loc="33468" ncloc="33468" packages="278" files="1341" classes="1341"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1764,7 +1764,7 @@
       </file>
     </package>
     <package name="src.components.ActivityLog">
-      <metrics statements="128" coveredstatements="0" conditionals="65" coveredconditionals="0" methods="40" coveredmethods="0"/>
+      <metrics statements="127" coveredstatements="0" conditionals="63" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="ActivitiesListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesListView.tsx">
         <metrics statements="44" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="17" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -1909,8 +1909,7 @@
         <line num="66" count="0" type="stmt"/>
       </file>
       <file name="MapSplitView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/MapSplitView.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
       </file>
@@ -37638,40 +37637,40 @@
       </file>
       <file name="organization.tsx" path="/home/runner/work/terraware-web/terraware-web/src/utils/organization.tsx">
         <metrics statements="34" coveredstatements="13" conditionals="12" coveredconditionals="0" methods="18" coveredmethods="0"/>
-        <line num="5" count="3" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="7" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="8" count="0" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="15" count="3" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="19" count="3" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="23" count="3" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="27" count="3" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="30" count="3" type="stmt"/>
-        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="34" count="3" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="38" count="3" type="stmt"/>
-        <line num="40" count="3" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="44" count="3" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="48" count="3" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="28" count="3" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="35" count="3" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="3" type="stmt"/>
+        <line num="41" count="3" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="3" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="49" count="3" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="54" count="3" type="stmt"/>
-        <line num="56" count="3" type="stmt"/>
-        <line num="57" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="58" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="55" count="3" type="stmt"/>
+        <line num="57" count="3" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
       </file>
       <file name="preventDefaultEvent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/utils/preventDefaultEvent.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

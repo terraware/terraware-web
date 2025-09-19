@@ -1,2 +1,4 @@
+e9406a20c1c SW-7379 Disable ability to remove TF Contacts of any kind in People List (#4475)
+cafde46539b SW-3793 Added empty map to activiy split map view (#4474)
 dd0b9367b40 Removed falsey rendering of 0 (#4473)
 6cb9aab9123 SW-7394 Added new size and drawer options for map (#4472)
