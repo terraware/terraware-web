@@ -112,9 +112,9 @@ export default function PlantsDashboardView({
   ]);
 
   const showSurvivalRateMessage = useMemo(() => {
-    const allPlotsLength = plantingSite?.plantingZones?.flatMap((z) =>
-      z.plantingSubzones.flatMap((sz) => sz.monitoringPlots)
-    ).length;
+    const allPlotsLength =
+      plantingSite?.plantingZones?.flatMap((z) => z.plantingSubzones?.flatMap((sz) => sz.monitoringPlots) || [])
+        ?.length || 0;
     return (t0Plots?.length || 0) < (allPlotsLength || 0);
   }, [plantingSite?.plantingZones, t0Plots?.length]);
 
