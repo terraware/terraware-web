@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Divider, FormControlLabel, IconButton, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, Icon, Message, SelectT } from '@terraware/web-components';
+import { Button, Checkbox, Icon, IconTooltip, Message, SelectT } from '@terraware/web-components';
 
 import TextField from 'src/components/common/TextField';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -262,12 +262,16 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
           <Box flexGrow={1} display={'flex'} alignItems={'center'}>
             <RadioGroup name='radio-buttons-t0' onChange={onChangeT0Origin} value={t0Origin}>
               <Box display='flex'>
-                <FormControlLabel
-                  control={<Radio />}
-                  disabled={(plot.observationPlots.length || 0) < 1}
-                  label={strings.USE_OBSERVATION_DATA}
-                  value={'useObservation'}
-                />
+                <Box display='flex' paddingRight={2} sx={{ alignItems: 'center' }}>
+                  <FormControlLabel
+                    control={<Radio />}
+                    disabled={(plot.observationPlots.length || 0) < 1}
+                    label={strings.USE_OBSERVATION_DATA}
+                    value={'useObservation'}
+                    sx={{ marginRight: '8px' }}
+                  />
+                  <IconTooltip title={strings.USE_OBSERVATION_DATA_TOOLTIP} />
+                </Box>
                 <SelectT<PlotT0Observation>
                   options={plot.observationPlots}
                   placeholder={strings.SELECT}
@@ -283,11 +287,15 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                   disabled={t0Origin === 'manual'}
                 />
               </Box>
-              <FormControlLabel
-                control={<Radio />}
-                label={strings.PROVIDE_PLANT_DENSITY_PER_SPECIES}
-                value={'manual'}
-              />
+              <Box display='flex' sx={{ alignItems: 'center' }}>
+                <FormControlLabel
+                  control={<Radio />}
+                  label={strings.PROVIDE_PLANT_DENSITY_PER_SPECIES}
+                  value={'manual'}
+                  sx={{ marginRight: '8px' }}
+                />
+                <IconTooltip title={strings.PROVIDE_PLANT_DENSITY_PER_SPECIES_TOOLTIP} />
+              </Box>
             </RadioGroup>
           </Box>
           {t0Origin === 'manual' && (
@@ -299,9 +307,23 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                 <table>
                   <thead>
                     <tr>
-                      <th style={{ textAlign: 'left' }}>{strings.SPECIES_FROM_WITHDRAWALS}</th>
-                      <th style={{ textAlign: 'left' }}>{strings.PLANT_DENSITY}</th>
-                      <th style={{ textAlign: 'left' }}>{strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}</th>
+                      <th style={{ textAlign: 'left' }}>
+                        <Box display='flex'>
+                          {strings.SPECIES_FROM_WITHDRAWALS}
+                          <IconTooltip title={strings.SPECIES_FROM_WITHDRAWALS_TOOLTIP} />
+                        </Box>
+                      </th>
+                      <th style={{ textAlign: 'left' }}>
+                        <Box display={'flex'}>
+                          {strings.PLANT_DENSITY} <IconTooltip title={strings.PLANT_DENSITY_TITLE_TOOLTIP} />
+                        </Box>
+                      </th>
+                      <th style={{ textAlign: 'left' }}>
+                        <Box display={'flex'}>
+                          {strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}
+                          <IconTooltip title={strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP} />
+                        </Box>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -335,7 +357,10 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                     {newSpeciesRows.length > 0 && (
                       <tr>
                         <td colSpan={3}>
-                          <Typography fontWeight={600}>{strings.ADDED_SPECIES}</Typography>{' '}
+                          <Box display='flex'>
+                            <Typography fontWeight={600}>{strings.ADDED_SPECIES}</Typography>
+                            <IconTooltip title={strings.ADDED_SPECIES_TOOLTIP} />
+                          </Box>
                         </td>
                       </tr>
                     )}
@@ -392,7 +417,10 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                     </tr>
                     <tr>
                       <td>
-                        <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
+                        <Box display={'flex'}>
+                          <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
+                          <IconTooltip title={strings.TOTAL_DENSITY_TOOLTIP} />
+                        </Box>
                       </td>
                       <td>
                         <Typography fontWeight={600}>{plotTotalDensity}</Typography>
