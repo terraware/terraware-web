@@ -107,6 +107,7 @@ ADD_VIABILITY,Añadir Viabilidad,a4672790
 ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad,4648a184
 ADDED,Agregado,d441aa1d
 ADDED_SPECIES,Especies añadidas,f2342d09
+ADDED_SPECIES_TOOLTIP,Especies que se incluirán en los cálculos de la tasa de supervivencia y que no provienen de Retiros.,cad59bdf
 ADDING_SUBZONE_BOUNDARIES,Añadir límites de subzona,58f0fb08
 ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de corte {0} para crear formas de subzonas (polígonos) dentro de las zonas.,042bd160
 ADDING_ZONE_BOUNDARIES,Añadir límites de zona,901f668b
@@ -241,6 +242,7 @@ BY_BATCH,Por lotes,68c5092f
 BY_NURSERY,Por vivero,a0a2faa5
 BY_SPECIES,Por especies,602624ab
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir de retiros,d06a4b56
+CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Para usar la densidad de plantas calculada a partir de los Retiros de plantación, marque la casilla. Para sobrescribir estos datos, ingrese manualmente un valor en los campos de Densidad de Plantas a la izquierda.",c674df96
 CANCEL,Cancelar,e73dc4d4
 CANCEL_DATA_CHECK,Cancelar comprobación de datos,5f140f00
 CANNOT_DELETE_APPLICATION_PROJECT,Este proyecto no se puede eliminar porque se ha presentado una solicitud para nuestro programa acelerador en relación con este proyecto.,5c1b8d4f
@@ -1267,6 +1269,7 @@ PLANT,plantar,9089fdf9
 PLANT_DENSITY,Densidad de plantación,feae2a2d
 PLANT_DENSITY_MISSING_TOOLTIP,"Cuando se completa una observación, la densidad de plantación calculada aparecerá aquí.",6e3830dd
 PLANT_DENSITY_OF_PLANTED_ZONES,Densidad de plantación (de Zonas plantadas),2e0bd471
+PLANT_DENSITY_TITLE_TOOLTIP,Ingrese manualmente la densidad de plantas para cada una de las especies plantadas. Esta densidad se utilizará para los cálculos de la Tasa de Supervivencia.,50547e3a
 PLANT_DESCRIPTION,Notas sobre las plantas,0915d26a
 PLANT_DETAIL,Detalle de la planta,4b1b7fff
 PLANT_ID,ID de la planta,25cd3771
@@ -1431,6 +1434,7 @@ PROPOSED_PROJECT_BOUNDARIES_ADDED,Se agregaron los límites para el proyecto pro
 PROPOSED_PROJECT_BOUNDARY,Límite propuesto del proyecto,0b77fcdf
 PROPOSED_RESTORATION_ACTIVITIES,Actividades de restauración propuestas,4c6b833a
 PROVIDE_PLANT_DENSITY_PER_SPECIES,Proporcione la densidad de plantas por especie,846ce9aa
+PROVIDE_PLANT_DENSITY_PER_SPECIES_TOOLTIP,Ingrese las densidades para cada especie plantada. Se muestran las densidades de plantas basadas en los datos del Registro de Retiros y pueden ser ingresadas como las densidades de plantas.,3b3ef9f3
 PUBLISH,Publicar,c1d4ecf7
 PUBLISH_TO_FUNDER_PORTAL,Publicar en el portal del financiador,ec2ddbec
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
@@ -1796,6 +1800,7 @@ SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,20250069
 SPECIES_FROM_WITHDRAWALS,Especies a partir de retiros,66d674b5
+SPECIES_FROM_WITHDRAWALS_TOOLTIP,Todas las especies registradas como plantadas en el Sitio de Plantación a través de Retiros.,fc05e7a4
 SPECIES_IMPORT_COMPLETE,¡Se completó la importación de los datos de especies!,74b00dc5
 SPECIES_LAST_UPDATED,Última especie actualizada,062c5811
 SPECIES_LIST,Lista de especies,d31336cb
@@ -2009,6 +2014,7 @@ TOOLTIP_VIABILITY_TEST_SUBSTRATE,"La superficie o el material del que un organis
 TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos y químicos utilizados para romper la latencia y/o acelerar la germinación.",560e95e8
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,8950dbea
+TOTAL_DENSITY_TOOLTIP,Densidad total de plantas (plantas/ha) de los valores ingresados arriba.,edb8e740
 TOTAL_EXPANSION_POTENTIAL,Potencial de expansión total (ha),51e2b16e
 TOTAL_HECTARES_PLANTED,Total de hectáreas plantadas,5410325f
 TOTAL_HECTARES_PLANTED_TOOLTIP,"Este es el número total de hectáreas marcadas con ""Plantación completa"" en este lugar de plantación.",1dd1dbf3
@@ -2118,6 +2124,7 @@ UPLOAD_PHOTOS,Cargar foto(s),d20a4173
 UPLOAD_SPATIAL_FILES,Subir archivo(s) espacial(es),953e770a
 USD_PER_HECTARE,${0} por ha,d8525ed1
 USE_OBSERVATION_DATA,Usar datos de observación,37c30404
+USE_OBSERVATION_DATA_TOOLTIP,Seleccione de la lista de todas las Observaciones completadas que incluyan datos t0 para la parcela.,1919d6a5
 USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización,2cf2ac16
 USED_UP,Agotado,323bdb79
 USER_ACCESS,Acceso del usuario,a9aa511b

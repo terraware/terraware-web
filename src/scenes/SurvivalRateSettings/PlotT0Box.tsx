@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
+import { IconTooltip } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
@@ -82,7 +83,10 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
                       ))}
                       <tr>
                         <td>
-                          <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
+                          <Box display={'flex'}>
+                            <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
+                            <IconTooltip title={strings.TOTAL_DENSITY_TOOLTIP} />
+                          </Box>
                         </td>
                         <td>
                           <Typography fontWeight={600}>{getPlotTotalDensity}</Typography>
