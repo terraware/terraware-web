@@ -51,8 +51,8 @@ export default function PeopleListView(): JSX.Element {
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [results, setResults] = useState<OrganizationUser[]>();
-  const [internalUserRoles, setInternalUserRoles] = useState<ProjectInternalUserRoles>({});
-  const [resultsWithInternalRoles, setResultsWithInternalRoles] = useState<OrganizationUser[]>([]);
+  const [projectRestorationLeads, setProjectRestorationLeads] = useState<ProjectInternalUserRoles>({});
+  const [resultsWithLeadRoles, setResultsWithLeadRoles] = useState<OrganizationUser[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
@@ -76,45 +76,49 @@ export default function PeopleListView(): JSX.Element {
     }
 
     const params: SearchRequestPayload = {
-      prefix: 'projects',
-      fields: ['name', 'internalUsers.user_id', 'internalUsers.role', 'internalUsers.roleName'],
+      prefix: 'projects_internalUsers',
+      fields: ['project_name', 'user_id', 'role'],
       search: {
         operation: 'and',
         children: [
           {
             operation: 'field',
-            field: 'organization_id',
+            field: 'project_organization_id',
             type: 'Exact',
-            values: [selectedOrganization?.id],
+            values: [selectedOrganization.id],
+          },
+          {
+            operation: 'field',
+            field: 'role',
+            type: 'Exact',
+            values: [
+              strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_LEAD,
+              strings.PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD,
+            ],
           },
         ],
       },
-      sortOrder: [],
+      sortOrder: [{ field: 'role' }],
       count: 0,
     };
 
     const searchResults = await SearchService.search(params);
 
-    const flattened =
-      (searchResults || [])
-        .filter((project) => project?.internalUsers)
-        .flatMap((project) => project.internalUsers as { role: string; roleName: string; user_id: string }[]) ?? [];
+    const flattened = (searchResults || []).map(
+      (result) => result as { role: string; user_id: string; project_name: string }
+    );
 
     const internalUserRolesByUserId = flattened.reduce((acc, curr) => {
       if (!acc[curr.user_id]) {
         acc[curr.user_id] = [];
       }
-      if (
-        (curr.role || curr.roleName) &&
-        !acc[curr.user_id].includes(curr.role) &&
-        !acc[curr.user_id].includes(curr.roleName)
-      ) {
-        acc[curr.user_id].push(curr.role || curr.roleName);
+      if (curr.role && !acc[curr.user_id].includes(curr.role)) {
+        acc[curr.user_id].push(`${curr.role} (${curr.project_name})`);
       }
       return acc;
     }, {} as ProjectInternalUserRoles);
-    setInternalUserRoles(internalUserRolesByUserId);
-  }, [selectedOrganization?.id]);
+    setProjectRestorationLeads(internalUserRolesByUserId);
+  }, [selectedOrganization?.id, strings]);
 
   useEffect(() => {
     void getProjectsWithInternalUsersData();
@@ -124,13 +128,13 @@ export default function PeopleListView(): JSX.Element {
     if (results) {
       const resultsWithRoles = results.map((result) => ({
         ...result,
-        role: (result.role === strings.TERRAFORMATION_CONTACT && internalUserRoles[result.id]?.length
-          ? `${result.role} - ${internalUserRoles[result.id].join(', ')}`
+        role: (result.role === strings.TERRAFORMATION_CONTACT && projectRestorationLeads[result.id]?.length
+          ? `${result.role} - ${projectRestorationLeads[result.id].join(', ')}`
           : result.role) as OrganizationRole,
       }));
-      setResultsWithInternalRoles(resultsWithRoles);
+      setResultsWithLeadRoles(resultsWithRoles);
     }
-  }, [results, internalUserRoles, strings]);
+  }, [results, projectRestorationLeads, strings]);
 
   const search = useCallback(
     async (searchTerm: string, skipTfContact = false) => {
@@ -470,7 +474,7 @@ export default function PeopleListView(): JSX.Element {
                     <Table
                       id='people-table'
                       columns={columns}
-                      rows={resultsWithInternalRoles}
+                      rows={resultsWithLeadRoles}
                       orderBy='name'
                       Renderer={TableCellRenderer}
                       isClickable={isClickable}
