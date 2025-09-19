@@ -355,7 +355,7 @@ const ProjectProfileView = ({
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
       </Grid>
-      {projectDetails?.metricProgress.length && (
+      {projectDetails?.metricProgress.length > 0 && (
         <>
           <Grid container>
             <ReportMetricCard
