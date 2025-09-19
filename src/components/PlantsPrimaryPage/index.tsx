@@ -25,6 +25,7 @@ export type PlantsPrimaryPageProps = {
   text?: string;
   newHeader?: boolean;
   showGeometryNote?: boolean;
+  showSurvivalRateMessage?: boolean;
   latestObservationId?: number;
   projectId?: number;
   organizationId?: number;
@@ -47,6 +48,7 @@ export default function PlantsPrimaryPage({
   text,
   newHeader,
   showGeometryNote,
+  showSurvivalRateMessage,
   latestObservationId,
   projectId,
   organizationId,
@@ -160,6 +162,7 @@ export default function PlantsPrimaryPage({
       text={text}
       newHeader={newHeader}
       showGeometryNote={showGeometryNote}
+      showSurvivalRateMessage={showSurvivalRateMessage}
       latestObservationId={latestObservationId}
       projectId={projectId}
       onSelectProjectId={onSelectProjectId}

@@ -8,13 +8,17 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useObservation from 'src/hooks/useObservation';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { useAppDispatch } from 'src/redux/store';
+import { selectPlantingSiteT0 } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSiteT0 } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
+import { PlotT0Data } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
 import MortalityRateCard from './components/MortalityRateCard';
@@ -40,6 +44,10 @@ export default function PlantsDashboardView({
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
+  const [requestId, setRequestId] = useState('');
+  const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
+  const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const {
     setAcceleratorOrganizationId,
@@ -78,6 +86,19 @@ export default function PlantsDashboardView({
   }, [latestResult, plantingSite]);
 
   useEffect(() => {
+    if (plantingSite) {
+      const request = dispatch(requestPlantingSiteT0(plantingSite.id));
+      setRequestId(request.requestId);
+    }
+  }, [dispatch, plantingSite]);
+
+  useEffect(() => {
+    if (plantingSiteT0Response?.status === 'success') {
+      setT0Plots(plantingSiteT0Response.data);
+    }
+  }, [plantingSiteT0Response]);
+
+  useEffect(() => {
     if (organizationId) {
       setAcceleratorOrganizationId(organizationId);
     } else if (!isAcceleratorRoute && selectedOrganization?.id) {
@@ -91,6 +112,17 @@ export default function PlantsDashboardView({
     selectedOrganization?.id,
     setAcceleratorOrganizationId,
   ]);
+
+  const showSurvivalRateMessage = useMemo(() => {
+    const allPlotsLength =
+      plantingSite?.plantingZones?.flatMap((z) => z.plantingSubzones?.flatMap((sz) => sz.monitoringPlots) || [])
+        ?.length || 0;
+    return (
+      isSurvivalRateCalculationEnabled &&
+      plantingSiteT0Response?.status === 'success' &&
+      (t0Plots?.length || 0) < (allPlotsLength || 0)
+    );
+  }, [isSurvivalRateCalculationEnabled, plantingSite?.plantingZones, plantingSiteT0Response?.status, t0Plots?.length]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -141,7 +173,7 @@ export default function PlantsDashboardView({
               }}
             >
               <Typography fontWeight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}>
-                {strings.MORTALITY_RATE}
+                {isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE}
               </Typography>
               {hasObservations && (
                 <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
@@ -153,7 +185,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
+    [plantingSite, isMobile, isSurvivalRateCalculationEnabled, hasObservations, renderLatestObservationLink]
   );
 
   const renderTotalPlantsAndSpecies = () => (
@@ -423,6 +455,7 @@ export default function PlantsDashboardView({
       setPlantsSitePreferences={onPreferences}
       newHeader={true}
       showGeometryNote={geometryChangedNote}
+      showSurvivalRateMessage={showSurvivalRateMessage}
       latestObservationId={latestResultId}
       projectId={projectId}
       onSelectProjectId={onSelectProject}

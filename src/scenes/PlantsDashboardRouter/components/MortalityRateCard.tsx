@@ -4,6 +4,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
@@ -15,6 +16,7 @@ export default function MortalityRateCard(): JSX.Element {
   const theme = useTheme();
   const { latestResult } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const separatorStyles = {
     width: '1px',
@@ -32,9 +34,11 @@ export default function MortalityRateCard(): JSX.Element {
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.MORTALITY_RATE}
+            {isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE}
           </Typography>
-          <Tooltip title={strings.MORTALITY_RATE_TOOLTIP}>
+          <Tooltip
+            title={isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_TOOLTIP : strings.MORTALITY_RATE_TOOLTIP}
+          >
             <Box display='flex'>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
             </Box>
@@ -65,9 +69,11 @@ export default function MortalityRateCard(): JSX.Element {
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.ZONE_MORTALITY}
+            {isSurvivalRateCalculationEnabled ? strings.ZONE_SURVIVAL : strings.ZONE_MORTALITY}
           </Typography>
-          <Tooltip title={strings.ZONE_MORTALITY_TOOLTIP}>
+          <Tooltip
+            title={isSurvivalRateCalculationEnabled ? strings.ZONE_SURVIVAL_TOOLTIP : strings.ZONE_MORTALITY_TOOLTIP}
+          >
             <Box display='flex'>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
             </Box>
@@ -81,9 +87,13 @@ export default function MortalityRateCard(): JSX.Element {
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.SPECIES_MORTALITY}
+            {isSurvivalRateCalculationEnabled ? strings.SPECIES_SURVIVAL : strings.SPECIES_MORTALITY}
           </Typography>
-          <Tooltip title={strings.SPECIES_MORTALITY_TOOLTIP}>
+          <Tooltip
+            title={
+              isSurvivalRateCalculationEnabled ? strings.SPECIES_SURVIVAL_TOOLTIP : strings.SPECIES_MORTALITY_TOOLTIP
+            }
+          >
             <Box display='flex'>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
             </Box>
@@ -97,9 +107,15 @@ export default function MortalityRateCard(): JSX.Element {
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.MORTALITY_BREAKDOWN}
+            {isSurvivalRateCalculationEnabled ? strings.SPECIES_SURVIVAL_BREAKDOWN : strings.MORTALITY_BREAKDOWN}
           </Typography>
-          <Tooltip title={strings.MORTALITY_BREAKDOWN_TOOLTIP}>
+          <Tooltip
+            title={
+              isSurvivalRateCalculationEnabled
+                ? strings.SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP
+                : strings.MORTALITY_BREAKDOWN_TOOLTIP
+            }
+          >
             <Box display='flex'>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
             </Box>
