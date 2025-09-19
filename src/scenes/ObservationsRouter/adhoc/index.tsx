@@ -9,6 +9,7 @@ import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -54,6 +55,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const [plantingZoneResult, setPlantingZoneResult] = useState<ObservationPlantingZoneResultsPayload>();
   const [plantingSubzoneResult, setPlantingSubzoneResult] = useState<ObservationPlantingSubzoneResultsPayload>();
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const result = useMemo(() => {
     if (!Number.isNaN(observationId)) {
@@ -258,15 +260,17 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       observationId={Number(observationId)}
       plantingZoneName={plantingZoneName}
       rightComponent={
-        <OptionsMenu
-          onOptionItemClick={goToSurvivalRateSettings}
-          optionItems={[
-            {
-              label: strings.SURVIVAL_RATE_SETTINGS,
-              value: 'survivalRate',
-            },
-          ]}
-        />
+        isSurvivalRateCalculationEnabled ? (
+          <OptionsMenu
+            onOptionItemClick={goToSurvivalRateSettings}
+            optionItems={[
+              {
+                label: strings.SURVIVAL_RATE_SETTINGS,
+                value: 'survivalRate',
+              },
+            ]}
+          />
+        ) : undefined
       }
     >
       <Grid container>
