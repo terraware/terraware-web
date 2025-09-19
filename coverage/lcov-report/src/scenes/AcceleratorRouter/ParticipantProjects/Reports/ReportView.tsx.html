@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/111</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/97</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/107</span>
+                <span class='fraction'>0/109</span>
             </div>
         
             
@@ -523,7 +523,11 @@
 <a name='L458'></a><a href='#L458'>458</a>
 <a name='L459'></a><a href='#L459'>459</a>
 <a name='L460'></a><a href='#L460'>460</a>
-<a name='L461'></a><a href='#L461'>461</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -573,6 +577,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -913,6 +919,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1007,6 +1015,7 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
@@ -1061,6 +1070,7 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
   const reportsResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectListFunderReports(projectId ?? ''));</span>
   const [publishedReports, setPublishedReports] = <span class="cstat-no" title="statement not covered" >useState&lt;PublishedReport[]&gt;();</span>
   const [selectedPublishedReport, setSelectedPublishedReport] = <span class="cstat-no" title="statement not covered" >useState&lt;PublishedReport&gt;();</span>
+  const isSurvivalRateCalculationEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Survival Rate Calculation');</span>
 &nbsp;
   const publishReport = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
@@ -1375,7 +1385,9 @@ const ReportView = <span class="cstat-no" title="statement not covered" ><span c
               {['system', 'project', 'standard'].map(<span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; {
                 const metrics =
 <span class="cstat-no" title="statement not covered" >                  type === 'system'</span>
-                    ? selectedReport?.systemMetrics
+                    ? selectedReport?.systemMetrics?.filter(
+<span class="fstat-no" title="function not covered" >                        (m</span>) =&gt; <span class="cstat-no" title="statement not covered" >isSurvivalRateCalculationEnabled || m.metric !== 'Survival Rate'</span>
+                      )
                     : type === 'project'
                       ? selectedReport?.projectMetrics
                       : selectedReport?.standardMetrics;
@@ -1450,7 +1462,7 @@ export default ReportView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-19T19:07:31.969Z
+                at 2025-09-19T19:15:23.721Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

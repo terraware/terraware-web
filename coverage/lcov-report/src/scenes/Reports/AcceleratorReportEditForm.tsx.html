@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -352,7 +352,9 @@
 <a name='L287'></a><a href='#L287'>287</a>
 <a name='L288'></a><a href='#L288'>288</a>
 <a name='L289'></a><a href='#L289'>289</a>
-<a name='L290'></a><a href='#L290'>290</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -405,6 +407,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -421,6 +424,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -592,7 +596,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -656,6 +660,7 @@ import MetricBox, { isReportSystemMetric } from 'src/components/AcceleratorRepor
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
+import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
@@ -714,6 +719,7 @@ const AcceleratorReportEditForm = <span class="cstat-no" title="statement not co
   const [deletePhotosRequestId, setDeletePhotosRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [updatePhotosRequestId, setUpdatePhotosRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [uploadPhotosRequestId, setUploadPhotosRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
+  const isSurvivalRateCalculationEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Survival Rate Calculation');</span>
 &nbsp;
   const deletePhotosResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeleteManyAcceleratorReportPhotos(deletePhotosRequestId));</span>
   const updatePhotosResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUpdateManyAcceleratorReportPhotos(updatePhotosRequestId));</span>
@@ -881,7 +887,7 @@ const AcceleratorReportEditForm = <span class="cstat-no" title="statement not co
           {['system', 'project', 'standard'].map(<span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; {
             const metrics =
 <span class="cstat-no" title="statement not covered" >              type === 'system'</span>
-                ? record.systemMetrics
+                ? record.systemMetrics?.filter(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; <span class="cstat-no" title="statement not covered" >isSurvivalRateCalculationEnabled || m.metric !== 'Survival Rate')</span>
                 : type === 'project'
                   ? record.projectMetrics
                   : record.standardMetrics;
@@ -937,7 +943,7 @@ export default AcceleratorReportEditForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-19T19:07:31.969Z
+                at 2025-09-19T19:15:23.721Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

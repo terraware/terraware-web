@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/99</span>
+                <span class='fraction'>0/102</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/92</span>
             </div>
         
             
@@ -376,7 +376,13 @@
 <a name='L311'></a><a href='#L311'>311</a>
 <a name='L312'></a><a href='#L312'>312</a>
 <a name='L313'></a><a href='#L313'>313</a>
-<a name='L314'></a><a href='#L314'>314</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -485,8 +491,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -494,6 +498,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -505,10 +512,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -523,12 +526,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -697,6 +707,7 @@ import { Select, TableColumnType, TableRowType } from '@terraware/web-components
 import { DateTime } from 'luxon';
 &nbsp;
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
@@ -798,6 +809,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
   const [selectedMetric, setSelectedMetric] = <span class="cstat-no" title="statement not covered" >useState&lt;RowMetric&gt;();</span>
   const currentYear = <span class="cstat-no" title="statement not covered" >DateTime.now().year;</span>
   const [yearFilter, setYearFilter] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;();</span>
+  const isSurvivalRateCalculationEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Survival Rate Calculation');</span>
 &nbsp;
   const { busy, reload, acceleratorReports: reports } = <span class="cstat-no" title="statement not covered" >useProjectReports(projectId, true, true, yearFilter);</span>
   const { acceleratorReports: allReports } = <span class="cstat-no" title="statement not covered" >useProjectReports(projectId, true, true);</span>
@@ -842,6 +854,9 @@ export default function <span class="fstat-no" title="function not covered" >Acc
     const metrics: Map&lt;string, RowMetric&gt; = <span class="cstat-no" title="statement not covered" >new Map();</span>
 <span class="cstat-no" title="statement not covered" >    reports?.forEach(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      report.systemMetrics.forEach(<span class="fstat-no" title="function not covered" >(s</span>m) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (!isSurvivalRateCalculationEnabled &amp;&amp; sm.metric === 'Survival Rate') {</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
 <span class="cstat-no" title="statement not covered" >        metrics.set(sm.metric, {</span>
           name: sm.metric,
           type: sm.type,
@@ -914,7 +929,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    setMetricsToUse(Array.from(metrics.values()));</span>
-  }, [reports]);
+  }, [isSurvivalRateCalculationEnabled, reports]);
 &nbsp;
   const defaultSearchOrder: SearchSortOrder = <span class="cstat-no" title="statement not covered" >{</span>
     field: 'metric',
@@ -1009,7 +1024,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-19T19:07:31.969Z
+                at 2025-09-19T19:15:23.721Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
