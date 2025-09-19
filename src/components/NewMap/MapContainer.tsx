@@ -1,7 +1,8 @@
 import React, { ReactNode, useMemo } from 'react';
 
-import '@terraware/web-components/components/Map/styles.scss';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import './styles.scss';
 
 type MapContainerProps = {
   containerId?: string;

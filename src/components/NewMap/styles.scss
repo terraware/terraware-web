@@ -1,0 +1,134 @@
+@import '@terraware/web-components/style-dictionary-dist/terraware.scss';
+
+.map-container {
+  border: 1px solid $tw-clr-brdr-tertiary;
+  border-radius: 8px;
+  display: flex;
+  overflow: hidden;
+
+  &--desktop {
+    flex-direction: row;
+    height: 700px;
+    max-height: 700px;
+
+    :fullscreen {
+      max-height: none;
+    }
+  }
+
+  &--mobile {
+    flex-direction: column;
+  }
+
+  &--mobile-drawer-open {
+    border: none;
+    border-radius: none;
+  }
+
+  .map-holder {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+
+    &--hidden {
+      display: none;
+    }
+  }
+}
+
+.map-drawer {
+  display: flex;
+  flex-direction: column;
+  background: $tw-clr-base-white;
+
+  &--mobile {
+    width: stretch;
+  }
+
+  &--small {
+    min-width: 280px;
+    width: 280px;
+  }
+  &--medium {
+    min-width: 420px;
+    width: 420px;
+  }
+  &--large {
+    min-width: 600px;
+    width: 600px;
+  }
+
+  &--header {
+    padding: $tw-spc-base-x-small;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+      font-family: $tw-fnt-mssg-title-font-family;
+      font-size: $tw-fnt-mssg-title-font-size;
+      font-weight: $tw-fnt-mssg-title-font-weight;
+      line-height: $tw-fnt-mssg-title-line-height;
+      color: $tw-clr-txt;
+      text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 0;
+      width: 100%;
+    }
+
+    .icon-close {
+      fill: $tw-clr-icn-secondary;
+      height: $tw-sz-base-medium;
+      width: $tw-sz-base-medium;
+    }
+  }
+
+  &--body {
+    background: $tw-clr-base-white;
+    padding: $tw-spc-base-x-small $tw-spc-base-small;
+    text-align: start;
+    overflow: auto;
+    white-space: pre-wrap;
+  }
+
+  &--message {
+    font-family: $tw-fnt-dlg-bx-message-font-family;
+    font-size: $tw-fnt-dlg-bx-message-font-size;
+    font-weight: $tw-fnt-dlg-bx-message-font-weight;
+    line-height: $tw-fnt-dlg-bx-message-line-height;
+    color: $tw-clr-txt;
+    width: 100%;
+    text-align: start;
+  }
+}
+
+.map-marker {
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &--cluster {
+    width: 42px;
+    height: 42px;
+
+    .count {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 16px;
+      color: $tw-clr-txt;
+      text-align: center;
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
