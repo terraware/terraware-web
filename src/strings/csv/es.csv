@@ -221,10 +221,10 @@ BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,Estás serían las estaciones en las q
 BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,"Por favor, seleccionar al menos un mes.",999b9492
 BIODIVERSITY,Biodiversidad,fa436482
 BIOMASS_EMPTY_STATE_MESSAGE_1,En este momento no hay observaciones de parcelas ad hoc.,7dd9cdf0
-BIOMASS_EMPTY_STATE_MESSAGE_2,"Las observaciones para la Monitorización de la Biomasa pueden registrarse a través de las Observaciones del Terreno Ad Hoc, en la aplicación para dispositivo móvil.",e9184a63
+BIOMASS_EMPTY_STATE_MESSAGE_2,Las observaciones para el Monitoreo de Biomasa pueden registrarse a través de Observaciones de Parcelas Ad Hoc en la aplicación móvil.,e9184a63
 BIOMASS_MEASUREMENT,Medición de biomasa,cf846a13
 BIOMASS_MEASUREMENTS,Mediciones de biomasa,fab7d40f
-BIOMASS_MONITORING,Monitorización de la biomasa,c249c88e
+BIOMASS_MONITORING,Monitoreo de biomasa,c249c88e
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Observación-de-la-biomasa,15aec1fa
 BOOLEAN_FALSE,falso,7a03081c
 BOOLEAN_TRUE,verdadero,54415086
@@ -1340,13 +1340,13 @@ PLANTS_PER_HA,Plantas por hectárea,1b8bb685
 PLANTS_PER_HA_TOOLTIP,"La ""Tendencia de plantas por hectárea"" representa la cantidad de plantas por hectárea registradas en todas las observaciones.",95449181
 PLANTS_PER_HECTARE,plantas/ha,606dca50
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,f37ff0f0
-PLOT,Terreno,8d3cefee
+PLOT,Parcela,8d3cefee
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
-PLOT_DESCRIPTION,Descripción del terreno,67e5afa5
-PLOT_LOCATION,Ubicación del terreno,59f1374a
+PLOT_DESCRIPTION,Descripción de la parcela,67e5afa5
+PLOT_LOCATION,Ubicación de la parcela,59f1374a
 PLOT_PHOTO,Foto de parcela,969c0fc9
 PLOT_SELECTION,Selección de parcela,ba150031
-PLOT_TYPE,Tipo de terreno,4b579233
+PLOT_TYPE,Tipo de parcela,4b579233
 PLOTS_AD_HOC,Parcelas ad hoc,104e30b2
 PLOTS_PERMANENT,Parcelas fijas,d06e9f3a
 PLOTS_QUANTITY,{0} Parcelas,cef6f681
@@ -1791,7 +1791,7 @@ SOUTHEAST_CORNER_LATITUDE,Latitud de la esquina sureste,25510ec5
 SOUTHEAST_CORNER_LONGITUDE,Longitud de la esquina sureste,a15c5f33
 SOUTHWEST_CORNER_LATITUDE,Latitud de la esquina suroeste,11768ce8
 SOUTHWEST_CORNER_LONGITUDE,Longitud de la esquina suroeste,170c539d
-SPECIES,Especie,bb344d18
+SPECIES,Especies,bb344d18
 SPECIES_APPROVED,Especie aprobada,448567d6
 SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla y Planta.,834fb3c8
 SPECIES_CATEGORIES,Categorías de especies,b63aa30d
