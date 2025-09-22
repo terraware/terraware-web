@@ -13,6 +13,7 @@ import {
   requestDeleteActivityMedia,
   requestGetActivity,
   requestGetActivityMedia,
+  requestGetFileForToken,
   requestListActivities,
   requestUpdateActivity,
   requestUpdateActivityMedia,
@@ -201,6 +202,20 @@ export const activityMediaDeleteSlice = createSlice({
   },
 });
 
+/**
+ * File access by token
+ */
+const initialStateFileForToken: Record<string, StatusT<any>> = {};
+
+export const fileForTokenSlice = createSlice({
+  name: 'fileForTokenSlice',
+  initialState: initialStateFileForToken,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetFileForToken)(builder);
+  },
+});
+
 const activityReducers = {
   activities: activityListSlice.reducer,
   activityCreate: activityCreateSlice.reducer,
@@ -215,6 +230,7 @@ const activityReducers = {
   activityMediaGet: activityMediaGetSlice.reducer,
   activityMediaUpdate: activityMediaUpdateSlice.reducer,
   activityMediaUpload: activityMediaUploadSlice.reducer,
+  fileForToken: fileForTokenSlice.reducer,
 };
 
 export default activityReducers;

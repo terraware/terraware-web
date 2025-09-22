@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import ActivityService from 'src/services/ActivityService';
+import FileService from 'src/services/FileService';
 import strings from 'src/strings';
 import {
   ActivityMediaFile,
@@ -222,6 +223,19 @@ export const requestDeleteActivityMedia = createAsyncThunk(
 
     if (response?.requestSucceeded) {
       return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestGetFileForToken = createAsyncThunk(
+  'activities/getFileForToken',
+  async (token: string, { rejectWithValue }) => {
+    const response = await FileService.getFileForToken(token);
+
+    if (response?.requestSucceeded && response?.data) {
+      return response.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

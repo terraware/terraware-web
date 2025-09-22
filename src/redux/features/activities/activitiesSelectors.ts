@@ -30,3 +30,5 @@ export const selectActivityMediaUpdate = (requestId: string) => (state: RootStat
 
 export const selectActivityMediaDelete = (requestId: string) => (state: RootState) =>
   state.activityMediaDelete[requestId];
+
+export const selectFileForToken = (requestId: string) => (state: RootState) => state.fileForToken[requestId];
