@@ -351,7 +351,7 @@ const PlantDashboardMap = ({
         zone.plantingSubzones.forEach((subzone) => {
           const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
           if (isSurvivalRateCalculationEnabled) {
-            sortFeatureByMortalityRate(zoneId, subzone.survivalRate);
+            sortFeatureByMortalityRate(subzoneId, subzone.survivalRate);
           } else {
             sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
           }
