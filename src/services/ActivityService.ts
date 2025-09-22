@@ -4,6 +4,7 @@ import {
   ActivityPayload,
   AdminActivityPayload,
   AdminCreateActivityRequestPayload,
+  CreateActivityRequestPayload,
 } from 'src/types/Activity';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
@@ -76,7 +77,7 @@ const listActivities = async (
 /**
  * Create a new activity
  */
-const createActivity = async (activity: ActivityPayload): Promise<Response2<CreateActivityResponse>> => {
+const createActivity = async (activity: CreateActivityRequestPayload): Promise<Response2<CreateActivityResponse>> => {
   return HttpService.root(ACTIVITIES_ENDPOINT).post2<CreateActivityResponse>({
     entity: activity,
   });

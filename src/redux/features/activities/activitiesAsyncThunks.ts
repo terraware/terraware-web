@@ -8,6 +8,7 @@ import {
   ActivityPayload,
   AdminActivityPayload,
   AdminCreateActivityRequestPayload,
+  CreateActivityRequestPayload,
 } from 'src/types/Activity';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
@@ -37,7 +38,7 @@ export const requestListActivities = createAsyncThunk(
 
 export const requestCreateActivity = createAsyncThunk(
   'activities/create',
-  async (activity: ActivityPayload, { rejectWithValue }) => {
+  async (activity: CreateActivityRequestPayload, { rejectWithValue }) => {
     const response = await ActivityService.createActivity(activity);
 
     if (response?.requestSucceeded && response?.data) {
