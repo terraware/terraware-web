@@ -356,7 +356,7 @@ const MetricBox = ({
           </Grid>
         )}
         <Grid item xs={6}>
-          <Box paddingRight={theme.spacing(2)}>
+          <Box paddingRight={theme.spacing(2)} sx={{ '.markdown a': { wordBreak: 'break-word' } }}>
             <Textfield
               type='textarea'
               label={isAcceleratorRoute || isFunderRoute ? strings.PROJECTS_COMMENTS : strings.COMMENTS}
