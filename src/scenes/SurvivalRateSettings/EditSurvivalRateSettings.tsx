@@ -55,7 +55,7 @@ const EditSurvivalRateSettings = () => {
   const snackbar = useSnackbar();
 
   const reload = useCallback(() => {
-    if (plantingSite) {
+    if (plantingSite && plantingSite.id !== -1) {
       const request = dispatch(requestPlantingSiteT0(plantingSite.id));
       setRequestId(request.requestId);
       const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSite.id));
