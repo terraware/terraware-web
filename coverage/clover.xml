@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1758557403927" clover="3.2.0">
-  <project timestamp="1758557403927" name="All files">
-    <metrics statements="33502" coveredstatements="1334" conditionals="23262" coveredconditionals="389" methods="10304" coveredmethods="211" elements="67068" coveredelements="1934" complexity="0" loc="33502" ncloc="33502" packages="278" files="1341" classes="1341"/>
+<coverage generated="1758558940754" clover="3.2.0">
+  <project timestamp="1758558940754" name="All files">
+    <metrics statements="33502" coveredstatements="1334" conditionals="23269" coveredconditionals="389" methods="10304" coveredmethods="211" elements="67075" coveredelements="1934" complexity="0" loc="33502" ncloc="33502" packages="278" files="1341" classes="1341"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -31600,9 +31600,9 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter">
-      <metrics statements="90" coveredstatements="0" conditionals="147" coveredconditionals="0" methods="38" coveredmethods="0"/>
+      <metrics statements="90" coveredstatements="0" conditionals="150" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="PlantsDashboardView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/PlantsDashboardView.tsx">
-        <metrics statements="82" coveredstatements="0" conditionals="145" coveredconditionals="0" methods="36" coveredmethods="0"/>
+        <metrics statements="82" coveredstatements="0" conditionals="148" coveredconditionals="0" methods="36" coveredmethods="0"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
@@ -31628,7 +31628,7 @@
         <line num="82" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
-        <line num="89" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="89" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="90" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
@@ -33824,9 +33824,9 @@
       </file>
     </package>
     <package name="src.scenes.SurvivalRateSettings">
-      <metrics statements="214" coveredstatements="0" conditionals="92" coveredconditionals="0" methods="88" coveredmethods="0"/>
+      <metrics statements="214" coveredstatements="0" conditionals="96" coveredconditionals="0" methods="88" coveredmethods="0"/>
       <file name="EditSurvivalRateSettings.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/EditSurvivalRateSettings.tsx">
-        <metrics statements="59" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="14" coveredmethods="0"/>
+        <metrics statements="59" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="14" coveredmethods="0"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
@@ -33845,7 +33845,7 @@
         <line num="52" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
@@ -34021,7 +34021,7 @@
         <line num="10" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/index.tsx">
-        <metrics statements="31" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="31" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
@@ -34037,7 +34037,7 @@
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
