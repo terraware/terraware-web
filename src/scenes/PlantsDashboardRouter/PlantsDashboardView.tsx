@@ -86,11 +86,11 @@ export default function PlantsDashboardView({
   }, [latestResult, plantingSite]);
 
   useEffect(() => {
-    if (plantingSite) {
+    if (isSurvivalRateCalculationEnabled && plantingSite && plantingSite.id !== -1) {
       const request = dispatch(requestPlantingSiteT0(plantingSite.id));
       setRequestId(request.requestId);
     }
-  }, [dispatch, plantingSite]);
+  }, [dispatch, isSurvivalRateCalculationEnabled, plantingSite]);
 
   useEffect(() => {
     if (plantingSiteT0Response?.status === 'success') {
