@@ -168,6 +168,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
     currentSpecies,
     goToParticipantProjectSpecies,
     newStatus,
+    ppsNeedsReload,
     reloadPPS,
     snackbar,
     updatePPSResponse,
