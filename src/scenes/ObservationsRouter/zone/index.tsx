@@ -68,22 +68,26 @@ export default function ObservationPlantingZone(): JSX.Element {
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const dispatch = useAppDispatch();
 
-  const defaultColumns = (): TableColumnType[] => [
-    { key: 'monitoringPlotNumber', name: strings.MONITORING_PLOT, type: 'string' },
-    { key: 'subzoneName', name: strings.SUBZONE, type: 'string' },
-    { key: 'completedDate', name: strings.DATE, type: 'string' },
-    { key: 'status', name: strings.STATUS, type: 'string' },
-    { key: 'isPermanent', name: strings.MONITORING_PLOT_TYPE, type: 'string' },
-    { key: 'totalLive', name: strings.LIVE_PLANTS, tooltipTitle: strings.TOOLTIP_LIVE_PLANTS, type: 'number' },
-    { key: 'totalPlants', name: strings.TOTAL_PLANTS, tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS, type: 'number' },
-    { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
-    { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
-    {
-      key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
-      name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
-      type: 'number',
-    },
-  ];
+  const defaultColumns = useCallback(
+    () =>
+      [
+        { key: 'monitoringPlotNumber', name: strings.MONITORING_PLOT, type: 'string' },
+        { key: 'subzoneName', name: strings.SUBZONE, type: 'string' },
+        { key: 'completedDate', name: strings.DATE, type: 'string' },
+        { key: 'status', name: strings.STATUS, type: 'string' },
+        { key: 'isPermanent', name: strings.MONITORING_PLOT_TYPE, type: 'string' },
+        { key: 'totalLive', name: strings.LIVE_PLANTS, tooltipTitle: strings.TOOLTIP_LIVE_PLANTS, type: 'number' },
+        { key: 'totalPlants', name: strings.TOTAL_PLANTS, tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS, type: 'number' },
+        { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
+        { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
+        {
+          key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
+          name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+          type: 'number',
+        },
+      ] as TableColumnType[],
+    [isSurvivalRateCalculationEnabled]
+  );
 
   const columns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {
@@ -91,7 +95,7 @@ export default function ObservationPlantingZone(): JSX.Element {
     }
 
     return [...defaultColumns(), ...(replaceObservationPlotEnabled ? replaceObservationPlotColumn() : [])];
-  }, [activeLocale, replaceObservationPlotEnabled]);
+  }, [activeLocale, defaultColumns, replaceObservationPlotEnabled]);
 
   const filterColumns = useMemo<FilterField[]>(
     () => (activeLocale ? [{ name: 'plotType', label: strings.MONITORING_PLOT_TYPE, type: 'single_selection' }] : []),

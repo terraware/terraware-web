@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { TableColumnType } from '@terraware/web-components';
@@ -36,20 +36,24 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   const observationId = Number(params.observationId || -1);
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
-  const columns = (): TableColumnType[] => [
-    { key: 'plantingZoneName', name: strings.ZONE, type: 'string' },
-    { key: 'completedDate', name: strings.DATE, type: 'string' },
-    { key: 'status', name: strings.STATUS, type: 'string' },
-    { key: 'totalLive', name: strings.LIVE_PLANTS, tooltipTitle: strings.TOOLTIP_LIVE_PLANTS, type: 'number' },
-    { key: 'totalPlants', name: strings.TOTAL_PLANTS, tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS, type: 'number' },
-    { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
-    { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
-    {
-      key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
-      name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
-      type: 'number',
-    },
-  ];
+  const columns = useCallback(
+    () =>
+      [
+        { key: 'plantingZoneName', name: strings.ZONE, type: 'string' },
+        { key: 'completedDate', name: strings.DATE, type: 'string' },
+        { key: 'status', name: strings.STATUS, type: 'string' },
+        { key: 'totalLive', name: strings.LIVE_PLANTS, tooltipTitle: strings.TOOLTIP_LIVE_PLANTS, type: 'number' },
+        { key: 'totalPlants', name: strings.TOTAL_PLANTS, tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS, type: 'number' },
+        { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
+        { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
+        {
+          key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
+          name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+          type: 'number',
+        },
+      ] as TableColumnType[],
+    [isSurvivalRateCalculationEnabled]
+  );
 
   const details = useAppSelector((state) =>
     searchObservationDetails(
