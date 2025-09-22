@@ -577,6 +577,7 @@ const PlantDashboardMap = ({
     disableObserationEvents,
     disablePhotoMarkers,
     disablePlantMarkers,
+    isSurvivalRateCalculationEnabled,
     layers,
     mortalityRateHighlights.greaterThanFifty,
     mortalityRateHighlights.lessThanFifty,
