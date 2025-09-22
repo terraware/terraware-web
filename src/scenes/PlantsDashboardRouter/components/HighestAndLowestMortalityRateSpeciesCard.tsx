@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import isEnabled from 'src/features';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
@@ -17,6 +18,8 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
   const [lowestMortalityRate, setLowestMortalityRate] = useState<number>();
   const [highestSpeciesName, setHighestSpeciesName] = useState<string>();
   const [lowestSpeciesName, setLowestSpeciesName] = useState<string>();
+
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const getSpeciesName = useCallback(
     (observationSpecies: ObservationSpeciesResultsPayload) => {
@@ -60,7 +63,14 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
     <Box>
       {highestSpeciesName && highestMortalityRate !== undefined && (
         <>
-          <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
+          <Box
+            sx={{
+              backgroundColor: isSurvivalRateCalculationEnabled ? '#5D822B33' : '#CB4D4533',
+              padding: 1,
+              borderRadius: 1,
+              marginBottom: 1,
+            }}
+          >
             <Typography fontSize='16px' fontWeight={400}>
               {strings.HIGHEST}
             </Typography>
@@ -79,7 +89,13 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
         </>
       )}
       {lowestSpeciesName && lowestSpeciesName !== highestSpeciesName && (
-        <Box sx={{ backgroundColor: ' #5D822B33', padding: 1, borderRadius: 1 }}>
+        <Box
+          sx={{
+            backgroundColor: isSurvivalRateCalculationEnabled ? '#CB4D4533' : ' #5D822B33',
+            padding: 1,
+            borderRadius: 1,
+          }}
+        >
           <Typography fontSize='16px' fontWeight={400}>
             {strings.LOWEST}
           </Typography>

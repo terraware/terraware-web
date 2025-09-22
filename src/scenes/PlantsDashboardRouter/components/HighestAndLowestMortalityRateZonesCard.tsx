@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { PlantingZoneObservationSummary } from 'src/types/Observations';
@@ -15,6 +16,8 @@ export default function TotalMortalityRateCard(): JSX.Element {
   const [lowestMortalityRate, setLowestMortalityRate] = useState<number>();
   const [highestZoneId, setHighestZoneId] = useState<number>();
   const [lowestZoneId, setLowestZoneId] = useState<number>();
+
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   useEffect(() => {
     let _highestMortalityRate = 0;
@@ -53,7 +56,14 @@ export default function TotalMortalityRateCard(): JSX.Element {
     <Box>
       {highestPlantingZone && highestMortalityRate !== undefined && (
         <>
-          <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
+          <Box
+            sx={{
+              backgroundColor: isSurvivalRateCalculationEnabled ? ' #5D822B33' : '#CB4D4533',
+              padding: 1,
+              borderRadius: 1,
+              marginBottom: 1,
+            }}
+          >
             <Typography fontSize='16px' fontWeight={400}>
               {strings.HIGHEST}
             </Typography>
@@ -72,7 +82,13 @@ export default function TotalMortalityRateCard(): JSX.Element {
         </>
       )}
       {lowestPlantingZone && lowestPlantingZone.id !== highestPlantingZone?.id && (
-        <Box sx={{ backgroundColor: ' #5D822B33', padding: 1, borderRadius: 1 }}>
+        <Box
+          sx={{
+            backgroundColor: isSurvivalRateCalculationEnabled ? '#CB4D4533' : '#5D822B33',
+            padding: 1,
+            borderRadius: 1,
+          }}
+        >
           <Typography fontSize='16px' fontWeight={400}>
             {strings.LOWEST}
           </Typography>

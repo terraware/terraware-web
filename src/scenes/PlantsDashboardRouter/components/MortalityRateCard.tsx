@@ -4,6 +4,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
@@ -14,7 +16,7 @@ import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
 export default function MortalityRateCard(): JSX.Element {
   const theme = useTheme();
-  const { latestResult } = usePlantingSiteData();
+  const { latestResult, plantingSite } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
@@ -54,16 +56,37 @@ export default function MortalityRateCard(): JSX.Element {
             </Typography>
           )}
         </Box>
-        {latestResult?.mortalityRate === undefined && (
-          <Box display={'flex'}>
-            <Box paddingRight={0.5}>
-              <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
+        {latestResult?.mortalityRate === undefined ? (
+          isSurvivalRateCalculationEnabled ? (
+            <Box>
+              <Typography fontSize='20px' fontWeight={500}>
+                {strings.CANNOT_BE_CALCULATED}
+              </Typography>
+              {plantingSite?.id && (
+                <Typography>
+                  {strings.formatString(
+                    strings.SET_T0_DATA_IN_THE,
+                    <Link
+                      fontSize='16px'
+                      to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSite.id.toString())}
+                    >
+                      {strings.SURVIVAL_RATE_SETTINGS}
+                    </Link>
+                  )}
+                </Typography>
+              )}
             </Box>
-            <Typography color={theme.palette.TwClrTxtWarning} fontSize='14px' fontWeight={400}>
-              {strings.NO_MORTALITY_RATE_WARNING}
-            </Typography>
-          </Box>
-        )}
+          ) : (
+            <Box display={'flex'}>
+              <Box paddingRight={0.5}>
+                <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
+              </Box>
+              <Typography color={theme.palette.TwClrTxtWarning} fontSize='14px' fontWeight={400}>
+                {strings.NO_MORTALITY_RATE_WARNING}
+              </Typography>
+            </Box>
+          )
+        ) : null}
       </Box>
       <div style={separatorStyles} />
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
