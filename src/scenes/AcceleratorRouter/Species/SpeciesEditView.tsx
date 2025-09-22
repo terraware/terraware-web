@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, Message } from '@terraware/web-components';
@@ -56,7 +56,7 @@ export default function SpeciesEditView(): JSX.Element {
     }
   }, [currentParticipantProjectSpecies, setParticipantProjectSpeciesRecord]);
 
-  const saveSpecies = () => {
+  const saveSpecies = useCallback(() => {
     if (!(currentParticipantProjectSpecies && speciesRecord)) {
       return;
     }
@@ -66,7 +66,7 @@ export default function SpeciesEditView(): JSX.Element {
     } else {
       update(speciesRecord, participantProjectSpeciesRecord);
     }
-  };
+  }, [currentParticipantProjectSpecies, participantProjectSpeciesRecord, speciesRecord, update]);
 
   return (
     <TfMain>

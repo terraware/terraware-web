@@ -28,6 +28,17 @@ export type Props = {
   children: React.ReactNode;
 };
 
+const isEqual = (a: ParticipantProjectSpecies | undefined, b: ParticipantProjectSpecies | undefined): boolean =>
+  !!(
+    a &&
+    b &&
+    (a.feedback || null) === (b.feedback || null) &&
+    (a.internalComment || null) === (b.internalComment || null) &&
+    (a.speciesNativeCategory || null) === (b.speciesNativeCategory || null) &&
+    (a.rationale || null) === (b.rationale || null) &&
+    a.submissionStatus === b.submissionStatus
+  );
+
 const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -53,6 +64,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   const updateSpeciesResponse = useAppSelector(selectSpeciesUpdateRequest(updateSpeciesRequestId));
 
   const [newStatus, setNewStatus] = useState('');
+  const [ppsNeedsReload, setPpsNeedsReload] = useState(true);
 
   const goToParticipantProjectSpecies = useCallback(() => {
     _goToParticipantProjectSpecies(deliverableId, projectId, participantProjectSpeciesId);
@@ -87,17 +99,6 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
     reloadSpecies();
   }, [reloadPPS, reloadSpecies]);
 
-  const isEqual = (a: ParticipantProjectSpecies | undefined, b: ParticipantProjectSpecies | undefined): boolean =>
-    !!(
-      a &&
-      b &&
-      (a.feedback || null) === (b.feedback || null) &&
-      (a.internalComment || null) === (b.internalComment || null) &&
-      (a.speciesNativeCategory || null) === (b.speciesNativeCategory || null) &&
-      (a.rationale || null) === (b.rationale || null) &&
-      a.submissionStatus === b.submissionStatus
-    );
-
   const update = useCallback(
     (species?: Species, participantProjectSpecies?: ParticipantProjectSpecies) => {
       if (participantProjectSpecies && !isEqual(participantProjectSpecies, currentParticipantProjectSpecies)) {
@@ -125,6 +126,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
         );
         setUpdateSpeciesRequestId(updateSpeciesRequest.requestId);
       }
+      setPpsNeedsReload(true);
     },
     [currentDeliverable, currentParticipantProjectSpecies, currentSpecies, dispatch, goToParticipantProjectSpecies]
   );
@@ -141,8 +143,9 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
       return;
     }
 
-    if (updatePPSResponse.status === 'success') {
+    if (updatePPSResponse.status === 'success' && ppsNeedsReload) {
       reloadPPS();
+      setPpsNeedsReload(false);
 
       if (currentParticipantProjectSpecies && currentSpecies) {
         if (newStatus === 'Approved') {
@@ -165,6 +168,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
     currentSpecies,
     goToParticipantProjectSpecies,
     newStatus,
+    ppsNeedsReload,
     reloadPPS,
     snackbar,
     updatePPSResponse,
