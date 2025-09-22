@@ -4,6 +4,7 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { ActivityMediaFile, ActivityPayload, AdminActivityPayload } from 'src/types/Activity';
 
 import {
+  requestAdminCreateActivity,
   requestAdminGetActivity,
   requestAdminListActivities,
   requestAdminUpdateActivity,
@@ -85,6 +86,20 @@ export const adminActivityUpdateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestAdminUpdateActivity)(builder);
+  },
+});
+
+/**
+ * Admin activity create
+ */
+const initialStateAdminActivityCreate: Record<string, StatusT<AdminActivityPayload>> = {};
+
+export const adminActivityCreateSlice = createSlice({
+  name: 'adminActivityCreateSlice',
+  initialState: initialStateAdminActivityCreate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestAdminCreateActivity)(builder);
   },
 });
 
@@ -193,6 +208,7 @@ const activityReducers = {
   activityGet: activityGetSlice.reducer,
   activityUpdate: activityUpdateSlice.reducer,
   adminActivities: adminActivityListSlice.reducer,
+  adminActivityCreate: adminActivityCreateSlice.reducer,
   adminActivityGet: adminActivityGetSlice.reducer,
   adminActivityUpdate: adminActivityUpdateSlice.reducer,
   activityMediaDelete: activityMediaDeleteSlice.reducer,

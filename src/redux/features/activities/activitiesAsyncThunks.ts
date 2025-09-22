@@ -2,7 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import ActivityService from 'src/services/ActivityService';
 import strings from 'src/strings';
-import { ActivityMediaFile, ActivityPayload, AdminActivityPayload } from 'src/types/Activity';
+import {
+  ActivityMediaFile,
+  ActivityPayload,
+  AdminActivityPayload,
+  AdminCreateActivityRequestPayload,
+} from 'src/types/Activity';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestListActivities = createAsyncThunk(
@@ -88,6 +93,19 @@ export const requestAdminUpdateActivity = createAsyncThunk(
 
     if (response?.requestSucceeded) {
       return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestAdminCreateActivity = createAsyncThunk(
+  'activities/adminCreate',
+  async (activity: AdminCreateActivityRequestPayload, { rejectWithValue }) => {
+    const response = await ActivityService.adminCreateActivity(activity);
+
+    if (response?.requestSucceeded && response?.data) {
+      return response.data.activity;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

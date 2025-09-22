@@ -1,5 +1,10 @@
 import { paths } from 'src/api/types/generated-schema';
-import { ActivityMediaFile, ActivityPayload, AdminActivityPayload } from 'src/types/Activity';
+import {
+  ActivityMediaFile,
+  ActivityPayload,
+  AdminActivityPayload,
+  AdminCreateActivityRequestPayload,
+} from 'src/types/Activity';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
@@ -15,6 +20,8 @@ const ACTIVITY_MEDIA_FILE_ENDPOINT = '/api/v1/accelerator/activities/{activityId
 type ListActivitiesResponse = paths[typeof ACTIVITIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type CreateActivityResponse =
   paths[typeof ACTIVITIES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type AdminCreateActivityResponse =
+  paths[typeof ACTIVITIES_ADMIN_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type AdminListActivitiesResponse =
   paths[typeof ACTIVITIES_ADMIN_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type AdminGetActivityResponse =
@@ -132,6 +139,17 @@ const adminUpdateActivity = async (
 };
 
 /**
+ * Create a new activity with admin details
+ */
+const adminCreateActivity = async (
+  activity: AdminCreateActivityRequestPayload
+): Promise<Response2<AdminCreateActivityResponse>> => {
+  return HttpService.root(ACTIVITIES_ADMIN_ENDPOINT).post2<AdminCreateActivityResponse>({
+    entity: activity,
+  });
+};
+
+/**
  * Get a single activity
  */
 const getActivity = async (activityId: number): Promise<Response2<GetActivityResponse>> => {
@@ -225,6 +243,7 @@ const deleteActivityMedia = async (
  * Exported ActivityService
  */
 const ActivityService = {
+  adminCreateActivity,
   adminGetActivity,
   adminListActivities,
   adminUpdateActivity,

@@ -6,6 +6,9 @@ export const selectActivityList = (requestId: string) => (state: RootState) => s
 
 export const selectAdminActivityList = (requestId: string) => (state: RootState) => state.adminActivities[requestId];
 
+export const selectAdminActivityCreate = (requestId: string) => (state: RootState) =>
+  state.adminActivityCreate[requestId];
+
 export const selectAdminActivityGet = (requestId: string) => (state: RootState) => state.adminActivityGet[requestId];
 
 export const selectAdminActivityUpdate = (requestId: string) => (state: RootState) =>
