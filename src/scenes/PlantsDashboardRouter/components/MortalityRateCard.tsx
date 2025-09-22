@@ -4,6 +4,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
@@ -14,7 +16,7 @@ import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
 export default function MortalityRateCard(): JSX.Element {
   const theme = useTheme();
-  const { latestResult } = usePlantingSiteData();
+  const { latestResult, plantingSite } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
@@ -45,16 +47,49 @@ export default function MortalityRateCard(): JSX.Element {
           </Tooltip>
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
-          <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-            {latestResult?.mortalityRate !== undefined ? <FormattedNumber value={latestResult.mortalityRate} /> : '-'}
-          </Typography>
-          {latestResult?.mortalityRate !== undefined && (
+          {isSurvivalRateCalculationEnabled ? (
             <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-              %
+              {latestResult?.survivalRate !== undefined ? <FormattedNumber value={latestResult.survivalRate} /> : '-'}
+            </Typography>
+          ) : (
+            <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+              {latestResult?.mortalityRate !== undefined ? <FormattedNumber value={latestResult.mortalityRate} /> : '-'}
             </Typography>
           )}
+          {isSurvivalRateCalculationEnabled
+            ? latestResult?.survivalRate !== undefined && (
+                <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+                  %
+                </Typography>
+              )
+            : latestResult?.mortalityRate !== undefined && (
+                <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+                  %
+                </Typography>
+              )}
         </Box>
-        {latestResult?.mortalityRate === undefined && (
+
+        {isSurvivalRateCalculationEnabled && latestResult?.survivalRate === undefined && (
+          <Box>
+            <Typography fontSize='20px' fontWeight={500}>
+              {strings.CANNOT_BE_CALCULATED}
+            </Typography>
+            {plantingSite?.id && (
+              <Typography>
+                {strings.formatString(
+                  strings.SET_T0_DATA_IN_THE,
+                  <Link
+                    fontSize='16px'
+                    to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSite.id.toString())}
+                  >
+                    {strings.SURVIVAL_RATE_SETTINGS}
+                  </Link>
+                )}
+              </Typography>
+            )}
+          </Box>
+        )}
+        {!isSurvivalRateCalculationEnabled && latestResult?.mortalityRate === undefined && (
           <Box display={'flex'}>
             <Box paddingRight={0.5}>
               <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />

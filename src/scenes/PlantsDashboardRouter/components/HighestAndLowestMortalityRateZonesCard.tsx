@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { PlantingZoneObservationSummary } from 'src/types/Observations';
@@ -16,20 +17,35 @@ export default function TotalMortalityRateCard(): JSX.Element {
   const [highestZoneId, setHighestZoneId] = useState<number>();
   const [lowestZoneId, setLowestZoneId] = useState<number>();
 
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
+
   useEffect(() => {
     let _highestMortalityRate = 0;
     let _lowestMortalityRate = 100;
     let _highestZoneId: number | undefined;
     let _lowestZoneId: number | undefined;
     observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
-      if (zone.mortalityRate !== undefined) {
-        if (zone.mortalityRate >= _highestMortalityRate) {
-          _highestMortalityRate = zone.mortalityRate;
-          _highestZoneId = zone.plantingZoneId;
+      if (isSurvivalRateCalculationEnabled) {
+        if (zone.survivalRate !== undefined) {
+          if (zone.survivalRate >= _highestMortalityRate) {
+            _highestMortalityRate = zone.survivalRate;
+            _highestZoneId = zone.plantingZoneId;
+          }
+          if (zone.survivalRate < _lowestMortalityRate) {
+            _lowestMortalityRate = zone.survivalRate;
+            _lowestZoneId = zone.plantingZoneId;
+          }
         }
-        if (zone.mortalityRate < _lowestMortalityRate) {
-          _lowestMortalityRate = zone.mortalityRate;
-          _lowestZoneId = zone.plantingZoneId;
+      } else {
+        if (zone.mortalityRate !== undefined) {
+          if (zone.mortalityRate >= _highestMortalityRate) {
+            _highestMortalityRate = zone.mortalityRate;
+            _highestZoneId = zone.plantingZoneId;
+          }
+          if (zone.mortalityRate < _lowestMortalityRate) {
+            _lowestMortalityRate = zone.mortalityRate;
+            _lowestZoneId = zone.plantingZoneId;
+          }
         }
       }
     });
@@ -39,7 +55,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
 
     setHighestMortalityRate(_highestZoneId ? _highestMortalityRate : undefined);
     setHighestZoneId(_highestZoneId);
-  }, [observationSummaries]);
+  }, [isSurvivalRateCalculationEnabled, observationSummaries]);
 
   const highestPlantingZone = useMemo(() => {
     return plantingSite?.plantingZones?.find((zone) => zone.id === highestZoneId);
@@ -53,7 +69,14 @@ export default function TotalMortalityRateCard(): JSX.Element {
     <Box>
       {highestPlantingZone && highestMortalityRate !== undefined && (
         <>
-          <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
+          <Box
+            sx={{
+              backgroundColor: isSurvivalRateCalculationEnabled ? '#5D822B33' : '#CB4D4533',
+              padding: 1,
+              borderRadius: 1,
+              marginBottom: 1,
+            }}
+          >
             <Typography fontSize='16px' fontWeight={400}>
               {strings.HIGHEST}
             </Typography>
@@ -72,7 +95,13 @@ export default function TotalMortalityRateCard(): JSX.Element {
         </>
       )}
       {lowestPlantingZone && lowestPlantingZone.id !== highestPlantingZone?.id && (
-        <Box sx={{ backgroundColor: ' #5D822B33', padding: 1, borderRadius: 1 }}>
+        <Box
+          sx={{
+            backgroundColor: isSurvivalRateCalculationEnabled ? '#CB4D4533' : '#5D822B33',
+            padding: 1,
+            borderRadius: 1,
+          }}
+        >
           <Typography fontSize='16px' fontWeight={400}>
             {strings.LOWEST}
           </Typography>

@@ -244,6 +244,7 @@ CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densité de plants calculée à partir
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Pour utiliser la densité de plantation calculée à partir des retraits de plantation, cochez la case. Pour remplacer cette donnée, saisissez manuellement une valeur dans les champs de densité de plantation à gauche.",c674df96
 CANCEL,Annuler,e73dc4d4
 CANCEL_DATA_CHECK,Annuler la vérification des données,5f140f00
+CANNOT_BE_CALCULATED,Impossible à calculer,19dafba4
 CANNOT_DELETE_APPLICATION_PROJECT,"Ce projet ne peut pas être supprimé, car une candidature à notre programme d'accélération a été initiée pour celui-ci.",5c1b8d4f
 CANNOT_EDIT,Impossible de modifier,97a312d7
 CANNOT_REMOVE,Impossible de supprimer,43979d40
@@ -1725,6 +1726,7 @@ SESSION_IS_STARTING_SOON,La session va bientôt commencer.,c3abc7d1
 SESSION_SLIDES,Diapositives de la session,7748a514
 SET_PLANTING_COMPLETE,Plantation terminée,3bea077e
 SET_REMINDER,Définir un rappel,ad81e3b3
+SET_T0_DATA_IN_THE,Définir les données t0 dans le/la {0},fd1bfa3d
 SET_UP,Configurer,6096080e
 SET_UP_NURSERY,Créer une pépinière,25ab7370
 SET_UP_SEED_BANK,Créer une banque de semences,6f047a89

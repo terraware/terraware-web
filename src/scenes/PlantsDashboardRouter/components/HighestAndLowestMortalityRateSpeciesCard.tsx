@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import isEnabled from 'src/features';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
@@ -17,6 +18,8 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
   const [lowestMortalityRate, setLowestMortalityRate] = useState<number>();
   const [highestSpeciesName, setHighestSpeciesName] = useState<string>();
   const [lowestSpeciesName, setLowestSpeciesName] = useState<string>();
+
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const getSpeciesName = useCallback(
     (observationSpecies: ObservationSpeciesResultsPayload) => {
@@ -37,14 +40,27 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
     let _lowestSpeciesName: string | undefined;
     observationSummaries?.[0]?.species.forEach((observationSpecies: ObservationSpeciesResultsPayload) => {
       const speciesName = getSpeciesName(observationSpecies);
-      if (observationSpecies.mortalityRate !== undefined && speciesName !== undefined) {
-        if (observationSpecies.mortalityRate >= _highestMortalityRate) {
-          _highestMortalityRate = observationSpecies.mortalityRate;
-          _highestSpeciesName = speciesName;
+      if (isSurvivalRateCalculationEnabled) {
+        if (observationSpecies.survivalRate !== undefined && speciesName !== undefined) {
+          if (observationSpecies.survivalRate >= _highestMortalityRate) {
+            _highestMortalityRate = observationSpecies.survivalRate;
+            _highestSpeciesName = speciesName;
+          }
+          if (observationSpecies.survivalRate < _lowestMortalityRate) {
+            _lowestMortalityRate = observationSpecies.survivalRate;
+            _lowestSpeciesName = speciesName;
+          }
         }
-        if (observationSpecies.mortalityRate < _lowestMortalityRate) {
-          _lowestMortalityRate = observationSpecies.mortalityRate;
-          _lowestSpeciesName = speciesName;
+      } else {
+        if (observationSpecies.mortalityRate !== undefined && speciesName !== undefined) {
+          if (observationSpecies.mortalityRate >= _highestMortalityRate) {
+            _highestMortalityRate = observationSpecies.mortalityRate;
+            _highestSpeciesName = speciesName;
+          }
+          if (observationSpecies.mortalityRate < _lowestMortalityRate) {
+            _lowestMortalityRate = observationSpecies.mortalityRate;
+            _lowestSpeciesName = speciesName;
+          }
         }
       }
     });
@@ -54,13 +70,20 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
 
     setHighestMortalityRate(_highestSpeciesName ? _highestMortalityRate : undefined);
     setHighestSpeciesName(_highestSpeciesName);
-  }, [observationSummaries, getSpeciesName]);
+  }, [observationSummaries, getSpeciesName, isSurvivalRateCalculationEnabled]);
 
   return (
     <Box>
       {highestSpeciesName && highestMortalityRate !== undefined && (
         <>
-          <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
+          <Box
+            sx={{
+              backgroundColor: isSurvivalRateCalculationEnabled ? '#5D822B33' : '#CB4D4533',
+              padding: 1,
+              borderRadius: 1,
+              marginBottom: 1,
+            }}
+          >
             <Typography fontSize='16px' fontWeight={400}>
               {strings.HIGHEST}
             </Typography>
@@ -79,7 +102,13 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
         </>
       )}
       {lowestSpeciesName && lowestSpeciesName !== highestSpeciesName && (
-        <Box sx={{ backgroundColor: ' #5D822B33', padding: 1, borderRadius: 1 }}>
+        <Box
+          sx={{
+            backgroundColor: isSurvivalRateCalculationEnabled ? '#CB4D4533' : ' #5D822B33',
+            padding: 1,
+            borderRadius: 1,
+          }}
+        >
           <Typography fontSize='16px' fontWeight={400}>
             {strings.LOWEST}
           </Typography>

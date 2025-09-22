@@ -245,6 +245,7 @@ CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Para usar la densidad de plantas calculada a partir de los Retiros de plantación, marque la casilla. Para sobrescribir estos datos, ingrese manualmente un valor en los campos de Densidad de Plantas a la izquierda.",c674df96
 CANCEL,Cancelar,e73dc4d4
 CANCEL_DATA_CHECK,Cancelar comprobación de datos,5f140f00
+CANNOT_BE_CALCULATED,No se puede calcular,19dafba4
 CANNOT_DELETE_APPLICATION_PROJECT,Este proyecto no se puede eliminar porque se ha presentado una solicitud para nuestro programa acelerador en relación con este proyecto.,5c1b8d4f
 CANNOT_EDIT,No se puede editar,97a312d7
 CANNOT_REMOVE,No se puede eliminar,43979d40
@@ -1726,6 +1727,7 @@ SESSION_IS_STARTING_SOON,La sesión comienza pronto.,c3abc7d1
 SESSION_SLIDES,Diapositivas de la sesión,7748a514
 SET_PLANTING_COMPLETE,Plantación completa,3bea077e
 SET_REMINDER,Establecer recordatorio,ad81e3b3
+SET_T0_DATA_IN_THE,Establecer los datos t0 en el {0},fd1bfa3d
 SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89

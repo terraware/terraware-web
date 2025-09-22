@@ -11,6 +11,7 @@ import {
   MapLayerFeatureId,
   MapMarker,
 } from 'src/components/NewMap/types';
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { MapService } from 'src/services';
 import {
@@ -67,6 +68,7 @@ const PlantDashboardMap = ({
   const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
   const [selectedPhoto, setSelectedPhoto] = useState<PlotPhoto>();
   const [selectedPlant, setSelectedPlant] = useState<PlotPlant>();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const sitesLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
@@ -332,14 +334,27 @@ const PlantDashboardMap = ({
 
     observationResults.forEach((results) => {
       const siteId = { layerId: 'sites', featureId: `${results.plantingSiteId}` };
-      sortFeatureByMortalityRate(siteId, results.mortalityRate);
+      if (isSurvivalRateCalculationEnabled) {
+        sortFeatureByMortalityRate(siteId, results.survivalRate);
+      } else {
+        sortFeatureByMortalityRate(siteId, results.mortalityRate);
+      }
 
       results.plantingZones.forEach((zone) => {
         const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
-        sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
+        if (isSurvivalRateCalculationEnabled) {
+          sortFeatureByMortalityRate(zoneId, zone.survivalRate);
+        } else {
+          sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
+        }
+
         zone.plantingSubzones.forEach((subzone) => {
           const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
-          sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
+          if (isSurvivalRateCalculationEnabled) {
+            sortFeatureByMortalityRate(subzoneId, subzone.survivalRate);
+          } else {
+            sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
+          }
         });
       });
     });
@@ -349,7 +364,7 @@ const PlantDashboardMap = ({
       lessThanFifty,
       greaterThanFifty,
     };
-  }, [observationResults]);
+  }, [isSurvivalRateCalculationEnabled, observationResults]);
 
   const setDrawerOpenCallback = useCallback((open: boolean) => {
     if (open) {
@@ -535,12 +550,14 @@ const PlantDashboardMap = ({
           ],
         },
         sectionDisabled: disableMortalityRate || observationResults.length === 0,
-        sectionTitle: strings.MORTALITY_RATE,
+        sectionTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
         legendItems: [
           {
             label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
             style: {
-              fillPatternUrl: '/assets/mortality-rate-less-25.png',
+              fillPatternUrl: isSurvivalRateCalculationEnabled
+                ? '/assets/mortality-rate-more-50.png'
+                : '/assets/mortality-rate-less-25.png',
               opacity: 1.0,
               type: 'fill',
             },
@@ -556,7 +573,9 @@ const PlantDashboardMap = ({
           {
             label: strings.GREATER_THAN_FIFTY_PERCENT,
             style: {
-              fillPatternUrl: '/assets/mortality-rate-more-50.png',
+              fillPatternUrl: isSurvivalRateCalculationEnabled
+                ? '/assets/mortality-rate-less-25.png'
+                : '/assets/mortality-rate-more-50.png',
               opacity: 1.0,
               type: 'fill',
             },
@@ -571,6 +590,7 @@ const PlantDashboardMap = ({
     disableObserationEvents,
     disablePhotoMarkers,
     disablePlantMarkers,
+    isSurvivalRateCalculationEnabled,
     layers,
     mortalityRateHighlights.greaterThanFifty,
     mortalityRateHighlights.lessThanFifty,
