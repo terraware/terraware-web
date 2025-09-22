@@ -52,6 +52,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test --depth=0 | grep @playwright/test | cut -d @ -f 3)" >> $GITHUB_ENV
+
+      - name: Cache playwright binaries
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+
       - name: Install dependencies
         run: yarn
 
@@ -88,8 +100,8 @@ jobs:
           TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
       - name: Install Playwright Browsers
-        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn playwright install --with-deps
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: yarn playwright install --with-deps chromium
 
       - name: Run end-to-end playwright tests
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
