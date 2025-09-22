@@ -334,14 +334,27 @@ const PlantDashboardMap = ({
 
     observationResults.forEach((results) => {
       const siteId = { layerId: 'sites', featureId: `${results.plantingSiteId}` };
-      sortFeatureByMortalityRate(siteId, results.mortalityRate);
+      if (isSurvivalRateCalculationEnabled) {
+        sortFeatureByMortalityRate(siteId, results.survivalRate);
+      } else {
+        sortFeatureByMortalityRate(siteId, results.mortalityRate);
+      }
 
       results.plantingZones.forEach((zone) => {
         const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
-        sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
+        if (isSurvivalRateCalculationEnabled) {
+          sortFeatureByMortalityRate(zoneId, zone.survivalRate);
+        } else {
+          sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
+        }
+
         zone.plantingSubzones.forEach((subzone) => {
           const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
-          sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
+          if (isSurvivalRateCalculationEnabled) {
+            sortFeatureByMortalityRate(zoneId, subzone.survivalRate);
+          } else {
+            sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
+          }
         });
       });
     });
@@ -351,7 +364,7 @@ const PlantDashboardMap = ({
       lessThanFifty,
       greaterThanFifty,
     };
-  }, [observationResults]);
+  }, [isSurvivalRateCalculationEnabled, observationResults]);
 
   const setDrawerOpenCallback = useCallback((open: boolean) => {
     if (open) {

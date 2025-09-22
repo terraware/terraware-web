@@ -47,46 +47,58 @@ export default function MortalityRateCard(): JSX.Element {
           </Tooltip>
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
-          <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-            {latestResult?.mortalityRate !== undefined ? <FormattedNumber value={latestResult.mortalityRate} /> : '-'}
-          </Typography>
-          {latestResult?.mortalityRate !== undefined && (
+          {isSurvivalRateCalculationEnabled ? (
             <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-              %
+              {latestResult?.survivalRate !== undefined ? <FormattedNumber value={latestResult.survivalRate} /> : '-'}
+            </Typography>
+          ) : (
+            <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+              {latestResult?.mortalityRate !== undefined ? <FormattedNumber value={latestResult.mortalityRate} /> : '-'}
             </Typography>
           )}
-        </Box>
-        {latestResult?.mortalityRate === undefined ? (
-          isSurvivalRateCalculationEnabled ? (
-            <Box>
-              <Typography fontSize='20px' fontWeight={500}>
-                {strings.CANNOT_BE_CALCULATED}
-              </Typography>
-              {plantingSite?.id && (
-                <Typography>
-                  {strings.formatString(
-                    strings.SET_T0_DATA_IN_THE,
-                    <Link
-                      fontSize='16px'
-                      to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSite.id.toString())}
-                    >
-                      {strings.SURVIVAL_RATE_SETTINGS}
-                    </Link>
-                  )}
+          {isSurvivalRateCalculationEnabled
+            ? latestResult?.survivalRate !== undefined && (
+                <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+                  %
+                </Typography>
+              )
+            : latestResult?.mortalityRate !== undefined && (
+                <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+                  %
                 </Typography>
               )}
-            </Box>
-          ) : (
-            <Box display={'flex'}>
-              <Box paddingRight={0.5}>
-                <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
-              </Box>
-              <Typography color={theme.palette.TwClrTxtWarning} fontSize='14px' fontWeight={400}>
-                {strings.NO_MORTALITY_RATE_WARNING}
+        </Box>
+
+        {isSurvivalRateCalculationEnabled && latestResult?.survivalRate === undefined && (
+          <Box>
+            <Typography fontSize='20px' fontWeight={500}>
+              {strings.CANNOT_BE_CALCULATED}
+            </Typography>
+            {plantingSite?.id && (
+              <Typography>
+                {strings.formatString(
+                  strings.SET_T0_DATA_IN_THE,
+                  <Link
+                    fontSize='16px'
+                    to={APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSite.id.toString())}
+                  >
+                    {strings.SURVIVAL_RATE_SETTINGS}
+                  </Link>
+                )}
               </Typography>
+            )}
+          </Box>
+        )}
+        {!isSurvivalRateCalculationEnabled && latestResult?.mortalityRate === undefined && (
+          <Box display={'flex'}>
+            <Box paddingRight={0.5}>
+              <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
             </Box>
-          )
-        ) : null}
+            <Typography color={theme.palette.TwClrTxtWarning} fontSize='14px' fontWeight={400}>
+              {strings.NO_MORTALITY_RATE_WARNING}
+            </Typography>
+          </Box>
+        )}
       </Box>
       <div style={separatorStyles} />
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>

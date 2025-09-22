@@ -40,14 +40,27 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
     let _lowestSpeciesName: string | undefined;
     observationSummaries?.[0]?.species.forEach((observationSpecies: ObservationSpeciesResultsPayload) => {
       const speciesName = getSpeciesName(observationSpecies);
-      if (observationSpecies.mortalityRate !== undefined && speciesName !== undefined) {
-        if (observationSpecies.mortalityRate >= _highestMortalityRate) {
-          _highestMortalityRate = observationSpecies.mortalityRate;
-          _highestSpeciesName = speciesName;
+      if (isSurvivalRateCalculationEnabled) {
+        if (observationSpecies.survivalRate !== undefined && speciesName !== undefined) {
+          if (observationSpecies.survivalRate >= _highestMortalityRate) {
+            _highestMortalityRate = observationSpecies.survivalRate;
+            _highestSpeciesName = speciesName;
+          }
+          if (observationSpecies.survivalRate < _lowestMortalityRate) {
+            _lowestMortalityRate = observationSpecies.survivalRate;
+            _lowestSpeciesName = speciesName;
+          }
         }
-        if (observationSpecies.mortalityRate < _lowestMortalityRate) {
-          _lowestMortalityRate = observationSpecies.mortalityRate;
-          _lowestSpeciesName = speciesName;
+      } else {
+        if (observationSpecies.mortalityRate !== undefined && speciesName !== undefined) {
+          if (observationSpecies.mortalityRate >= _highestMortalityRate) {
+            _highestMortalityRate = observationSpecies.mortalityRate;
+            _highestSpeciesName = speciesName;
+          }
+          if (observationSpecies.mortalityRate < _lowestMortalityRate) {
+            _lowestMortalityRate = observationSpecies.mortalityRate;
+            _lowestSpeciesName = speciesName;
+          }
         }
       }
     });
@@ -57,7 +70,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
 
     setHighestMortalityRate(_highestSpeciesName ? _highestMortalityRate : undefined);
     setHighestSpeciesName(_highestSpeciesName);
-  }, [observationSummaries, getSpeciesName]);
+  }, [observationSummaries, getSpeciesName, isSurvivalRateCalculationEnabled]);
 
   return (
     <Box>

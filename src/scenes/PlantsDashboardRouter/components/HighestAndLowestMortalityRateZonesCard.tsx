@@ -25,14 +25,27 @@ export default function TotalMortalityRateCard(): JSX.Element {
     let _highestZoneId: number | undefined;
     let _lowestZoneId: number | undefined;
     observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
-      if (zone.mortalityRate !== undefined) {
-        if (zone.mortalityRate >= _highestMortalityRate) {
-          _highestMortalityRate = zone.mortalityRate;
-          _highestZoneId = zone.plantingZoneId;
+      if (isSurvivalRateCalculationEnabled) {
+        if (zone.survivalRate !== undefined) {
+          if (zone.survivalRate >= _highestMortalityRate) {
+            _highestMortalityRate = zone.survivalRate;
+            _highestZoneId = zone.plantingZoneId;
+          }
+          if (zone.survivalRate < _lowestMortalityRate) {
+            _lowestMortalityRate = zone.survivalRate;
+            _lowestZoneId = zone.plantingZoneId;
+          }
         }
-        if (zone.mortalityRate < _lowestMortalityRate) {
-          _lowestMortalityRate = zone.mortalityRate;
-          _lowestZoneId = zone.plantingZoneId;
+      } else {
+        if (zone.mortalityRate !== undefined) {
+          if (zone.mortalityRate >= _highestMortalityRate) {
+            _highestMortalityRate = zone.mortalityRate;
+            _highestZoneId = zone.plantingZoneId;
+          }
+          if (zone.mortalityRate < _lowestMortalityRate) {
+            _lowestMortalityRate = zone.mortalityRate;
+            _lowestZoneId = zone.plantingZoneId;
+          }
         }
       }
     });
@@ -42,7 +55,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
 
     setHighestMortalityRate(_highestZoneId ? _highestMortalityRate : undefined);
     setHighestZoneId(_highestZoneId);
-  }, [observationSummaries]);
+  }, [isSurvivalRateCalculationEnabled, observationSummaries]);
 
   const highestPlantingZone = useMemo(() => {
     return plantingSite?.plantingZones?.find((zone) => zone.id === highestZoneId);
@@ -58,7 +71,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
         <>
           <Box
             sx={{
-              backgroundColor: isSurvivalRateCalculationEnabled ? ' #5D822B33' : '#CB4D4533',
+              backgroundColor: isSurvivalRateCalculationEnabled ? '#5D822B33' : '#CB4D4533',
               padding: 1,
               borderRadius: 1,
               marginBottom: 1,
