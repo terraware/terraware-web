@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/167</span>
+                <span class='fraction'>0/166</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/95</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/159</span>
+                <span class='fraction'>0/158</span>
             </div>
         
             
@@ -564,7 +564,11 @@
 <a name='L499'></a><a href='#L499'>499</a>
 <a name='L500'></a><a href='#L500'>500</a>
 <a name='L501'></a><a href='#L501'>501</a>
-<a name='L502'></a><a href='#L502'>502</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -659,6 +663,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -667,14 +683,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1118,8 +1126,8 @@ export default function <span class="fstat-no" title="function not covered" >Peo
   const [temporalSearchValue, setTemporalSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);</span>
   const [results, setResults] = <span class="cstat-no" title="statement not covered" >useState&lt;OrganizationUser[]&gt;();</span>
-  const [internalUserRoles, setInternalUserRoles] = <span class="cstat-no" title="statement not covered" >useState&lt;ProjectInternalUserRoles&gt;({});</span>
-  const [resultsWithInternalRoles, setResultsWithInternalRoles] = <span class="cstat-no" title="statement not covered" >useState&lt;OrganizationUser[]&gt;([]);</span>
+  const [projectRestorationLeads, setProjectRestorationLeads] = <span class="cstat-no" title="statement not covered" >useState&lt;ProjectInternalUserRoles&gt;({});</span>
+  const [resultsWithLeadRoles, setResultsWithLeadRoles] = <span class="cstat-no" title="statement not covered" >useState&lt;OrganizationUser[]&gt;([]);</span>
   const [totalUsers, setTotalUsers] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
@@ -1143,45 +1151,49 @@ export default function <span class="fstat-no" title="function not covered" >Peo
     }
 &nbsp;
     const params: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
-      prefix: 'projects',
-      fields: ['name', 'internalUsers.user_id', 'internalUsers.role', 'internalUsers.roleName'],
+      prefix: 'projects_internalUsers',
+      fields: ['project_name', 'user_id', 'role'],
       search: {
         operation: 'and',
         children: [
           {
             operation: 'field',
-            field: 'organization_id',
+            field: 'project_organization_id',
             type: 'Exact',
-            values: [selectedOrganization?.id],
+            values: [selectedOrganization.id],
+          },
+          {
+            operation: 'field',
+            field: 'role',
+            type: 'Exact',
+            values: [
+              strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_LEAD,
+              strings.PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD,
+            ],
           },
         ],
       },
-      sortOrder: [],
+      sortOrder: [{ field: 'role' }],
       count: 0,
     };
 &nbsp;
     const searchResults = <span class="cstat-no" title="statement not covered" >await SearchService.search(params);</span>
 &nbsp;
-    const flattened =
-<span class="cstat-no" title="statement not covered" >      (searchResults || [])</span>
-        .filter(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project?.internalUsers)</span>
-        .flatMap(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.internalUsers as { role: string; roleName: string; user_id: string }[])</span> ?? [];
+    const flattened = <span class="cstat-no" title="statement not covered" >(searchResults || []).map(</span>
+<span class="fstat-no" title="function not covered" >      (r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >result as { role: string; user_id: string; project_name: string }</span>
+    );
 &nbsp;
     const internalUserRolesByUserId = <span class="cstat-no" title="statement not covered" >flattened.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!acc[curr.user_id]) {</span>
 <span class="cstat-no" title="statement not covered" >        acc[curr.user_id] = [];</span>
       }
-<span class="cstat-no" title="statement not covered" >      if (</span>
-        (curr.role || curr.roleName) &amp;&amp;
-        !acc[curr.user_id].includes(curr.role) &amp;&amp;
-        !acc[curr.user_id].includes(curr.roleName)
-      ) {
-<span class="cstat-no" title="statement not covered" >        acc[curr.user_id].push(curr.role || curr.roleName);</span>
+<span class="cstat-no" title="statement not covered" >      if (curr.role &amp;&amp; !acc[curr.user_id].includes(curr.role)) {</span>
+<span class="cstat-no" title="statement not covered" >        acc[curr.user_id].push(`${curr.role} (${curr.project_name})`);</span>
       }
 <span class="cstat-no" title="statement not covered" >      return acc;</span>
     }, {} as ProjectInternalUserRoles);
-<span class="cstat-no" title="statement not covered" >    setInternalUserRoles(internalUserRolesByUserId);</span>
-  }, [selectedOrganization?.id]);
+<span class="cstat-no" title="statement not covered" >    setProjectRestorationLeads(internalUserRolesByUserId);</span>
+  }, [selectedOrganization?.id, strings]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    void getProjectsWithInternalUsersData();</span>
@@ -1191,13 +1203,13 @@ export default function <span class="fstat-no" title="function not covered" >Peo
 <span class="cstat-no" title="statement not covered" >    if (results) {</span>
       const resultsWithRoles = <span class="cstat-no" title="statement not covered" >results.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
         ...result,
-        role: (result.role === strings.TERRAFORMATION_CONTACT &amp;&amp; internalUserRoles[result.id]?.length
-          ? `${result.role} - ${internalUserRoles[result.id].join(', ')}`
+        role: (result.role === strings.TERRAFORMATION_CONTACT &amp;&amp; projectRestorationLeads[result.id]?.length
+          ? `${result.role} - ${projectRestorationLeads[result.id].join(', ')}`
           : result.role) as OrganizationRole,
       }));
-<span class="cstat-no" title="statement not covered" >      setResultsWithInternalRoles(resultsWithRoles);</span>
+<span class="cstat-no" title="statement not covered" >      setResultsWithLeadRoles(resultsWithRoles);</span>
     }
-  }, [results, internalUserRoles, strings]);
+  }, [results, projectRestorationLeads, strings]);
 &nbsp;
   const search = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    as</span>ync (searchTerm: string, skipTfContact = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> =&gt; {
@@ -1537,7 +1549,7 @@ export default function <span class="fstat-no" title="function not covered" >Peo
                     &lt;Table
                       id='people-table'
                       columns={columns}
-                      rows={resultsWithInternalRoles}
+                      rows={resultsWithLeadRoles}
                       orderBy='name'
                       Renderer={TableCellRenderer}
                       isClickable={isClickable}
@@ -1573,7 +1585,7 @@ export default function <span class="fstat-no" title="function not covered" >Peo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-22T12:59:06.796Z
+                at 2025-09-22T15:33:26.196Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
