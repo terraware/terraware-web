@@ -5,10 +5,12 @@ import { Grid } from '@mui/material';
 import _ from 'lodash';
 
 import ListMapView from 'src/components/ListMapView';
+import SurvivalRateMessage from 'src/components/SurvivalRate/SurvivalRateMessage';
 import { View } from 'src/components/common/ListMapSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -16,8 +18,9 @@ import {
   selectDetailsZoneNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { searchObservations, selectObservation } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSite, selectPlantingSiteT0 } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSiteT0 } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
@@ -27,6 +30,7 @@ import exportObservationResults from 'src/scenes/ObservationsRouter/details/expo
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
+import { PlotT0Data } from 'src/types/Tracking';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import useQuery from 'src/utils/useQuery';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -62,6 +66,11 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [status, setStatus] = useState<ObservationState[]>([]);
+  const [requestId, setRequestId] = useState('');
+  const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
+  const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
+  const dispatch = useAppDispatch();
   const query = useQuery();
 
   useEffect(() => {
@@ -206,6 +215,19 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [zoneNames, searchProps.filtersProps]);
 
+  useEffect(() => {
+    if (isSurvivalRateCalculationEnabled && plantingSite && plantingSite.id !== -1) {
+      const request = dispatch(requestPlantingSiteT0(plantingSite.id));
+      setRequestId(request.requestId);
+    }
+  }, [dispatch, isSurvivalRateCalculationEnabled, plantingSite]);
+
+  useEffect(() => {
+    if (plantingSiteT0Response?.status === 'success') {
+      setT0Plots(plantingSiteT0Response.data);
+    }
+  }, [plantingSiteT0Response]);
+
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
   const onExportObservationResults = useCallback(() => {
@@ -213,6 +235,17 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       void exportObservationResults({ observationResults: selectedObservationResults[0] });
     }
   }, [selectedObservationResults]);
+
+  const showSurvivalRateMessage = useMemo(() => {
+    const allPlotsLength =
+      plantingSite?.plantingZones?.flatMap((z) => z.plantingSubzones?.flatMap((sz) => sz.monitoringPlots) || [])
+        ?.length || 0;
+    return (
+      isSurvivalRateCalculationEnabled &&
+      plantingSiteT0Response?.status === 'success' &&
+      (t0Plots?.length || 0) < (allPlotsLength || 0)
+    );
+  }, [isSurvivalRateCalculationEnabled, plantingSite?.plantingZones, plantingSiteT0Response?.status, t0Plots?.length]);
 
   return (
     <DetailsPage
@@ -232,6 +265,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         />
       }
     >
+      {showSurvivalRateMessage && plantingSiteId && <SurvivalRateMessage selectedPlantingSiteId={plantingSiteId} />}
       {showPageMessage && (
         <UnrecognizedSpeciesPageMessage
           setShowMatchSpeciesModal={setShowMatchSpeciesModal}
