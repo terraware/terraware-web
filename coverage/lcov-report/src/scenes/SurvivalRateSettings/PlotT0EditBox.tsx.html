@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/134</span>
+                <span class='fraction'>0/140</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/116</span>
             </div>
         
             
@@ -520,7 +520,22 @@
 <a name='L455'></a><a href='#L455'>455</a>
 <a name='L456'></a><a href='#L456'>456</a>
 <a name='L457'></a><a href='#L457'>457</a>
-<a name='L458'></a><a href='#L458'>458</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -584,7 +599,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -645,17 +664,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -888,6 +916,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1021,7 +1051,7 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return speciesToShow;</span>
-  }, [t0Plot?.densityData, withdrawnSpeciesPlot?.species]);
+  }, [t0Plot, withdrawnSpeciesPlot]);
 &nbsp;
   const [newSpeciesRows, setNewSpeciesRows] = <span class="cstat-no" title="statement not covered" >useState&lt;AddedSpecies[]&gt;(initialNewSpecies);</span>
 &nbsp;
@@ -1038,6 +1068,10 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
 <span class="fstat-no" title="function not covered" >    (s</span>tartDate: string) =&gt; <span class="cstat-no" title="statement not covered" >({ observation_startDate: startDate }) as PlotT0Observation,</span>
     []
   );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setNewSpeciesRows(initialNewSpecies);</span>
+  }, [initialNewSpecies]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (t0Plot &amp;&amp; !t0Plot.observationId) {</span>
@@ -1102,20 +1136,29 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
         );
         let plotCopy: PlotT0Data;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (densityDataToUpdate?.plotDensity !== undefined) {</span>
-          const densityDataToUpdateCopy = <span class="cstat-no" title="statement not covered" >{ ...densityDataToUpdate, plotDensity: Number(value) };</span>
+<span class="cstat-no" title="statement not covered" >        if (value) {</span>
+<span class="cstat-no" title="statement not covered" >          if (densityDataToUpdate?.plotDensity !== undefined) {</span>
+            const densityDataToUpdateCopy = <span class="cstat-no" title="statement not covered" >{ ...densityDataToUpdate, plotDensity: Number(value) };</span>
 &nbsp;
-          // Udated plot with modified densityData array
-<span class="cstat-no" title="statement not covered" >          plotCopy = {</span>
-            ...plotToSave,
-            densityData: plotToSave.densityData.map(<span class="fstat-no" title="function not covered" >(d</span>ensityData) =&gt;
-<span class="cstat-no" title="statement not covered" >              densityData.speciesId.toString() === id ? densityDataToUpdateCopy : densityData</span>
-            ),
-          };
+            // Udated plot with modified densityData array
+<span class="cstat-no" title="statement not covered" >            plotCopy = {</span>
+              ...plotToSave,
+              densityData: plotToSave.densityData.map(<span class="fstat-no" title="function not covered" >(d</span>ensityData) =&gt;
+<span class="cstat-no" title="statement not covered" >                densityData.speciesId.toString() === id ? densityDataToUpdateCopy : densityData</span>
+              ),
+            };
+          } else {
+<span class="cstat-no" title="statement not covered" >            plotCopy = {</span>
+              ...plotToSave,
+              densityData: [...plotToSave.densityData, { plotDensity: Number(value), speciesId: Number(id) }],
+            };
+          }
         } else {
+          // if new density is null, remove the species in that plot
+          const densityDataCopy = <span class="cstat-no" title="statement not covered" >plotToSave.densityData.filter(<span class="fstat-no" title="function not covered" >(d</span>d) =&gt; <span class="cstat-no" title="statement not covered" >dd.speciesId.toString() !== id.toString())</span>;</span>
 <span class="cstat-no" title="statement not covered" >          plotCopy = {</span>
             ...plotToSave,
-            densityData: [...plotToSave.densityData, { plotDensity: Number(value), speciesId: Number(id) }],
+            densityData: densityDataCopy,
           };
         }
 &nbsp;
@@ -1384,14 +1427,16 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
                     })}
                     &lt;tr&gt;
                       &lt;td&gt;
-                        &lt;Button
-                          label={strings.ADD_SPECIES}
-                          type='productive'
-                          priority='ghost'
-                          onClick={onAddNewSpecies}
-                          icon='iconAdd'
-                          style={{ paddingLeft: 0, marginLeft: 0 }}
-                        /&gt;
+                        {availableSpecies.length &gt; 0 &amp;&amp; (
+                          &lt;Button
+                            label={strings.ADD_SPECIES}
+                            type='productive'
+                            priority='ghost'
+                            onClick={onAddNewSpecies}
+                            icon='iconAdd'
+                            style={{ paddingLeft: 0, marginLeft: 0 }}
+                          /&gt;
+                        )}
                       &lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
@@ -1441,7 +1486,7 @@ export default PlotT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-23T12:57:07.480Z
+                at 2025-09-23T18:09:33.096Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
