@@ -42,7 +42,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     });
 
     return speciesToShow;
-  }, [t0Plot?.densityData, withdrawnSpeciesPlot?.species]);
+  }, [t0Plot, withdrawnSpeciesPlot]);
 
   const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
 
@@ -59,6 +59,10 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     (startDate: string) => ({ observation_startDate: startDate }) as PlotT0Observation,
     []
   );
+
+  useEffect(() => {
+    setNewSpeciesRows(initialNewSpecies);
+  }, [initialNewSpecies]);
 
   useEffect(() => {
     if (t0Plot && !t0Plot.observationId) {
@@ -123,20 +127,29 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
         );
         let plotCopy: PlotT0Data;
 
-        if (densityDataToUpdate?.plotDensity !== undefined) {
-          const densityDataToUpdateCopy = { ...densityDataToUpdate, plotDensity: Number(value) };
+        if (value) {
+          if (densityDataToUpdate?.plotDensity !== undefined) {
+            const densityDataToUpdateCopy = { ...densityDataToUpdate, plotDensity: Number(value) };
 
-          // Udated plot with modified densityData array
-          plotCopy = {
-            ...plotToSave,
-            densityData: plotToSave.densityData.map((densityData) =>
-              densityData.speciesId.toString() === id ? densityDataToUpdateCopy : densityData
-            ),
-          };
+            // Udated plot with modified densityData array
+            plotCopy = {
+              ...plotToSave,
+              densityData: plotToSave.densityData.map((densityData) =>
+                densityData.speciesId.toString() === id ? densityDataToUpdateCopy : densityData
+              ),
+            };
+          } else {
+            plotCopy = {
+              ...plotToSave,
+              densityData: [...plotToSave.densityData, { plotDensity: Number(value), speciesId: Number(id) }],
+            };
+          }
         } else {
+          // if new density is null, remove the species in that plot
+          const densityDataCopy = plotToSave.densityData.filter((dd) => dd.speciesId.toString() !== id.toString());
           plotCopy = {
             ...plotToSave,
-            densityData: [...plotToSave.densityData, { plotDensity: Number(value), speciesId: Number(id) }],
+            densityData: densityDataCopy,
           };
         }
 
@@ -405,14 +418,16 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                     })}
                     <tr>
                       <td>
-                        <Button
-                          label={strings.ADD_SPECIES}
-                          type='productive'
-                          priority='ghost'
-                          onClick={onAddNewSpecies}
-                          icon='iconAdd'
-                          style={{ paddingLeft: 0, marginLeft: 0 }}
-                        />
+                        {availableSpecies.length > 0 && (
+                          <Button
+                            label={strings.ADD_SPECIES}
+                            type='productive'
+                            priority='ghost'
+                            onClick={onAddNewSpecies}
+                            icon='iconAdd'
+                            style={{ paddingLeft: 0, marginLeft: 0 }}
+                          />
+                        )}
                       </td>
                     </tr>
                     <tr>
