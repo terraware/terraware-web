@@ -555,6 +555,7 @@ EDITABLE_TABLE_ADD_ROW,Añadir fila,5c7a4d5d
 EDITABLE_TABLE_ADD_TABLE,Añadir tabla,ebf8e14b
 EDITABLE_TABLE_REMOVE_TABLE,Eliminar tabla,d7f9922e
 EDITED_BY,Editado por,d3fc0e0d
+EDITING_ACTIVITY_FOR_PROJECT,Editando actividad para {0},0fa99727
 EDITING_SPECIES_DATA_FOR_ORGANIZATION,Editando datos de la especie para {0},a9817671
 EDITING_SPECIES_DATA_FOR_ORGANIZATION_WARNING,Está editando datos de la especie para {0}. Los cambios que haga aquí se verán reflejados en su base de datos inmediatamente.,2fb0b00d
 ELEVATION,Elevación,776ffeea
