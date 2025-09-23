@@ -270,6 +270,31 @@ const MatrixView = () => {
             </Link>
           );
         },
+        muiTableBodyCellProps: ({
+          cell,
+        }: {
+          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
+          column: MRT_Column<ProjectsWithVariablesSearchResult>;
+          row: MRT_Row<ProjectsWithVariablesSearchResult>;
+          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+        }) => {
+          return {
+            sx: {
+              maxWidth: '150px',
+              '& a': {
+                display: '-webkit-box',
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                lineHeight: '1.2em',
+                maxHeight: '5.4em',
+                whiteSpace: 'normal',
+              },
+            },
+            title: cell.getValue()?.toString() || '',
+          };
+        },
       },
       {
         accessorKey: 'participant_cohort_phase',
@@ -358,12 +383,12 @@ const MatrixView = () => {
             />
           );
         };
+        Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
+          if (cell.getValue() && cell.getValue() instanceof Date) {
+            return cell.getValue<Date>().toLocaleDateString();
+          }
+        };
       }
-      Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
-        if (cell.getValue()) {
-          return cell.getValue<Date>().toLocaleDateString();
-        }
-      };
 
       if (selectedVariable && 'options' in selectedVariable) {
         Cell = undefined;
@@ -878,6 +903,27 @@ const MatrixView = () => {
         },
       },
     },
+    muiTableHeadCellProps: ({ column }) => ({
+      sx: {
+        height: '56px',
+        maxWidth: '200px',
+        padding: '8px',
+        '&.MuiTableCell-head': {
+          height: '56px !important',
+        },
+        '&.MuiTableCell-head .Mui-TableHeadCell-Content-Wrapper': {
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          lineHeight: '1.2em',
+          maxHeight: '3.4em',
+          whiteSpace: 'normal',
+        },
+      },
+      title: column.columnDef.header,
+    }),
   });
 
   const reloadTable = useCallback(() => {
