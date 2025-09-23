@@ -1,8 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import ActivityService from 'src/services/ActivityService';
+import FileService from 'src/services/FileService';
 import strings from 'src/strings';
-import { ActivityMediaFile, ActivityPayload, AdminActivityPayload } from 'src/types/Activity';
+import {
+  ActivityMediaFile,
+  ActivityPayload,
+  AdminActivityPayload,
+  AdminCreateActivityRequestPayload,
+  CreateActivityRequestPayload,
+} from 'src/types/Activity';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestListActivities = createAsyncThunk(
@@ -31,7 +38,7 @@ export const requestListActivities = createAsyncThunk(
 
 export const requestCreateActivity = createAsyncThunk(
   'activities/create',
-  async (activity: ActivityPayload, { rejectWithValue }) => {
+  async (activity: CreateActivityRequestPayload, { rejectWithValue }) => {
     const response = await ActivityService.createActivity(activity);
 
     if (response?.requestSucceeded && response?.data) {
@@ -88,6 +95,19 @@ export const requestAdminUpdateActivity = createAsyncThunk(
 
     if (response?.requestSucceeded) {
       return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestAdminCreateActivity = createAsyncThunk(
+  'activities/adminCreate',
+  async (activity: AdminCreateActivityRequestPayload, { rejectWithValue }) => {
+    const response = await ActivityService.adminCreateActivity(activity);
+
+    if (response?.requestSucceeded && response?.data) {
+      return response.data.activity;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -204,6 +224,19 @@ export const requestDeleteActivityMedia = createAsyncThunk(
 
     if (response?.requestSucceeded) {
       return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestGetFileForToken = createAsyncThunk(
+  'activities/getFileForToken',
+  async (token: string, { rejectWithValue }) => {
+    const response = await FileService.getFileForToken(token);
+
+    if (response?.requestSucceeded && response?.data) {
+      return response.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

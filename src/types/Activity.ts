@@ -20,6 +20,7 @@ export type ActivityPayload = components['schemas']['ActivityPayload'];
 export type ActivityMediaFile = components['schemas']['ActivityMediaFilePayload'];
 export type AdminActivityPayload = components['schemas']['AdminActivityPayload'];
 export type AdminActivityMediaFile = components['schemas']['AdminActivityMediaFilePayload'];
+export type AdminCreateActivityRequestPayload = components['schemas']['AdminCreateActivityRequestPayload'];
 export type CreateActivityRequestPayload = components['schemas']['CreateActivityRequestPayload'];
 export type UpdateActivityRequestPayload = components['schemas']['UpdateActivityRequestPayload'];
 

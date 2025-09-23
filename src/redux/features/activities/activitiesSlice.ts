@@ -4,6 +4,7 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { ActivityMediaFile, ActivityPayload, AdminActivityPayload } from 'src/types/Activity';
 
 import {
+  requestAdminCreateActivity,
   requestAdminGetActivity,
   requestAdminListActivities,
   requestAdminUpdateActivity,
@@ -12,6 +13,7 @@ import {
   requestDeleteActivityMedia,
   requestGetActivity,
   requestGetActivityMedia,
+  requestGetFileForToken,
   requestListActivities,
   requestUpdateActivity,
   requestUpdateActivityMedia,
@@ -85,6 +87,20 @@ export const adminActivityUpdateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestAdminUpdateActivity)(builder);
+  },
+});
+
+/**
+ * Admin activity create
+ */
+const initialStateAdminActivityCreate: Record<string, StatusT<AdminActivityPayload>> = {};
+
+export const adminActivityCreateSlice = createSlice({
+  name: 'adminActivityCreateSlice',
+  initialState: initialStateAdminActivityCreate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestAdminCreateActivity)(builder);
   },
 });
 
@@ -186,6 +202,20 @@ export const activityMediaDeleteSlice = createSlice({
   },
 });
 
+/**
+ * File access by token
+ */
+const initialStateFileForToken: Record<string, StatusT<any>> = {};
+
+export const fileForTokenSlice = createSlice({
+  name: 'fileForTokenSlice',
+  initialState: initialStateFileForToken,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetFileForToken)(builder);
+  },
+});
+
 const activityReducers = {
   activities: activityListSlice.reducer,
   activityCreate: activityCreateSlice.reducer,
@@ -193,12 +223,14 @@ const activityReducers = {
   activityGet: activityGetSlice.reducer,
   activityUpdate: activityUpdateSlice.reducer,
   adminActivities: adminActivityListSlice.reducer,
+  adminActivityCreate: adminActivityCreateSlice.reducer,
   adminActivityGet: adminActivityGetSlice.reducer,
   adminActivityUpdate: adminActivityUpdateSlice.reducer,
   activityMediaDelete: activityMediaDeleteSlice.reducer,
   activityMediaGet: activityMediaGetSlice.reducer,
   activityMediaUpdate: activityMediaUpdateSlice.reducer,
   activityMediaUpload: activityMediaUploadSlice.reducer,
+  fileForToken: fileForTokenSlice.reducer,
 };
 
 export default activityReducers;
