@@ -1,3 +1,5 @@
+554d3454e66 SW-7339 Long Header and Column names - truncation to 3-4 lines with ellipses (#4490)
+99c50f1250a Refactor Activity Log Create/Edit Views (#4491)
 3c2e0364724 Activity Log: Update Service & Redux (#4488)
 a9b6982360a Fix "Added species" initialization (#4489)
 ef1e19ccd47 SW-7406 Zone and Plot notifications (#4487)

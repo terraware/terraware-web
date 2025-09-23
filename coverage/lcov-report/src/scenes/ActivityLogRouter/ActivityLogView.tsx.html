@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -167,7 +167,11 @@
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -195,6 +199,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -206,7 +215,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -296,6 +304,11 @@ export default function <span class="fstat-no" title="function not covered" >Act
 &nbsp;
   const [projectFilter, setProjectFilter] = <span class="cstat-no" title="statement not covered" >useState&lt;{ projectId?: number | string }&gt;({});</span>
 &nbsp;
+  const projectId = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >projectFilter.projectId ? Number(projectFilter.projectId) : undefined)</span>,
+    [projectFilter.projectId]
+  );
+&nbsp;
   const availableProjects = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return availableParticipants</span>
       .flatMap(<span class="fstat-no" title="function not covered" >(p</span>articipant) =&gt;
@@ -311,7 +324,6 @@ export default function <span class="fstat-no" title="function not covered" >Act
   }, [availableParticipants]);
 &nbsp;
   const goToProjectActivityCreate = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const projectId = <span class="cstat-no" title="statement not covered" >Number(projectFilter.projectId);</span>
 <span class="cstat-no" title="statement not covered" >    if (!projectId) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -321,7 +333,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
     } else {
 <span class="cstat-no" title="statement not covered" >      goToActivityCreate(projectId);</span>
     }
-  }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectFilter.projectId]);
+  }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectId]);
 &nbsp;
   const PageHeaderLeftComponent = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (
@@ -370,7 +382,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
           width: '100%',
         }}
       &gt;
-        {projectFilter.projectId &amp;&amp; &lt;ActivitiesListView projectId={Number(projectFilter.projectId)} /&gt;}
+        {projectId &amp;&amp; &lt;ActivitiesListView projectId={projectId} /&gt;}
       &lt;/Card&gt;
     &lt;/Page&gt;
   );
@@ -382,7 +394,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-23T19:45:38.457Z
+                at 2025-09-23T20:40:38.158Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
