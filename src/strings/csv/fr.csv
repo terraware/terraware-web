@@ -554,6 +554,7 @@ EDITABLE_TABLE_ADD_ROW,Ajouter une rangée,5c7a4d5d
 EDITABLE_TABLE_ADD_TABLE,Ajouter un tableau,ebf8e14b
 EDITABLE_TABLE_REMOVE_TABLE,Retirer le tableau,d7f9922e
 EDITED_BY,Modifié par,d3fc0e0d
+EDITING_ACTIVITY_FOR_PROJECT,Modification de l’activité pour {0},0fa99727
 EDITING_SPECIES_DATA_FOR_ORGANIZATION,Modification des données de l'espèce pour {0},a9817671
 EDITING_SPECIES_DATA_FOR_ORGANIZATION_WARNING,Vous êtes en train de modifier les données de l'espèce pour {0}. Toute modification apportée ici sera immédiatement répercutée dans sa base de données.,2fb0b00d
 ELEVATION,Altitude,776ffeea
