@@ -5,6 +5,7 @@ import { IconTooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers/hooks';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
@@ -19,6 +20,7 @@ export type AggregatedPlantsStatsProps = {
   totalSpecies?: number;
   plantingDensity?: number;
   mortalityRate?: number;
+  survivalRate?: number;
   species?: ObservationSpeciesResults[];
   hasObservedPermanentPlots?: boolean;
 };
@@ -28,6 +30,7 @@ export default function AggregatedPlantsStats({
   totalSpecies,
   plantingDensity,
   mortalityRate,
+  survivalRate,
   species,
   hasObservedPermanentPlots,
 }: AggregatedPlantsStatsProps): JSX.Element {
@@ -40,6 +43,8 @@ export default function AggregatedPlantsStats({
 
   const handleMissingData = (num?: number) => (!completedTime && !num ? '' : num);
 
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
+
   const getData = () => [
     { label: strings.LIVE_PLANTS, tooltip: strings.TOOLTIP_LIVE_PLANTS, value: handleMissingData(livePlants) },
     { label: strings.SPECIES, value: handleMissingData(totalSpecies) },
@@ -48,7 +53,14 @@ export default function AggregatedPlantsStats({
       tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP,
       value: plantingDensity,
     },
-    { label: strings.MORTALITY_RATE, value: hasObservedPermanentPlots ? handleMissingData(mortalityRate) : '' },
+    {
+      label: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+      value: hasObservedPermanentPlots
+        ? isSurvivalRateCalculationEnabled
+          ? handleMissingData(survivalRate)
+          : handleMissingData(mortalityRate)
+        : '',
+    },
   ];
 
   return (
