@@ -23,6 +23,11 @@ export default function ActivityLogView(): JSX.Element {
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
+  const projectId = useMemo(
+    () => (projectFilter.projectId ? Number(projectFilter.projectId) : undefined),
+    [projectFilter.projectId]
+  );
+
   const availableProjects = useMemo(() => {
     return availableParticipants
       .flatMap((participant) =>
@@ -38,7 +43,6 @@ export default function ActivityLogView(): JSX.Element {
   }, [availableParticipants]);
 
   const goToProjectActivityCreate = useCallback(() => {
-    const projectId = Number(projectFilter.projectId);
     if (!projectId) {
       return;
     }
@@ -48,7 +52,7 @@ export default function ActivityLogView(): JSX.Element {
     } else {
       goToActivityCreate(projectId);
     }
-  }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectFilter.projectId]);
+  }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectId]);
 
   const PageHeaderLeftComponent = useMemo(
     () => (
@@ -97,7 +101,7 @@ export default function ActivityLogView(): JSX.Element {
           width: '100%',
         }}
       >
-        {projectFilter.projectId && <ActivitiesListView projectId={Number(projectFilter.projectId)} />}
+        {projectId && <ActivitiesListView projectId={projectId} />}
       </Card>
     </Page>
   );
