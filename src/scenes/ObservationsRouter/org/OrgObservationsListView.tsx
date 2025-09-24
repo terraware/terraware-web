@@ -71,7 +71,7 @@ export default function OrgObservationsListView({
   const snackbar = useSnackbar();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
-  const defaultColumns = useCallback(
+  const defaultColumns = useMemo(
     () =>
       [
         {
@@ -157,7 +157,7 @@ export default function OrgObservationsListView({
       return [];
     }
 
-    return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
+    return [...defaultColumns, ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
   }, [activeLocale, defaultColumns, scheduleObservationsEnabled]);
 
   const adHocColumns = useCallback((): TableColumnType[] => {
