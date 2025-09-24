@@ -121,12 +121,12 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
             </Box>
           </>
         )}
-        {selectedPlantingSite && isSurvivalRateCalculationEnabled && (
+        {selectedPlantingSite && isSurvivalRateCalculationEnabled && selectedPlotSelection === 'assigned' && (
           <Link
             onClick={navigateToSurvivalRateSettings}
             fontSize='16px'
             style={{ paddingLeft: theme.spacing(2) }}
-            disabled={selectedPlantingSite.id === -1}
+            disabled={selectedPlantingSite.id === -1 || (observationsResults?.length || 0) === 0}
           >
             {strings.SURVIVAL_RATE_SETTINGS}
           </Link>
