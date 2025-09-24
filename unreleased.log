@@ -1,3 +1,4 @@
+eadf461eff6 SW-7431 Observations: Percentage sign not showing with Survival Rates (#4495)
 00b4d700cd7 Activity Details Form: Validate form & send create request to API (#4492)
 a9d4c677413 SW-7429 Plants Dashboard: Survival Rate banner should not appear for Planting Sites that have no completed Observations (#4493)
 2cc80ff1cba SW-7430 Survival Rates are not showing in the Observation table or in the Observation Plot Details screen (#4494)
