@@ -99,7 +99,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
 
-
   useEffect(() => {
     if (isAcceleratorRoute) {
       const request = dispatch(
