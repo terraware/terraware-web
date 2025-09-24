@@ -119,10 +119,17 @@ export default function PlantsDashboardView({
         ?.length || 0;
     return (
       isSurvivalRateCalculationEnabled &&
+      hasObservations &&
       plantingSiteT0Response?.status === 'success' &&
       (t0Plots?.length || 0) < (allPlotsLength || 0)
     );
-  }, [isSurvivalRateCalculationEnabled, plantingSite?.plantingZones, plantingSiteT0Response?.status, t0Plots?.length]);
+  }, [
+    hasObservations,
+    isSurvivalRateCalculationEnabled,
+    plantingSite?.plantingZones,
+    plantingSiteT0Response?.status,
+    t0Plots?.length,
+  ]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
