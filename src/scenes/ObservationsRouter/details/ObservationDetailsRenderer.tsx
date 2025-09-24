@@ -47,6 +47,10 @@ const ObservationDetailsRenderer =
       );
     }
 
+    if (column.key === 'survivalRate') {
+      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value as number}%` : ''} />;
+    }
+
     if (column.key === 'status') {
       return <CellRenderer {...props} value={getPlotStatus(value as MonitoringPlotStatus)} />;
     }

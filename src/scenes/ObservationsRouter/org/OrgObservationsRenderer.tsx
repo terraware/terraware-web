@@ -78,6 +78,10 @@ const OrgObservationsRenderer =
       return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value as number}%` : ''} />;
     }
 
+    if (column.key === 'survivalRate') {
+      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value as number}%` : ''} />;
+    }
+
     if (column.key === 'actionsMenu') {
       const exportDisabled = row.state === 'Upcoming';
       const tableMenuItem = observationId ? (
