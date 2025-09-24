@@ -1,17 +1,27 @@
-import React, { Fragment, useCallback, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
+import { requestAdminListActivities, requestListActivities } from 'src/redux/features/activities/activitiesAsyncThunks';
+import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Activity, MOCK_ACTIVITIES } from 'src/types/Activity';
 import { SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
 
-const ActivityLogItem = ({ activity }: { activity: Activity }) => {
+type ActivityListItemProps = {
+  activity: Activity;
+  focused?: boolean;
+};
+
+const ActivityListItem = ({ activity, focused }: ActivityListItemProps) => {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -26,8 +36,13 @@ const ActivityLogItem = ({ activity }: { activity: Activity }) => {
   return (
     <Grid
       container
+      id={`activity-log-item-${activity.id}`}
       paddingY={theme.spacing(2)}
-      sx={{ borderBottom: '1px solid', borderColor: theme.palette.TwClrBrdrTertiary }}
+      sx={{
+        backgroundColor: focused ? theme.palette.TwClrBgSecondary : undefined,
+        borderBottom: '1px solid',
+        borderColor: theme.palette.TwClrBrdrTertiary,
+      }}
     >
       <Grid item paddingRight={theme.spacing(2)} xs='auto'>
         {/* TODO: add image src & alt text */}
@@ -67,12 +82,57 @@ type ActivitiesListViewProps = {
   projectId: number;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element => {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+  const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
   const theme = useTheme();
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [requestId, setRequestId] = useState('');
+  const [busy, setBusy] = useState<boolean>(false);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
+
+  const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
+  const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
+
+  useEffect(() => {
+    if (!projectId) {
+      return;
+    }
+
+    if (isAcceleratorRoute) {
+      const request = dispatch(
+        requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
+      );
+      setRequestId(request.requestId);
+    } else {
+      const request = dispatch(
+        requestListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
+      );
+      setRequestId(request.requestId);
+    }
+  }, [activeLocale, dispatch, isAcceleratorRoute, projectId]);
+
+  useEffect(() => {
+    if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+    } else if (listActivitiesRequest?.status === 'success' || adminListActivitiesRequest?.status === 'success') {
+      setBusy(false);
+      setActivities((listActivitiesRequest?.data || adminListActivitiesRequest?.data || []) as Activity[]);
+    }
+  }, [
+    adminListActivitiesRequest?.data,
+    adminListActivitiesRequest?.status,
+    listActivitiesRequest?.data,
+    listActivitiesRequest?.status,
+    snackbar,
+    strings.GENERIC_ERROR,
+  ]);
 
   const onDeleteFilter = useCallback(
     (key: string) => {
@@ -107,7 +167,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const groupedActivities = useMemo(() => {
     const groups: Record<string, Activity[]> = {};
 
-    MOCK_ACTIVITIES.forEach((activity) => {
+    activities.forEach((activity) => {
       const date = new Date(activity.date);
       const year = date.getFullYear();
       const quarter = Math.ceil((date.getMonth() + 1) / 3);
@@ -139,7 +199,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       quarter: quarterKey,
       activities: groups[quarterKey],
     }));
-  }, [strings]);
+  }, [activities, strings]);
 
   return (
     <MapSplitView>
@@ -149,23 +209,29 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
         onDelete={onDeleteDateRange}
         values={filters.dateRange?.values ?? []}
       />
-      {groupedActivities.map(({ quarter, activities: groupActivities }) => (
-        <Fragment key={quarter}>
-          <Typography
-            color={theme.palette.TwClrTxt}
-            fontSize='20px'
-            fontWeight={600}
-            lineHeight='28px'
-            marginY={theme.spacing(1)}
-          >
-            {quarter}
-          </Typography>
+      {groupedActivities.length === 0 && !busy ? (
+        <Typography color={theme.palette.TwClrTxt} fontSize='16px' fontWeight={500} marginTop={theme.spacing(2)}>
+          TODO: Show empty state for no results
+        </Typography>
+      ) : (
+        groupedActivities.map(({ quarter, activities: groupActivities }) => (
+          <Fragment key={quarter}>
+            <Typography
+              color={theme.palette.TwClrTxt}
+              fontSize='20px'
+              fontWeight={600}
+              lineHeight='28px'
+              marginY={theme.spacing(1)}
+            >
+              {quarter}
+            </Typography>
 
-          {groupActivities.map((activity, index) => (
-            <ActivityLogItem key={`${quarter}-${index}`} activity={activity} />
-          ))}
-        </Fragment>
-      ))}
+            {groupActivities.map((activity) => (
+              <ActivityListItem activity={activity} focused={activity.id === focusedActivityId} key={activity.id} />
+            ))}
+          </Fragment>
+        ))
+      )}
     </MapSplitView>
   );
 };
