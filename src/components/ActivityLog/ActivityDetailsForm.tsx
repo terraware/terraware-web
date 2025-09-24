@@ -13,15 +13,20 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { requestAdminCreateActivity, requestCreateActivity } from 'src/redux/features/activities/activitiesAsyncThunks';
+import { selectActivityCreate, selectAdminActivityCreate } from 'src/redux/features/activities/activitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
   ACTIVITY_TYPES,
   Activity,
   ActivityType,
+  AdminCreateActivityRequestPayload,
   CreateActivityRequestPayload,
   UpdateActivityRequestPayload,
   activityTypeLabel,
 } from 'src/types/Activity';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import MapSplitView from './MapSplitView';
 
@@ -38,6 +43,8 @@ const MAX_FILES = 20;
 
 export default function ActivityDetailsForm({ activityId, projectId }: ActivityDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
+  const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { availableParticipants } = useParticipants();
@@ -47,6 +54,12 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
+  const [validateFields, setValidateFields] = useState<boolean>(false);
+  const [requestId, setRequestId] = useState('');
+  const [busy, setBusy] = useState<boolean>(false);
+
+  const createActivityRequest = useAppSelector(selectActivityCreate(requestId));
+  const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(requestId));
 
   const isEditing = useMemo(() => activityId !== undefined, [activityId]);
 
@@ -93,20 +106,74 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
   }, [goToAcceleratorActivityLog, goToActivityLog, isAcceleratorRoute]);
 
+  const validateForm = useCallback((): boolean => !!record?.date && !!record?.description && !!record?.type, [record]);
+
+  const saveActivity = useCallback(() => {
+    if (!validateForm()) {
+      setValidateFields(true);
+      return;
+    }
+
+    setBusy(true);
+
+    if (isEditing && isAcceleratorRoute) {
+      // admin update activity
+    } else if (isEditing && !isAcceleratorRoute) {
+      // update activity
+    } else if (!isEditing && isAcceleratorRoute) {
+      // admin create activity
+      const request = dispatch(
+        requestAdminCreateActivity({
+          date: record?.date as string,
+          description: record?.description,
+          isHighlight: !!record?.isHighlight,
+          isVerified: !!record?.isVerified,
+          projectId,
+          type: record?.type as AdminCreateActivityRequestPayload['type'],
+        })
+      );
+      setRequestId(request.requestId);
+    } else {
+      // create activity
+      const request = dispatch(
+        requestCreateActivity({
+          date: record?.date as string,
+          description: record?.description,
+          projectId,
+          type: record?.type as CreateActivityRequestPayload['type'],
+        })
+      );
+      setRequestId(request.requestId);
+    }
+  }, [dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
+
   // initialize record, if creating new
   useEffect(() => {
     if (record) {
       return;
     }
 
-    const newActivity: Partial<CreateActivityRequestPayload> = {
+    const newActivity: Partial<FormRecord> = {
       date: getTodaysDateFormatted(),
       description: '',
+      isHighlight: false,
+      isVerified: false,
       projectId,
     };
 
     setRecord({ ...newActivity });
   }, [projectId, record, selectedOrganization, setRecord]);
+
+  useEffect(() => {
+    if (createActivityRequest?.status === 'error' || adminCreateActivityRequest?.status === 'error') {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+      setValidateFields(false);
+    } else if (createActivityRequest?.status === 'success' || adminCreateActivityRequest?.status === 'success') {
+      setBusy(false);
+      navToActivityLog();
+    }
+  }, [adminCreateActivityRequest?.status, createActivityRequest, navToActivityLog, snackbar, strings.GENERIC_ERROR]);
 
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
@@ -148,9 +215,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   return (
     <PageForm
+      busy={busy}
       cancelID='cancelSaveActivity'
       onCancel={navToActivityLog}
-      onSave={navToActivityLog}
+      onSave={saveActivity}
       saveButtonText={strings.SAVE}
       saveID='saveActivity'
     >
@@ -176,6 +244,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           <Grid container spacing={2} textAlign='left'>
             <Grid item lg={6} xs={12}>
               <Dropdown
+                errorText={validateFields && !record?.type ? strings.REQUIRED_FIELD : ''}
                 fullWidth
                 label={strings.ACTIVITY_TYPE}
                 onChange={onChangeActivityType}
@@ -188,6 +257,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             <Grid item lg={5} xs={12}>
               <DatePicker
                 aria-label={strings.DATE}
+                errorText={validateFields && !record?.date ? strings.REQUIRED_FIELD : ''}
                 id='date'
                 label={strings.DATE_REQUIRED}
                 onDateChange={onChangeDate}
@@ -198,6 +268,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
             <Grid item xs={12}>
               <Textfield
+                errorText={validateFields && !record?.description ? strings.REQUIRED_FIELD : ''}
                 id='description'
                 label={strings.DESCRIPTION}
                 onChange={onChangeCallback('description')}
@@ -208,15 +279,17 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               />
             </Grid>
 
-            <Grid item xs={12}>
-              <Checkbox
-                id='verified'
-                label={strings.VERIFIED}
-                name='verified'
-                onChange={onChangeIsVerified}
-                value={record?.isVerified}
-              />
-            </Grid>
+            {isAcceleratorRoute && (
+              <Grid item xs={12}>
+                <Checkbox
+                  id='verified'
+                  label={strings.VERIFIED}
+                  name='verified'
+                  onChange={onChangeIsVerified}
+                  value={record?.isVerified}
+                />
+              </Grid>
+            )}
 
             <Grid item xs={12}>
               {!fileLimitReached && (
