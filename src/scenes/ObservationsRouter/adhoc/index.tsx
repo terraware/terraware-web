@@ -176,6 +176,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       },
     ];
   }, [
+    isSurvivalRateCalculationEnabled,
     monitoringPlotResult,
     result?.completedTime,
     plantingSite?.timeZone,

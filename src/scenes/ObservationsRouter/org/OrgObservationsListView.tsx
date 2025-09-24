@@ -158,7 +158,7 @@ export default function OrgObservationsListView({
     }
 
     return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
-  }, [activeLocale, scheduleObservationsEnabled]);
+  }, [activeLocale, defaultColumns, scheduleObservationsEnabled]);
 
   const adHocColumns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {
