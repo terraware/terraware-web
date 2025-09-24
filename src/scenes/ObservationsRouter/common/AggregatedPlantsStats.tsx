@@ -57,7 +57,9 @@ export default function AggregatedPlantsStats({
       label: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
       value: hasObservedPermanentPlots
         ? isSurvivalRateCalculationEnabled
-          ? handleMissingData(survivalRate)
+          ? survivalRate
+            ? `${survivalRate}%`
+            : ''
           : handleMissingData(mortalityRate)
         : '',
     },
