@@ -99,11 +99,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
 
-  useEffect(() => {
-    if (!projectId) {
-      return;
-    }
 
+  useEffect(() => {
     if (isAcceleratorRoute) {
       const request = dispatch(
         requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
