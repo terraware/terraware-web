@@ -1622,6 +1622,7 @@ SAVE,Guardar,526a3e42
 SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_CHANGES,Guardar los cambios,cb5e8c33
+SAVE_PLANT_DENSITY,Guardar densidad de plantas,73135113
 SAVE_PROJECT_BOUNDARIES,Guardar límites del proyecto,d206ddd9
 SAVE_VERSION,Guardar versión,5afacff0
 SAVE_VERSION_ELLIPSIS,Guardar versión...,f3ac25ba
@@ -1800,6 +1801,7 @@ SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla 
 SPECIES_CATEGORIES,Categorías de especies,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del total de plantas plantadas que son Raras y en Peligro, según la especie.",e6a1dcfe
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
+SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para esas especies, Terraware usará 0 como densidad de plantas para esas especies. ¿Desea continuar?",2e7d051f
 SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,20250069
 SPECIES_FROM_WITHDRAWALS,Especies a partir de retiros,66d674b5
