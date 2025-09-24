@@ -6,6 +6,7 @@ import sanitize from 'sanitize-filename';
 
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestAbandonObservation } from 'src/redux/features/observations/observationsAsyncThunks';
@@ -30,61 +31,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import EndObservationModal from './EndObservationModal';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
-
-const defaultColumns = (): TableColumnType[] => [
-  {
-    key: 'observationDate',
-    name: strings.DATE,
-    type: 'string',
-  },
-  {
-    key: 'state',
-    name: strings.STATUS,
-    type: 'string',
-  },
-  {
-    key: 'plantingSiteName',
-    name: strings.PLANTING_SITE,
-    type: 'string',
-  },
-  {
-    key: 'plantingZones',
-    name: strings.ZONES,
-    type: 'string',
-  },
-  {
-    key: 'totalLive',
-    name: strings.LIVE_PLANTS,
-    tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
-    type: 'number',
-  },
-  {
-    key: 'totalPlants',
-    name: strings.TOTAL_PLANTS,
-    tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
-    type: 'number',
-  },
-  {
-    key: 'totalSpecies',
-    name: strings.SPECIES,
-    type: 'number',
-  },
-  {
-    key: 'plantingDensity',
-    name: strings.PLANT_DENSITY,
-    type: 'number',
-  },
-  {
-    key: 'mortalityRate',
-    name: strings.MORTALITY_RATE,
-    type: 'number',
-  },
-  {
-    key: 'endDate',
-    name: strings.END_DATE,
-    type: 'date',
-  },
-];
 
 const scheduleObservationsColumn = (): TableColumnType[] => [
   {
@@ -123,6 +69,66 @@ export default function OrgObservationsListView({
   const [requestId, setRequestId] = useState('');
   const abandonObservationResponse = useAppSelector((state) => selectAbandonObservation(state, requestId));
   const snackbar = useSnackbar();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
+
+  const defaultColumns = useMemo(
+    () =>
+      [
+        {
+          key: 'observationDate',
+          name: strings.DATE,
+          type: 'string',
+        },
+        {
+          key: 'state',
+          name: strings.STATUS,
+          type: 'string',
+        },
+        {
+          key: 'plantingSiteName',
+          name: strings.PLANTING_SITE,
+          type: 'string',
+        },
+        {
+          key: 'plantingZones',
+          name: strings.ZONES,
+          type: 'string',
+        },
+        {
+          key: 'totalLive',
+          name: strings.LIVE_PLANTS,
+          tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
+          type: 'number',
+        },
+        {
+          key: 'totalPlants',
+          name: strings.TOTAL_PLANTS,
+          tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
+          type: 'number',
+        },
+        {
+          key: 'totalSpecies',
+          name: strings.SPECIES,
+          type: 'number',
+        },
+        {
+          key: 'plantingDensity',
+          name: strings.PLANT_DENSITY,
+          type: 'number',
+        },
+        {
+          key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
+          name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+          type: 'number',
+        },
+        {
+          key: 'endDate',
+          name: strings.END_DATE,
+          type: 'date',
+        },
+      ] as TableColumnType[],
+    [isSurvivalRateCalculationEnabled]
+  );
 
   useEffect(() => {
     if (abandonObservationResponse?.status === 'success' && selectedObservation) {
@@ -151,8 +157,8 @@ export default function OrgObservationsListView({
       return [];
     }
 
-    return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
-  }, [activeLocale, scheduleObservationsEnabled]);
+    return [...defaultColumns, ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
+  }, [activeLocale, defaultColumns, scheduleObservationsEnabled]);
 
   const adHocColumns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {
