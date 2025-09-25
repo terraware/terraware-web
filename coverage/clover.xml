@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1758814902136" clover="3.2.0">
-  <project timestamp="1758814902136" name="All files">
-    <metrics statements="33594" coveredstatements="1335" conditionals="23416" coveredconditionals="389" methods="10322" coveredmethods="211" elements="67332" coveredelements="1935" complexity="0" loc="33594" ncloc="33594" packages="279" files="1343" classes="1343"/>
+<coverage generated="1758825123001" clover="3.2.0">
+  <project timestamp="1758825123001" name="All files">
+    <metrics statements="33594" coveredstatements="1335" conditionals="23418" coveredconditionals="389" methods="10322" coveredmethods="211" elements="67334" coveredelements="1935" complexity="0" loc="33594" ncloc="33594" packages="279" files="1343" classes="1343"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -28049,7 +28049,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.adhoc">
-      <metrics statements="146" coveredstatements="0" conditionals="147" coveredconditionals="0" methods="51" coveredmethods="0"/>
+      <metrics statements="146" coveredstatements="0" conditionals="149" coveredconditionals="0" methods="51" coveredmethods="0"/>
       <file name="AdHocObservationDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/AdHocObservationDetails.tsx">
         <metrics statements="52" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="17" coveredmethods="0"/>
         <line num="40" count="0" type="stmt"/>
@@ -28126,7 +28126,7 @@
         <line num="90" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/index.tsx">
-        <metrics statements="77" coveredstatements="0" conditionals="77" coveredconditionals="0" methods="31" coveredmethods="0"/>
+        <metrics statements="77" coveredstatements="0" conditionals="79" coveredconditionals="0" methods="31" coveredmethods="0"/>
         <line num="35" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
@@ -28178,32 +28178,32 @@
         <line num="125" count="0" type="stmt"/>
         <line num="126" count="0" type="stmt"/>
         <line num="128" count="0" type="stmt"/>
-        <line num="169" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="189" count="0" type="stmt"/>
-        <line num="190" count="0" type="stmt"/>
-        <line num="201" count="0" type="stmt"/>
-        <line num="202" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="203" count="0" type="stmt"/>
-        <line num="211" count="0" type="stmt"/>
-        <line num="213" count="0" type="stmt"/>
-        <line num="219" count="0" type="stmt"/>
-        <line num="221" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="222" count="0" type="stmt"/>
-        <line num="223" count="0" type="stmt"/>
+        <line num="174" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="194" count="0" type="stmt"/>
+        <line num="195" count="0" type="stmt"/>
+        <line num="206" count="0" type="stmt"/>
+        <line num="207" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="208" count="0" type="stmt"/>
+        <line num="216" count="0" type="stmt"/>
+        <line num="218" count="0" type="stmt"/>
         <line num="224" count="0" type="stmt"/>
-        <line num="225" count="0" type="stmt"/>
-        <line num="226" count="0" type="stmt"/>
+        <line num="226" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="227" count="0" type="stmt"/>
+        <line num="228" count="0" type="stmt"/>
+        <line num="229" count="0" type="stmt"/>
+        <line num="230" count="0" type="stmt"/>
         <line num="231" count="0" type="stmt"/>
-        <line num="232" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="233" count="0" type="stmt"/>
-        <line num="248" count="0" type="stmt"/>
-        <line num="251" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="252" count="0" type="stmt"/>
-        <line num="255" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="256" count="0" type="stmt"/>
-        <line num="259" count="0" type="stmt"/>
-        <line num="285" count="0" type="stmt"/>
-        <line num="315" count="0" type="stmt"/>
+        <line num="236" count="0" type="stmt"/>
+        <line num="237" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="238" count="0" type="stmt"/>
+        <line num="253" count="0" type="stmt"/>
+        <line num="256" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="257" count="0" type="stmt"/>
+        <line num="260" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="261" count="0" type="stmt"/>
+        <line num="264" count="0" type="stmt"/>
+        <line num="290" count="0" type="stmt"/>
+        <line num="320" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.biomass">
