@@ -55,6 +55,9 @@ export default function Link(props: LinkProps): JSX.Element {
       sx={{
         ...styleToUse,
         opacity: disabled ? 0.5 : 1,
+        '&[disabled]:hover': {
+          textDecoration: 'none',
+        },
       }}
     >
       {children}
