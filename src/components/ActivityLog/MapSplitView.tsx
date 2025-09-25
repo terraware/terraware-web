@@ -54,7 +54,7 @@ export default function MapSplitView({
           } else {
             return undefined;
           }
-        }, [])
+        })
         .filter((marker): marker is MapMarker => marker !== undefined);
 
       return {
