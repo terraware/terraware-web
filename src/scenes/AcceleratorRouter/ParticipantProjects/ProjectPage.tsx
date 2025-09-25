@@ -120,7 +120,7 @@ const ProjectPage = () => {
   );
 
   const goToProjectActivityCreate = useCallback(() => {
-    goToAcceleratorActivityCreate(projectData.projectId);
+    goToAcceleratorActivityCreate(projectData.projectId, 'profile');
   }, [goToAcceleratorActivityCreate, projectData.projectId]);
 
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
