@@ -163,32 +163,9 @@ const EditSurvivalRateSettings = () => {
   }, []);
 
   const saveWithDefaultDensity = useCallback(() => {
-    const recordToSave = { ...record };
-    withdrawnSpeciesPlots?.forEach((withdrawnPlot) => {
-      const correspondingPlot = recordToSave.plots.find(
-        (plot) => plot.monitoringPlotId.toString() === withdrawnPlot.monitoringPlotId.toString()
-      );
-      if (correspondingPlot) {
-        withdrawnPlot.species.forEach((withdrawnSpecies) => {
-          const correspondingSpecies = correspondingPlot.densityData.find(
-            (denData) => denData.speciesId.toString() === withdrawnSpecies.speciesId.toString()
-          );
-          if (!correspondingSpecies) {
-            correspondingPlot.densityData.push({ speciesId: withdrawnSpecies.speciesId, plotDensity: 0 });
-          }
-        });
-      }
-    });
-    recordToSave.plots.forEach((plot) => {
-      plot.densityData.forEach((denData) => {
-        if (denData.plotDensity === undefined || denData.plotDensity === null) {
-          denData.plotDensity = 0;
-        }
-      });
-    });
-    const saveRequest = dispatch(requestAssignT0SiteData(recordToSave));
+    const saveRequest = dispatch(requestAssignT0SiteData(record));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record, withdrawnSpeciesPlots]);
+  }, [dispatch, record]);
 
   return (
     <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
