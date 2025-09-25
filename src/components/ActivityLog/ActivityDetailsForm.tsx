@@ -12,6 +12,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useProjects } from 'src/hooks/useProjects';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { requestAdminCreateActivity, requestCreateActivity } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { selectActivityCreate, selectAdminActivityCreate } from 'src/redux/features/activities/activitiesSelectors';
@@ -26,7 +27,9 @@ import {
   activityTypeLabel,
 } from 'src/types/Activity';
 import useForm from 'src/utils/useForm';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import MapSplitView from './MapSplitView';
 
@@ -50,8 +53,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const { availableParticipants } = useParticipants();
   const { selectedProject } = useProjects({ projectId });
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { goToAcceleratorActivityLog, goToActivityLog } = useNavigateTo();
+  const navigate = useSyncNavigate();
+  const { goToAcceleratorActivityLog, goToActivityLog, goToParticipantProject } = useNavigateTo();
 
+  const location = useStateLocation();
+  const query = useQuery();
+
+  const [source, setSource] = useState<string | null>();
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -60,6 +68,15 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const createActivityRequest = useAppSelector(selectActivityCreate(requestId));
   const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(requestId));
+
+  useEffect(() => {
+    const _source = query.get('source');
+    if (_source) {
+      setSource(_source);
+      query.delete('source');
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    }
+  }, [query, location, navigate]);
 
   const isEditing = useMemo(() => activityId !== undefined, [activityId]);
 
@@ -99,12 +116,14 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   );
 
   const navToActivityLog = useCallback(() => {
-    if (isAcceleratorRoute) {
+    if (isAcceleratorRoute && !source) {
       goToAcceleratorActivityLog();
+    } else if (isAcceleratorRoute && source === 'profile') {
+      goToParticipantProject(projectId);
     } else {
       goToActivityLog();
     }
-  }, [goToAcceleratorActivityLog, goToActivityLog, isAcceleratorRoute]);
+  }, [goToAcceleratorActivityLog, goToActivityLog, goToParticipantProject, isAcceleratorRoute, projectId, source]);
 
   const validateForm = useCallback((): boolean => !!record?.date && !!record?.description && !!record?.type, [record]);
 

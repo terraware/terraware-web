@@ -33,7 +33,7 @@ const ProjectPage = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useParticipantProjectData();
-  const { goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
+  const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
@@ -119,9 +119,9 @@ const ProjectPage = () => {
     [goToParticipantProjectEdit, projectData.projectId]
   );
 
-  const handleAddActivity = useCallback(() => {
-    // TODO: Implement add activity logic
-  }, []);
+  const goToProjectActivityCreate = useCallback(() => {
+    goToAcceleratorActivityCreate(projectData.projectId, 'profile');
+  }, [goToAcceleratorActivityCreate, projectData.projectId]);
 
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
 
@@ -186,7 +186,7 @@ const ProjectPage = () => {
               icon='plus'
               id='addActivity'
               label={strings.ADD_ACTIVITY}
-              onClick={handleAddActivity}
+              onClick={goToProjectActivityCreate}
               priority='primary'
               size='medium'
               type='productive'
@@ -210,8 +210,8 @@ const ProjectPage = () => {
     [
       activeTab,
       goToDocumentNew,
+      goToProjectActivityCreate,
       goToProjectEdit,
-      handleAddActivity,
       isAllowedEdit,
       isAllowedPublish,
       onOptionItemClick,

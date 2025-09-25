@@ -14,7 +14,7 @@ import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
 export default function ActivityLogView(): JSX.Element {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
   const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
@@ -39,8 +39,8 @@ export default function ActivityLogView(): JSX.Element {
         }))
       )
       .filter((project) => project.dealName)
-      .sort((a, b) => a.dealName!.localeCompare(b.dealName!));
-  }, [availableParticipants]);
+      .sort((a, b) => a.dealName!.localeCompare(b.dealName!, activeLocale || undefined));
+  }, [activeLocale, availableParticipants]);
 
   const goToProjectActivityCreate = useCallback(() => {
     if (!projectId) {
