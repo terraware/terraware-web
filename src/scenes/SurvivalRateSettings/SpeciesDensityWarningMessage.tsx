@@ -1,4 +1,4 @@
-import React from '@mui/material';
+import React from 'react';
 
 import strings from 'src/strings';
 
