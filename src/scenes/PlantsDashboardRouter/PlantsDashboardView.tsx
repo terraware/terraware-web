@@ -13,12 +13,9 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useObservation from 'src/hooks/useObservation';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectPlantingSiteT0 } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSiteT0 } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppDispatch } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
-import { PlotT0Data } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
 import MortalityRateCard from './components/MortalityRateCard';
@@ -44,9 +41,6 @@ export default function PlantsDashboardView({
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
-  const [requestId, setRequestId] = useState('');
-  const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
-  const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const {
@@ -86,19 +80,6 @@ export default function PlantsDashboardView({
   }, [latestResult, plantingSite]);
 
   useEffect(() => {
-    if (isSurvivalRateCalculationEnabled && plantingSite && plantingSite.id !== -1) {
-      const request = dispatch(requestPlantingSiteT0(plantingSite.id));
-      setRequestId(request.requestId);
-    }
-  }, [dispatch, isSurvivalRateCalculationEnabled, plantingSite]);
-
-  useEffect(() => {
-    if (plantingSiteT0Response?.status === 'success') {
-      setT0Plots(plantingSiteT0Response.data);
-    }
-  }, [plantingSiteT0Response]);
-
-  useEffect(() => {
     if (organizationId) {
       setAcceleratorOrganizationId(organizationId);
     } else if (!isAcceleratorRoute && selectedOrganization?.id) {
@@ -114,22 +95,8 @@ export default function PlantsDashboardView({
   ]);
 
   const showSurvivalRateMessage = useMemo(() => {
-    const allPlotsLength =
-      plantingSite?.plantingZones?.flatMap((z) => z.plantingSubzones?.flatMap((sz) => sz.monitoringPlots) || [])
-        ?.length || 0;
-    return (
-      isSurvivalRateCalculationEnabled &&
-      hasObservations &&
-      plantingSiteT0Response?.status === 'success' &&
-      (t0Plots?.length || 0) < (allPlotsLength || 0)
-    );
-  }, [
-    hasObservations,
-    isSurvivalRateCalculationEnabled,
-    plantingSite?.plantingZones,
-    plantingSiteT0Response?.status,
-    t0Plots?.length,
-  ]);
+    return isSurvivalRateCalculationEnabled && hasObservations && latestResult?.survivalRate === undefined;
+  }, [hasObservations, isSurvivalRateCalculationEnabled, latestResult]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>

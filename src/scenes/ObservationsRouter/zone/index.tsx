@@ -13,19 +13,15 @@ import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
-import { selectPlantingSiteT0 } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSiteT0 } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePlot/ReplaceObservationPlotModal';
 import strings from 'src/strings';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
-import { PlotT0Data } from 'src/types/Tracking';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -61,12 +57,7 @@ export default function ObservationPlantingZone(): JSX.Element {
     ObservationMonitoringPlotResultsPayload | undefined
   >();
   const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
-  const { plantingSite } = usePlantingSiteData();
-  const [requestId, setRequestId] = useState('');
-  const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
-  const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
-  const dispatch = useAppDispatch();
 
   const defaultColumns = useCallback(
     () =>
@@ -156,19 +147,6 @@ export default function ObservationPlantingZone(): JSX.Element {
     }
   }, [navigate, observationId, plantingSiteId, plantingZone]);
 
-  useEffect(() => {
-    if (isSurvivalRateCalculationEnabled && plantingSite && plantingSite.id !== -1) {
-      const request = dispatch(requestPlantingSiteT0(plantingSite.id));
-      setRequestId(request.requestId);
-    }
-  }, [dispatch, isSurvivalRateCalculationEnabled, plantingSite]);
-
-  useEffect(() => {
-    if (plantingSiteT0Response?.status === 'success') {
-      setT0Plots(plantingSiteT0Response.data);
-    }
-  }, [plantingSiteT0Response]);
-
   const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string; totalLive?: number })[] = useMemo(
     () =>
       plantingZone?.plantingSubzones?.flatMap((subzone) =>
@@ -182,15 +160,8 @@ export default function ObservationPlantingZone(): JSX.Element {
   );
 
   const showSurvivalRateMessage = useMemo(() => {
-    const allPlotsLength =
-      plantingSite?.plantingZones?.flatMap((z) => z.plantingSubzones?.flatMap((sz) => sz.monitoringPlots) || [])
-        ?.length || 0;
-    return (
-      isSurvivalRateCalculationEnabled &&
-      plantingSiteT0Response?.status === 'success' &&
-      (t0Plots?.length || 0) < (allPlotsLength || 0)
-    );
-  }, [isSurvivalRateCalculationEnabled, plantingSite?.plantingZones, plantingSiteT0Response?.status, t0Plots?.length]);
+    return isSurvivalRateCalculationEnabled && plantingZone?.survivalRate === undefined;
+  }, [isSurvivalRateCalculationEnabled, plantingZone]);
 
   return (
     <>
