@@ -1,3 +1,5 @@
+08e95a99722 Use BE api survival rate value to show banner (#4500)
+9f67aa63e75 SW-7423 follow-up disable underline on link hover (#4499)
 6d9f3b0eb8f SW-7423 "Survival Rate Settings" should be grayed out (#4496)
 eadf461eff6 SW-7431 Observations: Percentage sign not showing with Survival Rates (#4495)
 00b4d700cd7 Activity Details Form: Validate form & send create request to API (#4492)
