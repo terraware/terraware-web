@@ -8,7 +8,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
 import { selectPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsSelectors';
@@ -32,6 +32,7 @@ const ProjectPage = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { isAllowed } = useUser();
+  const { selectedOrganization } = useOrganization();
   const projectData = useParticipantProjectData();
   const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
@@ -45,6 +46,7 @@ const ProjectPage = () => {
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
+  const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES', { organization: selectedOrganization });
   const isActivityLogEnabled = isEnabled('Activity Log');
 
   const projectApplication = useMemo(
@@ -181,7 +183,7 @@ const ProjectPage = () => {
             </>
           )}
 
-          {activeTab === 'activityLog' && (
+          {activeTab === 'activityLog' && isAllowedCreateActivities && (
             <Button
               icon='plus'
               id='addActivity'
@@ -212,6 +214,7 @@ const ProjectPage = () => {
       goToDocumentNew,
       goToProjectActivityCreate,
       goToProjectEdit,
+      isAllowedCreateActivities,
       isAllowedEdit,
       isAllowedPublish,
       onOptionItemClick,
