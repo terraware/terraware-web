@@ -93,7 +93,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
   const [activities, setActivities] = useState<Activity[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
 
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
@@ -200,7 +199,11 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   }, [activities, strings]);
 
   return (
-    <MapSplitView>
+    <MapSplitView
+      activities={activities}
+      focusedActivityId={focusedActivityId}
+      setFocusedActivityId={setFocusedActivityId}
+    >
       <DateRange
         field='dateRange'
         onChange={onChangeDateRange}

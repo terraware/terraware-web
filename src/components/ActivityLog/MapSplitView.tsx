@@ -24,13 +24,16 @@ export default function MapSplitView({
 }: MapSplitViewProps): JSX.Element {
   const { token, mapId } = useMapboxToken();
 
-  const onActivityMarkerClick = useCallback((id: number) => () => {
-    if (focusedActivityId === id) {
-      setFocusedActivityId?.(undefined);
-    } else {
-      setFocusedActivityId?.(id);
-    }
-  }, [focusedActivityId, setFocusedActivityId]);
+  const onActivityMarkerClick = useCallback(
+    (id: number) => () => {
+      if (focusedActivityId === id) {
+        setFocusedActivityId?.(undefined);
+      } else {
+        setFocusedActivityId?.(id);
+      }
+    },
+    [focusedActivityId, setFocusedActivityId]
+  );
 
   const markerGroups = useMemo((): MapMarkerGroup[] => {
     if (!activities) {
