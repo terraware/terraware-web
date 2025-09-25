@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 
 import ActivityCreateView from 'src/components/ActivityLog/ActivityCreateView';
 import ActivityEditView from 'src/components/ActivityLog/ActivityEditView';
 import isEnabled from 'src/features';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization, useUser } from 'src/providers';
 
 import ActivityLogView from './ActivityLogView';
 
 const ActivityLogRouter = () => {
   const { isAllowed } = useUser();
-  const { selectedOrganization: organization } = useOrganization();
+  const { selectedOrganization } = useOrganization();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const isActivityLogEnabled = isEnabled('Activity Log');
+
+  const organization = useMemo(
+    () => (isAcceleratorRoute ? undefined : selectedOrganization),
+    [isAcceleratorRoute, selectedOrganization]
+  );
 
   return (
     <Routes>

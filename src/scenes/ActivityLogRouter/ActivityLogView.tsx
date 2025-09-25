@@ -23,7 +23,12 @@ export default function ActivityLogView(): JSX.Element {
   const { availableParticipants } = useParticipants();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES', { organization: selectedOrganization });
+  const organization = useMemo(
+    () => (isAcceleratorRoute ? undefined : selectedOrganization),
+    [isAcceleratorRoute, selectedOrganization]
+  );
+
+  const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES', { organization });
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
