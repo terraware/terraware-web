@@ -4,6 +4,7 @@ import { Box, CircularProgress } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
+import isEnabled from 'src/features';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 
@@ -11,6 +12,7 @@ type MapStatsProperties = {
   areaHa: number | undefined;
   name: string | undefined;
   mortalityRate: number | undefined;
+  survivalRate: number | undefined;
   observed: boolean;
   observedPlants: number | undefined;
   observedSpecies: number | undefined;
@@ -30,6 +32,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
   const { strings } = useLocalization();
   const { isLoading, latestResult, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
   const [delayedLoading, setDelayedLoading] = useState(isLoading);
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -53,6 +56,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         type: strings.SITE,
         areaHa: plantingSite?.areaHa,
         mortalityRate: latestResult?.mortalityRate,
+        survivalRate: latestResult?.survivalRate,
         name: plantingSite?.name,
         observed: latestResult !== undefined,
         observedPlants: latestResult?.totalPlants,
@@ -74,6 +78,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         type: strings.ZONE,
         areaHa: zone?.areaHa,
         mortalityRate: zoneResult?.mortalityRate,
+        survivalRate: zoneResult?.survivalRate,
         name: zone?.name,
         observed: zoneResult !== undefined,
         observedPlants: zoneResult?.totalPlants,
@@ -98,6 +103,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
         type: strings.SUBZONE,
         areaHa: subzone?.areaHa,
         mortalityRate: subzoneResult?.mortalityRate,
+        survivalRate: subzoneResult?.survivalRate,
         name: subzone?.name,
         observed: subzoneResult !== undefined,
         observedPlants: subzoneResult?.totalPlants,
@@ -136,8 +142,14 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
       if (properties.observed) {
         results.push(
           {
-            key: strings.MORTALITY_RATE,
-            value: properties.mortalityRate ? `${properties.mortalityRate}%` : strings.NO_DATA_YET,
+            key: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+            value: isSurvivalRateCalculationEnabled
+              ? properties.survivalRate
+                ? `${properties.survivalRate}%`
+                : strings.NO_DATA_YET
+              : properties.mortalityRate
+                ? `${properties.mortalityRate}%`
+                : strings.NO_DATA_YET,
           },
           {
             key: strings.PLANTING_DENSITY,
