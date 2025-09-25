@@ -186,7 +186,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
     }
 
     return results;
-  }, [properties, strings]);
+  }, [properties, strings, isSurvivalRateCalculationEnabled]);
 
   if (delayedLoading) {
     return (
