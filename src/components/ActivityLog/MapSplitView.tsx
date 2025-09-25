@@ -11,7 +11,7 @@ type MapSplitViewProps = {
   activities?: Activity[];
   children: React.ReactNode;
   focusedActivityId?: number;
-  setFocusedActivityId?: (id: number) => void;
+  setFocusedActivityId?: (id: number | undefined) => void;
   topComponent?: React.ReactNode;
 };
 
@@ -24,7 +24,13 @@ export default function MapSplitView({
 }: MapSplitViewProps): JSX.Element {
   const { token, mapId } = useMapboxToken();
 
-  const onActivityMarkerClick = useCallback((id: number) => () => setFocusedActivityId?.(id), [setFocusedActivityId]);
+  const onActivityMarkerClick = useCallback((id: number) => () => {
+    if (focusedActivityId === id) {
+      setFocusedActivityId?.(undefined);
+    } else {
+      setFocusedActivityId?.(id);
+    }
+  }, [focusedActivityId, setFocusedActivityId]);
 
   const markerGroups = useMemo((): MapMarkerGroup[] => {
     if (!activities) {
