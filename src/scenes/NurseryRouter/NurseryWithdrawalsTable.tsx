@@ -4,12 +4,12 @@ import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 
-import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterField } from 'src/components/common/FilterGroup';
 import SearchFiltersWrapper, {
   FeaturedFilterConfig,
   SearchFiltersProps,
 } from 'src/components/common/SearchFiltersWrapper';
+import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -68,7 +68,7 @@ export default function NurseryWithdrawalsTable({
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'withdrawnDate',
     direction: 'Descending',
   } as SearchSortOrder);
@@ -302,11 +302,19 @@ export default function NurseryWithdrawalsTable({
   const onSortChange = useCallback(
     (order: SortOrder, orderBy: string) => {
       const orderByStr =
-        orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
-      setSearchSortOrder({
-        field: orderByStr,
-        direction: order === 'asc' ? 'Ascending' : 'Descending',
-      });
+        orderBy === 'speciesScientificNames'
+          ? 'batchWithdrawals.batch_species_scientificName'
+          : orderBy === 'project_names'
+            ? null
+            : orderBy;
+      setSearchSortOrder(
+        orderByStr
+          ? {
+              field: orderByStr,
+              direction: order === 'asc' ? 'Ascending' : 'Descending',
+            }
+          : undefined
+      );
     },
     [setSearchSortOrder]
   );
@@ -325,22 +333,21 @@ export default function NurseryWithdrawalsTable({
       </Grid>
 
       <Grid item xs={12}>
-        <ClientSideFilterTable
+        <Table
           id='withdrawal-log'
           columns={columns}
           rows={rows || []}
           Renderer={WithdrawalLogRenderer}
-          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-          isPresorted={searchSortOrder.field !== 'batchWithdrawals.batch_species_scientificName'}
+          orderBy={searchSortOrder?.field || 'project_names'}
+          order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
+          isPresorted={
+            searchSortOrder !== undefined && searchSortOrder.field !== 'batchWithdrawals.batch_species_scientificName'
+          }
           onSelect={onWithdrawalClicked}
           controlledOnSelect={true}
           sortHandler={onSortChange}
           isClickable={isClickable}
           reloadData={reload}
-          defaultSortOrder={{
-            field: 'withdrawnDate',
-            direction: 'Descending',
-          }}
         />
       </Grid>
     </Grid>
