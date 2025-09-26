@@ -202,6 +202,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     <MapSplitView
       activities={activities}
       focusedActivityId={focusedActivityId}
+      projectId={projectId}
       setFocusedActivityId={setFocusedActivityId}
     >
       <DateRange

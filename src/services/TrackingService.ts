@@ -404,14 +404,16 @@ const getPlantingSiteHistory = async (
 /**
  * List all planting sites
  */
-const listPlantingSites = async (
-  organizationId: number,
-  full?: boolean
-): Promise<Response2<ListPlantingSitesResponsePayload>> => {
+const listPlantingSites = async (request: {
+  projectId?: number;
+  organizationId?: number;
+  full?: boolean;
+}): Promise<Response2<ListPlantingSitesResponsePayload>> => {
   return await httpPlantingSites.get2<ListPlantingSitesResponsePayload>({
     params: {
-      organizationId: organizationId.toString(),
-      full: (full || false).toString(),
+      ...(request.projectId !== undefined && { projectId: request.projectId.toString() }),
+      ...(request.organizationId !== undefined && { organizationId: request.organizationId.toString() }),
+      full: (request?.full || false).toString(),
     },
   });
 };
