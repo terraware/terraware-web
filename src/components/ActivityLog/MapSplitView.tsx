@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
-import { MapLayer, MapLayerFeature, MapMarker, MapMarkerGroup } from 'src/components/NewMap/types';
+import { MapLayerFeature, MapMarker, MapMarkerGroup } from 'src/components/NewMap/types';
 import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
 import { useLocalization } from 'src/providers';
 import { Activity, activityTypeColor } from 'src/types/Activity';
@@ -43,8 +43,8 @@ export default function MapSplitView({
 
   const { plantingSites } = useProjectPlantingSites(projectId);
 
-  const siteLayer = useMemo((): MapLayer => {
-    const features =
+  const siteFeatures = useMemo((): MapLayerFeature[] => {
+    return (
       plantingSites?.map(
         (site): MapLayerFeature => ({
           featureId: `${site.id}`,
@@ -54,20 +54,9 @@ export default function MapSplitView({
             coordinates: site.boundary?.coordinates ?? [],
           },
         })
-      ) ?? [];
-
-    return {
-      features,
-      label: strings.PLANTING_SITES,
-      layerId: 'sites',
-      style: {
-        borderColor: theme.palette.TwClrBaseGreen300,
-        fillColor: theme.palette.TwClrBaseGreen300,
-        opacity: 0.2,
-        type: 'fill',
-      },
-    };
-  }, [plantingSites, strings, theme]);
+      ) ?? []
+    );
+  }, [plantingSites]);
 
   const markerGroups = useMemo((): MapMarkerGroup[] => {
     if (!activities) {
@@ -112,12 +101,24 @@ export default function MapSplitView({
         type: 'marker',
       },
       {
-        layers: [siteLayer],
-        sectionTitle: strings.SITE,
+        layers: [
+          {
+            features: siteFeatures,
+            label: strings.PLANTING_SITES,
+            layerId: 'sites',
+            style: {
+              borderColor: theme.palette.TwClrBaseGreen300,
+              fillColor: theme.palette.TwClrBaseGreen300,
+              opacity: 0.2,
+              type: 'fill',
+            },
+          },
+        ],
+        sectionTitle: strings.BOUNDARIES,
         type: 'layer',
       },
     ];
-  }, [markerGroups, siteLayer, strings]);
+  }, [markerGroups, siteFeatures, strings, theme]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -130,6 +131,7 @@ export default function MapSplitView({
         drawerSize='large'
         features={mapFeatures}
         hideLegend
+        initialSelectedLayerId='sites'
         mapId={mapId}
         token={token ?? ''}
       />

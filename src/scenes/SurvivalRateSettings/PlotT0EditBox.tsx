@@ -143,7 +143,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
               ...plotToSave,
               densityData: [
                 ...plotToSave.densityData,
-                { density: 0, plotDensity: Number(value), speciesId: Number(id) },
+                { density: Number(value), plotDensity: Number(value), speciesId: Number(id) },
               ],
             };
           }

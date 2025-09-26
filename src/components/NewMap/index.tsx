@@ -262,35 +262,61 @@ const MapComponent = (props: MapComponentProps) => {
     setDrawerOpen?.(false);
   }, [setDrawerOpen]);
 
+  const map = useMemo(() => {
+    return (
+      <MapBox
+        clusterRadius={clusterRadius}
+        containerId={mapContainerId ?? 'map-container'}
+        controlBottomLeft={controlBottomLeft}
+        controlTopRight={controlTopRight}
+        cursorInteract={cursorInteract}
+        cursorMap={cursorMap}
+        disableDoubleClickZoom={disableDoubleClickZoom}
+        disableZoom={disableZoom}
+        drawerOpen={drawerOpen}
+        hideFullScreenControl={hideFullScreenControl}
+        hideMapViewStyleControl={hideMapViewStyleControl}
+        hideZoomControl={hideZoomControl}
+        highlightGroups={highlightGroups}
+        initialViewState={mapViewState}
+        layers={layers}
+        mapId={mapId ?? 'mapId'}
+        mapImageUrls={mapImageUrls}
+        mapViewStyle={mapViewStyle}
+        markerGroups={markerGroups}
+        onClickCanvas={onClickCanvas}
+        setMapViewStyle={setMapViewStyle}
+        token={token}
+      />
+    );
+  }, [
+    clusterRadius,
+    controlBottomLeft,
+    controlTopRight,
+    cursorInteract,
+    cursorMap,
+    disableDoubleClickZoom,
+    disableZoom,
+    drawerOpen,
+    hideFullScreenControl,
+    hideMapViewStyleControl,
+    hideZoomControl,
+    highlightGroups,
+    layers,
+    mapContainerId,
+    mapId,
+    mapImageUrls,
+    mapViewState,
+    mapViewStyle,
+    markerGroups,
+    onClickCanvas,
+    token,
+  ]);
+
   return (
     <MapContainer
       containerId={mapContainerId ?? 'map-container'}
-      map={
-        <MapBox
-          clusterRadius={clusterRadius}
-          containerId={mapContainerId ?? 'map-container'}
-          controlBottomLeft={controlBottomLeft}
-          controlTopRight={controlTopRight}
-          cursorInteract={cursorInteract}
-          cursorMap={cursorMap}
-          disableDoubleClickZoom={disableDoubleClickZoom}
-          disableZoom={disableZoom}
-          drawerOpen={drawerOpen}
-          hideFullScreenControl={hideFullScreenControl}
-          hideMapViewStyleControl={hideMapViewStyleControl}
-          hideZoomControl={hideZoomControl}
-          highlightGroups={highlightGroups}
-          initialViewState={mapViewState}
-          layers={layers}
-          mapId={mapId ?? 'mapId'}
-          mapImageUrls={mapImageUrls}
-          mapViewStyle={mapViewStyle}
-          markerGroups={markerGroups}
-          onClickCanvas={onClickCanvas}
-          setMapViewStyle={setMapViewStyle}
-          token={token}
-        />
-      }
+      map={map}
       drawer={
         <MapDrawer
           hideCloseButton={drawerHideCloseButton}
