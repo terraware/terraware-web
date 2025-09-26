@@ -9,7 +9,7 @@ import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdr
 import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import { PlotT0Data, SiteT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
 
 type AddedSpecies = { id: string; speciesId?: number; density: string };
 
@@ -17,8 +17,8 @@ type PlotT0EditBoxProps = {
   plot: PlotsWithObservationsSearchResult;
   plantingSiteId: number;
   t0Plot?: PlotT0Data;
-  record: SiteT0Data;
-  setRecord: React.Dispatch<React.SetStateAction<SiteT0Data>>;
+  record: AssignSiteT0Data;
+  setRecord: React.Dispatch<React.SetStateAction<AssignSiteT0Data>>;
   withdrawnSpeciesPlot?: SpeciesPlot;
 };
 
@@ -141,7 +141,10 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
           } else {
             plotCopy = {
               ...plotToSave,
-              densityData: [...plotToSave.densityData, { plotDensity: Number(value), speciesId: Number(id) }],
+              densityData: [
+                ...plotToSave.densityData,
+                { density: 0, plotDensity: Number(value), speciesId: Number(id) },
+              ],
             };
           }
         } else {

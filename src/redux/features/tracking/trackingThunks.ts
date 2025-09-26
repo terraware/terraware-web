@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import { TrackingService } from 'src/services';
 import strings from 'src/strings';
-import { PlantingSiteSearchResult, SiteT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import {
   setPlantingSiteAction,
@@ -212,7 +212,7 @@ export const requestPermanentPlotsWithObservations = createAsyncThunk(
 
 export const requestAssignT0SiteData = createAsyncThunk(
   'assignT0SiteData',
-  async (request: SiteT0Data, { rejectWithValue }) => {
+  async (request: AssignSiteT0Data, { rejectWithValue }) => {
     const response = await TrackingService.assignT0SiteData(request);
 
     if (response && response.requestSucceeded) {
