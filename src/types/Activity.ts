@@ -35,6 +35,25 @@ export const ACTIVITY_TYPES: ActivityType[] = [
   'Stakeholder Engagement',
 ];
 
+export const activityTypeColor = (type: ActivityType) => {
+  switch (type) {
+    case 'Seed Collection':
+      return '#41C07F';
+    case 'Nursery':
+      return '#0072B2';
+    case 'Planting':
+      return '#CC79A7';
+    case 'Monitoring':
+      return '#F0E441';
+    case 'Site Visit':
+      return '#E79F00';
+    case 'Stakeholder Engagement':
+      return '#57B4E9';
+    case 'Drone Flight':
+      return '#D55E00';
+  }
+};
+
 export const activityTypeLabel = (activityType: ActivityType, strings: typeof defaultStrings) => {
   switch (activityType) {
     case 'Drone Flight':
