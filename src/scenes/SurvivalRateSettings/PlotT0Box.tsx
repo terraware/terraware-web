@@ -6,6 +6,7 @@ import { IconTooltip } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { PlotT0Data } from 'src/types/Tracking';
@@ -14,9 +15,10 @@ type PlotT0BoxProps = {
   plot: PlotsWithObservationsSearchResult;
   plantingSiteId: number;
   t0Plot?: PlotT0Data;
+  withdrawnSpeciesPlot?: SpeciesPlot;
 };
 
-const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
+const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
 
@@ -24,6 +26,14 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
     const total = t0Plot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
     return total;
   }, [t0Plot]);
+
+  const someWithdrawnSpeciesMissing = useMemo(() => {
+    return withdrawnSpeciesPlot?.species.some((withdrawnSp) => {
+      if (!t0Plot?.densityData.find((dd) => dd.speciesId.toString() === withdrawnSp.speciesId.toString())) {
+        return true;
+      }
+    });
+  }, [t0Plot, withdrawnSpeciesPlot]);
 
   return (
     <>
@@ -38,7 +48,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot }: PlotT0BoxProps) => {
           <Typography>{plot.name}</Typography>
         </Box>
         <Box flexGrow={1} display={'flex'} alignItems={'center'}>
-          {t0Plot ? (
+          {t0Plot && !someWithdrawnSpeciesMissing ? (
             <Box>
               <Box display='flex' paddingBottom={3}>
                 <Typography color={theme.palette.TwClrTxtSuccess} fontWeight={500} paddingRight={2}>
