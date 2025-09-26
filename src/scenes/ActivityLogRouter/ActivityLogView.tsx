@@ -10,16 +10,25 @@ import Card from 'src/components/common/Card';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipants } from 'src/hooks/useParticipants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
 export default function ActivityLogView(): JSX.Element {
   const { activeLocale, strings } = useLocalization();
+  const { selectedOrganization } = useOrganization();
+  const { isAllowed } = useUser();
   const theme = useTheme();
   const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
   const { availableParticipants } = useParticipants();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+
+  const organization = useMemo(
+    () => (isAcceleratorRoute ? undefined : selectedOrganization),
+    [isAcceleratorRoute, selectedOrganization]
+  );
+
+  const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES', { organization });
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
@@ -75,16 +84,17 @@ export default function ActivityLogView(): JSX.Element {
   );
 
   const PageHeaderRightComponent = useMemo(
-    () => (
-      <Button
-        disabled={!projectFilter.projectId}
-        icon='plus'
-        label={strings.ADD_ACTIVITY}
-        onClick={goToProjectActivityCreate}
-        size='medium'
-      />
-    ),
-    [goToProjectActivityCreate, projectFilter.projectId, strings]
+    () =>
+      isAllowedCreateActivities ? (
+        <Button
+          disabled={!projectId}
+          icon='plus'
+          label={strings.ADD_ACTIVITY}
+          onClick={goToProjectActivityCreate}
+          size='medium'
+        />
+      ) : null,
+    [goToProjectActivityCreate, isAllowedCreateActivities, projectId, strings.ADD_ACTIVITY]
   );
 
   return (

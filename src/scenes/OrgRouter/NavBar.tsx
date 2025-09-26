@@ -264,7 +264,10 @@ export default function NavBar({
 
   const activityLogMenu = useMemo<JSX.Element | null>(
     () =>
-      isActivityLogEnabled && currentParticipantProject && isManagerOrHigher(selectedOrganization) && activeLocale ? (
+      isActivityLogEnabled &&
+      isAllowed('READ_ACTIVITIES', { organization: selectedOrganization }) &&
+      currentParticipantProject &&
+      activeLocale ? (
         <NavItem
           icon='checklist'
           id='activity-log'
@@ -281,6 +284,7 @@ export default function NavBar({
       currentParticipantProject,
       isActivityLogEnabled,
       isActivityLogRoute,
+      isAllowed,
       selectedOrganization,
     ]
   );

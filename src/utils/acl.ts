@@ -28,6 +28,12 @@ type PermissionAcceleratorReports =
   | 'REVIEW_REPORTS_TARGETS'
   | 'UPDATE_REPORTS_SETTINGS'
   | 'UPDATE_REPORTS_TARGETS';
+type PermissionActivities =
+  | 'CREATE_ACTIVITIES'
+  | 'DELETE_ACTIVITIES_NON_PUBLISHED'
+  | 'DELETE_ACTIVITIES_PUBLISHED'
+  | 'EDIT_ACTIVITIES'
+  | 'READ_ACTIVITIES';
 type PermissionApplication =
   | 'READ_ALL_APPLICATIONS'
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
@@ -61,6 +67,7 @@ type PermissionParticipantProject =
 
 export type GlobalRolePermission =
   | PermissionAcceleratorReports
+  | PermissionActivities
   | PermissionApplication
   | PermissionCohort
   | PermissionConsole
@@ -84,6 +91,8 @@ const ReadOnlyPlus: UserGlobalRoles = [...TFExpertPlus, GLOBAL_ROLE_READ_ONLY];
 const isSuperAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_SUPER_ADMIN);
 const isAcceleratorAdmin = (user: User): boolean =>
   isSuperAdmin(user) || user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
+const isTFExpertOrHigher = (user: User): boolean =>
+  isAcceleratorAdmin(user) || user.globalRoles.includes(GLOBAL_ROLE_TF_EXPERT);
 const isReadOnlyOrHigher = (user: User): boolean => ReadOnlyPlus.some((role) => user.globalRoles.includes(role));
 
 /**
@@ -190,6 +199,58 @@ const isAllowedManageFundingEntities: PermissionCheckFn = (user: User): boolean 
 };
 
 /**
+ * Function related to reading activities, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type ReadActivitiesMetadata = { organization: Organization };
+const isAllowedReadActivities: PermissionCheckFn<ReadActivitiesMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: ReadActivitiesMetadata
+): boolean => {
+  return isReadOnlyOrHigher(user) || isAdmin(metadata?.organization);
+};
+
+/**
+ * Function related to creating activities, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type CreateActivitiesMetadata = { organization: Organization };
+const isAllowedCreateActivities: PermissionCheckFn<CreateActivitiesMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: CreateActivitiesMetadata
+): boolean => {
+  return isTFExpertOrHigher(user) || isAdmin(metadata?.organization);
+};
+
+/**
+ * Function related to editing activities, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type EditActivitiesMetadata = { organization: Organization };
+const isAllowedEditActivities: PermissionCheckFn<EditActivitiesMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: EditActivitiesMetadata
+): boolean => {
+  return isTFExpertOrHigher(user) || isAdmin(metadata?.organization);
+};
+
+/**
+ * Function related to deleting activities, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type DeleteNonPublishedActivitiesMetadata = { organization: Organization };
+const isAllowedDeleteNonPublishedActivities: PermissionCheckFn<DeleteNonPublishedActivitiesMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: DeleteNonPublishedActivitiesMetadata
+): boolean => {
+  return isTFExpertOrHigher(user) || isAdmin(metadata?.organization);
+};
+
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -198,12 +259,16 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   ASSIGN_PARTICIPANT_TO_COHORT: TFExpertPlus,
   ASSIGN_PROJECT_TO_PARTICIPANT: TFExpertPlus,
   ASSIGN_SOME_GLOBAL_ROLES: isAllowedAssignSomeGlobalRoles,
+  CREATE_ACTIVITIES: isAllowedCreateActivities,
   CREATE_COHORTS: AcceleratorAdminPlus,
   CREATE_DOCUMENTS: TFExpertPlus,
   CREATE_PARTICIPANTS: AcceleratorAdminPlus,
   CREATE_SUBMISSION: isAllowedCreateSubmission,
+  DELETE_ACTIVITIES_NON_PUBLISHED: isAllowedDeleteNonPublishedActivities,
+  DELETE_ACTIVITIES_PUBLISHED: AcceleratorAdminPlus,
   DELETE_COHORTS: AcceleratorAdminPlus,
   DELETE_PARTICIPANTS: AcceleratorAdminPlus,
+  EDIT_ACTIVITIES: isAllowedEditActivities,
   EDIT_REPORTS: AcceleratorAdminPlus,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
@@ -211,6 +276,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   MANAGE_FUNDING_ENTITIES: isAllowedManageFundingEntities,
   PUBLISH_PROJECT_DETAILS: AcceleratorAdminPlus,
   PUBLISH_REPORTS: AcceleratorAdminPlus,
+  READ_ACTIVITIES: isAllowedReadActivities,
   READ_ALL_APPLICATIONS: ReadOnlyPlus,
   READ_COHORTS: TFExpertPlus,
   READ_DELIVERABLE: isAllowedReadDeliverable,

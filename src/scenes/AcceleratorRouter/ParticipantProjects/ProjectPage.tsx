@@ -45,6 +45,7 @@ const ProjectPage = () => {
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
+  const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
   const isActivityLogEnabled = isEnabled('Activity Log');
 
   const projectApplication = useMemo(
@@ -181,7 +182,7 @@ const ProjectPage = () => {
             </>
           )}
 
-          {activeTab === 'activityLog' && (
+          {activeTab === 'activityLog' && isAllowedCreateActivities && (
             <Button
               icon='plus'
               id='addActivity'
@@ -212,6 +213,7 @@ const ProjectPage = () => {
       goToDocumentNew,
       goToProjectActivityCreate,
       goToProjectEdit,
+      isAllowedCreateActivities,
       isAllowedEdit,
       isAllowedPublish,
       onOptionItemClick,
