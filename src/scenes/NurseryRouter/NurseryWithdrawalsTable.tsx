@@ -68,7 +68,7 @@ export default function NurseryWithdrawalsTable({
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'withdrawnDate',
     direction: 'Descending',
   } as SearchSortOrder);
@@ -302,11 +302,19 @@ export default function NurseryWithdrawalsTable({
   const onSortChange = useCallback(
     (order: SortOrder, orderBy: string) => {
       const orderByStr =
-        orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
-      setSearchSortOrder({
-        field: orderByStr,
-        direction: order === 'asc' ? 'Ascending' : 'Descending',
-      });
+        orderBy === 'speciesScientificNames'
+          ? 'batchWithdrawals.batch_species_scientificName'
+          : orderBy === 'project_names'
+            ? null
+            : orderBy;
+      setSearchSortOrder(
+        orderByStr
+          ? {
+              field: orderByStr,
+              direction: order === 'asc' ? 'Ascending' : 'Descending',
+            }
+          : undefined
+      );
     },
     [setSearchSortOrder]
   );
@@ -330,9 +338,11 @@ export default function NurseryWithdrawalsTable({
           columns={columns}
           rows={rows || []}
           Renderer={WithdrawalLogRenderer}
-          orderBy={searchSortOrder.field}
-          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-          isPresorted={searchSortOrder.field !== 'batchWithdrawals.batch_species_scientificName'}
+          orderBy={searchSortOrder?.field || 'project_names'}
+          order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
+          isPresorted={
+            searchSortOrder !== undefined && searchSortOrder.field !== 'batchWithdrawals.batch_species_scientificName'
+          }
           onSelect={onWithdrawalClicked}
           controlledOnSelect={true}
           sortHandler={onSortChange}
