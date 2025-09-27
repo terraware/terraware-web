@@ -44,3 +44,6 @@ export const selectPermanentPlotsWithObservations = (requestId: string) => (stat
   state.plotsWithObservations[requestId];
 
 export const selectAssignT0SiteData = (requestId: string) => (state: RootState) => state.assignT0SiteData[requestId];
+
+export const selectProjectPlantingSiteList = (requestId: string) => (state: RootState) =>
+  state.projectPlantingSites[requestId];

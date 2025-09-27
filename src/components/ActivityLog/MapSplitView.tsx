@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
-import { MapMarker, MapMarkerGroup } from 'src/components/NewMap/types';
+import { MapLayerFeature, MapMarker, MapMarkerGroup } from 'src/components/NewMap/types';
+import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
+import { useLocalization } from 'src/providers';
 import { Activity, activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -11,6 +13,7 @@ type MapSplitViewProps = {
   activities?: Activity[];
   children: React.ReactNode;
   focusedActivityId?: number;
+  projectId: number;
   setFocusedActivityId?: (id: number | undefined) => void;
   topComponent?: React.ReactNode;
 };
@@ -19,10 +22,13 @@ export default function MapSplitView({
   activities,
   children,
   focusedActivityId,
+  projectId,
   setFocusedActivityId,
   topComponent,
 }: MapSplitViewProps): JSX.Element {
+  const theme = useTheme();
   const { token, mapId } = useMapboxToken();
+  const { strings } = useLocalization();
 
   const onActivityMarkerClick = useCallback(
     (id: number) => () => {
@@ -34,6 +40,23 @@ export default function MapSplitView({
     },
     [focusedActivityId, setFocusedActivityId]
   );
+
+  const { plantingSites } = useProjectPlantingSites(projectId);
+
+  const siteFeatures = useMemo((): MapLayerFeature[] => {
+    return (
+      plantingSites?.map(
+        (site): MapLayerFeature => ({
+          featureId: `${site.id}`,
+          label: site.name,
+          geometry: {
+            type: 'MultiPolygon',
+            coordinates: site.boundary?.coordinates ?? [],
+          },
+        })
+      ) ?? []
+    );
+  }, [plantingSites]);
 
   const markerGroups = useMemo((): MapMarkerGroup[] => {
     if (!activities) {
@@ -73,12 +96,29 @@ export default function MapSplitView({
   const mapFeatures = useMemo((): MapFeatureSection[] => {
     return [
       {
-        sectionTitle: '',
+        sectionTitle: strings.PHOTOS,
         groups: markerGroups,
         type: 'marker',
       },
+      {
+        layers: [
+          {
+            features: siteFeatures,
+            label: strings.PLANTING_SITES,
+            layerId: 'sites',
+            style: {
+              borderColor: theme.palette.TwClrBaseGreen300,
+              fillColor: theme.palette.TwClrBaseGreen300,
+              opacity: 0.2,
+              type: 'fill',
+            },
+          },
+        ],
+        sectionTitle: strings.BOUNDARIES,
+        type: 'layer',
+      },
     ];
-  }, [markerGroups]);
+  }, [markerGroups, siteFeatures, strings, theme]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -90,6 +130,8 @@ export default function MapSplitView({
         drawerOpen
         drawerSize='large'
         features={mapFeatures}
+        hideLegend
+        initialSelectedLayerId='sites'
         mapId={mapId}
         token={token ?? ''}
       />

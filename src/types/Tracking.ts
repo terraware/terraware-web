@@ -95,4 +95,5 @@ export type PlantingSiteHistory = components['schemas']['PlantingSiteHistoryPayl
 export type PlantingZoneHistory = components['schemas']['PlantingZoneHistoryPayload'];
 
 export type PlotT0Data = components['schemas']['PlotT0DataPayload'];
-export type SiteT0Data = components['schemas']['SiteT0DataPayload'];
+export type SiteT0Data = components['schemas']['SiteT0DataResponsePayload'];
+export type AssignSiteT0Data = components['schemas']['AssignSiteT0DataRequestPayload'];

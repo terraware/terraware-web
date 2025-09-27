@@ -27,7 +27,7 @@ import {
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { PlotT0Data, SiteT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -89,7 +89,7 @@ const EditSurvivalRateSettings = () => {
     }
   }, [plantingSiteT0Response]);
 
-  const [record, setRecord] = useForm<SiteT0Data>({
+  const [record, setRecord] = useForm<AssignSiteT0Data>({
     plantingSiteId,
     plots: t0Plots ?? [],
   });

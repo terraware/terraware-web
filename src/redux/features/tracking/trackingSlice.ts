@@ -17,6 +17,7 @@ import {
   requestGetPlantingSiteHistory,
   requestListPlantingSiteHistories,
   requestListPlantingSites,
+  requestListProjectPlantingSites,
   requestOnePlantingSite,
   requestOrganizationReportedPlants,
   requestPermanentPlotsWithObservations,
@@ -166,6 +167,15 @@ export const plantingSiteListSlice = createSlice({
   },
 });
 
+export const projectPlantingSiteListSlice = createSlice({
+  name: 'projectPlantingSiteListSlice',
+  initialState: initialStatePlantingSiteList,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListProjectPlantingSites)(builder);
+  },
+});
+
 const initialStatePlantingSite: { [key: string]: StatusT<PlantingSite> } = {};
 export const plantingSiteSlice = createSlice({
   name: 'plantingSiteSlice',
@@ -267,6 +277,7 @@ const trackingReducers = {
   plantingSiteT0: plantingSiteT0Slice.reducer,
   plotsWithObservations: plotsWithObservations.reducer,
   assignT0SiteData: assignT0SiteData.reducer,
+  projectPlantingSites: projectPlantingSiteListSlice.reducer,
 };
 
 export default trackingReducers;

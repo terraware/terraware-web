@@ -219,7 +219,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       );
     });
 
-    const _fillLayers = featureGroups?.map((group) => {
+    const _fillLayers = featureGroups?.flatMap((group) => {
       const opacity = Math.min(0.4, group.style.opacity ?? 0.2);
       const selectedOpacity = opacity * 2;
       const hoverOpacity = opacity * 1.5;
@@ -235,96 +235,94 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       const hoverFilter: FilterSpecification = ['==', ['get', 'id'], hoverFeatureId ?? null];
       const notHoverFilter: FilterSpecification = ['!=', ['get', 'id'], hoverFeatureId ?? null];
 
-      return (
-        <>
-          {/* Base fill. This layer is clickable */}
-          <Layer
-            key={group.layerId}
-            id={group.layerId}
-            source={'mapData'}
-            type={'fill'}
-            paint={{ 'fill-opacity': 0 }}
-            filter={['all', groupFilter, clickableFilter]}
-          />
-          {/* Fill for base layer */}
-          <Layer
-            key={`${group.layerId}-unselected`}
-            id={`${group.layerId}-unselected`}
-            source={'mapData'}
-            type={'fill'}
-            paint={
-              group.style.fillPatternUrl
-                ? {
-                    'fill-pattern': group.style.fillPatternUrl,
-                    'fill-opacity': opacity,
-                  }
-                : {
-                    'fill-color': group.style.fillColor,
-                    'fill-opacity': opacity,
-                  }
-            }
-            filter={['all', groupFilter, notSelectedFilter, notHoverFilter]}
-          />
-          {/* Fill for seleced layer */}
-          <Layer
-            key={`${group.layerId}-selected`}
-            id={`${group.layerId}-selected`}
-            slot={'bottom'}
-            source={'mapData'}
-            type={'fill'}
-            paint={
-              group.style.fillPatternUrl
-                ? {
-                    'fill-pattern': group.style.fillPatternUrl,
-                    'fill-opacity': selectedOpacity,
-                  }
-                : {
-                    'fill-color': group.style.fillColor,
-                    'fill-opacity': selectedOpacity,
-                  }
-            }
-            filter={['all', groupFilter, selectedFilter, notHoverFilter]}
-          />
-          {/* Fill for hover layer */}
-          <Layer
-            key={`${group.layerId}-hover`}
-            id={`${group.layerId}-hover`}
-            source={'mapData'}
-            type={'fill'}
-            paint={
-              group.style.fillPatternUrl
-                ? {
-                    'fill-pattern': group.style.fillPatternUrl,
-                    'fill-opacity': hoverOpacity,
-                  }
-                : {
-                    'fill-color': group.style.fillColor,
-                    'fill-opacity': hoverOpacity,
-                  }
-            }
-            filter={['all', groupFilter, hoverFilter, notSelectedFilter]}
-          />
-          {/* Fill for hover and selected layer */}
-          <Layer
-            key={`${group.layerId}-selected-hover`}
-            id={`${group.layerId}-selected-hover`}
-            source={'mapData'}
-            type={'fill'}
-            paint={
-              group.style.fillPatternUrl
-                ? {
-                    'fill-pattern': group.style.fillPatternUrl,
-                    'fill-opacity': hoverAndSelectedOpacity,
-                  }
-                : {
-                    'fill-color': group.style.fillColor,
-                    'fill-opacity': hoverAndSelectedOpacity,
-                  }
-            }
-            filter={['all', groupFilter, hoverFilter, selectedFilter]}
-          />
-        </>
-      );
+      return [
+        /* Base fill. This layer is clickable */
+        <Layer
+          key={group.layerId}
+          id={group.layerId}
+          source={'mapData'}
+          type={'fill'}
+          paint={{ 'fill-opacity': 0 }}
+          filter={['all', groupFilter, clickableFilter]}
+        />,
+        /* Fill for base layer */
+        <Layer
+          key={`${group.layerId}-unselected`}
+          id={`${group.layerId}-unselected`}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': opacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': opacity,
+                }
+          }
+          filter={['all', groupFilter, notSelectedFilter, notHoverFilter]}
+        />,
+        /* Fill for seleced layer */
+        <Layer
+          key={`${group.layerId}-selected`}
+          id={`${group.layerId}-selected`}
+          slot={'bottom'}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': selectedOpacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': selectedOpacity,
+                }
+          }
+          filter={['all', groupFilter, selectedFilter, notHoverFilter]}
+        />,
+        /* Fill for hover layer */
+        <Layer
+          key={`${group.layerId}-hover`}
+          id={`${group.layerId}-hover`}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': hoverOpacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': hoverOpacity,
+                }
+          }
+          filter={['all', groupFilter, hoverFilter, notSelectedFilter]}
+        />,
+        /* Fill for hover and selected layer */
+        <Layer
+          key={`${group.layerId}-selected-hover`}
+          id={`${group.layerId}-selected-hover`}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': hoverAndSelectedOpacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': hoverAndSelectedOpacity,
+                }
+          }
+          filter={['all', groupFilter, hoverFilter, selectedFilter]}
+        />,
+      ];
     });
 
     const _textLayers = featureGroups?.map((group) => {
