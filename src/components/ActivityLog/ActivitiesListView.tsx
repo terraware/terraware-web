@@ -7,6 +7,7 @@ import { useLocalization } from 'src/providers';
 import { requestAdminListActivities, requestListActivities } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { Activity } from 'src/types/Activity';
 import { SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -33,6 +34,15 @@ const ActivityListItem = ({ activity, focused }: ActivityListItemProps) => {
     );
   }, [activity.modifiedTime, activity.createdTime]);
 
+  const coverPhotoURL = useMemo(() => {
+    return coverPhoto
+      ? ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+          '{fileId}',
+          coverPhoto.fileId.toString()
+        )
+      : '/assets/activity-media.svg';
+  }, [activity.id, coverPhoto]);
+
   return (
     <Grid
       container
@@ -45,12 +55,16 @@ const ActivityListItem = ({ activity, focused }: ActivityListItemProps) => {
       }}
     >
       <Grid item paddingRight={theme.spacing(2)} xs='auto'>
-        {/* TODO: add image src & alt text */}
-        {coverPhoto ? (
-          <img alt={coverPhoto.caption} src='https://placehold.co/100' />
-        ) : (
-          <img alt='' src='https://placehold.co/100' />
-        )}
+        <img
+          alt={coverPhoto?.caption}
+          height='100'
+          src={coverPhotoURL}
+          style={{
+            backgroundColor: theme.palette.TwClrBgSecondary,
+            objectFit: 'cover',
+          }}
+          width='100'
+        />
       </Grid>
 
       <Grid item xs={true}>
