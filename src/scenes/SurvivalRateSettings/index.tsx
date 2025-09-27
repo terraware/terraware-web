@@ -9,6 +9,11 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { selectPlantingSiteWithdrawnSpecies } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
+import {
+  SpeciesPlot,
+  requestPlantingSiteWithdrawnSpecies,
+} from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import {
   selectPermanentPlotsWithObservations,
   selectPlantingSiteT0,
@@ -32,6 +37,9 @@ const SurvivalRateSettings = () => {
   const [plotsRequestId, setPlotsRequestId] = useState('');
   const plotsWithObservationsResponse = useAppSelector(selectPermanentPlotsWithObservations(plotsRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
+  const [speciesRequestId, setSpeciesRequestId] = useState('');
+  const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
+  const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
   const dispatch = useAppDispatch();
   const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
   const navigate = useSyncNavigate();
@@ -51,6 +59,8 @@ const SurvivalRateSettings = () => {
       setRequestId(request.requestId);
       const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSite.id));
       setPlotsRequestId(requestPlots.requestId);
+      const requestSpeciesPlots = dispatch(requestPlantingSiteWithdrawnSpecies(plantingSite.id));
+      setSpeciesRequestId(requestSpeciesPlots.requestId);
     }
   }, [dispatch, plantingSite]);
 
@@ -65,6 +75,12 @@ const SurvivalRateSettings = () => {
       setPlotsWithObservations(plotsWithObservationsResponse.data);
     }
   }, [plotsWithObservationsResponse]);
+
+  useEffect(() => {
+    if (withdrawnSpeciesResponse?.status === 'success') {
+      setWithdrawnSpeciesPlots(withdrawnSpeciesResponse.data);
+    }
+  }, [withdrawnSpeciesResponse]);
 
   const goToEditSurvivalRateSettings = useCallback(() => {
     navigate({ pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()) });
@@ -98,6 +114,9 @@ const SurvivalRateSettings = () => {
               key={plot.id}
               plantingSiteId={plantingSiteId}
               t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId.toString() === plot.id.toString())}
+              withdrawnSpeciesPlot={withdrawnSpeciesPlots?.find(
+                (spPlot) => spPlot.monitoringPlotId.toString() === plot.id.toString()
+              )}
             />
           ))}
       </Card>

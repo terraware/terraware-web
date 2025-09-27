@@ -357,6 +357,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                             }
                             onChange={onChangeDensity}
                             label={''}
+                            min={0}
                           />
                         </td>
                         <td>
@@ -403,6 +404,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                               value={row.density}
                               onChange={handleNewSpeciesDensityChange(row.id)}
                               label={''}
+                              min={0}
                             />
                           </td>
                           <td>
