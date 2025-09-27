@@ -114,7 +114,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         />
       }
 
-      {isActivityLogEnabled && (
+      {isActivityLogEnabled && isAllowed('READ_ACTIVITIES') && (
         <NavItem
           icon='checklist'
           id='activity-log'
