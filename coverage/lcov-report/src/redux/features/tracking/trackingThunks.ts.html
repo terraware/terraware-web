@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
@@ -275,7 +275,19 @@
 <a name='L210'></a><a href='#L210'>210</a>
 <a name='L211'></a><a href='#L211'>211</a>
 <a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -436,6 +448,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -494,7 +518,7 @@ import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import { TrackingService } from 'src/services';
 import strings from 'src/strings';
-import { PlantingSiteSearchResult, SiteT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, PlantingSiteSearchResult } from 'src/types/Tracking';
 &nbsp;
 import {
   setPlantingSiteAction,
@@ -643,13 +667,25 @@ export const requestListPlantingSiteHistories = <span class="cstat-no" title="st
 export const requestListPlantingSites = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'tracking/plantingSites',
 <span class="fstat-no" title="function not covered" >  as</span>ync (organizationId: number, { rejectWithValue }) =&gt; {
-    const response = <span class="cstat-no" title="statement not covered" >await TrackingService.listPlantingSites(organizationId, true);</span>
+    const response = <span class="cstat-no" title="statement not covered" >await TrackingService.listPlantingSites({ organizationId, full: true });</span>
 <span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded &amp;&amp; response?.data?.sites !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      return response.data.sites;</span>
     }
 <span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
   }
 );
+&nbsp;
+export const requestListProjectPlantingSites = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
+  'tracking/projectPlantingSites',
+<span class="fstat-no" title="function not covered" >  as</span>ync (projectId: number, { rejectWithValue }) =&gt; {
+    const response = <span class="cstat-no" title="statement not covered" >await TrackingService.listPlantingSites({ projectId, full: false });</span>
+<span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded &amp;&amp; response?.data?.sites !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >      return response.data.sites;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
+  }
+);
+&nbsp;
 export const requestOrganizationReportedPlants = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'tracking/organizationReportedPlants',
 <span class="fstat-no" title="function not covered" >  as</span>ync (organizationId: number, { rejectWithValue }) =&gt; {
@@ -689,7 +725,7 @@ export const requestPermanentPlotsWithObservations = <span class="cstat-no" titl
 &nbsp;
 export const requestAssignT0SiteData = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'assignT0SiteData',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: SiteT0Data, { rejectWithValue }) =&gt; {
+<span class="fstat-no" title="function not covered" >  as</span>ync (request: AssignSiteT0Data, { rejectWithValue }) =&gt; {
     const response = <span class="cstat-no" title="statement not covered" >await TrackingService.assignT0SiteData(request);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
@@ -706,7 +742,7 @@ export const requestAssignT0SiteData = <span class="cstat-no" title="statement n
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-26T23:50:14.453Z
+                at 2025-09-27T01:25:04.391Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

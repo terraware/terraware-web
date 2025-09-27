@@ -718,9 +718,7 @@
 <a name='L653'></a><a href='#L653'>653</a>
 <a name='L654'></a><a href='#L654'>654</a>
 <a name='L655'></a><a href='#L655'>655</a>
-<a name='L656'></a><a href='#L656'>656</a>
-<a name='L657'></a><a href='#L657'>657</a>
-<a name='L658'></a><a href='#L658'>658</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L656'></a><a href='#L656'>656</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -958,8 +956,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1598,7 +1594,7 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
       );
     });
 &nbsp;
-    const _fillLayers = <span class="cstat-no" title="statement not covered" >featureGroups?.map(<span class="fstat-no" title="function not covered" >(g</span>roup) =&gt; {</span>
+    const _fillLayers = <span class="cstat-no" title="statement not covered" >featureGroups?.flatMap(<span class="fstat-no" title="function not covered" >(g</span>roup) =&gt; {</span>
       const opacity = <span class="cstat-no" title="statement not covered" >Math.min(0.4, group.style.opacity ?? 0.2);</span>
       const selectedOpacity = <span class="cstat-no" title="statement not covered" >opacity * 2;</span>
       const hoverOpacity = <span class="cstat-no" title="statement not covered" >opacity * 1.5;</span>
@@ -1614,96 +1610,94 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
       const hoverFilter: FilterSpecification = <span class="cstat-no" title="statement not covered" >['==', ['get', 'id'], hoverFeatureId ?? null];</span>
       const notHoverFilter: FilterSpecification = <span class="cstat-no" title="statement not covered" >['!=', ['get', 'id'], hoverFeatureId ?? null];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;&gt;
-          {/* Base fill. This layer is clickable */}
-          &lt;Layer
-            key={group.layerId}
-            id={group.layerId}
-            source={'mapData'}
-            type={'fill'}
-            paint={{ 'fill-opacity': 0 }}
-            filter={['all', groupFilter, clickableFilter]}
-          /&gt;
-          {/* Fill for base layer */}
-          &lt;Layer
-            key={`${group.layerId}-unselected`}
-            id={`${group.layerId}-unselected`}
-            source={'mapData'}
-            type={'fill'}
-            paint={
-              group.style.fillPatternUrl
-                ? {
-                    'fill-pattern': group.style.fillPatternUrl,
-                    'fill-opacity': opacity,
-                  }
-                : {
-                    'fill-color': group.style.fillColor,
-                    'fill-opacity': opacity,
-                  }
-            }
-            filter={['all', groupFilter, notSelectedFilter, notHoverFilter]}
-          /&gt;
-          {/* Fill for seleced layer */}
-          &lt;Layer
-            key={`${group.layerId}-selected`}
-            id={`${group.layerId}-selected`}
-            slot={'bottom'}
-            source={'mapData'}
-            type={'fill'}
-            paint={
-              group.style.fillPatternUrl
-                ? {
-                    'fill-pattern': group.style.fillPatternUrl,
-                    'fill-opacity': selectedOpacity,
-                  }
-                : {
-                    'fill-color': group.style.fillColor,
-                    'fill-opacity': selectedOpacity,
-                  }
-            }
-            filter={['all', groupFilter, selectedFilter, notHoverFilter]}
-          /&gt;
-          {/* Fill for hover layer */}
-          &lt;Layer
-            key={`${group.layerId}-hover`}
-            id={`${group.layerId}-hover`}
-            source={'mapData'}
-            type={'fill'}
-            paint={
-              group.style.fillPatternUrl
-                ? {
-                    'fill-pattern': group.style.fillPatternUrl,
-                    'fill-opacity': hoverOpacity,
-                  }
-                : {
-                    'fill-color': group.style.fillColor,
-                    'fill-opacity': hoverOpacity,
-                  }
-            }
-            filter={['all', groupFilter, hoverFilter, notSelectedFilter]}
-          /&gt;
-          {/* Fill for hover and selected layer */}
-          &lt;Layer
-            key={`${group.layerId}-selected-hover`}
-            id={`${group.layerId}-selected-hover`}
-            source={'mapData'}
-            type={'fill'}
-            paint={
-              group.style.fillPatternUrl
-                ? {
-                    'fill-pattern': group.style.fillPatternUrl,
-                    'fill-opacity': hoverAndSelectedOpacity,
-                  }
-                : {
-                    'fill-color': group.style.fillColor,
-                    'fill-opacity': hoverAndSelectedOpacity,
-                  }
-            }
-            filter={['all', groupFilter, hoverFilter, selectedFilter]}
-          /&gt;
-        &lt;/&gt;
-      );
+<span class="cstat-no" title="statement not covered" >      return [</span>
+        /* Base fill. This layer is clickable */
+        &lt;Layer
+          key={group.layerId}
+          id={group.layerId}
+          source={'mapData'}
+          type={'fill'}
+          paint={{ 'fill-opacity': 0 }}
+          filter={['all', groupFilter, clickableFilter]}
+        /&gt;,
+        /* Fill for base layer */
+        &lt;Layer
+          key={`${group.layerId}-unselected`}
+          id={`${group.layerId}-unselected`}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': opacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': opacity,
+                }
+          }
+          filter={['all', groupFilter, notSelectedFilter, notHoverFilter]}
+        /&gt;,
+        /* Fill for seleced layer */
+        &lt;Layer
+          key={`${group.layerId}-selected`}
+          id={`${group.layerId}-selected`}
+          slot={'bottom'}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': selectedOpacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': selectedOpacity,
+                }
+          }
+          filter={['all', groupFilter, selectedFilter, notHoverFilter]}
+        /&gt;,
+        /* Fill for hover layer */
+        &lt;Layer
+          key={`${group.layerId}-hover`}
+          id={`${group.layerId}-hover`}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': hoverOpacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': hoverOpacity,
+                }
+          }
+          filter={['all', groupFilter, hoverFilter, notSelectedFilter]}
+        /&gt;,
+        /* Fill for hover and selected layer */
+        &lt;Layer
+          key={`${group.layerId}-selected-hover`}
+          id={`${group.layerId}-selected-hover`}
+          source={'mapData'}
+          type={'fill'}
+          paint={
+            group.style.fillPatternUrl
+              ? {
+                  'fill-pattern': group.style.fillPatternUrl,
+                  'fill-opacity': hoverAndSelectedOpacity,
+                }
+              : {
+                  'fill-color': group.style.fillColor,
+                  'fill-opacity': hoverAndSelectedOpacity,
+                }
+          }
+          filter={['all', groupFilter, hoverFilter, selectedFilter]}
+        /&gt;,
+      ];
     });
 &nbsp;
     const _textLayers = <span class="cstat-no" title="statement not covered" >featureGroups?.map(<span class="fstat-no" title="function not covered" >(g</span>roup) =&gt; {</span>
@@ -2041,7 +2035,7 @@ export default MapBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-26T23:50:14.453Z
+                at 2025-09-27T01:25:04.391Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
