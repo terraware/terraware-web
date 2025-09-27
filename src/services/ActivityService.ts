@@ -35,7 +35,7 @@ type DeleteActivityResponse =
   paths[typeof ACTIVITY_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 type UploadActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-type GetActivityMediaResponse =
+export type GetActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['put']['responses'][200]['content']['application/json'];
