@@ -1,13 +1,25 @@
+import { MultiPolygon } from 'geojson';
+
+import { MapBounds } from './types';
+
 const latToY = (lat: number): number => {
   const rad = (lat * Math.PI) / 180;
   return Math.log(Math.tan(Math.PI / 4 + rad / 2));
 };
 
-const getBoundsZoomLevel = (
-  bounds: { minLat: number; maxLat: number; minLng: number; maxLng: number },
-  mapWidth: number,
-  mapHeight: number
-): number => {
+const isBoundsValid = (bounds: MapBounds) => {
+  const { minLat, maxLat, minLng, maxLng } = bounds;
+
+  // Latitude must be within [-90, 90] and min <= max
+  const latValid = -90 <= minLat && minLat <= maxLat && maxLat <= 90;
+
+  // Longitude must be within [-180, 180]; allow crossing antimeridian
+  const lngValid = -180 <= minLng && minLng <= 180 && -180 <= maxLng && maxLng <= 180;
+
+  return latValid && lngValid;
+};
+
+const getBoundsZoomLevel = (bounds: MapBounds, mapWidth: number, mapHeight: number): number => {
   const TILE_SIZE = 256;
 
   // Latitude fraction (north–south span)
@@ -28,4 +40,30 @@ const getBoundsZoomLevel = (
   return Math.floor(Math.min(latZoom, lngZoom));
 };
 
-export { getBoundsZoomLevel };
+const getBoundingBox = (
+  multipolygons: MultiPolygon[]
+): { minLat: number; minLng: number; maxLat: number; maxLng: number } => {
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+  let minLng = Infinity;
+  let maxLng = -Infinity;
+
+  const coordinates = multipolygons
+    .map((multipolygon) => multipolygon.coordinates)
+    .flat()
+    .flat()
+    .flat();
+
+  if (coordinates.length > 0) {
+    for (const [lng, lat] of coordinates) {
+      minLat = Math.min(minLat, lat);
+      maxLat = Math.max(maxLat, lat);
+      minLng = Math.min(minLng, lng);
+      maxLng = Math.max(maxLng, lng);
+    }
+  }
+
+  return { minLat, minLng, maxLat, maxLng };
+};
+
+export { isBoundsValid, getBoundingBox, getBoundsZoomLevel };

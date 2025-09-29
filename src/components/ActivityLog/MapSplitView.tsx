@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -8,6 +9,9 @@ import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
 import { useLocalization } from 'src/providers';
 import { Activity, activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
+
+import useMapUtils from '../NewMap/useMapUtils';
+import { getBoundingBox } from '../NewMap/utils';
 
 type MapSplitViewProps = {
   activities?: Activity[];
@@ -29,6 +33,8 @@ export default function MapSplitView({
   const theme = useTheme();
   const { token, mapId } = useMapboxToken();
   const { strings } = useLocalization();
+  const mapRef = useRef<MapRef | null>(null);
+  const { fitBounds } = useMapUtils(mapRef);
 
   const onActivityMarkerClickCallback = useCallback(
     (activityId: number, fileId: number) => () => onActivityMarkerClick?.(activityId, fileId),
@@ -52,6 +58,11 @@ export default function MapSplitView({
     );
   }, [plantingSites]);
 
+  const boundingBox = useMemo(() => {
+    const multipolygons = siteFeatures.map((feature) => feature.geometry);
+    return getBoundingBox(multipolygons);
+  }, [siteFeatures]);
+
   const markerGroups = useMemo((): MapMarkerGroup[] => {
     if (!activities) {
       return [];
@@ -63,8 +74,8 @@ export default function MapSplitView({
           if (media.geolocation) {
             return {
               id: `activity-${activity.id}-media-${media.fileId}`,
-              longitude: media.geolocation.coordinates[1],
-              latitude: media.geolocation.coordinates[0],
+              longitude: media.geolocation.coordinates[0],
+              latitude: media.geolocation.coordinates[1],
               onClick: onActivityMarkerClickCallback(activity.id, media.fileId),
               selected: activityMarkerHighlighted?.(activity.id, media.fileId) ?? false,
             };
@@ -83,13 +94,10 @@ export default function MapSplitView({
           iconName: 'iconPhoto',
           type: 'icon',
         },
+        visible: true,
       };
     });
   }, [activities, activityMarkerHighlighted, onActivityMarkerClickCallback]);
-
-  const visibleMarkers = useMemo(() => {
-    return markerGroups.map((group) => group.markerGroupId);
-  }, [markerGroups]);
 
   const mapFeatures = useMemo((): MapFeatureSection[] => {
     return [
@@ -118,6 +126,10 @@ export default function MapSplitView({
     ];
   }, [markerGroups, siteFeatures, strings, theme]);
 
+  useEffect(() => {
+    fitBounds(boundingBox);
+  }, [boundingBox, fitBounds]);
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       {topComponent}
@@ -130,7 +142,7 @@ export default function MapSplitView({
         features={mapFeatures}
         hideLegend
         initialSelectedLayerId='sites'
-        initialVisibleMarkers={visibleMarkers}
+        mapRef={mapRef}
         mapId={mapId}
         token={token ?? ''}
       />

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import Map, {
   FullscreenControl,
   Layer,
@@ -54,6 +54,7 @@ export type MapBoxProps = {
   layers?: MapLayer[];
   mapId: string;
   mapImageUrls?: string[];
+  mapRef: MutableRefObject<MapRef | null>;
   mapViewStyle: MapViewStyle;
   markerGroups?: MapMarkerGroup[];
   onClickCanvas?: (event: MapMouseEvent) => void;
@@ -81,6 +82,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     initialViewState,
     mapId,
     mapImageUrls,
+    mapRef,
     mapViewStyle,
     markerGroups,
     onClickCanvas,
@@ -88,7 +90,6 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     token,
   } = props;
   const theme = useTheme();
-  const mapRef = useRef<MapRef | null>(null);
   const { isDesktop } = useDeviceInfo();
   const [cursor, setCursor] = useState<MapCursor>('auto');
   const [hoverFeatureId, setHoverFeatureId] = useState<string>();
@@ -117,7 +118,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         loadImages(map);
       }
     },
-    [loadImages]
+    [loadImages, mapRef]
   );
 
   const onMove = useCallback((view: ViewStateChangeEvent) => {
@@ -362,6 +363,9 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   const highlightLayers = useMemo(() => {
     return (
       highlightGroups?.flatMap((group) => {
+        if (!group.visible) {
+          return [];
+        }
         return group.highlights
           .map((highlight, index) => {
             const highlightFeatureIds = highlight.featureIds.map(({ layerId, featureId }) => `${layerId}/${featureId}`);
@@ -415,11 +419,15 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       });
       event.originalEvent.stopPropagation();
     },
-    [zoom]
+    [mapRef, zoom]
   );
 
   const markersComponents = useMemo(() => {
     return markerGroups?.flatMap((markerGroup) => {
+      if (!markerGroup.visible) {
+        return [];
+      }
+
       // cluster markers here
       const clusteredMarkers = clusterMarkers(mapRef.current, markerGroup.markers);
 
@@ -473,7 +481,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         }
       });
     });
-  }, [clusterMarkers, markerGroups, onMarkerClick, onMarkerClusterClick, theme]);
+  }, [clusterMarkers, markerGroups, mapRef, onMarkerClick, onMarkerClusterClick, theme]);
 
   const onMouseMove = useCallback((event: MapMouseEvent) => {
     if (event.features && event.features.length) {
@@ -509,7 +517,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     observer.observe(mapRef.current.getContainer());
 
     return () => observer.disconnect();
-  }, []);
+  }, [mapRef]);
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -517,7 +525,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     }
 
     mapRef.current.resize();
-  }, [drawerOpen]);
+  }, [drawerOpen, mapRef]);
 
   // Hovering interactive layers
   const onMouseEnter = useCallback(() => setCursor(cursorInteract ?? 'pointer'), [cursorInteract]);
