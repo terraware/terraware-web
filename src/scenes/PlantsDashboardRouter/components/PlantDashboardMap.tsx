@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
@@ -602,7 +602,7 @@ const PlantDashboardMap = ({
     strings,
   ]);
 
-  return (
+  return token ? (
     <MapComponent
       drawerChildren={drawerContent}
       drawerOpen={drawerOpen}
@@ -611,9 +611,11 @@ const PlantDashboardMap = ({
       features={mapFeatures}
       initialSelectedLayerId={'zones'}
       mapId={mapId}
-      token={token ?? ''}
+      token={token}
       setDrawerOpen={setDrawerOpenCallback}
     />
+  ) : (
+    <Box />
   );
 };
 
