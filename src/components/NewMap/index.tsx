@@ -59,6 +59,8 @@ export type MapComponentProps = {
     longitude?: number;
     zoom?: number;
   };
+  initialVisibleHighlights?: string[];
+  initialVisibleMarkers?: string[];
   mapContainerId?: string;
   mapId?: string;
   onClickCanvas?: (event: MapMouseEvent) => void;
@@ -89,6 +91,8 @@ const MapComponent = (props: MapComponentProps) => {
     initialSelectedLayerId,
     initialMapViewStyle,
     initialViewState,
+    initialVisibleHighlights,
+    initialVisibleMarkers,
     mapContainerId,
     mapId,
     onClickCanvas,
@@ -97,7 +101,7 @@ const MapComponent = (props: MapComponentProps) => {
   } = props;
   const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(initialMapViewStyle ?? 'Streets');
 
-  const [visibleHighlights, setVisibleHighlights] = useState<string[]>([]);
+  const [visibleHighlights, setVisibleHighlights] = useState<string[]>(initialVisibleHighlights ?? []);
   const setHighlightVisible = useCallback(
     (highlightId: string) => (visible: boolean) => {
       if (visible) {
@@ -111,7 +115,7 @@ const MapComponent = (props: MapComponentProps) => {
     []
   );
 
-  const [visibleMarkers, setVisibleMarkers] = useState<string[]>([]);
+  const [visibleMarkers, setVisibleMarkers] = useState<string[]>(initialVisibleMarkers ?? []);
   const setMarkerVisible = useCallback(
     (markerGroupId: string) => (visible: boolean) => {
       if (visible) {

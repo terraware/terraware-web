@@ -11,34 +11,28 @@ import useMapboxToken from 'src/utils/useMapboxToken';
 
 type MapSplitViewProps = {
   activities?: Activity[];
+  activityMarkerHighlighted?: (acitivityId: number, fileId: number) => boolean;
   children: React.ReactNode;
-  focusedActivityId?: number;
+  onActivityMarkerClick?: (acitivityId: number, fileId: number) => void;
   projectId: number;
-  setFocusedActivityId?: (id: number | undefined) => void;
   topComponent?: React.ReactNode;
 };
 
 export default function MapSplitView({
   activities,
+  activityMarkerHighlighted,
   children,
-  focusedActivityId,
+  onActivityMarkerClick,
   projectId,
-  setFocusedActivityId,
   topComponent,
 }: MapSplitViewProps): JSX.Element {
   const theme = useTheme();
   const { token, mapId } = useMapboxToken();
   const { strings } = useLocalization();
 
-  const onActivityMarkerClick = useCallback(
-    (id: number) => () => {
-      if (focusedActivityId === id) {
-        setFocusedActivityId?.(undefined);
-      } else {
-        setFocusedActivityId?.(id);
-      }
-    },
-    [focusedActivityId, setFocusedActivityId]
+  const onActivityMarkerClickCallback = useCallback(
+    (acitivityId: number, fileId: number) => () => onActivityMarkerClick?.(acitivityId, fileId),
+    [onActivityMarkerClick]
   );
 
   const { plantingSites } = useProjectPlantingSites(projectId);
@@ -71,8 +65,8 @@ export default function MapSplitView({
               id: `activity-${activity.id}-media-${media.fileId}`,
               longitude: media.geolocation.coordinates[1],
               latitude: media.geolocation.coordinates[0],
-              onClick: onActivityMarkerClick(activity.id),
-              selected: focusedActivityId === activity.id,
+              onClick: onActivityMarkerClickCallback(activity.id, media.fileId),
+              selected: activityMarkerHighlighted?.(activity.id, media.fileId) ?? false,
             };
           } else {
             return undefined;
@@ -91,7 +85,11 @@ export default function MapSplitView({
         },
       };
     });
-  }, [activities, focusedActivityId, onActivityMarkerClick]);
+  }, [activities, activityMarkerHighlighted, onActivityMarkerClickCallback]);
+
+  const visibleMarkers = useMemo(() => {
+    return markerGroups.map((group) => group.markerGroupId);
+  }, [markerGroups]);
 
   const mapFeatures = useMemo((): MapFeatureSection[] => {
     return [
@@ -132,6 +130,7 @@ export default function MapSplitView({
         features={mapFeatures}
         hideLegend
         initialSelectedLayerId='sites'
+        initialVisibleMarkers={visibleMarkers}
         mapId={mapId}
         token={token ?? ''}
       />

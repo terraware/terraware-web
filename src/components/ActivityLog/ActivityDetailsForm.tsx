@@ -256,10 +256,11 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         }}
       >
         <MapSplitView projectId={projectId}>
+          {' '}
+          {/* TODO: add activity for acitivityId if exists */}
           <Typography fontSize='20px' fontWeight='bold' marginBottom='24px' variant='h2'>
             {secondaryHeader}
           </Typography>
-
           <Grid container spacing={2} textAlign='left'>
             <Grid item lg={6} xs={12}>
               <Dropdown
