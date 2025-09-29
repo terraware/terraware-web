@@ -1,3 +1,5 @@
+cf2f0c3f0c1 Update dependency eslint-plugin-jsdoc to v60 (#4510)
+4469c1f1fb8 Update Node.js to v22.20.0 (#4509)
 be17cf9bc4c SW-7441 Render planting sites on activity map (#4505)
 0acdee26526 SW-7404 Added markers on the map list view (#4502)
 40db986d657 Activity Log Permissions (#4504)
