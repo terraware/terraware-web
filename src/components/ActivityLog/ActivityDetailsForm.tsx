@@ -255,7 +255,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           width: '100%',
         }}
       >
-        <MapSplitView>
+        <MapSplitView projectId={projectId}>
           <Typography fontSize='20px' fontWeight='bold' marginBottom='24px' variant='h2'>
             {secondaryHeader}
           </Typography>

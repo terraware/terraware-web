@@ -100,7 +100,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Gets a media file for an activity.
+         * Gets a photo file for an activity.
          * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
          */
         get: operations["getActivityMedia"];
@@ -109,6 +109,26 @@ export interface paths {
         post?: never;
         /** Deletes a media file from an activity. */
         delete: operations["deleteActivityMedia"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/activities/{activityId}/media/{fileId}/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets streaming details for a video for an activity.
+         * @description This does not return the actual streaming data; it just returns the necessary information to stream video from Mux.
+         */
+        get: operations["getActivityMediaStream"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -4002,6 +4022,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/t0/site/temp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Assign T0 Data for a planting site, only applicable to temporary plots */
+        post: operations["assignT0TempSiteData"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/t0/site/{plantingSiteId}": {
         parameters: {
             query?: never;
@@ -4819,6 +4856,16 @@ export interface components {
             accessionIds?: number[];
             batchIds?: number[];
             plantingSiteIds?: number[];
+        };
+        AssignSiteT0DataRequestPayload: {
+            /** Format: int64 */
+            plantingSiteId: number;
+            plots: components["schemas"]["PlotT0DataPayload"][];
+        };
+        AssignSiteT0TempDataRequestPayload: {
+            /** Format: int64 */
+            plantingSiteId: number;
+            zones: components["schemas"]["ZoneT0DataPayload"][];
         };
         AssignTerraformationContactRequestPayload: {
             /** Format: int64 */
@@ -6522,6 +6569,11 @@ export interface components {
             activity: components["schemas"]["ActivityPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetActivityStreamResponsePayload: {
+            playbackId: string;
+            playbackToken: string;
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetApplicationDeliverablesResponsePayload: {
             deliverables: components["schemas"]["ApplicationDeliverablePayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -6859,7 +6911,7 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         GetSiteT0DataResponsePayload: {
-            data: components["schemas"]["SiteT0DataPayload"];
+            data: components["schemas"]["SiteT0DataResponsePayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetSpeciesForParticipantProjectsResponsePayload: {
@@ -9084,7 +9136,7 @@ export interface components {
             /** @description GPS coordinates where plant was observed. */
             gpsCoordinates: Omit<components["schemas"]["Point"], "type">;
             /** Format: int64 */
-            id: number;
+            id?: number;
             /**
              * Format: int64
              * @description Required if certainty is Known. Ignored if certainty is Other or Unknown.
@@ -9434,12 +9486,15 @@ export interface components {
         SimpleSuccessResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
         };
-        SiteT0DataPayload: {
+        SiteT0DataResponsePayload: {
             /** Format: int64 */
             plantingSiteId: number;
             plots: components["schemas"]["PlotT0DataPayload"][];
+            survivalRateIncludesTempPlots: boolean;
+            zones: components["schemas"]["ZoneT0DataPayload"][];
         };
         SpeciesDensityPayload: {
+            density: number;
             plotDensity: number;
             /** Format: int64 */
             speciesId: number;
@@ -10139,6 +10194,7 @@ export interface components {
             plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
             /** Format: int64 */
             projectId?: number;
+            survivalRateIncludesTempPlots?: boolean;
             /**
              * @description Time zone name in IANA tz database format
              * @example America/New_York
@@ -10666,6 +10722,11 @@ export interface components {
             /** Format: int32 */
             volunteers?: number;
         };
+        ZoneT0DataPayload: {
+            densityData: components["schemas"]["SpeciesDensityPayload"][];
+            /** Format: int64 */
+            plantingZoneId: number;
+        };
     };
     responses: never;
     parameters: never;
@@ -10990,6 +11051,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getActivityMediaStream: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                activityId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetActivityStreamResponsePayload"];
                 };
             };
         };
@@ -19218,8 +19302,9 @@ export interface operations {
     };
     listPlantingSites: {
         parameters: {
-            query: {
-                organizationId: number;
+            query?: {
+                organizationId?: number;
+                projectId?: number;
                 /** @description If true, include planting zones and subzones for each site. */
                 full?: boolean;
             };
@@ -19513,7 +19598,31 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SiteT0DataPayload"];
+                "application/json": components["schemas"]["AssignSiteT0DataRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    assignT0TempSiteData: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignSiteT0TempDataRequestPayload"];
             };
         };
         responses: {

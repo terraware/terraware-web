@@ -12,7 +12,7 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { Delivery, PlantingSite, SiteT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, Delivery, PlantingSite } from 'src/types/Tracking';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { isArray } from '../types/utils';
@@ -404,14 +404,16 @@ const getPlantingSiteHistory = async (
 /**
  * List all planting sites
  */
-const listPlantingSites = async (
-  organizationId: number,
-  full?: boolean
-): Promise<Response2<ListPlantingSitesResponsePayload>> => {
+const listPlantingSites = async (request: {
+  projectId?: number;
+  organizationId?: number;
+  full?: boolean;
+}): Promise<Response2<ListPlantingSitesResponsePayload>> => {
   return await httpPlantingSites.get2<ListPlantingSitesResponsePayload>({
     params: {
-      organizationId: organizationId.toString(),
-      full: (full || false).toString(),
+      ...(request.projectId !== undefined && { projectId: request.projectId.toString() }),
+      ...(request.organizationId !== undefined && { organizationId: request.organizationId.toString() }),
+      full: (request?.full || false).toString(),
     },
   });
 };
@@ -475,7 +477,7 @@ const getPermanentPlotsWithObservations = async <T extends SearchResponseElement
   return SearchService.search<T>(params);
 };
 
-const assignT0SiteData = (payload: SiteT0Data): Promise<Response2<AssignT0SiteDataResponsePayload>> =>
+const assignT0SiteData = (payload: AssignSiteT0Data): Promise<Response2<AssignT0SiteDataResponsePayload>> =>
   HttpService.root(PLANTING_SITES_T0_ENDPOINT).post({
     entity: payload,
   });

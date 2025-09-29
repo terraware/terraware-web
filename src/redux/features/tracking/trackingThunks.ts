@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import { TrackingService } from 'src/services';
 import strings from 'src/strings';
-import { PlantingSiteSearchResult, SiteT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import {
   setPlantingSiteAction,
@@ -154,13 +154,25 @@ export const requestListPlantingSiteHistories = createAsyncThunk(
 export const requestListPlantingSites = createAsyncThunk(
   'tracking/plantingSites',
   async (organizationId: number, { rejectWithValue }) => {
-    const response = await TrackingService.listPlantingSites(organizationId, true);
+    const response = await TrackingService.listPlantingSites({ organizationId, full: true });
     if (response !== null && response.requestSucceeded && response?.data?.sites !== undefined) {
       return response.data.sites;
     }
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestListProjectPlantingSites = createAsyncThunk(
+  'tracking/projectPlantingSites',
+  async (projectId: number, { rejectWithValue }) => {
+    const response = await TrackingService.listPlantingSites({ projectId, full: false });
+    if (response !== null && response.requestSucceeded && response?.data?.sites !== undefined) {
+      return response.data.sites;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestOrganizationReportedPlants = createAsyncThunk(
   'tracking/organizationReportedPlants',
   async (organizationId: number, { rejectWithValue }) => {
@@ -200,7 +212,7 @@ export const requestPermanentPlotsWithObservations = createAsyncThunk(
 
 export const requestAssignT0SiteData = createAsyncThunk(
   'assignT0SiteData',
-  async (request: SiteT0Data, { rejectWithValue }) => {
+  async (request: AssignSiteT0Data, { rejectWithValue }) => {
     const response = await TrackingService.assignT0SiteData(request);
 
     if (response && response.requestSucceeded) {
