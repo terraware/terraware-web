@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { ActivityMediaFile, ActivityPayload, AdminActivityPayload } from 'src/types/Activity';
+import { GetActivityMediaResponse } from 'src/services/ActivityService';
+import { ActivityPayload, AdminActivityPayload } from 'src/types/Activity';
 
 import {
   requestAdminCreateActivity,
@@ -163,7 +164,7 @@ export const activityMediaUploadSlice = createSlice({
 /**
  * Activity media get
  */
-const initialStateActivityMediaGet: Record<string, StatusT<ActivityMediaFile>> = {};
+const initialStateActivityMediaGet: Record<string, StatusT<GetActivityMediaResponse>> = {};
 
 export const activityMediaGetSlice = createSlice({
   name: 'activityMediaGetSlice',

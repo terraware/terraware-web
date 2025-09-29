@@ -16,7 +16,7 @@ const ACTIVITIES_ADMIN_ENDPOINT = '/api/v1/accelerator/activities/admin';
 const ACTIVITY_ADMIN_ENDPOINT = '/api/v1/accelerator/activities/admin/{id}';
 const ACTIVITY_ENDPOINT = '/api/v1/accelerator/activities/{activityId}';
 const ACTIVITY_MEDIA_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media';
-const ACTIVITY_MEDIA_FILE_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media/{fileId}';
+export const ACTIVITY_MEDIA_FILE_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media/{fileId}';
 
 type ListActivitiesResponse = paths[typeof ACTIVITIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type CreateActivityResponse =
@@ -35,7 +35,7 @@ type DeleteActivityResponse =
   paths[typeof ACTIVITY_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 type UploadActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-type GetActivityMediaResponse =
+export type GetActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['put']['responses'][200]['content']['application/json'];
