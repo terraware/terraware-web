@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -62,6 +63,7 @@ const PlantDashboardMap = ({
   observationResults,
 }: PlantDashboardMapProps): JSX.Element => {
   const { token, mapId } = useMapboxToken();
+  const mapRef = useRef<MapRef | null>(null);
   const { strings } = useLocalization();
   const theme = useTheme();
 
@@ -611,6 +613,7 @@ const PlantDashboardMap = ({
       features={mapFeatures}
       initialSelectedLayerId={'zones'}
       mapId={mapId}
+      mapRef={mapRef}
       token={token}
       setDrawerOpen={setDrawerOpenCallback}
     />

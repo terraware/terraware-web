@@ -1,4 +1,5 @@
-import React, { ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { MutableRefObject, ReactNode, useCallback, useMemo, useState } from 'react';
+import { MapRef } from 'react-map-gl/mapbox';
 
 import { MapMouseEvent } from 'mapbox-gl';
 
@@ -7,7 +8,7 @@ import MapContainer from './MapContainer';
 import MapDrawer, { MapDrawerSize } from './MapDrawer';
 import MapLegend, { MapHighlightLegendItem, MapLegendGroup } from './MapLegend';
 import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapViewStyle } from './types';
-import { getBoundsZoomLevel } from './utils';
+import { getBoundingBox, getBoundsZoomLevel } from './utils';
 
 type BaseMapFeatureSection = {
   sectionDisabled?: boolean;
@@ -63,6 +64,7 @@ export type MapComponentProps = {
   initialVisibleMarkers?: string[];
   mapContainerId?: string;
   mapId?: string;
+  mapRef: MutableRefObject<MapRef | null>;
   onClickCanvas?: (event: MapMouseEvent) => void;
   setDrawerOpen?: (open: boolean) => void;
   token: string;
@@ -95,6 +97,7 @@ const MapComponent = (props: MapComponentProps) => {
     initialVisibleMarkers,
     mapContainerId,
     mapId,
+    mapRef,
     onClickCanvas,
     setDrawerOpen,
     token,
@@ -204,39 +207,24 @@ const MapComponent = (props: MapComponentProps) => {
     if (initialViewState) {
       return initialViewState;
     } else if (features) {
-      const coordinates = features
+      const multipolygons = features
         .filter((feature): feature is MapLayerFeatureSection => feature.type === 'layer')
         .flatMap((feature) => feature.layers)
         .flatMap((layer) => layer.features)
-        .map((geoFeature) => geoFeature.geometry.coordinates)
-        .flat()
-        .flat()
-        .flat();
+        .map((geoFeature) => geoFeature.geometry);
 
-      if (coordinates.length > 0) {
-        let minLat = Infinity;
-        let maxLat = -Infinity;
-        let minLng = Infinity;
-        let maxLng = -Infinity;
+      const { minLat, minLng, maxLat, maxLng } = getBoundingBox(multipolygons);
 
-        for (const [lng, lat] of coordinates) {
-          minLat = Math.min(minLat, lat);
-          maxLat = Math.max(maxLat, lat);
-          minLng = Math.min(minLng, lng);
-          maxLng = Math.max(maxLng, lng);
-        }
+      const centerLng = (minLng + maxLng) / 2;
+      const centerLat = (minLat + maxLat) / 2;
 
-        const centerLng = (minLng + maxLng) / 2;
-        const centerLat = (minLat + maxLat) / 2;
+      const zoom = getBoundsZoomLevel({ minLat, minLng, maxLat, maxLng }, 400, 400);
 
-        const zoom = getBoundsZoomLevel({ minLat, minLng, maxLat, maxLng }, 400, 400);
-
-        return {
-          latitude: centerLat,
-          longitude: centerLng,
-          zoom,
-        };
-      }
+      return {
+        latitude: centerLat,
+        longitude: centerLng,
+        zoom,
+      };
     }
   }, [features, initialViewState]);
 
@@ -286,6 +274,7 @@ const MapComponent = (props: MapComponentProps) => {
         layers={layers}
         mapId={mapId ?? 'mapId'}
         mapImageUrls={mapImageUrls}
+        mapRef={mapRef}
         mapViewStyle={mapViewStyle}
         markerGroups={markerGroups}
         onClickCanvas={onClickCanvas}
@@ -310,6 +299,7 @@ const MapComponent = (props: MapComponentProps) => {
     mapContainerId,
     mapId,
     mapImageUrls,
+    mapRef,
     mapViewState,
     mapViewStyle,
     markerGroups,

@@ -1,3 +1,5 @@
+import { MultiPolygon } from 'geojson';
+
 const latToY = (lat: number): number => {
   const rad = (lat * Math.PI) / 180;
   return Math.log(Math.tan(Math.PI / 4 + rad / 2));
@@ -28,4 +30,30 @@ const getBoundsZoomLevel = (
   return Math.floor(Math.min(latZoom, lngZoom));
 };
 
-export { getBoundsZoomLevel };
+const getBoundingBox = (
+  multipolygons: MultiPolygon[]
+): { minLat: number; minLng: number; maxLat: number; maxLng: number } => {
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+  let minLng = Infinity;
+  let maxLng = -Infinity;
+
+  const coordinates = multipolygons
+    .map((multipolygon) => multipolygon.coordinates)
+    .flat()
+    .flat()
+    .flat();
+
+  if (coordinates.length > 0) {
+    for (const [lng, lat] of coordinates) {
+      minLat = Math.min(minLat, lat);
+      maxLat = Math.max(maxLat, lat);
+      minLng = Math.min(minLng, lng);
+      maxLng = Math.max(maxLng, lng);
+    }
+  }
+
+  return { minLat, minLng, maxLat, maxLng };
+};
+
+export { getBoundingBox, getBoundsZoomLevel };
