@@ -418,6 +418,12 @@ const PlantDashboardMap = ({
     [theme]
   );
 
+  const [plotPhotoVisible, setPlotPhotoVisible] = useState<boolean>(false);
+  const [livePlantsVisible, setLivePlantsVisible] = useState<boolean>(false);
+  const [deadPlantsVisible, setDeadPlantsVisible] = useState<boolean>(false);
+  const [mortalityRateVisible, setMortalityRateVisible] = useState<boolean>(false);
+  const [observationEventsVisible, setObservationEventsVisible] = useState<boolean>(false);
+
   const mapFeatures = useMemo((): MapFeatureSection[] => {
     return [
       {
@@ -436,6 +442,7 @@ const PlantDashboardMap = ({
               iconName: 'iconPhoto',
               type: 'icon',
             },
+            visible: plotPhotoVisible,
           },
         ],
         sectionDisabled: disablePhotoMarkers,
@@ -453,6 +460,7 @@ const PlantDashboardMap = ({
               iconName: 'iconLivePlant',
               type: 'icon',
             },
+            visible: livePlantsVisible,
           },
           {
             label: strings.DEAD_PLANTS,
@@ -463,6 +471,7 @@ const PlantDashboardMap = ({
               iconName: 'iconLivePlant',
               type: 'icon',
             },
+            visible: deadPlantsVisible,
           },
         ],
         sectionDisabled: disablePlantMarkers,
@@ -509,6 +518,7 @@ const PlantDashboardMap = ({
               },
             },
           ],
+          visible: observationEventsVisible,
         },
         sectionDisabled: disableObserationEvents || observationResults.length === 0,
         sectionTitle: strings.OBSERVATION_EVENTS,
@@ -550,6 +560,7 @@ const PlantDashboardMap = ({
               },
             },
           ],
+          visible: mortalityRateVisible,
         },
         sectionDisabled: disableMortalityRate || observationResults.length === 0,
         sectionTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
@@ -588,21 +599,48 @@ const PlantDashboardMap = ({
     ];
   }, [
     baseObservationEventStyle,
+    deadPlantsVisible,
     disableMortalityRate,
     disableObserationEvents,
     disablePhotoMarkers,
     disablePlantMarkers,
     isSurvivalRateCalculationEnabled,
     layers,
-    mortalityRateHighlights.greaterThanFifty,
-    mortalityRateHighlights.lessThanFifty,
-    mortalityRateHighlights.lessThanTwentyFive,
+    livePlantsVisible,
+    mortalityRateHighlights,
+    mortalityRateVisible,
     observationEventsHighlights,
+    observationEventsVisible,
     observationResults,
     photoMarkers,
     plantsMarkers,
+    plotPhotoVisible,
     strings,
   ]);
+
+  const setHighlightVisible = useCallback(
+    (highlightId: string) => (visible: boolean) => {
+      if (highlightId === 'mortalityRate') {
+        setMortalityRateVisible(visible);
+      } else if (highlightId === 'observationEvents') {
+        setObservationEventsVisible(visible);
+      }
+    },
+    []
+  );
+
+  const setMarkerVisible = useCallback(
+    (markerGroupId: string) => (visible: boolean) => {
+      if (markerGroupId === 'plot-photos') {
+        setPlotPhotoVisible(visible);
+      } else if (markerGroupId === 'live-plants') {
+        setLivePlantsVisible(visible);
+      } else if (markerGroupId === 'dead-plants') {
+        setDeadPlantsVisible(visible);
+      }
+    },
+    []
+  );
 
   return token ? (
     <MapComponent
@@ -616,6 +654,8 @@ const PlantDashboardMap = ({
       mapRef={mapRef}
       token={token}
       setDrawerOpen={setDrawerOpenCallback}
+      setHighlightVisible={setHighlightVisible}
+      setMarkerVisible={setMarkerVisible}
     />
   ) : (
     <Box />

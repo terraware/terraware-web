@@ -1,6 +1,8 @@
 import { IconName } from '@terraware/web-components';
 import { MultiPolygon } from 'geojson';
 
+export type MapBounds = { minLat: number; minLng: number; maxLat: number; maxLng: number };
+
 /**
  * Properties class for GeoJson, with a few reserved object defined.
  */
@@ -62,6 +64,7 @@ export type MapHighlight = {
 export type MapHighlightGroup = {
   highlightId: string;
   highlights: MapHighlight[];
+  visible: boolean;
 };
 
 export type MapMarker = {
@@ -78,6 +81,7 @@ export type MapMarkerGroup = {
   markers: MapMarker[];
   markerGroupId: string;
   style: MapIconComponentStyle;
+  visible: boolean;
 };
 
 export type MapViewStyle = 'Outdoors' | 'Satellite' | 'Light' | 'Dark' | 'Streets';

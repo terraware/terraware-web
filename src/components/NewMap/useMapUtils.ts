@@ -1,7 +1,8 @@
 import { MutableRefObject, useCallback, useMemo } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-export type MapBounds = { minLat: number; minLng: number; maxLat: number; maxLng: number };
+import { MapBounds } from './types';
+import { isBoundsValid } from './utils';
 
 const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
   const easeTo = useCallback(
@@ -23,7 +24,7 @@ const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
       const map = mapRef.current;
       const { minLat, minLng, maxLat, maxLng } = bbox;
 
-      if (map) {
+      if (map && isBoundsValid(bbox)) {
         map.fitBounds([
           { lat: minLat, lng: minLng },
           { lat: maxLat, lng: maxLng },

@@ -60,13 +60,13 @@ export type MapComponentProps = {
     longitude?: number;
     zoom?: number;
   };
-  initialVisibleHighlights?: string[];
-  initialVisibleMarkers?: string[];
   mapContainerId?: string;
   mapId?: string;
   mapRef: MutableRefObject<MapRef | null>;
   onClickCanvas?: (event: MapMouseEvent) => void;
   setDrawerOpen?: (open: boolean) => void;
+  setHighlightVisible?: (highlightId: string) => (visible: boolean) => void;
+  setMarkerVisible?: (markerGroupId: string) => (visible: boolean) => void;
   token: string;
 };
 
@@ -93,45 +93,16 @@ const MapComponent = (props: MapComponentProps) => {
     initialSelectedLayerId,
     initialMapViewStyle,
     initialViewState,
-    initialVisibleHighlights,
-    initialVisibleMarkers,
     mapContainerId,
     mapId,
     mapRef,
     onClickCanvas,
     setDrawerOpen,
+    setHighlightVisible,
+    setMarkerVisible,
     token,
   } = props;
   const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(initialMapViewStyle ?? 'Streets');
-
-  const [visibleHighlights, setVisibleHighlights] = useState<string[]>(initialVisibleHighlights ?? []);
-  const setHighlightVisible = useCallback(
-    (highlightId: string) => (visible: boolean) => {
-      if (visible) {
-        setVisibleHighlights((_visibleHighlights) => [..._visibleHighlights, highlightId]);
-      } else {
-        setVisibleHighlights((_visibleHighlights) =>
-          _visibleHighlights.filter((_highlightId) => _highlightId !== highlightId)
-        );
-      }
-    },
-    []
-  );
-
-  const [visibleMarkers, setVisibleMarkers] = useState<string[]>(initialVisibleMarkers ?? []);
-  const setMarkerVisible = useCallback(
-    (markerGroupId: string) => (visible: boolean) => {
-      if (visible) {
-        setVisibleMarkers((_visibleMarkers) => [..._visibleMarkers, markerGroupId]);
-      } else {
-        setVisibleMarkers((_visibleMarkers) =>
-          _visibleMarkers.filter((_markerGroupId) => _markerGroupId !== markerGroupId)
-        );
-      }
-    },
-    []
-  );
-
   const [selectedLayer, setSelectedLayer] = useState<string | undefined>(initialSelectedLayerId);
 
   const legends = useMemo((): MapLegendGroup[] | undefined => {
@@ -147,8 +118,8 @@ const MapComponent = (props: MapComponentProps) => {
             ...baseLegendGroup,
             items: feature.legendItems,
             type: 'highlight',
-            visible: visibleHighlights.findIndex((highlightId) => highlightId === feature.highlight.highlightId) >= 0,
-            setVisible: setHighlightVisible(feature.highlight.highlightId),
+            visible: feature.highlight.visible,
+            setVisible: setHighlightVisible?.(feature.highlight.highlightId),
           };
         case 'layer':
           return {
@@ -171,14 +142,14 @@ const MapComponent = (props: MapComponentProps) => {
               id: group.markerGroupId,
               label: group.label,
               style: group.style,
-              setVisible: setMarkerVisible(group.markerGroupId),
-              visible: visibleMarkers.findIndex((markerId) => markerId === group.markerGroupId) >= 0,
+              setVisible: setMarkerVisible?.(group.markerGroupId),
+              visible: group.visible,
             })),
             type: 'marker',
           };
       }
     });
-  }, [features, selectedLayer, setHighlightVisible, setMarkerVisible, visibleHighlights, visibleMarkers]);
+  }, [features, selectedLayer, setHighlightVisible, setMarkerVisible]);
 
   const layers = useMemo(() => {
     return features
@@ -190,18 +161,14 @@ const MapComponent = (props: MapComponentProps) => {
   const highlightGroups = useMemo(() => {
     return features
       ?.filter((feature): feature is MapHighlightFeatureSection => feature.type === 'highlight')
-      ?.map((feature) => feature.highlight)
-      ?.filter(
-        (highlight) => visibleHighlights.findIndex((_highlightId) => _highlightId === highlight.highlightId) >= 0
-      );
-  }, [features, visibleHighlights]);
+      ?.map((feature) => feature.highlight);
+  }, [features]);
 
   const markerGroups = useMemo(() => {
     return features
       ?.filter((feature): feature is MapMarkerFeatureSection => feature.type === 'marker')
-      ?.flatMap((feature) => feature.groups)
-      .filter((group) => visibleMarkers.findIndex((_markerId) => _markerId === group.markerGroupId) >= 0);
-  }, [features, visibleMarkers]);
+      ?.flatMap((feature) => feature.groups);
+  }, [features]);
 
   const mapViewState = useMemo(() => {
     if (initialViewState) {

@@ -1,15 +1,25 @@
 import { MultiPolygon } from 'geojson';
 
+import { MapBounds } from './types';
+
 const latToY = (lat: number): number => {
   const rad = (lat * Math.PI) / 180;
   return Math.log(Math.tan(Math.PI / 4 + rad / 2));
 };
 
-const getBoundsZoomLevel = (
-  bounds: { minLat: number; maxLat: number; minLng: number; maxLng: number },
-  mapWidth: number,
-  mapHeight: number
-): number => {
+const isBoundsValid = (bounds: MapBounds) => {
+  const { minLat, maxLat, minLng, maxLng } = bounds;
+
+  // Latitude must be within [-90, 90] and min <= max
+  const latValid = -90 <= minLat && minLat <= maxLat && maxLat <= 90;
+
+  // Longitude must be within [-180, 180]; allow crossing antimeridian
+  const lngValid = -180 <= minLng && minLng <= 180 && -180 <= maxLng && maxLng <= 180;
+
+  return latValid && lngValid;
+};
+
+const getBoundsZoomLevel = (bounds: MapBounds, mapWidth: number, mapHeight: number): number => {
   const TILE_SIZE = 256;
 
   // Latitude fraction (north–south span)
@@ -56,4 +66,4 @@ const getBoundingBox = (
   return { minLat, minLng, maxLat, maxLng };
 };
 
-export { getBoundingBox, getBoundsZoomLevel };
+export { isBoundsValid, getBoundingBox, getBoundsZoomLevel };

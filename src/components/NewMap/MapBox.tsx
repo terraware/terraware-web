@@ -363,6 +363,9 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   const highlightLayers = useMemo(() => {
     return (
       highlightGroups?.flatMap((group) => {
+        if (!group.visible) {
+          return [];
+        }
         return group.highlights
           .map((highlight, index) => {
             const highlightFeatureIds = highlight.featureIds.map(({ layerId, featureId }) => `${layerId}/${featureId}`);
@@ -421,6 +424,10 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
   const markersComponents = useMemo(() => {
     return markerGroups?.flatMap((markerGroup) => {
+      if (!markerGroup.visible) {
+        return [];
+      }
+
       // cluster markers here
       const clusteredMarkers = clusterMarkers(mapRef.current, markerGroup.markers);
 

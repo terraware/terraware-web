@@ -74,8 +74,8 @@ export default function MapSplitView({
           if (media.geolocation) {
             return {
               id: `activity-${activity.id}-media-${media.fileId}`,
-              longitude: media.geolocation.coordinates[1],
-              latitude: media.geolocation.coordinates[0],
+              longitude: media.geolocation.coordinates[0],
+              latitude: media.geolocation.coordinates[1],
               onClick: onActivityMarkerClickCallback(activity.id, media.fileId),
               selected: activityMarkerHighlighted?.(activity.id, media.fileId) ?? false,
             };
@@ -94,13 +94,10 @@ export default function MapSplitView({
           iconName: 'iconPhoto',
           type: 'icon',
         },
+        visible: true,
       };
     });
   }, [activities, activityMarkerHighlighted, onActivityMarkerClickCallback]);
-
-  const visibleMarkers = useMemo(() => {
-    return markerGroups.map((group) => group.markerGroupId);
-  }, [markerGroups]);
 
   const mapFeatures = useMemo((): MapFeatureSection[] => {
     return [
@@ -145,7 +142,6 @@ export default function MapSplitView({
         features={mapFeatures}
         hideLegend
         initialSelectedLayerId='sites'
-        initialVisibleMarkers={visibleMarkers}
         mapRef={mapRef}
         mapId={mapId}
         token={token ?? ''}
