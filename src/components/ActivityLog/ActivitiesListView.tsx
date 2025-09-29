@@ -198,8 +198,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     }));
   }, [activities, strings]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const activityMarkerHighlighted = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (activityId: number, fileId: number) => {
       return focusedActivityId === activityId;
     },
