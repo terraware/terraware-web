@@ -1,3 +1,5 @@
+473b58322bb Activity Log: Activity List Item Cover Photo (#4512)
+c1ed3f6b2c6 Activity Log: Add permission check in console nav (#4508)
 3de7b0dfd15 SW-7436 Avoid console error about needing a mapbox API token (#4513)
 79acc742731 Bump tar-fs from 2.1.3 to 2.1.4 (#4507)
 cf2f0c3f0c1 Update dependency eslint-plugin-jsdoc to v60 (#4510)
