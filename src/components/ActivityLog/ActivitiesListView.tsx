@@ -212,12 +212,25 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     }));
   }, [activities, strings]);
 
+  const activityMarkerHighlighted = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (activityId: number, fileId: number) => {
+      return focusedActivityId === activityId;
+    },
+    [focusedActivityId]
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onActivityMarkerClick = useCallback((activityId: number, fileId: number) => {
+    setFocusedActivityId((prevValue) => (prevValue === activityId ? undefined : activityId));
+  }, []);
+
   return (
     <MapSplitView
-      activities={activities}
-      focusedActivityId={focusedActivityId}
+      activities={activities} // TODO: Use visible activites after pagination/filtering
+      activityMarkerHighlighted={activityMarkerHighlighted}
+      onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
-      setFocusedActivityId={setFocusedActivityId}
     >
       <DateRange
         field='dateRange'
