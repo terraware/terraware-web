@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/162</span>
+                <span class='fraction'>0/165</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/131</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/151</span>
+                <span class='fraction'>0/154</span>
             </div>
         
             
@@ -718,7 +718,15 @@
 <a name='L653'></a><a href='#L653'>653</a>
 <a name='L654'></a><a href='#L654'>654</a>
 <a name='L655'></a><a href='#L655'>655</a>
-<a name='L656'></a><a href='#L656'>656</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L656'></a><a href='#L656'>656</a>
+<a name='L657'></a><a href='#L657'>657</a>
+<a name='L658'></a><a href='#L658'>658</a>
+<a name='L659'></a><a href='#L659'>659</a>
+<a name='L660'></a><a href='#L660'>660</a>
+<a name='L661'></a><a href='#L661'>661</a>
+<a name='L662'></a><a href='#L662'>662</a>
+<a name='L663'></a><a href='#L663'>663</a>
+<a name='L664'></a><a href='#L664'>664</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -781,6 +789,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -806,7 +815,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1078,6 +1087,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1138,8 +1150,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1373,7 +1389,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import Map, {
   FullscreenControl,
   Layer,
@@ -1429,6 +1445,7 @@ export type MapBoxProps = {
   layers?: MapLayer[];
   mapId: string;
   mapImageUrls?: string[];
+  mapRef: MutableRefObject&lt;MapRef | null&gt;;
   mapViewStyle: MapViewStyle;
   markerGroups?: MapMarkerGroup[];
   onClickCanvas?: (event: MapMouseEvent) =&gt; void;
@@ -1456,6 +1473,7 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
     initialViewState,
     mapId,
     mapImageUrls,
+    mapRef,
     mapViewStyle,
     markerGroups,
     onClickCanvas,
@@ -1463,7 +1481,6 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
     token,
   } = <span class="cstat-no" title="statement not covered" >props;</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const mapRef = <span class="cstat-no" title="statement not covered" >useRef&lt;MapRef | null&gt;(null);</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const [cursor, setCursor] = <span class="cstat-no" title="statement not covered" >useState&lt;MapCursor&gt;('auto');</span>
   const [hoverFeatureId, setHoverFeatureId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;();</span>
@@ -1492,7 +1509,7 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
 <span class="cstat-no" title="statement not covered" >        loadImages(map);</span>
       }
     },
-    [loadImages]
+    [loadImages, mapRef]
   );
 &nbsp;
   const onMove = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(v</span>iew: ViewStateChangeEvent) =&gt; {</span>
@@ -1737,6 +1754,9 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
   const highlightLayers = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       highlightGroups?.flatMap(<span class="fstat-no" title="function not covered" >(g</span>roup) =&gt; {
+<span class="cstat-no" title="statement not covered" >        if (!group.visible) {</span>
+<span class="cstat-no" title="statement not covered" >          return [];</span>
+        }
 <span class="cstat-no" title="statement not covered" >        return group.highlights</span>
           .map(<span class="fstat-no" title="function not covered" >(h</span>ighlight, index) =&gt; {
             const highlightFeatureIds = <span class="cstat-no" title="statement not covered" >highlight.featureIds.map(<span class="fstat-no" title="function not covered" >({</span> layerId, featureId }) =&gt; <span class="cstat-no" title="statement not covered" >`${layerId}/${featureId}`)</span>;</span>
@@ -1790,11 +1810,15 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
       });
 <span class="cstat-no" title="statement not covered" >      event.originalEvent.stopPropagation();</span>
     },
-    [zoom]
+    [mapRef, zoom]
   );
 &nbsp;
   const markersComponents = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return markerGroups?.flatMap(<span class="fstat-no" title="function not covered" >(m</span>arkerGroup) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (!markerGroup.visible) {</span>
+<span class="cstat-no" title="statement not covered" >        return [];</span>
+      }
+&nbsp;
       // cluster markers here
       const clusteredMarkers = <span class="cstat-no" title="statement not covered" >clusterMarkers(mapRef.current, markerGroup.markers);</span>
 &nbsp;
@@ -1848,7 +1872,7 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
         }
       });
     });
-  }, [clusterMarkers, markerGroups, onMarkerClick, onMarkerClusterClick, theme]);
+  }, [clusterMarkers, markerGroups, mapRef, onMarkerClick, onMarkerClusterClick, theme]);
 &nbsp;
   const onMouseMove = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(e</span>vent: MapMouseEvent) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (event.features &amp;&amp; event.features.length) {</span>
@@ -1884,7 +1908,7 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
 <span class="cstat-no" title="statement not covered" >    observer.observe(mapRef.current.getContainer());</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >observer.disconnect();</span></span>
-  }, []);
+  }, [mapRef]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!mapRef.current) {</span>
@@ -1892,7 +1916,7 @@ const MapBox = <span class="cstat-no" title="statement not covered" ><span class
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    mapRef.current.resize();</span>
-  }, [drawerOpen]);
+  }, [drawerOpen, mapRef]);
 &nbsp;
   // Hovering interactive layers
   const onMouseEnter = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setCursor(cursorInteract ?? 'pointer'),</span> [cursorInteract]);</span>
@@ -2035,7 +2059,7 @@ export default MapBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-29T22:31:13.982Z
+                at 2025-09-29T23:49:01.675Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
