@@ -11,9 +11,9 @@ import useMapboxToken from 'src/utils/useMapboxToken';
 
 type MapSplitViewProps = {
   activities?: Activity[];
-  activityMarkerHighlighted?: (acitivityId: number, fileId: number) => boolean;
+  activityMarkerHighlighted?: (activityId: number, fileId: number) => boolean;
   children: React.ReactNode;
-  onActivityMarkerClick?: (acitivityId: number, fileId: number) => void;
+  onActivityMarkerClick?: (activityId: number, fileId: number) => void;
   projectId: number;
   topComponent?: React.ReactNode;
 };
@@ -31,7 +31,7 @@ export default function MapSplitView({
   const { strings } = useLocalization();
 
   const onActivityMarkerClickCallback = useCallback(
-    (acitivityId: number, fileId: number) => () => onActivityMarkerClick?.(acitivityId, fileId),
+    (activityId: number, fileId: number) => () => onActivityMarkerClick?.(activityId, fileId),
     [onActivityMarkerClick]
   );
 
