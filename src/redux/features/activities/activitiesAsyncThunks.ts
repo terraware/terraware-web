@@ -279,8 +279,8 @@ export const requestUploadManyActivityMedia = createAsyncThunk(
 
         // Update the metadata
         const updateResponse = await ActivityService.updateActivityMedia(activityId, uploadResponse.data.fileId, {
-          caption: mediaFile.caption || 'A brief description of the media file',
-          isCoverPhoto: mediaFile.isCoverPhoto || false,
+          caption: mediaFile.caption,
+          isCoverPhoto: !!mediaFile.isCoverPhoto,
         });
 
         if (!updateResponse?.requestSucceeded) {
