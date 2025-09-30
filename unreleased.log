@@ -1,3 +1,4 @@
+687221c4f8b Activity Log: Hide status badges on org-side (#4519)
 1ad5fa864d7 Create Activity Photos (#4517)
 c2d3a73e743 SW-7395 Change Status should do FE validation when remainder is negative (#4518)
 b348ae296b2 SW-7435 Use client table to sort correctly by project_names (#4506)
