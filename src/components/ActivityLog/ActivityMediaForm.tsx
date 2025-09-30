@@ -162,7 +162,7 @@ export default function ActivityMediaForm({
           <FileChooser
             acceptFileType='image/jpeg, image/png'
             chooseFileText={strings.CHOOSE_FILE}
-            maxFiles={MAX_FILES}
+            maxFiles={maxFiles}
             multipleSelection
             setFiles={onSetFiles}
             uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
