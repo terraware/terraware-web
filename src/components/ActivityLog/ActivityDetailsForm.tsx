@@ -81,16 +81,20 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
   const [mediaFiles, setMediaFiles] = useState<ActivityMediaPhoto[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState('');
+  const [uploadMediaRequestId, setUploadMediaRequestId] = useState('');
+  const [getActivityRequestId, setGetActivityRequestId] = useState('');
+  const [saveActivityRequestId, setSaveActivityRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
 
-  const createActivityRequest = useAppSelector(selectActivityCreate(requestId));
-  const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(requestId));
-  const uploadManyActivityMediaRequest = useAppSelector(selectUploadManyActivityMedia(requestId));
-  const updateActivityRequest = useAppSelector(selectActivityUpdate(requestId));
-  const adminUpdateActivityRequest = useAppSelector(selectAdminActivityUpdate(requestId));
-  const getActivityRequest = useAppSelector(selectActivityGet(requestId));
-  const adminGetActivityRequest = useAppSelector(selectAdminActivityGet(requestId));
+  const getActivityRequest = useAppSelector(selectActivityGet(getActivityRequestId));
+  const adminGetActivityRequest = useAppSelector(selectAdminActivityGet(getActivityRequestId));
+
+  const createActivityRequest = useAppSelector(selectActivityCreate(saveActivityRequestId));
+  const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(saveActivityRequestId));
+  const updateActivityRequest = useAppSelector(selectActivityUpdate(saveActivityRequestId));
+  const adminUpdateActivityRequest = useAppSelector(selectAdminActivityUpdate(saveActivityRequestId));
+
+  const uploadManyActivityMediaRequest = useAppSelector(selectUploadManyActivityMedia(uploadMediaRequestId));
 
   useEffect(() => {
     const _source = query.get('source');
@@ -173,7 +177,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           } as AdminActivityPayload,
         })
       );
-      setRequestId(request.requestId);
+      setSaveActivityRequestId(request.requestId);
     } else if (isEditing && !isAcceleratorRoute && activity) {
       // update activity
       const request = dispatch(
@@ -187,7 +191,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           } as ActivityPayload,
         })
       );
-      setRequestId(request.requestId);
+      setSaveActivityRequestId(request.requestId);
     } else if (!isEditing && isAcceleratorRoute) {
       // admin create activity
       const request = dispatch(
@@ -200,7 +204,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           type: record?.type as AdminCreateActivityRequestPayload['type'],
         })
       );
-      setRequestId(request.requestId);
+      setSaveActivityRequestId(request.requestId);
     } else {
       // create activity
       const request = dispatch(
@@ -211,7 +215,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           type: record?.type as CreateActivityRequestPayload['type'],
         })
       );
-      setRequestId(request.requestId);
+      setSaveActivityRequestId(request.requestId);
     }
   }, [activity, dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
 
@@ -223,7 +227,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           mediaFiles,
         })
       );
-      setRequestId(request.requestId);
+      setUploadMediaRequestId(request.requestId);
     },
     [dispatch, mediaFiles]
   );
@@ -250,10 +254,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     if (isEditing && activityId && !activity) {
       if (isAcceleratorRoute) {
         const request = dispatch(requestAdminGetActivity(activityId.toString()));
-        setRequestId(request.requestId);
+        setGetActivityRequestId(request.requestId);
       } else {
         const request = dispatch(requestGetActivity(activityId));
-        setRequestId(request.requestId);
+        setGetActivityRequestId(request.requestId);
       }
     }
   }, [activity, activityId, dispatch, isAcceleratorRoute, isEditing]);
