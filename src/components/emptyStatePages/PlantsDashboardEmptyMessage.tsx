@@ -37,12 +37,12 @@ export default function PlantsDashboardEmptyMessage(): JSX.Element {
       </Box>
       <Box>
         <Typography fontSize={'20px'} fontWeight={600}>
-          {isAdmin(selectedOrganization)
+          {isAllowedCreatePlantingSite
             ? strings.DASHBOARD_NO_PLANTING_SITES_TITLE_ADMIN
             : strings.DASHBOARD_NO_PLANTING_SITES_TITLE_NON_ADMIN}
         </Typography>
         <Typography paddingTop={1}>
-          {isAdmin(selectedOrganization)
+          {isAllowedCreatePlantingSite
             ? strings.DASHBOARD_NO_PLANTING_SITES_DESCRIPTION_ADMIN
             : strings.DASHBOARD_NO_PLANTING_SITES_DESCRIPTION_NON_ADMIN}
         </Typography>
