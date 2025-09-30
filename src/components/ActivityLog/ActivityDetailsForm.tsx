@@ -16,19 +16,29 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import {
   requestAdminCreateActivity,
+  requestAdminGetActivity,
+  requestAdminUpdateActivity,
   requestCreateActivity,
+  requestGetActivity,
+  requestUpdateActivity,
   requestUploadManyActivityMedia,
 } from 'src/redux/features/activities/activitiesAsyncThunks';
 import {
   selectActivityCreate,
+  selectActivityGet,
+  selectActivityUpdate,
   selectAdminActivityCreate,
+  selectAdminActivityGet,
+  selectAdminActivityUpdate,
   selectUploadManyActivityMedia,
 } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
   ACTIVITY_TYPES,
   Activity,
+  ActivityPayload,
   ActivityType,
+  AdminActivityPayload,
   AdminCreateActivityRequestPayload,
   CreateActivityRequestPayload,
   UpdateActivityRequestPayload,
@@ -67,6 +77,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const query = useQuery();
 
   const [source, setSource] = useState<string | null>();
+  const [activity, setActivity] = useState<Activity | null>(null);
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
   const [mediaFiles, setMediaFiles] = useState<ActivityMediaPhoto[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -76,6 +87,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const createActivityRequest = useAppSelector(selectActivityCreate(requestId));
   const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(requestId));
   const uploadManyActivityMediaRequest = useAppSelector(selectUploadManyActivityMedia(requestId));
+  const updateActivityRequest = useAppSelector(selectActivityUpdate(requestId));
+  const adminUpdateActivityRequest = useAppSelector(selectAdminActivityUpdate(requestId));
+  const getActivityRequest = useAppSelector(selectActivityGet(requestId));
+  const adminGetActivityRequest = useAppSelector(selectAdminActivityGet(requestId));
 
   useEffect(() => {
     const _source = query.get('source');
@@ -143,10 +158,36 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
     setBusy(true);
 
-    if (isEditing && isAcceleratorRoute) {
+    if (isEditing && isAcceleratorRoute && activity) {
       // admin update activity
-    } else if (isEditing && !isAcceleratorRoute) {
+      const request = dispatch(
+        requestAdminUpdateActivity({
+          activityId: activity.id,
+          activity: {
+            ...activity,
+            date: record?.date as string,
+            description: record?.description,
+            isHighlight: !!record?.isHighlight,
+            isVerified: !!record?.isVerified,
+            type: record?.type as AdminActivityPayload['type'],
+          } as AdminActivityPayload,
+        })
+      );
+      setRequestId(request.requestId);
+    } else if (isEditing && !isAcceleratorRoute && activity) {
       // update activity
+      const request = dispatch(
+        requestUpdateActivity({
+          activityId: activity.id,
+          activity: {
+            ...activity,
+            date: record?.date as string,
+            description: record?.description,
+            type: record?.type as ActivityPayload['type'],
+          } as ActivityPayload,
+        })
+      );
+      setRequestId(request.requestId);
     } else if (!isEditing && isAcceleratorRoute) {
       // admin create activity
       const request = dispatch(
@@ -172,7 +213,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       );
       setRequestId(request.requestId);
     }
-  }, [dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
+  }, [activity, dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
 
   const uploadMediaFiles = useCallback(
     (newActivityId: number) => {
@@ -189,7 +230,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   // initialize record, if creating new
   useEffect(() => {
-    if (record) {
+    if (record || isEditing) {
       return;
     }
 
@@ -202,8 +243,49 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     };
 
     setRecord({ ...newActivity });
-  }, [projectId, record, selectedOrganization, setRecord]);
+  }, [isEditing, projectId, record, selectedOrganization, setRecord]);
 
+  // get activity for editing
+  useEffect(() => {
+    if (isEditing && activityId && !activity) {
+      if (isAcceleratorRoute) {
+        const request = dispatch(requestAdminGetActivity(activityId.toString()));
+        setRequestId(request.requestId);
+      } else {
+        const request = dispatch(requestGetActivity(activityId));
+        setRequestId(request.requestId);
+      }
+    }
+  }, [activity, activityId, dispatch, isAcceleratorRoute, isEditing]);
+
+  // handle get activity responses
+  useEffect(() => {
+    if (getActivityRequest?.status === 'error' || adminGetActivityRequest?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    } else if (getActivityRequest?.status === 'success' && getActivityRequest?.data) {
+      setActivity(getActivityRequest.data as Activity);
+    } else if (adminGetActivityRequest?.status === 'success' && adminGetActivityRequest?.data) {
+      setActivity(adminGetActivityRequest.data as Activity);
+    }
+  }, [getActivityRequest, adminGetActivityRequest, snackbar, strings.GENERIC_ERROR]);
+
+  // reset record with fetched activity data when editing
+  useEffect(() => {
+    if (isEditing && activity) {
+      const activityRecord: Partial<FormRecord> = {
+        date: activity.date,
+        description: activity.description,
+        id: activity.id,
+        isHighlight: activity.isHighlight,
+        isVerified: activity.isVerified,
+        projectId,
+        type: activity.type,
+      };
+      setRecord({ ...activityRecord });
+    }
+  }, [isEditing, activity, setRecord, projectId]);
+
+  // handle create activity responses
   useEffect(() => {
     if (createActivityRequest?.status === 'error' || adminCreateActivityRequest?.status === 'error') {
       setBusy(false);
@@ -221,6 +303,25 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     uploadMediaFiles,
   ]);
 
+  // handle update activity responses
+  useEffect(() => {
+    if (updateActivityRequest?.status === 'error' || adminUpdateActivityRequest?.status === 'error') {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+      setValidateFields(false);
+    } else if (updateActivityRequest?.status === 'success' || adminUpdateActivityRequest?.status === 'success') {
+      uploadMediaFiles(activityId as number);
+    }
+  }, [
+    activityId,
+    adminUpdateActivityRequest,
+    snackbar,
+    strings.GENERIC_ERROR,
+    updateActivityRequest,
+    uploadMediaFiles,
+  ]);
+
+  // handle upload media responses
   useEffect(() => {
     if (uploadManyActivityMediaRequest?.status === 'error') {
       setBusy(false);
