@@ -8,6 +8,7 @@ import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -27,6 +28,7 @@ export const PlantingSiteStats = () => {
   const navigate = useSyncNavigate();
   const { selectedOrganization } = useOrganization();
   const { token } = useMapboxToken();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const { allPlantingSites, plantingSite, setSelectedPlantingSite, latestResult, plantingSiteReportedPlants } =
     usePlantingSiteData();
@@ -165,10 +167,18 @@ export const PlantingSiteStats = () => {
 
           <Grid item xs={primaryGridSize}>
             <StatsCardItem
-              label={strings.MORTALITY_RATE}
+              label={isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE}
               showBorder={!isDesktop}
               showLink={false}
-              value={latestResult?.mortalityRate ? `${latestResult.mortalityRate}%` : ''}
+              value={
+                isSurvivalRateCalculationEnabled
+                  ? latestResult?.mortalityRate
+                    ? `${latestResult.mortalityRate}%`
+                    : ''
+                  : latestResult?.survivalRate
+                    ? `${latestResult.survivalRate}%`
+                    : ''
+              }
             />
           </Grid>
 
