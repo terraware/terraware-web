@@ -68,13 +68,22 @@ export default function ChangeQuantityModal({
     if (movedValue === undefined || movedValue === 0) {
       setErrorText(strings.REQUIRED_FIELD);
       return;
-    } else if (type === 'germinating' && movedValue > +row['germinatingQuantity(raw)']) {
+    } else if (
+      type === 'germinating' &&
+      (movedValue > +row['germinatingQuantity(raw)'] || record.germinatingQuantity < 0)
+    ) {
       setErrorText(strings.GERMINATION_ESTABLISHMENT_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
-    } else if (type === 'active-growth' && movedValue > +row['activeGrowthQuantity(raw)']) {
+    } else if (
+      type === 'active-growth' &&
+      (movedValue > +row['activeGrowthQuantity(raw)'] || record.activeGrowthQuantity < 0)
+    ) {
       setErrorText(strings.ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
-    } else if (type === 'hardeningOff' && movedValue > +row['hardeningOffQuantity(raw)']) {
+    } else if (
+      type === 'hardening-off' &&
+      (movedValue > +row['hardeningOffQuantity(raw)'] || record.hardeningOffQuantity < 0)
+    ) {
       setErrorText(strings.HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
     }
