@@ -350,6 +350,7 @@ COUNT,Compte,59ea1127
 COUNTRY,Pays,cac01305
 COUNTRY_ONLY,Pays uniquement,d621bf13
 COUNTRY_REQUIRED,Pays *,2b4fcea0
+COVER_PHOTO,Photo de couverture,22acbe1c
 CREATE,Créer,24731958
 CREATE_NEW_ORGANIZATION,Créer une nouvelle organisation,a0e026b8
 CREATE_NEW_PROJECT,Créer un nouveau projet,b709ff33

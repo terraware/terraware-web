@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox, Dropdown, FileChooser, Textfield } from '@terraware/web-components';
+import { Checkbox, Dropdown, Textfield } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
@@ -17,6 +17,7 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { requestAdminCreateActivity, requestCreateActivity } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { selectActivityCreate, selectAdminActivityCreate } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { ActivityService } from 'src/services';
 import {
   ACTIVITY_TYPES,
   Activity,
@@ -31,6 +32,7 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import ActivityMediaForm, { ActivityPhoto } from './ActivityMediaForm';
 import MapSplitView from './MapSplitView';
 
 interface ActivityDetailsFormProps {
@@ -41,8 +43,6 @@ interface ActivityDetailsFormProps {
 type SavableActivity = (CreateActivityRequestPayload | UpdateActivityRequestPayload) & Activity;
 
 type FormRecord = Partial<SavableActivity> | undefined;
-
-const MAX_FILES = 20;
 
 export default function ActivityDetailsForm({ activityId, projectId }: ActivityDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
@@ -61,7 +61,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const [source, setSource] = useState<string | null>();
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
-  const [mediaFiles, setMediaFiles] = useState<File[]>([]);
+  const [mediaFiles, setMediaFiles] = useState<ActivityPhoto[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
@@ -166,6 +166,44 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
   }, [dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
 
+  const uploadMediaFiles = useCallback(
+    async (newActivityId: number) => {
+      const promises = mediaFiles.map(async (photo) => {
+        try {
+          const formData = new FormData();
+          formData.append('file', photo.file);
+          const uploadResponse = await ActivityService.uploadActivityMedia(newActivityId, formData);
+          if (!uploadResponse?.requestSucceeded || !uploadResponse?.data?.fileId) {
+            return { ok: false as const, activityId: newActivityId, error: new Error('Upload failed') };
+          }
+
+          const updateResponse = await ActivityService.updateActivityMedia(newActivityId, uploadResponse.data.fileId, {
+            caption: photo.caption || 'A brief description of the media file',
+            isCoverPhoto: photo.isCoverPhoto || false,
+          });
+          if (!updateResponse?.requestSucceeded) {
+            return { ok: false as const, activityId: newActivityId, error: new Error('Update failed') };
+          }
+
+          return { ok: true as const, activityId: newActivityId, fileId: uploadResponse.data.fileId };
+        } catch (e) {
+          return { ok: false as const, activityId: newActivityId, error: new Error((e as Error).message) };
+        }
+      });
+
+      const results = await Promise.all(promises);
+      if (results.every((r) => r.ok)) {
+        setBusy(false);
+        navToActivityLog();
+      } else {
+        setBusy(false);
+        snackbar.toastError(strings.GENERIC_ERROR);
+        navToActivityLog();
+      }
+    },
+    [mediaFiles, navToActivityLog, snackbar, strings.GENERIC_ERROR]
+  );
+
   // initialize record, if creating new
   useEffect(() => {
     if (record) {
@@ -189,10 +227,16 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
       setValidateFields(false);
     } else if (createActivityRequest?.status === 'success' || adminCreateActivityRequest?.status === 'success') {
-      setBusy(false);
-      navToActivityLog();
+      void uploadMediaFiles((createActivityRequest?.data?.id || adminCreateActivityRequest?.data?.id) as number);
     }
-  }, [adminCreateActivityRequest?.status, createActivityRequest, navToActivityLog, snackbar, strings.GENERIC_ERROR]);
+  }, [
+    adminCreateActivityRequest,
+    createActivityRequest,
+    navToActivityLog,
+    snackbar,
+    strings.GENERIC_ERROR,
+    uploadMediaFiles,
+  ]);
 
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
@@ -221,12 +265,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     },
     [onChange]
   );
-
-  const onSetFiles = useCallback((files: File[]) => {
-    setMediaFiles((prevFiles) => [...prevFiles, ...files]);
-  }, []);
-
-  const fileLimitReached = useMemo(() => (MAX_FILES ? mediaFiles.length >= MAX_FILES : false), [mediaFiles.length]);
 
   if (!record) {
     return <></>;
@@ -310,21 +348,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Grid>
             )}
 
-            <Grid item xs={12}>
-              {!fileLimitReached && (
-                <FileChooser
-                  acceptFileType='image/*, video/*'
-                  chooseFileText={strings.CHOOSE_FILE}
-                  maxFiles={20}
-                  multipleSelection
-                  setFiles={onSetFiles}
-                  uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
-                  uploadText={strings.ATTACH_IMAGES_OR_VIDEOS}
-                />
-              )}
-            </Grid>
-
-            {/* TODO: render media items */}
+            <ActivityMediaForm mediaFiles={mediaFiles} onMediaFilesChange={setMediaFiles} />
           </Grid>
         </MapSplitView>
       </Card>
