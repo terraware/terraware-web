@@ -20,9 +20,11 @@ import MapSplitView from './MapSplitView';
 type ActivityListItemProps = {
   activity: Activity;
   focused?: boolean;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
 };
 
-const ActivityListItem = ({ activity, focused }: ActivityListItemProps) => {
+const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: ActivityListItemProps) => {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -46,6 +48,8 @@ const ActivityListItem = ({ activity, focused }: ActivityListItemProps) => {
   return (
     <Grid
       container
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       id={`activity-log-item-${activity.id}`}
       paddingY={theme.spacing(2)}
       sx={{
@@ -108,6 +112,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [busy, setBusy] = useState<boolean>(false);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
+  const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
 
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
@@ -215,15 +220,26 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const activityMarkerHighlighted = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (activityId: number, fileId: number) => {
-      return focusedActivityId === activityId;
+      return focusedActivityId === activityId || hoveredActivityId === activityId;
     },
-    [focusedActivityId]
+    [focusedActivityId, hoveredActivityId]
   );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onActivityMarkerClick = useCallback((activityId: number, fileId: number) => {
     setFocusedActivityId((prevValue) => (prevValue === activityId ? undefined : activityId));
   }, []);
+
+  const setHoverActivityCallback = useCallback(
+    (activityId: number, hover: boolean) => () => {
+      if (hover) {
+        setHoveredActivityId(activityId);
+      } else {
+        setHoveredActivityId(undefined);
+      }
+    },
+    []
+  );
 
   return (
     <MapSplitView
@@ -256,7 +272,13 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
             </Typography>
 
             {groupActivities.map((activity) => (
-              <ActivityListItem activity={activity} focused={activity.id === focusedActivityId} key={activity.id} />
+              <ActivityListItem
+                activity={activity}
+                focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
+                key={activity.id}
+                onMouseEnter={setHoverActivityCallback(activity.id, true)}
+                onMouseLeave={setHoverActivityCallback(activity.id, false)}
+              />
             ))}
           </Fragment>
         ))
