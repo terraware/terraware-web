@@ -6,7 +6,6 @@ import { Button } from '@terraware/web-components';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
-import { isAdmin } from 'src/utils/organization';
 
 export default function PlantsDashboardEmptyMessage(): JSX.Element {
   const { goToPlantingSitesView } = useNavigateTo();
