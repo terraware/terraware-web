@@ -172,11 +172,11 @@ export const PlantingSiteStats = () => {
               showLink={false}
               value={
                 isSurvivalRateCalculationEnabled
-                  ? latestResult?.mortalityRate
-                    ? `${latestResult.mortalityRate}%`
-                    : ''
-                  : latestResult?.survivalRate
+                  ? latestResult?.survivalRate
                     ? `${latestResult.survivalRate}%`
+                    : ''
+                  : latestResult?.mortalityRate
+                    ? `${latestResult.mortalityRate}%`
                     : ''
               }
             />
