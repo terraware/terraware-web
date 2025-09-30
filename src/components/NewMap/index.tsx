@@ -46,6 +46,7 @@ export type MapComponentProps = {
   drawerHideCloseButton?: boolean;
   drawerHideHeader?: boolean;
   drawerOpen?: boolean;
+  drawerRef?: MutableRefObject<HTMLDivElement | null>;
   drawerSize?: MapDrawerSize;
   drawerTitle?: string;
   features?: MapFeatureSection[];
@@ -83,6 +84,7 @@ const MapComponent = (props: MapComponentProps) => {
     drawerHideCloseButton,
     drawerHideHeader,
     drawerOpen,
+    drawerRef,
     drawerSize,
     drawerTitle,
     features,
@@ -280,6 +282,7 @@ const MapComponent = (props: MapComponentProps) => {
       map={map}
       drawer={
         <MapDrawer
+          drawerRef={drawerRef}
           hideCloseButton={drawerHideCloseButton}
           hideHeader={drawerHideHeader}
           open={drawerOpen ?? false}

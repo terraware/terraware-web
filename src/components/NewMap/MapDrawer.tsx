@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties, MutableRefObject, ReactNode } from 'react';
 
 import { Box, IconButton, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -11,6 +11,7 @@ export type MapDrawerSize = 'small' | 'medium' | 'large';
 
 export type MapDrawerProp = {
   children?: ReactNode;
+  drawerRef?: MutableRefObject<HTMLDivElement | null>;
   hideCloseButton?: boolean;
   hideHeader?: boolean;
   onClose?: () => void;
@@ -21,7 +22,7 @@ export type MapDrawerProp = {
 };
 
 const MapDrawer = (props: MapDrawerProp) => {
-  const { children, hideCloseButton, hideHeader, onClose, open, size, style, title } = props;
+  const { children, drawerRef, hideCloseButton, hideHeader, onClose, open, size, style, title } = props;
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -42,7 +43,9 @@ const MapDrawer = (props: MapDrawerProp) => {
           )}
         </Box>
       )}
-      <Box className={'map-drawer--body'}>{children}</Box>
+      <Box className={'map-drawer--body'} ref={drawerRef}>
+        {children}
+      </Box>
     </Box>
   ) : null;
 };

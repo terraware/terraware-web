@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -13,6 +13,7 @@ import { SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import useMapDrawer from '../NewMap/useMapDrawer';
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
@@ -102,6 +103,7 @@ type ActivitiesListViewProps = {
 
 const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
+  const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -113,6 +115,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [activities, setActivities] = useState<Activity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
+
+  const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
@@ -241,10 +245,17 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     []
   );
 
+  useEffect(() => {
+    if (focusedActivityId !== undefined) {
+      scrollToElementById(`activity-log-item-${focusedActivityId}`);
+    }
+  }, [focusedActivityId, scrollToElementById]);
+
   return (
     <MapSplitView
       activities={activities} // TODO: Use visible activites after pagination/filtering
       activityMarkerHighlighted={activityMarkerHighlighted}
+      drawerRef={mapDrawerRef}
       onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >
