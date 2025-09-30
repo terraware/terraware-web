@@ -32,6 +32,7 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import PlotT0EditBox from './PlotT0EditBox';
+import SpeciesDensityWarningMessage from './SpeciesDensityWarningMessage';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
 
 const EditSurvivalRateSettings = () => {
@@ -44,6 +45,7 @@ const EditSurvivalRateSettings = () => {
   const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
+  const [showSpeciesDensityWarningMessage, setShowSpeciesDensityWarningMessage] = useState(false);
   const [assignRequestId, setAssignRequestId] = useState('');
   const saveResponse = useAppSelector(selectAssignT0SiteData(assignRequestId));
   const dispatch = useAppDispatch();
@@ -111,9 +113,40 @@ const EditSurvivalRateSettings = () => {
   }, [navigate, plantingSiteId]);
 
   const saveSettings = useCallback(() => {
+    let shouldShowWarning = false;
+
+    withdrawnSpeciesPlots?.forEach((withdrawnPlot) => {
+      const correspondingPlot = record.plots.find(
+        (plot) => plot.monitoringPlotId.toString() === withdrawnPlot.monitoringPlotId.toString()
+      );
+      if (correspondingPlot) {
+        withdrawnPlot.species.forEach((withdrawnSpecies) => {
+          const correspondingSpecies = correspondingPlot.densityData.find(
+            (denData) => denData.speciesId.toString() === withdrawnSpecies.speciesId.toString()
+          );
+          if (!correspondingSpecies) {
+            shouldShowWarning = true;
+          }
+        });
+      }
+    });
+
+    record.plots.forEach((plot) => {
+      plot.densityData.forEach((denData) => {
+        if (denData.plotDensity === undefined || denData.plotDensity === null) {
+          shouldShowWarning = true;
+        }
+      });
+    });
+
+    if (shouldShowWarning) {
+      setShowSpeciesDensityWarningMessage(true);
+      return;
+    }
+
     const saveRequest = dispatch(requestAssignT0SiteData(record));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record]);
+  }, [dispatch, record, withdrawnSpeciesPlots]);
 
   useEffect(() => {
     if (saveResponse?.status === 'success') {
@@ -125,8 +158,20 @@ const EditSurvivalRateSettings = () => {
     }
   }, [goToViewSettings, reload, saveResponse, snackbar]);
 
+  const cancelWarningHandler = useCallback(() => {
+    setShowSpeciesDensityWarningMessage(false);
+  }, []);
+
+  const saveWithDefaultDensity = useCallback(() => {
+    const saveRequest = dispatch(requestAssignT0SiteData(record));
+    setAssignRequestId(saveRequest.requestId);
+  }, [dispatch, record]);
+
   return (
     <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
+      {showSpeciesDensityWarningMessage && (
+        <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} />
+      )}
       <PageForm
         cancelID='cancelSettings'
         saveID='saveSettings'
