@@ -117,7 +117,9 @@ export default function ActivityMediaForm({
   const onSetFiles = useCallback(
     (files: File[]) => {
       const newPhotos = files.map((file) => {
-const existingPhoto = mediaFiles.find((photo) => photo.file.name === file.name && photo.file.size === file.size);
+        const existingPhoto = mediaFiles.find(
+          (photo) => photo.file.name === file.name && photo.file.size === file.size
+        );
 
         return {
           caption: existingPhoto?.caption,
