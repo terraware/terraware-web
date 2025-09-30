@@ -32,3 +32,6 @@ export const selectActivityMediaDelete = (requestId: string) => (state: RootStat
   state.activityMediaDelete[requestId];
 
 export const selectFileForToken = (requestId: string) => (state: RootState) => state.fileForToken[requestId];
+
+export const selectUploadManyActivityMedia = (requestId: string) => (state: RootState) =>
+  state.uploadManyActivityMedia[requestId];

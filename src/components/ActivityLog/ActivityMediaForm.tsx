@@ -6,7 +6,7 @@ import { Button, FileChooser, Textfield } from '@terraware/web-components';
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import { useLocalization } from 'src/providers/hooks';
 
-export type ActivityPhoto = {
+export type ActivityMediaPhoto = {
   caption?: string;
   file: File;
   isCoverPhoto?: boolean;
@@ -18,7 +18,7 @@ type ActivityPhotoPreviewProps = {
   isLast?: boolean;
   onCoverPhotoChange: (isCover: boolean) => void;
   onDelete: () => void;
-  photo: ActivityPhoto;
+  photo: ActivityMediaPhoto;
   setCaption: (caption: string) => void;
 };
 
@@ -103,8 +103,8 @@ const ActivityPhotoPreview = ({
 
 export interface ActivityMediaFormProps {
   maxFiles?: number;
-  mediaFiles: ActivityPhoto[];
-  onMediaFilesChange: React.Dispatch<React.SetStateAction<ActivityPhoto[]>>;
+  mediaFiles: ActivityMediaPhoto[];
+  onMediaFilesChange: React.Dispatch<React.SetStateAction<ActivityMediaPhoto[]>>;
 }
 
 export default function ActivityMediaForm({
@@ -120,8 +120,8 @@ export default function ActivityMediaForm({
         const existingPhoto = mediaFiles.find((photo) => photo.file === file);
 
         return {
-          file,
           caption: existingPhoto?.caption,
+          file,
           isCoverPhoto: existingPhoto?.isCoverPhoto,
         };
       });

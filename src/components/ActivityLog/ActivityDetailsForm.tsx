@@ -14,10 +14,17 @@ import { useParticipants } from 'src/hooks/useParticipants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { requestAdminCreateActivity, requestCreateActivity } from 'src/redux/features/activities/activitiesAsyncThunks';
-import { selectActivityCreate, selectAdminActivityCreate } from 'src/redux/features/activities/activitiesSelectors';
+import {
+  requestAdminCreateActivity,
+  requestCreateActivity,
+  requestUploadManyActivityMedia,
+} from 'src/redux/features/activities/activitiesAsyncThunks';
+import {
+  selectActivityCreate,
+  selectAdminActivityCreate,
+  selectUploadManyActivityMedia,
+} from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ActivityService } from 'src/services';
 import {
   ACTIVITY_TYPES,
   Activity,
@@ -32,7 +39,7 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import ActivityMediaForm, { ActivityPhoto } from './ActivityMediaForm';
+import ActivityMediaForm, { ActivityMediaPhoto } from './ActivityMediaForm';
 import MapSplitView from './MapSplitView';
 
 interface ActivityDetailsFormProps {
@@ -61,13 +68,14 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const [source, setSource] = useState<string | null>();
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
-  const [mediaFiles, setMediaFiles] = useState<ActivityPhoto[]>([]);
+  const [mediaFiles, setMediaFiles] = useState<ActivityMediaPhoto[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
 
   const createActivityRequest = useAppSelector(selectActivityCreate(requestId));
   const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(requestId));
+  const uploadManyActivityMediaRequest = useAppSelector(selectUploadManyActivityMedia(requestId));
 
   useEffect(() => {
     const _source = query.get('source');
@@ -167,41 +175,16 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   }, [dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
 
   const uploadMediaFiles = useCallback(
-    async (newActivityId: number) => {
-      const promises = mediaFiles.map(async (photo) => {
-        try {
-          const formData = new FormData();
-          formData.append('file', photo.file);
-          const uploadResponse = await ActivityService.uploadActivityMedia(newActivityId, formData);
-          if (!uploadResponse?.requestSucceeded || !uploadResponse?.data?.fileId) {
-            return { ok: false as const, activityId: newActivityId, error: new Error('Upload failed') };
-          }
-
-          const updateResponse = await ActivityService.updateActivityMedia(newActivityId, uploadResponse.data.fileId, {
-            caption: photo.caption || 'A brief description of the media file',
-            isCoverPhoto: photo.isCoverPhoto || false,
-          });
-          if (!updateResponse?.requestSucceeded) {
-            return { ok: false as const, activityId: newActivityId, error: new Error('Update failed') };
-          }
-
-          return { ok: true as const, activityId: newActivityId, fileId: uploadResponse.data.fileId };
-        } catch (e) {
-          return { ok: false as const, activityId: newActivityId, error: new Error((e as Error).message) };
-        }
-      });
-
-      const results = await Promise.all(promises);
-      if (results.every((r) => r.ok)) {
-        setBusy(false);
-        navToActivityLog();
-      } else {
-        setBusy(false);
-        snackbar.toastError(strings.GENERIC_ERROR);
-        navToActivityLog();
-      }
+    (newActivityId: number) => {
+      const request = dispatch(
+        requestUploadManyActivityMedia({
+          activityId: newActivityId,
+          mediaFiles,
+        })
+      );
+      setRequestId(request.requestId);
     },
-    [mediaFiles, navToActivityLog, snackbar, strings.GENERIC_ERROR]
+    [dispatch, mediaFiles]
   );
 
   // initialize record, if creating new
@@ -227,7 +210,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
       setValidateFields(false);
     } else if (createActivityRequest?.status === 'success' || adminCreateActivityRequest?.status === 'success') {
-      void uploadMediaFiles((createActivityRequest?.data?.id || adminCreateActivityRequest?.data?.id) as number);
+      uploadMediaFiles((createActivityRequest?.data?.id || adminCreateActivityRequest?.data?.id) as number);
     }
   }, [
     adminCreateActivityRequest,
@@ -237,6 +220,17 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     strings.GENERIC_ERROR,
     uploadMediaFiles,
   ]);
+
+  useEffect(() => {
+    if (uploadManyActivityMediaRequest?.status === 'error') {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+      navToActivityLog();
+    } else if (uploadManyActivityMediaRequest?.status === 'success') {
+      setBusy(false);
+      navToActivityLog();
+    }
+  }, [uploadManyActivityMediaRequest, navToActivityLog, snackbar, strings.GENERIC_ERROR]);
 
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
