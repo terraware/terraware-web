@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.42% </span>
+                <span class="strong">70.68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/56</span>
+                <span class='fraction'>41/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32.35% </span>
+                <span class="strong">30.55% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/34</span>
+                <span class='fraction'>11/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">27.27% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/21</span>
+                <span class='fraction'>6/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.07% </span>
+                <span class="strong">72.22% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>38/52</span>
+                <span class='fraction'>39/54</span>
             </div>
         
             
@@ -390,7 +390,23 @@
 <a name='L325'></a><a href='#L325'>325</a>
 <a name='L326'></a><a href='#L326'>326</a>
 <a name='L327'></a><a href='#L327'>327</a>
-<a name='L328'></a><a href='#L328'>328</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -646,7 +662,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -768,6 +796,7 @@ type PermissionDeliverable =
 type PermissionDocuments = 'CREATE_DOCUMENTS';
 type PermissionFunder = 'READ_FUNDING_ENTITIES' | 'MANAGE_FUNDING_ENTITIES' | 'INVITE_FUNDER';
 type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
+type PermissionOrganization = 'CREATE_PLANTING_SITE';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
   | 'READ_PARTICIPANTS'
@@ -794,6 +823,7 @@ export type GlobalRolePermission =
   | PermissionDocuments
   | PermissionFunder
   | PermissionGlobalRole
+  | PermissionOrganization
   | PermissionParticipant
   | PermissionParticipantProject;
 &nbsp;
@@ -970,6 +1000,17 @@ const isAllowedDeleteNonPublishedActivities: PermissionCheckFn&lt;DeleteNonPubli
 };
 &nbsp;
 /**
+ * Function related to create planting site, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type CreatePlantingSiteMetadata = { organization: Organization };
+const isAllowedCreatePlantingSite: PermissionCheckFn&lt;CreatePlantingSiteMetadata&gt; = <span class="fstat-no" title="function not covered" >(</span>
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: CreatePlantingSiteMetadata
+) =&gt; <span class="cstat-no" title="statement not covered" >isAcceleratorAdmin(user) || isAdmin(metadata?.organization);</span>
+&nbsp;
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -982,6 +1023,7 @@ const ACL: Record&lt;GlobalRolePermission, UserGlobalRoles | PermissionCheckFn&g
   CREATE_COHORTS: AcceleratorAdminPlus,
   CREATE_DOCUMENTS: TFExpertPlus,
   CREATE_PARTICIPANTS: AcceleratorAdminPlus,
+  CREATE_PLANTING_SITE: isAllowedCreatePlantingSite,
   CREATE_SUBMISSION: isAllowedCreateSubmission,
   DELETE_ACTIVITIES_NON_PUBLISHED: isAllowedDeleteNonPublishedActivities,
   DELETE_ACTIVITIES_PUBLISHED: AcceleratorAdminPlus,
@@ -1051,7 +1093,7 @@ export const isAllowed: PermissionCheckFn = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-30T20:04:29.618Z
+                at 2025-09-30T21:40:45.206Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
