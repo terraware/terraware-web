@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useOrganization } from 'src/providers';
+import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
@@ -12,6 +12,14 @@ export default function PlantsDashboardEmptyMessage(): JSX.Element {
   const { goToPlantingSitesView } = useNavigateTo();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const { isAllowed } = useUser();
+
+  const isAllowedCreatePlantingSite = useMemo(
+    () => isAllowed('CREATE_PLANTING_SITE', { organization: selectedOrganization }),
+    [isAllowed, selectedOrganization]
+  );
+
+  const goToCreatePlantingSite = useCallback(() => goToPlantingSitesView(true), [goToPlantingSitesView]);
 
   return (
     <Box
@@ -38,9 +46,11 @@ export default function PlantsDashboardEmptyMessage(): JSX.Element {
             ? strings.DASHBOARD_NO_PLANTING_SITES_DESCRIPTION_ADMIN
             : strings.DASHBOARD_NO_PLANTING_SITES_DESCRIPTION_NON_ADMIN}
         </Typography>
-        <Box marginTop={2}>
-          <Button onClick={() => goToPlantingSitesView(true)} label={strings.ADD_A_PLANTING_SITE} />
-        </Box>
+        {isAllowedCreatePlantingSite && (
+          <Box marginTop={2}>
+            <Button onClick={goToCreatePlantingSite} label={strings.ADD_A_PLANTING_SITE} />
+          </Box>
+        )}
       </Box>
     </Box>
   );
