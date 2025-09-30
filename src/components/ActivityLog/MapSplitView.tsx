@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, useTheme } from '@mui/material';
@@ -17,6 +17,7 @@ type MapSplitViewProps = {
   activities?: Activity[];
   activityMarkerHighlighted?: (activityId: number, fileId: number) => boolean;
   children: React.ReactNode;
+  drawerRef?: MutableRefObject<HTMLDivElement | null>;
   onActivityMarkerClick?: (activityId: number, fileId: number) => void;
   projectId: number;
   topComponent?: React.ReactNode;
@@ -26,6 +27,7 @@ export default function MapSplitView({
   activities,
   activityMarkerHighlighted,
   children,
+  drawerRef,
   onActivityMarkerClick,
   projectId,
   topComponent,
@@ -138,6 +140,7 @@ export default function MapSplitView({
         drawerChildren={children}
         drawerHideHeader
         drawerOpen
+        drawerRef={drawerRef}
         drawerSize='large'
         features={mapFeatures}
         hideLegend

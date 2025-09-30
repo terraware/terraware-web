@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -13,6 +13,7 @@ import { SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import useMapDrawer from '../NewMap/useMapDrawer';
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
@@ -20,9 +21,11 @@ import MapSplitView from './MapSplitView';
 type ActivityListItemProps = {
   activity: Activity;
   focused?: boolean;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
 };
 
-const ActivityListItem = ({ activity, focused }: ActivityListItemProps) => {
+const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: ActivityListItemProps) => {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -46,6 +49,8 @@ const ActivityListItem = ({ activity, focused }: ActivityListItemProps) => {
   return (
     <Grid
       container
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       id={`activity-log-item-${activity.id}`}
       paddingY={theme.spacing(2)}
       sx={{
@@ -98,6 +103,7 @@ type ActivitiesListViewProps = {
 
 const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
+  const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -108,6 +114,9 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [busy, setBusy] = useState<boolean>(false);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
+  const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
+
+  const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
@@ -215,9 +224,9 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const activityMarkerHighlighted = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (activityId: number, fileId: number) => {
-      return focusedActivityId === activityId;
+      return focusedActivityId === activityId || hoveredActivityId === activityId;
     },
-    [focusedActivityId]
+    [focusedActivityId, hoveredActivityId]
   );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -225,10 +234,28 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     setFocusedActivityId((prevValue) => (prevValue === activityId ? undefined : activityId));
   }, []);
 
+  const setHoverActivityCallback = useCallback(
+    (activityId: number, hover: boolean) => () => {
+      if (hover) {
+        setHoveredActivityId(activityId);
+      } else {
+        setHoveredActivityId(undefined);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (focusedActivityId !== undefined) {
+      scrollToElementById(`activity-log-item-${focusedActivityId}`);
+    }
+  }, [focusedActivityId, scrollToElementById]);
+
   return (
     <MapSplitView
       activities={activities} // TODO: Use visible activites after pagination/filtering
       activityMarkerHighlighted={activityMarkerHighlighted}
+      drawerRef={mapDrawerRef}
       onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >
@@ -256,7 +283,13 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
             </Typography>
 
             {groupActivities.map((activity) => (
-              <ActivityListItem activity={activity} focused={activity.id === focusedActivityId} key={activity.id} />
+              <ActivityListItem
+                activity={activity}
+                focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
+                key={activity.id}
+                onMouseEnter={setHoverActivityCallback(activity.id, true)}
+                onMouseLeave={setHoverActivityCallback(activity.id, false)}
+              />
             ))}
           </Fragment>
         ))
