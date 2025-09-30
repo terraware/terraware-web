@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox, Dropdown, FileChooser, Textfield } from '@terraware/web-components';
+import { Checkbox, Dropdown, Textfield } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
@@ -14,8 +14,16 @@ import { useParticipants } from 'src/hooks/useParticipants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { requestAdminCreateActivity, requestCreateActivity } from 'src/redux/features/activities/activitiesAsyncThunks';
-import { selectActivityCreate, selectAdminActivityCreate } from 'src/redux/features/activities/activitiesSelectors';
+import {
+  requestAdminCreateActivity,
+  requestCreateActivity,
+  requestUploadManyActivityMedia,
+} from 'src/redux/features/activities/activitiesAsyncThunks';
+import {
+  selectActivityCreate,
+  selectAdminActivityCreate,
+  selectUploadManyActivityMedia,
+} from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
   ACTIVITY_TYPES,
@@ -31,6 +39,7 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import ActivityMediaForm, { ActivityMediaPhoto } from './ActivityMediaForm';
 import MapSplitView from './MapSplitView';
 
 interface ActivityDetailsFormProps {
@@ -41,8 +50,6 @@ interface ActivityDetailsFormProps {
 type SavableActivity = (CreateActivityRequestPayload | UpdateActivityRequestPayload) & Activity;
 
 type FormRecord = Partial<SavableActivity> | undefined;
-
-const MAX_FILES = 20;
 
 export default function ActivityDetailsForm({ activityId, projectId }: ActivityDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
@@ -61,13 +68,14 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const [source, setSource] = useState<string | null>();
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
-  const [mediaFiles, setMediaFiles] = useState<File[]>([]);
+  const [mediaFiles, setMediaFiles] = useState<ActivityMediaPhoto[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
 
   const createActivityRequest = useAppSelector(selectActivityCreate(requestId));
   const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(requestId));
+  const uploadManyActivityMediaRequest = useAppSelector(selectUploadManyActivityMedia(requestId));
 
   useEffect(() => {
     const _source = query.get('source');
@@ -166,6 +174,19 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
   }, [dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
 
+  const uploadMediaFiles = useCallback(
+    (newActivityId: number) => {
+      const request = dispatch(
+        requestUploadManyActivityMedia({
+          activityId: newActivityId,
+          mediaFiles,
+        })
+      );
+      setRequestId(request.requestId);
+    },
+    [dispatch, mediaFiles]
+  );
+
   // initialize record, if creating new
   useEffect(() => {
     if (record) {
@@ -189,10 +210,27 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
       setValidateFields(false);
     } else if (createActivityRequest?.status === 'success' || adminCreateActivityRequest?.status === 'success') {
+      uploadMediaFiles((createActivityRequest?.data?.id || adminCreateActivityRequest?.data?.id) as number);
+    }
+  }, [
+    adminCreateActivityRequest,
+    createActivityRequest,
+    navToActivityLog,
+    snackbar,
+    strings.GENERIC_ERROR,
+    uploadMediaFiles,
+  ]);
+
+  useEffect(() => {
+    if (uploadManyActivityMediaRequest?.status === 'error') {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+      navToActivityLog();
+    } else if (uploadManyActivityMediaRequest?.status === 'success') {
       setBusy(false);
       navToActivityLog();
     }
-  }, [adminCreateActivityRequest?.status, createActivityRequest, navToActivityLog, snackbar, strings.GENERIC_ERROR]);
+  }, [uploadManyActivityMediaRequest, navToActivityLog, snackbar, strings.GENERIC_ERROR]);
 
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
@@ -221,12 +259,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     },
     [onChange]
   );
-
-  const onSetFiles = useCallback((files: File[]) => {
-    setMediaFiles((prevFiles) => [...prevFiles, ...files]);
-  }, []);
-
-  const fileLimitReached = useMemo(() => (MAX_FILES ? mediaFiles.length >= MAX_FILES : false), [mediaFiles.length]);
 
   if (!record) {
     return <></>;
@@ -310,21 +342,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Grid>
             )}
 
-            <Grid item xs={12}>
-              {!fileLimitReached && (
-                <FileChooser
-                  acceptFileType='image/*, video/*'
-                  chooseFileText={strings.CHOOSE_FILE}
-                  maxFiles={20}
-                  multipleSelection
-                  setFiles={onSetFiles}
-                  uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
-                  uploadText={strings.ATTACH_IMAGES_OR_VIDEOS}
-                />
-              )}
-            </Grid>
-
-            {/* TODO: render media items */}
+            <ActivityMediaForm mediaFiles={mediaFiles} onMediaFilesChange={setMediaFiles} />
           </Grid>
         </MapSplitView>
       </Card>

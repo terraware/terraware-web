@@ -351,6 +351,7 @@ COUNT,Recuento,59ea1127
 COUNTRY,País,cac01305
 COUNTRY_ONLY,Solo en el campo,d621bf13
 COUNTRY_REQUIRED,País *,2b4fcea0
+COVER_PHOTO,Foto de portada,22acbe1c
 CREATE,Crear,24731958
 CREATE_NEW_ORGANIZATION,Crear nueva organización,a0e026b8
 CREATE_NEW_PROJECT,Crear proyecto nuevo,b709ff33

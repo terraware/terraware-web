@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { ActivityMediaPhoto } from 'src/components/ActivityLog/ActivityMediaForm';
 import ActivityService from 'src/services/ActivityService';
 import FileService from 'src/services/FileService';
 import strings from 'src/strings';
@@ -11,6 +12,17 @@ import {
   CreateActivityRequestPayload,
 } from 'src/types/Activity';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+
+type UploadManyActivityMediaResult = {
+  success: boolean;
+  fileId?: number;
+  error?: string;
+};
+
+type UploadManyActivityMediaResponse = {
+  results: UploadManyActivityMediaResult[];
+  allSuccessful: boolean;
+};
 
 export const requestListActivities = createAsyncThunk(
   'activities/list',
@@ -237,6 +249,68 @@ export const requestGetFileForToken = createAsyncThunk(
 
     if (response?.requestSucceeded && response?.data) {
       return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUploadManyActivityMedia = createAsyncThunk(
+  'activities/uploadManyMedia',
+  async (request: { activityId: number; mediaFiles: ActivityMediaPhoto[] }, { rejectWithValue }) => {
+    const { activityId, mediaFiles } = request;
+
+    const results = [];
+
+    for (const mediaFile of mediaFiles) {
+      try {
+        // Upload the file
+        const formData = new FormData();
+        formData.append('file', mediaFile.file);
+        const uploadResponse = await ActivityService.uploadActivityMedia(activityId, formData);
+
+        if (!uploadResponse?.requestSucceeded || !uploadResponse?.data?.fileId) {
+          results.push({
+            success: false,
+            error: 'Upload failed',
+          });
+          continue;
+        }
+
+        // Update the metadata
+        const updateResponse = await ActivityService.updateActivityMedia(activityId, uploadResponse.data.fileId, {
+          caption: mediaFile.caption,
+          isCoverPhoto: !!mediaFile.isCoverPhoto,
+        });
+
+        if (!updateResponse?.requestSucceeded) {
+          results.push({
+            success: false,
+            fileId: uploadResponse.data.fileId,
+            error: 'Metadata update failed',
+          });
+          continue;
+        }
+
+        results.push({
+          success: true,
+          fileId: uploadResponse.data.fileId,
+        });
+      } catch (error) {
+        results.push({
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error occurred',
+        });
+      }
+    }
+
+    const response: UploadManyActivityMediaResponse = {
+      results,
+      allSuccessful: results.every((result) => result.success),
+    };
+
+    if (response.allSuccessful) {
+      return response;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
