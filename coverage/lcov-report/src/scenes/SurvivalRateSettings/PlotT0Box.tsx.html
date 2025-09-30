@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -191,7 +191,19 @@
 <a name='L126'></a><a href='#L126'>126</a>
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -216,6 +228,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -327,6 +347,7 @@ import { IconTooltip } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { PlotT0Data } from 'src/types/Tracking';
@@ -335,9 +356,10 @@ type PlotT0BoxProps = {
   plot: PlotsWithObservationsSearchResult;
   plantingSiteId: number;
   t0Plot?: PlotT0Data;
+  withdrawnSpeciesPlot?: SpeciesPlot;
 };
 &nbsp;
-const PlotT0Box = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> plot, plantingSiteId, t0Plot }: PlotT0BoxProps) =&gt; {</span>
+const PlotT0Box = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
 &nbsp;
@@ -345,6 +367,14 @@ const PlotT0Box = <span class="cstat-no" title="statement not covered" ><span cl
     const total = <span class="cstat-no" title="statement not covered" >t0Plot?.densityData.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, density) =&gt; <span class="cstat-no" title="statement not covered" >sum + density.plotDensity,</span> 0);</span>
 <span class="cstat-no" title="statement not covered" >    return total;</span>
   }, [t0Plot]);
+&nbsp;
+  const someWithdrawnSpeciesMissing = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return withdrawnSpeciesPlot?.species.some(<span class="fstat-no" title="function not covered" >(w</span>ithdrawnSp) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (!t0Plot?.densityData.find(<span class="fstat-no" title="function not covered" >(d</span>d) =&gt; <span class="cstat-no" title="statement not covered" >dd.speciesId.toString() === withdrawnSp.speciesId.toString())</span>) {</span>
+<span class="cstat-no" title="statement not covered" >        return true;</span>
+      }
+    });
+  }, [t0Plot, withdrawnSpeciesPlot]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
@@ -359,7 +389,7 @@ const PlotT0Box = <span class="cstat-no" title="statement not covered" ><span cl
           &lt;Typography&gt;{plot.name}&lt;/Typography&gt;
         &lt;/Box&gt;
         &lt;Box flexGrow={1} display={'flex'} alignItems={'center'}&gt;
-          {t0Plot ? (
+          {t0Plot &amp;&amp; !someWithdrawnSpeciesMissing ? (
             &lt;Box&gt;
               &lt;Box display='flex' paddingBottom={3}&gt;
                 &lt;Typography color={theme.palette.TwClrTxtSuccess} fontWeight={500} paddingRight={2}&gt;
@@ -454,7 +484,7 @@ export default PlotT0Box;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-30T16:11:38.249Z
+                at 2025-09-30T16:55:43.986Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

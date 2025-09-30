@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -408,7 +408,17 @@
 <a name='L343'></a><a href='#L343'>343</a>
 <a name='L344'></a><a href='#L344'>344</a>
 <a name='L345'></a><a href='#L345'>345</a>
-<a name='L346'></a><a href='#L346'>346</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -713,7 +723,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -721,9 +736,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -823,7 +843,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, SearchNodePayload&gt;&gt;({});</span>
   const [searchValue, setSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);</span>
-  const [searchSortOrder, setSearchSortOrder] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchSortOrder&gt;({</span>
+  const [searchSortOrder, setSearchSortOrder] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchSortOrder | undefined&gt;({</span>
     field: 'withdrawnDate',
     direction: 'Descending',
   } as SearchSortOrder);
@@ -1057,11 +1077,19 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   const onSortChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (o</span>rder: SortOrder, orderBy: string) =&gt; {
       const orderByStr =
-<span class="cstat-no" title="statement not covered" >        orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;</span>
-<span class="cstat-no" title="statement not covered" >      setSearchSortOrder({</span>
-        field: orderByStr,
-        direction: order === 'asc' ? 'Ascending' : 'Descending',
-      });
+<span class="cstat-no" title="statement not covered" >        orderBy === 'speciesScientificNames'</span>
+          ? 'batchWithdrawals.batch_species_scientificName'
+          : orderBy === 'project_names'
+            ? null
+            : orderBy;
+<span class="cstat-no" title="statement not covered" >      setSearchSortOrder(</span>
+        orderByStr
+          ? {
+              field: orderByStr,
+              direction: order === 'asc' ? 'Ascending' : 'Descending',
+            }
+          : undefined
+      );
     },
     [setSearchSortOrder]
   );
@@ -1085,9 +1113,11 @@ export default function <span class="fstat-no" title="function not covered" >Nur
           columns={columns}
           rows={rows || []}
           Renderer={WithdrawalLogRenderer}
-          orderBy={searchSortOrder.field}
-          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-          isPresorted={searchSortOrder.field !== 'batchWithdrawals.batch_species_scientificName'}
+          orderBy={searchSortOrder?.field || 'project_names'}
+          order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
+          isPresorted={
+            searchSortOrder !== undefined &amp;&amp; searchSortOrder.field !== 'batchWithdrawals.batch_species_scientificName'
+          }
           onSelect={onWithdrawalClicked}
           controlledOnSelect={true}
           sortHandler={onSortChange}
@@ -1105,7 +1135,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-30T16:11:38.249Z
+                at 2025-09-30T16:55:43.986Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

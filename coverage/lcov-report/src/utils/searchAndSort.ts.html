@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.65% </span>
+                <span class="strong">94.89% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>124/131</span>
+                <span class='fraction'>130/137</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.16% </span>
+                <span class="strong">77.63% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>57/72</span>
+                <span class='fraction'>59/76</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.83% </span>
+                <span class="strong">96.15% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>23/24</span>
+                <span class='fraction'>25/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.82% </span>
+                <span class="strong">95.08% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>110/116</span>
+                <span class='fraction'>116/122</span>
             </div>
         
             
@@ -366,7 +366,18 @@
 <a name='L301'></a><a href='#L301'>301</a>
 <a name='L302'></a><a href='#L302'>302</a>
 <a name='L303'></a><a href='#L303'>303</a>
-<a name='L304'></a><a href='#L304'>304</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -561,12 +572,23 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -864,12 +886,23 @@ export const sortResults = &lt;T extends Record&lt;string, unknown&gt;&gt;(
   const isDescending = sortOrder.direction === 'Descending';
   const isNumberField = (numberFields || <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>.includes(field);
 &nbsp;
+  // Create array with original indices to maintain stable sort
+  const indexedResults = results.map((item, index) =&gt; ({ item, index }));
+&nbsp;
   if (isNumberField) {
-    results = results.sort((a, b) =&gt; Number(getRawField(a, field)) - Number(getRawField(b, field)));
+    indexedResults.sort((a, b) =&gt; {
+      const comparison = Number(getRawField(a.item, field)) - Number(getRawField(b.item, field));
+      return comparison !== 0 ? comparison : <span class="branch-1 cbranch-no" title="branch not covered" >a.index - b.index;</span>
+    });
   } else {
     // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
-    results = results.sort((a, b) =&gt; `${a[field] || <span class="branch-1 cbranch-no" title="branch not covered" >''}</span>`.localeCompare(`${b[field] || <span class="branch-1 cbranch-no" title="branch not covered" >''}</span>`, locale || <span class="branch-1 cbranch-no" title="branch not covered" >undefined)</span>);
+    indexedResults.sort((a, b) =&gt; {
+      const comparison = String(a.item[field] || <span class="branch-1 cbranch-no" title="branch not covered" >'')</span>.localeCompare(String(b.item[field] || <span class="branch-1 cbranch-no" title="branch not covered" >'')</span>, locale || <span class="branch-1 cbranch-no" title="branch not covered" >undefined)</span>;
+      return comparison !== 0 ? comparison : <span class="branch-1 cbranch-no" title="branch not covered" >a.index - b.index;</span>
+    });
   }
+&nbsp;
+  results = indexedResults.map(({ item }) =&gt; item);
 &nbsp;
   if (isDescending) {
     results.reverse();
@@ -979,7 +1012,7 @@ export const modifySearchNode = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-30T16:11:38.249Z
+                at 2025-09-30T16:55:43.986Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
