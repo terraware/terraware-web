@@ -193,12 +193,23 @@ export const sortResults = <T extends Record<string, unknown>>(
   const isDescending = sortOrder.direction === 'Descending';
   const isNumberField = (numberFields || []).includes(field);
 
+  // Create array with original indices to maintain stable sort
+  const indexedResults = results.map((item, index) => ({ item, index }));
+
   if (isNumberField) {
-    results = results.sort((a, b) => Number(getRawField(a, field)) - Number(getRawField(b, field)));
+    indexedResults.sort((a, b) => {
+      const comparison = Number(getRawField(a.item, field)) - Number(getRawField(b.item, field));
+      return comparison !== 0 ? comparison : a.index - b.index;
+    });
   } else {
     // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
-    results = results.sort((a, b) => `${a[field] || ''}`.localeCompare(`${b[field] || ''}`, locale || undefined));
+    indexedResults.sort((a, b) => {
+      const comparison = String(a.item[field] || '').localeCompare(String(b.item[field] || ''), locale || undefined);
+      return comparison !== 0 ? comparison : a.index - b.index;
+    });
   }
+
+  results = indexedResults.map(({ item }) => item);
 
   if (isDescending) {
     results.reverse();
