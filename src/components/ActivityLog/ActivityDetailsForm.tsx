@@ -20,8 +20,8 @@ import {
   requestAdminUpdateActivity,
   requestCreateActivity,
   requestGetActivity,
+  requestSyncActivityMedia,
   requestUpdateActivity,
-  requestUploadManyActivityMedia,
 } from 'src/redux/features/activities/activitiesAsyncThunks';
 import {
   selectActivityCreate,
@@ -30,7 +30,7 @@ import {
   selectAdminActivityCreate,
   selectAdminActivityGet,
   selectAdminActivityUpdate,
-  selectUploadManyActivityMedia,
+  selectSyncActivityMedia,
 } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
@@ -49,7 +49,7 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import ActivityMediaForm, { ActivityMediaPhoto } from './ActivityMediaForm';
+import ActivityMediaForm, { ActivityMediaItem } from './ActivityMediaForm';
 import MapSplitView from './MapSplitView';
 
 interface ActivityDetailsFormProps {
@@ -79,9 +79,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const [source, setSource] = useState<string | null>();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
-  const [mediaFiles, setMediaFiles] = useState<ActivityMediaPhoto[]>([]);
+  const [mediaFiles, setMediaFiles] = useState<ActivityMediaItem[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [uploadMediaRequestId, setUploadMediaRequestId] = useState('');
+  const [syncMediaRequestId, setSyncMediaRequestId] = useState('');
   const [getActivityRequestId, setGetActivityRequestId] = useState('');
   const [saveActivityRequestId, setSaveActivityRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
@@ -94,7 +94,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const updateActivityRequest = useAppSelector(selectActivityUpdate(saveActivityRequestId));
   const adminUpdateActivityRequest = useAppSelector(selectAdminActivityUpdate(saveActivityRequestId));
 
-  const uploadManyActivityMediaRequest = useAppSelector(selectUploadManyActivityMedia(uploadMediaRequestId));
+  const syncActivityMediaRequest = useAppSelector(selectSyncActivityMedia(syncMediaRequestId));
 
   useEffect(() => {
     const _source = query.get('source');
@@ -219,17 +219,28 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
   }, [activity, dispatch, isAcceleratorRoute, isEditing, projectId, record, validateForm]);
 
-  const uploadMediaFiles = useCallback(
+  const syncMediaFiles = useCallback(
     (newActivityId: number) => {
-      const request = dispatch(
-        requestUploadManyActivityMedia({
-          activityId: newActivityId,
-          mediaFiles,
-        })
+      // Only sync if there are any media operations to perform
+      const hasMediaOperations = mediaFiles.some(
+        (item) => item.type === 'new' || (item.type === 'existing' && (item.isDeleted || item.isModified))
       );
-      setUploadMediaRequestId(request.requestId);
+
+      if (hasMediaOperations) {
+        const request = dispatch(
+          requestSyncActivityMedia({
+            activityId: newActivityId,
+            mediaItems: mediaFiles,
+          })
+        );
+        setSyncMediaRequestId(request.requestId);
+      } else {
+        // No media operations needed
+        setBusy(false);
+        navToActivityLog();
+      }
     },
-    [dispatch, mediaFiles]
+    [dispatch, mediaFiles, setBusy, navToActivityLog]
   );
 
   // initialize record, if creating new
@@ -289,6 +300,19 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
   }, [isEditing, activity, setRecord, projectId]);
 
+  // populate existing media files when editing
+  useEffect(() => {
+    if (isEditing && activity && activity.media) {
+      const existingMediaItems: ActivityMediaItem[] = activity.media.map((mediaFile) => ({
+        data: mediaFile,
+        isDeleted: false,
+        isModified: false,
+        type: 'existing' as const,
+      }));
+      setMediaFiles(existingMediaItems);
+    }
+  }, [isEditing, activity]);
+
   // handle create activity responses
   useEffect(() => {
     if (createActivityRequest?.status === 'error' || adminCreateActivityRequest?.status === 'error') {
@@ -296,7 +320,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
       setValidateFields(false);
     } else if (createActivityRequest?.status === 'success' || adminCreateActivityRequest?.status === 'success') {
-      uploadMediaFiles((createActivityRequest?.data?.id || adminCreateActivityRequest?.data?.id) as number);
+      syncMediaFiles((createActivityRequest?.data?.id || adminCreateActivityRequest?.data?.id) as number);
     }
   }, [
     adminCreateActivityRequest,
@@ -304,7 +328,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     navToActivityLog,
     snackbar,
     strings.GENERIC_ERROR,
-    uploadMediaFiles,
+    syncMediaFiles,
   ]);
 
   // handle update activity responses
@@ -314,28 +338,21 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
       setValidateFields(false);
     } else if (updateActivityRequest?.status === 'success' || adminUpdateActivityRequest?.status === 'success') {
-      uploadMediaFiles(activityId as number);
+      syncMediaFiles(activityId as number);
     }
-  }, [
-    activityId,
-    adminUpdateActivityRequest,
-    snackbar,
-    strings.GENERIC_ERROR,
-    updateActivityRequest,
-    uploadMediaFiles,
-  ]);
+  }, [activityId, adminUpdateActivityRequest, snackbar, strings.GENERIC_ERROR, updateActivityRequest, syncMediaFiles]);
 
-  // handle upload media responses
+  // handle sync media responses
   useEffect(() => {
-    if (uploadManyActivityMediaRequest?.status === 'error') {
+    if (syncActivityMediaRequest?.status === 'error') {
       setBusy(false);
       snackbar.toastError(strings.GENERIC_ERROR);
       navToActivityLog();
-    } else if (uploadManyActivityMediaRequest?.status === 'success') {
+    } else if (syncActivityMediaRequest?.status === 'success') {
       setBusy(false);
       navToActivityLog();
     }
-  }, [uploadManyActivityMediaRequest, navToActivityLog, snackbar, strings.GENERIC_ERROR]);
+  }, [navToActivityLog, snackbar, strings.GENERIC_ERROR, syncActivityMediaRequest]);
 
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
@@ -446,7 +463,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Grid>
             )}
 
-            <ActivityMediaForm mediaFiles={mediaFiles} onMediaFilesChange={setMediaFiles} />
+            <ActivityMediaForm activityId={activityId} mediaFiles={mediaFiles} onMediaFilesChange={setMediaFiles} />
           </Grid>
         </MapSplitView>
       </Card>
