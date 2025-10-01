@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1759320812440" clover="3.2.0">
-  <project timestamp="1759320812440" name="All files">
+<coverage generated="1759348327023" clover="3.2.0">
+  <project timestamp="1759348327023" name="All files">
     <metrics statements="33883" coveredstatements="1347" conditionals="23622" coveredconditionals="391" methods="10400" coveredmethods="213" elements="67905" coveredelements="1951" complexity="0" loc="33883" ncloc="33883" packages="279" files="1348" classes="1348"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -34248,8 +34248,8 @@
         <line num="33" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
       </file>
       <file name="PlotT0EditBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/PlotT0EditBox.tsx">
         <metrics statements="116" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="61" coveredmethods="0"/>
