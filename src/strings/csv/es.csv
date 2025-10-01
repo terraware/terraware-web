@@ -1273,6 +1273,7 @@ PLANT_DENSITY,Densidad de plantación,feae2a2d
 PLANT_DENSITY_MISSING_TOOLTIP,"Cuando se completa una observación, la densidad de plantación calculada aparecerá aquí.",6e3830dd
 PLANT_DENSITY_OF_PLANTED_ZONES,Densidad de plantación (de Zonas plantadas),2e0bd471
 PLANT_DENSITY_TITLE_TOOLTIP,Ingrese manualmente la densidad de plantas para cada una de las especies plantadas. Esta densidad se utilizará para los cálculos de la Tasa de Supervivencia.,50547e3a
+PLANT_DENSITY_TOOLTIP,Densidades de plantas por especie que se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,82b7af4f
 PLANT_DESCRIPTION,Notas sobre las plantas,0915d26a
 PLANT_DETAIL,Detalle de la planta,4b1b7fff
 PLANT_ID,ID de la planta,25cd3771
@@ -1830,6 +1831,7 @@ SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra la cantidad de plantas por especie que fueron registradas como vivas y muertas dentro de todas las zonas observadas.,8e100f36
 SPECIES_SURVIVAL_TOOLTIP,"La Supervivencia de Especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las zonas que fueron observadas.",dfaff418
+SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
 STAFF,Personal,6b242686
 STAKEHOLDER_ENGAGEMENT,Participación de partes interesadas,2c5cfa82

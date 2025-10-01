@@ -80,8 +80,17 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                   <table>
                     <thead style={{ textAlign: 'left' }}>
                       <tr>
-                        <th>{strings.SPECIES}</th>
-                        <th>{strings.PLANT_DENSITY}</th>
+                        <th>
+                          <Box display='flex'>
+                            {strings.SPECIES} <IconTooltip title={strings.SPECIES_TOOLTIP} />
+                          </Box>
+                        </th>
+                        <th>
+                          <Box display='flex'>
+                            {strings.PLANT_DENSITY}
+                            <IconTooltip title={strings.PLANT_DENSITY_TOOLTIP} />
+                          </Box>
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
