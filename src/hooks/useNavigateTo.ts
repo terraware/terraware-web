@@ -16,9 +16,13 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorActivityCreate: (projectId: number, source?: string) => {
+        const params = new URLSearchParams(location.search);
+        if (source !== undefined) {
+          params.set('source', 'source');
+        }
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
-          ...(source ? { search: `source=${source}` } : {}),
+          search: params.toString(),
         });
       },
 
@@ -28,11 +32,15 @@ export default function useNavigateTo() {
             ':activityId',
             `${activityId}`
           ),
+          search: location.search,
         });
       },
 
       goToAcceleratorActivityLog: () => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG });
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG,
+          search: location.search,
+        });
       },
 
       goToAcceleratorApplication: (applicationId: number) => {
@@ -85,7 +93,10 @@ export default function useNavigateTo() {
         }),
 
       goToActivityCreate: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`) });
+        navigate({
+          pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
+          search: location.search,
+        });
       },
 
       goToActivityEdit: (projectId: number, activityId: number) => {
@@ -94,11 +105,15 @@ export default function useNavigateTo() {
             ':activityId',
             `${activityId}`
           ),
+          search: location.search,
         });
       },
 
       goToActivityLog: () => {
-        navigate({ pathname: APP_PATHS.ACTIVITY_LOG });
+        navigate({
+          pathname: APP_PATHS.ACTIVITY_LOG,
+          search: location.search,
+        });
       },
 
       goToApplication: (applicationId: number) => {

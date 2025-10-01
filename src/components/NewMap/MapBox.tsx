@@ -58,6 +58,8 @@ export type MapBoxProps = {
   mapViewStyle: MapViewStyle;
   markerGroups?: MapMarkerGroup[];
   onClickCanvas?: (event: MapMouseEvent) => void;
+  onMapMove?: (view: ViewStateChangeEvent) => void;
+  onTokenExpired?: () => void;
   setMapViewStyle: (style: MapViewStyle) => void;
   token: string;
 };
@@ -86,6 +88,8 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     mapViewStyle,
     markerGroups,
     onClickCanvas,
+    onMapMove,
+    onTokenExpired,
     setMapViewStyle,
     token,
   } = props;
@@ -121,9 +125,13 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     [loadImages, mapRef]
   );
 
-  const onMove = useCallback((view: ViewStateChangeEvent) => {
-    setZoom(view.viewState.zoom);
-  }, []);
+  const onMove = useCallback(
+    (view: ViewStateChangeEvent) => {
+      setZoom(view.viewState.zoom);
+      onMapMove?.(view);
+    },
+    [onMapMove]
+  );
 
   const clusterMarkers = useCallback(
     (map: MapRef | null, markers: MapMarker[]): MapMarker[][] => {
@@ -573,6 +581,19 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     [featureGroups, onClickCanvas]
   );
 
+  const onMapError = useCallback(
+    (event: any) => {
+      if (event?.error?.status === 401) {
+        // eslint-disable-next-line no-console
+        console.error('Mapbox token expired');
+        if (onTokenExpired) {
+          onTokenExpired();
+        }
+      }
+    },
+    [onTokenExpired]
+  );
+
   const orderedLayerIds = useMemo(() => {
     return [
       ...fillLayers.map((layer) => layer.props.id),
@@ -598,6 +619,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       scrollZoom={!disableZoom}
       style={{ width: 'auto', height: isDesktop ? 'auto' : '80vh', flexGrow: isDesktop ? 1 : undefined }}
       onClick={onMapClick}
+      onError={onMapError}
       onMove={onMove}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

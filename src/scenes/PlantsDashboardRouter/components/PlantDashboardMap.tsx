@@ -62,7 +62,7 @@ const PlantDashboardMap = ({
   plantingSites,
   observationResults,
 }: PlantDashboardMapProps): JSX.Element => {
-  const { token, mapId } = useMapboxToken();
+  const { mapId, refreshToken, token } = useMapboxToken();
   const mapRef = useRef<MapRef | null>(null);
   const { strings } = useLocalization();
   const theme = useTheme();
@@ -652,6 +652,7 @@ const PlantDashboardMap = ({
       initialSelectedLayerId={'zones'}
       mapId={mapId}
       mapRef={mapRef}
+      onTokenExpired={refreshToken}
       token={token}
       setDrawerOpen={setDrawerOpenCallback}
       setHighlightVisible={setHighlightVisible}
