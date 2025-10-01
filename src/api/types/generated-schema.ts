@@ -4632,6 +4632,9 @@ export interface components {
             fileId: number;
             geolocation?: components["schemas"]["Point"];
             isCoverPhoto: boolean;
+            isHiddenOnMap: boolean;
+            /** Format: int32 */
+            listPosition: number;
             /** @enum {string} */
             type: "Photo" | "Video";
         };
@@ -4663,6 +4666,9 @@ export interface components {
             fileId: number;
             geolocation?: components["schemas"]["Point"];
             isCoverPhoto: boolean;
+            isHiddenOnMap: boolean;
+            /** Format: int32 */
+            listPosition: number;
             /** @enum {string} */
             type: "Photo" | "Video";
         };
@@ -4693,7 +4699,7 @@ export interface components {
         AdminCreateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description?: string;
+            description: string;
             isHighlight: boolean;
             isVerified: boolean;
             /** Format: int64 */
@@ -4712,7 +4718,7 @@ export interface components {
         AdminUpdateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description?: string;
+            description: string;
             isHighlight: boolean;
             isVerified: boolean;
             /** @enum {string} */
@@ -5368,7 +5374,7 @@ export interface components {
         CreateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description?: string;
+            description: string;
             /** Format: int64 */
             projectId: number;
             /** @enum {string} */
@@ -5852,7 +5858,7 @@ export interface components {
             /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
             withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
         };
-        DateVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        DateVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -6156,7 +6162,7 @@ export interface components {
              */
             timeZone?: string;
         };
-        EmailVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        EmailVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -6543,6 +6549,10 @@ export interface components {
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
+            /** @enum {string} */
+            type: "GeometryCollection";
+        } & {
+            geometries: Record<string, never>[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -7064,7 +7074,7 @@ export interface components {
             goal: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17";
             progress?: string;
         };
-        ImageVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        ImageVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -7123,7 +7133,7 @@ export interface components {
              */
             type: "LineString";
         };
-        LinkVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        LinkVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -7878,7 +7888,7 @@ export interface components {
             organizationId?: number;
             title: string;
         };
-        NumberVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        NumberVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /** Format: int32 */
             decimalPlaces?: number;
             maxValue?: number;
@@ -9414,7 +9424,7 @@ export interface components {
                 [key: string]: components["schemas"]["FieldValuesPayload"];
             };
         };
-        SectionVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        SectionVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             children: components["schemas"]["SectionVariablePayload"][];
             /** @description IDs of variables that this section recommends. */
             recommends: number[];
@@ -9464,7 +9474,7 @@ export interface components {
             name: string;
             renderedText?: string;
         };
-        SelectVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        SelectVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             isMultiple: boolean;
             options: components["schemas"]["SelectOptionPayload"][];
         } & {
@@ -9747,7 +9757,7 @@ export interface components {
             isHeader: boolean;
             variable: components["schemas"]["VariablePayload"];
         };
-        TableVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        TableVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             columns: components["schemas"]["TableColumnPayload"][];
             /** @enum {string} */
             tableStyle: "Horizontal" | "Vertical";
@@ -9769,7 +9779,7 @@ export interface components {
             /** Format: int64 */
             userId: number;
         };
-        TextVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
+        TextVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /** @enum {string} */
             textType: "SingleLine" | "MultiLine";
         } & {
@@ -9918,11 +9928,14 @@ export interface components {
         UpdateActivityMediaRequestPayload: {
             caption?: string;
             isCoverPhoto: boolean;
+            isHiddenOnMap: boolean;
+            /** Format: int32 */
+            listPosition: number;
         };
         UpdateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description?: string;
+            description: string;
             /** @enum {string} */
             type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
@@ -10962,6 +10975,8 @@ export interface operations {
                 "multipart/form-data": {
                     /** Format: binary */
                     file: string;
+                    /** Format: int32 */
+                    listPosition?: number;
                 };
             };
         };
