@@ -257,6 +257,7 @@ const MapComponent = (props: MapComponentProps) => {
   }, [
     clusterRadius,
     controlBottomLeft,
+    controlTopLeft,
     controlTopRight,
     cursorInteract,
     cursorMap,
