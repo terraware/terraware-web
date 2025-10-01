@@ -170,7 +170,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           activity: {
             ...activity,
             date: record?.date as string,
-            description: record?.description,
+            description: record?.description as string,
             isHighlight: !!record?.isHighlight,
             isVerified: !!record?.isVerified,
             type: record?.type as AdminActivityPayload['type'],
@@ -186,7 +186,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           activity: {
             ...activity,
             date: record?.date as string,
-            description: record?.description,
+            description: record?.description as string,
             type: record?.type as ActivityPayload['type'],
           } as ActivityPayload,
         })
@@ -197,7 +197,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       const request = dispatch(
         requestAdminCreateActivity({
           date: record?.date as string,
-          description: record?.description,
+          description: record?.description as string,
           isHighlight: !!record?.isHighlight,
           isVerified: !!record?.isVerified,
           projectId,
@@ -210,7 +210,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       const request = dispatch(
         requestCreateActivity({
           date: record?.date as string,
-          description: record?.description,
+          description: record?.description as string,
           projectId,
           type: record?.type as CreateActivityRequestPayload['type'],
         })

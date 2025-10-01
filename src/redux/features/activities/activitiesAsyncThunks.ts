@@ -307,6 +307,8 @@ export const requestSyncActivityMedia = createAsyncThunk(
           const updateResponse = await ActivityService.updateActivityMedia(activityId, item.data.fileId, {
             caption: item.data.caption,
             isCoverPhoto: item.data.isCoverPhoto,
+            isHiddenOnMap: item.data.isHiddenOnMap,
+            listPosition: item.data.listPosition,
           });
 
           if (updateResponse?.requestSucceeded) {
@@ -358,6 +360,8 @@ export const requestSyncActivityMedia = createAsyncThunk(
           const updateResponse = await ActivityService.updateActivityMedia(activityId, uploadResponse.data.fileId, {
             caption: item.data.caption,
             isCoverPhoto: !!item.data.isCoverPhoto,
+            isHiddenOnMap: item.data.isHiddenOnMap,
+            listPosition: item.data.listPosition,
           });
 
           if (!updateResponse?.requestSucceeded) {

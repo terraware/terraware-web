@@ -11,7 +11,9 @@ import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
 export type ActivityMediaPhoto = {
   caption?: string;
   file: File;
-  isCoverPhoto?: boolean;
+  isCoverPhoto: boolean;
+  isHiddenOnMap: boolean;
+  listPosition: number;
 };
 
 // Unified type for handling both new photos and existing media files
@@ -143,12 +145,17 @@ export default function ActivityMediaForm({
   const onSetFiles = useCallback(
     (files: File[]) => {
       const newPhotos: ActivityMediaItem[] = files.map((file) => ({
-        data: { file },
+        data: {
+          isCoverPhoto: false,
+          isHiddenOnMap: false,
+          file,
+          listPosition: mediaFiles.length + 1,
+        },
         type: 'new' as const,
       }));
       onMediaFilesChange((prevPhotos) => [...prevPhotos, ...newPhotos]);
     },
-    [onMediaFilesChange]
+    [mediaFiles.length, onMediaFilesChange]
   );
 
   const getUpdatePhotoCaption = useCallback(
