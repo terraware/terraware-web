@@ -18,7 +18,7 @@ export default function useNavigateTo() {
       goToAcceleratorActivityCreate: (projectId: number, source?: string) => {
         const params = new URLSearchParams(location.search);
         if (source !== undefined) {
-          params.set('source', 'source');
+          params.set('source', source);
         }
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
