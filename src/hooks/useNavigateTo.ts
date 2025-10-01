@@ -16,26 +16,34 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorActivityCreate: (projectId: number) => {
+        const params = new URLSearchParams(location.search);
+        params.set('source', window.location.pathname);
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
-          search: `source=${window.location.pathname}`,
+          search: params.toString(),
         });
       },
 
       goToAcceleratorActivityEdit: (projectId: number, activityId: number) => {
+        const params = new URLSearchParams(location.search);
+        params.set('source', window.location.pathname);
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
             ':activityId',
             `${activityId}`
           ),
-          search: `source=${window.location.pathname}`,
+          search: params.toString(),
         });
       },
 
       goToAcceleratorActivityLog: (activityId?: number) => {
+        const params = new URLSearchParams(location.search);
+        if (activityId !== undefined) {
+          params.set('activityId', activityId.toString());
+        }
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG,
-          search: activityId ? `activityId=${activityId}` : undefined,
+          search: params.toString(),
         });
       },
 
@@ -89,7 +97,10 @@ export default function useNavigateTo() {
         }),
 
       goToActivityCreate: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`) });
+        navigate({
+          pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
+          search: location.search,
+        });
       },
 
       goToActivityEdit: (projectId: number, activityId: number) => {
@@ -98,13 +109,18 @@ export default function useNavigateTo() {
             ':activityId',
             `${activityId}`
           ),
+          search: location.search,
         });
       },
 
       goToActivityLog: (activityId?: number) => {
+        const params = new URLSearchParams(location.search);
+        if (activityId !== undefined) {
+          params.set('activityId', activityId.toString());
+        }
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG,
-          search: activityId ? `activityId=${activityId}` : undefined,
+          search: params.toString(),
         });
       },
 

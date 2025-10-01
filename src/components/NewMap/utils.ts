@@ -40,9 +40,7 @@ const getBoundsZoomLevel = (bounds: MapBounds, mapWidth: number, mapHeight: numb
   return Math.floor(Math.min(latZoom, lngZoom));
 };
 
-const getBoundingBox = (
-  multipolygons: MultiPolygon[]
-): { minLat: number; minLng: number; maxLat: number; maxLng: number } => {
+const getBoundingBox = (multipolygons: MultiPolygon[]): MapBounds => {
   let minLat = Infinity;
   let maxLat = -Infinity;
   let minLng = Infinity;

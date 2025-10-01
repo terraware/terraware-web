@@ -1,13 +1,14 @@
 import { MutableRefObject, useCallback, useMemo } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { MapBounds } from './types';
+import { MapBounds, MapViewState } from './types';
 import { isBoundsValid } from './utils';
 
 const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
   const easeTo = useCallback(
-    (latitude: number, longitude: number, zoom?: number) => {
+    (viewState: MapViewState) => {
       const map = mapRef.current;
+      const { latitude, longitude, zoom } = viewState;
 
       if (map) {
         map.easeTo({
@@ -46,13 +47,29 @@ const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
     }
   }, [mapRef]);
 
+  const getCurrentViewState = useCallback((): MapViewState | undefined => {
+    const map = mapRef.current;
+
+    if (map) {
+      const center = map.getCenter();
+      const zoom = map.getZoom();
+
+      return {
+        latitude: center.lat,
+        longitude: center.lng,
+        zoom,
+      };
+    }
+  }, [mapRef]);
+
   return useMemo(
     () => ({
       easeTo,
       fitBounds,
       getCurrentBounds,
+      getCurrentViewState,
     }),
-    [easeTo, fitBounds, getCurrentBounds]
+    [easeTo, fitBounds, getCurrentBounds, getCurrentViewState]
   );
 };
 
