@@ -38,6 +38,7 @@ export default function MapSplitView({
   const { strings } = useLocalization();
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
+  const { plantingSites } = useProjectPlantingSites(projectId);
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentProjectId, setCurrentProjectId] = useState(projectId);
 
@@ -102,8 +103,6 @@ export default function MapSplitView({
     });
   }, [activities, activityMarkerHighlighted, onActivityMarkerClickCallback]);
 
-  const { plantingSites } = useProjectPlantingSites(projectId);
-
   const siteFeatures = useMemo((): MapLayerFeature[] => {
     return (
       plantingSites?.map(
@@ -159,7 +158,7 @@ export default function MapSplitView({
   }, [currentProjectId, projectId, setSearchParams]);
 
   useEffect(() => {
-    if (!initialMapViewState) {
+    if (!initialMapViewState && boundingBox) {
       // If no map view state is provided, move map to features
       fitBounds(boundingBox);
     }
