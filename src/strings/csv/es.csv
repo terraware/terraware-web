@@ -316,6 +316,7 @@ COLLECTION_SITE,Nombre del lugar de recolección,32b625d7
 COLLECTION_SOURCE,Tipo de fuente de la planta,292a47fa
 COLLECTOR,Recolector,cf2069b8
 COLLECTORS,Recolectores,55432568
+COLOR,Color,e96df902
 COMMENTS,Comentarios,5a6f1269
 COMMON_NAME,Nombre común,d7db2e57
 COMMUNITY,Comunidad,a1e5aaf2
@@ -834,6 +835,7 @@ IUCN_VULNERABLE,Vulnerable (VU),ed5dcc89
 JOIN,Únase,43eb6054
 JOIN_EVENT_NAME,Únase {0},14c4bd8e
 KEEP_ORIGINAL,Conservar original,21773616
+KEY,Clave,b46ab088
 KEY_LESSONS,Lecciones clave aprendidas,24ee85f1
 KEY_LESSONS_INSTRUCTIONS,"Proporcione detalles de las lecciones clave aprendidas durante el periodo de presentación de informes del proyecto, incluidas las consecuencias no intencionadas tanto positivas como negativas, de ser el caso. (Media página como máximo)",e6cf7202
 KEY_LESSONS_REQUIRED,Lecciones clave aprendidas *,74a53101
@@ -1736,6 +1738,7 @@ SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
 SETTINGS,Ajustes,38560978
+SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHRUB,Arbusto,af50871c
 SHRUBS,Arbustos,377018f6
 SILVOPASTURE,Sistema selvopastoril,9d942e38

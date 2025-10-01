@@ -315,6 +315,7 @@ COLLECTION_SITE,Nom du site de collection,32b625d7
 COLLECTION_SOURCE,Type de source végétale,292a47fa
 COLLECTOR,Collecteur,cf2069b8
 COLLECTORS,Collecteurs,55432568
+COLOR,Couleur,e96df902
 COMMENTS,Commentaires,5a6f1269
 COMMON_NAME,Nom commun,d7db2e57
 COMMUNITY,Communauté,a1e5aaf2
@@ -833,6 +834,7 @@ IUCN_VULNERABLE,Vulnérable (VU),ed5dcc89
 JOIN,Rejoindre,43eb6054
 JOIN_EVENT_NAME,Rejoindre {0},14c4bd8e
 KEEP_ORIGINAL,Garder l'original,21773616
+KEY,Légende,b46ab088
 KEY_LESSONS,Principales leçons tirées,24ee85f1
 KEY_LESSONS_INSTRUCTIONS,"Détailler les principales leçons tirées au cours de la période de rapport du projet, y compris les conséquences involontaires positives et négatives, le cas échéant. (Une demi-page maximum).",e6cf7202
 KEY_LESSONS_REQUIRED,Principales leçons tirées *,74a53101
@@ -1735,6 +1737,7 @@ SET_UP,Configurer,6096080e
 SET_UP_NURSERY,Créer une pépinière,25ab7370
 SET_UP_SEED_BANK,Créer une banque de semences,6f047a89
 SETTINGS,Paramètres,38560978
+SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHRUB,Arbuste,af50871c
 SHRUBS,Arbustes,377018f6
 SILVOPASTURE,Sylviculture,9d942e38
