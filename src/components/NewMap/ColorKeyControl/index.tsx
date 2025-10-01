@@ -13,10 +13,11 @@ export default function ColorKeyControl(): JSX.Element | null {
   const theme = useTheme();
   const mapPortalContainer = useMapPortalContainer();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { strings } = useLocalization();
+
   const handleClick = (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
     setAnchorEl(event?.currentTarget ?? null);
   };
-  const { strings } = useLocalization();
 
   const handleControlClose = useCallback(() => {
     setAnchorEl(null);
@@ -65,13 +66,13 @@ export default function ColorKeyControl(): JSX.Element | null {
             </tr>
           </thead>
           <tbody>
-            {ACTIVITY_TYPES.map((at) => (
-              <tr key={at}>
+            {ACTIVITY_TYPES.map((activityType) => (
+              <tr key={activityType}>
                 <td style={{ display: 'flex', height: '20px', alignItems: 'center' }}>
-                  <Icon name='iconPhoto' fillColor={activityTypeColor(at)} />
+                  <Icon name='iconPhoto' fillColor={activityTypeColor(activityType)} />
                 </td>
                 <td>
-                  <Typography fontSize={'12px'}>{activityTypeLabel(at, strings)}</Typography>
+                  <Typography fontSize={'12px'}>{activityTypeLabel(activityType, strings)}</Typography>
                 </td>
               </tr>
             ))}
