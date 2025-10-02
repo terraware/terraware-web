@@ -64,12 +64,9 @@ const ActivityPhotoPreview = ({
 
   const isCoverPhoto = useMemo(() => mediaItem.data.isCoverPhoto, [mediaItem]);
 
-  const coordinates = useMemo(
-    () => (mediaItem.type === 'existing' ? mediaItem.data.geolocation?.coordinates : undefined),
-    [mediaItem]
-  );
-
   const coordinatesLabel = useMemo(() => {
+    const coordinates = mediaItem.type === 'existing' ? mediaItem.data.geolocation?.coordinates : undefined;
+
     if (mediaItem.type === 'new') {
       return strings.LOCATION_WILL_BE_ADDED_TO_MAP_AFTER_SAVING;
     } else if (mediaItem.type === 'existing' && coordinates) {
@@ -77,7 +74,7 @@ const ActivityPhotoPreview = ({
     } else {
       return strings.LOCATION_DATA_UNAVAILABLE;
     }
-  }, [coordinates, mediaItem, strings]);
+  }, [mediaItem, strings]);
 
   const isHiddenOnMap = useMemo(() => mediaItem.data.isHiddenOnMap, [mediaItem]);
 
