@@ -14,7 +14,7 @@ export default function SpeciesSurvivalRateChart({ minHeight, species }: Species
     values: number[];
   };
 
-  const survivalRates = useMemo((): Data => {
+  const chartData = useMemo(() => {
     const data: Data = { labels: [], values: [] };
 
     species?.forEach((speciesData) => {
@@ -28,20 +28,15 @@ export default function SpeciesSurvivalRateChart({ minHeight, species }: Species
       }
     });
 
-    return data;
-  }, [species]);
-
-  const chartData = useMemo(
-    () => ({
-      labels: survivalRates.labels,
+    return {
+      labels: data.labels,
       datasets: [
         {
-          values: survivalRates.values,
+          values: data.values,
         },
       ],
-    }),
-    [survivalRates]
-  );
+    };
+  }, [species]);
 
   return (
     <BarChart chartId='observationsSurvivalRateBySpecies' chartData={chartData} barWidth={0} minHeight={minHeight} />
