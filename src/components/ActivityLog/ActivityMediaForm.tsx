@@ -179,12 +179,12 @@ export default function ActivityMediaForm({
 
   const onSetFiles = useCallback(
     (files: File[]) => {
-      const newPhotos: ActivityMediaItem[] = files.map((file) => ({
+      const newPhotos: ActivityMediaItem[] = files.map((file, index) => ({
         data: {
           isCoverPhoto: false,
           isHiddenOnMap: false,
           file,
-          listPosition: mediaFiles.length + 1,
+          listPosition: mediaFiles.length + index + 1,
         },
         type: 'new' as const,
       }));
