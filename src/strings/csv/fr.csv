@@ -1912,6 +1912,7 @@ SUMMARY_OF_PROGRESS_DESCRIPTION,Faites un bref résumé de ce projet.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Résumé des progrès accomplis *,35c72f75
 SUPPLEMENTAL_FILES,Fichiers supplémentaires,b655103c
 SURVIVAL_RATE,Taux de survie,b1a831cf
+SURVIVAL_RATE_COLUMN_TOOLTIP,"Les taux de survie sont calculés en fonction des densités initiales de plants. Si les densités initiales de plants ne sont pas définies pour un site de plantation, le taux de survie ne sera pas disponible.",426f186d
 SURVIVAL_RATE_PER_SPECIES,Taux de survie par espèce,523afab7
 SURVIVAL_RATE_SETTINGS,Paramètres du taux de survie,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Paramètres du taux de survie pour {0},f787c873
