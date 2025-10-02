@@ -170,7 +170,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           activity: {
             ...activity,
             date: record?.date as string,
-            description: record?.description,
+            description: record?.description as string,
             isHighlight: !!record?.isHighlight,
             isVerified: !!record?.isVerified,
             type: record?.type as AdminActivityPayload['type'],
@@ -186,7 +186,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           activity: {
             ...activity,
             date: record?.date as string,
-            description: record?.description,
+            description: record?.description as string,
             type: record?.type as ActivityPayload['type'],
           } as ActivityPayload,
         })
@@ -197,7 +197,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       const request = dispatch(
         requestAdminCreateActivity({
           date: record?.date as string,
-          description: record?.description,
+          description: record?.description as string,
           isHighlight: !!record?.isHighlight,
           isVerified: !!record?.isVerified,
           projectId,
@@ -210,7 +210,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       const request = dispatch(
         requestCreateActivity({
           date: record?.date as string,
-          description: record?.description,
+          description: record?.description as string,
           projectId,
           type: record?.type as CreateActivityRequestPayload['type'],
         })
@@ -264,7 +264,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   useEffect(() => {
     if (isEditing && activityId && !activity) {
       if (isAcceleratorRoute) {
-        const request = dispatch(requestAdminGetActivity(activityId.toString()));
+        const request = dispatch(requestAdminGetActivity(activityId));
         setGetActivityRequestId(request.requestId);
       } else {
         const request = dispatch(requestGetActivity(activityId));
@@ -303,12 +303,25 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   // populate existing media files when editing
   useEffect(() => {
     if (isEditing && activity && activity.media) {
-      const existingMediaItems: ActivityMediaItem[] = activity.media.map((mediaFile) => ({
-        data: mediaFile,
-        isDeleted: false,
-        isModified: false,
-        type: 'existing' as const,
-      }));
+      const existingMediaItems: ActivityMediaItem[] = activity.media
+        .map((mediaFile) => ({
+          data: mediaFile,
+          isDeleted: false,
+          isModified: false,
+          type: 'existing' as const,
+        }))
+        .sort((a, b) => {
+          // cover photos always come first
+          if (a.data.isCoverPhoto && !b.data.isCoverPhoto) {
+            return -1;
+          }
+          if (!a.data.isCoverPhoto && b.data.isCoverPhoto) {
+            return 1;
+          }
+
+          // then sort by listPosition
+          return (a.data.listPosition || 0) - (b.data.listPosition || 0);
+        });
       setMediaFiles(existingMediaItems);
     }
   }, [isEditing, activity]);
@@ -409,7 +422,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           width: '100%',
         }}
       >
-        <MapSplitView projectId={projectId}>
+        <MapSplitView activities={isEditing && activity ? [activity] : []} projectId={projectId}>
           <Typography fontSize='20px' fontWeight='bold' marginBottom='24px' variant='h2'>
             {secondaryHeader}
           </Typography>

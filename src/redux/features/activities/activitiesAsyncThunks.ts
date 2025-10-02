@@ -91,7 +91,7 @@ export const requestAdminListActivities = createAsyncThunk(
 
 export const requestAdminGetActivity = createAsyncThunk(
   'activities/adminGet',
-  async (activityId: string, { rejectWithValue }) => {
+  async (activityId: number, { rejectWithValue }) => {
     const response = await ActivityService.adminGetActivity(activityId);
 
     if (response?.requestSucceeded && response?.data) {
@@ -273,20 +273,12 @@ export const requestSyncActivityMedia = createAsyncThunk(
         try {
           const deleteResponse = await ActivityService.deleteActivityMedia(activityId, item.data.fileId);
 
-          if (deleteResponse?.requestSucceeded) {
-            results.push({
-              fileId: item.data.fileId,
-              operation: 'delete',
-              success: true,
-            });
-          } else {
-            results.push({
-              error: 'Delete request failed',
-              fileId: item.data.fileId,
-              operation: 'delete',
-              success: false,
-            });
-          }
+          results.push({
+            ...(deleteResponse?.requestSucceeded ? {} : { error: 'Delete request failed' }),
+            fileId: item.data.fileId,
+            operation: 'delete',
+            success: !!deleteResponse?.requestSucceeded,
+          });
         } catch (error) {
           results.push({
             error: error instanceof Error ? error.message : 'Unknown delete error',
@@ -307,22 +299,16 @@ export const requestSyncActivityMedia = createAsyncThunk(
           const updateResponse = await ActivityService.updateActivityMedia(activityId, item.data.fileId, {
             caption: item.data.caption,
             isCoverPhoto: item.data.isCoverPhoto,
+            isHiddenOnMap: item.data.isHiddenOnMap,
+            listPosition: item.data.listPosition,
           });
 
-          if (updateResponse?.requestSucceeded) {
-            results.push({
-              fileId: item.data.fileId,
-              operation: 'update',
-              success: true,
-            });
-          } else {
-            results.push({
-              error: 'Update request failed',
-              fileId: item.data.fileId,
-              operation: 'update',
-              success: false,
-            });
-          }
+          results.push({
+            ...(updateResponse?.requestSucceeded ? {} : { error: 'Update request failed' }),
+            fileId: item.data.fileId,
+            operation: 'update',
+            success: !!updateResponse?.requestSucceeded,
+          });
         } catch (error) {
           results.push({
             error: error instanceof Error ? error.message : 'Unknown update error',
@@ -357,7 +343,9 @@ export const requestSyncActivityMedia = createAsyncThunk(
           // update the metadata
           const updateResponse = await ActivityService.updateActivityMedia(activityId, uploadResponse.data.fileId, {
             caption: item.data.caption,
-            isCoverPhoto: !!item.data.isCoverPhoto,
+            isCoverPhoto: item.data.isCoverPhoto,
+            isHiddenOnMap: item.data.isHiddenOnMap,
+            listPosition: item.data.listPosition,
           });
 
           if (!updateResponse?.requestSucceeded) {

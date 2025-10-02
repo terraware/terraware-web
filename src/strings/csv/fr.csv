@@ -758,6 +758,7 @@ HERB,Herbe,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abondance des plantes herbacées (%),d3693b6c
 HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
+HIDE_ON_MAP,Masquer sur la carte,089ea8d7
 HIGHEST,Le plus élevé,5c2f89d6
 HIGHLIGHTS,Points forts,a76b6c49
 HISTORY,Historique,fe7205b3
@@ -908,7 +909,9 @@ LOADING,Chargement...,ccd47f3b
 LOCAL_USES_KNOWN,Utilisations locales connues,02a9f5ec
 LOCAL_USES_KNOWN_TOOLTIP,"Dressez la liste des utilisations traditionnelles, culturelles, sociales, économiques et des moyens de subsistance de l'espèce dans votre région.",e0632287
 LOCATION,Emplacement,460d693d
+LOCATION_DATA_UNAVAILABLE,Données de localisation indisponibles,150027f9
 LOCATION_REQUIRED,Emplacement *,5ff47eb0
+LOCATION_WILL_BE_ADDED_TO_MAP_AFTER_SAVING,"L’emplacement sera ajouté à la carte après l’enregistrement, si disponible.",c52bc597
 LOCATIONS,Lieux,dab7bb42
 LOCKED,Verrouillé,70941ed5
 LOG_FRAME_AND_ME_PLAN_URL,URL du cadre logique et du plan de suivi et évaluation,5bc48a88
