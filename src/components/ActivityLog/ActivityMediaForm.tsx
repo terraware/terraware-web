@@ -64,6 +64,21 @@ const ActivityPhotoPreview = ({
 
   const isCoverPhoto = useMemo(() => mediaItem.data.isCoverPhoto, [mediaItem]);
 
+  const coordinates = useMemo(
+    () => (mediaItem.type === 'existing' ? mediaItem.data.geolocation?.coordinates : undefined),
+    [mediaItem]
+  );
+
+  const coordinatesLabel = useMemo(() => {
+    if (mediaItem.type === 'new') {
+      return strings.LOCATION_WILL_BE_ADDED_TO_MAP_AFTER_SAVING;
+    } else if (mediaItem.type === 'existing' && coordinates) {
+      return `${coordinates[1].toFixed(7)}, ${coordinates[0].toFixed(7)}`;
+    } else {
+      return strings.LOCATION_DATA_UNAVAILABLE;
+    }
+  }, [coordinates, mediaItem, strings]);
+
   const isHiddenOnMap = useMemo(() => mediaItem.data.isHiddenOnMap, [mediaItem]);
 
   const setCaptionCallback = useCallback(
@@ -105,7 +120,7 @@ const ActivityPhotoPreview = ({
               />
             </Box>
 
-            <Typography>TODO: GPS coordinates, hide on map</Typography>
+            <Typography fontSize='14px'>{coordinatesLabel}</Typography>
 
             {isAcceleratorRoute && (
               <Checkbox

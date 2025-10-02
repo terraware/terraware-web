@@ -909,7 +909,9 @@ LOADING,Cargando...,ccd47f3b
 LOCAL_USES_KNOWN,Usos locales conocidos,02a9f5ec
 LOCAL_USES_KNOWN_TOOLTIP,"Enumere los usos tradicionales, culturales, sociales, económicos y de subsistencia importantes de la especie en su región.",e0632287
 LOCATION,Lugar,460d693d
+LOCATION_DATA_UNAVAILABLE,Datos de ubicación no disponibles,150027f9
 LOCATION_REQUIRED,Lugar *,5ff47eb0
+LOCATION_WILL_BE_ADDED_TO_MAP_AFTER_SAVING,"La ubicación se agregará al mapa después de guardar, si está disponible.",c52bc597
 LOCATIONS,Lugares,dab7bb42
 LOCKED,Bloqueado,70941ed5
 LOG_FRAME_AND_ME_PLAN_URL,URL del marco lógico y del plan de seguimiento y evaluación,5bc48a88
