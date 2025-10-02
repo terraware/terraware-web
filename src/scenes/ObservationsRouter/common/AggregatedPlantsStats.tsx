@@ -12,6 +12,7 @@ import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import SpeciesMortalityRateChart from './SpeciesMortalityRateChart';
+import SpeciesSurvivalRateChart from './SpeciesSurvivalRateChart';
 import SpeciesTotalPlantsChart from './SpeciesTotalPlantsChart';
 
 export type AggregatedPlantsStatsProps = {
@@ -93,9 +94,15 @@ export default function AggregatedPlantsStats({
           </ChartWrapper>
         </Grid>
         <Grid item xs={chartGridSize}>
-          <ChartWrapper title={strings.MORTALITY_RATE_PER_SPECIES}>
-            <SpeciesMortalityRateChart species={hasObservedPermanentPlots ? species : []} minHeight='170px' />
-          </ChartWrapper>
+          {isSurvivalRateCalculationEnabled ? (
+            <ChartWrapper title={strings.SURVIVAL_RATE_PER_SPECIES}>
+              <SpeciesSurvivalRateChart species={hasObservedPermanentPlots ? species : []} minHeight='170px' />
+            </ChartWrapper>
+          ) : (
+            <ChartWrapper title={strings.MORTALITY_RATE_PER_SPECIES}>
+              <SpeciesMortalityRateChart species={hasObservedPermanentPlots ? species : []} minHeight='170px' />
+            </ChartWrapper>
+          )}
         </Grid>
       </Grid>
     </Box>

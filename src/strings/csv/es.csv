@@ -1913,6 +1913,7 @@ SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,35c72f75
 SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
 SURVIVAL_RATE,Tasa de supervivencia,b1a831cf
+SURVIVAL_RATE_PER_SPECIES,Tasa de supervivencia por especie,523afab7
 SURVIVAL_RATE_SETTINGS,Configuración de la tasa de supervivencia,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Configuración de la tasa de supervivencia para {0},f787c873
 SURVIVAL_RATE_SETTINGS_INFO,"{0} Para cada parcela, seleccione o ingrese los datos que se utilizarán para proporcionar la densidad de plantas t0 por parcela para los cálculos de la tasa de supervivencia. Para cada Observación posterior, Terraware usará los datos t0 para calcular las tasas de supervivencia a nivel de Parcela, Subzona, Zona y Sitio de Plantación. Si se cambia la Observación seleccionada para una parcela, las tasas de supervivencia se recalcularán en función de la nueva selección. Alternativamente, si se conoce la cantidad de plantas que fueron plantadas en las parcelas, se pueden usar las densidades de plantas plantadas en lugar de los datos de Observación para los cálculos de la tasa de supervivencia.",d0a2ff5b
