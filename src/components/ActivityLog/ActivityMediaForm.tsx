@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/material';
-import { Button, FileChooser, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, FileChooser, Textfield } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
@@ -29,6 +30,7 @@ type ActivityPhotoPreviewProps = {
   mediaItem: ActivityMediaItem;
   onCoverPhotoChange: (isCover: boolean) => void;
   onDelete: () => void;
+  onHiddenOnMapChange: (isHidden: boolean) => void;
   setCaption: (caption: string) => void;
 };
 
@@ -38,9 +40,11 @@ const ActivityPhotoPreview = ({
   mediaItem,
   onCoverPhotoChange,
   onDelete,
+  onHiddenOnMapChange,
   setCaption,
 }: ActivityPhotoPreviewProps) => {
   const { strings } = useLocalization();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
 
   const url = useMemo(() => {
@@ -58,7 +62,9 @@ const ActivityPhotoPreview = ({
 
   const caption = useMemo(() => mediaItem.data.caption || '', [mediaItem]);
 
-  const isCoverPhoto = useMemo(() => !!mediaItem.data.isCoverPhoto, [mediaItem]);
+  const isCoverPhoto = useMemo(() => mediaItem.data.isCoverPhoto, [mediaItem]);
+
+  const isHiddenOnMap = useMemo(() => mediaItem.data.isHiddenOnMap, [mediaItem]);
 
   const setCaptionCallback = useCallback(
     (value: any) => {
@@ -70,6 +76,10 @@ const ActivityPhotoPreview = ({
   const onCoverPhotoToggle = useCallback(() => {
     onCoverPhotoChange(!isCoverPhoto);
   }, [onCoverPhotoChange, isCoverPhoto]);
+
+  const onHiddenOnMapToggle = useCallback(() => {
+    onHiddenOnMapChange(!isHiddenOnMap);
+  }, [onHiddenOnMapChange, isHiddenOnMap]);
 
   return (
     <Box
@@ -96,6 +106,16 @@ const ActivityPhotoPreview = ({
             </Box>
 
             <Typography>TODO: GPS coordinates, hide on map</Typography>
+
+            {isAcceleratorRoute && (
+              <Checkbox
+                id={`activity-media-id-${activityId}-hide-on-map`}
+                label='Hide on map'
+                name='isHiddenOnMap'
+                onChange={onHiddenOnMapToggle}
+                value={isHiddenOnMap}
+              />
+            )}
 
             <Button
               icon='iconTrashCan'
@@ -209,6 +229,34 @@ export default function ActivityMediaForm({
     [mediaFiles, onMediaFilesChange]
   );
 
+  const getSetHiddenOnMap = useCallback(
+    (index: number) => (isHidden: boolean) => {
+      const updatedPhotos = mediaFiles.map((mediaItem, i) => {
+        if (index !== i) {
+          return mediaItem;
+        }
+
+        if (mediaItem.type === 'new') {
+          return {
+            ...mediaItem,
+            data: { ...mediaItem.data, isHiddenOnMap: isHidden },
+          };
+        } else {
+          // for existing items, mark as modified if hidden on map status changed
+          const isChanged = mediaItem.data.isHiddenOnMap !== isHidden;
+
+          return {
+            ...mediaItem,
+            data: { ...mediaItem.data, isHiddenOnMap: isHidden },
+            ...(isChanged && { isModified: true }),
+          };
+        }
+      });
+      onMediaFilesChange(updatedPhotos);
+    },
+    [mediaFiles, onMediaFilesChange]
+  );
+
   const getDeletePhoto = useCallback(
     (index: number) => () => {
       const mediaItem = mediaFiles[index];
@@ -273,6 +321,7 @@ export default function ActivityMediaForm({
               key={`photo-${index}`}
               onCoverPhotoChange={getSetCoverPhoto(index)}
               onDelete={getDeletePhoto(index)}
+              onHiddenOnMapChange={getSetHiddenOnMap(index)}
               mediaItem={photo}
               setCaption={getUpdatePhotoCaption(index)}
             />

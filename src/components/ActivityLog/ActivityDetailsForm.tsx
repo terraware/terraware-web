@@ -264,7 +264,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   useEffect(() => {
     if (isEditing && activityId && !activity) {
       if (isAcceleratorRoute) {
-        const request = dispatch(requestAdminGetActivity(activityId.toString()));
+        const request = dispatch(requestAdminGetActivity(activityId));
         setGetActivityRequestId(request.requestId);
       } else {
         const request = dispatch(requestGetActivity(activityId));
