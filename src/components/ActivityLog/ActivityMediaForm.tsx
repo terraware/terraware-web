@@ -122,7 +122,7 @@ const ActivityPhotoPreview = ({
             {isAcceleratorRoute && (
               <Checkbox
                 id={`activity-media-id-${activityId}-hide-on-map`}
-                label='Hide on map'
+                label={strings.HIDE_ON_MAP}
                 name='isHiddenOnMap'
                 onChange={onHiddenOnMapToggle}
                 value={isHiddenOnMap}
