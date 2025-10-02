@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/141</span>
+                <span class='fraction'>0/146</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/115</span>
+                <span class='fraction'>0/131</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/136</span>
+                <span class='fraction'>0/142</span>
             </div>
         
             
@@ -535,7 +535,20 @@
 <a name='L470'></a><a href='#L470'>470</a>
 <a name='L471'></a><a href='#L471'>471</a>
 <a name='L472'></a><a href='#L472'>472</a>
-<a name='L473'></a><a href='#L473'>473</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -841,10 +854,23 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1179,7 +1205,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
           activity: {
             ...activity,
             date: record?.date as string,
-            description: record?.description,
+            description: record?.description as string,
             isHighlight: !!record?.isHighlight,
             isVerified: !!record?.isVerified,
             type: record?.type as AdminActivityPayload['type'],
@@ -1195,7 +1221,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
           activity: {
             ...activity,
             date: record?.date as string,
-            description: record?.description,
+            description: record?.description as string,
             type: record?.type as ActivityPayload['type'],
           } as ActivityPayload,
         })
@@ -1206,7 +1232,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
       const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
         requestAdminCreateActivity({
           date: record?.date as string,
-          description: record?.description,
+          description: record?.description as string,
           isHighlight: !!record?.isHighlight,
           isVerified: !!record?.isVerified,
           projectId,
@@ -1219,7 +1245,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
       const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
         requestCreateActivity({
           date: record?.date as string,
-          description: record?.description,
+          description: record?.description as string,
           projectId,
           type: record?.type as CreateActivityRequestPayload['type'],
         })
@@ -1273,7 +1299,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isEditing &amp;&amp; activityId &amp;&amp; !activity) {</span>
 <span class="cstat-no" title="statement not covered" >      if (isAcceleratorRoute) {</span>
-        const request = <span class="cstat-no" title="statement not covered" >dispatch(requestAdminGetActivity(activityId.toString()));</span>
+        const request = <span class="cstat-no" title="statement not covered" >dispatch(requestAdminGetActivity(activityId));</span>
 <span class="cstat-no" title="statement not covered" >        setGetActivityRequestId(request.requestId);</span>
       } else {
         const request = <span class="cstat-no" title="statement not covered" >dispatch(requestGetActivity(activityId));</span>
@@ -1312,12 +1338,25 @@ export default function <span class="fstat-no" title="function not covered" >Act
   // populate existing media files when editing
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isEditing &amp;&amp; activity &amp;&amp; activity.media) {</span>
-      const existingMediaItems: ActivityMediaItem[] = <span class="cstat-no" title="statement not covered" >activity.media.map(<span class="fstat-no" title="function not covered" >(m</span>ediaFile) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-        data: mediaFile,
-        isDeleted: false,
-        isModified: false,
-        type: 'existing' as const,
-      }));
+      const existingMediaItems: ActivityMediaItem[] = <span class="cstat-no" title="statement not covered" >activity.media</span>
+        .map(<span class="fstat-no" title="function not covered" >(m</span>ediaFile) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+          data: mediaFile,
+          isDeleted: false,
+          isModified: false,
+          type: 'existing' as const,
+        }))
+        .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {
+          // cover photos always come first
+<span class="cstat-no" title="statement not covered" >          if (a.data.isCoverPhoto &amp;&amp; !b.data.isCoverPhoto) {</span>
+<span class="cstat-no" title="statement not covered" >            return -1;</span>
+          }
+<span class="cstat-no" title="statement not covered" >          if (!a.data.isCoverPhoto &amp;&amp; b.data.isCoverPhoto) {</span>
+<span class="cstat-no" title="statement not covered" >            return 1;</span>
+          }
+&nbsp;
+          // then sort by listPosition
+<span class="cstat-no" title="statement not covered" >          return (a.data.listPosition || 0) - (b.data.listPosition || 0);</span>
+        });
 <span class="cstat-no" title="statement not covered" >      setMediaFiles(existingMediaItems);</span>
     }
   }, [isEditing, activity]);
@@ -1418,7 +1457,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
           width: '100%',
         }}
       &gt;
-        &lt;MapSplitView projectId={projectId}&gt;
+        &lt;MapSplitView activities={isEditing &amp;&amp; activity ? [activity] : []} projectId={projectId}&gt;
           &lt;Typography fontSize='20px' fontWeight='bold' marginBottom='24px' variant='h2'&gt;
             {secondaryHeader}
           &lt;/Typography&gt;
@@ -1486,7 +1525,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-02T16:07:52.308Z
+                at 2025-10-02T21:16:28.967Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

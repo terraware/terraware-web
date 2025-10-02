@@ -20628,7 +20628,29 @@
 <a name='L20563'></a><a href='#L20563'>20563</a>
 <a name='L20564'></a><a href='#L20564'>20564</a>
 <a name='L20565'></a><a href='#L20565'>20565</a>
-<a name='L20566'></a><a href='#L20566'>20566</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L20566'></a><a href='#L20566'>20566</a>
+<a name='L20567'></a><a href='#L20567'>20567</a>
+<a name='L20568'></a><a href='#L20568'>20568</a>
+<a name='L20569'></a><a href='#L20569'>20569</a>
+<a name='L20570'></a><a href='#L20570'>20570</a>
+<a name='L20571'></a><a href='#L20571'>20571</a>
+<a name='L20572'></a><a href='#L20572'>20572</a>
+<a name='L20573'></a><a href='#L20573'>20573</a>
+<a name='L20574'></a><a href='#L20574'>20574</a>
+<a name='L20575'></a><a href='#L20575'>20575</a>
+<a name='L20576'></a><a href='#L20576'>20576</a>
+<a name='L20577'></a><a href='#L20577'>20577</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -45827,6 +45849,9 @@ export interface components {
             fileId: number;
             geolocation?: components["schemas"]["Point"];
             isCoverPhoto: boolean;
+            isHiddenOnMap: boolean;
+            /** Format: int32 */
+            listPosition: number;
             /** @enum {string} */
             type: "Photo" | "Video";
         };
@@ -45858,6 +45883,9 @@ export interface components {
             fileId: number;
             geolocation?: components["schemas"]["Point"];
             isCoverPhoto: boolean;
+            isHiddenOnMap: boolean;
+            /** Format: int32 */
+            listPosition: number;
             /** @enum {string} */
             type: "Photo" | "Video";
         };
@@ -45888,7 +45916,7 @@ export interface components {
         AdminCreateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description?: string;
+            description: string;
             isHighlight: boolean;
             isVerified: boolean;
             /** Format: int64 */
@@ -45907,7 +45935,7 @@ export interface components {
         AdminUpdateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description?: string;
+            description: string;
             isHighlight: boolean;
             isVerified: boolean;
             /** @enum {string} */
@@ -46563,7 +46591,7 @@ export interface components {
         CreateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description?: string;
+            description: string;
             /** Format: int64 */
             projectId: number;
             /** @enum {string} */
@@ -47047,7 +47075,7 @@ export interface components {
             /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
             withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
         };
-        DateVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        DateVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -47351,7 +47379,7 @@ export interface components {
              */
             timeZone?: string;
         };
-        EmailVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        EmailVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -47737,7 +47765,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit&lt;WithRequired&lt;components["schemas"]["Geometry"], "type"&gt;, "type"&gt; &amp; {
-            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
+            geometries: Record&lt;string, never&gt;[];
             /** @enum {string} */
             type: "GeometryCollection";
         } &amp; {
@@ -48259,7 +48287,7 @@ export interface components {
             goal: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17";
             progress?: string;
         };
-        ImageVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        ImageVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -48318,7 +48346,7 @@ export interface components {
              */
             type: "LineString";
         };
-        LinkVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        LinkVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -49073,7 +49101,7 @@ export interface components {
             organizationId?: number;
             title: string;
         };
-        NumberVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        NumberVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             /** Format: int32 */
             decimalPlaces?: number;
             maxValue?: number;
@@ -50609,7 +50637,7 @@ export interface components {
                 [key: string]: components["schemas"]["FieldValuesPayload"];
             };
         };
-        SectionVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        SectionVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             children: components["schemas"]["SectionVariablePayload"][];
             /** @description IDs of variables that this section recommends. */
             recommends: number[];
@@ -50659,7 +50687,7 @@ export interface components {
             name: string;
             renderedText?: string;
         };
-        SelectVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        SelectVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             isMultiple: boolean;
             options: components["schemas"]["SelectOptionPayload"][];
         } &amp; {
@@ -50942,7 +50970,7 @@ export interface components {
             isHeader: boolean;
             variable: components["schemas"]["VariablePayload"];
         };
-        TableVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        TableVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             columns: components["schemas"]["TableColumnPayload"][];
             /** @enum {string} */
             tableStyle: "Horizontal" | "Vertical";
@@ -50964,7 +50992,7 @@ export interface components {
             /** Format: int64 */
             userId: number;
         };
-        TextVariablePayload: Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
+        TextVariablePayload: Omit&lt;WithRequired&lt;components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type"&gt;, "type"&gt; &amp; {
             /** @enum {string} */
             textType: "SingleLine" | "MultiLine";
         } &amp; {
@@ -51113,11 +51141,14 @@ export interface components {
         UpdateActivityMediaRequestPayload: {
             caption?: string;
             isCoverPhoto: boolean;
+            isHiddenOnMap: boolean;
+            /** Format: int32 */
+            listPosition: number;
         };
         UpdateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description?: string;
+            description: string;
             /** @enum {string} */
             type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
@@ -52157,6 +52188,8 @@ export interface operations {
                 "multipart/form-data": {
                     /** Format: binary */
                     file: string;
+                    /** Format: int32 */
+                    listPosition?: number;
                 };
             };
         };
@@ -61765,7 +61798,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-02T16:07:52.308Z
+                at 2025-10-02T21:16:28.967Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
