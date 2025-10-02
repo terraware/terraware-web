@@ -303,12 +303,25 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   // populate existing media files when editing
   useEffect(() => {
     if (isEditing && activity && activity.media) {
-      const existingMediaItems: ActivityMediaItem[] = activity.media.map((mediaFile) => ({
-        data: mediaFile,
-        isDeleted: false,
-        isModified: false,
-        type: 'existing' as const,
-      }));
+      const existingMediaItems: ActivityMediaItem[] = activity.media
+        .map((mediaFile) => ({
+          data: mediaFile,
+          isDeleted: false,
+          isModified: false,
+          type: 'existing' as const,
+        }))
+        .sort((a, b) => {
+          // cover photos always come first
+          if (a.data.isCoverPhoto && !b.data.isCoverPhoto) {
+            return -1;
+          }
+          if (!a.data.isCoverPhoto && b.data.isCoverPhoto) {
+            return 1;
+          }
+
+          // then sort by listPosition
+          return (a.data.listPosition || 0) - (b.data.listPosition || 0);
+        });
       setMediaFiles(existingMediaItems);
     }
   }, [isEditing, activity]);
