@@ -63,6 +63,8 @@ export default function AggregatedPlantsStats({
             : ''
           : handleMissingData(mortalityRate)
         : '',
+      tooltip:
+        hasObservedPermanentPlots && isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : '',
     },
   ];
 

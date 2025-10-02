@@ -297,6 +297,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
                     type={datum.text ? 'textarea' : 'text'}
                     preserveNewlines={true}
                     display={true}
+                    tooltipTitle={datum.label === strings.SURVIVAL_RATE ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : ''}
                   />
                 </Grid>
               ))}
