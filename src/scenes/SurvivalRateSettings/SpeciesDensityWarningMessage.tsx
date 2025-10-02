@@ -32,6 +32,8 @@ export default function SpeciesDensityWarningMessage(props: SpeciesDensityWarnin
       ]}
       skrim={true}
       message={strings.SPECIES_DENSITY_WARNING_MESSAGE}
-    />
+    >
+      <p>{strings.WOULD_YOU_LIKE_TO_CONTINUE}</p>
+    </DialogBox>
   );
 }

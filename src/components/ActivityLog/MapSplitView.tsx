@@ -10,6 +10,7 @@ import { useLocalization } from 'src/providers';
 import { Activity, activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import ColorKeyControl from '../NewMap/ColorKeyControl';
 import useMapUtils from '../NewMap/useMapUtils';
 import { getBoundingBox } from '../NewMap/utils';
 
@@ -148,6 +149,7 @@ export default function MapSplitView({
         mapRef={mapRef}
         mapId={mapId}
         token={token ?? ''}
+        controlTopLeft={<ColorKeyControl />}
       />
     </Box>
   );
