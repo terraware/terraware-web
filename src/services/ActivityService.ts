@@ -120,9 +120,9 @@ const adminListActivities = async (
 /**
  * Get a single activity with admin details
  */
-const adminGetActivity = async (activityId: string): Promise<Response2<AdminGetActivityResponse>> => {
+const adminGetActivity = async (activityId: number): Promise<Response2<AdminGetActivityResponse>> => {
   return HttpService.root(ACTIVITY_ADMIN_ENDPOINT).get2<AdminGetActivityResponse>({
-    urlReplacements: { '{id}': activityId },
+    urlReplacements: { '{id}': activityId.toString() },
   });
 };
 

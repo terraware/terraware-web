@@ -16,10 +16,10 @@ import {
   requestGetActivityMedia,
   requestGetFileForToken,
   requestListActivities,
+  requestSyncActivityMedia,
   requestUpdateActivity,
   requestUpdateActivityMedia,
   requestUploadActivityMedia,
-  requestUploadManyActivityMedia,
 } from './activitiesAsyncThunks';
 
 /**
@@ -219,16 +219,16 @@ export const fileForTokenSlice = createSlice({
 });
 
 /**
- * Upload many activity media
+ * Sync activity media
  */
-const initialStateUploadManyActivityMedia: Record<string, StatusT<any>> = {};
+const initialStateSyncActivityMedia: Record<string, StatusT<any>> = {};
 
-export const uploadManyActivityMediaSlice = createSlice({
-  name: 'uploadManyActivityMediaSlice',
-  initialState: initialStateUploadManyActivityMedia,
+export const syncActivityMediaSlice = createSlice({
+  name: 'syncActivityMediaSlice',
+  initialState: initialStateSyncActivityMedia,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestUploadManyActivityMedia)(builder);
+    buildReducers(requestSyncActivityMedia)(builder);
   },
 });
 
@@ -247,7 +247,7 @@ const activityReducers = {
   activityMediaUpdate: activityMediaUpdateSlice.reducer,
   activityMediaUpload: activityMediaUploadSlice.reducer,
   fileForToken: fileForTokenSlice.reducer,
-  uploadManyActivityMedia: uploadManyActivityMediaSlice.reducer,
+  syncActivityMedia: syncActivityMediaSlice.reducer,
 };
 
 export default activityReducers;

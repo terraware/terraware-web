@@ -316,6 +316,7 @@ COLLECTION_SITE,Nombre del lugar de recolección,32b625d7
 COLLECTION_SOURCE,Tipo de fuente de la planta,292a47fa
 COLLECTOR,Recolector,cf2069b8
 COLLECTORS,Recolectores,55432568
+COLOR,Color,e96df902
 COMMENTS,Comentarios,5a6f1269
 COMMON_NAME,Nombre común,d7db2e57
 COMMUNITY,Comunidad,a1e5aaf2
@@ -758,6 +759,7 @@ HERB,Hierba,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abundancia herbácea (%),d3693b6c
 HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
+HIDE_ON_MAP,Ocultar en el mapa,089ea8d7
 HIGHEST,Más alta,5c2f89d6
 HIGHLIGHTS,Destacados,a76b6c49
 HISTORY,Historial,fe7205b3
@@ -834,6 +836,7 @@ IUCN_VULNERABLE,Vulnerable (VU),ed5dcc89
 JOIN,Únase,43eb6054
 JOIN_EVENT_NAME,Únase {0},14c4bd8e
 KEEP_ORIGINAL,Conservar original,21773616
+KEY,Clave,b46ab088
 KEY_LESSONS,Lecciones clave aprendidas,24ee85f1
 KEY_LESSONS_INSTRUCTIONS,"Proporcione detalles de las lecciones clave aprendidas durante el periodo de presentación de informes del proyecto, incluidas las consecuencias no intencionadas tanto positivas como negativas, de ser el caso. (Media página como máximo)",e6cf7202
 KEY_LESSONS_REQUIRED,Lecciones clave aprendidas *,74a53101
@@ -907,7 +910,9 @@ LOADING,Cargando...,ccd47f3b
 LOCAL_USES_KNOWN,Usos locales conocidos,02a9f5ec
 LOCAL_USES_KNOWN_TOOLTIP,"Enumere los usos tradicionales, culturales, sociales, económicos y de subsistencia importantes de la especie en su región.",e0632287
 LOCATION,Lugar,460d693d
+LOCATION_DATA_UNAVAILABLE,Datos de ubicación no disponibles,150027f9
 LOCATION_REQUIRED,Lugar *,5ff47eb0
+LOCATION_WILL_BE_ADDED_TO_MAP_AFTER_SAVING,"La ubicación se agregará al mapa después de guardar, si está disponible.",c52bc597
 LOCATIONS,Lugares,dab7bb42
 LOCKED,Bloqueado,70941ed5
 LOG_FRAME_AND_ME_PLAN_URL,URL del marco lógico y del plan de seguimiento y evaluación,5bc48a88
@@ -1273,6 +1278,7 @@ PLANT_DENSITY,Densidad de plantación,feae2a2d
 PLANT_DENSITY_MISSING_TOOLTIP,"Cuando se completa una observación, la densidad de plantación calculada aparecerá aquí.",6e3830dd
 PLANT_DENSITY_OF_PLANTED_ZONES,Densidad de plantación (de Zonas plantadas),2e0bd471
 PLANT_DENSITY_TITLE_TOOLTIP,Ingrese manualmente la densidad de plantas para cada una de las especies plantadas. Esta densidad se utilizará para los cálculos de la Tasa de Supervivencia.,50547e3a
+PLANT_DENSITY_TOOLTIP,Densidades de plantas por especie que se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,82b7af4f
 PLANT_DESCRIPTION,Notas sobre las plantas,0915d26a
 PLANT_DETAIL,Detalle de la planta,4b1b7fff
 PLANT_ID,ID de la planta,25cd3771
@@ -1735,6 +1741,7 @@ SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
 SETTINGS,Ajustes,38560978
+SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHRUB,Arbusto,af50871c
 SHRUBS,Arbustos,377018f6
 SILVOPASTURE,Sistema selvopastoril,9d942e38
@@ -1802,7 +1809,7 @@ SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla 
 SPECIES_CATEGORIES,Categorías de especies,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del total de plantas plantadas que son Raras y en Peligro, según la especie.",e6a1dcfe
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
-SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en la parcela. ¿Desea continuar?",3042a1a1
+SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
 SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,20250069
 SPECIES_FROM_WITHDRAWALS,Especies a partir de retiros,66d674b5
@@ -1830,6 +1837,7 @@ SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra la cantidad de plantas por especie que fueron registradas como vivas y muertas dentro de todas las zonas observadas.,8e100f36
 SPECIES_SURVIVAL_TOOLTIP,"La Supervivencia de Especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las zonas que fueron observadas.",dfaff418
+SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
 STAFF,Personal,6b242686
 STAKEHOLDER_ENGAGEMENT,Participación de partes interesadas,2c5cfa82
@@ -1908,13 +1916,15 @@ SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,35c72f75
 SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
 SURVIVAL_RATE,Tasa de supervivencia,b1a831cf
+SURVIVAL_RATE_COLUMN_TOOLTIP,"Las tasas de supervivencia se calculan en función de las densidades iniciales de plantas. Si no se establecen densidades iniciales de plantas para un Sitio de Plantación, la tasa de supervivencia no estará disponible.",426f186d
+SURVIVAL_RATE_PER_SPECIES,Tasa de supervivencia por especie,523afab7
 SURVIVAL_RATE_SETTINGS,Configuración de la tasa de supervivencia,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Configuración de la tasa de supervivencia para {0},f787c873
 SURVIVAL_RATE_SETTINGS_INFO,"{0} Para cada parcela, seleccione o ingrese los datos que se utilizarán para proporcionar la densidad de plantas t0 por parcela para los cálculos de la tasa de supervivencia. Para cada Observación posterior, Terraware usará los datos t0 para calcular las tasas de supervivencia a nivel de Parcela, Subzona, Zona y Sitio de Plantación. Si se cambia la Observación seleccionada para una parcela, las tasas de supervivencia se recalcularán en función de la nueva selección. Alternativamente, si se conoce la cantidad de plantas que fueron plantadas en las parcelas, se pueden usar las densidades de plantas plantadas en lugar de los datos de Observación para los cálculos de la tasa de supervivencia.",d0a2ff5b
 SURVIVAL_RATE_TOOLTIP,La tasa de supervivencia se basa en la cantidad de plantas que fueron observadas como vivas dentro de todas las zonas que fueron observadas.,faa56121
 SURVIVAL_RATE_TREND_TOOLTIP,"La tendencia de la tasa de supervivencia representa los porcentajes de plantas que fueron registradas como vivas en parcelas permanentes dentro de todas las observaciones. Si los datos t0 no están establecidos para todas las parcelas dentro de una Observación, la tasa de supervivencia para la Observación no se representará en la tendencia.",63f175eb
-SURVIVAL_RATES_UNAVAILABLE_BODY,Ingrese los datos t0 en el {0} y obtenga más información sobre el cálculo de tasas de supervivencia en nuestro {1}.,c885f470
-SURVIVAL_RATES_UNAVAILABLE_TITLE,No es posible calcular las tasas de supervivencia porque no se han ingresado todos los datos t0 requeridos.,1d27b799
+SURVIVAL_RATES_UNAVAILABLE_BODY,Ingrese los datos en el {0} y obtenga más información sobre el cálculo de tasas de supervivencia en nuestro {1}.,5b1b6dc1
+SURVIVAL_RATES_UNAVAILABLE_TITLE,No es posible calcular las tasas de supervivencia porque no se han ingresado todos los datos requeridos.,3a990e77
 SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible,905bfc54
 SUSTAINABLE_TIMBER,Madera sostenible,b9574821
 SW_CORNER_LATITUDE,Latitud de la esquina SO: {0},11be73c0
@@ -2236,6 +2246,7 @@ WORKERS_PAID_FEMALE,Trabajadoras mujeres pagas *,0f4c8201
 WORKERS_VOLUNTEERS,Voluntarios *,339666d2
 WORKSHOP,Taller,8092cd5c
 WORKSHOPS,Talleres,1a6fc46c
+WOULD_YOU_LIKE_TO_CONTINUE,¿Desea continuar?,9ca4c77f
 X_HA,{0} hectáreas,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha en la Superficie total de plantación,586af003
 X_HECTARES,{0} hectáreas,6f24cf52
