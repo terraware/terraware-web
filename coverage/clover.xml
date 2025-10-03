@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1759507882286" clover="3.2.0">
-  <project timestamp="1759507882286" name="All files">
-    <metrics statements="34027" coveredstatements="1347" conditionals="23784" coveredconditionals="391" methods="10433" coveredmethods="213" elements="68244" coveredelements="1951" complexity="0" loc="34027" ncloc="34027" packages="280" files="1351" classes="1351"/>
+<coverage generated="1759511510331" clover="3.2.0">
+  <project timestamp="1759511510331" name="All files">
+    <metrics statements="34027" coveredstatements="1347" conditionals="23786" coveredconditionals="391" methods="10433" coveredmethods="213" elements="68246" coveredelements="1951" complexity="0" loc="34027" ncloc="34027" packages="280" files="1351" classes="1351"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1764,7 +1764,7 @@
       </file>
     </package>
     <package name="src.components.ActivityLog">
-      <metrics statements="379" coveredstatements="0" conditionals="284" coveredconditionals="0" methods="108" coveredmethods="0"/>
+      <metrics statements="379" coveredstatements="0" conditionals="286" coveredconditionals="0" methods="108" coveredmethods="0"/>
       <file name="ActivitiesEmptyState.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesEmptyState.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -2140,7 +2140,7 @@
         <line num="66" count="0" type="stmt"/>
       </file>
       <file name="MapSplitView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/MapSplitView.tsx">
-        <metrics statements="29" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="13" coveredmethods="0"/>
+        <metrics statements="29" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
@@ -2160,7 +2160,7 @@
         <line num="71" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
-        <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="77" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="78" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
