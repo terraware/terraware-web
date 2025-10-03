@@ -18,7 +18,7 @@ const ActivitiesEmptyState = ({ projectId }: ActivitiesEmptyStateProps): JSX.Ele
     <Box
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'center' }}
     >
-      <img src='/assets/no-activities.png' />
+      <img src='/assets/no-activities.png' alt={strings.THIS_PROJECT_HAS_NO_ACTIVITIES} />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingY: '24px' }}>
         <Typography fontSize={'20px'} paddingBottom={'8px'}>
           {strings.THIS_PROJECT_HAS_NO_ACTIVITIES}
