@@ -177,7 +177,6 @@ export default function MapSplitView({
     },
     [searchParams, setSearchParams]
   );
-  );
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
