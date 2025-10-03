@@ -166,13 +166,14 @@ export default function MapSplitView({
 
   const onMapMoveCallback = useCallback(
     (view: ViewStateChangeEvent) => {
-      setSearchParams({
-        lat: view.viewState.latitude.toString(),
-        lng: view.viewState.longitude.toString(),
-        zoom: view.viewState.zoom.toString(),
-      });
+      const params = new URLSearchParams(searchParams);
+      params.set('lat', view.viewState.latitude.toString());
+      params.set('lng', view.viewState.longitude.toString());
+      params.set('zoom', view.viewState.zoom.toString());
+      setSearchParams(params);
     },
-    [setSearchParams]
+    [searchParams, setSearchParams]
+  );
   );
 
   return (
