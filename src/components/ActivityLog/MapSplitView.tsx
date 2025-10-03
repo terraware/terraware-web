@@ -118,11 +118,6 @@ export default function MapSplitView({
     );
   }, [plantingSites]);
 
-  const boundingBox = useMemo(() => {
-    const multipolygons = siteFeatures.map((feature) => feature.geometry);
-    return getBoundingBox(multipolygons);
-  }, [siteFeatures]);
-
   const mapFeatures = useMemo((): MapFeatureSection[] => {
     return [
       {
@@ -158,11 +153,13 @@ export default function MapSplitView({
   }, [currentProjectId, projectId, setSearchParams]);
 
   useEffect(() => {
-    if (!initialMapViewState && boundingBox) {
+    if (!initialMapViewState && siteFeatures.length > 0) {
       // If no map view state is provided, move map to features
+      const multipolygons = siteFeatures.map((feature) => feature.geometry);
+      const boundingBox = getBoundingBox(multipolygons);
       fitBounds(boundingBox);
     }
-  }, [boundingBox, fitBounds, initialMapViewState]);
+  }, [fitBounds, initialMapViewState, siteFeatures]);
 
   const onMapMoveCallback = useCallback(
     (view: ViewStateChangeEvent) => {

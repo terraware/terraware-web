@@ -17,33 +17,66 @@ export default function useNavigateTo() {
 
       goToAcceleratorActivityCreate: (projectId: number) => {
         const params = new URLSearchParams(location.search);
-        params.set('source', window.location.pathname);
+        const newParams = new URLSearchParams();
+        if (params.has('lat')) {
+          newParams.set('lat', params.get('lat')!);
+        }
+        if (params.has('lng')) {
+          newParams.set('lng', params.get('lng')!);
+        }
+        if (params.has('zoom')) {
+          newParams.set('zoom', params.get('zoom')!);
+        }
+
+        newParams.set('source', window.location.pathname);
+
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
-          search: params.toString(),
+          search: newParams.toString(),
         });
       },
 
       goToAcceleratorActivityEdit: (projectId: number, activityId: number) => {
         const params = new URLSearchParams(location.search);
-        params.set('source', window.location.pathname);
+        const newParams = new URLSearchParams();
+        if (params.has('lat')) {
+          newParams.set('lat', params.get('lat')!);
+        }
+        if (params.has('lng')) {
+          newParams.set('lng', params.get('lng')!);
+        }
+        if (params.has('zoom')) {
+          newParams.set('zoom', params.get('zoom')!);
+        }
+        newParams.set('source', window.location.pathname);
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
             ':activityId',
             `${activityId}`
           ),
-          search: params.toString(),
+          search: newParams.toString(),
         });
       },
 
       goToAcceleratorActivityLog: (activityId?: number) => {
         const params = new URLSearchParams(location.search);
-        if (activityId !== undefined) {
-          params.set('activityId', activityId.toString());
+        const newParams = new URLSearchParams();
+        if (params.has('lat')) {
+          newParams.set('lat', params.get('lat')!);
         }
+        if (params.has('lng')) {
+          newParams.set('lng', params.get('lng')!);
+        }
+        if (params.has('zoom')) {
+          newParams.set('zoom', params.get('zoom')!);
+        }
+        if (activityId !== undefined) {
+          newParams.set('activityId', activityId.toString());
+        }
+
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG,
-          search: params.toString(),
+          search: newParams.toString(),
         });
       },
 
@@ -97,30 +130,65 @@ export default function useNavigateTo() {
         }),
 
       goToActivityCreate: (projectId: number) => {
+        const params = new URLSearchParams(location.search);
+        const newParams = new URLSearchParams();
+        if (params.has('lat')) {
+          newParams.set('lat', params.get('lat')!);
+        }
+        if (params.has('lng')) {
+          newParams.set('lng', params.get('lng')!);
+        }
+        if (params.has('zoom')) {
+          newParams.set('zoom', params.get('zoom')!);
+        }
+
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
-          search: location.search,
+          search: newParams.toString(),
         });
       },
 
       goToActivityEdit: (projectId: number, activityId: number) => {
+        const params = new URLSearchParams(location.search);
+        const newParams = new URLSearchParams();
+        if (params.has('lat')) {
+          newParams.set('lat', params.get('lat')!);
+        }
+        if (params.has('lng')) {
+          newParams.set('lng', params.get('lng')!);
+        }
+        if (params.has('zoom')) {
+          newParams.set('zoom', params.get('zoom')!);
+        }
+
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
             ':activityId',
             `${activityId}`
           ),
-          search: location.search,
+          search: newParams.toString(),
         });
       },
 
       goToActivityLog: (activityId?: number) => {
         const params = new URLSearchParams(location.search);
-        if (activityId !== undefined) {
-          params.set('activityId', activityId.toString());
+        const newParams = new URLSearchParams();
+        if (params.has('lat')) {
+          newParams.set('lat', params.get('lat')!);
         }
+        if (params.has('lng')) {
+          newParams.set('lng', params.get('lng')!);
+        }
+        if (params.has('zoom')) {
+          newParams.set('zoom', params.get('zoom')!);
+        }
+        if (activityId !== undefined) {
+          newParams.set('activityId', activityId.toString());
+        }
+
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG,
-          search: params.toString(),
+          search: newParams.toString(),
         });
       },
 
