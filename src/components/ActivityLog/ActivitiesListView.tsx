@@ -14,6 +14,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
+import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
@@ -262,40 +263,46 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >
-      <DateRange
-        field='dateRange'
-        onChange={onChangeDateRange}
-        onDelete={onDeleteDateRange}
-        values={filters.dateRange?.values ?? []}
-      />
-      {groupedActivities.length === 0 && !busy ? (
-        <Typography color={theme.palette.TwClrTxt} fontSize='16px' fontWeight={500} marginTop={theme.spacing(2)}>
-          TODO: Show empty state for no results
-        </Typography>
+      {activities.length === 0 && !busy ? (
+        <ActivitiesEmptyState projectId={projectId} />
       ) : (
-        groupedActivities.map(({ quarter, activities: groupActivities }) => (
-          <Fragment key={quarter}>
-            <Typography
-              color={theme.palette.TwClrTxt}
-              fontSize='20px'
-              fontWeight={600}
-              lineHeight='28px'
-              marginY={theme.spacing(1)}
-            >
-              {quarter}
+        <>
+          <DateRange
+            field='dateRange'
+            onChange={onChangeDateRange}
+            onDelete={onDeleteDateRange}
+            values={filters.dateRange?.values ?? []}
+          />
+          {groupedActivities.length === 0 && !busy ? (
+            <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
+              {strings.NO_ACTIVITIES_TO_SHOW}
             </Typography>
+          ) : (
+            groupedActivities.map(({ quarter, activities: groupActivities }) => (
+              <Fragment key={quarter}>
+                <Typography
+                  color={theme.palette.TwClrTxt}
+                  fontSize='20px'
+                  fontWeight={600}
+                  lineHeight='28px'
+                  marginY={theme.spacing(1)}
+                >
+                  {quarter}
+                </Typography>
 
-            {groupActivities.map((activity) => (
-              <ActivityListItem
-                activity={activity}
-                focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
-                key={activity.id}
-                onMouseEnter={setHoverActivityCallback(activity.id, true)}
-                onMouseLeave={setHoverActivityCallback(activity.id, false)}
-              />
-            ))}
-          </Fragment>
-        ))
+                {groupActivities.map((activity) => (
+                  <ActivityListItem
+                    activity={activity}
+                    focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
+                    key={activity.id}
+                    onMouseEnter={setHoverActivityCallback(activity.id, true)}
+                    onMouseLeave={setHoverActivityCallback(activity.id, false)}
+                  />
+                ))}
+              </Fragment>
+            ))
+          )}
+        </>
       )}
     </MapSplitView>
   );
