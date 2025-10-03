@@ -1,5 +1,5 @@
 import React, { MutableRefObject, ReactNode, useCallback, useMemo, useState } from 'react';
-import { MapRef } from 'react-map-gl/mapbox';
+import { MapRef, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 
 import { MapMouseEvent } from 'mapbox-gl';
 
@@ -7,7 +7,8 @@ import MapBox from './MapBox';
 import MapContainer from './MapContainer';
 import MapDrawer, { MapDrawerSize } from './MapDrawer';
 import MapLegend, { MapHighlightLegendItem, MapLegendGroup } from './MapLegend';
-import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapViewStyle } from './types';
+import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapViewState } from './types';
+import useStickyMapViewStyle from './useStickyMapViewStyle';
 import { getBoundingBox, getBoundsZoomLevel } from './utils';
 
 type BaseMapFeatureSection = {
@@ -56,16 +57,13 @@ export type MapComponentProps = {
   hideMapViewStyleControl?: boolean;
   hideZoomControl?: boolean;
   initialSelectedLayerId?: string;
-  initialMapViewStyle?: MapViewStyle;
-  initialViewState?: {
-    latitude?: number;
-    longitude?: number;
-    zoom?: number;
-  };
+  initialViewState?: MapViewState;
   mapContainerId?: string;
   mapId?: string;
   mapRef: MutableRefObject<MapRef | null>;
   onClickCanvas?: (event: MapMouseEvent) => void;
+  onMapMove?: (view: ViewStateChangeEvent) => void;
+  onTokenExpired?: () => void;
   setDrawerOpen?: (open: boolean) => void;
   setHighlightVisible?: (highlightId: string) => (visible: boolean) => void;
   setMarkerVisible?: (markerGroupId: string) => (visible: boolean) => void;
@@ -95,18 +93,20 @@ const MapComponent = (props: MapComponentProps) => {
     hideMapViewStyleControl,
     hideZoomControl,
     initialSelectedLayerId,
-    initialMapViewStyle,
     initialViewState,
     mapContainerId,
     mapId,
     mapRef,
     onClickCanvas,
+    onMapMove,
+    onTokenExpired,
     setDrawerOpen,
     setHighlightVisible,
     setMarkerVisible,
     token,
   } = props;
-  const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(initialMapViewStyle ?? 'Streets');
+
+  const { mapViewStyle, updateMapViewStyle } = useStickyMapViewStyle({ defaultStyle: 'Outdoors', key: 'map-style' });
   const [selectedLayer, setSelectedLayer] = useState<string | undefined>(initialSelectedLayerId);
 
   const legends = useMemo((): MapLegendGroup[] | undefined => {
@@ -250,7 +250,9 @@ const MapComponent = (props: MapComponentProps) => {
         mapViewStyle={mapViewStyle}
         markerGroups={markerGroups}
         onClickCanvas={onClickCanvas}
-        setMapViewStyle={setMapViewStyle}
+        onMapMove={onMapMove}
+        onTokenExpired={onTokenExpired}
+        setMapViewStyle={updateMapViewStyle}
         token={token}
       />
     );
@@ -277,7 +279,10 @@ const MapComponent = (props: MapComponentProps) => {
     mapViewStyle,
     markerGroups,
     onClickCanvas,
+    onMapMove,
+    onTokenExpired,
     token,
+    updateMapViewStyle,
   ]);
 
   return (

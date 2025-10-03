@@ -3,6 +3,8 @@ import { MultiPolygon } from 'geojson';
 
 export type MapBounds = { minLat: number; minLng: number; maxLat: number; maxLng: number };
 
+export type MapViewState = { latitude: number; longitude: number; zoom: number };
+
 /**
  * Properties class for GeoJson, with a few reserved object defined.
  */
