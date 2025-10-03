@@ -300,18 +300,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           isModified: false,
           type: 'existing' as const,
         }))
-        .sort((a, b) => {
-          // cover photos always come first
-          if (a.data.isCoverPhoto && !b.data.isCoverPhoto) {
-            return -1;
-          }
-          if (!a.data.isCoverPhoto && b.data.isCoverPhoto) {
-            return 1;
-          }
-
-          // then sort by listPosition
-          return (a.data.listPosition || 0) - (b.data.listPosition || 0);
-        });
+        .sort((a, b) => a.data.listPosition - b.data.listPosition);
       setMediaFiles(existingMediaItems);
     }
   }, [isEditing, activity]);
