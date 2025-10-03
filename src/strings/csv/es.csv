@@ -105,6 +105,7 @@ ADD_TEST,Añadir Prueba,2a608b3f
 ADD_TO_PROJECT,Añadir al proyecto,3e56c71f
 ADD_VIABILITY,Añadir Viabilidad,a4672790
 ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad,4648a184
+ADD_YOUR_FIRST_ACTIVITY,Agregue su primera Actividad,9df0e1e5
 ADDED,Agregado,d441aa1d
 ADDED_SPECIES,Especies añadidas,f2342d09
 ADDED_SPECIES_TOOLTIP,Especies que se incluirán en los cálculos de la tasa de supervivencia y que no provienen de Retiros.,cad59bdf
@@ -1055,6 +1056,7 @@ NEXT_STEPS_INSTRUCTIONS,Resuma las siguientes fases de su proyecto. (Un cuarto d
 NEXT_STEPS_REQUIRED,Próximos pasos *,33f00368
 NICE,¡Muy bien!,d5008f62
 NO,No,3c5beb81
+NO_ACTIVITIES_TO_SHOW,No hay actividades para mostrar.,1b075899
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,No hay más proyectos disponibles para esta especie.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,dc94bdcc
 NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe
@@ -1970,6 +1972,7 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Este entregable ha sido aproba
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Este entregable ha sido aprobado. La lista de especies y su estado pueden cambiar a medida que se presenten nuevos entregables de listas de especies.,28fcdf43
 THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
 THIS_OBSERVATION_INCLUDES,Esta observación incluye las siguientes subáreas:,2b52b417
+THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THREATENED,Amenazada,57ca76f3
 TIDE,Marea,9dd490e9

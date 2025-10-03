@@ -43,7 +43,7 @@ const MapDrawer = (props: MapDrawerProp) => {
           )}
         </Box>
       )}
-      <Box className={'map-drawer--body'} ref={drawerRef}>
+      <Box className={'map-drawer--body'} height='100%' ref={drawerRef}>
         {children}
       </Box>
     </Box>

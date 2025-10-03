@@ -105,6 +105,7 @@ ADD_TEST,Ajouter un test,2a608b3f
 ADD_TO_PROJECT,Ajouter au projet,3e56c71f
 ADD_VIABILITY,Ajouter la viabilité,a4672790
 ADD_VIABILITY_TEST,Ajouter un test de viabilité,4648a184
+ADD_YOUR_FIRST_ACTIVITY,Ajoutez votre première activité,9df0e1e5
 ADDED,Ajouté·e,d441aa1d
 ADDED_SPECIES,Espèces ajoutées,f2342d09
 ADDED_SPECIES_TOOLTIP,Espèces à inclure dans les calculs du taux de survie qui ne proviennent pas des retraits.,cad59bdf
@@ -1054,6 +1055,7 @@ NEXT_STEPS_INSTRUCTIONS,Résumez les phases suivantes de votre projet. (Un quart
 NEXT_STEPS_REQUIRED,Prochaines étapes *,33f00368
 NICE,Génial !,d5008f62
 NO,Non,3c5beb81
+NO_ACTIVITIES_TO_SHOW,Aucune activité à afficher.,1b075899
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,Il n'y a pas d'autres projets disponibles pour cette espèce.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,Il n'y a pas de lots dont les quantités peuvent être retirés.,dc94bdcc
 NO_COLUMNS_SELECTED,Aucune colonne sélectionnée,ac8b2bbe
@@ -1969,6 +1971,7 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Ce livrable a été approuvé.
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Ce livrable a été approuvé. La liste des espèces et leur statut peuvent changer à mesure que d'autres livrables de liste d'espèces sont soumis.,28fcdf43
 THIS_MODULE_CONTAINS,Ce module contient :,7982e848
 THIS_OBSERVATION_INCLUDES,Cette observation inclut les sous-zones suivantes :,2b52b417
+THIS_PROJECT_HAS_NO_ACTIVITIES,Ce projet n’a aucune activité,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Ce rapport a été approuvé.,030064cb
 THREATENED,Menacée,57ca76f3
 TIDE,Courant,9dd490e9
