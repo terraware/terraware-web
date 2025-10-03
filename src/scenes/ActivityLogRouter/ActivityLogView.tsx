@@ -9,7 +9,7 @@ import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProject
 import Card from 'src/components/common/Card';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
@@ -20,8 +20,8 @@ export default function ActivityLogView(): JSX.Element {
   const theme = useTheme();
   const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
-  const { availableParticipants } = useParticipants();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { participantProjects, isLoading: participantProjectsLoading } = useParticipantProjects();
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
@@ -38,18 +38,16 @@ export default function ActivityLogView(): JSX.Element {
   );
 
   const availableProjects = useMemo(() => {
-    return availableParticipants
-      .flatMap((participant) =>
-        participant.projects.map((project) => ({
-          dealName: project.projectDealName,
-          id: project.projectId,
-          name: project.projectName,
-          organizationId: project.organizationId,
-        }))
-      )
+    return participantProjects
+      .map((project) => ({
+        dealName: project.dealName,
+        id: project.projectId,
+        name: project.dealName || '',
+        organizationId: -1,
+      }))
       .filter((project) => project.dealName)
       .sort((a, b) => a.dealName!.localeCompare(b.dealName!, activeLocale || undefined));
-  }, [activeLocale, availableParticipants]);
+  }, [activeLocale, participantProjects]);
 
   const goToProjectActivityCreate = useCallback(() => {
     if (!projectId) {
@@ -100,6 +98,7 @@ export default function ActivityLogView(): JSX.Element {
   return (
     <Page
       hierarchicalCrumbs={false}
+      isLoading={isAcceleratorRoute && participantProjectsLoading}
       leftComponent={PageHeaderLeftComponent}
       rightComponent={PageHeaderRightComponent}
       title={strings.ACTIVITY_LOG}

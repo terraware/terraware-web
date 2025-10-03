@@ -10,7 +10,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -67,7 +67,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const { availableParticipants } = useParticipants();
+  const { participantProjects } = useParticipantProjects();
   const { selectedProject } = useProjects({ projectId });
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const navigate = useSyncNavigate();
@@ -108,18 +108,8 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const isEditing = useMemo(() => activityId !== undefined, [activityId]);
 
   const selectedParticipantProject = useMemo(() => {
-    return availableParticipants
-      .flatMap((participant) =>
-        participant.projects.map((project) => ({
-          dealName: project.projectDealName,
-          id: project.projectId,
-          name: project.projectName,
-          organizationId: project.organizationId,
-          participantId: participant.id,
-        }))
-      )
-      .find((p) => p.id === projectId);
-  }, [availableParticipants, projectId]);
+    return participantProjects.find((p) => p.projectId === projectId);
+  }, [projectId, participantProjects]);
 
   const projectName = useMemo(
     () => (isAcceleratorRoute ? selectedParticipantProject?.dealName : selectedProject?.name) || '',
