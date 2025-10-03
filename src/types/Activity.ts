@@ -23,6 +23,7 @@ export type AdminActivityMediaFile = components['schemas']['AdminActivityMediaFi
 export type AdminCreateActivityRequestPayload = components['schemas']['AdminCreateActivityRequestPayload'];
 export type CreateActivityRequestPayload = components['schemas']['CreateActivityRequestPayload'];
 export type UpdateActivityRequestPayload = components['schemas']['UpdateActivityRequestPayload'];
+export type UpdateActivityMediaRequestPayload = components['schemas']['UpdateActivityMediaRequestPayload'];
 
 export type ActivityType = Activity['type'];
 export const ACTIVITY_TYPES: ActivityType[] = [

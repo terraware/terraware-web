@@ -13,6 +13,10 @@ import { useLocalization } from 'src/providers';
 import { Activity, activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import ColorKeyControl from '../NewMap/ColorKeyControl';
+import useMapUtils from '../NewMap/useMapUtils';
+import { getBoundingBox } from '../NewMap/utils';
+
 type MapSplitViewProps = {
   activities?: Activity[];
   activityMarkerHighlighted?: (activityId: number, fileId: number) => boolean;
@@ -194,6 +198,7 @@ export default function MapSplitView({
         onMapMove={onMapMoveCallback}
         onTokenExpired={refreshToken}
         token={token ?? ''}
+        controlTopLeft={<ColorKeyControl />}
       />
     </Box>
   );

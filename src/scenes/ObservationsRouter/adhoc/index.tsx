@@ -31,6 +31,8 @@ import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
+
 export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const params = useParams<{
     plantingSiteId: string;
@@ -295,6 +297,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
                     type={datum.text ? 'textarea' : 'text'}
                     preserveNewlines={true}
                     display={true}
+                    tooltipTitle={datum.label === strings.SURVIVAL_RATE ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : ''}
                   />
                 </Grid>
               ))}
@@ -332,14 +335,22 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlotSpecies} />
             </Box>
-            {monitoringPlotResult?.isPermanent && (
-              <>
-                {title(strings.MORTALITY_RATE_PER_SPECIES)}
-                <Box height='360px'>
-                  <SpeciesMortalityRateChart minHeight='360px' species={monitoringPlotSpecies} />
-                </Box>
-              </>
-            )}
+            {monitoringPlotResult?.isPermanent &&
+              (isSurvivalRateCalculationEnabled ? (
+                <>
+                  {title(strings.SURVIVAL_RATE_PER_SPECIES)}
+                  <Box height='360px'>
+                    <SpeciesSurvivalRateChart minHeight='360px' species={monitoringPlotSpecies} />
+                  </Box>
+                </>
+              ) : (
+                <>
+                  {title(strings.MORTALITY_RATE_PER_SPECIES)}
+                  <Box height='360px'>
+                    <SpeciesMortalityRateChart minHeight='360px' species={monitoringPlotSpecies} />
+                  </Box>
+                </>
+              ))}
             {title(strings.PHOTOS)}
             <MonitoringPlotPhotos
               observationId={Number(observationId)}

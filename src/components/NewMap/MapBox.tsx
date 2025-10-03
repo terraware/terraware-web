@@ -37,6 +37,7 @@ export type MapBoxProps = {
   containerId?: string;
   controlBottomLeft?: React.ReactNode;
   controlTopRight?: React.ReactNode;
+  controlTopLeft?: React.ReactNode;
   cursorInteract?: MapCursor;
   cursorMap?: MapCursor;
   disableDoubleClickZoom?: boolean;
@@ -71,6 +72,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     containerId,
     controlBottomLeft,
     controlTopRight,
+    controlTopLeft,
     cursorInteract,
     cursorMap,
     disableDoubleClickZoom,
@@ -640,6 +642,20 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       )}
       {!hideMapViewStyleControl && (
         <MapViewStyleControl containerId={containerId} mapViewStyle={mapViewStyle} setMapViewStyle={setMapViewStyle} />
+      )}
+      {controlTopLeft && (
+        <Box
+          sx={{
+            height: 'max-content',
+            position: 'absolute',
+            left: '123px',
+            top: '10px',
+            width: 'max-content',
+            zIndex: 1000,
+          }}
+        >
+          {controlTopLeft}
+        </Box>
       )}
       {controlTopRight && (
         <Box

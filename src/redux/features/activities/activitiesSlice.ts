@@ -16,6 +16,7 @@ import {
   requestGetActivityMedia,
   requestGetFileForToken,
   requestListActivities,
+  requestSyncActivityMedia,
   requestUpdateActivity,
   requestUpdateActivityMedia,
   requestUploadActivityMedia,
@@ -217,6 +218,20 @@ export const fileForTokenSlice = createSlice({
   },
 });
 
+/**
+ * Sync activity media
+ */
+const initialStateSyncActivityMedia: Record<string, StatusT<any>> = {};
+
+export const syncActivityMediaSlice = createSlice({
+  name: 'syncActivityMediaSlice',
+  initialState: initialStateSyncActivityMedia,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestSyncActivityMedia)(builder);
+  },
+});
+
 const activityReducers = {
   activities: activityListSlice.reducer,
   activityCreate: activityCreateSlice.reducer,
@@ -232,6 +247,7 @@ const activityReducers = {
   activityMediaUpdate: activityMediaUpdateSlice.reducer,
   activityMediaUpload: activityMediaUploadSlice.reducer,
   fileForToken: fileForTokenSlice.reducer,
+  syncActivityMedia: syncActivityMediaSlice.reducer,
 };
 
 export default activityReducers;

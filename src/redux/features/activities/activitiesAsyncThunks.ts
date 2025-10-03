@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { ActivityMediaItem } from 'src/components/ActivityLog/ActivityMediaForm';
 import ActivityService from 'src/services/ActivityService';
 import FileService from 'src/services/FileService';
 import strings from 'src/strings';
@@ -11,6 +12,21 @@ import {
   CreateActivityRequestPayload,
 } from 'src/types/Activity';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+
+type SyncActivityMediaResult = {
+  error?: string;
+  fileId?: number;
+  operation: 'delete' | 'update' | 'upload';
+  success: boolean;
+};
+
+type SyncActivityMediaResponse = {
+  allSuccessful: boolean;
+  deletedCount: number;
+  results: SyncActivityMediaResult[];
+  updatedCount: number;
+  uploadedCount: number;
+};
 
 export const requestListActivities = createAsyncThunk(
   'activities/list',
@@ -75,7 +91,7 @@ export const requestAdminListActivities = createAsyncThunk(
 
 export const requestAdminGetActivity = createAsyncThunk(
   'activities/adminGet',
-  async (activityId: string, { rejectWithValue }) => {
+  async (activityId: number, { rejectWithValue }) => {
     const response = await ActivityService.adminGetActivity(activityId);
 
     if (response?.requestSucceeded && response?.data) {
@@ -237,6 +253,136 @@ export const requestGetFileForToken = createAsyncThunk(
 
     if (response?.requestSucceeded && response?.data) {
       return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestSyncActivityMedia = createAsyncThunk(
+  'activities/syncMedia',
+  async (request: { activityId: number; mediaItems: ActivityMediaItem[] }, { rejectWithValue }) => {
+    const { activityId, mediaItems } = request;
+    const results: SyncActivityMediaResult[] = [];
+
+    // delete existing media items marked for deletion
+    const itemsToDelete = mediaItems.filter((item) => item.type === 'existing' && item.isDeleted);
+
+    for (const item of itemsToDelete) {
+      if (item.type === 'existing') {
+        try {
+          const deleteResponse = await ActivityService.deleteActivityMedia(activityId, item.data.fileId);
+
+          results.push({
+            ...(deleteResponse?.requestSucceeded ? {} : { error: 'Delete request failed' }),
+            fileId: item.data.fileId,
+            operation: 'delete',
+            success: !!deleteResponse?.requestSucceeded,
+          });
+        } catch (error) {
+          results.push({
+            error: error instanceof Error ? error.message : 'Unknown delete error',
+            fileId: item.data.fileId,
+            operation: 'delete',
+            success: false,
+          });
+        }
+      }
+    }
+
+    // update metadata of existing media items marked as modified
+    const itemsToUpdate = mediaItems.filter((item) => item.type === 'existing' && item.isModified && !item.isDeleted);
+
+    for (const item of itemsToUpdate) {
+      if (item.type === 'existing') {
+        try {
+          const updateResponse = await ActivityService.updateActivityMedia(activityId, item.data.fileId, {
+            caption: item.data.caption,
+            isCoverPhoto: item.data.isCoverPhoto,
+            isHiddenOnMap: item.data.isHiddenOnMap,
+            listPosition: item.data.listPosition,
+          });
+
+          results.push({
+            ...(updateResponse?.requestSucceeded ? {} : { error: 'Update request failed' }),
+            fileId: item.data.fileId,
+            operation: 'update',
+            success: !!updateResponse?.requestSucceeded,
+          });
+        } catch (error) {
+          results.push({
+            error: error instanceof Error ? error.message : 'Unknown update error',
+            fileId: item.data.fileId,
+            operation: 'update',
+            success: false,
+          });
+        }
+      }
+    }
+
+    // upload new media files and update their metadata
+    const itemsToUpload = mediaItems.filter((item) => item.type === 'new');
+
+    for (const item of itemsToUpload) {
+      if (item.type === 'new') {
+        try {
+          // upload the file
+          const formData = new FormData();
+          formData.append('file', item.data.file);
+          const uploadResponse = await ActivityService.uploadActivityMedia(activityId, formData);
+
+          if (!uploadResponse?.requestSucceeded || !uploadResponse?.data?.fileId) {
+            results.push({
+              error: 'File upload failed',
+              operation: 'upload',
+              success: false,
+            });
+            continue;
+          }
+
+          // update the metadata
+          const updateResponse = await ActivityService.updateActivityMedia(activityId, uploadResponse.data.fileId, {
+            caption: item.data.caption,
+            isCoverPhoto: item.data.isCoverPhoto,
+            isHiddenOnMap: item.data.isHiddenOnMap,
+            listPosition: item.data.listPosition,
+          });
+
+          if (!updateResponse?.requestSucceeded) {
+            results.push({
+              error: 'Metadata update failed after upload',
+              fileId: uploadResponse.data.fileId,
+              operation: 'upload',
+              success: false,
+            });
+            continue;
+          }
+
+          results.push({
+            fileId: uploadResponse.data.fileId,
+            operation: 'upload',
+            success: true,
+          });
+        } catch (error) {
+          results.push({
+            error: error instanceof Error ? error.message : 'Unknown upload error',
+            operation: 'upload',
+            success: false,
+          });
+        }
+      }
+    }
+
+    const response: SyncActivityMediaResponse = {
+      allSuccessful: results.every((result) => result.success),
+      deletedCount: results.filter((r) => r.success && r.operation === 'delete').length,
+      results,
+      updatedCount: results.filter((r) => r.success && r.operation === 'update').length,
+      uploadedCount: results.filter((r) => r.success && r.operation === 'upload').length,
+    };
+
+    if (response.allSuccessful) {
+      return response;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

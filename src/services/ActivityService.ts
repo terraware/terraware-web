@@ -1,10 +1,10 @@
 import { paths } from 'src/api/types/generated-schema';
 import {
-  ActivityMediaFile,
   ActivityPayload,
   AdminActivityPayload,
   AdminCreateActivityRequestPayload,
   CreateActivityRequestPayload,
+  UpdateActivityMediaRequestPayload,
 } from 'src/types/Activity';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
@@ -120,9 +120,9 @@ const adminListActivities = async (
 /**
  * Get a single activity with admin details
  */
-const adminGetActivity = async (activityId: string): Promise<Response2<AdminGetActivityResponse>> => {
+const adminGetActivity = async (activityId: number): Promise<Response2<AdminGetActivityResponse>> => {
   return HttpService.root(ACTIVITY_ADMIN_ENDPOINT).get2<AdminGetActivityResponse>({
-    urlReplacements: { '{id}': activityId },
+    urlReplacements: { '{id}': activityId.toString() },
   });
 };
 
@@ -220,10 +220,10 @@ const getActivityMedia = async (
 const updateActivityMedia = async (
   activityId: number,
   fileId: number,
-  mediaData: ActivityMediaFile
+  mediaUpdateData: UpdateActivityMediaRequestPayload
 ): Promise<Response2<UpdateActivityMediaResponse>> => {
   return HttpService.root(ACTIVITY_MEDIA_FILE_ENDPOINT).put2<UpdateActivityMediaResponse>({
-    entity: mediaData,
+    entity: mediaUpdateData,
     urlReplacements: { '{activityId}': activityId.toString(), '{fileId}': fileId.toString() },
   });
 };

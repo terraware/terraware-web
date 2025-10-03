@@ -50,6 +50,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
           key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
           name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
           type: 'number',
+          tooltipTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : '',
         },
       ] as TableColumnType[],
     [isSurvivalRateCalculationEnabled]

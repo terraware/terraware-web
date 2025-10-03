@@ -119,6 +119,7 @@ export default function OrgObservationsListView({
         {
           key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
           name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+          tooltipTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : '',
           type: 'number',
         },
         {

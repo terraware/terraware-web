@@ -49,6 +49,7 @@ type PermissionDeliverable =
 type PermissionDocuments = 'CREATE_DOCUMENTS';
 type PermissionFunder = 'READ_FUNDING_ENTITIES' | 'MANAGE_FUNDING_ENTITIES' | 'INVITE_FUNDER';
 type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
+type PermissionOrganization = 'CREATE_PLANTING_SITE';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
   | 'READ_PARTICIPANTS'
@@ -75,6 +76,7 @@ export type GlobalRolePermission =
   | PermissionDocuments
   | PermissionFunder
   | PermissionGlobalRole
+  | PermissionOrganization
   | PermissionParticipant
   | PermissionParticipantProject;
 
@@ -251,6 +253,17 @@ const isAllowedDeleteNonPublishedActivities: PermissionCheckFn<DeleteNonPublishe
 };
 
 /**
+ * Function related to create planting site, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type CreatePlantingSiteMetadata = { organization: Organization };
+const isAllowedCreatePlantingSite: PermissionCheckFn<CreatePlantingSiteMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: CreatePlantingSiteMetadata
+) => isAcceleratorAdmin(user) || isAdmin(metadata?.organization);
+
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -263,6 +276,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   CREATE_COHORTS: AcceleratorAdminPlus,
   CREATE_DOCUMENTS: TFExpertPlus,
   CREATE_PARTICIPANTS: AcceleratorAdminPlus,
+  CREATE_PLANTING_SITE: isAllowedCreatePlantingSite,
   CREATE_SUBMISSION: isAllowedCreateSubmission,
   DELETE_ACTIVITIES_NON_PUBLISHED: isAllowedDeleteNonPublishedActivities,
   DELETE_ACTIVITIES_PUBLISHED: AcceleratorAdminPlus,

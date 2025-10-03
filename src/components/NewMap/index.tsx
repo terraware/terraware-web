@@ -39,6 +39,7 @@ export type MapComponentProps = {
   clusterRadius?: number;
   controlBottomLeft?: React.ReactNode;
   controlTopRight?: React.ReactNode;
+  controlTopLeft?: React.ReactNode;
   cursorInteract?: MapCursor;
   cursorMap?: MapCursor;
   disableDoubleClickZoom?: boolean;
@@ -74,6 +75,7 @@ const MapComponent = (props: MapComponentProps) => {
     clusterRadius,
     controlBottomLeft,
     controlTopRight,
+    controlTopLeft,
     cursorInteract,
     cursorMap,
     disableDoubleClickZoom,
@@ -230,6 +232,7 @@ const MapComponent = (props: MapComponentProps) => {
         containerId={mapContainerId ?? 'map-container'}
         controlBottomLeft={controlBottomLeft}
         controlTopRight={controlTopRight}
+        controlTopLeft={controlTopLeft}
         cursorInteract={cursorInteract}
         cursorMap={cursorMap}
         disableDoubleClickZoom={disableDoubleClickZoom}
@@ -256,6 +259,7 @@ const MapComponent = (props: MapComponentProps) => {
   }, [
     clusterRadius,
     controlBottomLeft,
+    controlTopLeft,
     controlTopRight,
     cursorInteract,
     cursorMap,

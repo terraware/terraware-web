@@ -28,6 +28,7 @@ type ActivityListItemProps = {
 const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: ActivityListItemProps) => {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
 
@@ -77,12 +78,14 @@ const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: Act
           {activity.type}
         </Typography>
 
-        <Box marginY={theme.spacing(1)}>
-          {isChanged && <ActivityStatusBadge status='Changed' />}
-          <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
-          {/* TODO: render badge for 'Do Not Use' when applicable */}
-          {/* TODO: render badge for 'Published' when applicable */}
-        </Box>
+        {isAcceleratorRoute && (
+          <Box marginY={theme.spacing(1)}>
+            {isChanged && <ActivityStatusBadge status='Changed' />}
+            <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
+            {/* TODO: render badge for 'Do Not Use' when applicable */}
+            {/* TODO: render badge for 'Published' when applicable */}
+          </Box>
+        )}
 
         <Typography>{activity.description}</Typography>
         {!isDesktop && <Typography>{activity.date}</Typography>}

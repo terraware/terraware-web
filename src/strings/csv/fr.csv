@@ -315,6 +315,7 @@ COLLECTION_SITE,Nom du site de collection,32b625d7
 COLLECTION_SOURCE,Type de source végétale,292a47fa
 COLLECTOR,Collecteur,cf2069b8
 COLLECTORS,Collecteurs,55432568
+COLOR,Couleur,e96df902
 COMMENTS,Commentaires,5a6f1269
 COMMON_NAME,Nom commun,d7db2e57
 COMMUNITY,Communauté,a1e5aaf2
@@ -350,6 +351,7 @@ COUNT,Compte,59ea1127
 COUNTRY,Pays,cac01305
 COUNTRY_ONLY,Pays uniquement,d621bf13
 COUNTRY_REQUIRED,Pays *,2b4fcea0
+COVER_PHOTO,Photo de couverture,22acbe1c
 CREATE,Créer,24731958
 CREATE_NEW_ORGANIZATION,Créer une nouvelle organisation,a0e026b8
 CREATE_NEW_PROJECT,Créer un nouveau projet,b709ff33
@@ -756,6 +758,7 @@ HERB,Herbe,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abondance des plantes herbacées (%),d3693b6c
 HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
+HIDE_ON_MAP,Masquer sur la carte,089ea8d7
 HIGHEST,Le plus élevé,5c2f89d6
 HIGHLIGHTS,Points forts,a76b6c49
 HISTORY,Historique,fe7205b3
@@ -832,6 +835,7 @@ IUCN_VULNERABLE,Vulnérable (VU),ed5dcc89
 JOIN,Rejoindre,43eb6054
 JOIN_EVENT_NAME,Rejoindre {0},14c4bd8e
 KEEP_ORIGINAL,Garder l'original,21773616
+KEY,Légende,b46ab088
 KEY_LESSONS,Principales leçons tirées,24ee85f1
 KEY_LESSONS_INSTRUCTIONS,"Détailler les principales leçons tirées au cours de la période de rapport du projet, y compris les conséquences involontaires positives et négatives, le cas échéant. (Une demi-page maximum).",e6cf7202
 KEY_LESSONS_REQUIRED,Principales leçons tirées *,74a53101
@@ -905,7 +909,9 @@ LOADING,Chargement...,ccd47f3b
 LOCAL_USES_KNOWN,Utilisations locales connues,02a9f5ec
 LOCAL_USES_KNOWN_TOOLTIP,"Dressez la liste des utilisations traditionnelles, culturelles, sociales, économiques et des moyens de subsistance de l'espèce dans votre région.",e0632287
 LOCATION,Emplacement,460d693d
+LOCATION_DATA_UNAVAILABLE,Données de localisation indisponibles,150027f9
 LOCATION_REQUIRED,Emplacement *,5ff47eb0
+LOCATION_WILL_BE_ADDED_TO_MAP_AFTER_SAVING,"L’emplacement sera ajouté à la carte après l’enregistrement, si disponible.",c52bc597
 LOCATIONS,Lieux,dab7bb42
 LOCKED,Verrouillé,70941ed5
 LOG_FRAME_AND_ME_PLAN_URL,URL du cadre logique et du plan de suivi et évaluation,5bc48a88
@@ -1271,6 +1277,7 @@ PLANT_DENSITY,Densité de plantation,feae2a2d
 PLANT_DENSITY_MISSING_TOOLTIP,"Lorsqu’une observation est terminée, la densité de plantation calculée apparaîtra ici.",6e3830dd
 PLANT_DENSITY_OF_PLANTED_ZONES,Densité de plantation (des zones plantées),2e0bd471
 PLANT_DENSITY_TITLE_TOOLTIP,Saisissez manuellement la densité de plantation pour chacune des espèces plantées. Cette densité sera utilisée pour les calculs du taux de survie.,50547e3a
+PLANT_DENSITY_TOOLTIP,Densités de plantation par espèce qui seront utilisées pour calculer les taux de survie des parcelles et des espèces.,82b7af4f
 PLANT_DESCRIPTION,Notes sur la plante,0915d26a
 PLANT_DETAIL,Informations sur la plante,4b1b7fff
 PLANT_ID,Identifiant de la plante,25cd3771
@@ -1733,6 +1740,7 @@ SET_UP,Configurer,6096080e
 SET_UP_NURSERY,Créer une pépinière,25ab7370
 SET_UP_SEED_BANK,Créer une banque de semences,6f047a89
 SETTINGS,Paramètres,38560978
+SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHRUB,Arbuste,af50871c
 SHRUBS,Arbustes,377018f6
 SILVOPASTURE,Sylviculture,9d942e38
@@ -1800,7 +1808,7 @@ SPECIES_CARD_DESCRIPTION,Voir les espèces qui sont référencées par vos entr�
 SPECIES_CATEGORIES,Catégories d'espèces,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,Les catégories d'espèces indiquent le pourcentage du total des plantes plantées qui sont rares et menacées en fonction de l'espèce.,e6a1dcfe
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
-SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette parcelle ne seront pas définies et aucun taux de survie ne sera calculé pour ces espèces. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une parcelle. Voulez-vous continuer ?",3042a1a1
+SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette parcelle ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une parcelle.",5bcc0f2b
 SPECIES_DESCRIPTION,"Gérez la liste des espèces de votre organisation pour la planification, les opérations et les rapports.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Saisissez les espèces que vous collectez ou plantez actuellement pour simplifier votre expérience lorsque vous êtes sur le terrain.,20250069
 SPECIES_FROM_WITHDRAWALS,Espèces issues des retraits,66d674b5
@@ -1828,6 +1836,7 @@ SPECIES_SURVIVAL,Survie des espèces,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Répartition de la survie des espèces,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,La répartition de la survie indique le nombre de plants par espèce enregistrés comme vivants ou morts dans l'ensemble des zones observées.,8e100f36
 SPECIES_SURVIVAL_TOOLTIP,La survie des espèces affiche les espèces ayant les taux de survie les plus élevés et les plus faibles parmi les zones observées.,dfaff418
+SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour calculer les taux de survie des parcelles et des espèces.,6e5f03ec
 SPECIES_USAGE,Utilisation des espèces,0669cb85
 STAFF,Personnel,6b242686
 STAKEHOLDER_ENGAGEMENT,Engagement des parties prenantes,2c5cfa82
@@ -1906,13 +1915,15 @@ SUMMARY_OF_PROGRESS_DESCRIPTION,Faites un bref résumé de ce projet.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Résumé des progrès accomplis *,35c72f75
 SUPPLEMENTAL_FILES,Fichiers supplémentaires,b655103c
 SURVIVAL_RATE,Taux de survie,b1a831cf
+SURVIVAL_RATE_COLUMN_TOOLTIP,"Les taux de survie sont calculés en fonction des densités initiales de plants. Si les densités initiales de plants ne sont pas définies pour un site de plantation, le taux de survie ne sera pas disponible.",426f186d
+SURVIVAL_RATE_PER_SPECIES,Taux de survie par espèce,523afab7
 SURVIVAL_RATE_SETTINGS,Paramètres du taux de survie,1177b667
 SURVIVAL_RATE_SETTINGS_FOR,Paramètres du taux de survie pour {0},f787c873
 SURVIVAL_RATE_SETTINGS_INFO,"{0} Pour chaque parcelle, sélectionnez ou saisissez les données qui seront utilisées pour fournir la densité de plantes t0 par parcelle pour le calcul du taux de survie. Pour chaque observation ultérieure, Terraware utilisera les données t0 pour calculer les taux de survie aux niveaux de la parcelle, de la sous-zone, de la zone et du site de plantation. Si l'observation sélectionnée pour une parcelle est modifiée, les taux de survie seront recalculés en fonction de la nouvelle sélection. Alternativement, si le nombre de plantes qui ont été plantées dans les parcelles est connu, les densités de plantes plantées peuvent être utilisées à la place des données d'observation pour le calcul du taux de survie.",d0a2ff5b
 SURVIVAL_RATE_TOOLTIP,Le taux de survie est basé sur le nombre de plants observés comme vivants dans l'ensemble des zones observées.,faa56121
 SURVIVAL_RATE_TREND_TOOLTIP,"La tendance du taux de survie représente les pourcentages de plants enregistrés comme vivants dans les placettes permanentes lors de toutes les observations. Si les données t0 ne sont pas renseignées pour toutes les placettes d'une observation, le taux de survie de cette observation ne sera pas représenté dans la tendance.",63f175eb
-SURVIVAL_RATES_UNAVAILABLE_BODY,Saisissez les données t0 dans le {0} et apprenez-en plus sur le calcul des taux de survie dans notre {1}.,c885f470
-SURVIVAL_RATES_UNAVAILABLE_TITLE,Les taux de survie ne peuvent pas être calculés car toutes les données t0 requises n'ont pas été saisies.,1d27b799
+SURVIVAL_RATES_UNAVAILABLE_BODY,Saisissez les données dans le {0} et apprenez-en plus sur le calcul des taux de survie dans notre {1}.,5b1b6dc1
+SURVIVAL_RATES_UNAVAILABLE_TITLE,Les taux de survie ne peuvent pas être calculés car toutes les données requises n'ont pas été saisies.,3a990e77
 SUSTAINABLE_DEVELOPMENT_GOALS,Objectifs de développement durable,905bfc54
 SUSTAINABLE_TIMBER,Bois durable,b9574821
 SW_CORNER_LATITUDE,Latitude du coin sud-ouest : {0},11be73c0
@@ -2234,6 +2245,7 @@ WORKERS_PAID_FEMALE,Travailleuses rémunérées *,0f4c8201
 WORKERS_VOLUNTEERS,Volontaires *,339666d2
 WORKSHOP,Atelier,8092cd5c
 WORKSHOPS,Ateliers,1a6fc46c
+WOULD_YOU_LIKE_TO_CONTINUE,Souhaitez-vous continuer ?,9ca4c77f
 X_HA,{0} ha,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha dans la superficie totale de plantation,586af003
 X_HECTARES,{0} hectares,6f24cf52
