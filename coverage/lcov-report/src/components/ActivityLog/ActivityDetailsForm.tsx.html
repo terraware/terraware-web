@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/146</span>
+                <span class='fraction'>0/140</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/131</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/142</span>
+                <span class='fraction'>0/136</span>
             </div>
         
             
@@ -527,28 +527,7 @@
 <a name='L462'></a><a href='#L462'>462</a>
 <a name='L463'></a><a href='#L463'>463</a>
 <a name='L464'></a><a href='#L464'>464</a>
-<a name='L465'></a><a href='#L465'>465</a>
-<a name='L466'></a><a href='#L466'>466</a>
-<a name='L467'></a><a href='#L467'>467</a>
-<a name='L468'></a><a href='#L468'>468</a>
-<a name='L469'></a><a href='#L469'>469</a>
-<a name='L470'></a><a href='#L470'>470</a>
-<a name='L471'></a><a href='#L471'>471</a>
-<a name='L472'></a><a href='#L472'>472</a>
-<a name='L473'></a><a href='#L473'>473</a>
-<a name='L474'></a><a href='#L474'>474</a>
-<a name='L475'></a><a href='#L475'>475</a>
-<a name='L476'></a><a href='#L476'>476</a>
-<a name='L477'></a><a href='#L477'>477</a>
-<a name='L478'></a><a href='#L478'>478</a>
-<a name='L479'></a><a href='#L479'>479</a>
-<a name='L480'></a><a href='#L480'>480</a>
-<a name='L481'></a><a href='#L481'>481</a>
-<a name='L482'></a><a href='#L482'>482</a>
-<a name='L483'></a><a href='#L483'>483</a>
-<a name='L484'></a><a href='#L484'>484</a>
-<a name='L485'></a><a href='#L485'>485</a>
-<a name='L486'></a><a href='#L486'>486</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L465'></a><a href='#L465'>465</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -660,16 +639,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -860,18 +829,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1045,7 +1003,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -1102,7 +1060,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { availableParticipants } = <span class="cstat-no" title="statement not covered" >useParticipants();</span>
+  const { participantProjects } = <span class="cstat-no" title="statement not covered" >useParticipantProjects();</span>
   const { selectedProject } = <span class="cstat-no" title="statement not covered" >useProjects({ projectId });</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
@@ -1143,18 +1101,8 @@ export default function <span class="fstat-no" title="function not covered" >Act
   const isEditing = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >activityId !== undefined,</span> [activityId]);</span>
 &nbsp;
   const selectedParticipantProject = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return availableParticipants</span>
-      .flatMap(<span class="fstat-no" title="function not covered" >(p</span>articipant) =&gt;
-<span class="cstat-no" title="statement not covered" >        participant.projects.map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-          dealName: project.projectDealName,
-          id: project.projectId,
-          name: project.projectName,
-          organizationId: project.organizationId,
-          participantId: participant.id,
-        }))
-      )
-      .find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.id === projectId)</span>;
-  }, [availableParticipants, projectId]);
+<span class="cstat-no" title="statement not covered" >    return participantProjects.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.projectId === projectId)</span>;</span>
+  }, [projectId, participantProjects]);
 &nbsp;
   const projectName = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >(isAcceleratorRoute ? selectedParticipantProject?.dealName : selectedProject?.name) || '',</span>
@@ -1345,18 +1293,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
           isModified: false,
           type: 'existing' as const,
         }))
-        .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {
-          // cover photos always come first
-<span class="cstat-no" title="statement not covered" >          if (a.data.isCoverPhoto &amp;&amp; !b.data.isCoverPhoto) {</span>
-<span class="cstat-no" title="statement not covered" >            return -1;</span>
-          }
-<span class="cstat-no" title="statement not covered" >          if (!a.data.isCoverPhoto &amp;&amp; b.data.isCoverPhoto) {</span>
-<span class="cstat-no" title="statement not covered" >            return 1;</span>
-          }
-&nbsp;
-          // then sort by listPosition
-<span class="cstat-no" title="statement not covered" >          return (a.data.listPosition || 0) - (b.data.listPosition || 0);</span>
-        });
+        .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.data.listPosition - b.data.listPosition)</span>;
 <span class="cstat-no" title="statement not covered" >      setMediaFiles(existingMediaItems);</span>
     }
   }, [isEditing, activity]);
@@ -1525,7 +1462,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-03T17:11:49.600Z
+                at 2025-10-03T18:15:40.193Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
