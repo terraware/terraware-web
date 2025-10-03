@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router';
 import { Box, useTheme } from '@mui/material';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
+import ColorKeyControl from 'src/components/NewMap/ColorKeyControl';
 import { MapLayerFeature, MapMarker, MapMarkerGroup, MapViewState } from 'src/components/NewMap/types';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import { getBoundingBox } from 'src/components/NewMap/utils';
@@ -12,10 +13,6 @@ import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
 import { useLocalization } from 'src/providers';
 import { Activity, activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
-
-import ColorKeyControl from '../NewMap/ColorKeyControl';
-import useMapUtils from '../NewMap/useMapUtils';
-import { getBoundingBox } from '../NewMap/utils';
 
 type MapSplitViewProps = {
   activities?: Activity[];
