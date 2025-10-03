@@ -74,7 +74,7 @@ export default function MapSplitView({
     return activities.map((activity): MapMarkerGroup => {
       const markers = activity.media
         .map((media): MapMarker | undefined => {
-          if (media.geolocation) {
+          if (media.geolocation && !media.isHiddenOnMap) {
             return {
               id: `activity-${activity.id}-media-${media.fileId}`,
               longitude: media.geolocation.coordinates[0],

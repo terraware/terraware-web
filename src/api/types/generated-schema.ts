@@ -6552,6 +6552,10 @@ export interface components {
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
+            geometries: Record<string, never>[];
+            /** @enum {string} */
+            type: "GeometryCollection";
+        } & {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
