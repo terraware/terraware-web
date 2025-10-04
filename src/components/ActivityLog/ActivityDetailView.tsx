@@ -33,6 +33,12 @@ const ActivityDetailView = ({
 
   const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
 
+  useEffect(() => {
+    if (activity?.verifiedBy && !verifiedByUser) {
+      void dispatch(requestGetUser(activity?.verifiedBy));
+    }
+  }, [activity?.verifiedBy, dispatch, verifiedByUser]);
+
   const verifiedByLabel = useMemo(() => {
     const verifiedByName = verifiedByUser
       ? `${verifiedByUser?.firstName ?? ''} ${verifiedByUser?.lastName ?? ''}`.trim() || verifiedByUser.email
@@ -48,12 +54,6 @@ const ActivityDetailView = ({
       activity.modifiedTime && activity.createdTime && new Date(activity.modifiedTime) > new Date(activity.createdTime)
     );
   }, [activity.modifiedTime, activity.createdTime]);
-
-  useEffect(() => {
-    if (activity?.verifiedBy && !verifiedByUser) {
-      void dispatch(requestGetUser(activity?.verifiedBy));
-    }
-  }, [activity?.verifiedBy, dispatch, verifiedByUser]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
