@@ -2172,6 +2172,7 @@ VARIABLE_HISTORY,Historial variable,62d3bc75
 VARIABLE_STATUS,Estado de variable,dd3169c3
 VARIABLES,Variables,9902c54b
 VERIFIED,Verificado,17f92e17
+VERIFIED_BY,Verificado por {0},c5e1ef69
 VERRA,Verra,b73695a0
 VERRA_LINK,Enlace de Verra,09f00e23
 VERRA_NPRT,Herramienta Verra de riesgo de no permanencia (NPRT),8df572d7

@@ -1,4 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -8,13 +9,14 @@ import { requestAdminListActivities, requestListActivities } from 'src/redux/fea
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { Activity } from 'src/types/Activity';
+import { Activity, activityTypeLabel } from 'src/types/Activity';
 import { SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
+import ActivityDetailView from './ActivityDetailView';
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
@@ -22,16 +24,20 @@ import MapSplitView from './MapSplitView';
 type ActivityListItemProps = {
   activity: Activity;
   focused?: boolean;
+  onClick: (activityId: number) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 };
 
-const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: ActivityListItemProps) => {
+const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLeave }: ActivityListItemProps) => {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
+
+  const activityType = useMemo(() => activityTypeLabel(activity.type, strings), [activity.type, strings]);
 
   const isChanged = useMemo(() => {
     return (
@@ -48,12 +54,17 @@ const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: Act
       : '/assets/activity-media.svg';
   }, [activity.id, coverPhoto]);
 
+  const onClickActivityListItem = useCallback(() => {
+    onClick(activity.id);
+  }, [activity.id, onClick]);
+
   return (
     <Grid
       container
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       id={`activity-log-item-${activity.id}`}
+      onClick={onClickActivityListItem}
       paddingY={theme.spacing(2)}
       sx={{
         backgroundColor: focused ? theme.palette.TwClrBgSecondary : undefined,
@@ -76,7 +87,7 @@ const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: Act
 
       <Grid item xs={true}>
         <Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'>
-          {activity.type}
+          {activityType}
         </Typography>
 
         {isAcceleratorRoute && (
@@ -103,15 +114,17 @@ const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: Act
 
 type ActivitiesListViewProps = {
   projectId: number;
+  setProjectFilter?: React.Dispatch<React.SetStateAction<{ projectId?: number | string }>>;
 };
 
-const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element => {
+const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [requestId, setRequestId] = useState('');
@@ -119,6 +132,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [activities, setActivities] = useState<Activity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
+  const [viewActivityId, setViewActivityId] = useState<number | undefined>(undefined);
 
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
@@ -157,6 +171,10 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     snackbar,
     strings.GENERIC_ERROR,
   ]);
+
+  const viewActivity = useMemo(() => {
+    return activities.find((activity) => activity.id === viewActivityId);
+  }, [activities, viewActivityId]);
 
   const onDeleteFilter = useCallback(
     (key: string) => {
@@ -249,6 +267,35 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     []
   );
 
+  // update url and navigation history when navigating to activity detail view
+  const onClickActivityListItem = useCallback(
+    (activityId: number) => {
+      const params = new URLSearchParams(searchParams);
+      params.set('projectId', projectId.toString());
+      params.set('activityId', activityId.toString());
+      setSearchParams(params);
+    },
+    [projectId, searchParams, setSearchParams]
+  );
+
+  useEffect(() => {
+    const projectIdParam = searchParams.get('projectId');
+    const activityIdParam = searchParams.get('activityId');
+
+    if (projectIdParam && Number(projectIdParam) !== projectId) {
+      setProjectFilter?.({ projectId: Number(projectIdParam) });
+    }
+
+    if (activityIdParam) {
+      const activityId = Number(activityIdParam);
+      if (!Number.isNaN(activityId)) {
+        setViewActivityId(activityId);
+      }
+    } else {
+      setViewActivityId(undefined);
+    }
+  }, [projectId, searchParams, setProjectFilter]);
+
   useEffect(() => {
     if (focusedActivityId !== undefined) {
       scrollToElementById(`activity-log-item-${focusedActivityId}`);
@@ -257,13 +304,15 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   return (
     <MapSplitView
-      activities={activities} // TODO: Use visible activites after pagination/filtering
+      activities={activities} // TODO: Use visible activities after pagination/filtering
       activityMarkerHighlighted={activityMarkerHighlighted}
       drawerRef={mapDrawerRef}
       onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >
-      {activities.length === 0 && !busy ? (
+      {viewActivityId && viewActivity ? (
+        <ActivityDetailView activity={viewActivity} />
+      ) : activities.length === 0 && !busy ? (
         <ActivitiesEmptyState projectId={projectId} />
       ) : (
         <>
@@ -295,6 +344,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
                     activity={activity}
                     focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
                     key={activity.id}
+                    onClick={onClickActivityListItem}
                     onMouseEnter={setHoverActivityCallback(activity.id, true)}
                     onMouseLeave={setHoverActivityCallback(activity.id, false)}
                   />

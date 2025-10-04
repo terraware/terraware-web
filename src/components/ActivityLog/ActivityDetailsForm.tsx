@@ -8,6 +8,7 @@ import { DateTime } from 'luxon';
 import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
+import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
@@ -135,7 +136,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const navToActivityLog = useCallback(() => {
     if (isAcceleratorRoute && !source) {
       goToAcceleratorActivityLog();
-    } else if (isAcceleratorRoute && source === 'profile') {
+    } else if (
+      isAcceleratorRoute &&
+      source === APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
+    ) {
       goToParticipantProject(projectId);
     } else {
       goToActivityLog();

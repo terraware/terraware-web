@@ -15,10 +15,10 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR });
       },
 
-      goToAcceleratorActivityCreate: (projectId: number, source?: string) => {
+      goToAcceleratorActivityCreate: (projectId: number) => {
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
-          ...(source ? { search: `source=${source}` } : {}),
+          search: `source=${window.location.pathname}`,
         });
       },
 
