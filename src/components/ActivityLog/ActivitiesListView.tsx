@@ -132,7 +132,7 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
   const [activities, setActivities] = useState<Activity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
-  const [viewActivityId, setViewActivityId] = useState<number | undefined>(undefined);
+  const [showActivityId, setShowActivityId] = useState<number | undefined>(undefined);
 
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
@@ -172,9 +172,15 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
     strings.GENERIC_ERROR,
   ]);
 
-  const viewActivity = useMemo(() => {
-    return activities.find((activity) => activity.id === viewActivityId);
-  }, [activities, viewActivityId]);
+  const shownActivity = useMemo(
+    () => activities.find((activity) => activity.id === showActivityId),
+    [activities, showActivityId]
+  );
+
+  const activitiesVisibleOnMap = useMemo(
+    () => (showActivityId && shownActivity ? [shownActivity] : activities),
+    [activities, shownActivity, showActivityId]
+  );
 
   const onDeleteFilter = useCallback(
     (key: string) => {
@@ -289,10 +295,10 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
     if (activityIdParam) {
       const activityId = Number(activityIdParam);
       if (!Number.isNaN(activityId)) {
-        setViewActivityId(activityId);
+        setShowActivityId(activityId);
       }
     } else {
-      setViewActivityId(undefined);
+      setShowActivityId(undefined);
     }
   }, [projectId, searchParams, setProjectFilter]);
 
@@ -304,14 +310,14 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
 
   return (
     <MapSplitView
-      activities={activities} // TODO: Use visible activities after pagination/filtering
+      activities={activitiesVisibleOnMap} // TODO: Use visible activities after pagination/filtering
       activityMarkerHighlighted={activityMarkerHighlighted}
       drawerRef={mapDrawerRef}
       onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >
-      {viewActivityId && viewActivity ? (
-        <ActivityDetailView activity={viewActivity} />
+      {showActivityId && shownActivity ? (
+        <ActivityDetailView activity={shownActivity} />
       ) : activities.length === 0 && !busy ? (
         <ActivitiesEmptyState projectId={projectId} />
       ) : (
