@@ -17,7 +17,7 @@ import ActivityStatusBadge from './ActivityStatusBadge';
 type ActivityDetailViewProps = {
   activity: Activity;
   hoveredFileId?: number;
-  setHoverFileCallback: (ileId: number, hover: boolean) => () => void;
+  setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
 };
 
 const ActivityDetailView = ({
