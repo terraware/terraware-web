@@ -16,9 +16,15 @@ import ActivityStatusBadge from './ActivityStatusBadge';
 
 type ActivityDetailViewProps = {
   activity: Activity;
+  hoveredFileId?: number;
+  setHoverFileCallback: (ileId: number, hover: boolean) => () => void;
 };
 
-const ActivityDetailView = ({ activity }: ActivityDetailViewProps): JSX.Element => {
+const ActivityDetailView = ({
+  activity,
+  hoveredFileId,
+  setHoverFileCallback,
+}: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
@@ -101,6 +107,8 @@ const ActivityDetailView = ({ activity }: ActivityDetailViewProps): JSX.Element 
         <Grid item lg={6} xs={12} key={index}>
           <img
             alt={mediaItem?.caption}
+            onMouseEnter={setHoverFileCallback(mediaItem.fileId, true)}
+            onMouseLeave={setHoverFileCallback(mediaItem.fileId, false)}
             src={ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
               '{fileId}',
               mediaItem.fileId.toString()
@@ -108,7 +116,12 @@ const ActivityDetailView = ({ activity }: ActivityDetailViewProps): JSX.Element 
             style={{
               aspectRatio: '4/3',
               backgroundColor: theme.palette.TwClrBgSecondary,
+              borderColor: hoveredFileId === mediaItem.fileId ? '#CC79A7' : theme.palette.TwClrBg,
+              borderStyle: 'solid',
+              borderWidth: '4px',
+              boxSizing: 'content-box',
               objectFit: 'cover',
+              transition: 'border 0.2s ease-in-out',
               width: '100%',
             }}
           />

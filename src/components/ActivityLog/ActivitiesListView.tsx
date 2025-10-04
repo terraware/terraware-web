@@ -131,7 +131,9 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
   const [busy, setBusy] = useState<boolean>(false);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
+  const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
+  const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
   const [showActivityId, setShowActivityId] = useState<number | undefined>(undefined);
 
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
@@ -250,16 +252,16 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
   }, [activities, strings]);
 
   const activityMarkerHighlighted = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (activityId: number, fileId: number) => {
-      return focusedActivityId === activityId || hoveredActivityId === activityId;
+      const ids = [focusedActivityId, focusedFileId, hoveredActivityId, hoveredFileId];
+      return ids.includes(activityId) || ids.includes(fileId);
     },
-    [focusedActivityId, hoveredActivityId]
+    [focusedActivityId, focusedFileId, hoveredActivityId, hoveredFileId]
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onActivityMarkerClick = useCallback((activityId: number, fileId: number) => {
     setFocusedActivityId((prevValue) => (prevValue === activityId ? undefined : activityId));
+    setFocusedFileId((prevValue) => (prevValue === fileId ? undefined : fileId));
   }, []);
 
   const setHoverActivityCallback = useCallback(
@@ -268,6 +270,17 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
         setHoveredActivityId(activityId);
       } else {
         setHoveredActivityId(undefined);
+      }
+    },
+    []
+  );
+
+  const setHoverFileCallback = useCallback(
+    (fileId: number, hover: boolean) => () => {
+      if (hover) {
+        setHoveredFileId(fileId);
+      } else {
+        setHoveredFileId(undefined);
       }
     },
     []
@@ -317,7 +330,11 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
       projectId={projectId}
     >
       {showActivityId && shownActivity ? (
-        <ActivityDetailView activity={shownActivity} />
+        <ActivityDetailView
+          activity={shownActivity}
+          hoveredFileId={hoveredFileId}
+          setHoverFileCallback={setHoverFileCallback}
+        />
       ) : activities.length === 0 && !busy ? (
         <ActivitiesEmptyState projectId={projectId} />
       ) : (
