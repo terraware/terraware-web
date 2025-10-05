@@ -26,7 +26,7 @@ import MapSplitView from './MapSplitView';
 type ActivityListItemProps = {
   activity: Activity;
   focused?: boolean;
-  onClick: (activityId: number) => void;
+  onClick: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 };
@@ -56,17 +56,13 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
       : '/assets/activity-media.svg';
   }, [activity.id, coverPhoto]);
 
-  const onClickActivityListItem = useCallback(() => {
-    onClick(activity.id);
-  }, [activity.id, onClick]);
-
   return (
     <Grid
       container
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       id={`activity-log-item-${activity.id}`}
-      onClick={onClickActivityListItem}
+      onClick={onClick}
       paddingY={theme.spacing(2)}
       sx={{
         backgroundColor: focused ? theme.palette.TwClrBgSecondary : undefined,
@@ -179,13 +175,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   const showActivityId = useMemo(() => {
     const activityIdParam = query.get('activityId');
-    if (activityIdParam) {
-      const activityId = Number(activityIdParam);
-      if (!Number.isNaN(activityId)) {
-        return activityId;
-      }
-    }
-    return undefined;
+    return activityIdParam ? Number(activityIdParam) : undefined;
   }, [query]);
 
   const shownActivity = useMemo(
@@ -280,29 +270,21 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   const setHoverActivityCallback = useCallback(
     (activityId: number, hover: boolean) => () => {
-      if (hover) {
-        setHoveredActivityId(activityId);
-      } else {
-        setHoveredActivityId(undefined);
-      }
+      setHoveredActivityId(hover ? activityId : undefined);
     },
     []
   );
 
   const setHoverFileCallback = useCallback(
     (fileId: number, hover: boolean) => () => {
-      if (hover) {
-        setHoveredFileId(fileId);
-      } else {
-        setHoveredFileId(undefined);
-      }
+      setHoveredFileId(hover ? fileId : undefined);
     },
     []
   );
 
   // update url and navigation history when navigating to activity detail view
-  const onClickActivityListItem = useCallback(
-    (activityId: number) => {
+  const getOnClickActivityListItem = useCallback(
+    (activityId: number) => () => {
       query.set('activityId', activityId.toString());
       navigate(getLocation(location.pathname, location, query.toString()));
     },
@@ -361,7 +343,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
                     activity={activity}
                     focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
                     key={activity.id}
-                    onClick={onClickActivityListItem}
+                    onClick={getOnClickActivityListItem(activity.id)}
                     onMouseEnter={setHoverActivityCallback(activity.id, true)}
                     onMouseLeave={setHoverActivityCallback(activity.id, false)}
                   />
