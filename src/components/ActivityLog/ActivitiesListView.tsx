@@ -3,6 +3,7 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { requestAdminListActivities, requestListActivities } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
@@ -11,7 +12,9 @@ import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { Activity, activityTypeLabel } from 'src/types/Activity';
 import { SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
@@ -120,6 +123,9 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
+  const navigate = useSyncNavigate();
+  const query = useQuery();
+  const location = useStateLocation();
   const snackbar = useSnackbar();
   const theme = useTheme();
 
@@ -131,7 +137,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
   const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
-  const [showActivityId, setShowActivityId] = useState<number | undefined>(undefined);
 
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
@@ -171,6 +176,17 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     snackbar,
     strings.GENERIC_ERROR,
   ]);
+
+  const showActivityId = useMemo(() => {
+    const activityIdParam = query.get('activityId');
+    if (activityIdParam) {
+      const activityId = Number(activityIdParam);
+      if (!Number.isNaN(activityId)) {
+        return activityId;
+      }
+    }
+    return undefined;
+  }, [query]);
 
   const shownActivity = useMemo(
     () => activities.find((activity) => activity.id === showActivityId),
@@ -285,9 +301,13 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   );
 
   // update url and navigation history when navigating to activity detail view
-  const onClickActivityListItem = useCallback((activityId: number) => {
-    setShowActivityId(activityId);
-  }, []);
+  const onClickActivityListItem = useCallback(
+    (activityId: number) => {
+      query.set('activityId', activityId.toString());
+      navigate(getLocation(location.pathname, location, query.toString()));
+    },
+    [location, navigate, query]
+  );
 
 
   useEffect(() => {
@@ -309,7 +329,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
           activity={shownActivity}
           hoveredFileId={hoveredFileId}
           setHoverFileCallback={setHoverFileCallback}
-          setShowActivityId={setShowActivityId}
         />
       ) : activities.length === 0 && !busy ? (
         <ActivitiesEmptyState projectId={projectId} />

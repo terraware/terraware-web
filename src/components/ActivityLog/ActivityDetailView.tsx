@@ -4,12 +4,15 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { Activity, activityTypeLabel } from 'src/types/Activity';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ActivityStatusBadge from './ActivityStatusBadge';
 
@@ -17,18 +20,19 @@ type ActivityDetailViewProps = {
   activity: Activity;
   hoveredFileId?: number;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
-  setShowActivityId: (value: React.SetStateAction<number | undefined>) => void;
 };
 
 const ActivityDetailView = ({
   activity,
   hoveredFileId,
   setHoverFileCallback,
-  setShowActivityId,
 }: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
+  const navigate = useSyncNavigate();
+  const query = useQuery();
+  const location = useStateLocation();
   const theme = useTheme();
 
   const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
@@ -60,11 +64,12 @@ const ActivityDetailView = ({
       {
         name: strings.PROJECT_ACTIVITY,
         onClick: () => {
-          setShowActivityId(undefined);
+          query.delete('activityId');
+          navigate(getLocation(location.pathname, location, query.toString()));
         },
       },
     ],
-    [setShowActivityId, strings.PROJECT_ACTIVITY]
+    [location, navigate, query, strings.PROJECT_ACTIVITY]
   );
 
   return (
