@@ -139,8 +139,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
 
   useEffect(() => {
-    setBusy(true);
-
     if (isAcceleratorRoute) {
       const request = dispatch(
         requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
@@ -155,7 +153,10 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   }, [activeLocale, dispatch, isAcceleratorRoute, projectId]);
 
   useEffect(() => {
-    if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
+    if (listActivitiesRequest?.status === 'pending' || adminListActivitiesRequest?.status === 'pending') {
+      setBusy(true);
+      setActivities([]);
+    } else if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
       setBusy(false);
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (listActivitiesRequest?.status === 'success' || adminListActivitiesRequest?.status === 'success') {
