@@ -309,7 +309,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     [location, navigate, query]
   );
 
-
   useEffect(() => {
     if (focusedActivityId !== undefined) {
       scrollToElementById(`activity-log-item-${focusedActivityId}`);
