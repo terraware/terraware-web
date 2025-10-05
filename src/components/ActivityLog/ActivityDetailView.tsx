@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -18,17 +17,18 @@ type ActivityDetailViewProps = {
   activity: Activity;
   hoveredFileId?: number;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
+  setShowActivityId: (value: React.SetStateAction<number | undefined>) => void;
 };
 
 const ActivityDetailView = ({
   activity,
   hoveredFileId,
   setHoverFileCallback,
+  setShowActivityId,
 }: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
   const theme = useTheme();
 
   const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
@@ -60,14 +60,11 @@ const ActivityDetailView = ({
       {
         name: strings.PROJECT_ACTIVITY,
         onClick: () => {
-          const params = new URLSearchParams(searchParams);
-          params.delete('projectId');
-          params.delete('activityId');
-          setSearchParams(params);
+          setShowActivityId(undefined);
         },
       },
     ],
-    [searchParams, setSearchParams, strings.PROJECT_ACTIVITY]
+    [setShowActivityId, strings.PROJECT_ACTIVITY]
   );
 
   return (

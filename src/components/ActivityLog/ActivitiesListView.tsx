@@ -1,5 +1,4 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -114,17 +113,15 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
 
 type ActivitiesListViewProps = {
   projectId: number;
-  setProjectFilter?: React.Dispatch<React.SetStateAction<{ projectId?: number | string }>>;
 };
 
-const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewProps): JSX.Element => {
+const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [requestId, setRequestId] = useState('');
@@ -287,33 +284,10 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
   );
 
   // update url and navigation history when navigating to activity detail view
-  const onClickActivityListItem = useCallback(
-    (activityId: number) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('projectId', projectId.toString());
-      params.set('activityId', activityId.toString());
-      setSearchParams(params);
-    },
-    [projectId, searchParams, setSearchParams]
-  );
+  const onClickActivityListItem = useCallback((activityId: number) => {
+    setShowActivityId(activityId);
+  }, []);
 
-  useEffect(() => {
-    const projectIdParam = searchParams.get('projectId');
-    const activityIdParam = searchParams.get('activityId');
-
-    if (projectIdParam && Number(projectIdParam) !== projectId) {
-      setProjectFilter?.({ projectId: Number(projectIdParam) });
-    }
-
-    if (activityIdParam) {
-      const activityId = Number(activityIdParam);
-      if (!Number.isNaN(activityId)) {
-        setShowActivityId(activityId);
-      }
-    } else {
-      setShowActivityId(undefined);
-    }
-  }, [projectId, searchParams, setProjectFilter]);
 
   useEffect(() => {
     if (focusedActivityId !== undefined) {
@@ -334,6 +308,7 @@ const ActivitiesListView = ({ projectId, setProjectFilter }: ActivitiesListViewP
           activity={shownActivity}
           hoveredFileId={hoveredFileId}
           setHoverFileCallback={setHoverFileCallback}
+          setShowActivityId={setShowActivityId}
         />
       ) : activities.length === 0 && !busy ? (
         <ActivitiesEmptyState projectId={projectId} />

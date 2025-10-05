@@ -110,7 +110,7 @@ export default function ActivityLogView(): JSX.Element {
           width: '100%',
         }}
       >
-        {projectId && <ActivitiesListView projectId={projectId} setProjectFilter={setProjectFilter} />}
+        {projectId && <ActivitiesListView projectId={projectId} />}
       </Card>
     </Page>
   );
