@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1759773330659" clover="3.2.0">
-  <project timestamp="1759773330659" name="All files">
+<coverage generated="1759774415618" clover="3.2.0">
+  <project timestamp="1759774415619" name="All files">
     <metrics statements="34119" coveredstatements="1347" conditionals="23858" coveredconditionals="391" methods="10443" coveredmethods="213" elements="68420" coveredelements="1951" complexity="0" loc="34119" ncloc="34119" packages="280" files="1352" classes="1352"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -34591,11 +34591,11 @@
         <line num="258" count="0" type="stmt"/>
         <line num="260" count="0" type="stmt"/>
         <line num="265" count="0" type="stmt"/>
-        <line num="299" count="0" type="stmt"/>
-        <line num="347" count="0" type="stmt"/>
+        <line num="300" count="0" type="stmt"/>
         <line num="348" count="0" type="stmt"/>
-        <line num="355" count="0" type="stmt"/>
-        <line num="385" count="0" type="stmt"/>
+        <line num="349" count="0" type="stmt"/>
+        <line num="356" count="0" type="stmt"/>
+        <line num="386" count="0" type="stmt"/>
       </file>
       <file name="SpeciesDensityWarningMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/SpeciesDensityWarningMessage.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
