@@ -134,13 +134,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   );
 
   const navToActivityLog = useCallback(() => {
-    if (isAcceleratorRoute && !source) {
-      goToAcceleratorActivityLog();
-    } else if (
+    if (
       isAcceleratorRoute &&
       source === APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
     ) {
       goToParticipantProject(projectId);
+    } else if (isAcceleratorRoute) {
+      goToAcceleratorActivityLog();
     } else {
       goToActivityLog();
     }
