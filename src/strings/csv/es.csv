@@ -583,6 +583,7 @@ END_OBSERVATION_MODAL_MESSAGE,Finalizar una observación cuando no hay parcelas 
 END_OBSERVATION_MODAL_QUESTION,¿Estás seguro de que quieres terminar la observación {0} anticipadamente?,5b3a4dde
 END_TIME,Hora de finalización,7c0eb9ca
 ENDANGERED,En peligro de extinción,1a1991aa
+ENDED,Finalizado,8291f981
 ENTER_LOCATION,Introducir ubicación,dfde68fa
 ENTER_SUBSET_WEIGHT_AND_COUNT,"Introduzca el peso del subconjunto y la proporción de recuento para determinar el recuento de semillas aproximado al extraer por peso de una cantidad de recuento. (Inversamente, la proporción determinará la cantidad restante aproximada cuando se extraiga por recuento de una cantidad en peso). Estos campos son útiles cuando contar semillas muy pequeñas no es práctico y solo se requieren si planea extraer de esta accesión a un vivero.",c02303ee
 ENTRIES,Entradas,065e7c3e

@@ -444,6 +444,7 @@ const getPermanentPlotsWithObservations = async <T extends SearchResponseElement
       'plantingSubzone_plantingZone_name',
       'observationPlots.observation_id',
       'observationPlots.observation_startDate',
+      'observationPlots.observation_endDate',
     ],
     search: {
       operation: 'and',
