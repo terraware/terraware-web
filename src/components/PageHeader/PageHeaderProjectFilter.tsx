@@ -9,6 +9,8 @@ import { useLocalization } from 'src/providers';
 import theme from 'src/theme';
 import { Project } from 'src/types/Project';
 
+const SELECTED_PROJECT_SESSION_KEY = 'selected-project-id';
+
 type PageHeaderProjectFilterProps = {
   currentParticipantProject?: Project;
   projectFilter: { projectId?: number | string };
@@ -27,24 +29,46 @@ const PageHeaderProjectFilter = ({
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  // set project filter to current participant project or first project, if not set
+  // initialize project filter with session storage value or defaults
   useEffect(() => {
     if (projectFilter.projectId) {
       return;
     }
 
-    if (currentParticipantProject?.id) {
+    // check session storage for previously selected project
+    const storedProjectId = sessionStorage.getItem(SELECTED_PROJECT_SESSION_KEY);
+    const storedProjectIdNumber = storedProjectId ? Number(storedProjectId) : null;
+
+    // check if the stored project ID exists in the current projects list
+    const isStoredProjectValid =
+      storedProjectIdNumber && projects.some((project) => project.id === storedProjectIdNumber);
+
+    if (isStoredProjectValid) {
+      setProjectFilter({ projectId: storedProjectIdNumber });
+      setCurrentParticipantProject(storedProjectIdNumber);
+    } else if (currentParticipantProject?.id) {
       setProjectFilter({ projectId: currentParticipantProject.id });
     } else if (projects.length) {
       setProjectFilter({ projectId: projects[0].id });
     }
-  }, [currentParticipantProject?.id, projectFilter.projectId, projects, setProjectFilter]);
+  }, [
+    currentParticipantProject?.id,
+    projectFilter.projectId,
+    projects,
+    setProjectFilter,
+    setCurrentParticipantProject,
+  ]);
 
+  // update current participant project and save to session storage when project filter changes
   useEffect(() => {
     if (projectFilter.projectId) {
       setCurrentParticipantProject(projectFilter.projectId);
+      // save the selected project ID to session storage
+      sessionStorage.setItem(SELECTED_PROJECT_SESSION_KEY, String(projectFilter.projectId));
     } else if (projects.length === 1) {
       setCurrentParticipantProject(projects[0].id);
+      // save the selected project ID to session storage
+      sessionStorage.setItem(SELECTED_PROJECT_SESSION_KEY, String(projects[0].id));
     }
   }, [projects, projectFilter.projectId, setCurrentParticipantProject]);
 

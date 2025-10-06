@@ -3,21 +3,25 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { requestAdminListActivities, requestListActivities } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { ACTIVITY_TYPES, Activity } from 'src/types/Activity';
+import { ACTIVITY_TYPES, Activity, activityTypeLabel } from 'src/types/Activity';
 import { FieldNodePayload, FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
 import { FilterField } from '../common/FilterGroup';
 import { FilterConfig } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
+import ActivityDetailView from './ActivityDetailView';
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
@@ -25,16 +29,20 @@ import MapSplitView from './MapSplitView';
 type ActivityListItemProps = {
   activity: Activity;
   focused?: boolean;
+  onClick: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 };
 
-const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: ActivityListItemProps) => {
+const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLeave }: ActivityListItemProps) => {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
+
+  const activityType = useMemo(() => activityTypeLabel(activity.type, strings), [activity.type, strings]);
 
   const isChanged = useMemo(() => {
     return (
@@ -57,6 +65,7 @@ const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: Act
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       id={`activity-log-item-${activity.id}`}
+      onClick={onClick}
       paddingY={theme.spacing(2)}
       sx={{
         backgroundColor: focused ? theme.palette.TwClrBgSecondary : undefined,
@@ -79,7 +88,7 @@ const ActivityListItem = ({ activity, focused, onMouseEnter, onMouseLeave }: Act
 
       <Grid item xs={true}>
         <Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'>
-          {activity.type}
+          {activityType}
         </Typography>
 
         {isAcceleratorRoute && (
@@ -113,6 +122,9 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
+  const navigate = useSyncNavigate();
+  const query = useQuery();
+  const location = useStateLocation();
   const snackbar = useSnackbar();
   const theme = useTheme();
 
@@ -123,7 +135,9 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [results, setResults] = useState<Activity[]>([]);
   const [resultsRequestId, setResultsRequestId] = useState('');
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
+  const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
+  const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
 
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
@@ -136,8 +150,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
   useEffect(() => {
-    setBusy(true);
-
     if (isAcceleratorRoute) {
       const request = dispatch(
         requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
@@ -152,7 +164,10 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   }, [activeLocale, dispatch, filters, isAcceleratorRoute, projectId]);
 
   useEffect(() => {
-    if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
+    if (listActivitiesRequest?.status === 'pending' || adminListActivitiesRequest?.status === 'pending') {
+      setBusy(true);
+      setActivities([]);
+    } else if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
       setBusy(false);
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (listActivitiesRequest?.status === 'success' || adminListActivitiesRequest?.status === 'success') {
@@ -167,6 +182,21 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     snackbar,
     strings.GENERIC_ERROR,
   ]);
+
+  const showActivityId = useMemo(() => {
+    const activityIdParam = query.get('activityId');
+    return activityIdParam ? Number(activityIdParam) : undefined;
+  }, [query]);
+
+  const shownActivity = useMemo(
+    () => activities.find((activity) => activity.id === showActivityId),
+    [activities, showActivityId]
+  );
+
+  const activitiesVisibleOnMap = useMemo(
+    () => (showActivityId && shownActivity ? [shownActivity] : activities),
+    [activities, shownActivity, showActivityId]
+  );
 
   useEffect(() => {
     if (listResultsActivitiesRequest?.status === 'error' || adminListResultsActivitiesRequest?.status === 'error') {
@@ -308,27 +338,39 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   }, [results, strings]);
 
   const activityMarkerHighlighted = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (activityId: number, fileId: number) => {
-      return focusedActivityId === activityId || hoveredActivityId === activityId;
+      const ids = [focusedActivityId, focusedFileId, hoveredActivityId, hoveredFileId];
+      return ids.includes(activityId) || ids.includes(fileId);
     },
-    [focusedActivityId, hoveredActivityId]
+    [focusedActivityId, focusedFileId, hoveredActivityId, hoveredFileId]
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onActivityMarkerClick = useCallback((activityId: number, fileId: number) => {
     setFocusedActivityId((prevValue) => (prevValue === activityId ? undefined : activityId));
+    setFocusedFileId((prevValue) => (prevValue === fileId ? undefined : fileId));
   }, []);
 
   const setHoverActivityCallback = useCallback(
     (activityId: number, hover: boolean) => () => {
-      if (hover) {
-        setHoveredActivityId(activityId);
-      } else {
-        setHoveredActivityId(undefined);
-      }
+      setHoveredActivityId(hover ? activityId : undefined);
     },
     []
+  );
+
+  const setHoverFileCallback = useCallback(
+    (fileId: number, hover: boolean) => () => {
+      setHoveredFileId(hover ? fileId : undefined);
+    },
+    []
+  );
+
+  // update url and navigation history when navigating to activity detail view
+  const getOnClickActivityListItem = useCallback(
+    (activityId: number) => () => {
+      query.set('activityId', activityId.toString());
+      navigate(getLocation(location.pathname, location, query.toString()));
+    },
+    [location, navigate, query]
   );
 
   useEffect(() => {
@@ -362,13 +404,19 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   return (
     <MapSplitView
-      activities={activities} // TODO: Use visible activites after pagination/filtering
+      activities={activitiesVisibleOnMap} // TODO: Use visible activities after pagination/filtering
       activityMarkerHighlighted={activityMarkerHighlighted}
       drawerRef={mapDrawerRef}
       onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >
-      {activities.length === 0 && !busy ? (
+      {showActivityId && shownActivity ? (
+        <ActivityDetailView
+          activity={shownActivity}
+          hoveredFileId={hoveredFileId}
+          setHoverFileCallback={setHoverFileCallback}
+        />
+      ) : activities.length === 0 && !busy ? (
         <ActivitiesEmptyState projectId={projectId} />
       ) : (
         <>
@@ -403,6 +451,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
                     activity={activity}
                     focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
                     key={activity.id}
+                    onClick={getOnClickActivityListItem(activity.id)}
                     onMouseEnter={setHoverActivityCallback(activity.id, true)}
                     onMouseLeave={setHoverActivityCallback(activity.id, false)}
                   />
