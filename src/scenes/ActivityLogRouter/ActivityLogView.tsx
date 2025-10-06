@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -12,16 +12,21 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import useQuery from 'src/utils/useQuery';
 
 export default function ActivityLogView(): JSX.Element {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { isAllowed } = useUser();
   const theme = useTheme();
-  const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
+  const query = useQuery();
+  const { goToAcceleratorActivityCreate, goToAcceleratorActivityEdit, goToActivityCreate, goToActivityEdit } =
+    useNavigateTo();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { participantProjects, isLoading: participantProjectsLoading } = useParticipantProjects();
+
+  const [activityId, setActivityId] = useState<number>();
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
@@ -61,6 +66,23 @@ export default function ActivityLogView(): JSX.Element {
     }
   }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectId]);
 
+  const goToProjectActivityEdit = useCallback(() => {
+    if (!projectId || !activityId) {
+      return;
+    }
+
+    if (isAcceleratorRoute) {
+      goToAcceleratorActivityEdit(projectId, activityId);
+    } else {
+      goToActivityEdit(projectId, activityId);
+    }
+  }, [goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId, activityId]);
+
+  useEffect(() => {
+    const _activityId = query.get('activityId');
+    setActivityId(_activityId ? Number(_activityId) : undefined);
+  }, [query]);
+
   const PageHeaderLeftComponent = useMemo(
     () => (
       <PageHeaderProjectFilter
@@ -83,7 +105,15 @@ export default function ActivityLogView(): JSX.Element {
 
   const PageHeaderRightComponent = useMemo(
     () =>
-      isAllowedCreateActivities ? (
+      activityId ? (
+        <Button
+          disabled={!projectId}
+          icon='plus'
+          label={strings.EDIT_ACTIVITY}
+          onClick={goToProjectActivityEdit}
+          size='medium'
+        />
+      ) : isAllowedCreateActivities ? (
         <Button
           disabled={!projectId}
           icon='plus'
@@ -92,7 +122,7 @@ export default function ActivityLogView(): JSX.Element {
           size='medium'
         />
       ) : null,
-    [goToProjectActivityCreate, isAllowedCreateActivities, projectId, strings.ADD_ACTIVITY]
+    [goToProjectActivityCreate, goToProjectActivityEdit, isAllowedCreateActivities, projectId, activityId, strings]
   );
 
   return (
