@@ -167,7 +167,7 @@ export default function MapSplitView({
       params.set('lat', view.viewState.latitude.toString());
       params.set('lng', view.viewState.longitude.toString());
       params.set('zoom', view.viewState.zoom.toString());
-      setSearchParams(params);
+      setSearchParams(params, { replace: true });
     },
     [searchParams, setSearchParams]
   );
