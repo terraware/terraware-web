@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -542,7 +542,12 @@
 <a name='L477'></a><a href='#L477'>477</a>
 <a name='L478'></a><a href='#L478'>478</a>
 <a name='L479'></a><a href='#L479'>479</a>
-<a name='L480'></a><a href='#L480'>480</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -889,15 +894,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -911,11 +916,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -927,7 +936,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -946,6 +954,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1287,18 +1297,18 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
-      &lt;Box display='flex' paddingY={theme.spacing(2)} justifyContent='space-between'&gt;
-        &lt;Box display='flex' gap={theme.spacing(2)}&gt;
-          &lt;Box
-            minHeight='100px'
-            minWidth='80px'
-            sx={{ background: theme.palette.TwClrBaseGray050, justifyContent: 'center' }}
-            display='flex'
-            alignItems='center'
-          &gt;
-            &lt;Typography&gt;{plot.name}&lt;/Typography&gt;
-          &lt;/Box&gt;
-          &lt;Box&gt;
+      &lt;Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}&gt;
+        &lt;Box
+          minHeight='100px'
+          minWidth='80px'
+          sx={{ background: theme.palette.TwClrBaseGray050, justifyContent: 'center' }}
+          display='flex'
+          alignItems='center'
+        &gt;
+          &lt;Typography&gt;{plot.name}&lt;/Typography&gt;
+        &lt;/Box&gt;
+        &lt;Box display='flex' flexGrow={1} alignItems='start' flexDirection={'column'}&gt;
+          &lt;Box display='flex' flexGrow={1} alignItems={'start'} width={'100%'}&gt;
             &lt;Box flexGrow={1} display={'flex'} alignItems={'center'}&gt;
               &lt;RadioGroup name='radio-buttons-t0' onChange={onChangeT0Origin} value={t0Origin}&gt;
                 &lt;Box display='flex'&gt;
@@ -1338,160 +1348,165 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
                 &lt;/Box&gt;
               &lt;/RadioGroup&gt;
             &lt;/Box&gt;
-            {t0Origin === 'manual' &amp;&amp; (
-              &lt;Box&gt;
-                &lt;Box paddingY={'16px'}&gt;
-                  &lt;Message type='page' priority='info' body={strings.T0_PLANT_DENSITY_WARNING} /&gt;
-                &lt;/Box&gt;
-                &lt;Box&gt;
-                  &lt;table&gt;
-                    &lt;thead&gt;
-                      &lt;tr&gt;
-                        &lt;th style={{ textAlign: 'left' }}&gt;
-                          &lt;Box display='flex'&gt;
-                            {strings.SPECIES_FROM_WITHDRAWALS}
-                            &lt;IconTooltip title={strings.SPECIES_FROM_WITHDRAWALS_TOOLTIP} /&gt;
-                          &lt;/Box&gt;
-                        &lt;/th&gt;
-                        &lt;th style={{ textAlign: 'left' }}&gt;
-                          &lt;Box display={'flex'}&gt;
-                            {strings.PLANT_DENSITY} &lt;IconTooltip title={strings.PLANT_DENSITY_TITLE_TOOLTIP} /&gt;
-                          &lt;/Box&gt;
-                        &lt;/th&gt;
-                        &lt;th style={{ textAlign: 'left' }}&gt;
-                          &lt;Box display={'flex'}&gt;
-                            {strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}
-                            &lt;IconTooltip title={strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP} /&gt;
-                          &lt;/Box&gt;
-                        &lt;/th&gt;
-                      &lt;/tr&gt;
-                    &lt;/thead&gt;
-                    &lt;tbody&gt;
-                      {withdrawnSpeciesPlot?.species.map(<span class="fstat-no" title="function not covered" >(w</span>ithdrawnSpecies, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >                        &lt;tr key={index}&gt;</span>
-                          &lt;td&gt;{species.find(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; <span class="cstat-no" title="statement not covered" >sp.id === withdrawnSpecies.speciesId)</span>?.scientificName}&lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;TextField
-                              type='number'
-                              id={`${withdrawnSpecies.speciesId}`}
-                              value={
-                                plotToSave?.densityData.find(
-<span class="fstat-no" title="function not covered" >                                  (d</span>ensityData) =&gt; <span class="cstat-no" title="statement not covered" >densityData.speciesId === withdrawnSpecies.speciesId</span>
-                                )?.plotDensity
-                              }
-                              onChange={onChangeDensity}
-                              label={''}
-                              min={0}
-                            /&gt;
-                          &lt;/td&gt;
-                          &lt;td&gt;
-                            &lt;Checkbox
-                              id={`density-${withdrawnSpecies.speciesId}`}
-                              label={withdrawnSpecies.density}
-                              name={`density-${withdrawnSpecies.speciesId}`}
-                              value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
-                              onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
-                            /&gt;
-                          &lt;/td&gt;
-                        &lt;/tr&gt;
-                      ))}
-                      {newSpeciesRows.length &gt; 0 &amp;&amp; (
-                        &lt;tr&gt;
-                          &lt;td colSpan={3}&gt;
-                            &lt;Box display='flex'&gt;
-                              &lt;Typography fontWeight={600}&gt;{strings.ADDED_SPECIES}&lt;/Typography&gt;
-                              &lt;IconTooltip title={strings.ADDED_SPECIES_TOOLTIP} /&gt;
-                            &lt;/Box&gt;
-                          &lt;/td&gt;
-                        &lt;/tr&gt;
-                      )}
-                      {newSpeciesRows.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt; {
-<span class="cstat-no" title="statement not covered" >                        return (</span>
-                          &lt;tr key={row.id}&gt;
-                            &lt;td&gt;
-                              &lt;SelectT&lt;Species&gt;
-                                options={availableSpecies}
-                                placeholder={strings.SELECT}
-                                onChange={handleSpeciesChange(row.id)}
-                                isEqual={isEqualSpecies}
-                                renderOption={renderOptionSpecies}
-                                displayLabel={renderOptionSpecies}
-                                selectedValue={speciesSelectedValueHandler(row)}
-                                fullWidth={true}
-                                toT={toTSpecies}
-                              /&gt;
-                            &lt;/td&gt;
-                            &lt;td&gt;
-                              &lt;TextField
-                                type='number'
-                                id={`new-${row.id}`}
-                                value={row.density}
-                                onChange={handleNewSpeciesDensityChange(row.id)}
-                                label={''}
-                                min={0}
-                              /&gt;
-                            &lt;/td&gt;
-                            &lt;td&gt;
-                              &lt;IconButton
-                                id={`delete-input-${row.id}`}
-                                aria-label='delete'
-                                size='small'
-                                onClick={onDeleteInputHandler(row.id)}
-                                sx={{ cursor: 'pointer' }}
-                              &gt;
-                                &lt;Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} /&gt;
-                              &lt;/IconButton&gt;
-                            &lt;/td&gt;
-                          &lt;/tr&gt;
-                        );
-                      })}
-                      &lt;tr&gt;
-                        &lt;td&gt;
-                          {availableSpecies.length &gt; 0 &amp;&amp; (
-                            &lt;Button
-                              label={strings.ADD_SPECIES}
-                              type='productive'
-                              priority='ghost'
-                              onClick={onAddNewSpecies}
-                              icon='iconAdd'
-                              style={{ paddingLeft: 0, marginLeft: 0 }}
-                            /&gt;
-                          )}
-                        &lt;/td&gt;
-                      &lt;/tr&gt;
-                      &lt;tr&gt;
-                        &lt;td&gt;
-                          &lt;Box display={'flex'}&gt;
-                            &lt;Typography fontWeight={600}&gt;{strings.ALL_SPECIES}&lt;/Typography&gt;
-                            &lt;IconTooltip title={strings.TOTAL_DENSITY_TOOLTIP} /&gt;
-                          &lt;/Box&gt;
-                        &lt;/td&gt;
-                        &lt;td&gt;
-                          &lt;Typography fontWeight={600}&gt;{plotTotalDensity}&lt;/Typography&gt;
-                        &lt;/td&gt;
-                      &lt;/tr&gt;
-                    &lt;/tbody&gt;
-                  &lt;/table&gt;
-                &lt;/Box&gt;
+            &lt;Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1} height='fit-content'&gt;
+              &lt;Box display='flex' paddingRight={3}&gt;
+                &lt;Typography fontWeight={600} paddingRight={0.5}&gt;
+                  {strings.ZONE}
+                &lt;/Typography&gt;
+                &lt;Typography&gt;{plot.plantingSubzone_plantingZone_name}&lt;/Typography&gt;
               &lt;/Box&gt;
-            )}
-          &lt;/Box&gt;
-        &lt;/Box&gt;
-        &lt;Box&gt;
-          &lt;Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1}&gt;
-            &lt;Box display='flex' paddingRight={3}&gt;
-              &lt;Typography fontWeight={600} paddingRight={0.5}&gt;
-                {strings.ZONE}
-              &lt;/Typography&gt;
-              &lt;Typography&gt;{plot.plantingSubzone_plantingZone_name}&lt;/Typography&gt;
-            &lt;/Box&gt;
-            &lt;Box display='flex'&gt;
-              &lt;Typography fontWeight={600} paddingRight={0.5}&gt;
-                {strings.SUBZONE}
-              &lt;/Typography&gt;
-              &lt;Typography&gt;{plot.plantingSubzone_name}&lt;/Typography&gt;
+              &lt;Box display='flex'&gt;
+                &lt;Typography fontWeight={600} paddingRight={0.5}&gt;
+                  {strings.SUBZONE}
+                &lt;/Typography&gt;
+                &lt;Typography&gt;{plot.plantingSubzone_name}&lt;/Typography&gt;
+              &lt;/Box&gt;
             &lt;/Box&gt;
           &lt;/Box&gt;
+          {t0Origin === 'manual' &amp;&amp; (
+            &lt;Box paddingY={'16px'}&gt;
+              &lt;Message type='page' priority='info' body={strings.T0_PLANT_DENSITY_WARNING} /&gt;
+            &lt;/Box&gt;
+          )}
+          {t0Origin === 'manual' &amp;&amp; (
+            &lt;Box width={'100%'}&gt;
+              &lt;table&gt;
+                &lt;thead&gt;
+                  &lt;tr&gt;
+                    &lt;th style={{ textAlign: 'left', width: '40%' }}&gt;
+                      &lt;Box display='flex'&gt;
+                        {strings.SPECIES_FROM_WITHDRAWALS}
+                        &lt;IconTooltip title={strings.SPECIES_FROM_WITHDRAWALS_TOOLTIP} /&gt;
+                      &lt;/Box&gt;
+                    &lt;/th&gt;
+                    &lt;th style={{ textAlign: 'left', width: '10%' }}&gt;
+                      &lt;Box display={'flex'}&gt;
+                        {strings.PLANT_DENSITY} &lt;IconTooltip title={strings.PLANT_DENSITY_TITLE_TOOLTIP} /&gt;
+                      &lt;/Box&gt;
+                      &lt;Typography fontSize={'14px'} fontWeight={600}&gt;
+                        ({strings.PLANTS_PER_HA_LC})
+                      &lt;/Typography&gt;
+                    &lt;/th&gt;
+                    &lt;th style={{ textAlign: 'left', width: '20%' }}&gt;
+                      &lt;Box display={'flex'}&gt;
+                        {strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}
+                        &lt;IconTooltip title={strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP} /&gt;
+                      &lt;/Box&gt;
+                      &lt;Typography fontSize={'14px'} fontWeight={600}&gt;
+                        ({strings.PLANTS_PER_HA_LC})
+                      &lt;/Typography&gt;
+                    &lt;/th&gt;
+                  &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                  {withdrawnSpeciesPlot?.species.map(<span class="fstat-no" title="function not covered" >(w</span>ithdrawnSpecies, index) =&gt; (
+<span class="cstat-no" title="statement not covered" >                    &lt;tr key={index}&gt;</span>
+                      &lt;td&gt;{species.find(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; <span class="cstat-no" title="statement not covered" >sp.id === withdrawnSpecies.speciesId)</span>?.scientificName}&lt;/td&gt;
+                      &lt;td&gt;
+                        &lt;TextField
+                          type='number'
+                          id={`${withdrawnSpecies.speciesId}`}
+                          value={
+                            plotToSave?.densityData.find(
+<span class="fstat-no" title="function not covered" >                              (d</span>ensityData) =&gt; <span class="cstat-no" title="statement not covered" >densityData.speciesId === withdrawnSpecies.speciesId</span>
+                            )?.plotDensity
+                          }
+                          onChange={onChangeDensity}
+                          label={''}
+                          min={0}
+                          sx={{ width: '68px' }}
+                        /&gt;
+                      &lt;/td&gt;
+                      &lt;td&gt;
+                        &lt;Checkbox
+                          id={`density-${withdrawnSpecies.speciesId}`}
+                          label={withdrawnSpecies.density}
+                          name={`density-${withdrawnSpecies.speciesId}`}
+                          value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
+                          onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
+                        /&gt;
+                      &lt;/td&gt;
+                    &lt;/tr&gt;
+                  ))}
+                  {newSpeciesRows.length &gt; 0 &amp;&amp; (
+                    &lt;tr&gt;
+                      &lt;td colSpan={3}&gt;
+                        &lt;Box display='flex'&gt;
+                          &lt;Typography fontWeight={600}&gt;{strings.ADDED_SPECIES}&lt;/Typography&gt;
+                          &lt;IconTooltip title={strings.ADDED_SPECIES_TOOLTIP} /&gt;
+                        &lt;/Box&gt;
+                      &lt;/td&gt;
+                    &lt;/tr&gt;
+                  )}
+                  {newSpeciesRows.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt; {
+<span class="cstat-no" title="statement not covered" >                    return (</span>
+                      &lt;tr key={row.id}&gt;
+                        &lt;td&gt;
+                          &lt;SelectT&lt;Species&gt;
+                            options={availableSpecies}
+                            placeholder={strings.SELECT}
+                            onChange={handleSpeciesChange(row.id)}
+                            isEqual={isEqualSpecies}
+                            renderOption={renderOptionSpecies}
+                            displayLabel={renderOptionSpecies}
+                            selectedValue={speciesSelectedValueHandler(row)}
+                            fullWidth={true}
+                            toT={toTSpecies}
+                          /&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;TextField
+                            type='number'
+                            id={`new-${row.id}`}
+                            value={row.density}
+                            onChange={handleNewSpeciesDensityChange(row.id)}
+                            label={''}
+                            min={0}
+                          /&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;IconButton
+                            id={`delete-input-${row.id}`}
+                            aria-label='delete'
+                            size='small'
+                            onClick={onDeleteInputHandler(row.id)}
+                            sx={{ cursor: 'pointer' }}
+                          &gt;
+                            &lt;Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} /&gt;
+                          &lt;/IconButton&gt;
+                        &lt;/td&gt;
+                      &lt;/tr&gt;
+                    );
+                  })}
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      {availableSpecies.length &gt; 0 &amp;&amp; (
+                        &lt;Button
+                          label={strings.ADD_SPECIES}
+                          type='productive'
+                          priority='ghost'
+                          onClick={onAddNewSpecies}
+                          icon='iconAdd'
+                          style={{ paddingLeft: 0, marginLeft: 0 }}
+                        /&gt;
+                      )}
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      &lt;Box display={'flex'}&gt;
+                        &lt;Typography fontWeight={600}&gt;{strings.ALL_SPECIES}&lt;/Typography&gt;
+                        &lt;IconTooltip title={strings.TOTAL_DENSITY_TOOLTIP} /&gt;
+                      &lt;/Box&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                      &lt;Typography fontWeight={600}&gt;{plotTotalDensity}&lt;/Typography&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+            &lt;/Box&gt;
+          )}
         &lt;/Box&gt;
       &lt;/Box&gt;
       &lt;Divider /&gt;
@@ -1507,7 +1522,7 @@ export default PlotT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-06T18:13:34.871Z
+                at 2025-10-06T20:14:40.447Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

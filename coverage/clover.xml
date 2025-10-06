@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1759774415618" clover="3.2.0">
-  <project timestamp="1759774415619" name="All files">
-    <metrics statements="34119" coveredstatements="1347" conditionals="23858" coveredconditionals="391" methods="10443" coveredmethods="213" elements="68420" coveredelements="1951" complexity="0" loc="34119" ncloc="34119" packages="280" files="1352" classes="1352"/>
+<coverage generated="1759781681196" clover="3.2.0">
+  <project timestamp="1759781681196" name="All files">
+    <metrics statements="34119" coveredstatements="1347" conditionals="23860" coveredconditionals="391" methods="10443" coveredmethods="213" elements="68422" coveredelements="1951" complexity="0" loc="34119" ncloc="34119" packages="280" files="1352" classes="1352"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -34375,7 +34375,7 @@
       </file>
     </package>
     <package name="src.scenes.SurvivalRateSettings">
-      <metrics statements="257" coveredstatements="0" conditionals="118" coveredconditionals="0" methods="104" coveredmethods="0"/>
+      <metrics statements="257" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="104" coveredmethods="0"/>
       <file name="EditSurvivalRateSettings.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/EditSurvivalRateSettings.tsx">
         <metrics statements="82" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="22" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
@@ -34479,7 +34479,7 @@
         <line num="99" count="0" type="stmt"/>
       </file>
       <file name="PlotT0EditBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/PlotT0EditBox.tsx">
-        <metrics statements="116" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="61" coveredmethods="0"/>
+        <metrics statements="116" coveredstatements="0" conditionals="56" coveredconditionals="0" methods="61" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
@@ -34592,10 +34592,10 @@
         <line num="260" count="0" type="stmt"/>
         <line num="265" count="0" type="stmt"/>
         <line num="300" count="0" type="stmt"/>
-        <line num="348" count="0" type="stmt"/>
-        <line num="349" count="0" type="stmt"/>
-        <line num="356" count="0" type="stmt"/>
-        <line num="386" count="0" type="stmt"/>
+        <line num="370" count="0" type="stmt"/>
+        <line num="371" count="0" type="stmt"/>
+        <line num="378" count="0" type="stmt"/>
+        <line num="409" count="0" type="stmt"/>
       </file>
       <file name="SpeciesDensityWarningMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/SpeciesDensityWarningMessage.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
