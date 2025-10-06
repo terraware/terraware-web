@@ -1,3 +1,5 @@
+f114fee9350 SW-7424 Should not capitalize "For" (#4539)
+b24986fc901 SW-7442 Filters: Date Range, Type, Verified Status (#4538)
 05b13b21bc3 Activity Create/Edit: Remove cover photo is always first from activity media sort (#4532)
 8a836210cd8 SW-7466: Error message when accessing Project Profile in Console (#4533)
 204ea795eee Filter hidden activities (#4529)
