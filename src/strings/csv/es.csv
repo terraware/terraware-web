@@ -1348,6 +1348,7 @@ PLANTS,Plantas,f6cde0c3
 PLANTS_DASHBOARD,Panel de plantas,65ec62dd
 PLANTS_DASHBOARD_ICON,Icono de Tablero de plantas,576ad8cc
 PLANTS_PER_HA,Plantas por hectárea,1b8bb685
+PLANTS_PER_HA_LC,plantas/ha,606dca50
 PLANTS_PER_HA_TOOLTIP,"La ""Tendencia de plantas por hectárea"" representa la cantidad de plantas por hectárea registradas en todas las observaciones.",95449181
 PLANTS_PER_HECTARE,plantas/ha,606dca50
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,f37ff0f0
