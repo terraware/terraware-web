@@ -4,12 +4,14 @@ import { Box, Divider, FormControlLabel, IconButton, Radio, RadioGroup, Typograp
 import { Button, Checkbox, Icon, IconTooltip, Message, SelectT } from '@terraware/web-components';
 
 import TextField from 'src/components/common/TextField';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
+import { getShortDate } from 'src/utils/dateFormatter';
 
 type AddedSpecies = { id: string; speciesId?: number; density: string };
 
@@ -27,6 +29,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
   const [t0Origin, setT0Origin] = useState<string>('useObservation');
 
   const { species } = useSpeciesData();
+  const locale = useLocalization().activeLocale;
 
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
 
@@ -51,9 +54,21 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     []
   );
 
-  const renderOptionObservation = useCallback((option: PlotT0Observation) => option?.observation_startDate, []);
+  const renderOptionObservation = useCallback(
+    (option: PlotT0Observation) =>
+      option?.observation_startDate
+        ? `${getShortDate(option.observation_startDate, locale)} ${strings.ENDED} ${option.observation_endDate}`
+        : '',
+    [locale]
+  );
 
-  const displayLabelObservation = useCallback((option: PlotT0Observation) => option?.observation_startDate, []);
+  const displayLabelObservation = useCallback(
+    (option: PlotT0Observation) =>
+      option?.observation_startDate
+        ? `${getShortDate(option.observation_startDate, locale)} ${strings.ENDED} ${option.observation_endDate}`
+        : '',
+    [locale]
+  );
 
   const toTObservation = useCallback(
     (startDate: string) => ({ observation_startDate: startDate }) as PlotT0Observation,
@@ -302,6 +317,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                     toT={toTObservation}
                     fullWidth={true}
                     disabled={t0Origin === 'manual'}
+                    sx={{ width: '300px' }}
                   />
                 </Box>
                 <Box display='flex' sx={{ alignItems: 'center' }}>

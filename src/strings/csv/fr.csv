@@ -582,6 +582,7 @@ END_OBSERVATION_MODAL_MESSAGE,Mettre fin à une observation lorsqu'il n'y a pas 
 END_OBSERVATION_MODAL_QUESTION,Voulez-vous vraiment mettre fin prématurément à l'observation {0} ?,5b3a4dde
 END_TIME,Heure de fin,7c0eb9ca
 ENDANGERED,En danger,1a1991aa
+ENDED,Terminé,8291f981
 ENTER_LOCATION,Saisir l'emplacement,dfde68fa
 ENTER_SUBSET_WEIGHT_AND_COUNT,"Saisissez le rapport entre le poids et le nombre de sous-ensembles pour déterminer le nombre approximatif de semences lors d'un prélèvement par poids à partir d'une quantité de comptage. (Inversement, le ratio déterminera la quantité restante approximative lors d'un prélèvement par comptage à partir d'une quantité pondérale.) Ces champs sont utiles lorsque le comptage de semences minuscules n'est pas pratique et ne sont nécessaires que si vous avez l'intention de prélever cette accession dans une pépinière.",c02303ee
 ENTRIES,Entrées,065e7c3e
