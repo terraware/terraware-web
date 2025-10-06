@@ -8,12 +8,15 @@ import { requestAdminListActivities, requestListActivities } from 'src/redux/fea
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { Activity } from 'src/types/Activity';
-import { SearchNodePayload } from 'src/types/Search';
+import { ACTIVITY_TYPES, Activity } from 'src/types/Activity';
+import { FieldNodePayload, FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
+import { FilterField } from '../common/FilterGroup';
+import { FilterConfig } from '../common/SearchFiltersWrapperV2';
+import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityStatusBadge from './ActivityStatusBadge';
 import DateRange from './FilterDateRange';
@@ -117,6 +120,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [results, setResults] = useState<Activity[]>([]);
+  const [resultsRequestId, setResultsRequestId] = useState('');
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
 
@@ -124,6 +129,11 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
+
+  const listResultsActivitiesRequest = useAppSelector(selectActivityList(resultsRequestId));
+  const adminListResultsActivitiesRequest = useAppSelector(selectAdminActivityList(resultsRequestId));
+
+  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
   useEffect(() => {
     setBusy(true);
@@ -139,7 +149,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       );
       setRequestId(request.requestId);
     }
-  }, [activeLocale, dispatch, isAcceleratorRoute, projectId]);
+  }, [activeLocale, dispatch, filters, isAcceleratorRoute, projectId]);
 
   useEffect(() => {
     if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
@@ -157,6 +167,78 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     snackbar,
     strings.GENERIC_ERROR,
   ]);
+
+  useEffect(() => {
+    if (listResultsActivitiesRequest?.status === 'error' || adminListResultsActivitiesRequest?.status === 'error') {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+    } else if (
+      listResultsActivitiesRequest?.status === 'success' ||
+      adminListResultsActivitiesRequest?.status === 'success'
+    ) {
+      setBusy(false);
+      setResults((listResultsActivitiesRequest?.data || adminListResultsActivitiesRequest?.data || []) as Activity[]);
+
+      const result = {} as FieldOptionsMap;
+
+      result.type = { partial: false, values: ACTIVITY_TYPES };
+      result.isVerified = { partial: false, values: [strings.YES, strings.NO] };
+
+      setFilterOptions(result);
+    }
+  }, [adminListResultsActivitiesRequest, listResultsActivitiesRequest, snackbar, strings]);
+
+  useEffect(() => {
+    setBusy(true);
+
+    const searchNodeChildren: SearchNodePayload[] = [];
+    if (Object.keys(filters).length > 0) {
+      const filterValueChildren = Object.keys(filters)
+        .filter((field: string) => field !== 'isVerified' && (filters[field]?.values || []).length > 0)
+        .map((field: string): SearchNodePayload => filters[field]);
+
+      if (filters.isVerified) {
+        const searchValues: (string | null)[] = [];
+        const selectedValues = filters.isVerified.values as string[];
+        if (selectedValues.find((s) => s === strings.YES)) {
+          searchValues.push(strings.BOOLEAN_TRUE);
+        }
+        if (selectedValues.find((s) => s === strings.NO)) {
+          searchValues.push(strings.BOOLEAN_FALSE);
+          searchValues.push(null);
+        }
+        const newNode: FieldNodePayload = {
+          operation: 'field',
+          field: 'isVerified',
+          type: 'Exact',
+          values: searchValues,
+        };
+        filterValueChildren.push(newNode);
+      }
+
+      searchNodeChildren.push({
+        operation: 'and',
+        children: filterValueChildren,
+      });
+    }
+
+    const search: SearchNodePayload = {
+      operation: 'and',
+      children: searchNodeChildren,
+    };
+
+    if (isAcceleratorRoute) {
+      const request = dispatch(
+        requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId, search })
+      );
+      setResultsRequestId(request.requestId);
+    } else {
+      const request = dispatch(
+        requestListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId, search })
+      );
+      setResultsRequestId(request.requestId);
+    }
+  }, [activeLocale, activities, dispatch, filters, isAcceleratorRoute, projectId, strings]);
 
   const onDeleteFilter = useCallback(
     (key: string) => {
@@ -181,17 +263,17 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   // const clearFilters = useCallback(() => setFilters({}), [setFilters]);
 
   const onChangeDateRange = useCallback(
-    (filter: SearchNodePayload) => onFilterChange('dateRange', filter),
+    (filter: SearchNodePayload) => onFilterChange('date', filter),
     [onFilterChange]
   );
 
-  const onDeleteDateRange = useCallback(() => onDeleteFilter('dateRange'), [onDeleteFilter]);
+  const onDeleteDateRange = useCallback(() => onDeleteFilter('date'), [onDeleteFilter]);
 
   // group activities by quarter and year
   const groupedActivities = useMemo(() => {
     const groups: Record<string, Activity[]> = {};
 
-    activities.forEach((activity) => {
+    results.forEach((activity) => {
       const date = new Date(activity.date);
       const year = date.getFullYear();
       const quarter = Math.ceil((date.getMonth() + 1) / 3);
@@ -223,7 +305,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       quarter: quarterKey,
       activities: groups[quarterKey],
     }));
-  }, [activities, strings]);
+  }, [results, strings]);
 
   const activityMarkerHighlighted = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -255,6 +337,29 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     }
   }, [focusedActivityId, scrollToElementById]);
 
+  const filterColumns = useMemo<FilterField[]>(
+    () =>
+      activeLocale
+        ? isAcceleratorRoute
+          ? [
+              { name: 'type', label: strings.TYPE, type: 'multiple_selection' },
+              { name: 'isVerified', label: strings.VERIFIED, type: 'multiple_selection' },
+            ]
+          : [{ name: 'type', label: strings.TYPE, type: 'multiple_selection' }]
+        : [],
+    [activeLocale, strings, isAcceleratorRoute]
+  );
+
+  const iconFilters: FilterConfig[] = useMemo(() => {
+    const _filters = filterColumns.map((filter) => ({
+      field: filter.name,
+      label: filter.label,
+      options: filterOptions?.[filter.name]?.values || [],
+    }));
+
+    return activeLocale ? _filters : [];
+  }, [activeLocale, filterColumns, filterOptions]);
+
   return (
     <MapSplitView
       activities={activities} // TODO: Use visible activites after pagination/filtering
@@ -267,13 +372,16 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
         <ActivitiesEmptyState projectId={projectId} />
       ) : (
         <>
-          <DateRange
-            field='dateRange'
-            onChange={onChangeDateRange}
-            onDelete={onDeleteDateRange}
-            values={filters.dateRange?.values ?? []}
-          />
-          {groupedActivities.length === 0 && !busy ? (
+          <Box display={'flex'}>
+            <DateRange
+              field='date'
+              onChange={onChangeDateRange}
+              onDelete={onDeleteDateRange}
+              values={filters.date?.values ?? []}
+            />
+            <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} />
+          </Box>
+          {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
               {strings.NO_ACTIVITIES_TO_SHOW}
             </Typography>

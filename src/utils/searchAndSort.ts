@@ -143,8 +143,8 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
       // don't return false here, in case the field actually just has an "." in it instead of representing a sub-property
     }
 
-    // Only 'Exact' and 'Fuzzy' condition types are supported
-    // `null` values (XYZ field contains no value) are also not supported
+    // Only 'Exact', 'Fuzzy', and 'Range' condition types are supported
+    // `null` values (XYZ field contains no value) are also not supported for Exact and Fuzzy
     const resultValue = `${result[condition.field] as string}`.toLowerCase();
     const searchValues = condition.values
       .filter((value: string | null): value is string => value !== null)
@@ -165,6 +165,45 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
         }
         return fuzzyMatch(searchValue, resultValue);
       });
+    } else if (condition.type === 'Range') {
+      // Range requires exactly two values: [min, max]
+      if (condition.values.length !== 2) {
+        return false;
+      }
+
+      const [minValue, maxValue] = condition.values;
+      const fieldValue = result[condition.field];
+
+      const fieldDate = new Date(fieldValue as string);
+
+      if (!isNaN(fieldDate.getTime())) {
+        const minDate = minValue ? new Date(minValue) : null;
+        const maxDate = maxValue ? new Date(maxValue) : null;
+
+        if (minDate && !isNaN(minDate.getTime()) && fieldDate < minDate) {
+          return false;
+        }
+        if (maxDate && !isNaN(maxDate.getTime()) && fieldDate > maxDate) {
+          return false;
+        }
+        return true;
+      }
+
+      const fieldNumber = Number(fieldValue);
+      if (isNaN(fieldNumber)) {
+        return false;
+      }
+
+      const minNumber = minValue ? Number(minValue) : null;
+      const maxNumber = maxValue ? Number(maxValue) : null;
+
+      if (minNumber !== null && fieldNumber < minNumber) {
+        return false;
+      }
+      if (maxNumber !== null && fieldNumber > maxNumber) {
+        return false;
+      }
+      return true;
     }
   }
 
@@ -225,7 +264,8 @@ export type SearchAndSortFn<T extends Record<string, unknown>> = (
 ) => T[];
 /**
  * In-memory search (filter) and sort on a result list using the Search API search and sortOrder interfaces
- * The search currently only supports `Exact` and 'Fuzzy' type searches, 'Range' and 'ExactOrFuzzy' are not supported
+ * The search currently supports `Exact`, 'Fuzzy', and 'Range' type searches. 'ExactOrFuzzy' is not supported
+ * Range searches work with dates and numbers, automatically detecting the field type
  * If the result type contains number fields, those must be supplied in the `sortOrderConfig` if you wish to sort on them
  * @param results         The list of results you want to search and sort
  * @param search          (optional) The SearchNodePayload which contains filter conditions to apply to the results
