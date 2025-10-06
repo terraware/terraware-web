@@ -264,18 +264,18 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
 
   return (
     <>
-      <Box display='flex' paddingY={theme.spacing(2)} justifyContent='space-between'>
-        <Box display='flex' gap={theme.spacing(2)}>
-          <Box
-            minHeight='100px'
-            minWidth='80px'
-            sx={{ background: theme.palette.TwClrBaseGray050, justifyContent: 'center' }}
-            display='flex'
-            alignItems='center'
-          >
-            <Typography>{plot.name}</Typography>
-          </Box>
-          <Box>
+      <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
+        <Box
+          minHeight='100px'
+          minWidth='80px'
+          sx={{ background: theme.palette.TwClrBaseGray050, justifyContent: 'center' }}
+          display='flex'
+          alignItems='center'
+        >
+          <Typography>{plot.name}</Typography>
+        </Box>
+        <Box display='flex' flexGrow={1} alignItems='start' flexDirection={'column'}>
+          <Box display='flex' flexGrow={1} alignItems={'start'} width={'100%'}>
             <Box flexGrow={1} display={'flex'} alignItems={'center'}>
               <RadioGroup name='radio-buttons-t0' onChange={onChangeT0Origin} value={t0Origin}>
                 <Box display='flex'>
@@ -315,160 +315,165 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                 </Box>
               </RadioGroup>
             </Box>
-            {t0Origin === 'manual' && (
-              <Box>
-                <Box paddingY={'16px'}>
-                  <Message type='page' priority='info' body={strings.T0_PLANT_DENSITY_WARNING} />
-                </Box>
-                <Box>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th style={{ textAlign: 'left' }}>
-                          <Box display='flex'>
-                            {strings.SPECIES_FROM_WITHDRAWALS}
-                            <IconTooltip title={strings.SPECIES_FROM_WITHDRAWALS_TOOLTIP} />
-                          </Box>
-                        </th>
-                        <th style={{ textAlign: 'left' }}>
-                          <Box display={'flex'}>
-                            {strings.PLANT_DENSITY} <IconTooltip title={strings.PLANT_DENSITY_TITLE_TOOLTIP} />
-                          </Box>
-                        </th>
-                        <th style={{ textAlign: 'left' }}>
-                          <Box display={'flex'}>
-                            {strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}
-                            <IconTooltip title={strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP} />
-                          </Box>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {withdrawnSpeciesPlot?.species.map((withdrawnSpecies, index) => (
-                        <tr key={index}>
-                          <td>{species.find((sp) => sp.id === withdrawnSpecies.speciesId)?.scientificName}</td>
-                          <td>
-                            <TextField
-                              type='number'
-                              id={`${withdrawnSpecies.speciesId}`}
-                              value={
-                                plotToSave?.densityData.find(
-                                  (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
-                                )?.plotDensity
-                              }
-                              onChange={onChangeDensity}
-                              label={''}
-                              min={0}
-                            />
-                          </td>
-                          <td>
-                            <Checkbox
-                              id={`density-${withdrawnSpecies.speciesId}`}
-                              label={withdrawnSpecies.density}
-                              name={`density-${withdrawnSpecies.speciesId}`}
-                              value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
-                              onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                      {newSpeciesRows.length > 0 && (
-                        <tr>
-                          <td colSpan={3}>
-                            <Box display='flex'>
-                              <Typography fontWeight={600}>{strings.ADDED_SPECIES}</Typography>
-                              <IconTooltip title={strings.ADDED_SPECIES_TOOLTIP} />
-                            </Box>
-                          </td>
-                        </tr>
-                      )}
-                      {newSpeciesRows.map((row) => {
-                        return (
-                          <tr key={row.id}>
-                            <td>
-                              <SelectT<Species>
-                                options={availableSpecies}
-                                placeholder={strings.SELECT}
-                                onChange={handleSpeciesChange(row.id)}
-                                isEqual={isEqualSpecies}
-                                renderOption={renderOptionSpecies}
-                                displayLabel={renderOptionSpecies}
-                                selectedValue={speciesSelectedValueHandler(row)}
-                                fullWidth={true}
-                                toT={toTSpecies}
-                              />
-                            </td>
-                            <td>
-                              <TextField
-                                type='number'
-                                id={`new-${row.id}`}
-                                value={row.density}
-                                onChange={handleNewSpeciesDensityChange(row.id)}
-                                label={''}
-                                min={0}
-                              />
-                            </td>
-                            <td>
-                              <IconButton
-                                id={`delete-input-${row.id}`}
-                                aria-label='delete'
-                                size='small'
-                                onClick={onDeleteInputHandler(row.id)}
-                                sx={{ cursor: 'pointer' }}
-                              >
-                                <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
-                              </IconButton>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      <tr>
-                        <td>
-                          {availableSpecies.length > 0 && (
-                            <Button
-                              label={strings.ADD_SPECIES}
-                              type='productive'
-                              priority='ghost'
-                              onClick={onAddNewSpecies}
-                              icon='iconAdd'
-                              style={{ paddingLeft: 0, marginLeft: 0 }}
-                            />
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Box display={'flex'}>
-                            <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
-                            <IconTooltip title={strings.TOTAL_DENSITY_TOOLTIP} />
-                          </Box>
-                        </td>
-                        <td>
-                          <Typography fontWeight={600}>{plotTotalDensity}</Typography>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Box>
+            <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1} height='fit-content'>
+              <Box display='flex' paddingRight={3}>
+                <Typography fontWeight={600} paddingRight={0.5}>
+                  {strings.ZONE}
+                </Typography>
+                <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
               </Box>
-            )}
-          </Box>
-        </Box>
-        <Box>
-          <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1}>
-            <Box display='flex' paddingRight={3}>
-              <Typography fontWeight={600} paddingRight={0.5}>
-                {strings.ZONE}
-              </Typography>
-              <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
-            </Box>
-            <Box display='flex'>
-              <Typography fontWeight={600} paddingRight={0.5}>
-                {strings.SUBZONE}
-              </Typography>
-              <Typography>{plot.plantingSubzone_name}</Typography>
+              <Box display='flex'>
+                <Typography fontWeight={600} paddingRight={0.5}>
+                  {strings.SUBZONE}
+                </Typography>
+                <Typography>{plot.plantingSubzone_name}</Typography>
+              </Box>
             </Box>
           </Box>
+          {t0Origin === 'manual' && (
+            <Box paddingY={'16px'}>
+              <Message type='page' priority='info' body={strings.T0_PLANT_DENSITY_WARNING} />
+            </Box>
+          )}
+          {t0Origin === 'manual' && (
+            <Box width={'100%'}>
+              <table>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: 'left', width: '40%' }}>
+                      <Box display='flex'>
+                        {strings.SPECIES_FROM_WITHDRAWALS}
+                        <IconTooltip title={strings.SPECIES_FROM_WITHDRAWALS_TOOLTIP} />
+                      </Box>
+                    </th>
+                    <th style={{ textAlign: 'left', width: '10%' }}>
+                      <Box display={'flex'}>
+                        {strings.PLANT_DENSITY} <IconTooltip title={strings.PLANT_DENSITY_TITLE_TOOLTIP} />
+                      </Box>
+                      <Typography fontSize={'14px'} fontWeight={600}>
+                        ({strings.PLANTS_PER_HA_LC})
+                      </Typography>
+                    </th>
+                    <th style={{ textAlign: 'left', width: '20%' }}>
+                      <Box display={'flex'}>
+                        {strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS}
+                        <IconTooltip title={strings.CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP} />
+                      </Box>
+                      <Typography fontSize={'14px'} fontWeight={600}>
+                        ({strings.PLANTS_PER_HA_LC})
+                      </Typography>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {withdrawnSpeciesPlot?.species.map((withdrawnSpecies, index) => (
+                    <tr key={index}>
+                      <td>{species.find((sp) => sp.id === withdrawnSpecies.speciesId)?.scientificName}</td>
+                      <td>
+                        <TextField
+                          type='number'
+                          id={`${withdrawnSpecies.speciesId}`}
+                          value={
+                            plotToSave?.densityData.find(
+                              (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
+                            )?.plotDensity
+                          }
+                          onChange={onChangeDensity}
+                          label={''}
+                          min={0}
+                          sx={{ width: '68px' }}
+                        />
+                      </td>
+                      <td>
+                        <Checkbox
+                          id={`density-${withdrawnSpecies.speciesId}`}
+                          label={withdrawnSpecies.density}
+                          name={`density-${withdrawnSpecies.speciesId}`}
+                          value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
+                          onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                  {newSpeciesRows.length > 0 && (
+                    <tr>
+                      <td colSpan={3}>
+                        <Box display='flex'>
+                          <Typography fontWeight={600}>{strings.ADDED_SPECIES}</Typography>
+                          <IconTooltip title={strings.ADDED_SPECIES_TOOLTIP} />
+                        </Box>
+                      </td>
+                    </tr>
+                  )}
+                  {newSpeciesRows.map((row) => {
+                    return (
+                      <tr key={row.id}>
+                        <td>
+                          <SelectT<Species>
+                            options={availableSpecies}
+                            placeholder={strings.SELECT}
+                            onChange={handleSpeciesChange(row.id)}
+                            isEqual={isEqualSpecies}
+                            renderOption={renderOptionSpecies}
+                            displayLabel={renderOptionSpecies}
+                            selectedValue={speciesSelectedValueHandler(row)}
+                            fullWidth={true}
+                            toT={toTSpecies}
+                          />
+                        </td>
+                        <td>
+                          <TextField
+                            type='number'
+                            id={`new-${row.id}`}
+                            value={row.density}
+                            onChange={handleNewSpeciesDensityChange(row.id)}
+                            label={''}
+                            min={0}
+                          />
+                        </td>
+                        <td>
+                          <IconButton
+                            id={`delete-input-${row.id}`}
+                            aria-label='delete'
+                            size='small'
+                            onClick={onDeleteInputHandler(row.id)}
+                            sx={{ cursor: 'pointer' }}
+                          >
+                            <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
+                          </IconButton>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  <tr>
+                    <td>
+                      {availableSpecies.length > 0 && (
+                        <Button
+                          label={strings.ADD_SPECIES}
+                          type='productive'
+                          priority='ghost'
+                          onClick={onAddNewSpecies}
+                          icon='iconAdd'
+                          style={{ paddingLeft: 0, marginLeft: 0 }}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <Box display={'flex'}>
+                        <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
+                        <IconTooltip title={strings.TOTAL_DENSITY_TOOLTIP} />
+                      </Box>
+                    </td>
+                    <td>
+                      <Typography fontWeight={600}>{plotTotalDensity}</Typography>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </Box>
+          )}
         </Box>
       </Box>
       <Divider />
