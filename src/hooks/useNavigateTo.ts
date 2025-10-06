@@ -27,9 +27,7 @@ export default function useNavigateTo() {
         if (params.has('zoom')) {
           newParams.set('zoom', params.get('zoom')!);
         }
-
         newParams.set('source', window.location.pathname);
-
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
           search: newParams.toString(),
