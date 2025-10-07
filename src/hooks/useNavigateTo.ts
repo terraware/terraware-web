@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { APP_PATHS } from 'src/constants';
 import { ModuleContentType } from 'src/types/Module';
