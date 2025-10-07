@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -10,7 +10,7 @@ import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { Activity, activityTypeLabel } from 'src/types/Activity';
+import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -76,6 +76,15 @@ const ActivityDetailView = ({
     [location, navigate, query, strings.PROJECT_ACTIVITY]
   );
 
+  const mediaItemHoverCallback = useCallback(
+    (mediaItem: ActivityMediaFile, hovered: boolean) => () => {
+      if (mediaItem.geolocation && !mediaItem.isHiddenOnMap) {
+        setHoverFileCallback(mediaItem.fileId, hovered);
+      }
+    },
+    [setHoverFileCallback]
+  );
+
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
       <Grid item xs={12}>
@@ -116,16 +125,8 @@ const ActivityDetailView = ({
             id={`activity-media-item-${mediaItem.fileId}`}
             onClick={onMediaItemClick(mediaItem.fileId)}
             // Hover effects only for photos with corresponding markers
-            onMouseEnter={
-              mediaItem.geolocation && !mediaItem.isHiddenOnMap
-                ? setHoverFileCallback(mediaItem.fileId, true)
-                : undefined
-            }
-            onMouseLeave={
-              mediaItem.geolocation && !mediaItem.isHiddenOnMap
-                ? setHoverFileCallback(mediaItem.fileId, false)
-                : undefined
-            }
+            onMouseEnter={mediaItemHoverCallback(mediaItem, true)}
+            onMouseLeave={mediaItemHoverCallback(mediaItem, false)}
             src={ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
               '{fileId}',
               mediaItem.fileId.toString()
