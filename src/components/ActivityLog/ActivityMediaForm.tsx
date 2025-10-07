@@ -26,21 +26,27 @@ const MAX_FILES = 20;
 
 type ActivityPhotoPreviewProps = {
   activityId?: number;
+  currentPosition: number;
   isLast?: boolean;
+  maxPosition: number;
   mediaItem: ActivityMediaItem;
   onCoverPhotoChange: (isCover: boolean) => void;
   onDelete: () => void;
   onHiddenOnMapChange: (isHidden: boolean) => void;
+  onPositionChange: (newPosition: number) => void;
   setCaption: (caption: string) => void;
 };
 
 const ActivityPhotoPreview = ({
   activityId,
+  currentPosition,
   isLast,
+  maxPosition,
   mediaItem,
   onCoverPhotoChange,
   onDelete,
   onHiddenOnMapChange,
+  onPositionChange,
   setCaption,
 }: ActivityPhotoPreviewProps) => {
   const { strings } = useLocalization();
@@ -93,6 +99,45 @@ const ActivityPhotoPreview = ({
     onHiddenOnMapChange(!isHiddenOnMap);
   }, [onHiddenOnMapChange, isHiddenOnMap]);
 
+  const onMoveUp = useCallback(
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+      if (currentPosition > 1) {
+        onPositionChange(currentPosition - 1);
+        event?.currentTarget?.blur();
+      }
+    },
+    [currentPosition, onPositionChange]
+  );
+
+  const onMoveDown = useCallback(
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+      if (currentPosition < maxPosition) {
+        onPositionChange(currentPosition + 1);
+        event?.currentTarget?.blur();
+      }
+    },
+    [currentPosition, maxPosition, onPositionChange]
+  );
+
+  const onPositionInputChange = useCallback(
+    (value: any) => {
+      const stringValue = value as string;
+      // only allow numeric values
+      if (/^\d*$/.test(stringValue)) {
+        const numericValue = parseInt(stringValue, 10);
+        if (!isNaN(numericValue)) {
+          // clamp the value between 1 and maxPosition
+          const clampedValue = Math.max(1, Math.min(maxPosition, numericValue));
+          onPositionChange(clampedValue);
+        } else if (stringValue === '') {
+          // allow empty string for editing
+          return;
+        }
+      }
+    },
+    [maxPosition, onPositionChange]
+  );
+
   return (
     <Box
       borderBottom={isLast ? 'none' : `1px solid ${theme.palette.TwClrBgSecondary}`}
@@ -107,8 +152,33 @@ const ActivityPhotoPreview = ({
 
         <Grid item sm={true} xs={12}>
           <Box display='flex' flexDirection='column'>
-            <Box alignItems='center' display='flex' flexDirection='row'>
-              <Typography>TODO: list position</Typography>
+            <Box alignItems='center' display='flex' flexDirection='row' gap={1}>
+              <Button
+                disabled={currentPosition <= 1}
+                icon='caretUp'
+                onClick={onMoveUp}
+                priority='ghost'
+                size='medium'
+                style={{ margin: 0, minWidth: '32px', padding: 0 }}
+                type='passive'
+              />
+              <Button
+                disabled={currentPosition >= maxPosition}
+                icon='caretDown'
+                onClick={onMoveDown}
+                priority='ghost'
+                size='medium'
+                style={{ margin: 0, minWidth: '32px', padding: 0 }}
+                type='passive'
+              />
+              <Textfield
+                id={`position-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
+                label=''
+                onChange={onPositionInputChange}
+                sx={{ width: '60px', '& input': { textAlign: 'center' } }}
+                type='text'
+                value={currentPosition.toString()}
+              />
 
               <FormControlLabel
                 control={<Radio checked={isCoverPhoto} name='coverPhoto' onChange={onCoverPhotoToggle} />}
@@ -173,6 +243,16 @@ export default function ActivityMediaForm({
   onMediaFilesChange,
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = useLocalization();
+
+  const visibleMediaFiles = useMemo(
+    () => mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted),
+    [mediaFiles]
+  );
+
+  const fileLimitReached = useMemo(
+    () => (maxFiles ? visibleMediaFiles.length >= maxFiles : false),
+    [visibleMediaFiles.length, maxFiles]
+  );
 
   const onSetFiles = useCallback(
     (files: File[]) => {
@@ -293,14 +373,41 @@ export default function ActivityMediaForm({
     [mediaFiles, onMediaFilesChange]
   );
 
-  const visibleMediaFiles = useMemo(
-    () => mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted),
-    [mediaFiles]
-  );
+  const getUpdatePosition = useCallback(
+    (currentIndex: number) => (newPosition: number) => {
+      const targetIndex = newPosition - 1;
+      if (targetIndex < 0 || targetIndex >= visibleMediaFiles.length || currentIndex === targetIndex) {
+        return;
+      }
 
-  const fileLimitReached = useMemo(
-    () => (maxFiles ? visibleMediaFiles.length >= maxFiles : false),
-    [visibleMediaFiles.length, maxFiles]
+      // reorder the visible files
+      const reorderedFiles = [...visibleMediaFiles];
+      const [movedItem] = reorderedFiles.splice(currentIndex, 1);
+      reorderedFiles.splice(targetIndex, 0, movedItem);
+
+      // update list positions for new items
+      const updatedFiles = reorderedFiles.map((item, index) => {
+        if (item.type === 'new') {
+          return {
+            ...item,
+            data: { ...item.data, listPosition: index + 1 },
+          };
+        } else {
+          return {
+            ...item,
+            data: { ...item.data, listPosition: index + 1 },
+            isModified: true,
+          };
+        }
+      });
+
+      // merge back with deleted items (they maintain their original position in the array)
+      const deletedItems = mediaFiles.filter((item) => item.type === 'existing' && item.isDeleted);
+      const finalFiles = [...updatedFiles, ...deletedItems];
+
+      onMediaFilesChange(finalFiles);
+    },
+    [mediaFiles, onMediaFilesChange, visibleMediaFiles]
   );
 
   return (
@@ -329,11 +436,14 @@ export default function ActivityMediaForm({
           return (
             <ActivityPhotoPreview
               activityId={activityId}
+              currentPosition={index + 1}
               isLast={index === visibleMediaFiles.length - 1}
               key={`photo-${index}`}
+              maxPosition={visibleMediaFiles.length}
               onCoverPhotoChange={getSetCoverPhoto(index)}
               onDelete={getDeletePhoto(index)}
               onHiddenOnMapChange={getSetHiddenOnMap(index)}
+              onPositionChange={getUpdatePosition(index)}
               mediaItem={photo}
               setCaption={getUpdatePhotoCaption(index)}
             />
