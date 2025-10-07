@@ -108,7 +108,7 @@ export default function ActivityLogView(): JSX.Element {
       activityId ? (
         <Button
           disabled={!projectId}
-          icon='plus'
+          icon='iconEdit'
           label={strings.EDIT_ACTIVITY}
           onClick={goToProjectActivityEdit}
           size='medium'
