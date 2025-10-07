@@ -403,15 +403,10 @@ export default function ActivityMediaForm({
     [mediaFiles, onMediaFilesChange]
   );
 
-  const visibleMediaFiles = useMemo(
-    () => mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted),
-    [mediaFiles]
-  );
-
-  const fileLimitReached = useMemo(
-    () => (maxFiles ? visibleMediaFiles.length >= maxFiles : false),
-    [visibleMediaFiles.length, maxFiles]
-  );
+  const fileLimitReached = useMemo(() => {
+    const visibleMediaFiles = mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted);
+    return maxFiles ? visibleMediaFiles.length >= maxFiles : false;
+  }, [mediaFiles, maxFiles]);
 
   return (
     <>
@@ -430,22 +425,25 @@ export default function ActivityMediaForm({
       </Grid>
 
       <Grid item xs={12}>
-        {visibleMediaFiles.map((photo, visibleIndex) => {
-          const originalIndex = mediaFiles.findIndex((item) => item === photo);
+        {mediaFiles.map((photo, index) => {
+          // skip deleted existing photos
+          if (photo.type === 'existing' && photo.isDeleted) {
+            return null;
+          }
 
           return (
             <ActivityPhotoPreview
               activityId={activityId}
-              currentPosition={visibleIndex + 1}
-              isLast={visibleIndex === visibleMediaFiles.length - 1}
-              key={`photo-${originalIndex}`}
-              maxPosition={visibleMediaFiles.length}
-              onCoverPhotoChange={getSetCoverPhoto(originalIndex)}
-              onDelete={getDeletePhoto(originalIndex)}
-              onHiddenOnMapChange={getSetHiddenOnMap(originalIndex)}
-              onPositionChange={getUpdatePosition(visibleIndex)}
+              currentPosition={index + 1}
+              isLast={index === mediaFiles.length - 1}
+              key={`photo-${index}`}
+              maxPosition={mediaFiles.length}
+              onCoverPhotoChange={getSetCoverPhoto(index)}
+              onDelete={getDeletePhoto(index)}
+              onHiddenOnMapChange={getSetHiddenOnMap(index)}
+              onPositionChange={getUpdatePosition(index)}
               mediaItem={photo}
-              setCaption={getUpdatePhotoCaption(originalIndex)}
+              setCaption={getUpdatePhotoCaption(index)}
             />
           );
         })}
