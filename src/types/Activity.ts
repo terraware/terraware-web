@@ -1,3 +1,5 @@
+import { theme } from '@terraware/web-components';
+
 import { components } from 'src/api/types/generated-schema';
 import defaultStrings from 'src/strings';
 
@@ -39,19 +41,19 @@ export const ACTIVITY_TYPES: ActivityType[] = [
 export const activityTypeColor = (type: ActivityType) => {
   switch (type) {
     case 'Seed Collection':
-      return '#41C07F';
+      return theme.palette.TwClrBasePink300 as string;
     case 'Nursery':
-      return '#0072B2';
+      return theme.palette.TwClrBaseBlue600 as string;
     case 'Planting':
-      return '#CC79A7';
+      return theme.palette.TwClrBaseGreen400 as string;
     case 'Monitoring':
-      return '#F0E441';
+      return theme.palette.TwClrBaseBlue300 as string;
     case 'Site Visit':
-      return '#E79F00';
+      return theme.palette.TwClrBaseOrange400 as string;
     case 'Stakeholder Engagement':
-      return '#57B4E9';
+      return theme.palette.TwClrBaseYellow200 as string;
     case 'Drone Flight':
-      return '#D55E00';
+      return theme.palette.TwClrBaseRed500 as string;
   }
 };
 
