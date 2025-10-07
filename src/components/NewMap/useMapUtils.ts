@@ -5,13 +5,13 @@ import { MapBounds, MapViewState } from './types';
 import { isBoundsValid } from './utils';
 
 const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
-  const easeTo = useCallback(
+  const jumpTo = useCallback(
     (viewState: MapViewState) => {
       const map = mapRef.current;
       const { latitude, longitude, zoom } = viewState;
 
       if (map) {
-        map.easeTo({
+        map.jumpTo({
           center: { lat: latitude, lng: longitude },
           zoom,
         });
@@ -26,10 +26,15 @@ const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
       const { minLat, minLng, maxLat, maxLng } = bbox;
 
       if (map && isBoundsValid(bbox)) {
-        map.fitBounds([
-          { lat: minLat, lng: minLng },
-          { lat: maxLat, lng: maxLng },
-        ]);
+        map.fitBounds(
+          [
+            { lat: minLat, lng: minLng },
+            { lat: maxLat, lng: maxLng },
+          ],
+          {
+            animate: false,
+          }
+        );
       }
     },
     [mapRef]
@@ -64,12 +69,12 @@ const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
 
   return useMemo(
     () => ({
-      easeTo,
+      jumpTo,
       fitBounds,
       getCurrentBounds,
       getCurrentViewState,
     }),
-    [easeTo, fitBounds, getCurrentBounds, getCurrentViewState]
+    [jumpTo, fitBounds, getCurrentBounds, getCurrentViewState]
   );
 };
 
