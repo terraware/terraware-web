@@ -147,7 +147,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       source === APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
     ) {
       goToParticipantProject(projectId, editingActivityId);
-    } else if (isAcceleratorRoute && !source) {
+    } else if (isAcceleratorRoute) {
       goToAcceleratorActivityLog(editingActivityId);
     } else {
       goToActivityLog(editingActivityId);
