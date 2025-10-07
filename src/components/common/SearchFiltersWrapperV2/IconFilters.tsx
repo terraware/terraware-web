@@ -13,9 +13,10 @@ interface IconFiltersProps {
   filters: FilterConfig[];
   setCurrentFilters: (filters: Record<string, any>) => void;
   currentFilters: Record<string, SearchNodePayload>;
+  noScroll?: boolean;
 }
 
-const IconFilters = ({ filters, setCurrentFilters, currentFilters }: IconFiltersProps) => {
+const IconFilters = ({ filters, setCurrentFilters, currentFilters, noScroll }: IconFiltersProps) => {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -99,6 +100,7 @@ const IconFilters = ({ filters, setCurrentFilters, currentFilters }: IconFilters
             setCurrentFilters(fs);
           }}
           onCancel={handleFilterClose}
+          noScroll={noScroll}
         />
       </Popover>
     </>
