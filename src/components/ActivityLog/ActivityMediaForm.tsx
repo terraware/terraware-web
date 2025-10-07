@@ -244,6 +244,16 @@ export default function ActivityMediaForm({
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = useLocalization();
 
+  const visibleMediaFiles = useMemo(
+    () => mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted),
+    [mediaFiles]
+  );
+
+  const fileLimitReached = useMemo(
+    () => (maxFiles ? visibleMediaFiles.length >= maxFiles : false),
+    [visibleMediaFiles.length, maxFiles]
+  );
+
   const onSetFiles = useCallback(
     (files: File[]) => {
       const newPhotos: ActivityMediaItem[] = files.map((file, index) => ({
@@ -365,16 +375,13 @@ export default function ActivityMediaForm({
 
   const getUpdatePosition = useCallback(
     (currentIndex: number) => (newPosition: number) => {
-      // create a copy of visible media files for reordering
-      const visibleFiles = mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted);
-      const targetIndex = newPosition - 1; // convert to 0-based index
-
-      if (targetIndex < 0 || targetIndex >= visibleFiles.length || currentIndex === targetIndex) {
+      const targetIndex = newPosition - 1;
+      if (targetIndex < 0 || targetIndex >= visibleMediaFiles.length || currentIndex === targetIndex) {
         return;
       }
 
       // reorder the visible files
-      const reorderedFiles = [...visibleFiles];
+      const reorderedFiles = [...visibleMediaFiles];
       const [movedItem] = reorderedFiles.splice(currentIndex, 1);
       reorderedFiles.splice(targetIndex, 0, movedItem);
 
@@ -400,13 +407,8 @@ export default function ActivityMediaForm({
 
       onMediaFilesChange(finalFiles);
     },
-    [mediaFiles, onMediaFilesChange]
+    [mediaFiles, onMediaFilesChange, visibleMediaFiles]
   );
-
-  const fileLimitReached = useMemo(() => {
-    const visibleMediaFiles = mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted);
-    return maxFiles ? visibleMediaFiles.length >= maxFiles : false;
-  }, [mediaFiles, maxFiles]);
 
   return (
     <>
@@ -435,9 +437,9 @@ export default function ActivityMediaForm({
             <ActivityPhotoPreview
               activityId={activityId}
               currentPosition={index + 1}
-              isLast={index === mediaFiles.length - 1}
+              isLast={index === visibleMediaFiles.length - 1}
               key={`photo-${index}`}
-              maxPosition={mediaFiles.length}
+              maxPosition={visibleMediaFiles.length}
               onCoverPhotoChange={getSetCoverPhoto(index)}
               onDelete={getDeletePhoto(index)}
               onHiddenOnMapChange={getSetHiddenOnMap(index)}
