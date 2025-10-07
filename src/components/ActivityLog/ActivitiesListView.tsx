@@ -1,4 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -17,6 +18,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
+import useMapUtils from '../NewMap/useMapUtils';
 import { FilterField } from '../common/FilterGroup';
 import { FilterConfig } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
@@ -120,6 +122,8 @@ type ActivitiesListViewProps = {
 const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<MapRef | null>(null);
+  const { easeTo, getCurrentViewState } = useMapUtils(mapRef);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
@@ -187,6 +191,16 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     const activityIdParam = query.get('activityId');
     return activityIdParam ? Number(activityIdParam) : undefined;
   }, [query]);
+
+  useEffect(() => {
+    if (showActivityId !== undefined) {
+      // Entering one activity details, set focus to the selected activity
+      setFocusedActivityId(showActivityId);
+    } else {
+      // Existing one activity detailed view. Clear file states
+      setFocusedFileId(undefined);
+    }
+  }, [showActivityId]);
 
   const shownActivity = useMemo(
     () => activities.find((activity) => activity.id === showActivityId),
@@ -339,16 +353,37 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   const activityMarkerHighlighted = useCallback(
     (activityId: number, fileId: number) => {
-      const ids = [focusedActivityId, focusedFileId, hoveredActivityId, hoveredFileId];
-      return ids.includes(activityId) || ids.includes(fileId);
+      if (showActivityId !== undefined) {
+        // One activity is selected
+        return fileId === focusedFileId || fileId === hoveredFileId;
+      } else {
+        return activityId === focusedActivityId || activityId === hoveredActivityId;
+      }
     },
-    [focusedActivityId, focusedFileId, hoveredActivityId, hoveredFileId]
+    [focusedActivityId, focusedFileId, hoveredActivityId, hoveredFileId, showActivityId]
   );
 
-  const onActivityMarkerClick = useCallback((activityId: number, fileId: number) => {
-    setFocusedActivityId((prevValue) => (prevValue === activityId ? undefined : activityId));
-    setFocusedFileId((prevValue) => (prevValue === fileId ? undefined : fileId));
-  }, []);
+  const onActivityMarkerClick = useCallback(
+    (activityId: number, fileId: number) => {
+      if (showActivityId !== undefined) {
+        // One activity is selected
+        if (focusedFileId === fileId) {
+          setFocusedFileId(undefined);
+        } else {
+          setFocusedFileId(fileId);
+          scrollToElementById(`activity-media-item-${fileId}`);
+        }
+      } else {
+        if (focusedActivityId === activityId) {
+          setFocusedActivityId(undefined);
+        } else {
+          setFocusedActivityId(activityId);
+          scrollToElementById(`activity-log-item-${activityId}`);
+        }
+      }
+    },
+    [focusedActivityId, focusedFileId, scrollToElementById, showActivityId]
+  );
 
   const setHoverActivityCallback = useCallback(
     (activityId: number, hover: boolean) => () => {
@@ -364,6 +399,28 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     []
   );
 
+  const onMediaItemClick = useCallback(
+    (fileId: number) => () => {
+      if (shownActivity) {
+        if (focusedFileId === fileId) {
+          setFocusedFileId(undefined);
+          return;
+        }
+        setFocusedFileId(fileId);
+        const media = shownActivity.media.find((mediaFile) => mediaFile.fileId === fileId);
+        const viewState = getCurrentViewState();
+        if (media && !media.isHiddenOnMap && media.geolocation && viewState) {
+          easeTo({
+            latitude: media.geolocation.coordinates[1],
+            longitude: media.geolocation.coordinates[0],
+            zoom: viewState.zoom,
+          });
+        }
+      }
+    },
+    [shownActivity, easeTo, focusedFileId, getCurrentViewState]
+  );
+
   // update url and navigation history when navigating to activity detail view
   const getOnClickActivityListItem = useCallback(
     (activityId: number) => () => {
@@ -372,12 +429,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     },
     [location, navigate, query]
   );
-
-  useEffect(() => {
-    if (focusedActivityId !== undefined) {
-      scrollToElementById(`activity-log-item-${focusedActivityId}`);
-    }
-  }, [focusedActivityId, scrollToElementById]);
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
@@ -407,13 +458,16 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       activities={activitiesVisibleOnMap} // TODO: Use visible activities after pagination/filtering
       activityMarkerHighlighted={activityMarkerHighlighted}
       drawerRef={mapDrawerRef}
+      mapRef={mapRef}
       onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >
       {showActivityId && shownActivity ? (
         <ActivityDetailView
           activity={shownActivity}
+          focusedFileId={focusedFileId}
           hoveredFileId={hoveredFileId}
+          onMediaItemClick={onMediaItemClick}
           setHoverFileCallback={setHoverFileCallback}
         />
       ) : activities.length === 0 && !busy ? (

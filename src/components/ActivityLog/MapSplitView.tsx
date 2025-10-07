@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import { MapRef, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router';
 
@@ -19,6 +19,7 @@ type MapSplitViewProps = {
   activityMarkerHighlighted?: (activityId: number, fileId: number) => boolean;
   children: React.ReactNode;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
+  mapRef: MutableRefObject<MapRef | null>;
   onActivityMarkerClick?: (activityId: number, fileId: number) => void;
   projectId: number;
   topComponent?: React.ReactNode;
@@ -29,6 +30,7 @@ export default function MapSplitView({
   activityMarkerHighlighted,
   children,
   drawerRef,
+  mapRef,
   onActivityMarkerClick,
   projectId,
   topComponent,
@@ -36,7 +38,6 @@ export default function MapSplitView({
   const theme = useTheme();
   const { mapId, refreshToken, token } = useMapboxToken();
   const { strings } = useLocalization();
-  const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
   const { plantingSites } = useProjectPlantingSites(projectId);
   const [searchParams, setSearchParams] = useSearchParams();

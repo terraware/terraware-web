@@ -18,13 +18,17 @@ import ActivityStatusBadge from './ActivityStatusBadge';
 
 type ActivityDetailViewProps = {
   activity: Activity;
+  focusedFileId?: number;
   hoveredFileId?: number;
+  onMediaItemClick: (fileId: number) => () => void;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
 };
 
 const ActivityDetailView = ({
   activity,
+  focusedFileId,
   hoveredFileId,
+  onMediaItemClick,
   setHoverFileCallback,
 }: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
@@ -109,8 +113,19 @@ const ActivityDetailView = ({
         <Grid item lg={6} xs={12} key={index}>
           <img
             alt={mediaItem?.caption}
-            onMouseEnter={setHoverFileCallback(mediaItem.fileId, true)}
-            onMouseLeave={setHoverFileCallback(mediaItem.fileId, false)}
+            id={`activity-media-item-${mediaItem.fileId}`}
+            onClick={onMediaItemClick(mediaItem.fileId)}
+            // Hover effects only for photos with corresponding markers
+            onMouseEnter={
+              mediaItem.geolocation && !mediaItem.isHiddenOnMap
+                ? setHoverFileCallback(mediaItem.fileId, true)
+                : undefined
+            }
+            onMouseLeave={
+              mediaItem.geolocation && !mediaItem.isHiddenOnMap
+                ? setHoverFileCallback(mediaItem.fileId, false)
+                : undefined
+            }
             src={ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
               '{fileId}',
               mediaItem.fileId.toString()
@@ -118,7 +133,10 @@ const ActivityDetailView = ({
             style={{
               aspectRatio: '4/3',
               backgroundColor: theme.palette.TwClrBgSecondary,
-              borderColor: hoveredFileId === mediaItem.fileId ? '#CC79A7' : theme.palette.TwClrBg,
+              borderColor:
+                hoveredFileId === mediaItem.fileId || focusedFileId === mediaItem.fileId
+                  ? '#CC79A7'
+                  : theme.palette.TwClrBg,
               borderStyle: 'solid',
               borderWidth: '4px',
               boxSizing: 'content-box',
