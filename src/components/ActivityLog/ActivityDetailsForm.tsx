@@ -73,7 +73,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const navigate = useSyncNavigate();
   const { goToAcceleratorActivityLog, goToActivityLog, goToParticipantProject } = useNavigateTo();
-
   const location = useStateLocation();
   const query = useQuery();
 
@@ -89,12 +88,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const getActivityRequest = useAppSelector(selectActivityGet(getActivityRequestId));
   const adminGetActivityRequest = useAppSelector(selectAdminActivityGet(getActivityRequestId));
-
   const createActivityRequest = useAppSelector(selectActivityCreate(saveActivityRequestId));
   const adminCreateActivityRequest = useAppSelector(selectAdminActivityCreate(saveActivityRequestId));
   const updateActivityRequest = useAppSelector(selectActivityUpdate(saveActivityRequestId));
   const adminUpdateActivityRequest = useAppSelector(selectAdminActivityUpdate(saveActivityRequestId));
-
   const syncActivityMediaRequest = useAppSelector(selectSyncActivityMedia(syncMediaRequestId));
 
   useEffect(() => {
@@ -134,17 +131,28 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   );
 
   const navToActivityLog = useCallback(() => {
+    const editingActivityId = isEditing ? activityId : undefined;
+
     if (
       isAcceleratorRoute &&
       source === APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
     ) {
-      goToParticipantProject(projectId);
-    } else if (isAcceleratorRoute) {
-      goToAcceleratorActivityLog();
+      goToParticipantProject(projectId, editingActivityId);
+    } else if (isAcceleratorRoute && !source) {
+      goToAcceleratorActivityLog(editingActivityId);
     } else {
-      goToActivityLog();
+      goToActivityLog(editingActivityId);
     }
-  }, [goToAcceleratorActivityLog, goToActivityLog, goToParticipantProject, isAcceleratorRoute, projectId, source]);
+  }, [
+    activityId,
+    goToAcceleratorActivityLog,
+    goToActivityLog,
+    goToParticipantProject,
+    isAcceleratorRoute,
+    isEditing,
+    projectId,
+    source,
+  ]);
 
   const validateForm = useCallback((): boolean => !!record?.date && !!record?.description && !!record?.type, [record]);
 

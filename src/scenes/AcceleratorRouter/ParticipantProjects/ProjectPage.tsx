@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboardView';
 import strings from 'src/strings';
 import { FunderProjectDetails } from 'src/types/FunderProject';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -33,11 +34,13 @@ const ProjectPage = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useParticipantProjectData();
-  const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
+  const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit, goToAcceleratorActivityEdit } =
+    useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
   const dispatch = useAppDispatch();
+  const query = useQuery();
   const [openPublishDialog, setOpenPublishDialog] = useState(false);
   const [publishRequestId, setPublishRequestId] = useState('');
   const publishProfileResponse = useAppSelector(selectPublishFunderProject(publishRequestId));
@@ -46,7 +49,15 @@ const ProjectPage = () => {
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
+  const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
   const isActivityLogEnabled = isEnabled('Activity Log');
+
+  const [activityId, setActivityId] = useState<number>();
+
+  useEffect(() => {
+    const _activityId = query.get('activityId');
+    setActivityId(_activityId ? Number(_activityId) : undefined);
+  }, [query]);
 
   const projectApplication = useMemo(
     () => getApplicationByProjectId(projectData.projectId),
@@ -124,6 +135,13 @@ const ProjectPage = () => {
     goToAcceleratorActivityCreate(projectData.projectId);
   }, [goToAcceleratorActivityCreate, projectData.projectId]);
 
+  const goToProjectActivityEdit = useCallback(() => {
+    if (!activityId) {
+      return;
+    }
+    goToAcceleratorActivityEdit(projectData.projectId, activityId);
+  }, [goToAcceleratorActivityEdit, projectData.projectId, activityId]);
+
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
 
   const publishProfile = useCallback(() => {
@@ -182,12 +200,24 @@ const ProjectPage = () => {
             </>
           )}
 
-          {activeTab === 'activityLog' && isAllowedCreateActivities && (
+          {activeTab === 'activityLog' && isAllowedCreateActivities && !activityId && (
             <Button
               icon='plus'
               id='addActivity'
               label={strings.ADD_ACTIVITY}
               onClick={goToProjectActivityCreate}
+              priority='primary'
+              size='medium'
+              type='productive'
+            />
+          )}
+
+          {activeTab === 'activityLog' && isAllowedEditActivities && activityId && (
+            <Button
+              icon='plus'
+              id='editActivity'
+              label={strings.EDIT_ACTIVITY}
+              onClick={goToProjectActivityEdit}
               priority='primary'
               size='medium'
               type='productive'
@@ -210,11 +240,14 @@ const ProjectPage = () => {
     ),
     [
       activeTab,
+      activityId,
       goToDocumentNew,
       goToProjectActivityCreate,
+      goToProjectActivityEdit,
       goToProjectEdit,
       isAllowedCreateActivities,
       isAllowedEdit,
+      isAllowedEditActivities,
       isAllowedPublish,
       onOptionItemClick,
       theme,
