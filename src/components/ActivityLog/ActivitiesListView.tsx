@@ -94,7 +94,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
         </Typography>
 
         {isAcceleratorRoute && (
-          <Box marginY={theme.spacing(1)}>
+          <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginY={theme.spacing(1)}>
             {isChanged && <ActivityStatusBadge status='Changed' />}
             <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
             {/* TODO: render badge for 'Do Not Use' when applicable */}
