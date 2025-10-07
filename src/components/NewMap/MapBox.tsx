@@ -626,7 +626,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
           sx={{
             height: 'max-content',
             position: 'absolute',
-            left: '123px',
+            left: '136px',
             top: '10px',
             width: 'max-content',
             zIndex: 1000,
