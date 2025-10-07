@@ -63,6 +63,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const projectId = String(pathParams.projectId);
 
   const [record, , onChange, onChangeCallback] = useForm<AcceleratorReport>(report);
+  const [validate, setValidate] = useState(false);
   const [photos, setPhotos] = useState<AcceleratorReportPhotoActions>({ toAdd: [], toDelete: [], toUpdate: [] });
   const [saveReportRequestId, setSaveReportRequestId] = useState('');
   const saveReportResponse = useAppSelector(selectUpdateAcceleratorReport(saveReportRequestId));
@@ -125,6 +126,16 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   }, [report, photos, dispatch, projectId]);
 
   const saveReport = useCallback(() => {
+    setValidate(false);
+    if (record.challenges.length) {
+      const missingField = record.challenges.some((chal) => {
+        return (chal.challenge && !chal.mitigationPlan) || (chal.mitigationPlan && !chal.challenge);
+      });
+      if (missingField) {
+        setValidate(true);
+        return;
+      }
+    }
     const request = dispatch(
       requestUpdateAcceleratorReport({
         projectId: Number(projectId),
@@ -268,6 +279,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             projectId={projectId}
             editing={true}
             onChange={onChangeCallback('challenges')}
+            validate={validate}
           />
           <FinancialSummariesBox
             report={record}
