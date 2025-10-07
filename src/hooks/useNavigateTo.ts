@@ -9,7 +9,7 @@ import { useSyncNavigate } from './useSyncNavigate';
 export default function useNavigateTo() {
   const navigate = useSyncNavigate();
 
-  const searchParamsWtihMapViewState = () => {
+  const searchParamsWithMapViewState = () => {
     const params = new URLSearchParams(location.search);
     const newParams = new URLSearchParams();
     if (params.has('lat')) {
@@ -31,7 +31,7 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorActivityCreate: (projectId: number) => {
-        const params = searchParamsWtihMapViewState();
+        const params = searchParamsWithMapViewState();
         params.set('source', window.location.pathname);
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
@@ -40,7 +40,7 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorActivityEdit: (projectId: number, activityId: number) => {
-        const params = searchParamsWtihMapViewState();
+        const params = searchParamsWithMapViewState();
         params.set('source', window.location.pathname);
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
@@ -52,7 +52,7 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorActivityLog: (activityId?: number) => {
-        const params = searchParamsWtihMapViewState();
+        const params = searchParamsWithMapViewState();
         if (activityId !== undefined) {
           params.set('activityId', activityId.toString());
         }
@@ -112,7 +112,7 @@ export default function useNavigateTo() {
         }),
 
       goToActivityCreate: (projectId: number) => {
-        const params = searchParamsWtihMapViewState();
+        const params = searchParamsWithMapViewState();
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
           search: params.toString(),
@@ -120,7 +120,7 @@ export default function useNavigateTo() {
       },
 
       goToActivityEdit: (projectId: number, activityId: number) => {
-        const params = searchParamsWtihMapViewState();
+        const params = searchParamsWithMapViewState();
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
             ':activityId',
@@ -131,7 +131,7 @@ export default function useNavigateTo() {
       },
 
       goToActivityLog: (activityId?: number) => {
-        const params = searchParamsWtihMapViewState();
+        const params = searchParamsWithMapViewState();
         if (activityId !== undefined) {
           params.set('activityId', activityId.toString());
         }
@@ -319,7 +319,7 @@ export default function useNavigateTo() {
         }),
 
       goToParticipantProject: (projectId: number, activityId?: number) => {
-        const params = searchParamsWtihMapViewState();
+        const params = searchParamsWithMapViewState();
         if (activityId !== undefined) {
           params.set('activityId', activityId.toString());
         }
