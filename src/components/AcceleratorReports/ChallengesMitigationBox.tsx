@@ -28,6 +28,7 @@ const ChallengeMitigationPlan = ({
   onRemove,
   validateFields,
   funderReportView,
+  validate,
 }: {
   challengeMitigation: ChallengeMitigation;
   setChallengeMitigation: (challengeMitigation: ChallengeMitigation) => void;
@@ -37,6 +38,7 @@ const ChallengeMitigationPlan = ({
   onRemove: () => void;
   validateFields: boolean;
   funderReportView?: boolean;
+  validate?: boolean;
 }) => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -95,7 +97,9 @@ const ChallengeMitigationPlan = ({
               styles={textAreaStyles}
               onChange={setChallenge}
               errorText={
-                validateFields && !challengeMitigation.challenge ? strings.TEXT_REQUIRED_BOTH_FIELDS : undefined
+                (validateFields || validate) && !challengeMitigation.challenge
+                  ? strings.TEXT_REQUIRED_BOTH_FIELDS
+                  : undefined
               }
               required
               preserveNewlines
@@ -121,7 +125,9 @@ const ChallengeMitigationPlan = ({
               styles={textAreaStyles}
               onChange={setMitigation}
               errorText={
-                validateFields && !challengeMitigation.mitigationPlan ? strings.TEXT_REQUIRED_BOTH_FIELDS : undefined
+                (validateFields || validate) && !challengeMitigation.mitigationPlan
+                  ? strings.TEXT_REQUIRED_BOTH_FIELDS
+                  : undefined
               }
               required
               preserveNewlines
@@ -144,8 +150,18 @@ const ChallengeMitigationPlan = ({
 };
 
 const ChallengesMitigationBox = (props: ReportBoxProps) => {
-  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } =
-    props;
+  const {
+    report,
+    projectId,
+    reload,
+    isConsoleView,
+    onChange,
+    editing,
+    onEditChange,
+    canEdit,
+    funderReportView,
+    validate,
+  } = props;
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -285,6 +301,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
           setChallengeMitigation={updateChallenge(index)}
           validateFields={validateFields}
           funderReportView={funderReportView}
+          validate={validate}
         />
       ))}
       {isEditing && (
