@@ -96,7 +96,9 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                     <tbody>
                       {t0Plot.densityData.map((densityData, index) => (
                         <tr key={index}>
-                          <td style={{ paddingRight: '64px' }}>{species.find((sp) => sp.id === densityData.speciesId)?.scientificName}</td>
+                          <td style={{ paddingRight: '64px' }}>
+                            {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
+                          </td>
                           <td>{densityData.plotDensity}</td>
                         </tr>
                       ))}
