@@ -1,3 +1,5 @@
+846593a514c Activity Log: Fix navigation bug (#4552)
+aad9433c20b Implemented map interactions on details and edit screen (#4547)
 30ef3fe0f2b SW-7450 Make map location sticky and map view style sticky (#4524)
 fbf2363b0e6 Survival rate settings - Increase the length of Observations dropdown (#4551)
 f29b9292a9b SW-7459: Activity Create/Edit Media List Position (#4546)

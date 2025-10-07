@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
@@ -518,7 +518,20 @@
 <a name='L453'></a><a href='#L453'>453</a>
 <a name='L454'></a><a href='#L454'>454</a>
 <a name='L455'></a><a href='#L455'>455</a>
-<a name='L456'></a><a href='#L456'>456</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -557,7 +570,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -569,6 +585,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -659,6 +676,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -762,6 +781,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -954,6 +978,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1002,9 +1028,11 @@ const MAX_FILES = <span class="cstat-no" title="statement not covered" >20;</spa
 type ActivityPhotoPreviewProps = {
   activityId?: number;
   currentPosition: number;
+  focused?: boolean;
   isLast?: boolean;
   maxPosition: number;
   mediaItem: ActivityMediaItem;
+  onClick?: () =&gt; void;
   onCoverPhotoChange: (isCover: boolean) =&gt; void;
   onDelete: () =&gt; void;
   onHiddenOnMapChange: (isHidden: boolean) =&gt; void;
@@ -1015,9 +1043,11 @@ type ActivityPhotoPreviewProps = {
 const ActivityPhotoPreview = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
   activityId,
   currentPosition,
+  focused,
   isLast,
   maxPosition,
   mediaItem,
+  onClick,
   onCoverPhotoChange,
   onDelete,
   onHiddenOnMapChange,
@@ -1115,8 +1145,11 @@ const ActivityPhotoPreview = <span class="cstat-no" title="statement not covered
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box
+      bgcolor={focused ? theme.palette.TwClrBgSecondary : undefined}
       borderBottom={isLast ? 'none' : `1px solid ${theme.palette.TwClrBgSecondary}`}
+      id={mediaItem.type === 'existing' ? `activity-media-item-${mediaItem.data.fileId}` : undefined}
       marginBottom='24px'
+      onClick={onClick}
       paddingBottom='24px'
       width='100%'
     &gt;
@@ -1206,15 +1239,19 @@ const ActivityPhotoPreview = <span class="cstat-no" title="statement not covered
 &nbsp;
 export interface ActivityMediaFormProps {
   activityId?: number;
+  focusedFileId?: number;
   maxFiles?: number;
   mediaFiles: ActivityMediaItem[];
+  onMediaFileClick: (fileId: number) =&gt; () =&gt; void;
   onMediaFilesChange: React.Dispatch&lt;React.SetStateAction&lt;ActivityMediaItem[]&gt;&gt;;
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ActivityMediaForm(</span>{
   activityId,
+  focusedFileId,
   maxFiles = <span class="branch-0 cbranch-no" title="branch not covered" >MAX_FILES,</span>
   mediaFiles,
+  onMediaFileClick,
   onMediaFilesChange,
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
@@ -1412,9 +1449,11 @@ export default function <span class="fstat-no" title="function not covered" >Act
             &lt;ActivityPhotoPreview
               activityId={activityId}
               currentPosition={index + 1}
+              focused={photo.type === 'existing' &amp;&amp; photo.data.fileId === focusedFileId}
               isLast={index === visibleMediaFiles.length - 1}
               key={`photo-${index}`}
               maxPosition={visibleMediaFiles.length}
+              onClick={photo.type === 'existing' ? onMediaFileClick(photo.data.fileId) : undefined}
               onCoverPhotoChange={getSetCoverPhoto(index)}
               onDelete={getDeletePhoto(index)}
               onHiddenOnMapChange={getSetHiddenOnMap(index)}
@@ -1435,7 +1474,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-07T19:59:21.357Z
+                at 2025-10-07T20:21:52.895Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
