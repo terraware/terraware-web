@@ -214,7 +214,7 @@ const ProjectPage = () => {
 
           {activeTab === 'activityLog' && isAllowedEditActivities && activityId && (
             <Button
-              icon='plus'
+              icon='iconEdit'
               id='editActivity'
               label={strings.EDIT_ACTIVITY}
               onClick={goToProjectActivityEdit}
