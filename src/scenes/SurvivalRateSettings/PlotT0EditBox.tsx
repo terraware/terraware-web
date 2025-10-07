@@ -433,8 +433,17 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                             renderOption={renderOptionSpecies}
                             displayLabel={renderOptionSpecies}
                             selectedValue={speciesSelectedValueHandler(row)}
-                            fullWidth={true}
                             toT={toTSpecies}
+                            selectStyles={{
+                              inputContainer: { width: '450px', 'max-width': '100%' },
+                              optionsContainer: { width: '450px', 'max-width': '100%' },
+                            }}
+                            sx={{
+                              '.textfield-container': {
+                                width: '450px !important',
+                                'max-width': '100%',
+                              },
+                            }}
                           />
                         </td>
                         <td>
@@ -445,6 +454,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                             onChange={handleNewSpeciesDensityChange(row.id)}
                             label={''}
                             min={0}
+                            sx={{ width: '68px' }}
                           />
                         </td>
                         <td>
