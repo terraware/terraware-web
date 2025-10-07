@@ -24,7 +24,7 @@ import { FilterConfig } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityDetailView from './ActivityDetailView';
-import ActivityStatusBadge from './ActivityStatusBadge';
+import ActivityStatusBadges from './ActivityStatusBadges';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
 
@@ -45,12 +45,6 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
   const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
 
   const activityType = useMemo(() => activityTypeLabel(activity.type, strings), [activity.type, strings]);
-
-  const isChanged = useMemo(() => {
-    return (
-      activity.modifiedTime && activity.createdTime && new Date(activity.modifiedTime) > new Date(activity.createdTime)
-    );
-  }, [activity.modifiedTime, activity.createdTime]);
 
   const coverPhotoURL = useMemo(() => {
     return coverPhoto
@@ -93,14 +87,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
           {activityType}
         </Typography>
 
-        {isAcceleratorRoute && (
-          <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginY={theme.spacing(1)}>
-            {isChanged && <ActivityStatusBadge status='Changed' />}
-            <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
-            {/* TODO: render badge for 'Do Not Use' when applicable */}
-            {/* TODO: render badge for 'Published' when applicable */}
-          </Box>
-        )}
+        {isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}
 
         <Typography>{activity.description}</Typography>
         {!isDesktop && <Typography>{activity.date}</Typography>}
