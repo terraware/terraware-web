@@ -367,7 +367,7 @@ export default function ActivityMediaForm({
     (currentIndex: number) => (newPosition: number) => {
       // create a copy of visible media files for reordering
       const visibleFiles = mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted);
-      const targetIndex = newPosition - 1; // Convert to 0-based index
+      const targetIndex = newPosition - 1; // convert to 0-based index
 
       if (targetIndex < 0 || targetIndex >= visibleFiles.length || currentIndex === targetIndex) {
         return;
