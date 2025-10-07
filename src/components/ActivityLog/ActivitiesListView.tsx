@@ -52,10 +52,10 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
 
   const coverPhotoURL = useMemo(() => {
     return coverPhoto
-      ? ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+      ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
           '{fileId}',
           coverPhoto.fileId.toString()
-        )
+        )}?maxHeight=200&maxWidth=200`
       : '/assets/activity-media.svg';
   }, [activity.id, coverPhoto]);
 
