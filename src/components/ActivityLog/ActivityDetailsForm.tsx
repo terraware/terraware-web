@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown, Textfield } from '@terraware/web-components';
@@ -50,6 +51,8 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import useMapDrawer from '../NewMap/useMapDrawer';
+import useMapUtils from '../NewMap/useMapUtils';
 import ActivityMediaForm, { ActivityMediaItem } from './ActivityMediaForm';
 import MapSplitView from './MapSplitView';
 
@@ -93,6 +96,12 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const updateActivityRequest = useAppSelector(selectActivityUpdate(saveActivityRequestId));
   const adminUpdateActivityRequest = useAppSelector(selectAdminActivityUpdate(saveActivityRequestId));
   const syncActivityMediaRequest = useAppSelector(selectSyncActivityMedia(syncMediaRequestId));
+
+  const [focusedFileId, setFocusedFileId] = useState<number>();
+  const mapRef = useRef<MapRef | null>(null);
+  const mapDrawerRef = useRef<HTMLDivElement | null>(null);
+  const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
+  const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
   useEffect(() => {
     const _source = query.get('source');
@@ -386,6 +395,42 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [onChange]
   );
 
+  const activityMarkerHighlighted = useCallback(
+    (_: number, fileId: number) => {
+      return fileId === focusedFileId;
+    },
+    [focusedFileId]
+  );
+
+  const onActivityMarkerClick = useCallback(
+    (_: number, fileId: number) => {
+      if (focusedFileId === fileId) {
+        setFocusedFileId(undefined);
+      } else {
+        setFocusedFileId(fileId);
+        scrollToElementById(`activity-media-item-${fileId}`);
+      }
+    },
+    [focusedFileId, scrollToElementById]
+  );
+
+  const onFileClicked = useCallback(
+    (fileId: number) => () => {
+      if (activity) {
+        const media = activity.media.find((mediaFile) => mediaFile.fileId === fileId);
+        const viewState = getCurrentViewState();
+        if (media && !media.isHiddenOnMap && media.geolocation && viewState) {
+          jumpTo({
+            latitude: media.geolocation.coordinates[1],
+            longitude: media.geolocation.coordinates[0],
+            zoom: viewState.zoom,
+          });
+        }
+      }
+    },
+    [activity, jumpTo, getCurrentViewState]
+  );
+
   if (!record) {
     return <></>;
   }
@@ -413,7 +458,14 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           width: '100%',
         }}
       >
-        <MapSplitView activities={isEditing && activity ? [activity] : []} projectId={projectId}>
+        <MapSplitView
+          activities={isEditing && activity ? [activity] : []}
+          activityMarkerHighlighted={activityMarkerHighlighted}
+          drawerRef={mapDrawerRef}
+          mapRef={mapRef}
+          projectId={projectId}
+          onActivityMarkerClick={onActivityMarkerClick}
+        >
           <Typography fontSize='20px' fontWeight='bold' marginBottom='24px' variant='h2'>
             {secondaryHeader}
           </Typography>
@@ -467,7 +519,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Grid>
             )}
 
-            <ActivityMediaForm activityId={activityId} mediaFiles={mediaFiles} onMediaFilesChange={setMediaFiles} />
+            <ActivityMediaForm
+              activityId={activityId}
+              focusedFileId={focusedFileId}
+              mediaFiles={mediaFiles}
+              onMediaFileClick={onFileClicked}
+              onMediaFilesChange={setMediaFiles}
+            />
           </Grid>
         </MapSplitView>
       </Card>

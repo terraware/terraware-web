@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -10,7 +10,7 @@ import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { Activity, activityTypeLabel } from 'src/types/Activity';
+import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -18,13 +18,17 @@ import ActivityStatusBadge from './ActivityStatusBadge';
 
 type ActivityDetailViewProps = {
   activity: Activity;
+  focusedFileId?: number;
   hoveredFileId?: number;
+  onMediaItemClick: (fileId: number) => () => void;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
 };
 
 const ActivityDetailView = ({
   activity,
+  focusedFileId,
   hoveredFileId,
+  onMediaItemClick,
   setHoverFileCallback,
 }: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
@@ -72,6 +76,15 @@ const ActivityDetailView = ({
     [location, navigate, query, strings.PROJECT_ACTIVITY]
   );
 
+  const mediaItemHoverCallback = useCallback(
+    (mediaItem: ActivityMediaFile, hovered: boolean) => () => {
+      if (mediaItem.geolocation && !mediaItem.isHiddenOnMap) {
+        setHoverFileCallback(mediaItem.fileId, hovered);
+      }
+    },
+    [setHoverFileCallback]
+  );
+
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
       <Grid item xs={12}>
@@ -109,8 +122,11 @@ const ActivityDetailView = ({
         <Grid item lg={6} xs={12} key={index}>
           <img
             alt={mediaItem?.caption}
-            onMouseEnter={setHoverFileCallback(mediaItem.fileId, true)}
-            onMouseLeave={setHoverFileCallback(mediaItem.fileId, false)}
+            id={`activity-media-item-${mediaItem.fileId}`}
+            onClick={onMediaItemClick(mediaItem.fileId)}
+            // Hover effects only for photos with corresponding markers
+            onMouseEnter={mediaItemHoverCallback(mediaItem, true)}
+            onMouseLeave={mediaItemHoverCallback(mediaItem, false)}
             src={ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
               '{fileId}',
               mediaItem.fileId.toString()
@@ -118,7 +134,10 @@ const ActivityDetailView = ({
             style={{
               aspectRatio: '4/3',
               backgroundColor: theme.palette.TwClrBgSecondary,
-              borderColor: hoveredFileId === mediaItem.fileId ? '#CC79A7' : theme.palette.TwClrBg,
+              borderColor:
+                hoveredFileId === mediaItem.fileId || focusedFileId === mediaItem.fileId
+                  ? '#CC79A7'
+                  : theme.palette.TwClrBg,
               borderStyle: 'solid',
               borderWidth: '4px',
               boxSizing: 'content-box',

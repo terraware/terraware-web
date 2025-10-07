@@ -27,9 +27,11 @@ const MAX_FILES = 20;
 type ActivityPhotoPreviewProps = {
   activityId?: number;
   currentPosition: number;
+  focused?: boolean;
   isLast?: boolean;
   maxPosition: number;
   mediaItem: ActivityMediaItem;
+  onClick?: () => void;
   onCoverPhotoChange: (isCover: boolean) => void;
   onDelete: () => void;
   onHiddenOnMapChange: (isHidden: boolean) => void;
@@ -40,9 +42,11 @@ type ActivityPhotoPreviewProps = {
 const ActivityPhotoPreview = ({
   activityId,
   currentPosition,
+  focused,
   isLast,
   maxPosition,
   mediaItem,
+  onClick,
   onCoverPhotoChange,
   onDelete,
   onHiddenOnMapChange,
@@ -140,8 +144,11 @@ const ActivityPhotoPreview = ({
 
   return (
     <Box
+      bgcolor={focused ? theme.palette.TwClrBgSecondary : undefined}
       borderBottom={isLast ? 'none' : `1px solid ${theme.palette.TwClrBgSecondary}`}
+      id={mediaItem.type === 'existing' ? `activity-media-item-${mediaItem.data.fileId}` : undefined}
       marginBottom='24px'
+      onClick={onClick}
       paddingBottom='24px'
       width='100%'
     >
@@ -231,15 +238,19 @@ const ActivityPhotoPreview = ({
 
 export interface ActivityMediaFormProps {
   activityId?: number;
+  focusedFileId?: number;
   maxFiles?: number;
   mediaFiles: ActivityMediaItem[];
+  onMediaFileClick: (fileId: number) => () => void;
   onMediaFilesChange: React.Dispatch<React.SetStateAction<ActivityMediaItem[]>>;
 }
 
 export default function ActivityMediaForm({
   activityId,
+  focusedFileId,
   maxFiles = MAX_FILES,
   mediaFiles,
+  onMediaFileClick,
   onMediaFilesChange,
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = useLocalization();
@@ -437,9 +448,11 @@ export default function ActivityMediaForm({
             <ActivityPhotoPreview
               activityId={activityId}
               currentPosition={index + 1}
+              focused={photo.type === 'existing' && photo.data.fileId === focusedFileId}
               isLast={index === visibleMediaFiles.length - 1}
               key={`photo-${index}`}
               maxPosition={visibleMediaFiles.length}
+              onClick={photo.type === 'existing' ? onMediaFileClick(photo.data.fileId) : undefined}
               onCoverPhotoChange={getSetCoverPhoto(index)}
               onDelete={getDeletePhoto(index)}
               onHiddenOnMapChange={getSetHiddenOnMap(index)}
