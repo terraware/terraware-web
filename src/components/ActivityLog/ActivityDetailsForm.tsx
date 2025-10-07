@@ -100,7 +100,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const [focusedFileId, setFocusedFileId] = useState<number>();
   const mapRef = useRef<MapRef | null>(null);
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
-  const { easeTo, getCurrentViewState } = useMapUtils(mapRef);
+  const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
   useEffect(() => {
@@ -420,7 +420,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         const media = activity.media.find((mediaFile) => mediaFile.fileId === fileId);
         const viewState = getCurrentViewState();
         if (media && !media.isHiddenOnMap && media.geolocation && viewState) {
-          easeTo({
+          jumpTo({
             latitude: media.geolocation.coordinates[1],
             longitude: media.geolocation.coordinates[0],
             zoom: viewState.zoom,
@@ -428,7 +428,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         }
       }
     },
-    [activity, easeTo, getCurrentViewState]
+    [activity, jumpTo, getCurrentViewState]
   );
 
   if (!record) {

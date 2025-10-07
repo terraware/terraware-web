@@ -123,7 +123,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
-  const { easeTo, getCurrentViewState } = useMapUtils(mapRef);
+  const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
@@ -410,7 +410,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
         const media = shownActivity.media.find((mediaFile) => mediaFile.fileId === fileId);
         const viewState = getCurrentViewState();
         if (media && !media.isHiddenOnMap && media.geolocation && viewState) {
-          easeTo({
+          jumpTo({
             latitude: media.geolocation.coordinates[1],
             longitude: media.geolocation.coordinates[0],
             zoom: viewState.zoom,
@@ -418,7 +418,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
         }
       }
     },
-    [shownActivity, easeTo, focusedFileId, getCurrentViewState]
+    [shownActivity, jumpTo, focusedFileId, getCurrentViewState]
   );
 
   // update url and navigation history when navigating to activity detail view
