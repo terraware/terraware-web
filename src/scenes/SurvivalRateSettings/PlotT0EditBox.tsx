@@ -317,7 +317,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                     toT={toTObservation}
                     fullWidth={true}
                     disabled={t0Origin === 'manual'}
-                    sx={{ width: '300px' }}
+                    sx={{ width: '325px' }}
                   />
                 </Box>
                 <Box display='flex' sx={{ alignItems: 'center' }}>
