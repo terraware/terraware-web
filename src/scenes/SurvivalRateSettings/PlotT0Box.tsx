@@ -80,7 +80,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                   <table>
                     <thead style={{ textAlign: 'left' }}>
                       <tr>
-                        <th>
+                        <th style={{ paddingRight: '64px' }}>
                           <Box display='flex'>
                             {strings.SPECIES} <IconTooltip title={strings.SPECIES_TOOLTIP} />
                           </Box>
@@ -96,12 +96,12 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                     <tbody>
                       {t0Plot.densityData.map((densityData, index) => (
                         <tr key={index}>
-                          <td>{species.find((sp) => sp.id === densityData.speciesId)?.scientificName}</td>
+                          <td style={{ paddingRight: '64px' }}>{species.find((sp) => sp.id === densityData.speciesId)?.scientificName}</td>
                           <td>{densityData.plotDensity}</td>
                         </tr>
                       ))}
                       <tr>
-                        <td>
+                        <td style={{ paddingRight: '64px' }}>
                           <Box display={'flex'}>
                             <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
                             <IconTooltip title={strings.TOTAL_DENSITY_TOOLTIP} />
