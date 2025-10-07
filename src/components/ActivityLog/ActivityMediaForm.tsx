@@ -61,10 +61,6 @@ const ActivityPhotoPreview = ({
   const [isHeicPlaceholder, setIsHeicPlaceholder] = useState<boolean | undefined>();
 
   useEffect(() => {
-    if (isHeicPlaceholder !== undefined) {
-      return;
-    }
-
     const checkHeicPlaceholder = async () => {
       if (mediaItem.type === 'new') {
         const shouldShow = await shouldShowHeicPlaceholder(mediaItem.data.file);
@@ -75,7 +71,7 @@ const ActivityPhotoPreview = ({
     };
 
     void checkHeicPlaceholder();
-  }, [isHeicPlaceholder, mediaItem]);
+  }, [mediaItem]);
 
   const url = useMemo(() => {
     if (mediaItem.type === 'new') {
