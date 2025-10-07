@@ -44,7 +44,14 @@ async function isHeicSupportedByBrowser(): Promise<boolean> {
   }
 
   try {
-    const heicBlob = new Blob([''], { type: 'image/heic' });
+    // Use a minimal valid HEIC image for detection (base64 encoded)
+    const heicBase64 = 'AAAAHGZ0eXBIRUlDAABtaW5mAAAAAGhlaWMAAAAQc3BpbgEAAAAAAAAAAA=='; // Minimal HEIC header
+    const binaryString = atob(heicBase64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const heicBlob = new Blob([bytes], { type: 'image/heic' });
     await createImageBitmap(heicBlob);
     heicSupportCache = true;
     return true;
