@@ -9,6 +9,21 @@ import { useSyncNavigate } from './useSyncNavigate';
 export default function useNavigateTo() {
   const navigate = useSyncNavigate();
 
+  const searchParamsWithMapViewState = () => {
+    const params = new URLSearchParams(location.search);
+    const newParams = new URLSearchParams();
+    if (params.has('lat')) {
+      newParams.set('lat', params.get('lat')!);
+    }
+    if (params.has('lng')) {
+      newParams.set('lng', params.get('lng')!);
+    }
+    if (params.has('zoom')) {
+      newParams.set('zoom', params.get('zoom')!);
+    }
+    return newParams;
+  };
+
   return useMemo(
     () => ({
       goToAccelerator: () => {
@@ -16,26 +31,34 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorActivityCreate: (projectId: number) => {
+        const params = searchParamsWithMapViewState();
+        params.set('source', window.location.pathname);
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
-          search: `source=${window.location.pathname}`,
+          search: params.toString(),
         });
       },
 
       goToAcceleratorActivityEdit: (projectId: number, activityId: number) => {
+        const params = searchParamsWithMapViewState();
+        params.set('source', window.location.pathname);
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
             ':activityId',
             `${activityId}`
           ),
-          search: `source=${window.location.pathname}`,
+          search: params.toString(),
         });
       },
 
       goToAcceleratorActivityLog: (activityId?: number) => {
+        const params = searchParamsWithMapViewState();
+        if (activityId !== undefined) {
+          params.set('activityId', activityId.toString());
+        }
         navigate({
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG,
-          search: activityId ? `activityId=${activityId}` : undefined,
+          search: params.toString(),
         });
       },
 
@@ -89,22 +112,32 @@ export default function useNavigateTo() {
         }),
 
       goToActivityCreate: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`) });
+        const params = searchParamsWithMapViewState();
+        navigate({
+          pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
+          search: params.toString(),
+        });
       },
 
       goToActivityEdit: (projectId: number, activityId: number) => {
+        const params = searchParamsWithMapViewState();
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
             ':activityId',
             `${activityId}`
           ),
+          search: params.toString(),
         });
       },
 
       goToActivityLog: (activityId?: number) => {
+        const params = searchParamsWithMapViewState();
+        if (activityId !== undefined) {
+          params.set('activityId', activityId.toString());
+        }
         navigate({
           pathname: APP_PATHS.ACTIVITY_LOG,
-          search: activityId ? `activityId=${activityId}` : undefined,
+          search: params.toString(),
         });
       },
 
@@ -285,11 +318,16 @@ export default function useNavigateTo() {
           search: 'tab=participants',
         }),
 
-      goToParticipantProject: (projectId: number, activityId?: number) =>
+      goToParticipantProject: (projectId: number, activityId?: number) => {
+        const params = searchParamsWithMapViewState();
+        if (activityId !== undefined) {
+          params.set('activityId', activityId.toString());
+        }
         navigate({
           pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
-          search: activityId ? `activityId=${activityId}` : undefined,
-        }),
+          search: params.toString(),
+        });
+      },
 
       goToParticipantProjectEdit: (projectId: number) =>
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),

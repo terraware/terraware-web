@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
+import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
@@ -28,7 +29,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const { reload } = useApplicationData();
   const navigate = useSyncNavigate();
 
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
+  const [isReviewModalOpen, , openReviewModal, closeReviewModal] = useBoolean(false);
 
   const onReviewSubmitted = useCallback(() => {
     reload(() => navigate(0));
@@ -40,7 +41,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
         <ApplicationReviewModal
           application={application}
           open={isReviewModalOpen}
-          onClose={() => setIsReviewModalOpen(false)}
+          onClose={closeReviewModal}
           onSuccess={onReviewSubmitted}
         />
       )}
@@ -81,9 +82,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
             // they also lack permission to review the application or leave feedback
             disabled={!canUpdateInternalComments}
             label={strings.REVIEW_APPLICATION}
-            onClick={() => {
-              setIsReviewModalOpen(true);
-            }}
+            onClick={openReviewModal}
             size={'small'}
             priority={'secondary'}
             style={{
