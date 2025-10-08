@@ -38,6 +38,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Quantité de croissance active (avant),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité de croissance active ne peut être inférieure à 0,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Quantité de croissance active ({0} restant),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Quantité de croissance active *,b8c156d3
+ACTIVITY_DELETED,Activité supprimée,e2df95fd
 ACTIVITY_LOG,Journal d'activité,112b2d64
 ACTIVITY_TYPE,Type d’activité,5f057b66
 ACTUAL,Réel,1235cf68
@@ -416,6 +417,8 @@ DELETE_ACCESSION_MESSAGE,Vous vous apprêtez à supprimer l'accession {0}.,dd39f
 DELETE_ACCOUNT,Supprimer le compte,c3f369c2
 DELETE_ACCOUNT_CONFIRMATION,Êtes-vous sûr de vouloir supprimer votre compte ? Cette opération ne peut être annulée.,ca782b20
 DELETE_ACCOUNT_ERROR,Une erreur s'est produite lors de la suppression de votre compte.,6105987b
+DELETE_ACTIVITY,Supprimer l'activité,18958b95
+DELETE_ACTIVITY_CONFIRM,Êtes-vous sûr de vouloir supprimer cette activité ? Toutes les données associées à cette activité seront supprimées.,e64e17b5
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,Êtes-vous sûr de vouloir supprimer l'espèce ?,43a238c7
 DELETE_FUNDING_ENTITY,Supprimer l’entité de financement,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Tous les financeurs associés à cette entité de financement seront supprimés.,cedce711

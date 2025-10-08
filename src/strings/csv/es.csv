@@ -38,6 +38,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Cantidad de crecimiento activo (antes),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de crecimiento activo no puede ser menor que 0.,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Cantidad de crecimiento activo ({0} restante),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Cantidad de crecimiento activo *,b8c156d3
+ACTIVITY_DELETED,Actividad eliminada,e2df95fd
 ACTIVITY_LOG,Registro de actividades,112b2d64
 ACTIVITY_TYPE,Tipo de actividad,5f057b66
 ACTUAL,Real,1235cf68
@@ -417,6 +418,8 @@ DELETE_ACCESSION_MESSAGE,Está a punto de borrar la accesión {0}.,dd39f8dd
 DELETE_ACCOUNT,Eliminar cuenta,c3f369c2
 DELETE_ACCOUNT_CONFIRMATION,¿Seguro que desea eliminar su cuenta? Esta acción no puede deshacerse.,ca782b20
 DELETE_ACCOUNT_ERROR,Ocurrió un error al eliminar su cuenta.,6105987b
+DELETE_ACTIVITY,Eliminar actividad,18958b95
+DELETE_ACTIVITY_CONFIRM,¿Está seguro de que desea eliminar esta actividad? Todos los datos de la actividad serán eliminados.,e64e17b5
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,¿Está seguro de que desea eliminar la especie?,43a238c7
 DELETE_FUNDING_ENTITY,Eliminar entidad financiadora,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Se eliminarán todos los financiadores asociados a esta entidad financiadora.,cedce711
