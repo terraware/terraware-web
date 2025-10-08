@@ -1,3 +1,4 @@
+006a483e89a SW-7504 When deleting and then adding media to activity, numbering is off (#4562)
 e53afaafb2f SW-7499 Fix Plot showing as "Not set" when using observation data (#4559)
 97539fdc306 SW-7498 Fix warning dialog and error message are showing up when not expected (#4558)
 5485318f753 SW-7242: Cover photo and preview photo not showing up for HEIC photos (#4554)

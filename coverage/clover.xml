@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1759937365114" clover="3.2.0">
-  <project timestamp="1759937365114" name="All files">
-    <metrics statements="34431" coveredstatements="1347" conditionals="24074" coveredconditionals="391" methods="10503" coveredmethods="213" elements="69008" coveredelements="1951" complexity="0" loc="34431" ncloc="34431" packages="280" files="1356" classes="1356"/>
+<coverage generated="1759955074928" clover="3.2.0">
+  <project timestamp="1759955074928" name="All files">
+    <metrics statements="34434" coveredstatements="1347" conditionals="24076" coveredconditionals="391" methods="10504" coveredmethods="213" elements="69014" coveredelements="1951" complexity="0" loc="34434" ncloc="34434" packages="280" files="1356" classes="1356"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1764,7 +1764,7 @@
       </file>
     </package>
     <package name="src.components.ActivityLog">
-      <metrics statements="601" coveredstatements="0" conditionals="449" coveredconditionals="0" methods="159" coveredmethods="0"/>
+      <metrics statements="604" coveredstatements="0" conditionals="451" coveredconditionals="0" methods="160" coveredmethods="0"/>
       <file name="ActivitiesEmptyState.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesEmptyState.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -2176,7 +2176,7 @@
         <line num="13" count="0" type="stmt"/>
       </file>
       <file name="ActivityMediaForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityMediaForm.tsx">
-        <metrics statements="119" coveredstatements="0" conditionals="88" coveredconditionals="0" methods="39" coveredmethods="0"/>
+        <metrics statements="122" coveredstatements="0" conditionals="90" coveredconditionals="0" methods="40" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
@@ -2295,7 +2295,10 @@
         <line num="460" count="0" type="stmt"/>
         <line num="479" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="480" count="0" type="stmt"/>
-        <line num="483" count="0" type="stmt"/>
+        <line num="484" count="0" type="stmt"/>
+        <line num="486" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="488" count="0" type="stmt"/>
+        <line num="490" count="0" type="stmt"/>
       </file>
       <file name="ActivityStatusBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityStatusBadge.tsx">
         <metrics statements="11" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
