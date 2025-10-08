@@ -78,4 +78,5 @@ export const activityTypeLabel = (activityType: ActivityType, strings: typeof de
   }
 };
 
-export type MockActivityStatus = 'Changed' | 'Do Not Use' | 'Not Verified' | 'Published' | 'Verified';
+export type ActivityStatus = Activity['status'];
+export const ACTIVITY_STATUSES = ['Verified', 'Not Verified', 'Do Not Use'];

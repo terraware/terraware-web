@@ -276,6 +276,7 @@ CHANGE_DEFAULT_WEIGHT_SYSTEM,Puede cambiar el sistema de peso por defecto de {0}
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Cambiar estado de germinación/establecimiento,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Cambiar estado de aclimatación,b734dbd7
 CHANGE_TO,Cambiar a {0},8423817d
+CHANGED,Cambiado,f88927ec
 CHANGES,Cambios,47809a57
 CHANGES_SAVED,¡Cambios guardados!,709a9559
 CHECK_DATA,Comprobar datos,f99c93bc
@@ -470,6 +471,7 @@ DEV_SERVER_ERROR,Servidor no disponible (se puede reiniciar con nuevos cambios e
 DIAMETER_AT_BREAST_HEIGHT,Diámetro a la altura del pecho (DAP) en la madurez (cm),6b42a16f
 DIAMETER_CM,Diámetro (cm),242d8114
 DISMISS,Cerrar notificación,a56709f4
+DO_NOT_USE,No usar,6950f9e5
 DOC_PRODUCER,Productor de documentos,e40f8aa1
 DOCUMENT,Documento,57650c76
 DOCUMENT_DETAILS,Editar detalles del documento,92155983
@@ -1108,6 +1110,7 @@ NOT_NEEDED,No es necesario,dc4188cf
 NOT_OBSERVED,No observado,4a9890a2
 NOT_SET,No establecido,6b047afe
 NOT_SUBMITTED,No se ha enviado,e40a2b1d
+NOT_VERIFIED,No verificado,fbd9066a
 NOT_YET,Aún no,77976aa8
 NOTE_ANY_ISSUES,¿Todo lo anterior parece correcto? Anote cualquier problema.,133db1c4
 NOTE_COLON,Nota:,00769bbe
@@ -1454,6 +1457,7 @@ PROVIDE_PLANT_DENSITY_PER_SPECIES,Proporcione la densidad de plantas por especie
 PROVIDE_PLANT_DENSITY_PER_SPECIES_TOOLTIP,Ingrese las densidades para cada especie plantada. Se muestran las densidades de plantas basadas en los datos del Registro de Retiros y pueden ser ingresadas como las densidades de plantas.,3b3ef9f3
 PUBLISH,Publicar,c1d4ecf7
 PUBLISH_TO_FUNDER_PORTAL,Publicar en el portal del financiador,ec2ddbec
+PUBLISHED,Publicado,baa0bfba
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
 PURPOSE,Propósito,ff06abab
 PURPOSE_REQUIRED,Propósito *,3f585469
