@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Pagination, Typography, useTheme } from '@mui/material';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -129,6 +129,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
   const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
 
@@ -338,6 +340,30 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     }));
   }, [results, strings]);
 
+  // Flatten activities for pagination
+  const flatActivities = useMemo(() => {
+    return groupedActivities.flatMap((group) => group.activities);
+  }, [groupedActivities]);
+
+  const totalPages = useMemo(() => {
+    return Math.ceil(flatActivities.length / itemsPerPage);
+  }, [flatActivities.length, itemsPerPage]);
+
+  const paginatedActivities = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return flatActivities.slice(startIndex, endIndex);
+  }, [flatActivities, currentPage, itemsPerPage]);
+
+  const handlePageChange = useCallback((_event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
   const activityMarkerHighlighted = useCallback(
     (activityId: number, fileId: number) => {
       if (showActivityId !== undefined) {
@@ -470,35 +496,46 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
             />
             <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
           </Box>
-          {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
+          {(!flatActivities || flatActivities.length === 0) && !busy ? (
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
               {strings.NO_ACTIVITIES_TO_SHOW}
             </Typography>
           ) : (
-            groupedActivities.map(({ quarter, activities: groupActivities }) => (
-              <Fragment key={quarter}>
-                <Typography
-                  color={theme.palette.TwClrTxt}
-                  fontSize='20px'
-                  fontWeight={600}
-                  lineHeight='28px'
-                  marginY={theme.spacing(1)}
-                >
-                  {quarter}
-                </Typography>
-
-                {groupActivities.map((activity) => (
-                  <ActivityListItem
-                    activity={activity}
-                    focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
-                    key={activity.id}
-                    onClick={getOnClickActivityListItem(activity.id)}
-                    onMouseEnter={setHoverActivityCallback(activity.id, true)}
-                    onMouseLeave={setHoverActivityCallback(activity.id, false)}
+            <>
+              {paginatedActivities.map((activity) => (
+                <ActivityListItem
+                  activity={activity}
+                  focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
+                  key={activity.id}
+                  onClick={getOnClickActivityListItem(activity.id)}
+                  onMouseEnter={setHoverActivityCallback(activity.id, true)}
+                  onMouseLeave={setHoverActivityCallback(activity.id, false)}
+                />
+              ))}
+              {totalPages > 1 && (
+                <Box display='flex' justifyContent='center' marginTop={theme.spacing(3)} alignItems='center'>
+                  <Typography fontSize={'14px'} paddingRight={'8px'}>
+                    {strings.formatString(
+                      strings.PAGINATION_FOOTER,
+                      (currentPage - 1) * itemsPerPage + 1,
+                      Math.min(currentPage * itemsPerPage, flatActivities.length),
+                      flatActivities.length
+                    )}
+                  </Typography>
+                  <Pagination
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    sx={{
+                      '.MuiButtonBase-root.MuiPaginationItem-root.Mui-selected': {
+                        backgroundColor: theme.palette.TwClrBgGhostActive,
+                        borderRadius: '4px',
+                      },
+                    }}
                   />
-                ))}
-              </Fragment>
-            ))
+                </Box>
+              )}
+            </>
           )}
         </>
       )}
