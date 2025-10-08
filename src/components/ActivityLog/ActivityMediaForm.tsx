@@ -480,10 +480,15 @@ export default function ActivityMediaForm({
             return null;
           }
 
+          // Calculate position excluding deleted items
+          const currentPosition = mediaFiles
+            .slice(0, index + 1)
+            .filter((item) => !(item.type === 'existing' && item.isDeleted)).length;
+
           return (
             <ActivityPhotoPreview
               activityId={activityId}
-              currentPosition={index + 1}
+              currentPosition={currentPosition}
               focused={photo.type === 'existing' && photo.data.fileId === focusedFileId}
               isLast={index === visibleMediaFiles.length - 1}
               key={`photo-${index}`}
