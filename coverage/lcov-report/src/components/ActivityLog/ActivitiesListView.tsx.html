@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/186</span>
+                <span class='fraction'>0/184</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/134</span>
+                <span class='fraction'>0/127</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/175</span>
+                <span class='fraction'>0/173</span>
             </div>
         
             
@@ -572,20 +572,7 @@
 <a name='L507'></a><a href='#L507'>507</a>
 <a name='L508'></a><a href='#L508'>508</a>
 <a name='L509'></a><a href='#L509'>509</a>
-<a name='L510'></a><a href='#L510'>510</a>
-<a name='L511'></a><a href='#L511'>511</a>
-<a name='L512'></a><a href='#L512'>512</a>
-<a name='L513'></a><a href='#L513'>513</a>
-<a name='L514'></a><a href='#L514'>514</a>
-<a name='L515'></a><a href='#L515'>515</a>
-<a name='L516'></a><a href='#L516'>516</a>
-<a name='L517'></a><a href='#L517'>517</a>
-<a name='L518'></a><a href='#L518'>518</a>
-<a name='L519'></a><a href='#L519'>519</a>
-<a name='L520'></a><a href='#L520'>520</a>
-<a name='L521'></a><a href='#L521'>521</a>
-<a name='L522'></a><a href='#L522'>522</a>
-<a name='L523'></a><a href='#L523'>523</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L510'></a><a href='#L510'>510</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -639,23 +626,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1133,7 +1107,7 @@ import { FilterConfig } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityDetailView from './ActivityDetailView';
-import ActivityStatusBadge from './ActivityStatusBadge';
+import ActivityStatusBadges from './ActivityStatusBadges';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
 &nbsp;
@@ -1154,12 +1128,6 @@ const ActivityListItem = <span class="cstat-no" title="statement not covered" ><
   const coverPhoto = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >activity.media.find(<span class="fstat-no" title="function not covered" >(f</span>ile) =&gt; <span class="cstat-no" title="statement not covered" >file.isCoverPhoto)</span>,</span> [activity.media]);</span>
 &nbsp;
   const activityType = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >activityTypeLabel(activity.type, strings),</span> [activity.type, strings]);</span>
-&nbsp;
-  const isChanged = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      activity.modifiedTime &amp;&amp; activity.createdTime &amp;&amp; new Date(activity.modifiedTime) &gt; new Date(activity.createdTime)
-    );
-  }, [activity.modifiedTime, activity.createdTime]);
 &nbsp;
   const coverPhotoURL = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return coverPhoto</span>
@@ -1202,14 +1170,7 @@ const ActivityListItem = <span class="cstat-no" title="statement not covered" ><
           {activityType}
         &lt;/Typography&gt;
 &nbsp;
-        {isAcceleratorRoute &amp;&amp; (
-          &lt;Box marginY={theme.spacing(1)}&gt;
-            {isChanged &amp;&amp; &lt;ActivityStatusBadge status='Changed' /&gt;}
-            &lt;ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} /&gt;
-            {/* TODO: render badge for 'Do Not Use' when applicable */}
-            {/* TODO: render badge for 'Published' when applicable */}
-          &lt;/Box&gt;
-        )}
+        {isAcceleratorRoute &amp;&amp; &lt;ActivityStatusBadges activity={activity} /&gt;}
 &nbsp;
         &lt;Typography&gt;{activity.description}&lt;/Typography&gt;
         {!isDesktop &amp;&amp; &lt;Typography&gt;{activity.date}&lt;/Typography&gt;}
@@ -1636,7 +1597,7 @@ export default ActivitiesListView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-07T23:06:35.758Z
+                at 2025-10-08T00:36:01.565Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

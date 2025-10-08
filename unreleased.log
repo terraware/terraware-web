@@ -1,3 +1,4 @@
+9e2cc5846fa Adjust activity status badge placement (#4556)
 5de2fd18aa0 SW-7500: "Edit Activity" should show edit icon instead of + icon (#4555)
 15710616dba SW-7495 If challenge is not empty, validate that mitigation is not empty before saving (#4553)
 846593a514c Activity Log: Fix navigation bug (#4552)
