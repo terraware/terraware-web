@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, FileChooser, Textfield } from '@terraware/web-components';
@@ -8,6 +8,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
+import { shouldShowHeicPlaceholder } from 'src/utils/images';
 
 export type ActivityMediaPhoto = {
   caption?: string;
@@ -57,9 +58,24 @@ const ActivityPhotoPreview = ({
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
 
+  const [isHeicPlaceholder, setIsHeicPlaceholder] = useState<boolean | undefined>();
+
+  useEffect(() => {
+    const checkHeicPlaceholder = async () => {
+      if (mediaItem.type === 'new') {
+        const shouldShow = await shouldShowHeicPlaceholder(mediaItem.data.file);
+        setIsHeicPlaceholder(shouldShow);
+      } else {
+        setIsHeicPlaceholder(false);
+      }
+    };
+
+    void checkHeicPlaceholder();
+  }, [mediaItem]);
+
   const url = useMemo(() => {
     if (mediaItem.type === 'new') {
-      return URL.createObjectURL(mediaItem.data.file);
+      return isHeicPlaceholder ? '/assets/activity-media.svg' : URL.createObjectURL(mediaItem.data.file);
     } else if (mediaItem.type === 'existing' && activityId) {
       return ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activityId.toString()).replace(
         '{fileId}',
@@ -68,7 +84,7 @@ const ActivityPhotoPreview = ({
     } else {
       return '';
     }
-  }, [activityId, mediaItem]);
+  }, [activityId, mediaItem, isHeicPlaceholder]);
 
   const caption = useMemo(() => mediaItem.data.caption || '', [mediaItem]);
 
@@ -154,7 +170,27 @@ const ActivityPhotoPreview = ({
     >
       <Grid container spacing={2} textAlign='left'>
         <Grid item sm='auto' xs={12}>
-          <PhotoPreview imgUrl={url} includeTrashIcon={false} onTrashClick={onDelete} />
+          <Box position='relative'>
+            <PhotoPreview imgUrl={url} includeTrashIcon={false} onTrashClick={onDelete} />
+            {isHeicPlaceholder && (
+              <Box
+                sx={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                  borderRadius: 1,
+                  bottom: 4,
+                  color: 'white',
+                  fontSize: '10px',
+                  left: 4,
+                  padding: '2px 6px',
+                  position: 'absolute',
+                  right: 4,
+                  textAlign: 'center',
+                }}
+              >
+                {strings.HEIC_PREVIEW}
+              </Box>
+            )}
+          </Box>
         </Grid>
 
         <Grid item sm={true} xs={12}>
@@ -426,7 +462,7 @@ export default function ActivityMediaForm({
       <Grid item xs={12}>
         {!fileLimitReached && (
           <FileChooser
-            acceptFileType='image/jpeg, image/png'
+            acceptFileType='image/heic, image/jpeg, image/png'
             chooseFileText={strings.CHOOSE_FILE}
             maxFiles={maxFiles}
             multipleSelection
