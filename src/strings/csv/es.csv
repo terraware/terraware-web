@@ -757,7 +757,6 @@ HARDENING_OFF_QUANTITY_REMAINING,Cantidad en aclimatación ({0} restantes),19e39
 HARDENING_OFF_QUANTITY_REQUIRED,Cantidad en aclimatación *,8bda8f0f
 HAS_CHANGED,ha cambiado,089c641e
 HECTARES,Hectáreas,316902d7
-HEIC_PREVIEW,Vista previa HEIC,eac42010
 HEIGHT_AT_MATURITY,Altura en la madurez (cm),f8025719
 HEIGHT_M,Altura (m),fe61fc34
 HELP_SUPPORT,Ayuda y soporte,477f3e22
@@ -1380,6 +1379,7 @@ PREPARATION_MATERIALS,Materiales de preparación,c6fd2575
 PRESCREEN,Preselección,9a38127f
 PRESCREEN_FAILED,Prueba de selección fallida,2a2dc3e9
 PREVIEW,Vista previa,a2aefa10
+PREVIEW_WILL_DISPLAY_AFTER_SAVING,La vista previa se mostrará después de guardar,475b4844
 PREVIOUS,Anterior,156ee39e
 PREVIOUS_25M_PLOT,Parcela anterior de 25x25 m,d94f2944
 PREVIOUS_25M_PLOTS,Parcelas de 25 x 25 m anteriores,f38d3ea7

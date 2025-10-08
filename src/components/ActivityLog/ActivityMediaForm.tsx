@@ -187,7 +187,7 @@ const ActivityPhotoPreview = ({
                   textAlign: 'center',
                 }}
               >
-                {strings.HEIC_PREVIEW}
+                {strings.PREVIEW_WILL_DISPLAY_AFTER_SAVING}
               </Box>
             )}
           </Box>
