@@ -48,7 +48,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
           <Typography>{plot.name}</Typography>
         </Box>
         <Box flexGrow={1} display={'flex'} alignItems={'center'}>
-          {t0Plot && !someWithdrawnSpeciesMissing ? (
+          {t0Plot && (t0Plot.observationId || (!t0Plot.observationId && !someWithdrawnSpeciesMissing)) ? (
             <Box>
               <Box display='flex' paddingBottom={3}>
                 <Typography color={theme.palette.TwClrTxtSuccess} fontWeight={500} paddingRight={2}>
