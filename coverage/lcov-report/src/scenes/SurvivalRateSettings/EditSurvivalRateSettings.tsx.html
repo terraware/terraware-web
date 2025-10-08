@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/82</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/82</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
@@ -274,7 +274,13 @@
 <a name='L209'></a><a href='#L209'>209</a>
 <a name='L210'></a><a href='#L210'>210</a>
 <a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,6 +396,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -411,6 +421,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -600,13 +612,17 @@ const EditSurvivalRateSettings = <span class="cstat-no" title="statement not cov
   }, [navigate, plantingSiteId]);
 &nbsp;
   const saveSettings = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!record.plots || record.plots.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      goToViewSettings();</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
     let shouldShowWarning = <span class="cstat-no" title="statement not covered" >false;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    withdrawnSpeciesPlots?.forEach(<span class="fstat-no" title="function not covered" >(w</span>ithdrawnPlot) =&gt; {</span>
       const correspondingPlot = <span class="cstat-no" title="statement not covered" >record.plots.find(</span>
 <span class="fstat-no" title="function not covered" >        (p</span>lot) =&gt; <span class="cstat-no" title="statement not covered" >plot.monitoringPlotId.toString() === withdrawnPlot.monitoringPlotId.toString()</span>
       );
-<span class="cstat-no" title="statement not covered" >      if (correspondingPlot) {</span>
+<span class="cstat-no" title="statement not covered" >      if (correspondingPlot &amp;&amp; !correspondingPlot.observationId) {</span>
 <span class="cstat-no" title="statement not covered" >        withdrawnPlot.species.forEach(<span class="fstat-no" title="function not covered" >(w</span>ithdrawnSpecies) =&gt; {</span>
           const correspondingSpecies = <span class="cstat-no" title="statement not covered" >correspondingPlot.densityData.find(</span>
 <span class="fstat-no" title="function not covered" >            (d</span>enData) =&gt; <span class="cstat-no" title="statement not covered" >denData.speciesId.toString() === withdrawnSpecies.speciesId.toString()</span>
@@ -619,11 +635,13 @@ const EditSurvivalRateSettings = <span class="cstat-no" title="statement not cov
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    record.plots.forEach(<span class="fstat-no" title="function not covered" >(p</span>lot) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      plot.densityData.forEach(<span class="fstat-no" title="function not covered" >(d</span>enData) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        if (denData.plotDensity === undefined || denData.plotDensity === null) {</span>
-<span class="cstat-no" title="statement not covered" >          shouldShowWarning = true;</span>
-        }
-      });
+<span class="cstat-no" title="statement not covered" >      if (!plot.observationId) {</span>
+<span class="cstat-no" title="statement not covered" >        plot.densityData.forEach(<span class="fstat-no" title="function not covered" >(d</span>enData) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          if (denData.plotDensity === undefined || denData.plotDensity === null) {</span>
+<span class="cstat-no" title="statement not covered" >            shouldShowWarning = true;</span>
+          }
+        });
+      }
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (shouldShowWarning) {</span>
@@ -633,7 +651,7 @@ const EditSurvivalRateSettings = <span class="cstat-no" title="statement not cov
 &nbsp;
     const saveRequest = <span class="cstat-no" title="statement not covered" >dispatch(requestAssignT0SiteData(record));</span>
 <span class="cstat-no" title="statement not covered" >    setAssignRequestId(saveRequest.requestId);</span>
-  }, [dispatch, record, withdrawnSpeciesPlots]);
+  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (saveResponse?.status === 'success') {</span>
@@ -703,7 +721,7 @@ export default EditSurvivalRateSettings;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-08T04:23:47.399Z
+                at 2025-10-08T15:29:24.370Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
