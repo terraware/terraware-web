@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox, Dropdown, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, Dropdown, Textfield } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
@@ -15,18 +15,20 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import {
   requestAdminCreateActivity,
   requestAdminGetActivity,
   requestAdminUpdateActivity,
   requestCreateActivity,
+  requestDeleteActivity,
   requestGetActivity,
   requestSyncActivityMedia,
   requestUpdateActivity,
 } from 'src/redux/features/activities/activitiesAsyncThunks';
 import {
   selectActivityCreate,
+  selectActivityDelete,
   selectActivityGet,
   selectActivityUpdate,
   selectAdminActivityCreate,
@@ -55,6 +57,7 @@ import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
 import ActivityMediaForm, { ActivityMediaItem } from './ActivityMediaForm';
 import ActivityStatusBadges from './ActivityStatusBadges';
+import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
 
 interface ActivityDetailsFormProps {
@@ -68,6 +71,7 @@ type FormRecord = Partial<SavableActivity> | undefined;
 
 export default function ActivityDetailsForm({ activityId, projectId }: ActivityDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
+  const { isAllowed } = useUser();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
@@ -88,7 +92,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const [syncMediaRequestId, setSyncMediaRequestId] = useState('');
   const [getActivityRequestId, setGetActivityRequestId] = useState('');
   const [saveActivityRequestId, setSaveActivityRequestId] = useState('');
+  const [deleteActivityRequestId, setDeleteActivityRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
+  const [deleteActivityModalOpen, setDeleteActivityModalOpen] = useState<boolean>(false);
 
   const getActivityRequest = useAppSelector(selectActivityGet(getActivityRequestId));
   const adminGetActivityRequest = useAppSelector(selectAdminActivityGet(getActivityRequestId));
@@ -97,12 +103,23 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const updateActivityRequest = useAppSelector(selectActivityUpdate(saveActivityRequestId));
   const adminUpdateActivityRequest = useAppSelector(selectAdminActivityUpdate(saveActivityRequestId));
   const syncActivityMediaRequest = useAppSelector(selectSyncActivityMedia(syncMediaRequestId));
+  const deleteActivityRequest = useAppSelector(selectActivityDelete(deleteActivityRequestId));
 
   const [focusedFileId, setFocusedFileId] = useState<number>();
   const mapRef = useRef<MapRef | null>(null);
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
+
+  const organization = useMemo(
+    () => (isAcceleratorRoute ? undefined : selectedOrganization),
+    [isAcceleratorRoute, selectedOrganization]
+  );
+
+  const isAllowedDeleteActivitiesNonPublished = useMemo(
+    () => isAllowed('DELETE_ACTIVITIES_NON_PUBLISHED', { organization }),
+    [isAllowed, organization]
+  );
 
   useEffect(() => {
     const _source = query.get('source');
@@ -368,6 +385,18 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
   }, [navToActivityLog, snackbar, strings.GENERIC_ERROR, syncActivityMediaRequest]);
 
+  // handle delete activity responses
+  useEffect(() => {
+    if (deleteActivityRequest?.status === 'error') {
+      setBusy(false);
+      snackbar.toastError(strings.GENERIC_ERROR);
+    } else if (deleteActivityRequest?.status === 'success') {
+      setBusy(false);
+      snackbar.toastSuccess(strings.SUCCESS);
+      navToActivityLog();
+    }
+  }, [deleteActivityRequest, navToActivityLog, setBusy, snackbar, strings]);
+
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
       label: activityTypeLabel(activityType, strings),
@@ -432,6 +461,26 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [activity, jumpTo, getCurrentViewState]
   );
 
+  const handleDeleteActivity = useCallback(() => {
+    setDeleteActivityModalOpen(true);
+  }, []);
+
+  const handleCloseDeleteActivityModal = useCallback(() => {
+    setDeleteActivityModalOpen(false);
+  }, []);
+
+  const dispatchDeleteActivityRequest = useCallback(() => {
+    if (!activityId) {
+      return;
+    }
+
+    setDeleteActivityModalOpen(false);
+    setBusy(true);
+
+    const request = dispatch(requestDeleteActivity(activityId));
+    setDeleteActivityRequestId(request.requestId);
+  }, [activityId, dispatch]);
+
   if (!record) {
     return <></>;
   }
@@ -445,10 +494,32 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       saveButtonText={strings.SAVE}
       saveID='saveActivity'
     >
-      <Box marginBottom='32px' marginTop='2px' paddingLeft={theme.spacing(4)}>
+      <DeleteActivityModal
+        open={deleteActivityModalOpen}
+        onClose={handleCloseDeleteActivityModal}
+        onSubmit={dispatchDeleteActivityRequest}
+      />
+      <Box
+        alignItems='center'
+        display='flex'
+        flexDirection='row'
+        justifyContent='space-between'
+        marginBottom='32px'
+        marginTop='2px'
+        paddingLeft={theme.spacing(4)}
+      >
         <Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'>
           {primaryHeader}
         </Typography>
+
+        {isEditing && activity && isAllowedDeleteActivitiesNonPublished && (
+          <Button
+            label={strings.DELETE_ACTIVITY}
+            onClick={handleDeleteActivity}
+            priority='secondary'
+            type='destructive'
+          />
+        )}
       </Box>
 
       <Card
