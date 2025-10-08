@@ -340,20 +340,15 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     }));
   }, [results, strings]);
 
-  // Flatten activities for pagination
-  const flatActivities = useMemo(() => {
-    return groupedActivities.flatMap((group) => group.activities);
-  }, [groupedActivities]);
-
   const totalPages = useMemo(() => {
-    return Math.ceil(flatActivities.length / itemsPerPage);
-  }, [flatActivities.length, itemsPerPage]);
+    return Math.ceil(results.length / itemsPerPage);
+  }, [results.length, itemsPerPage]);
 
   const paginatedActivities = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return flatActivities.slice(startIndex, endIndex);
-  }, [flatActivities, currentPage, itemsPerPage]);
+    return results.slice(startIndex, endIndex);
+  }, [results, currentPage, itemsPerPage]);
 
   const handlePageChange = useCallback((_event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -496,7 +491,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
             />
             <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
           </Box>
-          {(!flatActivities || flatActivities.length === 0) && !busy ? (
+          {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
               {strings.NO_ACTIVITIES_TO_SHOW}
             </Typography>
@@ -518,8 +513,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
                     {strings.formatString(
                       strings.PAGINATION_FOOTER,
                       (currentPage - 1) * itemsPerPage + 1,
-                      Math.min(currentPage * itemsPerPage, flatActivities.length),
-                      flatActivities.length
+                      Math.min(currentPage * itemsPerPage, results.length),
+                      results.length
                     )}
                   </Typography>
                   <Pagination
