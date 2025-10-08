@@ -152,7 +152,7 @@ const EditSurvivalRateSettings = () => {
 
     const saveRequest = dispatch(requestAssignT0SiteData(record));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record, withdrawnSpeciesPlots]);
+  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots]);
 
   useEffect(() => {
     if (saveResponse?.status === 'success') {
