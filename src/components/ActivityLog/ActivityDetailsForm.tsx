@@ -56,6 +56,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
 import ActivityMediaForm, { ActivityMediaItem } from './ActivityMediaForm';
+import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
 
@@ -540,6 +541,8 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           <Typography fontSize='20px' fontWeight='bold' marginBottom='24px' variant='h2'>
             {secondaryHeader}
           </Typography>
+
+          {isAcceleratorRoute && isEditing && activity && <ActivityStatusBadges activity={activity} />}
 
           <Grid container spacing={2} textAlign='left'>
             <Grid item lg={6} xs={12}>

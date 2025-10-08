@@ -14,7 +14,7 @@ import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activi
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import ActivityStatusBadge from './ActivityStatusBadge';
+import ActivityStatusBadges from './ActivityStatusBadges';
 
 type ActivityDetailViewProps = {
   activity: Activity;
@@ -57,12 +57,6 @@ const ActivityDetailView = ({
 
   const activityType = useMemo(() => activityTypeLabel(activity.type, strings), [activity.type, strings]);
 
-  const isChanged = useMemo(() => {
-    return (
-      activity.modifiedTime && activity.createdTime && new Date(activity.modifiedTime) > new Date(activity.createdTime)
-    );
-  }, [activity.modifiedTime, activity.createdTime]);
-
   const crumbs: Crumb[] = useMemo(
     () => [
       {
@@ -101,10 +95,7 @@ const ActivityDetailView = ({
 
       {isAcceleratorRoute && (
         <Grid item xs={12}>
-          {isChanged && <ActivityStatusBadge status='Changed' />}
-          <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
-          {/* TODO: render badge for 'Do Not Use' when applicable */}
-          {/* TODO: render badge for 'Published' when applicable */}
+          <ActivityStatusBadges activity={activity} />
         </Grid>
       )}
 
