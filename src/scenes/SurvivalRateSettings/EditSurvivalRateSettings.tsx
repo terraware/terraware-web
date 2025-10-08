@@ -113,13 +113,17 @@ const EditSurvivalRateSettings = () => {
   }, [navigate, plantingSiteId]);
 
   const saveSettings = useCallback(() => {
+    if (!record.plots || record.plots.length === 0) {
+      goToViewSettings();
+      return;
+    }
     let shouldShowWarning = false;
 
     withdrawnSpeciesPlots?.forEach((withdrawnPlot) => {
       const correspondingPlot = record.plots.find(
         (plot) => plot.monitoringPlotId.toString() === withdrawnPlot.monitoringPlotId.toString()
       );
-      if (correspondingPlot) {
+      if (correspondingPlot && !correspondingPlot.observationId) {
         withdrawnPlot.species.forEach((withdrawnSpecies) => {
           const correspondingSpecies = correspondingPlot.densityData.find(
             (denData) => denData.speciesId.toString() === withdrawnSpecies.speciesId.toString()
@@ -132,11 +136,13 @@ const EditSurvivalRateSettings = () => {
     });
 
     record.plots.forEach((plot) => {
-      plot.densityData.forEach((denData) => {
-        if (denData.plotDensity === undefined || denData.plotDensity === null) {
-          shouldShowWarning = true;
-        }
-      });
+      if (!plot.observationId) {
+        plot.densityData.forEach((denData) => {
+          if (denData.plotDensity === undefined || denData.plotDensity === null) {
+            shouldShowWarning = true;
+          }
+        });
+      }
     });
 
     if (shouldShowWarning) {
