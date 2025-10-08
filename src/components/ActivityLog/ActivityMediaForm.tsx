@@ -480,19 +480,26 @@ export default function ActivityMediaForm({
             return null;
           }
 
+          // Calculate position excluding deleted items (this is the index in visibleMediaFiles)
+          const visibleIndex = mediaFiles
+            .slice(0, index)
+            .filter((item) => !(item.type === 'existing' && item.isDeleted)).length;
+
+          const currentPosition = visibleIndex + 1;
+
           return (
             <ActivityPhotoPreview
               activityId={activityId}
-              currentPosition={index + 1}
+              currentPosition={currentPosition}
               focused={photo.type === 'existing' && photo.data.fileId === focusedFileId}
-              isLast={index === visibleMediaFiles.length - 1}
+              isLast={visibleIndex === visibleMediaFiles.length - 1}
               key={`photo-${index}`}
               maxPosition={visibleMediaFiles.length}
               onClick={photo.type === 'existing' ? onMediaFileClick(photo.data.fileId) : undefined}
               onCoverPhotoChange={getSetCoverPhoto(index)}
               onDelete={getDeletePhoto(index)}
               onHiddenOnMapChange={getSetHiddenOnMap(index)}
-              onPositionChange={getUpdatePosition(index)}
+              onPositionChange={getUpdatePosition(visibleIndex)}
               mediaItem={photo}
               setCaption={getUpdatePhotoCaption(index)}
             />
