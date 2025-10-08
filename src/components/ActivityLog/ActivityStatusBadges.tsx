@@ -15,7 +15,9 @@ const ActivityStatusBadges = ({ activity }: ActivityStatusBadgesProps): JSX.Elem
 
   const isChanged = useMemo(() => {
     return (
-      activity.modifiedTime && activity.verifiedTime && new Date(activity.modifiedTime) > new Date(activity.verifiedTime)
+      activity.modifiedTime &&
+      activity.verifiedTime &&
+      new Date(activity.modifiedTime) > new Date(activity.verifiedTime)
     );
   }, [activity.modifiedTime, activity.verifiedTime]);
 
