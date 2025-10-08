@@ -5,10 +5,10 @@ import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
 import { useLocalization } from 'src/providers';
-import { ActivityStatus } from 'src/types/Activity';
+import { ActivityStatusTag, activityStatusTagLabel } from 'src/types/Activity';
 
 type ActivityStatusBadgeProps = {
-  status: ActivityStatus | 'Changed' | 'Published';
+  status: ActivityStatusTag;
 };
 
 const ActivityStatusBadge = (props: ActivityStatusBadgeProps): JSX.Element => {
@@ -48,22 +48,7 @@ const ActivityStatusBadge = (props: ActivityStatusBadgeProps): JSX.Element => {
     }
   }, [status, theme]);
 
-  const statusLabel = useMemo(() => {
-    switch (status) {
-      case 'Not Verified':
-        return strings.NOT_VERIFIED;
-      case 'Verified':
-        return strings.VERIFIED;
-      case 'Do Not Use':
-        return strings.DO_NOT_USE;
-      case 'Changed':
-        return strings.CHANGED;
-      case 'Published':
-        return strings.PUBLISHED;
-    }
-  }, [status, strings]);
-
-  return <Badge label={statusLabel} {...badgeColors} />;
+  return <Badge label={activityStatusTagLabel(status, strings)} {...badgeColors} />;
 };
 
 export default ActivityStatusBadge;

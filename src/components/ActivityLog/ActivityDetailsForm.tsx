@@ -39,6 +39,7 @@ import {
 } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
+  ACTIVITY_STATUSES,
   ACTIVITY_TYPES,
   Activity,
   ActivityPayload,
@@ -48,6 +49,7 @@ import {
   AdminCreateActivityRequestPayload,
   CreateActivityRequestPayload,
   UpdateActivityRequestPayload,
+  activityStatusTagLabel,
   activityTypeLabel,
 } from 'src/types/Activity';
 import useForm from 'src/utils/useForm';
@@ -435,21 +437,12 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [onChange]
   );
 
-  const statusOptions = useMemo(
-    (): DropdownItem[] => [
-      {
-        label: strings.NOT_VERIFIED,
-        value: 'Not Verified',
-      },
-      {
-        label: strings.VERIFIED,
-        value: 'Verified',
-      },
-      {
-        label: strings.DO_NOT_USE,
-        value: 'Do Not Use',
-      },
-    ],
+  const activityStatusOptions = useMemo(
+    (): DropdownItem[] =>
+      ACTIVITY_STATUSES.map((status) => ({
+        label: activityStatusTagLabel(status, strings),
+        value: status,
+      })),
     [strings]
   );
 
@@ -629,7 +622,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                   label={strings.STATUS}
                   onChange={onChangeStatus}
                   selectedValue={record?.status}
-                  options={statusOptions}
+                  options={activityStatusOptions}
                 />
               </Grid>
             )}

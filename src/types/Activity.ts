@@ -38,6 +38,9 @@ export const ACTIVITY_TYPES: ActivityType[] = [
   'Stakeholder Engagement',
 ];
 
+export type ActivityStatus = Activity['status'];
+export const ACTIVITY_STATUSES: ActivityStatus[] = ['Verified', 'Not Verified', 'Do Not Use'];
+
 export const activityTypeColor = (type: ActivityType) => {
   switch (type) {
     case 'Seed Collection':
@@ -54,6 +57,26 @@ export const activityTypeColor = (type: ActivityType) => {
       return theme.palette.TwClrBaseYellow200 as string;
     case 'Drone Flight':
       return theme.palette.TwClrBaseRed500 as string;
+  }
+};
+
+export type ActivityStatusTag = ActivityStatus | 'Changed' | 'Published';
+
+export const activityStatusTagLabel = (
+  status: ActivityStatusTag | 'Changed' | 'Published',
+  strings: typeof defaultStrings
+) => {
+  switch (status) {
+    case 'Not Verified':
+      return strings.NOT_VERIFIED;
+    case 'Verified':
+      return strings.VERIFIED;
+    case 'Do Not Use':
+      return strings.DO_NOT_USE;
+    case 'Changed':
+      return strings.CHANGED;
+    case 'Published':
+      return strings.PUBLISHED;
   }
 };
 
@@ -77,6 +100,3 @@ export const activityTypeLabel = (activityType: ActivityType, strings: typeof de
       return '';
   }
 };
-
-export type ActivityStatus = Activity['status'];
-export const ACTIVITY_STATUSES = ['Verified', 'Not Verified', 'Do Not Use'];
