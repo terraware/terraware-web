@@ -59,7 +59,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
-import ActivityMediaForm, { ActivityMediaItem, ExistingActivityMeidaItem } from './ActivityMediaForm';
+import ActivityMediaForm, { ActivityMediaItem, ExistingActivityMediaItem } from './ActivityMediaForm';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
@@ -505,7 +505,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const activityWithMedia = useMemo(() => {
     if (activity) {
       const media = mediaFiles
-        .filter((file): file is ExistingActivityMeidaItem => file.type === 'existing' && !file.isDeleted)
+        .filter((file): file is ExistingActivityMediaItem => file.type === 'existing' && !file.isDeleted)
         .map((file) => file.data);
 
       return { ...activity, media };

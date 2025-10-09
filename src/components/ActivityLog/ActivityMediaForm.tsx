@@ -19,7 +19,7 @@ export type ActivityMediaPhoto = {
 };
 
 export type NewActivityMediaItem = { type: 'new'; data: ActivityMediaPhoto };
-export type ExistingActivityMeidaItem = {
+export type ExistingActivityMediaItem = {
   type: 'existing';
   data: ActivityMediaFile | AdminActivityMediaFile;
   isModified?: boolean;
@@ -27,7 +27,7 @@ export type ExistingActivityMeidaItem = {
 };
 
 // Unified type for handling both new photos and existing media files
-export type ActivityMediaItem = NewActivityMediaItem | ExistingActivityMeidaItem;
+export type ActivityMediaItem = NewActivityMediaItem | ExistingActivityMediaItem;
 
 const MAX_FILES = 20;
 
