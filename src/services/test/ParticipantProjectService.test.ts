@@ -17,7 +17,6 @@ jest.mock('src/strings', () => {
     PHASE_1_SCORE: 'Phase 1 Score',
     VOTING_DECISION: 'Voting Decision',
     FILE_NAMING: 'File Naming',
-    PROJECT_LEAD: 'Project Lead',
     COUNTRY: 'Country',
     REGION: 'Region',
     LAND_USE_MODEL_TYPE: 'Land Use Model Type',
@@ -56,7 +55,6 @@ describe('ParticipantProjectService', () => {
       perHectareBudget: undefined,
       pipeline: undefined,
       projectId: 1,
-      projectLead: 'test lead',
       region: 'South Asia',
       totalExpansionPotential: undefined,
       whatNeedsToBeTrue: undefined,
@@ -115,8 +113,8 @@ describe('ParticipantProjectService', () => {
     });
 
     const expected =
-      'Organization Name,Project ID,Project Name,Phase 1 Score,Voting Decision,File Naming,Project Lead,Country,Region,Land Use Model Type,Number of Native Species,Application Restorable Land (ha),Confirmed Restorable Land (ha),Total Expansion Potential (ha),Minimum Carbon Accumulation (CO2/ha/yr),Maximum Carbon Accumulation (CO2/ha/yr),Per Hectare Estimated Budget,Number of Communities Within Project Area,Created on,Created by,Last modified on,Last modified by\r' +
-      '"The tree farm","1","Project ""1234""","1.5","Yes","PROJ_123","test lead","AF","South Asia","Monoculture, Other Timber","","","","","","","","","2024-03-08T21:30:27.294915Z","Weese Ritherspoon","2024-03-29T17:41:09.530803Z","Donny Jepp"\r';
+      'Organization Name,Project ID,Project Name,Phase 1 Score,Voting Decision,File Naming,Country,Region,Land Use Model Type,Number of Native Species,Application Restorable Land (ha),Confirmed Restorable Land (ha),Total Expansion Potential (ha),Minimum Carbon Accumulation (CO2/ha/yr),Maximum Carbon Accumulation (CO2/ha/yr),Per Hectare Estimated Budget,Number of Communities Within Project Area,Created on,Created by,Last modified on,Last modified by\r' +
+      '"The tree farm","1","Project ""1234""","1.5","Yes","PROJ_123","AF","South Asia","Monoculture, Other Timber","","","","","","","","","2024-03-08T21:30:27.294915Z","Weese Ritherspoon","2024-03-29T17:41:09.530803Z","Donny Jepp"\r';
     expect(result).toBe(expected);
   });
 });

@@ -97,7 +97,6 @@ const download = async ({
     [strings.PHASE_1_SCORE, projectScore?.overallScore],
     [strings.VOTING_DECISION, phaseVotes?.decision],
     [strings.FILE_NAMING, participantProject?.fileNaming],
-    [strings.PROJECT_LEAD, participantProject?.projectLead],
     [strings.COUNTRY, participantProject?.countryCode],
     [strings.REGION, participantProject?.region],
     [strings.LAND_USE_MODEL_TYPE, (participantProject?.landUseModelTypes || []).join(', ')],
