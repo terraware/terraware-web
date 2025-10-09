@@ -9,8 +9,11 @@ export type ProjectsWithVariablesSearchResult = {
   country_name: string;
   acceleratorDetails: {
     'confirmedReforestableLand(raw)': number;
-    projectLead: string;
   };
+  internalUsers: {
+    user_firstName: string;
+    user_lastName: string;
+  }[];
   variables: {
     stableId: string;
     id: string;
