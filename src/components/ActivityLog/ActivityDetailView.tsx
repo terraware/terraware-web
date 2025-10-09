@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -79,6 +80,26 @@ const ActivityDetailView = ({
     [setHoverFileCallback]
   );
 
+  const handleDownloadClick = useCallback(
+    (mediaItem: ActivityMediaFile) => (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+      event?.stopPropagation();
+
+      const imageURL = ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+        '{fileId}',
+        mediaItem.fileId.toString()
+      );
+
+      const link = document.createElement('a');
+      link.href = imageURL;
+      link.download = `activity-${activity.id}-image-${mediaItem.fileId}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+    [activity.id]
+  );
+
+
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
       <Grid item xs={12}>
@@ -111,32 +132,54 @@ const ActivityDetailView = ({
 
       {activity.media.map((mediaItem, index) => (
         <Grid item lg={6} xs={12} key={index}>
-          <img
-            alt={mediaItem?.caption}
-            id={`activity-media-item-${mediaItem.fileId}`}
-            onClick={onMediaItemClick(mediaItem.fileId)}
-            // Hover effects only for photos with corresponding markers
-            onMouseEnter={mediaItemHoverCallback(mediaItem, true)}
-            onMouseLeave={mediaItemHoverCallback(mediaItem, false)}
-            src={ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
-              '{fileId}',
-              mediaItem.fileId.toString()
-            )}
-            style={{
-              aspectRatio: '4/3',
-              backgroundColor: theme.palette.TwClrBgSecondary,
-              borderColor:
-                hoveredFileId === mediaItem.fileId || focusedFileId === mediaItem.fileId
-                  ? '#CC79A7'
-                  : theme.palette.TwClrBg,
-              borderStyle: 'solid',
-              borderWidth: '4px',
-              boxSizing: 'content-box',
-              objectFit: 'cover',
-              transition: 'border 0.2s ease-in-out',
-              width: '100%',
-            }}
-          />
+          <Box position='relative' display='inline-block' width='100%'>
+            <img
+              alt={mediaItem?.caption}
+              id={`activity-media-item-${mediaItem.fileId}`}
+              onClick={onMediaItemClick(mediaItem.fileId)}
+              // Hover effects only for photos with corresponding markers
+              onMouseEnter={mediaItemHoverCallback(mediaItem, true)}
+              onMouseLeave={mediaItemHoverCallback(mediaItem, false)}
+              src={ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+                '{fileId}',
+                mediaItem.fileId.toString()
+              )}
+              style={{
+                aspectRatio: '4/3',
+                backgroundColor: theme.palette.TwClrBgSecondary,
+                borderColor:
+                  hoveredFileId === mediaItem.fileId || focusedFileId === mediaItem.fileId
+                    ? '#CC79A7'
+                    : theme.palette.TwClrBg,
+                borderStyle: 'solid',
+                borderWidth: '4px',
+                boxSizing: 'content-box',
+                objectFit: 'cover',
+                transition: 'border 0.2s ease-in-out',
+                width: '100%',
+              }}
+            />
+            <IconButton
+              onClick={handleDownloadClick(mediaItem)}
+              sx={{
+                backgroundColor: '#fff',
+                borderRadius: '4px',
+                height: '24px',
+                padding: 0,
+                position: 'absolute',
+                right: theme.spacing(1),
+                top: theme.spacing(2),
+                width: '24px',
+                zIndex: 1,
+                '&:hover': {
+                  backgroundColor: '#eee',
+                },
+              }}
+              title={strings.DOWNLOAD}
+            >
+              <Icon name='downloadFromTheCloud' />
+            </IconButton>
+          </Box>
         </Grid>
       ))}
     </Grid>
