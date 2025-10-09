@@ -4649,7 +4649,7 @@ export interface components {
             /** @enum {string} */
             status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
-            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
+            type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };
         AddOrganizationUserRequestPayload: {
             email: string;
@@ -4693,7 +4693,7 @@ export interface components {
             /** @enum {string} */
             status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
-            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
+            type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
             /** Format: int64 */
             verifiedBy?: number;
             /** Format: date-time */
@@ -4708,7 +4708,7 @@ export interface components {
             /** Format: int64 */
             projectId: number;
             /** @enum {string} */
-            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
+            type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };
         AdminGetActivityResponsePayload: {
             activity: components["schemas"]["AdminActivityPayload"];
@@ -4726,7 +4726,7 @@ export interface components {
             /** @enum {string} */
             status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
-            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
+            type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };
         /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
         AndNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
@@ -5382,7 +5382,7 @@ export interface components {
             /** Format: int64 */
             projectId: number;
             /** @enum {string} */
-            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
+            type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };
         CreateApplicationRequestPayload: {
             /** Format: int64 */
@@ -9943,7 +9943,7 @@ export interface components {
             /** @enum {string} */
             status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
-            type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
+            type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };
         UpdateApplicationBoundaryRequestPayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
