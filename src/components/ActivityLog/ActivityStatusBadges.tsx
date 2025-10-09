@@ -24,7 +24,7 @@ const ActivityStatusBadges = ({ activity }: ActivityStatusBadgesProps): JSX.Elem
   return (
     <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' gap={1} marginY={theme.spacing(1)}>
       {isChanged && <ActivityStatusBadge status='Changed' />}
-      <ActivityStatusBadge status={activity.isVerified ? 'Verified' : 'Not Verified'} />
+      <ActivityStatusBadge status={activity.status} />
       {/* TODO: render badge for 'Do Not Use' when applicable */}
       {/* TODO: render badge for 'Published' when applicable */}
     </Box>
