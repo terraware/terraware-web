@@ -302,11 +302,17 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   const onDeleteDateRange = useCallback(() => onDeleteFilter('date'), [onDeleteFilter]);
 
+  const paginatedActivities = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return results.slice(startIndex, endIndex);
+  }, [results, currentPage, itemsPerPage]);
+
   // group activities by quarter and year
   const groupedActivities = useMemo(() => {
     const groups: Record<string, Activity[]> = {};
 
-    results.forEach((activity) => {
+    paginatedActivities.forEach((activity) => {
       const date = new Date(activity.date);
       const year = date.getFullYear();
       const quarter = Math.ceil((date.getMonth() + 1) / 3);
@@ -338,17 +344,11 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       quarter: quarterKey,
       activities: groups[quarterKey],
     }));
-  }, [results, strings]);
+  }, [paginatedActivities, strings]);
 
   const totalPages = useMemo(() => {
     return Math.ceil(results.length / itemsPerPage);
   }, [results.length, itemsPerPage]);
-
-  const paginatedActivities = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return results.slice(startIndex, endIndex);
-  }, [results, currentPage, itemsPerPage]);
 
   const handlePageChange = useCallback((_event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -497,15 +497,29 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
             </Typography>
           ) : (
             <>
-              {paginatedActivities.map((activity) => (
-                <ActivityListItem
-                  activity={activity}
-                  focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
-                  key={activity.id}
-                  onClick={getOnClickActivityListItem(activity.id)}
-                  onMouseEnter={setHoverActivityCallback(activity.id, true)}
-                  onMouseLeave={setHoverActivityCallback(activity.id, false)}
-                />
+              {groupedActivities.map(({ quarter, activities: groupActivities }) => (
+                <Fragment key={quarter}>
+                  <Typography
+                    color={theme.palette.TwClrTxt}
+                    fontSize='20px'
+                    fontWeight={600}
+                    lineHeight='28px'
+                    marginY={theme.spacing(1)}
+                  >
+                    {quarter}
+                  </Typography>
+
+                  {groupActivities.map((activity) => (
+                    <ActivityListItem
+                      activity={activity}
+                      focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
+                      key={activity.id}
+                      onClick={getOnClickActivityListItem(activity.id)}
+                      onMouseEnter={setHoverActivityCallback(activity.id, true)}
+                      onMouseLeave={setHoverActivityCallback(activity.id, false)}
+                    />
+                  ))}
+                </Fragment>
               ))}
               {totalPages > 1 && (
                 <Box display='flex' justifyContent='center' marginTop={theme.spacing(3)} alignItems='center'>
