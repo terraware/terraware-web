@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760043307637" clover="3.2.0">
-  <project timestamp="1760043307638" name="All files">
+<coverage generated="1760047517778" clover="3.2.0">
+  <project timestamp="1760047517778" name="All files">
     <metrics statements="34471" coveredstatements="1347" conditionals="24116" coveredconditionals="391" methods="10516" coveredmethods="213" elements="69103" coveredelements="1951" complexity="0" loc="34471" ncloc="34471" packages="280" files="1356" classes="1356"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -36463,25 +36463,25 @@
         <line num="72" count="0" type="stmt"/>
         <line num="75" count="1" type="stmt"/>
         <line num="93" count="1" type="stmt"/>
-        <line num="118" count="1" type="stmt"/>
-        <line num="120" count="1" type="stmt"/>
-        <line num="121" count="22" type="cond" truecount="2" falsecount="0"/>
-        <line num="123" count="1" type="stmt"/>
-        <line num="126" count="1" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
-        <line num="133" count="1" type="stmt"/>
-        <line num="134" count="0" type="stmt"/>
-        <line num="136" count="1" type="stmt"/>
-        <line num="142" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="143" count="0" type="stmt"/>
-        <line num="150" count="0" type="stmt"/>
-        <line num="152" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="153" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="162" count="1" type="stmt"/>
-        <line num="163" count="0" type="stmt"/>
-        <line num="165" count="0" type="stmt"/>
-        <line num="173" count="1" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="119" count="1" type="stmt"/>
+        <line num="120" count="21" type="cond" truecount="2" falsecount="0"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="125" count="1" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="132" count="1" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="135" count="1" type="stmt"/>
+        <line num="141" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="149" count="0" type="stmt"/>
+        <line num="151" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="161" count="1" type="stmt"/>
+        <line num="162" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
+        <line num="172" count="1" type="stmt"/>
       </file>
       <file name="ParticipantProjectSpeciesService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ParticipantProjectSpeciesService.ts">
         <metrics statements="29" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
