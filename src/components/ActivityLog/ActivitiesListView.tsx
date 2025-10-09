@@ -67,6 +67,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
         backgroundColor: focused ? theme.palette.TwClrBgSecondary : undefined,
         borderBottom: '1px solid',
         borderColor: theme.palette.TwClrBrdrTertiary,
+        cursor: 'pointer',
       }}
     >
       <Grid item paddingRight={theme.spacing(2)} xs='auto'>

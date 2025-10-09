@@ -59,7 +59,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
-import ActivityMediaForm, { ActivityMediaItem } from './ActivityMediaForm';
+import ActivityMediaForm, { ActivityMediaItem, ExistingActivityMediaItem } from './ActivityMediaForm';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
@@ -207,6 +207,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             description: record?.description as string,
             isHighlight: !!record?.isHighlight,
             isVerified: !!record?.isVerified,
+            status: record?.status as AdminActivityPayload['status'],
             type: record?.type as AdminActivityPayload['type'],
           } as AdminActivityPayload,
         })
@@ -328,6 +329,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         isHighlight: activity.isHighlight,
         isVerified: activity.isVerified,
         projectId,
+        status: activity.status,
         type: activity.type,
       };
       setRecord({ ...activityRecord });
@@ -502,6 +504,16 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     setDeleteActivityRequestId(request.requestId);
   }, [activityId, dispatch]);
 
+  const activityWithMedia = useMemo(() => {
+    if (activity) {
+      const media = mediaFiles
+        .filter((file): file is ExistingActivityMediaItem => file.type === 'existing' && !file.isDeleted)
+        .map((file) => file.data);
+
+      return { ...activity, media };
+    }
+  }, [activity, mediaFiles]);
+
   if (!record) {
     return <></>;
   }
@@ -552,7 +564,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         }}
       >
         <MapSplitView
-          activities={isEditing && activity ? [activity] : []}
+          activities={isEditing && activityWithMedia ? [activityWithMedia] : []}
           activityMarkerHighlighted={activityMarkerHighlighted}
           drawerRef={mapDrawerRef}
           mapRef={mapRef}

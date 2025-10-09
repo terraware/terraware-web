@@ -11,11 +11,11 @@ import useMapUtils from 'src/components/NewMap/useMapUtils';
 import { getBoundingBox } from 'src/components/NewMap/utils';
 import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
 import { useLocalization } from 'src/providers';
-import { Activity, activityTypeColor } from 'src/types/Activity';
+import { ActivityPayload, activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 type MapSplitViewProps = {
-  activities?: Activity[];
+  activities?: ActivityPayload[];
   activityMarkerHighlighted?: (activityId: number, fileId: number) => boolean;
   children: React.ReactNode;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
