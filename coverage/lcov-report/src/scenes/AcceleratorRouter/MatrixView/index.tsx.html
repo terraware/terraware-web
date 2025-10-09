@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/363</span>
+                <span class='fraction'>0/364</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/248</span>
+                <span class='fraction'>0/253</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/110</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/343</span>
+                <span class='fraction'>0/344</span>
             </div>
         
             
@@ -1157,7 +1157,21 @@
 <a name='L1092'></a><a href='#L1092'>1092</a>
 <a name='L1093'></a><a href='#L1093'>1093</a>
 <a name='L1094'></a><a href='#L1094'>1094</a>
-<a name='L1095'></a><a href='#L1095'>1095</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1095'></a><a href='#L1095'>1095</a>
+<a name='L1096'></a><a href='#L1096'>1096</a>
+<a name='L1097'></a><a href='#L1097'>1097</a>
+<a name='L1098'></a><a href='#L1098'>1098</a>
+<a name='L1099'></a><a href='#L1099'>1099</a>
+<a name='L1100'></a><a href='#L1100'>1100</a>
+<a name='L1101'></a><a href='#L1101'>1101</a>
+<a name='L1102'></a><a href='#L1102'>1102</a>
+<a name='L1103'></a><a href='#L1103'>1103</a>
+<a name='L1104'></a><a href='#L1104'>1104</a>
+<a name='L1105'></a><a href='#L1105'>1105</a>
+<a name='L1106'></a><a href='#L1106'>1106</a>
+<a name='L1107'></a><a href='#L1107'>1107</a>
+<a name='L1108'></a><a href='#L1108'>1108</a>
+<a name='L1109'></a><a href='#L1109'>1109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1492,8 +1506,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2092,6 +2110,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2580,11 +2608,15 @@ const MatrixView = <span class="cstat-no" title="statement not covered" ><span c
         filterSelectOptions: countries.map(<span class="fstat-no" title="function not covered" >(c</span>ountry) =&gt; <span class="cstat-no" title="statement not covered" >country.name || '')</span>,
       },
       {
-        accessorKey: 'acceleratorDetails_projectLead',
+        accessorKey: 'internalUsers.user_firstName',
         header: strings.PROJECT_LEAD,
         size: 200,
         id: 'projectLead',
         enableEditing: false,
+        accessorFn: <span class="fstat-no" title="function not covered" >(r</span>ow) =&gt;
+<span class="cstat-no" title="statement not covered" >          row.internalUsers &amp;&amp; row.internalUsers.length &gt; 0 &amp;&amp; row.internalUsers[0].user_firstName</span>
+            ? `${row.internalUsers[0].user_firstName} ${row.internalUsers[0].user_lastName}`
+            : '',
       },
     ];
 &nbsp;
@@ -3193,7 +3225,9 @@ const MatrixView = <span class="cstat-no" title="statement not covered" ><span c
           'participant_cohort_phase',
           'acceleratorDetails_confirmedReforestableLand(raw)',
           'country_name',
-          'acceleratorDetails_projectLead',
+          'internalUsers.role',
+          'internalUsers.user_firstName',
+          'internalUsers.user_lastName',
           'variables.stableId',
           'variables.id',
           'variables.variableName',
@@ -3219,6 +3253,14 @@ const MatrixView = <span class="cstat-no" title="statement not covered" ><span c
               operation: 'field',
               type: 'Exact',
               values: visibleColumnIds.length &gt; 0 ? visibleColumnIds : [''],
+            },
+          },
+          {
+            prefix: 'internalUsers',
+            search: {
+              operation: 'field',
+              field: 'role',
+              values: ['Project Lead'],
             },
           },
         ],
@@ -3352,7 +3394,7 @@ export default MatrixView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-09T19:39:50.916Z
+                at 2025-10-09T20:29:53.606Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
