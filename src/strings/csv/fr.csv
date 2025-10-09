@@ -1144,6 +1144,7 @@ NUMBER_PLANTS_COLLECTED_FROM,Nombre approximatif de plantes recueillies à parti
 NURSERIES,Pépinières,74230ea3
 NURSERY,Pépinière,2a9dbfec
 NURSERY_ADDED,Pépinière ajoutée,43ce28ea
+NURSERY_AND_PROPAGULE_OPERATIONS,Opérations de pépinière et de propagules,6ccaebb3
 NURSERY_CAPACITY,Capacité d'accueil de la pépinière,bc2d7864
 NURSERY_CAPACITY_REQUIRED,Capacité d'accueil de la pépinière *,44be62ad
 NURSERY_GERMINATION,Germination en pépinière,f661d6d4
@@ -1236,6 +1237,7 @@ OTHER_LAND_USE_MODEL,Autre modèle d'utilisation des sols,b89ac507
 OTHER_SPECIES,Autres espèces,b19f20cd
 OTHER_TIMBER,Autres bois,e68c3ffe
 OTHER_VALUE,Autre : {0},9072d8e6
+OTHERS,Autres,9a598a95
 OUNCES,Onces,4ae3cfe8
 OUT_PLANTING,Plantation extérieure,b2c96a10
 OUTDOORS,Extérieur,38de141f

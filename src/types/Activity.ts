@@ -31,21 +31,22 @@ export type ActivityType = Activity['type'];
 export const ACTIVITY_TYPES: ActivityType[] = [
   'Drone Flight',
   'Monitoring',
-  'Nursery',
+  'Nursery and Propagule Operations',
   'Planting',
   'Seed Collection',
   'Site Visit',
-  'Stakeholder Engagement',
+  'Social Impact',
+  'Others',
 ];
 
 export type ActivityStatus = Activity['status'];
 export const ACTIVITY_STATUSES: ActivityStatus[] = ['Verified', 'Not Verified', 'Do Not Use'];
 
-export const activityTypeColor = (type: ActivityType) => {
+export const activityTypeColor = (type: ActivityType): string => {
   switch (type) {
     case 'Seed Collection':
       return theme.palette.TwClrBasePink300 as string;
-    case 'Nursery':
+    case 'Nursery and Propagule Operations':
       return theme.palette.TwClrBaseBlue600 as string;
     case 'Planting':
       return theme.palette.TwClrBaseGreen400 as string;
@@ -53,10 +54,12 @@ export const activityTypeColor = (type: ActivityType) => {
       return theme.palette.TwClrBaseBlue300 as string;
     case 'Site Visit':
       return theme.palette.TwClrBaseOrange400 as string;
-    case 'Stakeholder Engagement':
+    case 'Social Impact':
       return theme.palette.TwClrBaseYellow200 as string;
     case 'Drone Flight':
       return theme.palette.TwClrBaseRed500 as string;
+    case 'Others':
+      return theme.palette.TwClrBaseBlack as string;
   }
 };
 
@@ -80,23 +83,23 @@ export const activityStatusTagLabel = (
   }
 };
 
-export const activityTypeLabel = (activityType: ActivityType, strings: typeof defaultStrings) => {
+export const activityTypeLabel = (activityType: ActivityType, strings: typeof defaultStrings): string => {
   switch (activityType) {
     case 'Drone Flight':
       return strings.DRONE_FLIGHT;
     case 'Monitoring':
       return strings.MONITORING;
-    case 'Nursery':
-      return strings.NURSERY;
+    case 'Nursery and Propagule Operations':
+      return strings.NURSERY_AND_PROPAGULE_OPERATIONS;
     case 'Planting':
       return strings.PLANTING;
     case 'Seed Collection':
       return strings.SEED_COLLECTION;
     case 'Site Visit':
       return strings.SITE_VISIT;
-    case 'Stakeholder Engagement':
+    case 'Social Impact':
       return strings.STAKEHOLDER_ENGAGEMENT;
-    default:
-      return '';
+    case 'Others':
+      return strings.OTHERS;
   }
 };

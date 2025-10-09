@@ -1145,6 +1145,7 @@ NUMBER_PLANTS_COLLECTED_FROM,Número estimado de plantas de las que se recolect�
 NURSERIES,Viveros,74230ea3
 NURSERY,Vivero,2a9dbfec
 NURSERY_ADDED,Vivero añadido,43ce28ea
+NURSERY_AND_PROPAGULE_OPERATIONS,Operaciones de vivero y propágulos,6ccaebb3
 NURSERY_CAPACITY,Capacidad del vivero,bc2d7864
 NURSERY_CAPACITY_REQUIRED,Capacidad del vivero *,44be62ad
 NURSERY_GERMINATION,Germinación en vivero,f661d6d4
@@ -1237,6 +1238,7 @@ OTHER_LAND_USE_MODEL,Otro modelo del uso de la tierra,b89ac507
 OTHER_SPECIES,Otras especies,b19f20cd
 OTHER_TIMBER,Otros tipos de madera,e68c3ffe
 OTHER_VALUE,Otro - {0},9072d8e6
+OTHERS,Otros,9a598a95
 OUNCES,Onzas,4ae3cfe8
 OUT_PLANTING,Replantando en el exterior,b2c96a10
 OUTDOORS,En el exterior,38de141f
