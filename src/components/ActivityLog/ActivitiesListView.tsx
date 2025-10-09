@@ -196,9 +196,15 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     [activities, showActivityId]
   );
 
+  const paginatedActivities = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return results.slice(startIndex, endIndex);
+  }, [results, currentPage, itemsPerPage]);
+
   const activitiesVisibleOnMap = useMemo(
-    () => (showActivityId && shownActivity ? [shownActivity] : activities),
-    [activities, shownActivity, showActivityId]
+    () => (showActivityId && shownActivity ? [shownActivity] : paginatedActivities),
+    [paginatedActivities, shownActivity, showActivityId]
   );
 
   useEffect(() => {
@@ -301,12 +307,6 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   );
 
   const onDeleteDateRange = useCallback(() => onDeleteFilter('date'), [onDeleteFilter]);
-
-  const paginatedActivities = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return results.slice(startIndex, endIndex);
-  }, [results, currentPage, itemsPerPage]);
 
   // group activities by quarter and year
   const groupedActivities = useMemo(() => {
