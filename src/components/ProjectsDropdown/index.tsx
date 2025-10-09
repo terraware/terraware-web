@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { Dropdown, DropdownItem } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -41,6 +42,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
   placeholder,
 }: ProjectsDropdownProps<T>) {
   const { activeLocale } = useLocalization();
+  const { isDesktop } = useDeviceInfo();
 
   const projectOptions = useMemo(() => {
     const options: DropdownItem[] = [];
@@ -85,7 +87,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
       }}
       fullWidth
       required={required}
-      sx={{ backgroundColor: '#fff', minWidth: '240px' }}
+      sx={{ backgroundColor: '#fff', minWidth: isDesktop ? '240px' : 'auto' }}
       placeholder={placeholder}
     />
   );

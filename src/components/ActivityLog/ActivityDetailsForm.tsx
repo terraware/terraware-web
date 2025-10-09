@@ -3,6 +3,7 @@ import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Dropdown, Textfield } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
@@ -74,6 +75,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const { isAllowed } = useUser();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { participantProjects } = useParticipantProjects();
@@ -500,9 +502,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         onSubmit={dispatchDeleteActivityRequest}
       />
       <Box
-        alignItems='center'
+        alignItems={isMobile ? 'flex-start' : 'center'}
         display='flex'
-        flexDirection='row'
+        flexDirection={isMobile ? 'column' : 'row'}
         justifyContent='space-between'
         marginBottom='32px'
         marginTop='2px'

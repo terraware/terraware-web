@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -45,6 +46,7 @@ const ProjectPage = () => {
   const [publishRequestId, setPublishRequestId] = useState('');
   const publishProfileResponse = useAppSelector(selectPublishFunderProject(publishRequestId));
   const snackbar = useSnackbar();
+  const { isDesktop } = useDeviceInfo();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
@@ -178,7 +180,13 @@ const ProjectPage = () => {
   const rightComponent = useMemo(
     () => (
       <Box display='flex' flexDirection='column' justifyContent='center' minHeight={80}>
-        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+        <Box
+          display='flex'
+          flexDirection='row'
+          flexGrow={0}
+          marginRight={theme.spacing(3)}
+          justifyContent={isDesktop ? 'flex-start' : 'flex-end'}
+        >
           {activeTab === 'projectProfile' && isAllowedEdit && (
             <>
               <Button
@@ -188,6 +196,7 @@ const ProjectPage = () => {
                 priority='primary'
                 onClick={goToProjectEdit}
                 size='medium'
+                sx={{ whiteSpace: 'nowrap' }}
                 type='productive'
               />
               {isAllowedPublish && (
@@ -208,6 +217,7 @@ const ProjectPage = () => {
               onClick={goToProjectActivityCreate}
               priority='primary'
               size='medium'
+              sx={{ whiteSpace: 'nowrap' }}
               type='productive'
             />
           )}
@@ -220,6 +230,7 @@ const ProjectPage = () => {
               onClick={goToProjectActivityEdit}
               priority='primary'
               size='medium'
+              sx={{ whiteSpace: 'nowrap' }}
               type='productive'
             />
           )}
@@ -232,6 +243,7 @@ const ProjectPage = () => {
               onClick={goToDocumentNew}
               priority='primary'
               size='medium'
+              sx={{ whiteSpace: 'nowrap' }}
               type='productive'
             />
           )}
@@ -249,6 +261,7 @@ const ProjectPage = () => {
       isAllowedEdit,
       isAllowedEditActivities,
       isAllowedPublish,
+      isDesktop,
       onOptionItemClick,
       theme,
     ]
