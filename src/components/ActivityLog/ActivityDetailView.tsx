@@ -99,7 +99,6 @@ const ActivityDetailView = ({
     [activity.id]
   );
 
-
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
       <Grid item xs={12}>
