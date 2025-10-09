@@ -4,15 +4,17 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
-import { MockActivityStatus } from 'src/types/Activity';
+import { useLocalization } from 'src/providers';
+import { ActivityStatusTag, activityStatusTagLabel } from 'src/types/Activity';
 
 type ActivityStatusBadgeProps = {
-  status: MockActivityStatus;
+  status: ActivityStatusTag;
 };
 
 const ActivityStatusBadge = (props: ActivityStatusBadgeProps): JSX.Element => {
   const { status } = props;
   const theme = useTheme();
+  const { strings } = useLocalization();
 
   const badgeColors = useMemo((): Omit<BadgeProps, 'label'> | undefined => {
     switch (status) {
@@ -46,7 +48,7 @@ const ActivityStatusBadge = (props: ActivityStatusBadgeProps): JSX.Element => {
     }
   }, [status, theme]);
 
-  return <Badge label={status} {...badgeColors} />;
+  return <Badge label={activityStatusTagLabel(status, strings)} {...badgeColors} />;
 };
 
 export default ActivityStatusBadge;
