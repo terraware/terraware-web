@@ -470,6 +470,15 @@ const getPermanentPlotsWithObservations = async <T extends SearchResponseElement
             values: [null],
           },
         },
+        {
+          operation: 'not',
+          child: {
+            operation: 'field',
+            field: 'permanentIndex',
+            type: 'Exact',
+            values: [null],
+          },
+        },
       ],
     },
     count: 1000,
