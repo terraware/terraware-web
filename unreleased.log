@@ -1,3 +1,5 @@
+6f410949bae Activity Log: Support Mobile (#4564)
+ff6aeac333a SW-7443 Pagination (#4560)
 e4d039f4743 Activity Log: Update HEIC image preview message copy (#4563)
 006a483e89a SW-7504 When deleting and then adding media to activity, numbering is off (#4562)
 e53afaafb2f SW-7499 Fix Plot showing as "Not set" when using observation data (#4559)

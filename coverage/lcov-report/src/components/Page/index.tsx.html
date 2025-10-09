@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -208,7 +208,20 @@
 <a name='L143'></a><a href='#L143'>143</a>
 <a name='L144'></a><a href='#L144'>144</a>
 <a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,6 +278,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -275,6 +289,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -357,6 +381,7 @@
 &nbsp;
 import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -410,6 +435,7 @@ export default function <span class="fstat-no" title="function not covered" >Pag
 }: PageProps): JSX.Element {
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (isLoading) {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -452,18 +478,28 @@ export default function <span class="fstat-no" title="function not covered" >Pag
             &lt;/Grid&gt;
           )}
           {leftComponent &amp;&amp; (
-            &lt;Grid item xs={4} style={{ marginRight: 'auto' }}&gt;
+            &lt;Grid item md={4} xs={12} style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : theme.spacing(3) }}&gt;
               {leftComponent}
             &lt;/Grid&gt;
           )}
           {rightComponent &amp;&amp; (
-            &lt;Grid item xs={4} sx={{ textAlign: 'right' }}&gt;
+            &lt;Grid
+              item
+              md={4}
+              xs={12}
+              sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+            &gt;
               {rightComponent}
             &lt;/Grid&gt;
           )}
 &nbsp;
           {primaryButton &amp;&amp; (
-            &lt;Grid item xs={4} sx={{ textAlign: 'right' }}&gt;
+            &lt;Grid
+              item
+              md={4}
+              xs={12}
+              sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+            &gt;
               &lt;Button
                 id={`${primaryButton.title}_id}`}
                 icon={primaryButton.icon}
@@ -505,7 +541,7 @@ export default function <span class="fstat-no" title="function not covered" >Pag
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-08T22:13:58.262Z
+                at 2025-10-09T16:45:10.342Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
