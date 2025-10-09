@@ -327,11 +327,15 @@ const MatrixView = () => {
         filterSelectOptions: countries.map((country) => country.name || ''),
       },
       {
-        accessorKey: 'acceleratorDetails_projectLead',
+        accessorKey: 'internalUsers.user_firstName',
         header: strings.PROJECT_LEAD,
         size: 200,
         id: 'projectLead',
         enableEditing: false,
+        accessorFn: (row) =>
+          row.internalUsers && row.internalUsers.length > 0 && row.internalUsers[0].user_firstName
+            ? `${row.internalUsers[0].user_firstName} ${row.internalUsers[0].user_lastName}`
+            : '',
       },
     ];
 
@@ -940,7 +944,9 @@ const MatrixView = () => {
           'participant_cohort_phase',
           'acceleratorDetails_confirmedReforestableLand(raw)',
           'country_name',
-          'acceleratorDetails_projectLead',
+          'internalUsers.role',
+          'internalUsers.user_firstName',
+          'internalUsers.user_lastName',
           'variables.stableId',
           'variables.id',
           'variables.variableName',
@@ -966,6 +972,14 @@ const MatrixView = () => {
               operation: 'field',
               type: 'Exact',
               values: visibleColumnIds.length > 0 ? visibleColumnIds : [''],
+            },
+          },
+          {
+            prefix: 'internalUsers',
+            search: {
+              operation: 'field',
+              field: 'role',
+              values: ['Project Lead'],
             },
           },
         ],
