@@ -195,8 +195,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   );
 
   const activitiesVisibleOnMap = useMemo(
-    () => (showActivityId && shownActivity ? [shownActivity] : activities),
-    [activities, shownActivity, showActivityId]
+    () => (showActivityId && shownActivity ? [shownActivity] : results),
+    [results, shownActivity, showActivityId]
   );
 
   useEffect(() => {
@@ -442,7 +442,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   return (
     <MapSplitView
-      activities={activitiesVisibleOnMap} // TODO: Use visible activities after pagination/filtering
+      activities={activitiesVisibleOnMap}
       activityMarkerHighlighted={activityMarkerHighlighted}
       drawerRef={mapDrawerRef}
       mapRef={mapRef}
