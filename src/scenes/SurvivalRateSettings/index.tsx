@@ -96,6 +96,7 @@ const SurvivalRateSettings = () => {
           onClick={goToEditSurvivalRateSettings}
           size='medium'
           id='editSettings'
+          disabled={!plotsWithObservations || plotsWithObservations.length === 0}
         />
       }
     >
