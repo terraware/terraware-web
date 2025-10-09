@@ -275,6 +275,7 @@ CHANGE_DEFAULT_WEIGHT_SYSTEM,Vous pouvez changer votre système de poids par dé
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Changer l'état de germination/établissement,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Modifier le statut d’acclimatation,b734dbd7
 CHANGE_TO,Passez à {0},8423817d
+CHANGED,Modifié,f88927ec
 CHANGES,Changements,47809a57
 CHANGES_SAVED,Changements sauvés !,709a9559
 CHECK_DATA,Vérifier les données,f99c93bc
@@ -469,6 +470,7 @@ DEV_SERVER_ERROR,Serveur non disponible (possibilité de redémarrage avec mise 
 DIAMETER_AT_BREAST_HEIGHT,Diamètre à hauteur de poitrine (DHP) à maturité (cm),6b42a16f
 DIAMETER_CM,Diamètre (cm),242d8114
 DISMISS,Fermer,a56709f4
+DO_NOT_USE,Ne pas utiliser,6950f9e5
 DOC_PRODUCER,Producteur de docs,e40f8aa1
 DOCUMENT,Document,57650c76
 DOCUMENT_DETAILS,Modifier les détails du document,92155983
@@ -1107,6 +1109,7 @@ NOT_NEEDED,Non nécessaire,dc4188cf
 NOT_OBSERVED,Non observé,4a9890a2
 NOT_SET,Non défini,6b047afe
 NOT_SUBMITTED,Non soumis,e40a2b1d
+NOT_VERIFIED,Non vérifié,fbd9066a
 NOT_YET,Pas encore,77976aa8
 NOTE_ANY_ISSUES,Est-ce que tout ce qui précède vous semble correct ? Signalez tout problème.,133db1c4
 NOTE_COLON,Note :,00769bbe
@@ -1453,6 +1456,7 @@ PROVIDE_PLANT_DENSITY_PER_SPECIES,Indiquer la densité de plants par espèce,846
 PROVIDE_PLANT_DENSITY_PER_SPECIES_TOOLTIP,Saisissez les densités pour chaque espèce plantée. Les densités de plantation basées sur les données du journal des retraits sont affichées et peuvent être saisies comme densités de plantation.,3b3ef9f3
 PUBLISH,Publier,c1d4ecf7
 PUBLISH_TO_FUNDER_PORTAL,Publier sur le portail des financeurs,ec2ddbec
+PUBLISHED,Publié,baa0bfba
 PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, celui fourni aux donateurs sur leur portail.",64413dc4
 PURPOSE,But,ff06abab
 PURPOSE_REQUIRED,But *,3f585469

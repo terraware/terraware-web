@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, Dropdown, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
@@ -39,14 +39,17 @@ import {
 } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
+  ACTIVITY_STATUSES,
   ACTIVITY_TYPES,
   Activity,
   ActivityPayload,
+  ActivityStatus,
   ActivityType,
   AdminActivityPayload,
   AdminCreateActivityRequestPayload,
   CreateActivityRequestPayload,
   UpdateActivityRequestPayload,
+  activityStatusTagLabel,
   activityTypeLabel,
 } from 'src/types/Activity';
 import useForm from 'src/utils/useForm';
@@ -427,6 +430,22 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [onChange]
   );
 
+  const onChangeStatus = useCallback(
+    (value: any): void => {
+      onChange('status', value as ActivityStatus);
+    },
+    [onChange]
+  );
+
+  const activityStatusOptions = useMemo(
+    (): DropdownItem[] =>
+      ACTIVITY_STATUSES.map((status) => ({
+        label: activityStatusTagLabel(status, strings),
+        value: status,
+      })),
+    [strings]
+  );
+
   const activityMarkerHighlighted = useCallback(
     (_: number, fileId: number) => {
       return fileId === focusedFileId;
@@ -584,7 +603,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               />
             </Grid>
 
-            {isAcceleratorRoute && (
+            {isAcceleratorRoute && activityId === undefined && (
               <Grid item xs={12}>
                 <Checkbox
                   id='verified'
@@ -592,6 +611,18 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                   name='verified'
                   onChange={onChangeIsVerified}
                   value={record?.isVerified}
+                />
+              </Grid>
+            )}
+
+            {isAcceleratorRoute && activityId !== undefined && (
+              <Grid item xs={12}>
+                <Dropdown
+                  required
+                  label={strings.STATUS}
+                  onChange={onChangeStatus}
+                  selectedValue={record?.status}
+                  options={activityStatusOptions}
                 />
               </Grid>
             )}

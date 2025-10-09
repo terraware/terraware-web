@@ -4647,6 +4647,8 @@ export interface components {
             isHighlight: boolean;
             media: components["schemas"]["ActivityMediaFilePayload"][];
             /** @enum {string} */
+            status: "Not Verified" | "Verified" | "Do Not Use";
+            /** @enum {string} */
             type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
         AddOrganizationUserRequestPayload: {
@@ -4683,12 +4685,13 @@ export interface components {
             /** Format: int64 */
             id: number;
             isHighlight: boolean;
-            isVerified: boolean;
             media: components["schemas"]["AdminActivityMediaFilePayload"][];
             /** Format: int64 */
             modifiedBy: number;
             /** Format: date-time */
             modifiedTime: string;
+            /** @enum {string} */
+            status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
             type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
             /** Format: int64 */
@@ -4720,7 +4723,8 @@ export interface components {
             date: string;
             description: string;
             isHighlight: boolean;
-            isVerified: boolean;
+            /** @enum {string} */
+            status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
             type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
@@ -6548,7 +6552,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: Record<string, never>[];
+            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -9937,6 +9941,8 @@ export interface components {
             date: string;
             description: string;
             /** @enum {string} */
+            status: "Not Verified" | "Verified" | "Do Not Use";
+            /** @enum {string} */
             type: "Seed Collection" | "Nursery" | "Planting" | "Monitoring" | "Site Visit" | "Stakeholder Engagement" | "Drone Flight";
         };
         UpdateApplicationBoundaryRequestPayload: {
@@ -10801,6 +10807,8 @@ export interface operations {
         parameters: {
             query: {
                 projectId: number;
+                /** @description If true, include a list of media files for each activity. */
+                includeMedia?: boolean;
             };
             header?: never;
             path?: never;
