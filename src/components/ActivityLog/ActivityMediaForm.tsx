@@ -18,10 +18,16 @@ export type ActivityMediaPhoto = {
   listPosition: number;
 };
 
+export type NewActivityMediaItem = { type: 'new'; data: ActivityMediaPhoto };
+export type ExistingActivityMediaItem = {
+  type: 'existing';
+  data: ActivityMediaFile | AdminActivityMediaFile;
+  isModified?: boolean;
+  isDeleted?: boolean;
+};
+
 // Unified type for handling both new photos and existing media files
-export type ActivityMediaItem =
-  | { type: 'new'; data: ActivityMediaPhoto }
-  | { type: 'existing'; data: ActivityMediaFile | AdminActivityMediaFile; isModified?: boolean; isDeleted?: boolean };
+export type ActivityMediaItem = NewActivityMediaItem | ExistingActivityMediaItem;
 
 const MAX_FILES = 20;
 
