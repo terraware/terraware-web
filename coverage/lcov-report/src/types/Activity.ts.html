@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -165,7 +165,10 @@
 <a name='L100'></a><a href='#L100'>100</a>
 <a name='L101'></a><a href='#L101'>101</a>
 <a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -206,9 +209,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -300,21 +306,22 @@ export type ActivityType = Activity['type'];
 export const ACTIVITY_TYPES: ActivityType[] = <span class="cstat-no" title="statement not covered" >[</span>
   'Drone Flight',
   'Monitoring',
-  'Nursery',
+  'Nursery and Propagule Operations',
   'Planting',
   'Seed Collection',
   'Site Visit',
-  'Stakeholder Engagement',
+  'Social Impact',
+  'Others',
 ];
 &nbsp;
 export type ActivityStatus = Activity['status'];
 export const ACTIVITY_STATUSES: ActivityStatus[] = <span class="cstat-no" title="statement not covered" >['Verified', 'Not Verified', 'Do Not Use'];</span>
 &nbsp;
-export const activityTypeColor = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>ype: ActivityType) =&gt; {</span>
+export const activityTypeColor = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>ype: ActivityType): string =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  switch (type) {</span>
     case 'Seed Collection':
 <span class="cstat-no" title="statement not covered" >      return theme.palette.TwClrBasePink300 as string;</span>
-    case 'Nursery':
+    case 'Nursery and Propagule Operations':
 <span class="cstat-no" title="statement not covered" >      return theme.palette.TwClrBaseBlue600 as string;</span>
     case 'Planting':
 <span class="cstat-no" title="statement not covered" >      return theme.palette.TwClrBaseGreen400 as string;</span>
@@ -322,10 +329,12 @@ export const activityTypeColor = <span class="cstat-no" title="statement not cov
 <span class="cstat-no" title="statement not covered" >      return theme.palette.TwClrBaseBlue300 as string;</span>
     case 'Site Visit':
 <span class="cstat-no" title="statement not covered" >      return theme.palette.TwClrBaseOrange400 as string;</span>
-    case 'Stakeholder Engagement':
+    case 'Social Impact':
 <span class="cstat-no" title="statement not covered" >      return theme.palette.TwClrBaseYellow200 as string;</span>
     case 'Drone Flight':
 <span class="cstat-no" title="statement not covered" >      return theme.palette.TwClrBaseRed500 as string;</span>
+    case 'Others':
+<span class="cstat-no" title="statement not covered" >      return theme.palette.TwClrBaseBlack as string;</span>
   }
 };
 &nbsp;
@@ -349,24 +358,24 @@ export const activityStatusTagLabel = <span class="cstat-no" title="statement no
   }
 };
 &nbsp;
-export const activityTypeLabel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctivityType: ActivityType, strings: typeof defaultStrings) =&gt; {</span>
+export const activityTypeLabel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctivityType: ActivityType, strings: typeof defaultStrings): string =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  switch (activityType) {</span>
     case 'Drone Flight':
 <span class="cstat-no" title="statement not covered" >      return strings.DRONE_FLIGHT;</span>
     case 'Monitoring':
 <span class="cstat-no" title="statement not covered" >      return strings.MONITORING;</span>
-    case 'Nursery':
-<span class="cstat-no" title="statement not covered" >      return strings.NURSERY;</span>
+    case 'Nursery and Propagule Operations':
+<span class="cstat-no" title="statement not covered" >      return strings.NURSERY_AND_PROPAGULE_OPERATIONS;</span>
     case 'Planting':
 <span class="cstat-no" title="statement not covered" >      return strings.PLANTING;</span>
     case 'Seed Collection':
 <span class="cstat-no" title="statement not covered" >      return strings.SEED_COLLECTION;</span>
     case 'Site Visit':
 <span class="cstat-no" title="statement not covered" >      return strings.SITE_VISIT;</span>
-    case 'Stakeholder Engagement':
+    case 'Social Impact':
 <span class="cstat-no" title="statement not covered" >      return strings.STAKEHOLDER_ENGAGEMENT;</span>
-    default:
-<span class="cstat-no" title="statement not covered" >      return '';</span>
+    case 'Others':
+<span class="cstat-no" title="statement not covered" >      return strings.OTHERS;</span>
   }
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -376,7 +385,7 @@ export const activityTypeLabel = <span class="cstat-no" title="statement not cov
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-09T22:05:17.018Z
+                at 2025-10-09T23:43:44.604Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
