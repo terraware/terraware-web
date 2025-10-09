@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/194</span>
+                <span class='fraction'>0/200</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/153</span>
+                <span class='fraction'>0/157</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/188</span>
+                <span class='fraction'>0/194</span>
             </div>
         
             
@@ -705,7 +705,17 @@
 <a name='L640'></a><a href='#L640'>640</a>
 <a name='L641'></a><a href='#L641'>641</a>
 <a name='L642'></a><a href='#L642'>642</a>
-<a name='L643'></a><a href='#L643'>643</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L643'></a><a href='#L643'>643</a>
+<a name='L644'></a><a href='#L644'>644</a>
+<a name='L645'></a><a href='#L645'>645</a>
+<a name='L646'></a><a href='#L646'>646</a>
+<a name='L647'></a><a href='#L647'>647</a>
+<a name='L648'></a><a href='#L648'>648</a>
+<a name='L649'></a><a href='#L649'>649</a>
+<a name='L650'></a><a href='#L650'>650</a>
+<a name='L651'></a><a href='#L651'>651</a>
+<a name='L652'></a><a href='#L652'>652</a>
+<a name='L653'></a><a href='#L653'>653</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1207,6 +1217,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1408,7 +1428,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
-import ActivityMediaForm, { ActivityMediaItem } from './ActivityMediaForm';
+import ActivityMediaForm, { ActivityMediaItem, ExistingActivityMediaItem } from './ActivityMediaForm';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
@@ -1851,6 +1871,16 @@ export default function <span class="fstat-no" title="function not covered" >Act
 <span class="cstat-no" title="statement not covered" >    setDeleteActivityRequestId(request.requestId);</span>
   }, [activityId, dispatch]);
 &nbsp;
+  const activityWithMedia = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (activity) {</span>
+      const media = <span class="cstat-no" title="statement not covered" >mediaFiles</span>
+        .filter(<span class="fstat-no" title="function not covered" >(f</span>ile): file is ExistingActivityMediaItem =&gt; <span class="cstat-no" title="statement not covered" >file.type === 'existing' &amp;&amp; !file.isDeleted)</span>
+        .map(<span class="fstat-no" title="function not covered" >(f</span>ile) =&gt; <span class="cstat-no" title="statement not covered" >file.data)</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return { ...activity, media };</span>
+    }
+  }, [activity, mediaFiles]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!record) {</span>
 <span class="cstat-no" title="statement not covered" >    return &lt;&gt;&lt;/&gt;;</span>
   }
@@ -1901,7 +1931,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
         }}
       &gt;
         &lt;MapSplitView
-          activities={isEditing &amp;&amp; activity ? [activity] : []}
+          activities={isEditing &amp;&amp; activityWithMedia ? [activityWithMedia] : []}
           activityMarkerHighlighted={activityMarkerHighlighted}
           drawerRef={mapDrawerRef}
           mapRef={mapRef}
@@ -1996,7 +2026,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-09T18:13:45.730Z
+                at 2025-10-09T19:29:29.826Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
