@@ -456,12 +456,6 @@ const getPermanentPlotsWithObservations = async <T extends SearchResponseElement
           values: [plantingSiteId],
         },
         {
-          operation: 'field',
-          field: 'observationPlots.isPermanent',
-          type: 'Exact',
-          values: [true],
-        },
-        {
           operation: 'not',
           child: {
             operation: 'field',
