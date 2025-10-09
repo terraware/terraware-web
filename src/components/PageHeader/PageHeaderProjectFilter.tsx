@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -28,6 +29,7 @@ const PageHeaderProjectFilter = ({
 }: PageHeaderProjectFilterProps) => {
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isDesktop } = useDeviceInfo();
 
   // initialize project filter with session storage value or defaults
   useEffect(() => {
@@ -73,10 +75,19 @@ const PageHeaderProjectFilter = ({
   }, [projects, projectFilter.projectId, setCurrentParticipantProject]);
 
   return (
-    <Grid container sx={{ alignItems: 'center', flexWrap: 'nowrap', marginTop: theme.spacing(0.5) }}>
-      <Grid item>
-        <Separator height='40px' />
-      </Grid>
+    <Grid
+      container
+      sx={{
+        alignItems: 'center',
+        flexWrap: 'nowrap',
+        marginY: isDesktop ? 0 : theme.spacing(1),
+      }}
+    >
+      {isDesktop && (
+        <Grid item>
+          <Separator height='40px' />
+        </Grid>
+      )}
       {projects?.length > 0 && (
         <Grid item>
           {projects?.length > 1 ? (

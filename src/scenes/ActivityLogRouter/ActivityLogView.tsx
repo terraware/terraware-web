@@ -112,6 +112,7 @@ export default function ActivityLogView(): JSX.Element {
           label={strings.EDIT_ACTIVITY}
           onClick={goToProjectActivityEdit}
           size='medium'
+          sx={{ whiteSpace: 'nowrap' }}
         />
       ) : isAllowedCreateActivities ? (
         <Button
@@ -120,6 +121,7 @@ export default function ActivityLogView(): JSX.Element {
           label={strings.ADD_ACTIVITY}
           onClick={goToProjectActivityCreate}
           size='medium'
+          sx={{ whiteSpace: 'nowrap' }}
         />
       ) : null,
     [goToProjectActivityCreate, goToProjectActivityEdit, isAllowedCreateActivities, projectId, activityId, strings]

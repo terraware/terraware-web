@@ -2,6 +2,7 @@ import React, { CSSProperties, useRef } from 'react';
 
 import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -55,6 +56,7 @@ export default function Page({
 }: PageProps): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
 
   if (isLoading) {
     return (
@@ -97,18 +99,28 @@ export default function Page({
             </Grid>
           )}
           {leftComponent && (
-            <Grid item xs={4} style={{ marginRight: 'auto' }}>
+            <Grid item md={4} xs={12} style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : theme.spacing(3) }}>
               {leftComponent}
             </Grid>
           )}
           {rightComponent && (
-            <Grid item xs={4} sx={{ textAlign: 'right' }}>
+            <Grid
+              item
+              md={4}
+              xs={12}
+              sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+            >
               {rightComponent}
             </Grid>
           )}
 
           {primaryButton && (
-            <Grid item xs={4} sx={{ textAlign: 'right' }}>
+            <Grid
+              item
+              md={4}
+              xs={12}
+              sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+            >
               <Button
                 id={`${primaryButton.title}_id}`}
                 icon={primaryButton.icon}
