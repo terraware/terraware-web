@@ -207,6 +207,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             description: record?.description as string,
             isHighlight: !!record?.isHighlight,
             isVerified: !!record?.isVerified,
+            status: record?.status as AdminActivityPayload['status'],
             type: record?.type as AdminActivityPayload['type'],
           } as AdminActivityPayload,
         })
@@ -328,6 +329,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         isHighlight: activity.isHighlight,
         isVerified: activity.isVerified,
         projectId,
+        status: activity.status,
         type: activity.type,
       };
       setRecord({ ...activityRecord });
