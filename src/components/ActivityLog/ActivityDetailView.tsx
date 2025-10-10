@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { Button, Icon } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -22,6 +23,7 @@ type ActivityDetailViewProps = {
   focusedFileId?: number;
   hoveredFileId?: number;
   onMediaItemClick: (fileId: number) => () => void;
+  projectId: number;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
 };
 
@@ -30,17 +32,22 @@ const ActivityDetailView = ({
   focusedFileId,
   hoveredFileId,
   onMediaItemClick,
+  projectId,
   setHoverFileCallback,
 }: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
+  const { isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const theme = useTheme();
+  const { goToAcceleratorActivityEdit, goToActivityEdit } = useNavigateTo();
 
   const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
+
+  const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
 
   useEffect(() => {
     if (activity?.verifiedBy && !verifiedByUser) {
@@ -99,18 +106,45 @@ const ActivityDetailView = ({
     [activity.id]
   );
 
+  const goToProjectActivityEdit = useCallback(() => {
+    if (!projectId || !activity.id) {
+      return;
+    }
+
+    if (isAcceleratorRoute) {
+      goToAcceleratorActivityEdit(projectId, activity.id);
+    } else {
+      goToActivityEdit(projectId, activity.id);
+    }
+  }, [goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId, activity.id]);
+
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
-      <Grid item xs={12}>
-        {crumbs && <BreadCrumbs crumbs={crumbs} />}
-      </Grid>
+      <Grid item md={8} xs={12}>
+        {crumbs && (
+          <Box marginBottom={theme.spacing(2)}>
+            <BreadCrumbs crumbs={crumbs} />
+          </Box>
+        )}
 
-      <Grid item xs={12}>
         <Box display='flex' flexDirection='row' alignItems='center'>
           <Typography fontSize='24px' fontWeight={600} lineHeight='32px'>
             {activityType}
           </Typography>
         </Box>
+      </Grid>
+
+      <Grid item md={4} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+        {isAllowedEditActivities && (
+          <Button
+            disabled={!projectId}
+            icon='iconEdit'
+            label={strings.EDIT_ACTIVITY}
+            onClick={goToProjectActivityEdit}
+            size='medium'
+            sx={{ whiteSpace: 'nowrap' }}
+          />
+        )}
       </Grid>
 
       {isAcceleratorRoute && (

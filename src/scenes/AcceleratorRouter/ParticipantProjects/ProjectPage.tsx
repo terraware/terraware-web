@@ -35,8 +35,7 @@ const ProjectPage = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useParticipantProjectData();
-  const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit, goToAcceleratorActivityEdit } =
-    useNavigateTo();
+  const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
@@ -51,7 +50,6 @@ const ProjectPage = () => {
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
-  const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
   const isActivityLogEnabled = isEnabled('Activity Log');
 
   const [activityId, setActivityId] = useState<number>();
@@ -137,13 +135,6 @@ const ProjectPage = () => {
     goToAcceleratorActivityCreate(projectData.projectId);
   }, [goToAcceleratorActivityCreate, projectData.projectId]);
 
-  const goToProjectActivityEdit = useCallback(() => {
-    if (!activityId) {
-      return;
-    }
-    goToAcceleratorActivityEdit(projectData.projectId, activityId);
-  }, [goToAcceleratorActivityEdit, projectData.projectId, activityId]);
-
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
 
   const publishProfile = useCallback(() => {
@@ -222,19 +213,6 @@ const ProjectPage = () => {
             />
           )}
 
-          {activeTab === 'activityLog' && isAllowedEditActivities && activityId && (
-            <Button
-              icon='iconEdit'
-              id='editActivity'
-              label={strings.EDIT_ACTIVITY}
-              onClick={goToProjectActivityEdit}
-              priority='primary'
-              size='medium'
-              sx={{ whiteSpace: 'nowrap' }}
-              type='productive'
-            />
-          )}
-
           {activeTab === 'documents' && (
             <Button
               icon='plus'
@@ -255,11 +233,9 @@ const ProjectPage = () => {
       activityId,
       goToDocumentNew,
       goToProjectActivityCreate,
-      goToProjectActivityEdit,
       goToProjectEdit,
       isAllowedCreateActivities,
       isAllowedEdit,
-      isAllowedEditActivities,
       isAllowedPublish,
       isDesktop,
       onOptionItemClick,
