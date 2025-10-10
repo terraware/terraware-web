@@ -78,7 +78,17 @@ export default function PlantsPrimaryPage({
       : plantingSitesData;
     const projectSitesWithAll =
       allowAllAsSiteSelection && projectSites.length > 2 ? projectSites : projectSites.filter((site) => site.id !== -1);
-    return projectSitesWithAll.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined));
+    return projectSitesWithAll.toSorted((a, b) => {
+      // Keep site with id -1 (allSites) always first
+      if (a.id === -1) {
+        return -1;
+      }
+      if (b.id === -1) {
+        return 1;
+      }
+      // Sort other sites
+      return a.name.localeCompare(b.name, activeLocale || undefined);
+    });
   }, [activeLocale, allowAllAsSiteSelection, plantingSitesData, projectId]);
 
   const setActivePlantingSite = useCallback(
