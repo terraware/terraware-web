@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Divider, Typography } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Box, Typography } from '@mui/material';
+import { Button, Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingSiteWithdrawnSpecies } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
 import {
@@ -26,9 +27,11 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlotT0Data } from 'src/types/Tracking';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
-import PlotT0Box from './PlotT0Box';
+import PermanentPlotsTab from './PermanentPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
+import TemporaryPlotsTab from './TemporaryPlotsTab';
 
 const SurvivalRateSettings = () => {
   const { plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
@@ -43,11 +46,38 @@ const SurvivalRateSettings = () => {
   const dispatch = useAppDispatch();
   const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
   const navigate = useSyncNavigate();
+  const { activeLocale } = useLocalization();
   const params = useParams<{
     plantingSiteId: string;
   }>();
 
   const plantingSiteId = Number(params.plantingSiteId);
+
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      {
+        id: 'permanent',
+        label: strings.PERMANENT_PLOTS,
+        children: (
+          <PermanentPlotsTab
+            plantingSiteId={plantingSiteId}
+            plotsWithObservations={plotsWithObservations}
+            t0Plots={t0Plots}
+            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+          />
+        ),
+      },
+      {
+        id: 'temporary',
+        label: strings.TEMPORARY_PLOTS,
+        children: <TemporaryPlotsTab />,
+      },
+    ];
+  }, [activeLocale, plantingSiteId, plotsWithObservations, t0Plots, withdrawnSpeciesPlots]);
 
   useEffect(() => {
     setSelectedPlantingSite(plantingSiteId);
@@ -86,6 +116,12 @@ const SurvivalRateSettings = () => {
     navigate({ pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()) });
   }, [navigate, plantingSiteId]);
 
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'permanent',
+    tabs,
+    viewIdentifier: 'survival-rate-settings',
+  });
+
   return (
     <Page
       title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}
@@ -107,19 +143,18 @@ const SurvivalRateSettings = () => {
             {strings.formatString(strings.PLOTS_QUANTITY, plotsWithObservations?.length || 0)}
           </Typography>
         </Box>
-        <Divider />
-        {plantingSiteId &&
-          plotsWithObservations?.map((plot) => (
-            <PlotT0Box
-              plot={plot}
-              key={plot.id}
-              plantingSiteId={plantingSiteId}
-              t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId.toString() === plot.id.toString())}
-              withdrawnSpeciesPlot={withdrawnSpeciesPlots?.find(
-                (spPlot) => spPlot.monitoringPlotId.toString() === plot.id.toString()
-              )}
-            />
-          ))}
+
+        <Tabs
+          activeTab={activeTab}
+          onChangeTab={onChangeTab}
+          tabs={tabs}
+          headerBorder={true}
+          sx={{
+            '& .tab-header': {
+              margin: 0,
+            },
+          }}
+        />
       </Card>
     </Page>
   );

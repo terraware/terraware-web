@@ -54,7 +54,7 @@
     "@mui/material": "^6.0.0",
     "@mui/styled-engine-sc": "^5.14.12",
     "@reduxjs/toolkit": "^1.9.3",
-    "@terraware/web-components": "^3.9.1",
+    "@terraware/web-components": "^3.9.2",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.4.3",
