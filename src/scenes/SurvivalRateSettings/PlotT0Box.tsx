@@ -5,11 +5,13 @@ import { IconTooltip } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { PlotT0Data } from 'src/types/Tracking';
+import { getShortDate } from 'src/utils/dateFormatter';
 
 type PlotT0BoxProps = {
   plot: PlotsWithObservationsSearchResult;
@@ -21,6 +23,7 @@ type PlotT0BoxProps = {
 const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
+  const { activeLocale } = useLocalization();
 
   const getPlotTotalDensity = useMemo(() => {
     const total = t0Plot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
@@ -34,6 +37,10 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
       }
     });
   }, [t0Plot, withdrawnSpeciesPlot]);
+
+  const observationPlot = useMemo(() => {
+    return plot.observationPlots.find((op) => op.observation_id === t0Plot?.observationId?.toString());
+  }, [plot.observationPlots, t0Plot?.observationId]);
 
   return (
     <>
@@ -55,19 +62,17 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                   {strings.T0_DATA_IS_SET}
                 </Typography>
                 {t0Plot.observationId ? (
-                  <Typography color={theme.palette.TwClrTxtSuccess}>
+                  <Typography fontWeight={500}>
                     {strings.formatString(
                       strings.USING_OBSERVATION_DATA_FROM,
                       <Link
+                        fontSize={'16px'}
                         to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSiteId.toString()).replace(
                           ':observationId',
                           t0Plot.observationId.toString()
                         )}
                       >
-                        {
-                          plot.observationPlots.find((op) => op.observation_id === t0Plot.observationId?.toString())
-                            ?.observation_startDate
-                        }
+                        {observationPlot ? getShortDate(observationPlot.observation_startDate, activeLocale) : ''}
                       </Link>
                     )}
                   </Typography>
