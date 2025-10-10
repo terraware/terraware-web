@@ -46,7 +46,6 @@ const ActivityDetailView = ({
   const { goToAcceleratorActivityEdit, goToActivityEdit } = useNavigateTo();
 
   const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
-
   const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
 
   useEffect(() => {
@@ -165,7 +164,7 @@ const ActivityDetailView = ({
 
       {activity.media.map((mediaItem, index) => (
         <Grid item lg={6} xs={12} key={index}>
-          <Box position='relative' display='inline-block' width='100%'>
+          <Box display='inline-block' position='relative' sx={{ '&:hover .info-panel': { opacity: 1 } }} width='100%'>
             <img
               alt={mediaItem?.caption}
               id={`activity-media-item-${mediaItem.fileId}`}
@@ -192,6 +191,44 @@ const ActivityDetailView = ({
                 width: '100%',
               }}
             />
+
+            <Box
+              className='info-panel'
+              onClick={onMediaItemClick(mediaItem.fileId)}
+              sx={{
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                bottom: '10px',
+                color: '#fff',
+                cursor: 'pointer',
+                left: '4px',
+                opacity: 0,
+                padding: theme.spacing(1),
+                position: 'absolute',
+                transition: 'opacity 0.2s ease-in-out',
+                userSelect: 'none',
+                width: '100%',
+                zIndex: 1,
+              }}
+            >
+              <Typography component='div' fontSize='16px' lineHeight='16px' variant='body2'>
+                {activity.date}
+              </Typography>
+
+              {mediaItem.caption && (
+                <Typography
+                  component='div'
+                  fontSize='16px'
+                  lineHeight='16px'
+                  marginTop={theme.spacing(1)}
+                  sx={{ wordWrap: 'break-word' }}
+                  variant='body2'
+                  whiteSpace='normal'
+                >
+                  {mediaItem.caption}
+                </Typography>
+              )}
+            </Box>
+
             <IconButton
               onClick={handleDownloadClick(mediaItem)}
               sx={{
