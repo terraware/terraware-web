@@ -35,8 +35,7 @@ const ProjectPage = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useParticipantProjectData();
-  const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit, goToAcceleratorActivityEdit } =
-    useNavigateTo();
+  const { goToAcceleratorActivityCreate, goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
@@ -135,13 +134,6 @@ const ProjectPage = () => {
   const goToProjectActivityCreate = useCallback(() => {
     goToAcceleratorActivityCreate(projectData.projectId);
   }, [goToAcceleratorActivityCreate, projectData.projectId]);
-
-  const goToProjectActivityEdit = useCallback(() => {
-    if (!activityId) {
-      return;
-    }
-    goToAcceleratorActivityEdit(projectData.projectId, activityId);
-  }, [goToAcceleratorActivityEdit, projectData.projectId, activityId]);
 
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
 
