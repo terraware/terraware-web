@@ -46,7 +46,6 @@ const ActivityDetailView = ({
   const { goToAcceleratorActivityEdit, goToActivityEdit } = useNavigateTo();
 
   const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
-
   const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
 
   useEffect(() => {
@@ -199,7 +198,7 @@ const ActivityDetailView = ({
               sx={{
                 backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 bottom: '10px',
-                color: 'white',
+                color: '#fff',
                 cursor: 'pointer',
                 left: '4px',
                 opacity: 0,
@@ -221,9 +220,9 @@ const ActivityDetailView = ({
                   fontSize='16px'
                   lineHeight='16px'
                   marginTop={theme.spacing(1)}
-                  whiteSpace='normal'
                   sx={{ wordWrap: 'break-word' }}
                   variant='body2'
+                  whiteSpace='normal'
                 >
                   {mediaItem.caption}
                 </Typography>
