@@ -1268,6 +1268,7 @@ PER_HECTARE_ESTIMATED_BUDGET,Presupuesto estimado por hectárea (USD),71a43325
 PERCENTAGE_VALUE,{0}%,a3614c0d
 PERLITE_VERMICULITE,Perlita/vermiculita,9fb0ed30
 PERMANENT,Permanente,6c7426f2
+PERMANENT_PLOTS,Parcelas Permanentes,d06e9f3a
 PERSON,Persona,3c8a3d43
 PERSON_ADDED,Se ha añadido una persona,5bea0d6f
 PESTS,Plagas,16b7eeed
@@ -1964,6 +1965,7 @@ TARGETS,Objetivos,afd4bbf9
 TEMPLATE,Plantilla,28afe27c
 TEMPLATES,Plantillas,a66a976a
 TEMPORARY,Temporal,4d5354bb
+TEMPORARY_PLOTS,Parcelas Temporales,7d9bceab
 TERRAFORMATION_CONTACT,Contacto de Terraformation,65846c70
 TERRAWARE_IS_SOFTWARE,"Terraware es un software especializado, creado por [Terraformation], que permite a los silvicultores optimizar cualquier etapa de sus proyectos forestales, desde la recolección de semillas hasta el cálculo del carbono.",ca042b5f
 TERRAWARE_METRIC_MESSAGE,Esta métrica está tomada directamente de los datos de seguimiento de Terraware.,cd131ec1
