@@ -1,3 +1,5 @@
+cfe3a7b4775 SW-7518: Activity Detail view - Image download button (#4573)
+469e46d6448 SW-7524: Fix spacing to the right of "Add Activity" and "Edit Activity" (#4574)
 f032ed628b4 SW-7515 Updated activity type string (#4578)
 5f4ec04b21b SW-7526  Date format for selected Observation is incorrect (#4576)
 78988861909 SW-7517 Ensure "All Planting Sites" option on plants dashboard selector is always at the top (#4575)
