@@ -144,7 +144,17 @@ const SurvivalRateSettings = () => {
           </Typography>
         </Box>
 
-        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} headerBorder={true} />
+        <Tabs
+          activeTab={activeTab}
+          onChangeTab={onChangeTab}
+          tabs={tabs}
+          headerBorder={true}
+          sx={{
+            '& .tab-header': {
+              margin: 0,
+            },
+          }}
+        />
       </Card>
     </Page>
   );
