@@ -185,7 +185,7 @@ const ProjectPage = () => {
           flexDirection='row'
           flexGrow={0}
           marginRight={theme.spacing(3)}
-          justifyContent={isDesktop ? 'flex-start' : 'flex-end'}
+          justifyContent={isDesktop ? 'flex-end' : 'flex-start'}
         >
           {activeTab === 'projectProfile' && isAllowedEdit && (
             <>
