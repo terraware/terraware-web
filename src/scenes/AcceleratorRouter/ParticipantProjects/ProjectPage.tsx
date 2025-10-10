@@ -241,7 +241,6 @@ const ProjectPage = () => {
       activityId,
       goToDocumentNew,
       goToProjectActivityCreate,
-      goToProjectActivityEdit,
       goToProjectEdit,
       isAllowedCreateActivities,
       isAllowedEdit,
