@@ -477,6 +477,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
           focusedFileId={focusedFileId}
           hoveredFileId={hoveredFileId}
           onMediaItemClick={onMediaItemClick}
+          projectId={projectId}
           setHoverFileCallback={setHoverFileCallback}
         />
       ) : activities.length === 0 && !busy ? (

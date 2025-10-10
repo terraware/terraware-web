@@ -20,8 +20,7 @@ export default function ActivityLogView(): JSX.Element {
   const { isAllowed } = useUser();
   const theme = useTheme();
   const query = useQuery();
-  const { goToAcceleratorActivityCreate, goToAcceleratorActivityEdit, goToActivityCreate, goToActivityEdit } =
-    useNavigateTo();
+  const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { participantProjects, isLoading: participantProjectsLoading } = useParticipantProjects();
@@ -66,18 +65,6 @@ export default function ActivityLogView(): JSX.Element {
     }
   }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectId]);
 
-  const goToProjectActivityEdit = useCallback(() => {
-    if (!projectId || !activityId) {
-      return;
-    }
-
-    if (isAcceleratorRoute) {
-      goToAcceleratorActivityEdit(projectId, activityId);
-    } else {
-      goToActivityEdit(projectId, activityId);
-    }
-  }, [goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId, activityId]);
-
   useEffect(() => {
     const _activityId = query.get('activityId');
     setActivityId(_activityId ? Number(_activityId) : undefined);
@@ -105,16 +92,7 @@ export default function ActivityLogView(): JSX.Element {
 
   const PageHeaderRightComponent = useMemo(
     () =>
-      activityId ? (
-        <Button
-          disabled={!projectId}
-          icon='iconEdit'
-          label={strings.EDIT_ACTIVITY}
-          onClick={goToProjectActivityEdit}
-          size='medium'
-          sx={{ whiteSpace: 'nowrap' }}
-        />
-      ) : isAllowedCreateActivities ? (
+      isAllowedCreateActivities && !activityId ? (
         <Button
           disabled={!projectId}
           icon='plus'
@@ -124,7 +102,7 @@ export default function ActivityLogView(): JSX.Element {
           sx={{ whiteSpace: 'nowrap' }}
         />
       ) : null,
-    [goToProjectActivityCreate, goToProjectActivityEdit, isAllowedCreateActivities, projectId, activityId, strings]
+    [activityId, goToProjectActivityCreate, isAllowedCreateActivities, projectId, strings]
   );
 
   return (

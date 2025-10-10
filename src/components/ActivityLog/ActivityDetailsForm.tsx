@@ -544,15 +544,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         <Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'>
           {primaryHeader}
         </Typography>
-
-        {isEditing && activity && isAllowedDeleteActivitiesNonPublished && (
-          <Button
-            label={strings.DELETE_ACTIVITY}
-            onClick={handleDeleteActivity}
-            priority='secondary'
-            type='destructive'
-          />
-        )}
       </Box>
 
       <Card
@@ -571,13 +562,28 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           projectId={projectId}
           onActivityMarkerClick={onActivityMarkerClick}
         >
-          <Typography fontSize='20px' fontWeight='bold' marginBottom='24px' variant='h2'>
-            {secondaryHeader}
-          </Typography>
-
-          {isAcceleratorRoute && isEditing && activity && <ActivityStatusBadges activity={activity} />}
-
           <Grid container spacing={2} textAlign='left'>
+            <Grid item md={8} xs={12}>
+              <Typography fontSize='20px' fontWeight='bold' variant='h2'>
+                {secondaryHeader}
+              </Typography>
+            </Grid>
+
+            <Grid item md={4} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+              {isEditing && activity && isAllowedDeleteActivitiesNonPublished && (
+                <Button
+                  label={strings.DELETE_ACTIVITY}
+                  onClick={handleDeleteActivity}
+                  priority='secondary'
+                  type='destructive'
+                />
+              )}
+            </Grid>
+
+            <Grid item xs={12}>
+              {isAcceleratorRoute && isEditing && activity && <ActivityStatusBadges activity={activity} />}
+            </Grid>
+
             <Grid item lg={6} xs={12}>
               <Dropdown
                 errorText={validateFields && !record?.type ? strings.REQUIRED_FIELD : ''}
