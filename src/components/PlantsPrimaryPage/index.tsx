@@ -176,6 +176,7 @@ export default function PlantsPrimaryPage({
       latestObservationId={latestObservationId}
       projectId={projectId}
       onSelectProjectId={onSelectProjectId}
+      allowAllAsSiteSelection={allowAllAsSiteSelection}
     />
   );
 }
