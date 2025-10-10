@@ -98,7 +98,7 @@ export const activityTypeLabel = (activityType: ActivityType, strings: typeof de
     case 'Site Visit':
       return strings.SITE_VISIT;
     case 'Social Impact':
-      return strings.STAKEHOLDER_ENGAGEMENT;
+      return strings.SOCIAL_IMPACT;
     case 'Others':
       return strings.OTHERS;
   }
