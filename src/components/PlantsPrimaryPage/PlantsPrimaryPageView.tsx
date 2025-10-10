@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, GlobalStyles, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, IconName, Message } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -45,6 +45,7 @@ export type PlantsPrimaryPageViewProps = {
   latestObservationId?: number;
   projectId?: number;
   onSelectProjectId?: (projectId: number) => void;
+  allowAllAsSiteSelection?: boolean;
 };
 
 export default function PlantsPrimaryPageView({
@@ -63,6 +64,7 @@ export default function PlantsPrimaryPageView({
   newHeader,
   title,
   actionButton,
+  allowAllAsSiteSelection,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
@@ -224,15 +226,27 @@ export default function PlantsPrimaryPageView({
                       {options[0].label}
                     </Typography>
                   ) : (
-                    <Dropdown
-                      placeholder={strings.SELECT}
-                      id='planting-site-selector'
-                      onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
-                      options={options}
-                      selectedValue={selectedPlantingSiteId}
-                      fullWidth
-                      disabled={isAcceleratorRoute && options.length === 0}
-                    />
+                    <>
+                      {allowAllAsSiteSelection && options.length > 2 && (
+                        <GlobalStyles
+                          styles={{
+                            '.planting-site-selector-container .options-container li:first-of-type': {
+                              borderBottom: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+                            },
+                          }}
+                        />
+                      )}
+                      <Dropdown
+                        placeholder={strings.SELECT}
+                        id='planting-site-selector'
+                        onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
+                        options={options}
+                        selectedValue={selectedPlantingSiteId}
+                        fullWidth
+                        disabled={isAcceleratorRoute && options.length === 0}
+                        className='planting-site-selector-container'
+                      />
+                    </>
                   )}
                 </Grid>
                 <Grid item xs={isDesktop ? 3 : 12}>
@@ -298,6 +312,15 @@ export default function PlantsPrimaryPageView({
                     />
                   )}
                   <Box display='flex' alignItems='center' padding={theme.spacing(2, 0)}>
+                    {allowAllAsSiteSelection && options.length > 2 && (
+                      <GlobalStyles
+                        styles={{
+                          '.planting-site-selector-container .options-container li:first-of-type': {
+                            borderBottom: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+                          },
+                        }}
+                      />
+                    )}
                     <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
                       {strings.PLANTING_SITE}
                     </Typography>
@@ -307,6 +330,7 @@ export default function PlantsPrimaryPageView({
                       onChange={(newValue: string) => onChangePlantingSiteId(Number(newValue))}
                       options={options}
                       selectedValue={selectedPlantingSiteId}
+                      className='planting-site-selector-container'
                     />
                   </Box>
                 </>
