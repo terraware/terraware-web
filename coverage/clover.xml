@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760053425345" clover="3.2.0">
-  <project timestamp="1760053425345" name="All files">
-    <metrics statements="34472" coveredstatements="1347" conditionals="24117" coveredconditionals="391" methods="10516" coveredmethods="213" elements="69105" coveredelements="1951" complexity="0" loc="34472" ncloc="34472" packages="280" files="1356" classes="1356"/>
+<coverage generated="1760098919449" clover="3.2.0">
+  <project timestamp="1760098919450" name="All files">
+    <metrics statements="34472" coveredstatements="1347" conditionals="24119" coveredconditionals="391" methods="10516" coveredmethods="213" elements="69107" coveredelements="1951" complexity="0" loc="34472" ncloc="34472" packages="280" files="1356" classes="1356"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -34694,7 +34694,7 @@
       </file>
     </package>
     <package name="src.scenes.SurvivalRateSettings">
-      <metrics statements="264" coveredstatements="0" conditionals="134" coveredconditionals="0" methods="104" coveredmethods="0"/>
+      <metrics statements="264" coveredstatements="0" conditionals="136" coveredconditionals="0" methods="104" coveredmethods="0"/>
       <file name="EditSurvivalRateSettings.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/EditSurvivalRateSettings.tsx">
         <metrics statements="86" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="22" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
@@ -34935,7 +34935,7 @@
         <line num="10" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/index.tsx">
-        <metrics statements="40" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="40" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
@@ -34973,9 +34973,9 @@
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="119" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.TerrawareRouter">
@@ -37161,10 +37161,10 @@
         <line num="430" count="0" type="stmt"/>
         <line num="435" count="1" type="stmt"/>
         <line num="438" count="0" type="stmt"/>
-        <line num="478" count="0" type="stmt"/>
-        <line num="481" count="1" type="stmt"/>
-        <line num="482" count="0" type="stmt"/>
-        <line num="489" count="1" type="stmt"/>
+        <line num="481" count="0" type="stmt"/>
+        <line num="484" count="1" type="stmt"/>
+        <line num="485" count="0" type="stmt"/>
+        <line num="492" count="1" type="stmt"/>
       </file>
       <file name="UserInternalInterestsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/UserInternalInterestsService.ts">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
