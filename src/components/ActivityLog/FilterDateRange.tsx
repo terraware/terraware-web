@@ -62,7 +62,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
         onDelete();
       }
     },
-    [startDate, endDate, userTimeZone?.id, field, onChange, onDelete]
+    [endDate, field, onChange, onDelete, startDate, userTimeZone?.id]
   );
 
   return (
