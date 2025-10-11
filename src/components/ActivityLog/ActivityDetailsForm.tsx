@@ -399,7 +399,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (deleteActivityRequest?.status === 'success') {
       setBusy(false);
-      snackbar.toastSuccess(strings.SUCCESS);
+      snackbar.toastSuccess(strings.ACTIVITY_DELETED);
       navToActivityLog();
     }
   }, [deleteActivityRequest, navToActivityLog, setBusy, snackbar, strings]);
