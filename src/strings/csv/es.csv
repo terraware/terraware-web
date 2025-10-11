@@ -624,6 +624,7 @@ EXISTING_PROJECT_PLANTING_SITES_BODY,"Hay sitios de plantación que ya se añadi
 EXISTING_PROJECT_PLANTING_SITES_TITLE,Proyecto existente con sitios de plantación,bdd02838
 EXISTING_SPECIES_MSG,"""{0}"" ya está en su lista de especies.",92747058
 EXIT_APPLICATION,Salir de la solicitud,71aff49c
+EXPAND,Expandir,2ecfd856
 EXPANSION_POTENTIAL,Potencial de expansión,cfcbb501
 EXPANSION_POTENTIAL_DESCRIPTION,"Terrenos elegibles aún no protegidos mediante acuerdos, pero se cree que pueden protegerse.",60ac9586
 EXPANSION_POTENTIAL_HA,Potencial de expansión (ha),eb119de5
