@@ -99,7 +99,6 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({ imageAlt = '', imageSrc, 
           alt={imageAlt}
           src={imageSrc}
           style={{
-            // boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
             maxHeight: '90vh',
             maxWidth: '90vw',
             objectFit: 'contain',
