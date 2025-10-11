@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
+import ImageLightbox from 'src/components/common/ImageLightbox';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -48,6 +49,8 @@ const ActivityDetailView = ({
   const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
   const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
 
+  const [lightboxImageId, setLightboxImageId] = useState<number | undefined>(undefined);
+
   useEffect(() => {
     if (activity?.verifiedBy && !verifiedByUser) {
       void dispatch(requestGetUser(activity?.verifiedBy));
@@ -75,6 +78,22 @@ const ActivityDetailView = ({
       },
     ],
     [location, navigate, query, strings.PROJECT_ACTIVITY]
+  );
+
+  const iconButtonStyles: SxProps<Theme> = useMemo(
+    () => ({
+      backgroundColor: '#fff',
+      borderRadius: '4px',
+      height: '24px',
+      padding: 0,
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(2),
+      width: '24px',
+      zIndex: 2,
+      '&:hover': { backgroundColor: '#eee' },
+    }),
+    [theme]
   );
 
   const mediaItemHoverCallback = useCallback(
@@ -116,6 +135,34 @@ const ActivityDetailView = ({
       goToActivityEdit(projectId, activity.id);
     }
   }, [goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId, activity.id]);
+
+  const handleExpandClick = useCallback(
+    (fileId: number) => (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      event?.stopPropagation();
+      setLightboxImageId(fileId);
+    },
+    []
+  );
+
+  const handleCloseLightbox = useCallback(() => {
+    setLightboxImageId(undefined);
+  }, []);
+
+  const lightboxMediaItem = useMemo(
+    () => activity.media.find((item) => item.fileId === lightboxImageId),
+    [activity.media, lightboxImageId]
+  );
+
+  const lightboxImageSrc = useMemo(
+    () =>
+      lightboxMediaItem
+        ? ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+            '{fileId}',
+            lightboxMediaItem.fileId.toString()
+          )
+        : '',
+    [activity.id, lightboxMediaItem]
+  );
 
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
@@ -231,27 +278,25 @@ const ActivityDetailView = ({
 
             <IconButton
               onClick={handleDownloadClick(mediaItem)}
-              sx={{
-                backgroundColor: '#fff',
-                borderRadius: '4px',
-                height: '24px',
-                padding: 0,
-                position: 'absolute',
-                right: theme.spacing(1),
-                top: theme.spacing(2),
-                width: '24px',
-                zIndex: 1,
-                '&:hover': {
-                  backgroundColor: '#eee',
-                },
-              }}
+              sx={{ ...iconButtonStyles, right: theme.spacing(5) }}
               title={strings.DOWNLOAD}
             >
               <Icon name='downloadFromTheCloud' />
             </IconButton>
+
+            <IconButton onClick={handleExpandClick(mediaItem.fileId)} sx={iconButtonStyles} title={strings.EXPAND}>
+              <Icon name='expand' />
+            </IconButton>
           </Box>
         </Grid>
       ))}
+
+      <ImageLightbox
+        imageAlt={lightboxMediaItem?.caption}
+        imageSrc={lightboxImageSrc}
+        isOpen={!!lightboxImageId}
+        onClose={handleCloseLightbox}
+      />
     </Grid>
   );
 };

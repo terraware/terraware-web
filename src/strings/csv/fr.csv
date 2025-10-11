@@ -623,6 +623,7 @@ EXISTING_PROJECT_PLANTING_SITES_BODY,"Certains sites de plantation ont déjà é
 EXISTING_PROJECT_PLANTING_SITES_TITLE,Projet existant avec sites de plantation,bdd02838
 EXISTING_SPECIES_MSG,« {0} » est déjà dans votre liste d'espèces.,92747058
 EXIT_APPLICATION,Fermer la candidature,71aff49c
+EXPAND,Développer,2ecfd856
 EXPANSION_POTENTIAL,Potentiel d'expansion,cfcbb501
 EXPANSION_POTENTIAL_DESCRIPTION,"Terrain éligible non encore sécurisé par des accords, mais nous pensons qu’il peut l’être.",60ac9586
 EXPANSION_POTENTIAL_HA,Potentiel d'expansion (ha),eb119de5
