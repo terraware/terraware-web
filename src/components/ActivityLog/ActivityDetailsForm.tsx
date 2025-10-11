@@ -56,6 +56,7 @@ import useForm from 'src/utils/useForm';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
@@ -76,6 +77,8 @@ type FormRecord = Partial<SavableActivity> | undefined;
 export default function ActivityDetailsForm({ activityId, projectId }: ActivityDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
+
+  const userTimeZone = useUserTimeZone();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
@@ -599,6 +602,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             <Grid item lg={5} xs={12}>
               <DatePicker
                 aria-label={strings.DATE}
+                defaultTimeZone={userTimeZone?.id}
                 errorText={validateFields && !record?.date ? strings.REQUIRED_FIELD : ''}
                 id='date'
                 label={strings.DATE_REQUIRED}
