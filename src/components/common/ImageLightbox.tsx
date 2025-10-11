@@ -58,7 +58,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({ imageAlt = '', imageSrc, 
       onClick={handleBackdropClick}
       sx={{
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 1)',
+        backgroundColor: '#000',
         bottom: 0,
         display: 'flex',
         justifyContent: 'center',
