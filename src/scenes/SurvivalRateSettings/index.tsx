@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
@@ -15,10 +15,7 @@ import {
   SpeciesPlot,
   requestPlantingSiteWithdrawnSpecies,
 } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
-import {
-  selectPermanentPlotsWithObservations,
-  selectPlantingSiteT0,
-} from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSiteT0, selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
   requestPermanentPlotsWithObservations,
@@ -38,7 +35,7 @@ const SurvivalRateSettings = () => {
   const [requestId, setRequestId] = useState('');
   const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
   const [plotsRequestId, setPlotsRequestId] = useState('');
-  const plotsWithObservationsResponse = useAppSelector(selectPermanentPlotsWithObservations(plotsRequestId));
+  const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const [speciesRequestId, setSpeciesRequestId] = useState('');
   const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
@@ -50,8 +47,40 @@ const SurvivalRateSettings = () => {
   const params = useParams<{
     plantingSiteId: string;
   }>();
+  const theme = useTheme();
 
   const plantingSiteId = Number(params.plantingSiteId);
+
+  const permanentPlots = useMemo(() => {
+    return plotsWithObservations?.filter((p) => !!p.permanentIndex);
+  }, [plotsWithObservations]);
+
+  // const temporaryPlots = useMemo(() => {
+  //   return plotsWithObservations?.filter((p) => !p.permanentIndex);
+  // }, [plotsWithObservations]);
+
+  const numberOfSetPermanentPlots = useMemo(() => {
+    let totalSet = 0;
+    permanentPlots?.forEach((pp) => {
+      const correspondingPlot = t0Plots?.find((plot) => plot.monitoringPlotId.toString() === pp.id.toString());
+      if (correspondingPlot?.observationId) {
+        totalSet = totalSet + 1;
+      } else {
+        const correspondingWithdrawnSpeciesPlot = withdrawnSpeciesPlots?.find(
+          (plot) => plot.monitoringPlotId.toString() === pp.id.toString()
+        );
+        const everySpeciesSet = correspondingWithdrawnSpeciesPlot?.species.every((withdrawnSp) => {
+          return correspondingPlot?.densityData.find(
+            (dd) => dd.speciesId.toString() === withdrawnSp.speciesId.toString()
+          );
+        });
+        if (everySpeciesSet) {
+          totalSet = totalSet + 1;
+        }
+      }
+    });
+    return totalSet;
+  }, [permanentPlots, t0Plots, withdrawnSpeciesPlots]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -65,7 +94,7 @@ const SurvivalRateSettings = () => {
         children: (
           <PermanentPlotsTab
             plantingSiteId={plantingSiteId}
-            plotsWithObservations={plotsWithObservations}
+            plotsWithObservations={permanentPlots}
             t0Plots={t0Plots}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
           />
@@ -77,7 +106,7 @@ const SurvivalRateSettings = () => {
         children: <TemporaryPlotsTab />,
       },
     ];
-  }, [activeLocale, plantingSiteId, plotsWithObservations, t0Plots, withdrawnSpeciesPlots]);
+  }, [activeLocale, permanentPlots, plantingSiteId, t0Plots, withdrawnSpeciesPlots]);
 
   useEffect(() => {
     setSelectedPlantingSite(plantingSiteId);
@@ -123,25 +152,43 @@ const SurvivalRateSettings = () => {
   });
 
   return (
-    <Page
-      title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}
-      rightComponent={
-        <Button
-          icon='iconEdit'
-          label={strings.EDIT_SETTINGS}
-          onClick={goToEditSurvivalRateSettings}
-          size='medium'
-          id='editSettings'
-          disabled={!plotsWithObservations || plotsWithObservations.length === 0}
-        />
-      }
-    >
+    <Page title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
       <Card radius='8px'>
         <SurvivalRateInstructions />
-        <Box paddingY={3}>
-          <Typography fontWeight={600}>
-            {strings.formatString(strings.PLOTS_QUANTITY, plotsWithObservations?.length || 0)}
-          </Typography>
+        <Box width={'100%'} display='flex' justifyContent={'space-between'} alignItems={'center'}>
+          <Box paddingY={3} display={'flex'} alignItems={'center'}>
+            {(permanentPlots?.length || 0) > 0 && (permanentPlots?.length || 0) === numberOfSetPermanentPlots ? (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
+                {strings.T0_SET_FOR_PERMANENT_PLOTS}
+              </Typography>
+            ) : numberOfSetPermanentPlots === 0 ? (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                {strings.T0_NOT_SET_FOR_PERMANENT_PLOTS}
+              </Typography>
+            ) : (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                {strings.formatString(
+                  strings.NUMBER_OF_PLOTS_SET_FOR_PERMANENT_PLOTS,
+                  numberOfSetPermanentPlots,
+                  permanentPlots?.length || 0
+                )}
+              </Typography>
+            )}
+            <Box height={'32px'} width={'1px'} sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }} marginX={1} />
+            <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+              {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
+            </Typography>
+          </Box>
+          <Box>
+            <Button
+              icon='iconEdit'
+              label={activeTab === 'permanent' ? strings.EDIT_PERMANENT_PLOTS : strings.EDIT_TEMPORARY_PLOTS}
+              onClick={goToEditSurvivalRateSettings}
+              disabled={!plotsWithObservations || plotsWithObservations.length === 0}
+              priority='secondary'
+              size='medium'
+            />
+          </Box>
         </Box>
 
         <Tabs

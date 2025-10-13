@@ -545,6 +545,7 @@ EDIT_LOCATION,Editar ubicación,f120fad8
 EDIT_NURSERY,Editar vivero,8813669e
 EDIT_ORGANIZATION,Editar organización,56332548
 EDIT_PARTICIPANT,Editar participante,895b68b3
+EDIT_PERMANENT_PLOTS,Editar Parcelas Permanentes,b78a9922
 EDIT_PERSON,Editar persona,5ec719a6
 EDIT_PLANTING_SITE,Editar sitio de plantación,71f7ea28
 EDIT_PROJECT,Editar proyecto,88eb63cb
@@ -556,6 +557,7 @@ EDIT_SETTINGS,Editar configuración,f9c91817
 EDIT_SPECIES,Editar especie,0893d9a0
 EDIT_STATUS,Editar estado,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Editar configuración de la tasa de supervivencia para {0},669ad74c
+EDIT_TEMPORARY_PLOTS,Editar Parcelas Temporales,3df84c06
 EDIT_VIABILITY,Editar viabilidad,019e694b
 EDIT_VIABILITY_TEST,Editar prueba de viabilidad,71da108b
 EDIT_VOTES,Editar votos,8d6f6fe1
@@ -1126,6 +1128,7 @@ NUMBER_OF_PEOPLE,Número de personas,7fd030c1
 NUMBER_OF_PHOTOS,Número de fotos,643d471f
 NUMBER_OF_PLANTS,Número de plantas,41fe8f14
 NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION,Número de parcelas en la observación más reciente,ce786371
+NUMBER_OF_PLOTS_SET_FOR_PERMANENT_PLOTS,t0 establecido para {0} de {1} Parcelas Permanentes,8a4987bd
 NUMBER_OF_SEEDS_COMPROMISED,# semillas afectadas,aee08b67
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *,44a0ef6a
 NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas,aee08b67
@@ -1946,7 +1949,11 @@ SW_CORNER_LATITUDE,Latitud de la esquina SO: {0},11be73c0
 SW_CORNER_LONGITUDE,Longitud de la esquina SO: {0},28e4af3d
 SYSTEM_METRICS,Métricas del sistema,c19498b7
 T0_DATA_IS_SET,Los datos t0 están establecidos,cf4c95a7
+T0_NOT_SET_FOR_PERMANENT_PLOTS,t0 no establecido para Parcelas Permanentes,d1ad09a9
+T0_NOT_SET_FOR_TEMPORARY_PLOTS,t0 no establecido para Parcelas Temporales,6fc5b12c
 T0_PLANT_DENSITY_WARNING,"Proporcione las densidades de plantas para todas las especies que se utilizarán en los cálculos de la tasa de supervivencia para esta parcela. Se muestran las especies a partir de retiros. Es posible que esta no sea la lista completa de especies representadas en la parcela. Para agregar otras especies, utilice Agregar especie.",8f270545
+T0_SET_FOR_PERMANENT_PLOTS,t0 establecido para Parcelas Permanentes,da47223f
+T0_SET_FOR_TEMPORARY_PLOTS,t0 establecido para Parcelas Temporales,e844cb70
 TABLE_OF_CONTENTS,Índice,c4c6df6c
 TABLE_SELECT_ALL_ROWS,Seleccione todas las {0} filas.,b2db09d4
 TABLE_SELECT_NONE,Quite la selección.,37fe7c91

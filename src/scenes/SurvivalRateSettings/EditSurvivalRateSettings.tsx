@@ -16,8 +16,8 @@ import {
 } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import {
   selectAssignT0SiteData,
-  selectPermanentPlotsWithObservations,
   selectPlantingSiteT0,
+  selectPlotsWithObservations,
 } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
@@ -40,7 +40,7 @@ const EditSurvivalRateSettings = () => {
   const [requestId, setRequestId] = useState('');
   const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
   const [plotsRequestId, setPlotsRequestId] = useState('');
-  const plotsWithObservationsResponse = useAppSelector(selectPermanentPlotsWithObservations(plotsRequestId));
+  const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
   const [speciesRequestId, setSpeciesRequestId] = useState('');
   const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
