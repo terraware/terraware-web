@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -156,21 +156,11 @@
 <a name='L91'></a><a href='#L91'>91</a>
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,6 +172,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -222,6 +228,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,6 +266,7 @@ import { isValid } from 'date-fns';
 import DatePicker from 'src/components/common/DatePicker';
 import { useLocalization } from 'src/providers/hooks';
 import { FieldNodePayload } from 'src/types/Search';
+import { useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
 const datePickerStyles = <span class="cstat-no" title="statement not covered" >{</span>
   '&amp; .MuiInputBase-input': {
@@ -276,6 +285,7 @@ interface DateRangeProps {
 export default function <span class="fstat-no" title="function not covered" >DateRange(</span>{ field, onChange, onDelete, values }: DateRangeProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const userTimeZone = <span class="cstat-no" title="statement not covered" >useUserTimeZone();</span>
 &nbsp;
   const [startDate, setStartDate] = <span class="cstat-no" title="statement not covered" >useState(values[0]);</span>
   const [endDate, setEndDate] = <span class="cstat-no" title="statement not covered" >useState(values[1]);</span>
@@ -288,7 +298,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   const getOnChangeDate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (i</span>d: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue?: Date | null) =&gt; {</span>
       const newValues = <span class="cstat-no" title="statement not covered" >[startDate, endDate];</span>
-      const date = <span class="cstat-no" title="statement not covered" >value &amp;&amp; isValid(value) ? getDateDisplayValue(value) : null;</span>
+      const date = <span class="cstat-no" title="statement not covered" >value &amp;&amp; isValid(value) ? getDateDisplayValue(value, userTimeZone?.id) : null;</span>
 <span class="cstat-no" title="statement not covered" >      if (id === 'startDate' &amp;&amp; date) {</span>
 <span class="cstat-no" title="statement not covered" >        setStartDate(date);</span>
 <span class="cstat-no" title="statement not covered" >        newValues[0] = date;</span>
@@ -311,7 +321,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 <span class="cstat-no" title="statement not covered" >        onDelete();</span>
       }
     },
-    [endDate, field, onChange, onDelete, startDate]
+    [endDate, field, onChange, onDelete, startDate, userTimeZone?.id]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -319,6 +329,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
       &lt;Box alignItems='center' display='flex' flexDirection='row'&gt;
         &lt;DatePicker
           aria-label={strings.START_DATE}
+          defaultTimeZone={userTimeZone?.id}
           id='startDate'
           label=''
           onChange={getOnChangeDate('startDate')}
@@ -332,6 +343,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
       &lt;Box alignItems='center' display='flex' flexDirection='row'&gt;
         &lt;DatePicker
           aria-label={strings.END_DATE}
+          defaultTimeZone={userTimeZone?.id}
           id='endDate'
           label=''
           onChange={getOnChangeDate('endDate')}
@@ -349,7 +361,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-13T15:42:30.251Z
+                at 2025-10-13T19:02:41.917Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
