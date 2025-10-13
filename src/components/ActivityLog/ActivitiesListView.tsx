@@ -10,8 +10,8 @@ import { requestAdminListActivities, requestListActivities } from 'src/redux/fea
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { ACTIVITY_TYPES, Activity, activityTypeLabel } from 'src/types/Activity';
-import { FieldNodePayload, FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
+import { ACTIVITY_STATUSES, ACTIVITY_TYPES, Activity, activityTypeLabel } from 'src/types/Activity';
+import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -222,7 +222,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       const result = {} as FieldOptionsMap;
 
       result.type = { partial: false, values: ACTIVITY_TYPES };
-      result.isVerified = { partial: false, values: [strings.YES, strings.NO] };
+      result.status = { partial: false, values: ACTIVITY_STATUSES };
 
       setFilterOptions(result);
     }
@@ -234,27 +234,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     const searchNodeChildren: SearchNodePayload[] = [];
     if (Object.keys(filters).length > 0) {
       const filterValueChildren = Object.keys(filters)
-        .filter((field: string) => field !== 'isVerified' && (filters[field]?.values || []).length > 0)
+        .filter((field: string) => (filters[field]?.values || []).length > 0)
         .map((field: string): SearchNodePayload => filters[field]);
-
-      if (filters.isVerified) {
-        const searchValues: (string | null)[] = [];
-        const selectedValues = filters.isVerified.values as string[];
-        if (selectedValues.find((s) => s === strings.YES)) {
-          searchValues.push(strings.BOOLEAN_TRUE);
-        }
-        if (selectedValues.find((s) => s === strings.NO)) {
-          searchValues.push(strings.BOOLEAN_FALSE);
-          searchValues.push(null);
-        }
-        const newNode: FieldNodePayload = {
-          operation: 'field',
-          field: 'isVerified',
-          type: 'Exact',
-          values: searchValues,
-        };
-        filterValueChildren.push(newNode);
-      }
 
       searchNodeChildren.push({
         operation: 'and',
@@ -441,15 +422,13 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
-      activeLocale
-        ? isAcceleratorRoute
-          ? [
-              { name: 'type', label: strings.TYPE, type: 'multiple_selection' },
-              { name: 'isVerified', label: strings.VERIFIED, type: 'multiple_selection' },
-            ]
-          : [{ name: 'type', label: strings.TYPE, type: 'multiple_selection' }]
-        : [],
-    [activeLocale, strings, isAcceleratorRoute]
+      isAcceleratorRoute
+        ? [
+            { name: 'type', label: strings.TYPE, type: 'multiple_selection' },
+            { name: 'status', label: strings.STATUS, type: 'multiple_selection' },
+          ]
+        : [{ name: 'type', label: strings.TYPE, type: 'multiple_selection' }],
+    [strings, isAcceleratorRoute]
   );
 
   const iconFilters: FilterConfig[] = useMemo(() => {
