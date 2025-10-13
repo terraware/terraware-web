@@ -1,3 +1,5 @@
+496871b1b24 Update dependency eslint-plugin-jsdoc to v61 (#4583)
+08bb1f71242 SW-7527 Round Plant Density numbers in Detail View (#4588)
 9774afebe9f SW-7519: Image expand button (#4582)
 518ce9a3829 Activity Log: Update success message (#4585)
 ef1ab5ac677 SW-7520: Activity Log - Image hover metadata (#4581)

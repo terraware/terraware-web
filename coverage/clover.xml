@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760315361109" clover="3.2.0">
-  <project timestamp="1760315361109" name="All files">
-    <metrics statements="34530" coveredstatements="1347" conditionals="24144" coveredconditionals="391" methods="10533" coveredmethods="213" elements="69207" coveredelements="1951" complexity="0" loc="34530" ncloc="34530" packages="280" files="1359" classes="1359"/>
+<coverage generated="1760369631457" clover="3.2.0">
+  <project timestamp="1760369631458" name="All files">
+    <metrics statements="34530" coveredstatements="1347" conditionals="24146" coveredconditionals="391" methods="10533" coveredmethods="213" elements="69209" coveredelements="1951" complexity="0" loc="34530" ncloc="34530" packages="280" files="1359" classes="1359"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -34743,7 +34743,7 @@
       </file>
     </package>
     <package name="src.scenes.SurvivalRateSettings">
-      <metrics statements="276" coveredstatements="0" conditionals="140" coveredconditionals="0" methods="108" coveredmethods="0"/>
+      <metrics statements="276" coveredstatements="0" conditionals="142" coveredconditionals="0" methods="108" coveredmethods="0"/>
       <file name="EditSurvivalRateSettings.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/EditSurvivalRateSettings.tsx">
         <metrics statements="86" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="22" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
@@ -34842,14 +34842,14 @@
         <line num="30" count="0" type="stmt"/>
       </file>
       <file name="PlotT0Box.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/PlotT0Box.tsx">
-        <metrics statements="16" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="16" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
