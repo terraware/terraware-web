@@ -26,6 +26,7 @@ export type PlotsWithObservationsSearchResult = {
   plantingSubzone_name: string;
   plantingSubzone_plantingZone_name: string;
   observationPlots: PlotT0Observation[];
+  permanentIndex?: string;
 };
 
 export const requestPlantingSite = (plantingSiteId: number, locale?: string | null) => {
@@ -201,7 +202,7 @@ export const requestPlantingSiteT0 = createAsyncThunk(
 export const requestPermanentPlotsWithObservations = createAsyncThunk(
   'permanentPlotsWithObservations',
   async (plantingSiteId: number, { rejectWithValue }) => {
-    const response = await TrackingService.getPermanentPlotsWithObservations(plantingSiteId);
+    const response = await TrackingService.getPlotsWithObservations(plantingSiteId);
 
     if (response) {
       return response;

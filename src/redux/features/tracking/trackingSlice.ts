@@ -20,9 +20,9 @@ import {
   requestListProjectPlantingSites,
   requestOnePlantingSite,
   requestOrganizationReportedPlants,
-  requestPermanentPlotsWithObservations,
   requestPlantingSiteReportedPlants,
   requestPlantingSiteT0,
+  requestPermanentPlotsWithObservations as requestPlotsWithObservations,
 } from './trackingThunks';
 
 // all sites data
@@ -247,7 +247,7 @@ export const plotsWithObservations = createSlice({
   initialState: initialPlotsWithObservationsState,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestPermanentPlotsWithObservations, true)(builder);
+    buildReducers(requestPlotsWithObservations, true)(builder);
   },
 });
 

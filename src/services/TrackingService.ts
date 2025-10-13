@@ -432,7 +432,7 @@ const getPlantingSiteT0 = async (plantingSiteId: number): Promise<Response2<Plan
   ).get2<PlantingSiteT0ResponsePayload>({});
 };
 
-const getPermanentPlotsWithObservations = async <T extends SearchResponseElement>(
+const getPlotsWithObservations = async <T extends SearchResponseElement>(
   plantingSiteId: number
 ): Promise<T[] | null> => {
   const params: SearchRequestPayloadWithOptionalSearch = {
@@ -445,6 +445,7 @@ const getPermanentPlotsWithObservations = async <T extends SearchResponseElement
       'observationPlots.observation_id',
       'observationPlots.observation_startDate',
       'observationPlots.observation_endDate',
+      'permanentIndex',
     ],
     search: {
       operation: 'and',
@@ -460,15 +461,6 @@ const getPermanentPlotsWithObservations = async <T extends SearchResponseElement
           child: {
             operation: 'field',
             field: 'observationPlots.completedTime',
-            type: 'Exact',
-            values: [null],
-          },
-        },
-        {
-          operation: 'not',
-          child: {
-            operation: 'field',
-            field: 'permanentIndex',
             type: 'Exact',
             values: [null],
           },
@@ -508,7 +500,7 @@ const TrackingService = {
   getPlantingSiteHistory,
   listPlantingSiteHistories,
   listOrganizationReportedPlants,
-  getPermanentPlotsWithObservations,
+  getPlotsWithObservations,
   assignT0SiteData,
 };
 
