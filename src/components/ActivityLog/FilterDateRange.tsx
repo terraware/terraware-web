@@ -7,6 +7,7 @@ import { isValid } from 'date-fns';
 import DatePicker from 'src/components/common/DatePicker';
 import { useLocalization } from 'src/providers/hooks';
 import { FieldNodePayload } from 'src/types/Search';
+import { useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const datePickerStyles = {
   '& .MuiInputBase-input': {
@@ -25,6 +26,7 @@ interface DateRangeProps {
 export default function DateRange({ field, onChange, onDelete, values }: DateRangeProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const userTimeZone = useUserTimeZone();
 
   const [startDate, setStartDate] = useState(values[0]);
   const [endDate, setEndDate] = useState(values[1]);
@@ -37,7 +39,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
   const getOnChangeDate = useCallback(
     (id: string) => (value?: Date | null) => {
       const newValues = [startDate, endDate];
-      const date = value && isValid(value) ? getDateDisplayValue(value) : null;
+      const date = value && isValid(value) ? getDateDisplayValue(value, userTimeZone?.id) : null;
       if (id === 'startDate' && date) {
         setStartDate(date);
         newValues[0] = date;
@@ -60,7 +62,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
         onDelete();
       }
     },
-    [endDate, field, onChange, onDelete, startDate]
+    [endDate, field, onChange, onDelete, startDate, userTimeZone?.id]
   );
 
   return (
@@ -68,6 +70,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
       <Box alignItems='center' display='flex' flexDirection='row'>
         <DatePicker
           aria-label={strings.START_DATE}
+          defaultTimeZone={userTimeZone?.id}
           id='startDate'
           label=''
           onChange={getOnChangeDate('startDate')}
@@ -81,6 +84,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
       <Box alignItems='center' display='flex' flexDirection='row'>
         <DatePicker
           aria-label={strings.END_DATE}
+          defaultTimeZone={userTimeZone?.id}
           id='endDate'
           label=''
           onChange={getOnChangeDate('endDate')}
