@@ -25,6 +25,7 @@ export type PlotsWithObservationsSearchResult = {
   name: string;
   plantingSubzone_name: string;
   plantingSubzone_plantingZone_name: string;
+  plantingSubzone_plantingZone_id: string;
   observationPlots: PlotT0Observation[];
   permanentIndex?: string;
 };
