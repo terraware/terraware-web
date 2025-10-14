@@ -90,10 +90,6 @@ const EditSurvivalRateSettings = () => {
     return plotsWithObservations?.filter((p) => !!p.permanentIndex);
   }, [plotsWithObservations]);
 
-  const temporaryPlots = useMemo(() => {
-    return plotsWithObservations?.filter((p) => !p.permanentIndex);
-  }, [plotsWithObservations]);
-
   const tabs = useMemo(() => {
     if (!activeLocale) {
       return [];
@@ -116,17 +112,10 @@ const EditSurvivalRateSettings = () => {
       {
         id: 'temporary',
         label: strings.TEMPORARY_PLOTS,
-        children: (
-          <EditTemporaryPlotsTab
-            plantingSiteId={plantingSiteId}
-            temporaryPlotsWithObservations={temporaryPlots}
-            t0Plots={t0Plots}
-            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
-          />
-        ),
+        children: <EditTemporaryPlotsTab />,
       },
     ];
-  }, [activeLocale, permanentPlots, plantingSiteId, reload, t0Plots, temporaryPlots, withdrawnSpeciesPlots]);
+  }, [activeLocale, permanentPlots, plantingSiteId, reload, t0Plots, withdrawnSpeciesPlots]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'permanent',
