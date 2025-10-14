@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760406781466" clover="3.2.0">
-  <project timestamp="1760406781466" name="All files">
-    <metrics statements="34539" coveredstatements="1347" conditionals="24152" coveredconditionals="391" methods="10543" coveredmethods="213" elements="69234" coveredelements="1951" complexity="0" loc="34539" ncloc="34539" packages="280" files="1359" classes="1359"/>
+<coverage generated="1760464122694" clover="3.2.0">
+  <project timestamp="1760464122694" name="All files">
+    <metrics statements="34539" coveredstatements="1347" conditionals="24162" coveredconditionals="391" methods="10543" coveredmethods="213" elements="69244" coveredelements="1951" complexity="0" loc="34539" ncloc="34539" packages="280" files="1359" classes="1359"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -975,7 +975,7 @@
       </file>
     </package>
     <package name="src.components.AcceleratorReports">
-      <metrics statements="723" coveredstatements="0" conditionals="595" coveredconditionals="0" methods="226" coveredmethods="0"/>
+      <metrics statements="723" coveredstatements="0" conditionals="605" coveredconditionals="0" methods="226" coveredmethods="0"/>
       <file name="AcceleratorReportCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorReports/AcceleratorReportCellRenderer.tsx">
         <metrics statements="26" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
@@ -1383,7 +1383,7 @@
         <line num="294" count="0" type="stmt"/>
       </file>
       <file name="EditAcceleratorReportTargetsModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorReports/EditAcceleratorReportTargetsModal.tsx">
-        <metrics statements="57" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="57" coveredstatements="0" conditionals="43" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
@@ -1412,15 +1412,15 @@
         <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="78" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
-        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="87" count="0" type="stmt"/>
-        <line num="89" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="89" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="90" count="0" type="stmt"/>
-        <line num="92" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="92" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="93" count="0" type="stmt"/>
-        <line num="95" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="95" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="96" count="0" type="stmt"/>
         <line num="100" count="0" type="cond" truecount="0" falsecount="3"/>
         <line num="102" count="0" type="stmt"/>

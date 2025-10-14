@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -613,20 +613,20 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 &nbsp;
     const targets: ReportMetricTargets[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (row.annualReportId) {</span>
-<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.annualReportId, target: record.annualTarget });</span>
+<span class="cstat-no" title="statement not covered" >    if (row.annualReportId &amp;&amp; row.annualTarget !== record.annualTarget) {</span>
+<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.annualReportId, target: Number(record.annualTarget) });</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (row.q1ReportId) {</span>
-<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.q1ReportId, target: record.q1Target });</span>
+<span class="cstat-no" title="statement not covered" >    if (row.q1ReportId &amp;&amp; row.q1Target !== record.q1Target) {</span>
+<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.q1ReportId, target: Number(record.q1Target) });</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (row.q2ReportId) {</span>
-<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.q2ReportId, target: record.q2Target });</span>
+<span class="cstat-no" title="statement not covered" >    if (row.q2ReportId &amp;&amp; row.q2Target !== record.q2Target) {</span>
+<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.q2ReportId, target: Number(record.q2Target) });</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (row.q3ReportId) {</span>
-<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.q3ReportId, target: record.q3Target });</span>
+<span class="cstat-no" title="statement not covered" >    if (row.q3ReportId &amp;&amp; row.q3Target !== record.q3Target) {</span>
+<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.q3ReportId, target: Number(record.q3Target) });</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (row.q4ReportId) {</span>
-<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.q4ReportId, target: record.q4Target });</span>
+<span class="cstat-no" title="statement not covered" >    if (row.q4ReportId &amp;&amp; row.q4Target !== record.q4Target) {</span>
+<span class="cstat-no" title="statement not covered" >      targets.push({ reportId: row.q4ReportId, target: Number(record.q4Target) });</span>
     }
 &nbsp;
     let metric: UpdateProjectMetricTargets | UpdateStandardMetricTargets | UpdateSystemMetricTargets;
@@ -680,7 +680,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 <span class="cstat-no" title="statement not covered" >        return true;</span>
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return !isAllowedReviewReportTargets &amp;&amp; !(report.status === 'Not Submitted' || report.status === 'Needs Update');</span>
+<span class="cstat-no" title="statement not covered" >      return !isAllowedReviewReportTargets || !(report.status === 'Not Submitted' || report.status === 'Needs Update');</span>
     },
     [isAllowedReviewReportTargets, reportsById]
   );
@@ -716,7 +716,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             disabled={isFieldDisabled(record.annualReportId)}
             id='annualTarget'
             label={strings.ANNUAL_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('annualTarget')}
             value={record.annualTarget}
           /&gt;
@@ -726,7 +726,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             disabled={isFieldDisabled(record.q1ReportId)}
             id='q1Target'
             label={strings.Q1_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('q1Target')}
             value={record.q1Target}
           /&gt;
@@ -736,7 +736,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             disabled={isFieldDisabled(record.q2ReportId)}
             id='q2Target'
             label={strings.Q2_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('q2Target')}
             value={record.q2Target}
           /&gt;
@@ -746,7 +746,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             disabled={isFieldDisabled(record.q3ReportId)}
             id='q3Target'
             label={strings.Q3_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('q3Target')}
             value={record.q3Target}
           /&gt;
@@ -756,7 +756,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             disabled={isFieldDisabled(record.q4ReportId)}
             id='q4Target'
             label={strings.Q4_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('q4Target')}
             value={record.q4Target}
           /&gt;
@@ -772,7 +772,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-14T01:53:00.715Z
+                at 2025-10-14T17:48:41.947Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
