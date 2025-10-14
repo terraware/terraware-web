@@ -3,6 +3,7 @@ import { MapRef, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
 import ColorKeyControl from 'src/components/NewMap/ColorKeyControl';
@@ -19,6 +20,7 @@ type MapSplitViewProps = {
   activityMarkerHighlighted?: (activityId: number, fileId: number) => boolean;
   children: React.ReactNode;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
+  heightOffsetPx: number;
   mapRef: MutableRefObject<MapRef | null>;
   onActivityMarkerClick?: (activityId: number, fileId: number) => void;
   projectId: number;
@@ -30,12 +32,14 @@ export default function MapSplitView({
   activityMarkerHighlighted,
   children,
   drawerRef,
+  heightOffsetPx,
   mapRef,
   onActivityMarkerClick,
   projectId,
   topComponent,
 }: MapSplitViewProps): JSX.Element {
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
   const { mapId, refreshToken, token } = useMapboxToken();
   const { strings } = useLocalization();
   const { fitBounds } = useMapUtils(mapRef);
@@ -178,6 +182,14 @@ export default function MapSplitView({
       {topComponent}
 
       <MapComponent
+        containerStyle={
+          isDesktop
+            ? {
+                height: `calc(100vh - ${heightOffsetPx}px)`,
+                maxHeight: `calc(100vh - ${heightOffsetPx}px)`,
+              }
+            : undefined
+        }
         drawerChildren={children}
         drawerHideHeader
         drawerOpen

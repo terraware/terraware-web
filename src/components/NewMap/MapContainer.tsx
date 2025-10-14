@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { CSSProperties, ReactNode, useMemo } from 'react';
 
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -10,10 +10,11 @@ type MapContainerProps = {
   drawerOpen?: boolean;
   legend?: ReactNode;
   map: ReactNode;
+  style?: CSSProperties;
 };
 
 const MapContainer = (props: MapContainerProps) => {
-  const { containerId, drawer, drawerOpen, legend, map } = props;
+  const { containerId, drawer, drawerOpen, legend, map, style } = props;
   const { isDesktop } = useDeviceInfo();
   const drawerOnly = useMemo(() => !isDesktop && drawerOpen, [drawerOpen, isDesktop]);
 
@@ -23,6 +24,7 @@ const MapContainer = (props: MapContainerProps) => {
       className={`map-container map-container${
         isDesktop ? '--desktop' : `--mobile${drawerOpen ? '-drawer-open' : ''}`
       }`}
+      style={style}
     >
       <div className={`map-holder${drawerOnly ? ' map-holder--hidden' : ''}`}>{map}</div>
       {drawerOpen && drawer}
