@@ -112,6 +112,7 @@ export default function ActivityLogView(): JSX.Element {
       leftComponent={PageHeaderLeftComponent}
       rightComponent={PageHeaderRightComponent}
       title={strings.ACTIVITY_LOG}
+      titleContainerStyle={{ minHeight: '56px' }}
     >
       <Card
         style={{
