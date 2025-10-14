@@ -1,3 +1,4 @@
+46c31ba19fb SW-7487 Make map container height constraint by viewport size (#4597)
 ce5833f62e0 SW-7534 Edit Temporary Plots View (#4596)
 1bca4183fa8 SW-7525: Clicking back to "Project Activity" should not have an activity selected (#4592)
 75a98500a9a SW-7548 Remove unchanged metric targets from payload (#4595)
