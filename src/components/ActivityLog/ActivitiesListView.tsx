@@ -120,6 +120,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
   const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
+  const { scrollToElementById } = useMapDrawer(mapDrawerRef);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
@@ -129,6 +130,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const theme = useTheme();
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -141,15 +143,10 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const { scrollToElementById } = useMapDrawer(mapDrawerRef);
-
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
-
   const listResultsActivitiesRequest = useAppSelector(selectActivityList(resultsRequestId));
   const adminListResultsActivitiesRequest = useAppSelector(selectAdminActivityList(resultsRequestId));
-
-  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
   useEffect(() => {
     if (isAcceleratorRoute) {
