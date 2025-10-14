@@ -58,7 +58,6 @@ export default function EditAcceleratorReportTargetsModal({
     reports.forEach((report) => {
       reportsByIdMap[report.id] = report;
     });
-    console.log('reportsByIdMap', reportsByIdMap);
     return reportsByIdMap;
   }, [reports]);
 
