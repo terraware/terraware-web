@@ -48,15 +48,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     description: ['New survival rate calculation for Plant Monitoring Observations'],
     disclosure: ['This is a WIP'],
   },
-  {
-    name: 'Activity Log',
-    preferenceName: 'activityLog',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['New activity log feature'],
-    disclosure: ['This is a WIP'],
-  },
 ];
 
 type FeatureMap = { [key: string]: Feature };

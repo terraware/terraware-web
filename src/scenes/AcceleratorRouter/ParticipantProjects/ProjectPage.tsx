@@ -6,7 +6,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
@@ -50,7 +49,6 @@ const ProjectPage = () => {
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
-  const isActivityLogEnabled = isEnabled('Activity Log');
 
   const [activityId, setActivityId] = useState<number>();
 
@@ -83,15 +81,11 @@ const ProjectPage = () => {
           />
         ),
       },
-      ...(isActivityLogEnabled
-        ? [
-            {
-              id: 'activityLog',
-              label: strings.PROJECT_ACTIVITY,
-              children: <ProjectActivityLogView projectId={projectData.projectId} />,
-            },
-          ]
-        : []),
+      {
+        id: 'activityLog',
+        label: strings.PROJECT_ACTIVITY,
+        children: <ProjectActivityLogView projectId={projectData.projectId} />,
+      },
       {
         id: 'deliverables',
         label: strings.DELIVERABLES,
@@ -118,7 +112,7 @@ const ProjectPage = () => {
         ),
       },
     ];
-  }, [activeLocale, isActivityLogEnabled, projectData, projectApplication, projectScore, phaseVotes]);
+  }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
