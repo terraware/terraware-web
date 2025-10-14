@@ -80,20 +80,20 @@ export default function EditAcceleratorReportTargetsModal({
 
     const targets: ReportMetricTargets[] = [];
 
-    if (row.annualReportId) {
-      targets.push({ reportId: row.annualReportId, target: record.annualTarget });
+    if (row.annualReportId && row.annualTarget !== record.annualTarget) {
+      targets.push({ reportId: row.annualReportId, target: Number(record.annualTarget) });
     }
-    if (row.q1ReportId) {
-      targets.push({ reportId: row.q1ReportId, target: record.q1Target });
+    if (row.q1ReportId && row.q1Target !== record.q1Target) {
+      targets.push({ reportId: row.q1ReportId, target: Number(record.q1Target) });
     }
-    if (row.q2ReportId) {
-      targets.push({ reportId: row.q2ReportId, target: record.q2Target });
+    if (row.q2ReportId && row.q2Target !== record.q2Target) {
+      targets.push({ reportId: row.q2ReportId, target: Number(record.q2Target) });
     }
-    if (row.q3ReportId) {
-      targets.push({ reportId: row.q3ReportId, target: record.q3Target });
+    if (row.q3ReportId && row.q3Target !== record.q3Target) {
+      targets.push({ reportId: row.q3ReportId, target: Number(record.q3Target) });
     }
-    if (row.q4ReportId) {
-      targets.push({ reportId: row.q4ReportId, target: record.q4Target });
+    if (row.q4ReportId && row.q4Target !== record.q4Target) {
+      targets.push({ reportId: row.q4ReportId, target: Number(record.q4Target) });
     }
 
     let metric: UpdateProjectMetricTargets | UpdateStandardMetricTargets | UpdateSystemMetricTargets;
@@ -183,7 +183,7 @@ export default function EditAcceleratorReportTargetsModal({
             disabled={isFieldDisabled(record.annualReportId)}
             id='annualTarget'
             label={strings.ANNUAL_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('annualTarget')}
             value={record.annualTarget}
           />
@@ -193,7 +193,7 @@ export default function EditAcceleratorReportTargetsModal({
             disabled={isFieldDisabled(record.q1ReportId)}
             id='q1Target'
             label={strings.Q1_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('q1Target')}
             value={record.q1Target}
           />
@@ -203,7 +203,7 @@ export default function EditAcceleratorReportTargetsModal({
             disabled={isFieldDisabled(record.q2ReportId)}
             id='q2Target'
             label={strings.Q2_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('q2Target')}
             value={record.q2Target}
           />
@@ -213,7 +213,7 @@ export default function EditAcceleratorReportTargetsModal({
             disabled={isFieldDisabled(record.q3ReportId)}
             id='q3Target'
             label={strings.Q3_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('q3Target')}
             value={record.q3Target}
           />
@@ -223,7 +223,7 @@ export default function EditAcceleratorReportTargetsModal({
             disabled={isFieldDisabled(record.q4ReportId)}
             id='q4Target'
             label={strings.Q4_TARGET}
-            type='text'
+            type='number'
             onChange={onChangeCallback('q4Target')}
             value={record.q4Target}
           />
