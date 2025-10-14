@@ -20,6 +20,7 @@ type MapSplitViewProps = {
   activityMarkerHighlighted?: (activityId: number, fileId: number) => boolean;
   children: React.ReactNode;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
+  heightOffsetPx: number;
   mapRef: MutableRefObject<MapRef | null>;
   onActivityMarkerClick?: (activityId: number, fileId: number) => void;
   projectId: number;
@@ -31,6 +32,7 @@ export default function MapSplitView({
   activityMarkerHighlighted,
   children,
   drawerRef,
+  heightOffsetPx,
   mapRef,
   onActivityMarkerClick,
   projectId,
@@ -183,8 +185,8 @@ export default function MapSplitView({
         containerStyle={
           isDesktop
             ? {
-                height: 'calc(100vh - 256px)',
-                maxHeight: 'calc(100vh - 256px)',
+                height: `calc(100vh - ${heightOffsetPx}px)`,
+                maxHeight: `calc(100vh - ${heightOffsetPx}px)`,
               }
             : undefined
         }

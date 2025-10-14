@@ -112,10 +112,11 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
 };
 
 type ActivitiesListViewProps = {
+  overrideHeightOffsetPx?: number;
   projectId: number;
 };
 
-const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element => {
+const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesListViewProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
@@ -468,6 +469,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       activityMarkerHighlighted={activityMarkerHighlighted}
       drawerRef={mapDrawerRef}
       mapRef={mapRef}
+      heightOffsetPx={overrideHeightOffsetPx ?? 256}
       onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >

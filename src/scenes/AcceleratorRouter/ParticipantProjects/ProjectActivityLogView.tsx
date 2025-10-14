@@ -20,7 +20,7 @@ const ProjectActivityLogView = ({ projectId }: ProjectActivityLogViewProps) => {
         width: '100%',
       }}
     >
-      <ActivitiesListView projectId={projectId} />
+      <ActivitiesListView overrideHeightOffsetPx={384} projectId={projectId} />
     </Card>
   );
 };

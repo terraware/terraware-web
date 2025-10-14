@@ -541,6 +541,8 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         display='flex'
         flexDirection={isMobile ? 'column' : 'row'}
         justifyContent='space-between'
+        marginBottom='2px'
+        marginTop='2px'
         paddingLeft={theme.spacing(4)}
       >
         <Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'>
@@ -559,6 +561,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           activities={isEditing && activityWithMedia ? [activityWithMedia] : []}
           activityMarkerHighlighted={activityMarkerHighlighted}
           drawerRef={mapDrawerRef}
+          heightOffsetPx={264}
           mapRef={mapRef}
           projectId={projectId}
           onActivityMarkerClick={onActivityMarkerClick}
