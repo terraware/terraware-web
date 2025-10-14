@@ -7,8 +7,6 @@ import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 import { useLocalization } from 'src/providers';
 import { ACTIVITY_TYPES, activityTypeColor, activityTypeLabel } from 'src/types/Activity';
 
-export type MapLayer = 'Planting Site' | 'Zones' | 'Sub-Zones' | 'Monitoring Plots' | 'Project Zones';
-
 export default function ColorKeyControl(): JSX.Element | null {
   const theme = useTheme();
   const mapPortalContainer = useMapPortalContainer();

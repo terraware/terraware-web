@@ -3,6 +3,7 @@ import { MapRef, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
 import ColorKeyControl from 'src/components/NewMap/ColorKeyControl';
@@ -36,6 +37,7 @@ export default function MapSplitView({
   topComponent,
 }: MapSplitViewProps): JSX.Element {
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
   const { mapId, refreshToken, token } = useMapboxToken();
   const { strings } = useLocalization();
   const { fitBounds } = useMapUtils(mapRef);
@@ -178,6 +180,14 @@ export default function MapSplitView({
       {topComponent}
 
       <MapComponent
+        containerStyle={
+          isDesktop
+            ? {
+                height: 'calc(100vh - 256px)',
+                maxHeight: 'calc(100vh - 256px)',
+              }
+            : undefined
+        }
         drawerChildren={children}
         drawerHideHeader
         drawerOpen

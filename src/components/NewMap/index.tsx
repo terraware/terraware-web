@@ -1,4 +1,4 @@
-import React, { MutableRefObject, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { CSSProperties, MutableRefObject, ReactNode, useCallback, useMemo, useState } from 'react';
 import { MapRef, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 
 import { MapMouseEvent } from 'mapbox-gl';
@@ -37,6 +37,7 @@ export type MapFeatureSection = MapHighlightFeatureSection | MapLayerFeatureSect
 
 export type MapComponentProps = {
   clusterRadius?: number;
+  containerStyle?: CSSProperties;
   controlBottomLeft?: React.ReactNode;
   controlTopRight?: React.ReactNode;
   controlTopLeft?: React.ReactNode;
@@ -73,6 +74,7 @@ export type MapComponentProps = {
 const MapComponent = (props: MapComponentProps) => {
   const {
     clusterRadius,
+    containerStyle,
     controlBottomLeft,
     controlTopRight,
     controlTopLeft,
@@ -288,7 +290,6 @@ const MapComponent = (props: MapComponentProps) => {
   return (
     <MapContainer
       containerId={mapContainerId ?? 'map-container'}
-      map={map}
       drawer={
         <MapDrawer
           drawerRef={drawerRef}
@@ -304,6 +305,8 @@ const MapComponent = (props: MapComponentProps) => {
       }
       drawerOpen={drawerOpen}
       legend={!hideLegend && legends && <MapLegend legends={legends} />}
+      map={map}
+      style={containerStyle}
     />
   );
 };
