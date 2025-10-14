@@ -1,3 +1,5 @@
+922a4766ad7 SW-7539: Verified filter is not working (#4590)
+e31a85bf574 SW-7545: Small jump when moving between Activity Log and Activity Details page (#4591)
 b0dff548130 Activity Log: Set default timezone in date picker controls (#4586)
 e603021f081 SW-7530 Add temporary/permanent plots indicator (#4589)
 496871b1b24 Update dependency eslint-plugin-jsdoc to v61 (#4583)
