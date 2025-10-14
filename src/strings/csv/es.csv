@@ -2176,6 +2176,7 @@ USD_PER_HECTARE,${0} por ha,d8525ed1
 USE_OBSERVATION_DATA,Usar datos de observación,37c30404
 USE_OBSERVATION_DATA_TOOLTIP,Seleccione de la lista de todas las Observaciones completadas que incluyan datos t0 para la parcela.,1919d6a5
 USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización,2cf2ac16
+USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE,Usar densidades de plantas de parcelas temporales en los cálculos de la tasa de supervivencia,7d41da80
 USED_UP,Agotado,323bdb79
 USER_ACCESS,Acceso del usuario,a9aa511b
 USER_NOTIFICATION_ACTION,"Para cambiar las preferencias, ve a [Mi cuenta]",8fcbad99

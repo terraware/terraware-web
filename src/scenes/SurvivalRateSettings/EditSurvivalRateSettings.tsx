@@ -1,38 +1,31 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Divider, Typography } from '@mui/material';
-import { PageForm } from '@terraware/web-components';
+import { Box, useTheme } from '@mui/material';
+import { Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingSiteWithdrawnSpecies } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
 import {
   SpeciesPlot,
   requestPlantingSiteWithdrawnSpecies,
 } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
-import {
-  selectAssignT0SiteData,
-  selectPlantingSiteT0,
-  selectPlotsWithObservations,
-} from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSiteT0, selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
-  requestAssignT0SiteData,
   requestPermanentPlotsWithObservations,
   requestPlantingSiteT0,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
-import useForm from 'src/utils/useForm';
-import useSnackbar from 'src/utils/useSnackbar';
+import { PlotT0Data } from 'src/types/Tracking';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
-import PlotT0EditBox from './PlotT0EditBox';
-import SpeciesDensityWarningMessage from './SpeciesDensityWarningMessage';
+import EditPermanentPlotsTab from './EditPermanentPlotsTab';
+import EditTemporaryPlotsTab from './EditTemporaryPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
 
 const EditSurvivalRateSettings = () => {
@@ -45,16 +38,18 @@ const EditSurvivalRateSettings = () => {
   const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
-  const [showSpeciesDensityWarningMessage, setShowSpeciesDensityWarningMessage] = useState(false);
-  const [assignRequestId, setAssignRequestId] = useState('');
-  const saveResponse = useAppSelector(selectAssignT0SiteData(assignRequestId));
   const dispatch = useAppDispatch();
   const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
-  const navigate = useSyncNavigate();
   const params = useParams<{
     plantingSiteId: string;
   }>();
-  const snackbar = useSnackbar();
+  const plantingSiteId = Number(params.plantingSiteId);
+  const { activeLocale } = useLocalization();
+  const theme = useTheme();
+
+  useEffect(() => {
+    setSelectedPlantingSite(plantingSiteId);
+  }, [plantingSiteId, setSelectedPlantingSite]);
 
   const reload = useCallback(() => {
     if (plantingSite && plantingSite.id !== -1) {
@@ -66,12 +61,6 @@ const EditSurvivalRateSettings = () => {
       setSpeciesRequestId(requestSpeciesPlots.requestId);
     }
   }, [dispatch, plantingSite]);
-
-  const plantingSiteId = Number(params.plantingSiteId);
-
-  useEffect(() => {
-    setSelectedPlantingSite(plantingSiteId);
-  }, [plantingSiteId, setSelectedPlantingSite]);
 
   useEffect(() => {
     if (plantingSite) {
@@ -91,125 +80,78 @@ const EditSurvivalRateSettings = () => {
     }
   }, [plantingSiteT0Response]);
 
-  const [record, setRecord] = useForm<AssignSiteT0Data>({
-    plantingSiteId,
-    plots: t0Plots ?? [],
-  });
-
-  useEffect(() => {
-    if (t0Plots) {
-      setRecord({ plantingSiteId, plots: t0Plots });
-    }
-  }, [plantingSiteId, setRecord, t0Plots]);
-
   useEffect(() => {
     if (plotsWithObservationsResponse?.status === 'success') {
       setPlotsWithObservations(plotsWithObservationsResponse.data);
     }
   }, [plotsWithObservationsResponse]);
 
-  const goToViewSettings = useCallback(() => {
-    navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));
-  }, [navigate, plantingSiteId]);
+  const permanentPlots = useMemo(() => {
+    return plotsWithObservations?.filter((p) => !!p.permanentIndex);
+  }, [plotsWithObservations]);
 
-  const saveSettings = useCallback(() => {
-    if (!record.plots || record.plots.length === 0) {
-      goToViewSettings();
-      return;
-    }
-    let shouldShowWarning = false;
+  const temporaryPlots = useMemo(() => {
+    return plotsWithObservations?.filter((p) => !p.permanentIndex);
+  }, [plotsWithObservations]);
 
-    withdrawnSpeciesPlots?.forEach((withdrawnPlot) => {
-      const correspondingPlot = record.plots.find(
-        (plot) => plot.monitoringPlotId.toString() === withdrawnPlot.monitoringPlotId.toString()
-      );
-      if (correspondingPlot && !correspondingPlot.observationId) {
-        withdrawnPlot.species.forEach((withdrawnSpecies) => {
-          const correspondingSpecies = correspondingPlot.densityData.find(
-            (denData) => denData.speciesId.toString() === withdrawnSpecies.speciesId.toString()
-          );
-          if (!correspondingSpecies) {
-            shouldShowWarning = true;
-          }
-        });
-      }
-    });
-
-    record.plots.forEach((plot) => {
-      if (!plot.observationId) {
-        plot.densityData.forEach((denData) => {
-          if (denData.plotDensity === undefined || denData.plotDensity === null) {
-            shouldShowWarning = true;
-          }
-        });
-      }
-    });
-
-    if (shouldShowWarning) {
-      setShowSpeciesDensityWarningMessage(true);
-      return;
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
     }
 
-    const saveRequest = dispatch(requestAssignT0SiteData(record));
-    setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots]);
+    return [
+      {
+        id: 'permanent',
+        label: strings.PERMANENT_PLOTS,
+        children: (
+          <EditPermanentPlotsTab
+            plantingSiteId={plantingSiteId}
+            plotsWithObservations={permanentPlots}
+            t0Plots={t0Plots}
+            reload={reload}
+            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+          />
+        ),
+      },
+      {
+        id: 'temporary',
+        label: strings.TEMPORARY_PLOTS,
+        children: (
+          <EditTemporaryPlotsTab
+            plantingSiteId={plantingSiteId}
+            temporaryPlotsWithObservations={temporaryPlots}
+            t0Plots={t0Plots}
+            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+          />
+        ),
+      },
+    ];
+  }, [activeLocale, permanentPlots, plantingSiteId, reload, t0Plots, temporaryPlots, withdrawnSpeciesPlots]);
 
-  useEffect(() => {
-    if (saveResponse?.status === 'success') {
-      reload();
-      goToViewSettings();
-    }
-    if (saveResponse?.status === 'error') {
-      snackbar.toastError();
-    }
-  }, [goToViewSettings, reload, saveResponse, snackbar]);
-
-  const cancelWarningHandler = useCallback(() => {
-    setShowSpeciesDensityWarningMessage(false);
-  }, []);
-
-  const saveWithDefaultDensity = useCallback(() => {
-    const saveRequest = dispatch(requestAssignT0SiteData(record));
-    setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record]);
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'permanent',
+    tabs,
+    viewIdentifier: 'edit-survival-rate-settings',
+  });
 
   return (
     <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
-      {showSpeciesDensityWarningMessage && (
-        <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} />
-      )}
-      <PageForm
-        cancelID='cancelSettings'
-        saveID='saveSettings'
-        onCancel={goToViewSettings}
-        onSave={saveSettings}
-        saveButtonText={strings.SAVE}
-        cancelButtonText={strings.CANCEL}
-      >
-        <Card radius='8px'>
+      <Card radius='8px'>
+        <Box marginBottom={theme.spacing(4)}>
           <SurvivalRateInstructions />
-          <Box paddingY={3}>
-            <Typography fontWeight={600}>
-              {strings.formatString(strings.PLOTS_QUANTITY, plotsWithObservations?.length || 0)}
-            </Typography>
-          </Box>
-          <Divider />
-          {plantingSiteId &&
-            plotsWithObservations?.map((plot) => (
-              <PlotT0EditBox
-                plot={plot}
-                key={plot.id}
-                plantingSiteId={plantingSiteId}
-                t0Plot={t0Plots?.find((t0Plot) => t0Plot.monitoringPlotId.toString() === plot.id.toString())}
-                record={record}
-                setRecord={setRecord}
-                withdrawnSpeciesPlot={withdrawnSpeciesPlots?.find(
-                  (spPlot) => spPlot.monitoringPlotId.toString() === plot.id.toString()
-                )}
-              />
-            ))}
-        </Card>
-      </PageForm>
+        </Box>
+        <Tabs
+          activeTab={activeTab}
+          onChangeTab={onChangeTab}
+          tabs={tabs}
+          headerBorder={true}
+          sx={{
+            '& .tab-header': {
+              margin: 0,
+            },
+          }}
+        />
+      </Card>
     </Page>
   );
 };

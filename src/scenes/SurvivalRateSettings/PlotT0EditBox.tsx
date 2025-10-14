@@ -13,7 +13,7 @@ import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 
-type AddedSpecies = { id: string; speciesId?: number; density: string };
+export type AddedSpecies = { id: string; speciesId?: number; density: string };
 
 type PlotT0EditBoxProps = {
   plot: PlotsWithObservationsSearchResult;

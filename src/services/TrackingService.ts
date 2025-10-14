@@ -442,6 +442,7 @@ const getPlotsWithObservations = async <T extends SearchResponseElement>(
       'name',
       'plantingSubzone_name',
       'plantingSubzone_plantingZone_name',
+      'plantingSubzone_plantingZone_id',
       'observationPlots.observation_id',
       'observationPlots.observation_startDate',
       'observationPlots.observation_endDate',
