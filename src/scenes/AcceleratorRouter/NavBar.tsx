@@ -112,17 +112,15 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         />
       }
 
-      {isAllowed('READ_ACTIVITIES') && (
-        <NavItem
-          icon='checklist'
-          id='activity-log'
-          label={strings.ACTIVITY_LOG}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.ACCELERATOR_ACTIVITY_LOG);
-          }}
-          selected={!!isActivityLogRoute}
-        />
-      )}
+      <NavItem
+        icon='checklist'
+        id='activity-log'
+        label={strings.ACTIVITY_LOG}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.ACCELERATOR_ACTIVITY_LOG);
+        }}
+        selected={!!isActivityLogRoute}
+      />
 
       <NavSection title={strings.DOC_PRODUCER} />
 
