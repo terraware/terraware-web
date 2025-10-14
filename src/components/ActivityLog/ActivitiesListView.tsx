@@ -10,7 +10,15 @@ import { requestAdminListActivities, requestListActivities } from 'src/redux/fea
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { ACTIVITY_STATUSES, ACTIVITY_TYPES, Activity, activityTypeLabel } from 'src/types/Activity';
+import {
+  ACTIVITY_STATUSES,
+  ACTIVITY_TYPES,
+  Activity,
+  ActivityStatus,
+  ActivityType,
+  activityStatusTagLabel,
+  activityTypeLabel,
+} from 'src/types/Activity';
 import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
@@ -219,12 +227,12 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       setBusy(false);
       setResults((listResultsActivitiesRequest?.data || adminListResultsActivitiesRequest?.data || []) as Activity[]);
 
-      const result = {} as FieldOptionsMap;
+      const activityFilterOptions = {
+        status: { partial: false, values: ACTIVITY_STATUSES },
+        type: { partial: false, values: ACTIVITY_TYPES },
+      } as FieldOptionsMap;
 
-      result.type = { partial: false, values: ACTIVITY_TYPES };
-      result.status = { partial: false, values: ACTIVITY_STATUSES };
-
-      setFilterOptions(result);
+      setFilterOptions(activityFilterOptions);
     }
   }, [adminListResultsActivitiesRequest, listResultsActivitiesRequest, snackbar, strings]);
 
@@ -424,8 +432,20 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     () =>
       isAcceleratorRoute
         ? [
-            { name: 'type', label: strings.TYPE, type: 'multiple_selection' },
-            { name: 'status', label: strings.STATUS, type: 'multiple_selection' },
+            {
+              name: 'type',
+              label: strings.TYPE,
+              pillValueRenderer: (values: (string | number | null)[]) =>
+                values.map((value) => activityTypeLabel(value as ActivityType, strings)).join(', '),
+              type: 'multiple_selection',
+            },
+            {
+              name: 'status',
+              label: strings.STATUS,
+              pillValueRenderer: (values: (string | number | null)[]) =>
+                values.map((value) => activityStatusTagLabel(value as ActivityStatus, strings)).join(', '),
+              type: 'multiple_selection',
+            },
           ]
         : [{ name: 'type', label: strings.TYPE, type: 'multiple_selection' }],
     [strings, isAcceleratorRoute]
@@ -436,6 +456,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       field: filter.name,
       label: filter.label,
       options: filterOptions?.[filter.name]?.values || [],
+      pillValueRenderer: filter.pillValueRenderer,
     }));
 
     return activeLocale ? _filters : [];
