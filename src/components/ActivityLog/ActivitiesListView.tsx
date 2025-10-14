@@ -195,8 +195,11 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       // Entering one activity details, set focus to the selected activity
       setFocusedActivityId(showActivityId);
     } else {
-      // Existing one activity detailed view. Clear file states
+      // Exiting one activity detailed view, clear focused & hovered states
+      setFocusedActivityId(undefined);
       setFocusedFileId(undefined);
+      setHoveredActivityId(undefined);
+      setHoveredFileId(undefined);
     }
   }, [showActivityId]);
 
