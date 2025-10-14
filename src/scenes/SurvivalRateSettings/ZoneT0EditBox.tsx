@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Divider, IconButton, Typography, useTheme } from '@mui/material';
-import { Button, Icon, IconTooltip, SelectT } from '@terraware/web-components';
+import { Button, Checkbox, Icon, IconTooltip, SelectT } from '@terraware/web-components';
 
 import TextField from 'src/components/common/TextField';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -34,6 +34,8 @@ const ZoneT0EditBox = ({
     const newRowId = `new-species-${crypto.randomUUID()}`;
     setNewSpeciesRows((prev) => [...prev, { id: newRowId, density: '' }]);
   }, []);
+
+  const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
 
   const allWithdrawnSpecies = React.useMemo(() => {
     if (!withdrawnSpeciesPlot) {
@@ -166,6 +168,26 @@ const ZoneT0EditBox = ({
     [onNewSpeciesChange]
   );
 
+  const onWithdrawalValueSelected = useCallback(
+    (speciesId: number) => (value: boolean) => {
+      const newSelected = new Set(selectedWithdrawalCheckboxes);
+
+      if (value) {
+        newSelected.add(speciesId);
+        const withdrawnValue = allWithdrawnSpecies.find(
+          (wdSpecies) => wdSpecies.speciesId.toString() === speciesId.toString()
+        )?.density;
+        onChangeDensity(speciesId.toString(), withdrawnValue);
+      } else {
+        newSelected.delete(speciesId);
+        onChangeDensity(speciesId.toString(), 0);
+      }
+
+      setSelectedWithdrawalCheckboxes(newSelected);
+    },
+    [selectedWithdrawalCheckboxes, allWithdrawnSpecies, onChangeDensity]
+  );
+
   const isEqualSpecies = useCallback(
     (a: { id: number; scientificName: string }, b: { id: number; scientificName: string }) => a.id === b.id,
     []
@@ -263,6 +285,15 @@ const ZoneT0EditBox = ({
                       label={''}
                       min={0}
                       sx={{ width: '85px' }}
+                    />
+                  </td>
+                  <td>
+                    <Checkbox
+                      id={`density-${withdrawnSpecies.speciesId}`}
+                      label={withdrawnSpecies.density}
+                      name={`density-${withdrawnSpecies.speciesId}`}
+                      value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
+                      onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
                     />
                   </td>
                 </tr>

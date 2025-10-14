@@ -93,8 +93,7 @@ const EditTemporaryPlotsTab = ({
     }
     let shouldShowWarning = false;
 
-    record.zones.forEach((zone) => {
-      const plots = zonesWithObservations[zone.plantingZoneId.toString()];
+    Object.entries(zonesWithObservations).forEach(([zoneId, plots]) => {
       const plotIds = plots.map((plot) => plot.id.toString());
       const withdrawnSpeciesOfZone = withdrawnSpeciesPlots?.filter((wsp) =>
         plotIds.includes(wsp.monitoringPlotId.toString())
@@ -111,7 +110,8 @@ const EditTemporaryPlotsTab = ({
       const allWithdrawnSpeciesForZone = Array.from(speciesMap.values());
 
       allWithdrawnSpeciesForZone.forEach((spec) => {
-        const correspondingSpecies = zone.densityData.find(
+        const correspondingZone = record.zones.find((z) => z.plantingZoneId.toString() === zoneId.toString());
+        const correspondingSpecies = correspondingZone?.densityData.find(
           (denData) => denData.speciesId.toString() === spec.speciesId.toString()
         );
         if (!correspondingSpecies) {
@@ -174,7 +174,7 @@ const EditTemporaryPlotsTab = ({
       desktopOffset={'266px'}
     >
       {showSpeciesDensityWarningMessage && (
-        <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} />
+        <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} type='temporary' />
       )}
       <Box
         paddingTop={1.5}
