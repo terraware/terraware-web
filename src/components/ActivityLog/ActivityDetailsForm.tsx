@@ -529,6 +529,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       onSave={saveActivity}
       saveButtonText={strings.SAVE}
       saveID='saveActivity'
+      style={{ paddingBottom: '4px' }}
     >
       <DeleteActivityModal
         open={deleteActivityModalOpen}
@@ -540,8 +541,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         display='flex'
         flexDirection={isMobile ? 'column' : 'row'}
         justifyContent='space-between'
-        marginBottom='32px'
-        marginTop='2px'
         paddingLeft={theme.spacing(4)}
       >
         <Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'>
@@ -552,7 +551,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       <Card
         style={{
           borderRadius: theme.spacing(1),
-          minHeight: '100vh',
           padding: theme.spacing(3),
           width: '100%',
         }}
