@@ -10,8 +10,16 @@ import { requestAdminListActivities, requestListActivities } from 'src/redux/fea
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { ACTIVITY_TYPES, Activity, activityTypeLabel } from 'src/types/Activity';
-import { FieldNodePayload, FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
+import {
+  ACTIVITY_STATUSES,
+  ACTIVITY_TYPES,
+  Activity,
+  ActivityStatus,
+  ActivityType,
+  activityStatusTagLabel,
+  activityTypeLabel,
+} from 'src/types/Activity';
+import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -219,12 +227,12 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       setBusy(false);
       setResults((listResultsActivitiesRequest?.data || adminListResultsActivitiesRequest?.data || []) as Activity[]);
 
-      const result = {} as FieldOptionsMap;
+      const activityFilterOptions = {
+        status: { partial: false, values: ACTIVITY_STATUSES },
+        type: { partial: false, values: ACTIVITY_TYPES },
+      } as FieldOptionsMap;
 
-      result.type = { partial: false, values: ACTIVITY_TYPES };
-      result.isVerified = { partial: false, values: [strings.YES, strings.NO] };
-
-      setFilterOptions(result);
+      setFilterOptions(activityFilterOptions);
     }
   }, [adminListResultsActivitiesRequest, listResultsActivitiesRequest, snackbar, strings]);
 
@@ -234,27 +242,8 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
     const searchNodeChildren: SearchNodePayload[] = [];
     if (Object.keys(filters).length > 0) {
       const filterValueChildren = Object.keys(filters)
-        .filter((field: string) => field !== 'isVerified' && (filters[field]?.values || []).length > 0)
+        .filter((field: string) => (filters[field]?.values || []).length > 0)
         .map((field: string): SearchNodePayload => filters[field]);
-
-      if (filters.isVerified) {
-        const searchValues: (string | null)[] = [];
-        const selectedValues = filters.isVerified.values as string[];
-        if (selectedValues.find((s) => s === strings.YES)) {
-          searchValues.push(strings.BOOLEAN_TRUE);
-        }
-        if (selectedValues.find((s) => s === strings.NO)) {
-          searchValues.push(strings.BOOLEAN_FALSE);
-          searchValues.push(null);
-        }
-        const newNode: FieldNodePayload = {
-          operation: 'field',
-          field: 'isVerified',
-          type: 'Exact',
-          values: searchValues,
-        };
-        filterValueChildren.push(newNode);
-      }
 
       searchNodeChildren.push({
         operation: 'and',
@@ -441,15 +430,25 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
-      activeLocale
-        ? isAcceleratorRoute
-          ? [
-              { name: 'type', label: strings.TYPE, type: 'multiple_selection' },
-              { name: 'isVerified', label: strings.VERIFIED, type: 'multiple_selection' },
-            ]
-          : [{ name: 'type', label: strings.TYPE, type: 'multiple_selection' }]
-        : [],
-    [activeLocale, strings, isAcceleratorRoute]
+      isAcceleratorRoute
+        ? [
+            {
+              name: 'type',
+              label: strings.TYPE,
+              pillValueRenderer: (values: (string | number | null)[]) =>
+                values.map((value) => activityTypeLabel(value as ActivityType, strings)).join(', '),
+              type: 'multiple_selection',
+            },
+            {
+              name: 'status',
+              label: strings.STATUS,
+              pillValueRenderer: (values: (string | number | null)[]) =>
+                values.map((value) => activityStatusTagLabel(value as ActivityStatus, strings)).join(', '),
+              type: 'multiple_selection',
+            },
+          ]
+        : [{ name: 'type', label: strings.TYPE, type: 'multiple_selection' }],
+    [strings, isAcceleratorRoute]
   );
 
   const iconFilters: FilterConfig[] = useMemo(() => {
@@ -457,6 +456,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
       field: filter.name,
       label: filter.label,
       options: filterOptions?.[filter.name]?.values || [],
+      pillValueRenderer: filter.pillValueRenderer,
     }));
 
     return activeLocale ? _filters : [];
@@ -464,7 +464,7 @@ const ActivitiesListView = ({ projectId }: ActivitiesListViewProps): JSX.Element
 
   return (
     <MapSplitView
-      activities={activitiesVisibleOnMap} // TODO: Use visible activities after pagination/filtering
+      activities={activitiesVisibleOnMap}
       activityMarkerHighlighted={activityMarkerHighlighted}
       drawerRef={mapDrawerRef}
       mapRef={mapRef}
