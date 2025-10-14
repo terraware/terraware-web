@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
@@ -20,10 +20,11 @@ interface DateRangeProps {
   field: string;
   onChange: (filter: FieldNodePayload) => void;
   onDelete: () => void;
+  rightComponent?: ReactNode;
   values: (string | null)[];
 }
 
-export default function DateRange({ field, onChange, onDelete, values }: DateRangeProps): JSX.Element {
+export default function DateRange({ field, onChange, onDelete, rightComponent, values }: DateRangeProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
   const userTimeZone = useUserTimeZone();
@@ -66,8 +67,8 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
   );
 
   return (
-    <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' sx={{ marginBottom: theme.spacing(3) }}>
-      <Box alignItems='center' display='flex' flexDirection='row'>
+    <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap'>
+      <Box display='flex' flexDirection='row' justifyContent='center' marginBottom={theme.spacing(2)}>
         <DatePicker
           aria-label={strings.START_DATE}
           defaultTimeZone={userTimeZone?.id}
@@ -77,11 +78,12 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
           sx={datePickerStyles}
           value={startDate}
         />
-
-        <Typography paddingX={theme.spacing(1)}>to</Typography>
+        <Typography lineHeight='40px' paddingX='14px'>
+          {strings.TO.toLowerCase()}
+        </Typography>
       </Box>
 
-      <Box alignItems='center' display='flex' flexDirection='row'>
+      <Box display='flex' flexDirection='row' justifyContent='center' marginBottom={theme.spacing(2)}>
         <DatePicker
           aria-label={strings.END_DATE}
           defaultTimeZone={userTimeZone?.id}
@@ -91,6 +93,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
           sx={datePickerStyles}
           value={endDate}
         />
+        {rightComponent}
       </Box>
     </Box>
   );

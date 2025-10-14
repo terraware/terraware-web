@@ -491,9 +491,11 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
               field='date'
               onChange={onChangeDateRange}
               onDelete={onDeleteDateRange}
+              rightComponent={
+                <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
+              }
               values={filters.date?.values ?? []}
             />
-            <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
           </Box>
           {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
