@@ -9,16 +9,24 @@ import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdr
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import { PlotT0Data } from 'src/types/Tracking';
+import { AssignSiteT0TempData, ZoneT0Data } from 'src/types/Tracking';
 
 import { AddedSpecies } from './PlotT0EditBox';
 
 type ZoneT0EditBoxProps = {
   plotsWithObservations: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlot?: SpeciesPlot[];
-  t0Plots?: PlotT0Data[];
+  zoneData?: ZoneT0Data;
+  record: AssignSiteT0TempData;
+  setRecord: React.Dispatch<React.SetStateAction<AssignSiteT0TempData>>;
 };
-const ZoneT0EditBox = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Plots }: ZoneT0EditBoxProps) => {
+const ZoneT0EditBox = ({
+  plotsWithObservations,
+  withdrawnSpeciesPlot,
+  zoneData,
+  record,
+  setRecord,
+}: ZoneT0EditBoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
 
@@ -46,17 +54,15 @@ const ZoneT0EditBox = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Plots }:
     const withdrawnSpeciesIds = allWithdrawnSpecies?.map((ws) => ws.speciesId) || [];
     const speciesToShow: AddedSpecies[] = [];
 
-    t0Plots?.forEach((t0Plot) => {
-      t0Plot.densityData.forEach((dd) => {
-        if (!withdrawnSpeciesIds.includes(dd.speciesId)) {
-          const newRowId = `new-species-${crypto.randomUUID()}`;
-          speciesToShow.push({ id: newRowId, speciesId: dd.speciesId, density: dd.plotDensity.toString() });
-        }
-      });
+    zoneData?.densityData.forEach((dd) => {
+      if (!withdrawnSpeciesIds.includes(dd.speciesId)) {
+        const newRowId = `new-species-${crypto.randomUUID()}`;
+        speciesToShow.push({ id: newRowId, speciesId: dd.speciesId, density: dd.plotDensity.toString() });
+      }
     });
 
     return speciesToShow;
-  }, [allWithdrawnSpecies, t0Plots]);
+  }, [allWithdrawnSpecies, zoneData]);
 
   const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
 
@@ -70,10 +76,65 @@ const ZoneT0EditBox = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Plots }:
     return '';
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onChangeDensity = useCallback((id: string, value: unknown) => {
-    return true;
-  }, []);
+  const zoneToSave = useMemo(() => {
+    const existingZone = record.zones.find(
+      (zone) => plotsWithObservations?.[0].plantingSubzone_plantingZone_id === zone.plantingZoneId.toString()
+    );
+    if (existingZone) {
+      return existingZone;
+    }
+    return {
+      plantingZoneId: Number(plotsWithObservations?.[0].plantingSubzone_plantingZone_id),
+      densityData: [],
+    };
+  }, [plotsWithObservations, record]);
+
+  const onChangeDensity = useCallback(
+    (id: string, value: unknown) => {
+      if (zoneToSave) {
+        const densityDataToUpdate = zoneToSave.densityData.find(
+          (densityData) => densityData.speciesId.toString() === id
+        );
+        let zoneCopy: ZoneT0Data;
+
+        if (value) {
+          if (densityDataToUpdate?.plotDensity !== undefined) {
+            const densityDataToUpdateCopy = { ...densityDataToUpdate, plotDensity: Number(value) };
+
+            // Udated plot with modified densityData array
+            zoneCopy = {
+              ...zoneToSave,
+              densityData: zoneToSave.densityData.map((densityData) =>
+                densityData.speciesId.toString() === id ? densityDataToUpdateCopy : densityData
+              ),
+            };
+          } else {
+            zoneCopy = {
+              ...zoneToSave,
+              densityData: [
+                ...zoneToSave.densityData,
+                { density: Number(value), plotDensity: Number(value), speciesId: Number(id) },
+              ],
+            };
+          }
+        } else {
+          // if new density is null, remove the species in that plot
+          const densityDataCopy = zoneToSave.densityData.filter((dd) => dd.speciesId.toString() !== id.toString());
+          zoneCopy = {
+            ...zoneToSave,
+            densityData: densityDataCopy,
+          };
+        }
+
+        // Remove the existing zone, then add the updated one
+        const otherZones = record.zones.filter(
+          (z) => z.plantingZoneId.toString() !== plotsWithObservations?.[0].plantingSubzone_plantingZone_id.toString()
+        );
+        setRecord({ ...record, zones: otherZones ? [...otherZones, zoneCopy] : [zoneCopy] });
+      }
+    },
+    [plotsWithObservations, record, setRecord, zoneToSave]
+  );
 
   const onNewSpeciesChange = useCallback((rowId: string, speciesId: number) => {
     setNewSpeciesRows((prev) => prev.map((row) => (row.id === rowId ? { ...row, speciesId } : row)));
@@ -193,7 +254,11 @@ const ZoneT0EditBox = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Plots }:
                     <TextField
                       type='number'
                       id={`${withdrawnSpecies.speciesId}`}
-                      value={0}
+                      value={
+                        zoneToSave?.densityData.find(
+                          (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
+                        )?.plotDensity
+                      }
                       onChange={onChangeDensity}
                       label={''}
                       min={0}
