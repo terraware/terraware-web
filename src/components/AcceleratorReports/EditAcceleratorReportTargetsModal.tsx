@@ -147,7 +147,7 @@ export default function EditAcceleratorReportTargetsModal({
         return true;
       }
 
-      return !isAllowedReviewReportTargets && !(report.status === 'Not Submitted' || report.status === 'Needs Update');
+      return !isAllowedReviewReportTargets || !(report.status === 'Not Submitted' || report.status === 'Needs Update');
     },
     [isAllowedReviewReportTargets, reportsById]
   );
