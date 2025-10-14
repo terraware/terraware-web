@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/186</span>
+                <span class='fraction'>0/189</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/175</span>
+                <span class='fraction'>0/178</span>
             </div>
         
             
@@ -749,28 +749,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -818,6 +815,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1299,6 +1299,7 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
   const mapDrawerRef = <span class="cstat-no" title="statement not covered" >useRef&lt;HTMLDivElement | null&gt;(null);</span>
   const mapRef = <span class="cstat-no" title="statement not covered" >useRef&lt;MapRef | null&gt;(null);</span>
   const { getCurrentViewState, jumpTo } = <span class="cstat-no" title="statement not covered" >useMapUtils(mapRef);</span>
+  const { scrollToElementById } = <span class="cstat-no" title="statement not covered" >useMapDrawer(mapDrawerRef);</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
@@ -1308,6 +1309,7 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, SearchNodePayload&gt;&gt;({});</span>
+  const [filterOptions, setFilterOptions] = <span class="cstat-no" title="statement not covered" >useState&lt;FieldOptionsMap&gt;({});</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [busy, setBusy] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [activities, setActivities] = <span class="cstat-no" title="statement not covered" >useState&lt;Activity[]&gt;([]);</span>
@@ -1320,15 +1322,10 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
   const [currentPage, setCurrentPage] = <span class="cstat-no" title="statement not covered" >useState(1);</span>
   const itemsPerPage = <span class="cstat-no" title="statement not covered" >10;</span>
 &nbsp;
-  const { scrollToElementById } = <span class="cstat-no" title="statement not covered" >useMapDrawer(mapDrawerRef);</span>
-&nbsp;
   const listActivitiesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectActivityList(requestId));</span>
   const adminListActivitiesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdminActivityList(requestId));</span>
-&nbsp;
   const listResultsActivitiesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectActivityList(resultsRequestId));</span>
   const adminListResultsActivitiesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdminActivityList(resultsRequestId));</span>
-&nbsp;
-  const [filterOptions, setFilterOptions] = <span class="cstat-no" title="statement not covered" >useState&lt;FieldOptionsMap&gt;({});</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute) {</span>
@@ -1374,8 +1371,11 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
       // Entering one activity details, set focus to the selected activity
 <span class="cstat-no" title="statement not covered" >      setFocusedActivityId(showActivityId);</span>
     } else {
-      // Existing one activity detailed view. Clear file states
+      // Exiting one activity detailed view, clear focused &amp; hovered states
+<span class="cstat-no" title="statement not covered" >      setFocusedActivityId(undefined);</span>
 <span class="cstat-no" title="statement not covered" >      setFocusedFileId(undefined);</span>
+<span class="cstat-no" title="statement not covered" >      setHoveredActivityId(undefined);</span>
+<span class="cstat-no" title="statement not covered" >      setHoveredFileId(undefined);</span>
     }
   }, [showActivityId]);
 &nbsp;
@@ -1741,7 +1741,7 @@ export default ActivitiesListView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-14T17:48:41.947Z
+                at 2025-10-14T19:02:08.429Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

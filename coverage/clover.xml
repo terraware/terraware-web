@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760464122694" clover="3.2.0">
-  <project timestamp="1760464122694" name="All files">
-    <metrics statements="34539" coveredstatements="1347" conditionals="24162" coveredconditionals="391" methods="10543" coveredmethods="213" elements="69244" coveredelements="1951" complexity="0" loc="34539" ncloc="34539" packages="280" files="1359" classes="1359"/>
+<coverage generated="1760468529187" clover="3.2.0">
+  <project timestamp="1760468529188" name="All files">
+    <metrics statements="34542" coveredstatements="1347" conditionals="24162" coveredconditionals="391" methods="10543" coveredmethods="213" elements="69247" coveredelements="1951" complexity="0" loc="34542" ncloc="34542" packages="280" files="1359" classes="1359"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1764,7 +1764,7 @@
       </file>
     </package>
     <package name="src.components.ActivityLog">
-      <metrics statements="652" coveredstatements="0" conditionals="465" coveredconditionals="0" methods="182" coveredmethods="0"/>
+      <metrics statements="655" coveredstatements="0" conditionals="465" coveredconditionals="0" methods="182" coveredmethods="0"/>
       <file name="ActivitiesEmptyState.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesEmptyState.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -1772,7 +1772,7 @@
         <line num="17" count="0" type="stmt"/>
       </file>
       <file name="ActivitiesListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesListView.tsx">
-        <metrics statements="175" coveredstatements="0" conditionals="119" coveredconditionals="0" methods="51" coveredmethods="0"/>
+        <metrics statements="178" coveredstatements="0" conditionals="119" coveredconditionals="0" methods="51" coveredmethods="0"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
@@ -1795,7 +1795,7 @@
         <line num="127" count="0" type="stmt"/>
         <line num="128" count="0" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
         <line num="132" count="0" type="stmt"/>
         <line num="133" count="0" type="stmt"/>
         <line num="134" count="0" type="stmt"/>
@@ -1807,34 +1807,37 @@
         <line num="140" count="0" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
         <line num="142" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
         <line num="144" count="0" type="stmt"/>
         <line num="146" count="0" type="stmt"/>
         <line num="147" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
         <line num="149" count="0" type="stmt"/>
-        <line num="150" count="0" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="154" count="0" type="stmt"/>
-        <line num="155" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="151" count="0" type="stmt"/>
+        <line num="152" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="153" count="0" type="stmt"/>
         <line num="156" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
         <line num="161" count="0" type="stmt"/>
-        <line num="164" count="0" type="stmt"/>
+        <line num="165" count="0" type="stmt"/>
+        <line num="166" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="167" count="0" type="stmt"/>
         <line num="168" count="0" type="stmt"/>
         <line num="169" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="170" count="0" type="stmt"/>
         <line num="171" count="0" type="stmt"/>
         <line num="172" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="173" count="0" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="175" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="176" count="0" type="stmt"/>
-        <line num="177" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="188" count="0" type="stmt"/>
-        <line num="189" count="0" type="stmt"/>
-        <line num="190" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="174" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="187" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="191" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="193" count="0" type="stmt"/>
-        <line num="194" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="196" count="0" type="stmt"/>
+        <line num="197" count="0" type="stmt"/>
+        <line num="198" count="0" type="stmt"/>
         <line num="199" count="0" type="stmt"/>
         <line num="203" count="0" type="stmt"/>
         <line num="204" count="0" type="stmt"/>
