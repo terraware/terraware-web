@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -346,7 +346,20 @@
 <a name='L281'></a><a href='#L281'>281</a>
 <a name='L282'></a><a href='#L282'>282</a>
 <a name='L283'></a><a href='#L283'>283</a>
-<a name='L284'></a><a href='#L284'>284</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -388,6 +401,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -544,20 +558,30 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -568,6 +592,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -611,6 +636,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -638,13 +664,14 @@ import {
   PlantingSiteHistory,
   PlantingSiteReportedPlants,
   PlantingSiteSearchResult,
-  PlotT0Data,
+  SiteT0Data,
 } from 'src/types/Tracking';
 &nbsp;
 import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
 import {
   PlotsWithObservationsSearchResult,
   requestAssignT0SiteData,
+  requestAssignT0TempSiteData,
   requestGetPlantingSiteHistory,
   requestListPlantingSiteHistories,
   requestListPlantingSites,
@@ -860,7 +887,7 @@ export const organizationReportedPlantsSlice = <span class="cstat-no" title="sta
   },
 });
 &nbsp;
-const initialPlantingSiteT0: { [key: string]: StatusT&lt;PlotT0Data[]&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
+const initialPlantingSiteT0: { [key: string]: StatusT&lt;SiteT0Data&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
 &nbsp;
 export const plantingSiteT0Slice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
   name: 'plantingSiteT0Slice',
@@ -893,6 +920,17 @@ export const assignT0SiteData = <span class="cstat-no" title="statement not cove
   },
 });
 &nbsp;
+const initialAssignT0TempSiteDataState: { [key: string]: StatusT&lt;number&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
+&nbsp;
+export const assignT0TempSiteData = <span class="cstat-no" title="statement not covered" >createSlice({</span>
+  name: 'assignT0TempSiteDataSlice',
+  initialState: initialAssignT0TempSiteDataState,
+  reducers: {},
+  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
+<span class="cstat-no" title="statement not covered" >    buildReducers(requestAssignT0TempSiteData)(builder);</span>
+  },
+});
+&nbsp;
 const trackingReducers = <span class="cstat-no" title="statement not covered" >{</span>
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
@@ -908,6 +946,7 @@ const trackingReducers = <span class="cstat-no" title="statement not covered" >{
   plantingSiteT0: plantingSiteT0Slice.reducer,
   plotsWithObservations: plotsWithObservations.reducer,
   assignT0SiteData: assignT0SiteData.reducer,
+  assignT0TempSiteData: assignT0TempSiteData.reducer,
   projectPlantingSites: projectPlantingSiteListSlice.reducer,
 };
 &nbsp;
@@ -919,7 +958,7 @@ export default trackingReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-15T04:37:12.208Z
+                at 2025-10-15T16:56:20.880Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

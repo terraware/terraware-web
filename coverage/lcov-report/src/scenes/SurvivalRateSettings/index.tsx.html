@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -273,7 +273,9 @@
 <a name='L208'></a><a href='#L208'>208</a>
 <a name='L209'></a><a href='#L209'>209</a>
 <a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -338,6 +340,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -508,7 +512,7 @@ import {
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { PlotT0Data } from 'src/types/Tracking';
+import { SiteT0Data } from 'src/types/Tracking';
 import useStickyTabs from 'src/utils/useStickyTabs';
 &nbsp;
 import PermanentPlotsTab from './PermanentPlotsTab';
@@ -526,7 +530,7 @@ const SurvivalRateSettings = <span class="cstat-no" title="statement not covered
   const withdrawnSpeciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));</span>
   const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = <span class="cstat-no" title="statement not covered" >useState&lt;SpeciesPlot[]&gt;();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const [t0Plots, setT0Plots] = <span class="cstat-no" title="statement not covered" >useState&lt;PlotT0Data[]&gt;();</span>
+  const [t0SiteData, setT0SiteData] = <span class="cstat-no" title="statement not covered" >useState&lt;SiteT0Data&gt;();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const params = <span class="cstat-no" title="statement not covered" >useParams&lt;{</span>
@@ -547,7 +551,9 @@ const SurvivalRateSettings = <span class="cstat-no" title="statement not covered
   const numberOfSetPermanentPlots = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     let totalSet = <span class="cstat-no" title="statement not covered" >0;</span>
 <span class="cstat-no" title="statement not covered" >    permanentPlots?.forEach(<span class="fstat-no" title="function not covered" >(p</span>p) =&gt; {</span>
-      const correspondingPlot = <span class="cstat-no" title="statement not covered" >t0Plots?.find(<span class="fstat-no" title="function not covered" >(p</span>lot) =&gt; <span class="cstat-no" title="statement not covered" >plot.monitoringPlotId.toString() === pp.id.toString())</span>;</span>
+      const correspondingPlot = <span class="cstat-no" title="statement not covered" >t0SiteData?.plots?.find(</span>
+<span class="fstat-no" title="function not covered" >        (p</span>lot) =&gt; <span class="cstat-no" title="statement not covered" >plot.monitoringPlotId.toString() === pp.id.toString()</span>
+      );
 <span class="cstat-no" title="statement not covered" >      if (correspondingPlot?.observationId) {</span>
 <span class="cstat-no" title="statement not covered" >        totalSet = totalSet + 1;</span>
       } else {
@@ -565,7 +571,7 @@ const SurvivalRateSettings = <span class="cstat-no" title="statement not covered
       }
     });
 <span class="cstat-no" title="statement not covered" >    return totalSet;</span>
-  }, [permanentPlots, t0Plots, withdrawnSpeciesPlots]);
+  }, [permanentPlots, t0SiteData, withdrawnSpeciesPlots]);
 &nbsp;
   const tabs = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
@@ -580,7 +586,7 @@ const SurvivalRateSettings = <span class="cstat-no" title="statement not covered
           &lt;PermanentPlotsTab
             plantingSiteId={plantingSiteId}
             plotsWithObservations={permanentPlots}
-            t0Plots={t0Plots}
+            t0Plots={t0SiteData?.plots}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
           /&gt;
         ),
@@ -591,7 +597,7 @@ const SurvivalRateSettings = <span class="cstat-no" title="statement not covered
         children: &lt;TemporaryPlotsTab /&gt;,
       },
     ];
-  }, [activeLocale, permanentPlots, plantingSiteId, t0Plots, withdrawnSpeciesPlots]);
+  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, withdrawnSpeciesPlots]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedPlantingSite(plantingSiteId);</span>
@@ -610,7 +616,7 @@ const SurvivalRateSettings = <span class="cstat-no" title="statement not covered
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (plantingSiteT0Response?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      setT0Plots(plantingSiteT0Response.data);</span>
+<span class="cstat-no" title="statement not covered" >      setT0SiteData(plantingSiteT0Response.data);</span>
     }
   }, [plantingSiteT0Response]);
 &nbsp;
@@ -700,7 +706,7 @@ export default SurvivalRateSettings;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-15T04:37:12.208Z
+                at 2025-10-15T16:56:20.880Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1,3 +1,6 @@
+6713428e539 SW-7538 Photo captions that are too long expand past the photo itself and cover other UI elements (#4604)
+dc65439f674 SW-7522 Adding pills for filters (#4603)
+e5607502130 SW-7550 Add redux for Temporary Plots (#4598)
 16276257507 SW-7544 Fit bound to selected activity markers (#4602)
 78ce1aee024 SW-7553: Remove feature flag (#4600)
 25686f55769 SW-7542 Hide border in activity log views (#4601)
