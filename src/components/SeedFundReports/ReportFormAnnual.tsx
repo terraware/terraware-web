@@ -84,9 +84,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
   );
   const [socialImpact, setSocialImpact] = useState(report.annualDetails?.socialImpact ?? '');
 
-  const [sdgList, setSdgList] = useState(
-    report.annualDetails?.sustainableDevelopmentGoals.map((g) => g.goal.toString()) ?? []
-  );
+  const [sdgList, setSdgList] = useState(report.annualDetails?.sustainableDevelopmentGoals.map((g) => g.goal) ?? []);
   const [sdgProgressStates, setSdgProgressStates] = useSDGProgress(report);
 
   const [challenges, setChallenges] = useState(report.annualDetails?.challenges ?? '');
@@ -374,57 +372,60 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           {strings.SUSTAINABLE_DEVELOPMENT_GOALS}
         </Typography>
       </Grid>
-      {Object.keys(SDG_STRING).map((key) => (
-        <Grid key={key} item xs={smallItemGridWidth()}>
-          <Checkbox
-            id={key}
-            disabled={!editable}
-            name={SDG_STRING[key as SustainableDevelopmentGoal]}
-            label={SDG_STRING[key as SustainableDevelopmentGoal]}
-            value={sdgList.includes(key as SustainableDevelopmentGoal)}
-            onChange={(value) => handleSDGChange(value, key as SustainableDevelopmentGoal)}
-          />
-          {sdgList.includes(key as SustainableDevelopmentGoal) && (
-            <>
-              <Textfield
-                label=''
-                id={key}
-                type='textarea'
-                display={!editable}
-                preserveNewlines={true}
-                value={sdgProgressStates[Number(key) - 1]}
-                onChange={(value) => {
-                  setSdgProgressStates[Number(key) - 1](value as string);
-                  const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex(
-                    (s) => s.goal.toString() === key
-                  );
-                  if (updateSDGProgress && index !== undefined && index >= 0) {
-                    updateSDGProgress(index, value as string);
+      {Object.keys(SDG_STRING).map((key) => {
+        const sdgKey = Number(key) as SustainableDevelopmentGoal;
+        return (
+          <Grid key={key} item xs={smallItemGridWidth()}>
+            <Checkbox
+              id={key}
+              disabled={!editable}
+              name={SDG_STRING[sdgKey]}
+              label={SDG_STRING[sdgKey]}
+              value={sdgList.includes(sdgKey)}
+              onChange={(value) => handleSDGChange(value, sdgKey)}
+            />
+            {sdgList.includes(sdgKey) && (
+              <>
+                <Textfield
+                  label=''
+                  id={key}
+                  type='textarea'
+                  display={!editable}
+                  preserveNewlines={true}
+                  value={sdgProgressStates[sdgKey - 1]}
+                  onChange={(value) => {
+                    setSdgProgressStates[sdgKey - 1](value as string);
+                    const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex(
+                      (s) => s.goal === sdgKey
+                    );
+                    if (updateSDGProgress && index !== undefined && index >= 0) {
+                      updateSDGProgress(index, value as string);
+                    }
+                  }}
+                  errorText={
+                    validate &&
+                    !report.annualDetails?.sustainableDevelopmentGoals[
+                      report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === Number(key))
+                    ].progress
+                      ? strings.REQUIRED_FIELD
+                      : ''
                   }
-                }}
-                errorText={
-                  validate &&
-                  !report.annualDetails?.sustainableDevelopmentGoals[
-                    report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal.toString() === key)
-                  ].progress
-                    ? strings.REQUIRED_FIELD
-                    : ''
-                }
-              />
-              {editable && (
-                <Typography
-                  fontSize='14px'
-                  fontWeight={400}
-                  color={theme.palette.TwClrTxtSecondary}
-                  margin={theme.spacing(0.5, 0, 0, 0.5)}
-                >
-                  {strings.REQUIRED}
-                </Typography>
-              )}
-            </>
-          )}
-        </Grid>
-      ))}
+                />
+                {editable && (
+                  <Typography
+                    fontSize='14px'
+                    fontWeight={400}
+                    color={theme.palette.TwClrTxtSecondary}
+                    margin={theme.spacing(0.5, 0, 0, 0.5)}
+                  >
+                    {strings.REQUIRED}
+                  </Typography>
+                )}
+              </>
+            )}
+          </Grid>
+        );
+      })}
       <br />
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
