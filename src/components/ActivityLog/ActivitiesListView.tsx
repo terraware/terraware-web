@@ -124,7 +124,7 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
-  const { scrollToElementById } = useMapDrawer(mapDrawerRef);
+  const { scrollToElementById, scrollToTop } = useMapDrawer(mapDrawerRef);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
@@ -448,8 +448,9 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
     (activityId: number) => () => {
       query.set('activityId', activityId.toString());
       navigate(getLocation(location.pathname, location, query.toString()));
+      scrollToTop();
     },
-    [location, navigate, query]
+    [location, navigate, query, scrollToTop]
   );
 
   const filterColumns = useMemo<FilterField[]>(
