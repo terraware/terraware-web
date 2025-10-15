@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box } from '@mui/material';
-import { Checkbox, PageForm } from '@terraware/web-components';
+import { Box, useTheme } from '@mui/material';
+import { Checkbox, Icon, PageForm, Tooltip } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -44,6 +44,7 @@ const EditTemporaryPlotsTab = ({
   const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const theme = useTheme();
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({
     plantingSiteId,
@@ -184,13 +185,22 @@ const EditTemporaryPlotsTab = ({
           },
         }}
       >
-        <Checkbox
-          id={'temporaryPlotsCheck'}
-          name={'temporaryPlotsCheck'}
-          label={strings.USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE}
-          value={isTemporaryPlotsChecked}
-          onChange={onChangeTemporaryPlotsCheck}
-        />
+        <Box display={'flex'} alignItems={'center'}>
+          <Checkbox
+            id={'temporaryPlotsCheck'}
+            name={'temporaryPlotsCheck'}
+            label={strings.USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE}
+            value={isTemporaryPlotsChecked}
+            onChange={onChangeTemporaryPlotsCheck}
+          />
+          <Box marginTop={1} paddingLeft={1}>
+            <Tooltip title={strings.USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE_TOOLTIP}>
+              <Box display='flex'>
+                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+              </Box>
+            </Tooltip>
+          </Box>
+        </Box>
 
         {isTemporaryPlotsChecked &&
           Object.entries(zonesWithObservations).map(([zoneId, plots]) => {

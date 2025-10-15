@@ -55,9 +55,9 @@ const SurvivalRateSettings = () => {
     return plotsWithObservations?.filter((p) => !!p.permanentIndex);
   }, [plotsWithObservations]);
 
-  // const temporaryPlots = useMemo(() => {
-  //   return plotsWithObservations?.filter((p) => !p.permanentIndex);
-  // }, [plotsWithObservations]);
+  const temporaryPlots = useMemo(() => {
+    return plotsWithObservations?.filter((p) => !p.permanentIndex);
+  }, [plotsWithObservations]);
 
   const numberOfSetPermanentPlots = useMemo(() => {
     let totalSet = 0;
@@ -84,6 +84,26 @@ const SurvivalRateSettings = () => {
     return totalSet;
   }, [permanentPlots, t0SiteData, withdrawnSpeciesPlots]);
 
+  const zonesWithObservations = useMemo(() => {
+    if (!temporaryPlots) {
+      return {};
+    }
+    return temporaryPlots.reduce(
+      (acc, plot) => {
+        const zoneId = plot.plantingSubzone_plantingZone_id;
+        if (!zoneId) {
+          return acc;
+        }
+        if (!acc[zoneId]) {
+          acc[zoneId] = [];
+        }
+        acc[zoneId].push(plot);
+        return acc;
+      },
+      {} as Record<string, PlotsWithObservationsSearchResult[]>
+    );
+  }, [temporaryPlots]);
+
   const tabs = useMemo(() => {
     if (!activeLocale) {
       return [];
@@ -105,10 +125,16 @@ const SurvivalRateSettings = () => {
       {
         id: 'temporary',
         label: strings.TEMPORARY_PLOTS,
-        children: <TemporaryPlotsTab />,
+        children: (
+          <TemporaryPlotsTab
+            t0SiteData={t0SiteData}
+            zonesWithObservations={zonesWithObservations}
+            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+          />
+        ),
       },
     ];
-  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, withdrawnSpeciesPlots]);
+  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, withdrawnSpeciesPlots, zonesWithObservations]);
 
   useEffect(() => {
     setSelectedPlantingSite(plantingSiteId);
@@ -143,15 +169,18 @@ const SurvivalRateSettings = () => {
     }
   }, [withdrawnSpeciesResponse]);
 
-  const goToEditSurvivalRateSettings = useCallback(() => {
-    navigate({ pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()) });
-  }, [navigate, plantingSiteId]);
-
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'permanent',
     tabs,
     viewIdentifier: 'survival-rate-settings',
   });
+
+  const goToEditSurvivalRateSettings = useCallback(() => {
+    navigate({
+      pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()),
+      search: `tab=${activeTab}`,
+    });
+  }, [activeTab, navigate, plantingSiteId]);
 
   return (
     <Page title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
@@ -176,10 +205,25 @@ const SurvivalRateSettings = () => {
                 )}
               </Typography>
             )}
-            <Box height={'32px'} width={'1px'} sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }} marginX={1} />
-            <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
-              {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
-            </Typography>
+            {t0SiteData?.survivalRateIncludesTempPlots && (
+              <>
+                <Box
+                  height={'32px'}
+                  width={'1px'}
+                  sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }}
+                  marginX={1}
+                />
+                {(t0SiteData?.zones.length || 0) === Object.entries(zonesWithObservations).length ? (
+                  <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
+                    {strings.T0_SET_FOR_TEMPORARY_PLOTS}
+                  </Typography>
+                ) : (
+                  <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                    {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
+                  </Typography>
+                )}
+              </>
+            )}
           </Box>
           <Box>
             <Button
