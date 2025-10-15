@@ -271,6 +271,7 @@ const ActivityPhotoPreview = ({
             onChange={setCaptionCallback}
             type='text'
             value={caption}
+            maxLength={200}
           />
         </Grid>
       </Grid>
