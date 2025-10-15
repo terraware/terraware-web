@@ -191,8 +191,11 @@ const PhotosBox = (props: ReportBoxProps) => {
 
   const toUpdate = useMemo(() => {
     return (
-      photos.filter((newPhoto) => report?.photos.some((existingPhoto) => newPhoto.fileId === existingPhoto.fileId)) ??
-      []
+      photos.filter((newPhoto) =>
+        report?.photos.some(
+          (existingPhoto) => newPhoto.fileId === existingPhoto.fileId && newPhoto.caption !== existingPhoto.caption
+        )
+      ) ?? []
     );
   }, [photos, report?.photos]);
 
