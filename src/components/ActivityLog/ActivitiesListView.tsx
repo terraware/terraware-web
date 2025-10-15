@@ -2,6 +2,7 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Pagination, Typography, useTheme } from '@mui/material';
+import { PillList, PillListItem } from '@terraware/web-components';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -28,7 +29,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
 import { FilterField } from '../common/FilterGroup';
-import { FilterConfig } from '../common/SearchFiltersWrapperV2';
+import { FilterConfig, defaultPillValueRenderer } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityDetailView from './ActivityDetailView';
@@ -463,6 +464,43 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
     return activeLocale ? _filters : [];
   }, [activeLocale, filterColumns, filterOptions]);
 
+  const filterPillData = useMemo(() => {
+    return Object.keys(iconFilters)
+      .map((key): PillListItem<string> | false => {
+        const filterName = iconFilters[Number(key)].field;
+        // If there are no values, there should be no pill
+        if (!filters[filterName] || (filters[filterName].values || []).length === 0) {
+          return false;
+        }
+
+        const filterConfig = [...(iconFilters || [])].find((filter: FilterConfig) => filter.field === filterName);
+
+        if (!filterConfig) {
+          // Should not be possible, a filter must be present at this point
+          return false;
+        }
+
+        const pillValue = filterConfig.pillValueRenderer
+          ? filterConfig.pillValueRenderer(filters[filterName].values)
+          : defaultPillValueRenderer(filters[filterName].values);
+        const label = filterConfig.label;
+
+        const removeFilter = (k: string) => {
+          const result = { ...filters };
+          delete result[k];
+          setFilters(result);
+        };
+
+        return {
+          id: filterName,
+          label,
+          value: pillValue || '',
+          onRemove: () => removeFilter(filterName),
+        };
+      })
+      .filter((item: PillListItem<string> | false): item is PillListItem<string> => !!item);
+  }, [filters, iconFilters]);
+
   return (
     <MapSplitView
       activities={activitiesVisibleOnMap}
@@ -486,14 +524,21 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
         <ActivitiesEmptyState projectId={projectId} />
       ) : (
         <>
-          <Box display={'flex'}>
-            <DateRange
-              field='date'
-              onChange={onChangeDateRange}
-              onDelete={onDeleteDateRange}
-              values={filters.date?.values ?? []}
-            />
-            <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
+          <Box marginBottom={3}>
+            <Box display={'flex'}>
+              <DateRange
+                field='date'
+                onChange={onChangeDateRange}
+                onDelete={onDeleteDateRange}
+                values={filters.date?.values ?? []}
+              />
+              <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
+            </Box>
+            {filterPillData.length > 0 && (
+              <Grid item xs={12} display='flex' marginTop={1}>
+                <PillList data={filterPillData} />
+              </Grid>
+            )}
           </Box>
           {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
