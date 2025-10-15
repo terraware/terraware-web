@@ -1,6 +1,6 @@
 import { MultiPolygon } from 'geojson';
 
-import { MapBounds } from './types';
+import { MapBounds, MapPoint } from './types';
 
 const latToY = (lat: number): number => {
   const rad = (lat * Math.PI) / 180;
@@ -40,20 +40,25 @@ const getBoundsZoomLevel = (bounds: MapBounds, mapWidth: number, mapHeight: numb
   return Math.floor(Math.min(latZoom, lngZoom));
 };
 
-const getBoundingBox = (multipolygons: MultiPolygon[]): MapBounds => {
+const getBoundingBoxFromMultiPolygons = (multipolygons: MultiPolygon[]): MapBounds => {
+  const points = multipolygons
+    .map((multipolygon) => multipolygon.coordinates)
+    .flat()
+    .flat()
+    .flat()
+    .map((coordinate) => ({ lng: coordinate[0], lat: coordinate[1] }));
+
+  return getBoundingBoxFromPoints(points);
+};
+
+const getBoundingBoxFromPoints = (points: MapPoint[]): MapBounds => {
   let minLat = Infinity;
   let maxLat = -Infinity;
   let minLng = Infinity;
   let maxLng = -Infinity;
 
-  const coordinates = multipolygons
-    .map((multipolygon) => multipolygon.coordinates)
-    .flat()
-    .flat()
-    .flat();
-
-  if (coordinates.length > 0) {
-    for (const [lng, lat] of coordinates) {
+  if (points.length > 0) {
+    for (const { lng, lat } of points) {
       minLat = Math.min(minLat, lat);
       maxLat = Math.max(maxLat, lat);
       minLng = Math.min(minLng, lng);
@@ -64,4 +69,4 @@ const getBoundingBox = (multipolygons: MultiPolygon[]): MapBounds => {
   return { minLat, minLng, maxLat, maxLng };
 };
 
-export { isBoundsValid, getBoundingBox, getBoundsZoomLevel };
+export { isBoundsValid, getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints, getBoundsZoomLevel };

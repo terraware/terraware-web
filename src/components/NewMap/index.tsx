@@ -9,7 +9,7 @@ import MapDrawer, { MapDrawerSize } from './MapDrawer';
 import MapLegend, { MapHighlightLegendItem, MapLegendGroup } from './MapLegend';
 import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapViewState } from './types';
 import useStickyMapViewStyle from './useStickyMapViewStyle';
-import { getBoundingBox, getBoundsZoomLevel } from './utils';
+import { getBoundingBoxFromMultiPolygons, getBoundsZoomLevel } from './utils';
 
 type BaseMapFeatureSection = {
   sectionDisabled?: boolean;
@@ -188,7 +188,7 @@ const MapComponent = (props: MapComponentProps) => {
         .flatMap((layer) => layer.features)
         .map((geoFeature) => geoFeature.geometry);
 
-      const { minLat, minLng, maxLat, maxLng } = getBoundingBox(multipolygons);
+      const { minLat, minLng, maxLat, maxLng } = getBoundingBoxFromMultiPolygons(multipolygons);
 
       const centerLng = (minLng + maxLng) / 2;
       const centerLat = (minLat + maxLat) / 2;
