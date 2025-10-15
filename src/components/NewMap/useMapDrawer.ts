@@ -18,8 +18,13 @@ const useMapDrawer = (drawerRef: MutableRefObject<HTMLDivElement | null>) => {
     [drawerRef]
   );
 
+  const scrollToTop = useCallback(() => {
+    drawerRef?.current?.scrollTo(0, 0);
+  }, [drawerRef]);
+
   return {
     scrollToElementById,
+    scrollToTop,
   };
 };
 
