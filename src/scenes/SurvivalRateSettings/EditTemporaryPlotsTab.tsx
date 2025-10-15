@@ -5,7 +5,9 @@ import { Checkbox, Icon, PageForm, Tooltip } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
+import { updatePlantingSite } from 'src/redux/features/plantingSite/plantingSiteThunks';
 import { selectAssignT0TempSiteData } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
@@ -45,6 +47,7 @@ const EditTemporaryPlotsTab = ({
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const { plantingSite } = usePlantingSiteData();
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({
     plantingSiteId,
@@ -66,6 +69,20 @@ const EditTemporaryPlotsTab = ({
   const goToViewSettings = useCallback(() => {
     navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));
   }, [navigate, plantingSiteId]);
+
+  const updatePlantingSiteSetting = useCallback(() => {
+    if (isTemporaryPlotsChecked) {
+      void dispatch(
+        updatePlantingSite({
+          id: plantingSiteId,
+          plantingSite: {
+            survivalRateIncludesTempPlots: isTemporaryPlotsChecked,
+            name: plantingSite?.name || '',
+          },
+        })
+      );
+    }
+  }, [dispatch, isTemporaryPlotsChecked, plantingSite, plantingSiteId]);
 
   const zonesWithObservations = useMemo(() => {
     if (!temporaryPlotsWithObservations) {
@@ -134,9 +151,10 @@ const EditTemporaryPlotsTab = ({
       return;
     }
 
+    updatePlantingSiteSetting();
     const saveRequest = dispatch(requestAssignT0TempSiteData(record));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots, zonesWithObservations]);
+  }, [dispatch, goToViewSettings, record, updatePlantingSiteSetting, withdrawnSpeciesPlots, zonesWithObservations]);
 
   const onChangeTemporaryPlotsCheck = useCallback(
     (value: boolean) => {
@@ -160,9 +178,10 @@ const EditTemporaryPlotsTab = ({
   }, []);
 
   const saveWithDefaultDensity = useCallback(() => {
+    updatePlantingSiteSetting();
     const saveRequest = dispatch(requestAssignT0TempSiteData(record));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record]);
+  }, [dispatch, record, updatePlantingSiteSetting]);
 
   return (
     <PageForm

@@ -104,6 +104,42 @@ const SurvivalRateSettings = () => {
     );
   }, [temporaryPlots]);
 
+  const numberOfSetZones = useMemo(() => {
+    let totalSet = 0;
+    Object.entries(zonesWithObservations).forEach(([zoneId, plots]) => {
+      const correspondingZone = t0SiteData?.zones?.find((z) => z.plantingZoneId.toString() === zoneId.toString());
+
+      const plotIds = plots.map((plot) => plot.id.toString());
+      const withdrawnSpeciesOfZone = withdrawnSpeciesPlots?.filter((wsp) =>
+        plotIds.includes(wsp.monitoringPlotId.toString())
+      );
+
+      const speciesMap = new Map<number, { density: number; speciesId: number }>();
+      withdrawnSpeciesOfZone?.forEach((plot) => {
+        plot.species.forEach((wdSpecies) => {
+          if (!speciesMap.has(wdSpecies.speciesId)) {
+            speciesMap.set(wdSpecies.speciesId, wdSpecies);
+          }
+        });
+      });
+      const allWithdrawnSpeciesForZone = Array.from(speciesMap.values());
+
+      const everySpeciesSet = allWithdrawnSpeciesForZone.every((sp) => {
+        const correspondingSpecies = correspondingZone?.densityData.find((dd) => dd.speciesId === sp.speciesId);
+        if (correspondingSpecies) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      if (everySpeciesSet) {
+        totalSet = totalSet + 1;
+      }
+    });
+    return totalSet;
+  }, [t0SiteData, withdrawnSpeciesPlots, zonesWithObservations]);
+
   const tabs = useMemo(() => {
     if (!activeLocale) {
       return [];
@@ -205,24 +241,24 @@ const SurvivalRateSettings = () => {
                 )}
               </Typography>
             )}
-            {t0SiteData?.survivalRateIncludesTempPlots && (
-              <>
-                <Box
-                  height={'32px'}
-                  width={'1px'}
-                  sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }}
-                  marginX={1}
-                />
-                {(t0SiteData?.zones.length || 0) === Object.entries(zonesWithObservations).length ? (
-                  <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
-                    {strings.T0_SET_FOR_TEMPORARY_PLOTS}
-                  </Typography>
-                ) : (
-                  <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
-                    {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
-                  </Typography>
+
+            <Box height={'32px'} width={'1px'} sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }} marginX={1} />
+            {(t0SiteData?.zones.length || 0) === Object.entries(zonesWithObservations).length ? (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
+                {strings.T0_SET_FOR_TEMPORARY_PLOTS}
+              </Typography>
+            ) : numberOfSetZones === 0 ? (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
+              </Typography>
+            ) : (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                {strings.formatString(
+                  strings.NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,
+                  numberOfSetZones,
+                  Object.entries(zonesWithObservations).length || 0
                 )}
-              </>
+              </Typography>
             )}
           </Box>
           <Box>
