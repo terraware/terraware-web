@@ -1828,6 +1828,7 @@ SPECIES_CATEGORIES,Catégories d'espèces,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,Les catégories d'espèces indiquent le pourcentage du total des plantes plantées qui sont rares et menacées en fonction de l'espèce.,e6a1dcfe
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette parcelle ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une parcelle.",5bcc0f2b
+SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette zone ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une zone.",654fe2d4
 SPECIES_DESCRIPTION,"Gérez la liste des espèces de votre organisation pour la planification, les opérations et les rapports.",b1943eab
 SPECIES_EMPTY_MSG_BODY,Saisissez les espèces que vous collectez ou plantez actuellement pour simplifier votre expérience lorsque vous êtes sur le terrain.,20250069
 SPECIES_FROM_WITHDRAWALS,Espèces issues des retraits,66d674b5

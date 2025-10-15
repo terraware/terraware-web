@@ -8,10 +8,11 @@ import Button from '../../components/common/button/Button';
 export interface SpeciesDensityWarningMessageProps {
   onClose: () => void;
   onSave: () => void;
+  type?: 'temporary' | 'permanent';
 }
 
 export default function SpeciesDensityWarningMessage(props: SpeciesDensityWarningMessageProps): JSX.Element {
-  const { onClose, onSave } = props;
+  const { onClose, onSave, type } = props;
 
   return (
     <DialogBox
@@ -31,7 +32,11 @@ export default function SpeciesDensityWarningMessage(props: SpeciesDensityWarnin
         <Button id='save' onClick={onSave} label={strings.SAVE} key='button-2' type='productive' />,
       ]}
       skrim={true}
-      message={strings.SPECIES_DENSITY_WARNING_MESSAGE}
+      message={
+        type === 'temporary'
+          ? strings.SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS
+          : strings.SPECIES_DENSITY_WARNING_MESSAGE
+      }
     >
       <p>{strings.WOULD_YOU_LIKE_TO_CONTINUE}</p>
     </DialogBox>
