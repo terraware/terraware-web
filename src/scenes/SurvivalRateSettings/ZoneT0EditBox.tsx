@@ -104,8 +104,12 @@ const ZoneT0EditBox = ({
         let zoneCopy: ZoneT0Data;
 
         if (value) {
-          if (densityDataToUpdate?.plotDensity !== undefined) {
-            const densityDataToUpdateCopy = { ...densityDataToUpdate, plotDensity: Number(value) };
+          if (densityDataToUpdate?.plotDensity !== undefined || densityDataToUpdate?.density !== undefined) {
+            const densityDataToUpdateCopy = {
+              ...densityDataToUpdate,
+              plotDensity: Number(value),
+              density: Number(value),
+            };
 
             // Udated plot with modified densityData array
             zoneCopy = {
