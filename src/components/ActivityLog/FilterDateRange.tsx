@@ -13,18 +13,27 @@ const datePickerStyles = {
   '& .MuiInputBase-input': {
     paddingRight: 0,
   },
+  minWidth: '180px',
   maxWidth: '180px',
 };
 
 interface DateRangeProps {
   field: string;
+  iconFilters?: ReactNode;
   onChange: (filter: FieldNodePayload) => void;
   onDelete: () => void;
   rightComponent?: ReactNode;
   values: (string | null)[];
 }
 
-export default function DateRange({ field, onChange, onDelete, rightComponent, values }: DateRangeProps): JSX.Element {
+export default function DateRange({
+  field,
+  iconFilters,
+  onChange,
+  onDelete,
+  rightComponent,
+  values,
+}: DateRangeProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
   const userTimeZone = useUserTimeZone();
@@ -93,8 +102,14 @@ export default function DateRange({ field, onChange, onDelete, rightComponent, v
           sx={datePickerStyles}
           value={endDate}
         />
-        {rightComponent}
+        {iconFilters}
       </Box>
+
+      {rightComponent && (
+        <Box display='flex' flexDirection='row' justifyContent='center' marginBottom={theme.spacing(2)}>
+          {rightComponent}
+        </Box>
+      )}
     </Box>
   );
 }
