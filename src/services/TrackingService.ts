@@ -12,7 +12,7 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { AssignSiteT0Data, Delivery, PlantingSite } from 'src/types/Tracking';
+import { AssignSiteT0Data, AssignSiteT0TempData, Delivery, PlantingSite } from 'src/types/Tracking';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { isArray } from '../types/utils';
@@ -34,6 +34,7 @@ const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
 const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
 const PLANTING_SITES_T0_ENDPOINT = '/api/v1/tracking/t0/site';
+const PLANTING_SITES_T0_TEMP_ENDPOINT = '/api/v1/tracking/t0/site/temp';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -479,6 +480,11 @@ const assignT0SiteData = (payload: AssignSiteT0Data): Promise<Response2<AssignT0
     entity: payload,
   });
 
+const assignT0TempSiteData = (payload: AssignSiteT0TempData): Promise<Response2<AssignT0SiteDataResponsePayload>> =>
+  HttpService.root(PLANTING_SITES_T0_TEMP_ENDPOINT).post({
+    entity: payload,
+  });
+
 /**
  * Exported functions
  */
@@ -503,6 +509,7 @@ const TrackingService = {
   listOrganizationReportedPlants,
   getPlotsWithObservations,
   assignT0SiteData,
+  assignT0TempSiteData,
 };
 
 export default TrackingService;

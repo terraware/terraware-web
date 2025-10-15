@@ -12,6 +12,7 @@ export type MapDrawerSize = 'small' | 'medium' | 'large';
 export type MapDrawerProp = {
   children?: ReactNode;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
+  hideBorder?: boolean;
   hideCloseButton?: boolean;
   hideHeader?: boolean;
   onClose?: () => void;
@@ -22,15 +23,15 @@ export type MapDrawerProp = {
 };
 
 const MapDrawer = (props: MapDrawerProp) => {
-  const { children, drawerRef, hideCloseButton, hideHeader, onClose, open, size, style, title } = props;
+  const { children, drawerRef, hideBorder, hideCloseButton, hideHeader, onClose, open, size, style, title } = props;
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
   return open ? (
     <Box
       className={`map-drawer map-drawer${isDesktop ? `--${size}` : '--mobile'}`}
-      borderLeft={isDesktop ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined}
-      borderRight={isDesktop ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined}
+      borderLeft={isDesktop && !hideBorder ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined}
+      borderRight={isDesktop && !hideBorder ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined}
       style={style}
     >
       {!hideHeader && (

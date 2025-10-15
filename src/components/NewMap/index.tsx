@@ -9,7 +9,7 @@ import MapDrawer, { MapDrawerSize } from './MapDrawer';
 import MapLegend, { MapHighlightLegendItem, MapLegendGroup } from './MapLegend';
 import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapViewState } from './types';
 import useStickyMapViewStyle from './useStickyMapViewStyle';
-import { getBoundingBox, getBoundsZoomLevel } from './utils';
+import { getBoundingBoxFromMultiPolygons, getBoundsZoomLevel } from './utils';
 
 type BaseMapFeatureSection = {
   sectionDisabled?: boolean;
@@ -53,6 +53,7 @@ export type MapComponentProps = {
   drawerSize?: MapDrawerSize;
   drawerTitle?: string;
   features?: MapFeatureSection[];
+  hideBorder?: boolean;
   hideFullScreenControl?: boolean;
   hideLegend?: boolean;
   hideMapViewStyleControl?: boolean;
@@ -90,6 +91,7 @@ const MapComponent = (props: MapComponentProps) => {
     drawerSize,
     drawerTitle,
     features,
+    hideBorder,
     hideFullScreenControl,
     hideLegend,
     hideMapViewStyleControl,
@@ -186,7 +188,7 @@ const MapComponent = (props: MapComponentProps) => {
         .flatMap((layer) => layer.features)
         .map((geoFeature) => geoFeature.geometry);
 
-      const { minLat, minLng, maxLat, maxLng } = getBoundingBox(multipolygons);
+      const { minLat, minLng, maxLat, maxLng } = getBoundingBoxFromMultiPolygons(multipolygons);
 
       const centerLng = (minLng + maxLng) / 2;
       const centerLat = (minLat + maxLat) / 2;
@@ -293,6 +295,7 @@ const MapComponent = (props: MapComponentProps) => {
       drawer={
         <MapDrawer
           drawerRef={drawerRef}
+          hideBorder={hideBorder}
           hideCloseButton={drawerHideCloseButton}
           hideHeader={drawerHideHeader}
           open={drawerOpen ?? false}
@@ -304,6 +307,7 @@ const MapComponent = (props: MapComponentProps) => {
         </MapDrawer>
       }
       drawerOpen={drawerOpen}
+      hideBorder={hideBorder}
       legend={!hideLegend && legends && <MapLegend legends={legends} />}
       map={map}
       style={containerStyle}

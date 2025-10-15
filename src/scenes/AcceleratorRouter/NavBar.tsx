@@ -9,7 +9,6 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUser } from 'src/providers';
@@ -42,7 +41,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
 
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
   const isAllowedViewFundingEntities = isAllowed('READ_FUNDING_ENTITIES');
-  const isActivityLogEnabled = isEnabled('Activity Log');
 
   const closeAndNavigateTo = (path: string) => {
     closeNavBar();
@@ -114,17 +112,15 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         />
       }
 
-      {isActivityLogEnabled && isAllowed('READ_ACTIVITIES') && (
-        <NavItem
-          icon='checklist'
-          id='activity-log'
-          label={strings.ACTIVITY_LOG}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.ACCELERATOR_ACTIVITY_LOG);
-          }}
-          selected={!!isActivityLogRoute}
-        />
-      )}
+      <NavItem
+        icon='checklist'
+        id='activity-log'
+        label={strings.ACTIVITY_LOG}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.ACCELERATOR_ACTIVITY_LOG);
+        }}
+        selected={!!isActivityLogRoute}
+      />
 
       <NavSection title={strings.DOC_PRODUCER} />
 

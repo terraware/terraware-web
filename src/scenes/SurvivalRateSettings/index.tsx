@@ -23,7 +23,7 @@ import {
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { PlotT0Data } from 'src/types/Tracking';
+import { SiteT0Data } from 'src/types/Tracking';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';
@@ -41,7 +41,7 @@ const SurvivalRateSettings = () => {
   const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
   const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
   const dispatch = useAppDispatch();
-  const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
+  const [t0SiteData, setT0SiteData] = useState<SiteT0Data>();
   const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
   const params = useParams<{
@@ -62,7 +62,9 @@ const SurvivalRateSettings = () => {
   const numberOfSetPermanentPlots = useMemo(() => {
     let totalSet = 0;
     permanentPlots?.forEach((pp) => {
-      const correspondingPlot = t0Plots?.find((plot) => plot.monitoringPlotId.toString() === pp.id.toString());
+      const correspondingPlot = t0SiteData?.plots?.find(
+        (plot) => plot.monitoringPlotId.toString() === pp.id.toString()
+      );
       if (correspondingPlot?.observationId) {
         totalSet = totalSet + 1;
       } else {
@@ -80,7 +82,7 @@ const SurvivalRateSettings = () => {
       }
     });
     return totalSet;
-  }, [permanentPlots, t0Plots, withdrawnSpeciesPlots]);
+  }, [permanentPlots, t0SiteData, withdrawnSpeciesPlots]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -95,7 +97,7 @@ const SurvivalRateSettings = () => {
           <PermanentPlotsTab
             plantingSiteId={plantingSiteId}
             plotsWithObservations={permanentPlots}
-            t0Plots={t0Plots}
+            t0Plots={t0SiteData?.plots}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
           />
         ),
@@ -106,7 +108,7 @@ const SurvivalRateSettings = () => {
         children: <TemporaryPlotsTab />,
       },
     ];
-  }, [activeLocale, permanentPlots, plantingSiteId, t0Plots, withdrawnSpeciesPlots]);
+  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, withdrawnSpeciesPlots]);
 
   useEffect(() => {
     setSelectedPlantingSite(plantingSiteId);
@@ -125,7 +127,7 @@ const SurvivalRateSettings = () => {
 
   useEffect(() => {
     if (plantingSiteT0Response?.status === 'success') {
-      setT0Plots(plantingSiteT0Response.data);
+      setT0SiteData(plantingSiteT0Response.data);
     }
   }, [plantingSiteT0Response]);
 

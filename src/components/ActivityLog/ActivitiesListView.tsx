@@ -2,6 +2,7 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Pagination, Typography, useTheme } from '@mui/material';
+import { PillList, PillListItem } from '@terraware/web-components';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -25,10 +26,12 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import { MapPoint } from '../NewMap/types';
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
+import { getBoundingBoxFromPoints } from '../NewMap/utils';
 import { FilterField } from '../common/FilterGroup';
-import { FilterConfig } from '../common/SearchFiltersWrapperV2';
+import { FilterConfig, defaultPillValueRenderer } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityDetailView from './ActivityDetailView';
@@ -120,7 +123,7 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
-  const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
+  const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
@@ -216,6 +219,26 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
     () => (showActivityId && shownActivity ? [shownActivity] : paginatedActivities),
     [paginatedActivities, shownActivity, showActivityId]
   );
+
+  useEffect(() => {
+    if (shownActivity) {
+      const points = shownActivity.media
+        .map((_media): MapPoint | undefined => {
+          if (!_media.isHiddenOnMap && _media.geolocation) {
+            return {
+              lat: _media.geolocation.coordinates[1],
+              lng: _media.geolocation.coordinates[0],
+            };
+          }
+        })
+        .filter((point): point is MapPoint => point !== undefined);
+
+      if (points.length > 0) {
+        const bbox = getBoundingBoxFromPoints(points);
+        fitBounds(bbox);
+      }
+    }
+  }, [fitBounds, shownActivity]);
 
   useEffect(() => {
     if (listResultsActivitiesRequest?.status === 'error' || adminListResultsActivitiesRequest?.status === 'error') {
@@ -463,6 +486,43 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
     return activeLocale ? _filters : [];
   }, [activeLocale, filterColumns, filterOptions]);
 
+  const filterPillData = useMemo(() => {
+    return Object.keys(iconFilters)
+      .map((key): PillListItem<string> | false => {
+        const filterName = iconFilters[Number(key)].field;
+        // If there are no values, there should be no pill
+        if (!filters[filterName] || (filters[filterName].values || []).length === 0) {
+          return false;
+        }
+
+        const filterConfig = [...(iconFilters || [])].find((filter: FilterConfig) => filter.field === filterName);
+
+        if (!filterConfig) {
+          // Should not be possible, a filter must be present at this point
+          return false;
+        }
+
+        const pillValue = filterConfig.pillValueRenderer
+          ? filterConfig.pillValueRenderer(filters[filterName].values)
+          : defaultPillValueRenderer(filters[filterName].values);
+        const label = filterConfig.label;
+
+        const removeFilter = (k: string) => {
+          const result = { ...filters };
+          delete result[k];
+          setFilters(result);
+        };
+
+        return {
+          id: filterName,
+          label,
+          value: pillValue || '',
+          onRemove: () => removeFilter(filterName),
+        };
+      })
+      .filter((item: PillListItem<string> | false): item is PillListItem<string> => !!item);
+  }, [filters, iconFilters]);
+
   return (
     <MapSplitView
       activities={activitiesVisibleOnMap}
@@ -486,16 +546,30 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
         <ActivitiesEmptyState projectId={projectId} />
       ) : (
         <>
-          <Box display={'flex'}>
-            <DateRange
-              field='date'
-              onChange={onChangeDateRange}
-              onDelete={onDeleteDateRange}
-              rightComponent={
-                <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
-              }
-              values={filters.date?.values ?? []}
-            />
+          <Box marginBottom={3}>
+            <Box display={'flex'}>
+              <DateRange
+                field='date'
+                onChange={onChangeDateRange}
+                onDelete={onDeleteDateRange}
+                rightComponent={
+                  <>
+                    <IconFilters
+                      filters={iconFilters}
+                      setCurrentFilters={setFilters}
+                      currentFilters={filters}
+                      noScroll
+                    />
+                    {filterPillData.length > 0 && (
+                      <Grid item xs={12} display='flex' marginTop={1}>
+                        <PillList data={filterPillData} />
+                      </Grid>
+                    )}
+                  </>
+                }
+                values={filters.date?.values ?? []}
+              />
+            </Box>
           </Box>
           {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>

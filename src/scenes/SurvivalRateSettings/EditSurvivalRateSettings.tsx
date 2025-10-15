@@ -21,7 +21,7 @@ import {
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { PlotT0Data } from 'src/types/Tracking';
+import { SiteT0Data } from 'src/types/Tracking';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import EditPermanentPlotsTab from './EditPermanentPlotsTab';
@@ -39,7 +39,7 @@ const EditSurvivalRateSettings = () => {
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
   const dispatch = useAppDispatch();
-  const [t0Plots, setT0Plots] = useState<PlotT0Data[]>();
+  const [t0SiteData, setT0SiteData] = useState<SiteT0Data>();
   const params = useParams<{
     plantingSiteId: string;
   }>();
@@ -76,7 +76,7 @@ const EditSurvivalRateSettings = () => {
 
   useEffect(() => {
     if (plantingSiteT0Response?.status === 'success') {
-      setT0Plots(plantingSiteT0Response.data);
+      setT0SiteData(plantingSiteT0Response.data);
     }
   }, [plantingSiteT0Response]);
 
@@ -107,7 +107,7 @@ const EditSurvivalRateSettings = () => {
           <EditPermanentPlotsTab
             plantingSiteId={plantingSiteId}
             plotsWithObservations={permanentPlots}
-            t0Plots={t0Plots}
+            t0Plots={t0SiteData?.plots}
             reload={reload}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
           />
@@ -120,13 +120,15 @@ const EditSurvivalRateSettings = () => {
           <EditTemporaryPlotsTab
             plantingSiteId={plantingSiteId}
             temporaryPlotsWithObservations={temporaryPlots}
-            t0Plots={t0Plots}
+            zones={t0SiteData?.zones}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+            reload={reload}
+            alreadyIncluding={t0SiteData?.survivalRateIncludesTempPlots}
           />
         ),
       },
     ];
-  }, [activeLocale, permanentPlots, plantingSiteId, reload, t0Plots, temporaryPlots, withdrawnSpeciesPlots]);
+  }, [activeLocale, permanentPlots, plantingSiteId, reload, t0SiteData, temporaryPlots, withdrawnSpeciesPlots]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'permanent',

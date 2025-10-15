@@ -13,7 +13,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -48,7 +47,6 @@ export default function NavBar({
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
   const mixpanel = useMixpanel();
-  const isActivityLogEnabled = isEnabled('Activity Log');
 
   const [orgFeaturesRequestId, setOrgFeaturesRequestId] = useState<string>('');
   const orgFeatures = useAppSelector(listOrganizationFeatures(orgFeaturesRequestId));
@@ -264,7 +262,6 @@ export default function NavBar({
 
   const activityLogMenu = useMemo<JSX.Element | null>(
     () =>
-      isActivityLogEnabled &&
       isAllowed('READ_ACTIVITIES', { organization: selectedOrganization }) &&
       currentParticipantProject &&
       activeLocale ? (
@@ -278,15 +275,7 @@ export default function NavBar({
           selected={!!isActivityLogRoute}
         />
       ) : null,
-    [
-      activeLocale,
-      closeAndNavigateTo,
-      currentParticipantProject,
-      isActivityLogEnabled,
-      isActivityLogRoute,
-      isAllowed,
-      selectedOrganization,
-    ]
+    [activeLocale, closeAndNavigateTo, currentParticipantProject, isActivityLogRoute, isAllowed, selectedOrganization]
   );
 
   const applicationMenu = useMemo<JSX.Element | null>(

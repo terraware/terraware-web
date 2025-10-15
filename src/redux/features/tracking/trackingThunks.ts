@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import { TrackingService } from 'src/services';
 import strings from 'src/strings';
-import { AssignSiteT0Data, PlantingSiteSearchResult } from 'src/types/Tracking';
+import { AssignSiteT0Data, AssignSiteT0TempData, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import {
   setPlantingSiteAction,
@@ -193,7 +193,7 @@ export const requestPlantingSiteT0 = createAsyncThunk(
     const response = await TrackingService.getPlantingSiteT0(plantingSiteId);
 
     if (response !== null && response.requestSucceeded && response.data?.data) {
-      return response.data.data.plots;
+      return response.data.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -217,6 +217,19 @@ export const requestAssignT0SiteData = createAsyncThunk(
   'assignT0SiteData',
   async (request: AssignSiteT0Data, { rejectWithValue }) => {
     const response = await TrackingService.assignT0SiteData(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestAssignT0TempSiteData = createAsyncThunk(
+  'assignT0TempSiteData',
+  async (request: AssignSiteT0TempData, { rejectWithValue }) => {
+    const response = await TrackingService.assignT0TempSiteData(request);
 
     if (response && response.requestSucceeded) {
       return response.data;
