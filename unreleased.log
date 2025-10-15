@@ -1,3 +1,4 @@
+78ce1aee024 SW-7553: Remove feature flag (#4600)
 25686f55769 SW-7542 Hide border in activity log views (#4601)
 46c31ba19fb SW-7487 Make map container height constraint by viewport size (#4597)
 ce5833f62e0 SW-7534 Edit Temporary Plots View (#4596)

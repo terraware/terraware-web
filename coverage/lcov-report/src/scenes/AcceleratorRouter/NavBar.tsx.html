@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -243,12 +243,7 @@
 <a name='L178'></a><a href='#L178'>178</a>
 <a name='L179'></a><a href='#L179'>179</a>
 <a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L181'></a><a href='#L181'>181</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,7 +284,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -368,9 +362,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -442,7 +434,6 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUser } from 'src/providers';
@@ -475,7 +466,6 @@ export default function <span class="fstat-no" title="function not covered" >Nav
 &nbsp;
   const isAllowedViewPeople = <span class="cstat-no" title="statement not covered" >isAllowed('READ_GLOBAL_ROLES');</span>
   const isAllowedViewFundingEntities = <span class="cstat-no" title="statement not covered" >isAllowed('READ_FUNDING_ENTITIES');</span>
-  const isActivityLogEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Activity Log');</span>
 &nbsp;
   const closeAndNavigateTo = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>ath: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    closeNavBar();</span>
@@ -547,17 +537,15 @@ export default function <span class="fstat-no" title="function not covered" >Nav
         /&gt;
       }
 &nbsp;
-      {isActivityLogEnabled &amp;&amp; isAllowed('READ_ACTIVITIES') &amp;&amp; (
-        &lt;NavItem
-          icon='checklist'
-          id='activity-log'
-          label={strings.ACTIVITY_LOG}
-          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >            closeAndNavigateTo(APP_PATHS.ACCELERATOR_ACTIVITY_LOG);</span>
-          }}
-          selected={!!isActivityLogRoute}
-        /&gt;
-      )}
+      &lt;NavItem
+        icon='checklist'
+        id='activity-log'
+        label={strings.ACTIVITY_LOG}
+        onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >          closeAndNavigateTo(APP_PATHS.ACCELERATOR_ACTIVITY_LOG);</span>
+        }}
+        selected={!!isActivityLogRoute}
+      /&gt;
 &nbsp;
       &lt;NavSection title={strings.DOC_PRODUCER} /&gt;
 &nbsp;
@@ -622,7 +610,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-15T02:51:27.702Z
+                at 2025-10-15T03:38:40.793Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
