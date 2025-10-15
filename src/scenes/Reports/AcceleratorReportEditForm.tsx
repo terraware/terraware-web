@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -209,9 +209,18 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
     setPhotos(value as AcceleratorReportPhotoActions);
   }, []);
 
+  const isBusy = useMemo(() => {
+    return (
+      saveReportResponse?.status === 'pending' ||
+      deletePhotosResult?.status === 'pending' ||
+      updatePhotosResult?.status === 'pending' ||
+      uploadPhotosResult?.status === 'pending'
+    );
+  }, [deletePhotosResult?.status, saveReportResponse?.status, updatePhotosResult?.status, uploadPhotosResult?.status]);
+
   return (
     <WrappedPageForm
-      busy={saveReportResponse?.status === 'pending'}
+      busy={isBusy}
       cancelID={'cancelEditAcceleratorReport'}
       onCancel={goToReport}
       onSave={saveReport}
