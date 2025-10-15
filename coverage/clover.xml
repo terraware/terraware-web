@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760563160895" clover="3.2.0">
-  <project timestamp="1760563160895" name="All files">
-    <metrics statements="34874" coveredstatements="1349" conditionals="24327" coveredconditionals="391" methods="10687" coveredmethods="213" elements="69888" coveredelements="1953" complexity="0" loc="34874" ncloc="34874" packages="280" files="1363" classes="1363"/>
+<coverage generated="1760566411780" clover="3.2.0">
+  <project timestamp="1760566411780" name="All files">
+    <metrics statements="34877" coveredstatements="1349" conditionals="24327" coveredconditionals="391" methods="10688" coveredmethods="213" elements="69892" coveredelements="1953" complexity="0" loc="34877" ncloc="34877" packages="280" files="1363" classes="1363"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1765,7 +1765,7 @@
       </file>
     </package>
     <package name="src.components.ActivityLog">
-      <metrics statements="698" coveredstatements="0" conditionals="499" coveredconditionals="0" methods="200" coveredmethods="0"/>
+      <metrics statements="699" coveredstatements="0" conditionals="499" coveredconditionals="0" methods="200" coveredmethods="0"/>
       <file name="ActivitiesEmptyState.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesEmptyState.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -1773,7 +1773,7 @@
         <line num="17" count="0" type="stmt"/>
       </file>
       <file name="ActivitiesListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesListView.tsx">
-        <metrics statements="209" coveredstatements="0" conditionals="147" coveredconditionals="0" methods="64" coveredmethods="0"/>
+        <metrics statements="210" coveredstatements="0" conditionals="147" coveredconditionals="0" methods="64" coveredmethods="0"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
@@ -1951,38 +1951,39 @@
         <line num="448" count="0" type="stmt"/>
         <line num="449" count="0" type="stmt"/>
         <line num="450" count="0" type="stmt"/>
-        <line num="455" count="0" type="stmt"/>
-        <line num="457" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="463" count="0" type="stmt"/>
-        <line num="470" count="0" type="stmt"/>
-        <line num="478" count="0" type="stmt"/>
+        <line num="451" count="0" type="stmt"/>
+        <line num="456" count="0" type="stmt"/>
+        <line num="458" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="464" count="0" type="stmt"/>
+        <line num="471" count="0" type="stmt"/>
         <line num="479" count="0" type="stmt"/>
-        <line num="486" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="489" count="0" type="stmt"/>
+        <line num="480" count="0" type="stmt"/>
+        <line num="487" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="490" count="0" type="stmt"/>
-        <line num="495" count="0" type="stmt"/>
+        <line num="491" count="0" type="stmt"/>
         <line num="496" count="0" type="stmt"/>
-        <line num="500" count="0" type="stmt"/>
-        <line num="503" count="0" type="stmt"/>
+        <line num="497" count="0" type="stmt"/>
+        <line num="501" count="0" type="stmt"/>
         <line num="504" count="0" type="stmt"/>
-        <line num="507" count="0" type="cond" truecount="0" falsecount="6"/>
-        <line num="508" count="0" type="stmt"/>
-        <line num="511" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="512" count="0" type="stmt"/>
-        <line num="515" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="517" count="0" type="stmt"/>
-        <line num="520" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="523" count="0" type="stmt"/>
-        <line num="525" count="0" type="stmt"/>
+        <line num="505" count="0" type="stmt"/>
+        <line num="508" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="509" count="0" type="stmt"/>
+        <line num="512" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="513" count="0" type="stmt"/>
+        <line num="516" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="518" count="0" type="stmt"/>
+        <line num="521" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="524" count="0" type="stmt"/>
         <line num="526" count="0" type="stmt"/>
         <line num="527" count="0" type="stmt"/>
         <line num="528" count="0" type="stmt"/>
-        <line num="531" count="0" type="stmt"/>
-        <line num="535" count="0" type="stmt"/>
-        <line num="538" count="0" type="stmt"/>
-        <line num="541" count="0" type="stmt"/>
-        <line num="581" count="0" type="stmt"/>
-        <line num="593" count="0" type="stmt"/>
+        <line num="529" count="0" type="stmt"/>
+        <line num="532" count="0" type="stmt"/>
+        <line num="536" count="0" type="stmt"/>
+        <line num="539" count="0" type="stmt"/>
+        <line num="542" count="0" type="stmt"/>
+        <line num="582" count="0" type="stmt"/>
+        <line num="594" count="0" type="stmt"/>
       </file>
       <file name="ActivityCreateView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityCreateView.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -6141,7 +6142,7 @@
       </file>
     </package>
     <package name="src.components.NewMap">
-      <metrics statements="386" coveredstatements="0" conditionals="318" coveredconditionals="0" methods="145" coveredmethods="0"/>
+      <metrics statements="388" coveredstatements="0" conditionals="318" coveredconditionals="0" methods="146" coveredmethods="0"/>
       <file name="MapBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NewMap/MapBox.tsx">
         <metrics statements="164" coveredstatements="0" conditionals="141" coveredconditionals="0" methods="63" coveredmethods="0"/>
         <line num="70" count="0" type="stmt"/>
@@ -6472,7 +6473,7 @@
         <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="useMapDrawer.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/NewMap/useMapDrawer.ts">
-        <metrics statements="8" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -6481,6 +6482,8 @@
         <line num="10" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
       </file>
       <file name="useMapUtils.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/NewMap/useMapUtils.ts">
         <metrics statements="23" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
