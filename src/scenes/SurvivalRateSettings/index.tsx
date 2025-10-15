@@ -55,9 +55,9 @@ const SurvivalRateSettings = () => {
     return plotsWithObservations?.filter((p) => !!p.permanentIndex);
   }, [plotsWithObservations]);
 
-  // const temporaryPlots = useMemo(() => {
-  //   return plotsWithObservations?.filter((p) => !p.permanentIndex);
-  // }, [plotsWithObservations]);
+  const temporaryPlots = useMemo(() => {
+    return plotsWithObservations?.filter((p) => !p.permanentIndex);
+  }, [plotsWithObservations]);
 
   const numberOfSetPermanentPlots = useMemo(() => {
     let totalSet = 0;
@@ -84,6 +84,62 @@ const SurvivalRateSettings = () => {
     return totalSet;
   }, [permanentPlots, t0SiteData, withdrawnSpeciesPlots]);
 
+  const zonesWithObservations = useMemo(() => {
+    if (!temporaryPlots) {
+      return {};
+    }
+    return temporaryPlots.reduce(
+      (acc, plot) => {
+        const zoneId = plot.plantingSubzone_plantingZone_id;
+        if (!zoneId) {
+          return acc;
+        }
+        if (!acc[zoneId]) {
+          acc[zoneId] = [];
+        }
+        acc[zoneId].push(plot);
+        return acc;
+      },
+      {} as Record<string, PlotsWithObservationsSearchResult[]>
+    );
+  }, [temporaryPlots]);
+
+  const numberOfSetZones = useMemo(() => {
+    let totalSet = 0;
+    Object.entries(zonesWithObservations).forEach(([zoneId, plots]) => {
+      const correspondingZone = t0SiteData?.zones?.find((z) => z.plantingZoneId.toString() === zoneId.toString());
+
+      const plotIds = plots.map((plot) => plot.id.toString());
+      const withdrawnSpeciesOfZone = withdrawnSpeciesPlots?.filter((wsp) =>
+        plotIds.includes(wsp.monitoringPlotId.toString())
+      );
+
+      const speciesMap = new Map<number, { density: number; speciesId: number }>();
+      withdrawnSpeciesOfZone?.forEach((plot) => {
+        plot.species.forEach((wdSpecies) => {
+          if (!speciesMap.has(wdSpecies.speciesId)) {
+            speciesMap.set(wdSpecies.speciesId, wdSpecies);
+          }
+        });
+      });
+      const allWithdrawnSpeciesForZone = Array.from(speciesMap.values());
+
+      const everySpeciesSet = allWithdrawnSpeciesForZone.every((sp) => {
+        const correspondingSpecies = correspondingZone?.densityData.find((dd) => dd.speciesId === sp.speciesId);
+        if (correspondingSpecies) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      if (everySpeciesSet) {
+        totalSet = totalSet + 1;
+      }
+    });
+    return totalSet;
+  }, [t0SiteData, withdrawnSpeciesPlots, zonesWithObservations]);
+
   const tabs = useMemo(() => {
     if (!activeLocale) {
       return [];
@@ -105,10 +161,16 @@ const SurvivalRateSettings = () => {
       {
         id: 'temporary',
         label: strings.TEMPORARY_PLOTS,
-        children: <TemporaryPlotsTab />,
+        children: (
+          <TemporaryPlotsTab
+            t0SiteData={t0SiteData}
+            zonesWithObservations={zonesWithObservations}
+            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+          />
+        ),
       },
     ];
-  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, withdrawnSpeciesPlots]);
+  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, withdrawnSpeciesPlots, zonesWithObservations]);
 
   useEffect(() => {
     setSelectedPlantingSite(plantingSiteId);
@@ -143,15 +205,18 @@ const SurvivalRateSettings = () => {
     }
   }, [withdrawnSpeciesResponse]);
 
-  const goToEditSurvivalRateSettings = useCallback(() => {
-    navigate({ pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()) });
-  }, [navigate, plantingSiteId]);
-
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'permanent',
     tabs,
     viewIdentifier: 'survival-rate-settings',
   });
+
+  const goToEditSurvivalRateSettings = useCallback(() => {
+    navigate({
+      pathname: APP_PATHS.EDIT_SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()),
+      search: `tab=${activeTab}`,
+    });
+  }, [activeTab, navigate, plantingSiteId]);
 
   return (
     <Page title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
@@ -176,10 +241,25 @@ const SurvivalRateSettings = () => {
                 )}
               </Typography>
             )}
+
             <Box height={'32px'} width={'1px'} sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }} marginX={1} />
-            <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
-              {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
-            </Typography>
+            {(t0SiteData?.zones.length || 0) === Object.entries(zonesWithObservations).length ? (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
+                {strings.T0_SET_FOR_TEMPORARY_PLOTS}
+              </Typography>
+            ) : numberOfSetZones === 0 ? (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
+              </Typography>
+            ) : (
+              <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                {strings.formatString(
+                  strings.NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,
+                  numberOfSetZones,
+                  Object.entries(zonesWithObservations).length || 0
+                )}
+              </Typography>
+            )}
           </Box>
           <Box>
             <Button

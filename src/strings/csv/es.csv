@@ -1130,6 +1130,7 @@ NUMBER_OF_PHOTOS,Número de fotos,643d471f
 NUMBER_OF_PLANTS,Número de plantas,41fe8f14
 NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION,Número de parcelas en la observación más reciente,ce786371
 NUMBER_OF_PLOTS_SET_FOR_PERMANENT_PLOTS,t0 establecido para {0} de {1} Parcelas Permanentes,8a4987bd
+NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,t0 establecido para {0} de {1} Parcelas Temporales,0c92adac
 NUMBER_OF_SEEDS_COMPROMISED,# semillas afectadas,aee08b67
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *,44a0ef6a
 NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas,aee08b67
@@ -2178,6 +2179,7 @@ USE_OBSERVATION_DATA,Usar datos de observación,37c30404
 USE_OBSERVATION_DATA_TOOLTIP,Seleccione de la lista de todas las Observaciones completadas que incluyan datos t0 para la parcela.,1919d6a5
 USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización,2cf2ac16
 USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE,Usar densidades de plantas de parcelas temporales en los cálculos de la tasa de supervivencia,7d41da80
+USE_TEMPORARY_PLOTS_IN_SURVIVAL_RATE_TOOLTIP,"Marque la casilla para incluir las Parcelas Temporales en los cálculos de la Tasa de Supervivencia. Si se selecciona, los datos t0 deben estar establecidos para todas las Zonas para que se puedan calcular las Tasas de Supervivencia.",4d450244
 USED_UP,Agotado,323bdb79
 USER_ACCESS,Acceso del usuario,a9aa511b
 USER_NOTIFICATION_ACTION,"Para cambiar las preferencias, ve a [Mi cuenta]",8fcbad99
