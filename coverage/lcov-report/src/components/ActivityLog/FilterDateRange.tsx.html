@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -160,7 +160,25 @@
 <a name='L95'></a><a href='#L95'>95</a>
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,6 +204,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -257,7 +285,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
@@ -272,17 +308,27 @@ const datePickerStyles = <span class="cstat-no" title="statement not covered" >{
   '&amp; .MuiInputBase-input': {
     paddingRight: 0,
   },
+  minWidth: '180px',
   maxWidth: '180px',
 };
 &nbsp;
 interface DateRangeProps {
   field: string;
+  iconFilters?: ReactNode;
   onChange: (filter: FieldNodePayload) =&gt; void;
   onDelete: () =&gt; void;
+  rightComponent?: ReactNode;
   values: (string | null)[];
 }
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >DateRange(</span>{ field, onChange, onDelete, values }: DateRangeProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >DateRange(</span>{
+  field,
+  iconFilters,
+  onChange,
+  onDelete,
+  rightComponent,
+  values,
+}: DateRangeProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const userTimeZone = <span class="cstat-no" title="statement not covered" >useUserTimeZone();</span>
@@ -326,7 +372,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap'&gt;
-      &lt;Box alignItems='center' display='flex' flexDirection='row'&gt;
+      &lt;Box display='flex' flexDirection='row' justifyContent='center' marginBottom={theme.spacing(2)}&gt;
         &lt;DatePicker
           aria-label={strings.START_DATE}
           defaultTimeZone={userTimeZone?.id}
@@ -336,11 +382,12 @@ export default function <span class="fstat-no" title="function not covered" >Dat
           sx={datePickerStyles}
           value={startDate}
         /&gt;
-&nbsp;
-        &lt;Typography paddingX={theme.spacing(1)}&gt;to&lt;/Typography&gt;
+        &lt;Typography lineHeight='40px' paddingX='14px'&gt;
+          {strings.TO.toLowerCase()}
+        &lt;/Typography&gt;
       &lt;/Box&gt;
 &nbsp;
-      &lt;Box alignItems='center' display='flex' flexDirection='row'&gt;
+      &lt;Box display='flex' flexDirection='row' justifyContent='center' marginBottom={theme.spacing(2)}&gt;
         &lt;DatePicker
           aria-label={strings.END_DATE}
           defaultTimeZone={userTimeZone?.id}
@@ -350,7 +397,14 @@ export default function <span class="fstat-no" title="function not covered" >Dat
           sx={datePickerStyles}
           value={endDate}
         /&gt;
+        {iconFilters}
       &lt;/Box&gt;
+&nbsp;
+      {rightComponent &amp;&amp; (
+        &lt;Box display='flex' flexDirection='row' justifyContent='center' marginBottom={theme.spacing(2)}&gt;
+          {rightComponent}
+        &lt;/Box&gt;
+      )}
     &lt;/Box&gt;
   );
 }
@@ -361,7 +415,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-15T20:23:53.336Z
+                at 2025-10-15T20:48:28.106Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

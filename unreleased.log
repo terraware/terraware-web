@@ -1,3 +1,5 @@
+525be4a7c09 SW-7522 Show pill for date filter on activities list (#4610)
+a3fcc8589e4 SW-7543: Add spacing between date pickers in mobile (#4599)
 f1f14569fba SW-7551 Temporary Plots View (#4608)
 0c30b1e6939 SW-7544 Added padding to map fit bound option (#4606)
 d8d99d63c75 Updated offset margins to make map bigger. (#4607)
