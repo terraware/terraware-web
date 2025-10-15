@@ -21,7 +21,7 @@ const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
   );
 
   const fitBounds = useCallback(
-    (bbox: MapBounds) => {
+    (bbox: MapBounds, padding?: number) => {
       const map = mapRef.current;
       const { minLat, minLng, maxLat, maxLng } = bbox;
 
@@ -33,6 +33,7 @@ const useMapUtils = (mapRef: MutableRefObject<MapRef | null>) => {
           ],
           {
             animate: false,
+            padding: padding ?? 50,
           }
         );
       }
