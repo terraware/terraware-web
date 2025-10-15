@@ -7,7 +7,7 @@ import MapBox from './MapBox';
 import MapContainer from './MapContainer';
 import MapDrawer, { MapDrawerSize } from './MapDrawer';
 import MapLegend, { MapHighlightLegendItem, MapLegendGroup } from './MapLegend';
-import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapViewState } from './types';
+import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapNameTag, MapViewState } from './types';
 import useStickyMapViewStyle from './useStickyMapViewStyle';
 import { getBoundingBoxFromMultiPolygons, getBoundsZoomLevel } from './utils';
 
@@ -63,6 +63,7 @@ export type MapComponentProps = {
   mapContainerId?: string;
   mapId?: string;
   mapRef: MutableRefObject<MapRef | null>;
+  nameTags?: MapNameTag[];
   onClickCanvas?: (event: MapMouseEvent) => void;
   onMapMove?: (view: ViewStateChangeEvent) => void;
   onTokenExpired?: () => void;
@@ -101,6 +102,7 @@ const MapComponent = (props: MapComponentProps) => {
     mapContainerId,
     mapId,
     mapRef,
+    nameTags,
     onClickCanvas,
     onMapMove,
     onTokenExpired,
@@ -253,6 +255,7 @@ const MapComponent = (props: MapComponentProps) => {
         mapRef={mapRef}
         mapViewStyle={mapViewStyle}
         markerGroups={markerGroups}
+        nameTags={nameTags}
         onClickCanvas={onClickCanvas}
         onMapMove={onMapMove}
         onTokenExpired={onTokenExpired}
@@ -282,6 +285,7 @@ const MapComponent = (props: MapComponentProps) => {
     mapViewState,
     mapViewStyle,
     markerGroups,
+    nameTags,
     onClickCanvas,
     onMapMove,
     onTokenExpired,
