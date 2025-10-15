@@ -53,6 +53,7 @@ export type MapComponentProps = {
   drawerSize?: MapDrawerSize;
   drawerTitle?: string;
   features?: MapFeatureSection[];
+  hideBorder?: boolean;
   hideFullScreenControl?: boolean;
   hideLegend?: boolean;
   hideMapViewStyleControl?: boolean;
@@ -90,6 +91,7 @@ const MapComponent = (props: MapComponentProps) => {
     drawerSize,
     drawerTitle,
     features,
+    hideBorder,
     hideFullScreenControl,
     hideLegend,
     hideMapViewStyleControl,
@@ -293,6 +295,7 @@ const MapComponent = (props: MapComponentProps) => {
       drawer={
         <MapDrawer
           drawerRef={drawerRef}
+          hideBorder={hideBorder}
           hideCloseButton={drawerHideCloseButton}
           hideHeader={drawerHideHeader}
           open={drawerOpen ?? false}
@@ -304,6 +307,7 @@ const MapComponent = (props: MapComponentProps) => {
         </MapDrawer>
       }
       drawerOpen={drawerOpen}
+      hideBorder={hideBorder}
       legend={!hideLegend && legends && <MapLegend legends={legends} />}
       map={map}
       style={containerStyle}
