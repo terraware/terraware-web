@@ -9,7 +9,7 @@ import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
 import ColorKeyControl from 'src/components/NewMap/ColorKeyControl';
 import { MapLayerFeature, MapMarker, MapMarkerGroup, MapViewState } from 'src/components/NewMap/types';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
-import { getBoundingBox } from 'src/components/NewMap/utils';
+import { getBoundingBoxFromMultiPolygons } from 'src/components/NewMap/utils';
 import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
 import { useLocalization } from 'src/providers';
 import { ActivityPayload, activityTypeColor } from 'src/types/Activity';
@@ -161,7 +161,7 @@ export default function MapSplitView({
     if (!initialMapViewState && siteFeatures.length > 0) {
       // If no map view state is provided, move map to features
       const multipolygons = siteFeatures.map((feature) => feature.geometry);
-      const boundingBox = getBoundingBox(multipolygons);
+      const boundingBox = getBoundingBoxFromMultiPolygons(multipolygons);
       fitBounds(boundingBox);
     }
   }, [fitBounds, initialMapViewState, siteFeatures]);

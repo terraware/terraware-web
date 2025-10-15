@@ -25,8 +25,10 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import { MapPoint } from '../NewMap/types';
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
+import { getBoundingBoxFromPoints } from '../NewMap/utils';
 import { FilterField } from '../common/FilterGroup';
 import { FilterConfig } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
@@ -120,7 +122,7 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
-  const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
+  const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
@@ -216,6 +218,26 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
     () => (showActivityId && shownActivity ? [shownActivity] : paginatedActivities),
     [paginatedActivities, shownActivity, showActivityId]
   );
+
+  useEffect(() => {
+    if (shownActivity) {
+      const points = shownActivity.media
+        .map((_media): MapPoint | undefined => {
+          if (!_media.isHiddenOnMap && _media.geolocation) {
+            return {
+              lat: _media.geolocation.coordinates[1],
+              lng: _media.geolocation.coordinates[0],
+            };
+          }
+        })
+        .filter((point): point is MapPoint => point !== undefined);
+
+      if (points.length > 0) {
+        const bbox = getBoundingBoxFromPoints(points);
+        fitBounds(bbox);
+      }
+    }
+  }, [fitBounds, shownActivity]);
 
   useEffect(() => {
     if (listResultsActivitiesRequest?.status === 'error' || adminListResultsActivitiesRequest?.status === 'error') {
