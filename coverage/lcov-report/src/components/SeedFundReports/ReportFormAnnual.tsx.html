@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/125</span>
+                <span class='fraction'>0/126</span>
             </div>
         
             
@@ -663,7 +663,8 @@
 <a name='L598'></a><a href='#L598'>598</a>
 <a name='L599'></a><a href='#L599'>599</a>
 <a name='L600'></a><a href='#L600'>600</a>
-<a name='L601'></a><a href='#L601'>601</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L601'></a><a href='#L601'>601</a>
+<a name='L602'></a><a href='#L602'>602</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -753,8 +754,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1041,12 +1040,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1071,6 +1072,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1349,9 +1351,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
   );
   const [socialImpact, setSocialImpact] = <span class="cstat-no" title="statement not covered" >useState(report.annualDetails?.socialImpact ?? '');</span>
 &nbsp;
-  const [sdgList, setSdgList] = <span class="cstat-no" title="statement not covered" >useState(</span>
-    report.annualDetails?.sustainableDevelopmentGoals.map(<span class="fstat-no" title="function not covered" >(g</span>) =&gt; <span class="cstat-no" title="statement not covered" >g.goal.toString())</span> ?? []
-  );
+  const [sdgList, setSdgList] = <span class="cstat-no" title="statement not covered" >useState(report.annualDetails?.sustainableDevelopmentGoals.map(<span class="fstat-no" title="function not covered" >(g</span>) =&gt; <span class="cstat-no" title="statement not covered" >g.goal)</span> ?? []);</span>
   const [sdgProgressStates, setSdgProgressStates] = <span class="cstat-no" title="statement not covered" >useSDGProgress(report);</span>
 &nbsp;
   const [challenges, setChallenges] = <span class="cstat-no" title="statement not covered" >useState(report.annualDetails?.challenges ?? '');</span>
@@ -1639,57 +1639,60 @@ export default function <span class="fstat-no" title="function not covered" >Rep
           {strings.SUSTAINABLE_DEVELOPMENT_GOALS}
         &lt;/Typography&gt;
       &lt;/Grid&gt;
-      {Object.keys(SDG_STRING).map(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; (
-<span class="cstat-no" title="statement not covered" >        &lt;Grid key={key} item xs={smallItemGridWidth()}&gt;</span>
-          &lt;Checkbox
-            id={key}
-            disabled={!editable}
-            name={SDG_STRING[key as SustainableDevelopmentGoal]}
-            label={SDG_STRING[key as SustainableDevelopmentGoal]}
-            value={sdgList.includes(key as SustainableDevelopmentGoal)}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >handleSDGChange(value, key as SustainableDevelopmentGoal)}</span>
-          /&gt;
-          {sdgList.includes(key as SustainableDevelopmentGoal) &amp;&amp; (
-            &lt;&gt;
-              &lt;Textfield
-                label=''
-                id={key}
-                type='textarea'
-                display={!editable}
-                preserveNewlines={true}
-                value={sdgProgressStates[Number(key) - 1]}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
-<span class="cstat-no" title="statement not covered" >                  setSdgProgressStates[Number(key) - 1](value as string);</span>
-                  const index = <span class="cstat-no" title="statement not covered" >report.annualDetails?.sustainableDevelopmentGoals?.findIndex(</span>
-<span class="fstat-no" title="function not covered" >                    (s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.goal.toString() === key</span>
-                  );
-<span class="cstat-no" title="statement not covered" >                  if (updateSDGProgress &amp;&amp; index !== undefined &amp;&amp; index &gt;= 0) {</span>
-<span class="cstat-no" title="statement not covered" >                    updateSDGProgress(index, value as string);</span>
+      {Object.keys(SDG_STRING).map(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {
+        const sdgKey = <span class="cstat-no" title="statement not covered" >Number(key) as SustainableDevelopmentGoal;</span>
+<span class="cstat-no" title="statement not covered" >        return (</span>
+          &lt;Grid key={key} item xs={smallItemGridWidth()}&gt;
+            &lt;Checkbox
+              id={key}
+              disabled={!editable}
+              name={SDG_STRING[sdgKey]}
+              label={SDG_STRING[sdgKey]}
+              value={sdgList.includes(sdgKey)}
+              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >handleSDGChange(value, sdgKey)}</span>
+            /&gt;
+            {sdgList.includes(sdgKey) &amp;&amp; (
+              &lt;&gt;
+                &lt;Textfield
+                  label=''
+                  id={key}
+                  type='textarea'
+                  display={!editable}
+                  preserveNewlines={true}
+                  value={sdgProgressStates[sdgKey - 1]}
+                  onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
+<span class="cstat-no" title="statement not covered" >                    setSdgProgressStates[sdgKey - 1](value as string);</span>
+                    const index = <span class="cstat-no" title="statement not covered" >report.annualDetails?.sustainableDevelopmentGoals?.findIndex(</span>
+<span class="fstat-no" title="function not covered" >                      (s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.goal === sdgKey</span>
+                    );
+<span class="cstat-no" title="statement not covered" >                    if (updateSDGProgress &amp;&amp; index !== undefined &amp;&amp; index &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >                      updateSDGProgress(index, value as string);</span>
+                    }
+                  }}
+                  errorText={
+                    validate &amp;&amp;
+                    !report.annualDetails?.sustainableDevelopmentGoals[
+                      report.annualDetails?.sustainableDevelopmentGoals?.findIndex(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.goal === Number(key))</span>
+                    ].progress
+                      ? strings.REQUIRED_FIELD
+                      : ''
                   }
-                }}
-                errorText={
-                  validate &amp;&amp;
-                  !report.annualDetails?.sustainableDevelopmentGoals[
-                    report.annualDetails?.sustainableDevelopmentGoals?.findIndex(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.goal.toString() === key)</span>
-                  ].progress
-                    ? strings.REQUIRED_FIELD
-                    : ''
-                }
-              /&gt;
-              {editable &amp;&amp; (
-                &lt;Typography
-                  fontSize='14px'
-                  fontWeight={400}
-                  color={theme.palette.TwClrTxtSecondary}
-                  margin={theme.spacing(0.5, 0, 0, 0.5)}
-                &gt;
-                  {strings.REQUIRED}
-                &lt;/Typography&gt;
-              )}
-            &lt;/&gt;
-          )}
-        &lt;/Grid&gt;
-      ))}
+                /&gt;
+                {editable &amp;&amp; (
+                  &lt;Typography
+                    fontSize='14px'
+                    fontWeight={400}
+                    color={theme.palette.TwClrTxtSecondary}
+                    margin={theme.spacing(0.5, 0, 0, 0.5)}
+                  &gt;
+                    {strings.REQUIRED}
+                  &lt;/Typography&gt;
+                )}
+              &lt;/&gt;
+            )}
+          &lt;/Grid&gt;
+        );
+      })}
       &lt;br /&gt;
       &lt;Grid item xs={mediumItemGridWidth()}&gt;
         &lt;ReportField
@@ -1870,7 +1873,7 @@ function <span class="fstat-no" title="function not covered" >ReportField(</span
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-15T20:48:28.106Z
+                at 2025-10-15T21:19:20.167Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
