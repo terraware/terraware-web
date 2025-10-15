@@ -7,9 +7,16 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
 import ColorKeyControl from 'src/components/NewMap/ColorKeyControl';
-import { MapLayerFeature, MapMarker, MapMarkerGroup, MapViewState } from 'src/components/NewMap/types';
+import {
+  MapLayerFeature,
+  MapMarker,
+  MapMarkerGroup,
+  MapNameTag,
+  MapPoint,
+  MapViewState,
+} from 'src/components/NewMap/types';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
-import { getBoundingBoxFromMultiPolygons } from 'src/components/NewMap/utils';
+import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
 import { useLocalization } from 'src/providers';
 import { ActivityPayload, activityTypeColor } from 'src/types/Activity';
@@ -113,7 +120,6 @@ export default function MapSplitView({
       plantingSites?.map(
         (site): MapLayerFeature => ({
           featureId: `${site.id}`,
-          label: site.name,
           geometry: {
             type: 'MultiPolygon',
             coordinates: site.boundary?.coordinates ?? [],
@@ -149,6 +155,35 @@ export default function MapSplitView({
       },
     ];
   }, [markerGroups, siteFeatures, strings, theme]);
+
+  const nameTags = useMemo((): MapNameTag[] | undefined => {
+    return plantingSites
+      ?.map((site): MapNameTag | undefined => {
+        if (site.boundary) {
+          const points = site.boundary.coordinates
+            .flat()
+            .flat()
+            .map(
+              ([lng, lat]): MapPoint => ({
+                lat,
+                lng,
+              })
+            );
+
+          const bbox = getBoundingBoxFromPoints(points);
+          const latitude = (bbox.maxLat + bbox.minLat) / 2;
+          const longitude = (bbox.maxLng + bbox.minLng) / 2;
+
+          return {
+            label: site.name,
+            longitude,
+            latitude,
+            onClick: () => fitBounds(bbox),
+          };
+        }
+      })
+      .filter((nameTag): nameTag is MapNameTag => nameTag !== undefined);
+  }, [fitBounds, plantingSites]);
 
   useEffect(() => {
     if (projectId !== currentProjectId) {
@@ -202,6 +237,7 @@ export default function MapSplitView({
         initialViewState={initialMapViewState}
         mapRef={mapRef}
         mapId={mapId}
+        nameTags={nameTags}
         onMapMove={onMapMoveCallback}
         onTokenExpired={refreshToken}
         token={token ?? ''}

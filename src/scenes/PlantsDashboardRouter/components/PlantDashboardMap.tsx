@@ -11,7 +11,11 @@ import {
   MapLayerFeature,
   MapLayerFeatureId,
   MapMarker,
+  MapNameTag,
+  MapPoint,
 } from 'src/components/NewMap/types';
+import useMapUtils from 'src/components/NewMap/useMapUtils';
+import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { MapService } from 'src/services';
@@ -64,6 +68,7 @@ const PlantDashboardMap = ({
 }: PlantDashboardMapProps): JSX.Element => {
   const { mapId, refreshToken, token } = useMapboxToken();
   const mapRef = useRef<MapRef | null>(null);
+  const { fitBounds } = useMapUtils(mapRef);
   const { strings } = useLocalization();
   const theme = useTheme();
 
@@ -185,7 +190,6 @@ const PlantDashboardMap = ({
         siteFeatures: [
           {
             featureId: `${site.id}`,
-            label: site.name,
             geometry: {
               type: 'MultiPolygon',
               coordinates: site.boundary?.coordinates ?? [],
@@ -618,6 +622,35 @@ const PlantDashboardMap = ({
     strings,
   ]);
 
+  const nameTags = useMemo((): MapNameTag[] | undefined => {
+    return plantingSites
+      .map((site): MapNameTag | undefined => {
+        if (site.boundary) {
+          const points = site.boundary.coordinates
+            .flat()
+            .flat()
+            .map(
+              ([lng, lat]): MapPoint => ({
+                lat,
+                lng,
+              })
+            );
+
+          const bbox = getBoundingBoxFromPoints(points);
+          const latitude = (bbox.maxLat + bbox.minLat) / 2;
+          const longitude = (bbox.maxLng + bbox.minLng) / 2;
+
+          return {
+            label: site.name,
+            longitude,
+            latitude,
+            onClick: () => fitBounds(bbox),
+          };
+        }
+      })
+      .filter((nameTag): nameTag is MapNameTag => nameTag !== undefined);
+  }, [fitBounds, plantingSites]);
+
   const setHighlightVisible = useCallback(
     (highlightId: string) => (visible: boolean) => {
       if (highlightId === 'mortalityRate') {
@@ -652,6 +685,7 @@ const PlantDashboardMap = ({
       initialSelectedLayerId={'zones'}
       mapId={mapId}
       mapRef={mapRef}
+      nameTags={nameTags}
       onTokenExpired={refreshToken}
       token={token}
       setDrawerOpen={setDrawerOpenCallback}

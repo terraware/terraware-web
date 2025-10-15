@@ -88,6 +88,13 @@ export type MapMarkerGroup = {
   visible: boolean;
 };
 
+export type MapNameTag = {
+  label: string;
+  longitude: number;
+  latitude: number;
+  onClick?: () => void;
+};
+
 export type MapViewStyle = 'Outdoors' | 'Satellite' | 'Light' | 'Dark' | 'Streets';
 export const MapViewStyles: MapViewStyle[] = ['Outdoors', 'Satellite', 'Light', 'Dark', 'Streets'];
 

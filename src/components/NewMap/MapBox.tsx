@@ -10,7 +10,7 @@ import Map, {
   ViewStateChangeEvent,
 } from 'react-map-gl/mapbox';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { Feature, FeatureCollection } from 'geojson';
 import { FilterSpecification, MapMouseEvent, Point } from 'mapbox-gl';
@@ -25,6 +25,7 @@ import {
   MapLayer,
   MapMarker,
   MapMarkerGroup,
+  MapNameTag,
   MapProperties,
   MapViewStyle,
   stylesUrl,
@@ -58,6 +59,7 @@ export type MapBoxProps = {
   mapRef: MutableRefObject<MapRef | null>;
   mapViewStyle: MapViewStyle;
   markerGroups?: MapMarkerGroup[];
+  nameTags?: MapNameTag[];
   onClickCanvas?: (event: MapMouseEvent) => void;
   onMapMove?: (view: ViewStateChangeEvent) => void;
   onTokenExpired?: () => void;
@@ -89,6 +91,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     mapRef,
     mapViewStyle,
     markerGroups,
+    nameTags,
     onClickCanvas,
     onMapMove,
     onTokenExpired,
@@ -493,6 +496,41 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     });
   }, [clusterMarkers, markerGroups, mapRef, onMarkerClick, onMarkerClusterClick, theme]);
 
+  const nameTagMarkers = useMemo(() => {
+    if (nameTags?.length) {
+      return nameTags.map((nameTag, i) => {
+        return (
+          <Marker
+            key={`map-name-tag-${i}`}
+            longitude={nameTag.longitude}
+            latitude={nameTag.latitude}
+            anchor='center'
+            style={{ cursor: nameTag.onClick ? 'pointer' : 'auto' }}
+            onClick={nameTag.onClick}
+          >
+            <div
+              style={{
+                background: 'rgba(255, 255, 255, 0.6)',
+                padding: '8px 16px',
+                borderRadius: '8px',
+              }}
+            >
+              <Typography
+                fontSize={'16px'}
+                fontWeight={400}
+                lineHeight={'24px'}
+                color={theme.palette.TwClrBaseBlack}
+                whiteSpace={'nowrap'}
+              >
+                {nameTag.label}
+              </Typography>
+            </div>
+          </Marker>
+        );
+      });
+    }
+  }, [nameTags, theme]);
+
   const onMouseMove = useCallback((event: MapMouseEvent) => {
     if (event.features && event.features.length) {
       const properties = event.features
@@ -694,6 +732,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         </Source>
       )}
       {markersComponents}
+      {nameTagMarkers}
     </Map>
   );
 };
