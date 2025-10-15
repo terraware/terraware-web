@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -130,7 +130,12 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,14 +180,19 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -199,7 +209,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { MultiPolygon } from 'geojson';
 &nbsp;
-import { MapBounds } from './types';
+import { MapBounds, MapPoint } from './types';
 &nbsp;
 const latToY = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>at: number): number =&gt; {</span>
   const rad = <span class="cstat-no" title="statement not covered" >(lat * Math.PI) / 180;</span>
@@ -239,20 +249,25 @@ const getBoundsZoomLevel = <span class="cstat-no" title="statement not covered" 
 <span class="cstat-no" title="statement not covered" >  return Math.floor(Math.min(latZoom, lngZoom));</span>
 };
 &nbsp;
-const getBoundingBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>ultipolygons: MultiPolygon[]): MapBounds =&gt; {</span>
+const getBoundingBoxFromMultiPolygons = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>ultipolygons: MultiPolygon[]): MapBounds =&gt; {</span>
+  const points = <span class="cstat-no" title="statement not covered" >multipolygons</span>
+    .map(<span class="fstat-no" title="function not covered" >(m</span>ultipolygon) =&gt; <span class="cstat-no" title="statement not covered" >multipolygon.coordinates)</span>
+    .flat()
+    .flat()
+    .flat()
+    .map(<span class="fstat-no" title="function not covered" >(c</span>oordinate) =&gt; (<span class="cstat-no" title="statement not covered" >{ lng: coordinate[0], lat: coordinate[1] })</span>);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return getBoundingBoxFromPoints(points);</span>
+};
+&nbsp;
+const getBoundingBoxFromPoints = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>oints: MapPoint[]): MapBounds =&gt; {</span>
   let minLat = <span class="cstat-no" title="statement not covered" >Infinity;</span>
   let maxLat = <span class="cstat-no" title="statement not covered" >-Infinity;</span>
   let minLng = <span class="cstat-no" title="statement not covered" >Infinity;</span>
   let maxLng = <span class="cstat-no" title="statement not covered" >-Infinity;</span>
 &nbsp;
-  const coordinates = <span class="cstat-no" title="statement not covered" >multipolygons</span>
-    .map(<span class="fstat-no" title="function not covered" >(m</span>ultipolygon) =&gt; <span class="cstat-no" title="statement not covered" >multipolygon.coordinates)</span>
-    .flat()
-    .flat()
-    .flat();
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (coordinates.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >    for (const [lng, lat] of coordinates) {</span>
+<span class="cstat-no" title="statement not covered" >  if (points.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >    for (const { lng, lat } of points) {</span>
 <span class="cstat-no" title="statement not covered" >      minLat = Math.min(minLat, lat);</span>
 <span class="cstat-no" title="statement not covered" >      maxLat = Math.max(maxLat, lat);</span>
 <span class="cstat-no" title="statement not covered" >      minLng = Math.min(minLng, lng);</span>
@@ -263,7 +278,7 @@ const getBoundingBox = <span class="cstat-no" title="statement not covered" ><sp
 <span class="cstat-no" title="statement not covered" >  return { minLat, minLng, maxLat, maxLng };</span>
 };
 &nbsp;
-export { isBoundsValid, getBoundingBox, getBoundsZoomLevel };
+export { isBoundsValid, getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints, getBoundsZoomLevel };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -271,7 +286,7 @@ export { isBoundsValid, getBoundingBox, getBoundsZoomLevel };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-15T03:38:40.793Z
+                at 2025-10-15T04:37:12.208Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
