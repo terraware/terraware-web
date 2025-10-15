@@ -66,7 +66,7 @@ export default function DateRange({ field, onChange, onDelete, values }: DateRan
   );
 
   return (
-    <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' sx={{ marginBottom: theme.spacing(3) }}>
+    <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap'>
       <Box alignItems='center' display='flex' flexDirection='row'>
         <DatePicker
           aria-label={strings.START_DATE}

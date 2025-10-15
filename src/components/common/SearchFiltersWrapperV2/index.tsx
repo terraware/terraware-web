@@ -47,7 +47,7 @@ export type SearchProps = SearchInputProps & {
   extraComponent?: React.ReactNode;
 };
 
-const defaultPillValueRenderer = (values: (string | number | null)[]): string | undefined => values.join(', ');
+export const defaultPillValueRenderer = (values: (string | number | null)[]): string | undefined => values.join(', ');
 
 export default function SearchFiltersWrapperV2({
   search,
