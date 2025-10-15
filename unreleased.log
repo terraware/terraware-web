@@ -1,3 +1,5 @@
+0c30b1e6939 SW-7544 Added padding to map fit bound option (#4606)
+d8d99d63c75 Updated offset margins to make map bigger. (#4607)
 824b6656dd1 SW-7533 Disable report save while uploading and filter caption changes (#4609)
 6713428e539 SW-7538 Photo captions that are too long expand past the photo itself and cover other UI elements (#4604)
 dc65439f674 SW-7522 Adding pills for filters (#4603)
