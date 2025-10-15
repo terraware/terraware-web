@@ -79,6 +79,10 @@ const ZoneT0EditBox = ({
   }, []);
 
   const zoneToSave = useMemo(() => {
+    if (!plotsWithObservations?.length) {
+      return { plantingZoneId: 0, densityData: [] };
+    }
+
     const existingZone = record.zones.find(
       (zone) => plotsWithObservations?.[0].plantingSubzone_plantingZone_id === zone.plantingZoneId.toString()
     );
