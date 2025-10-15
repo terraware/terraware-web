@@ -8,13 +8,14 @@ type MapContainerProps = {
   containerId?: string;
   drawer?: ReactNode;
   drawerOpen?: boolean;
+  hideBorder?: boolean;
   legend?: ReactNode;
   map: ReactNode;
   style?: CSSProperties;
 };
 
 const MapContainer = (props: MapContainerProps) => {
-  const { containerId, drawer, drawerOpen, legend, map, style } = props;
+  const { containerId, drawer, drawerOpen, hideBorder, legend, map, style } = props;
   const { isDesktop } = useDeviceInfo();
   const drawerOnly = useMemo(() => !isDesktop && drawerOpen, [drawerOpen, isDesktop]);
 
@@ -24,7 +25,7 @@ const MapContainer = (props: MapContainerProps) => {
       className={`map-container map-container${
         isDesktop ? '--desktop' : `--mobile${drawerOpen ? '-drawer-open' : ''}`
       }`}
-      style={style}
+      style={{ ...style, ...(hideBorder ? { border: 'none' } : undefined) }}
     >
       <div className={`map-holder${drawerOnly ? ' map-holder--hidden' : ''}`}>{map}</div>
       {drawerOpen && drawer}

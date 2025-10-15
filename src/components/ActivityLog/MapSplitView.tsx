@@ -196,6 +196,7 @@ export default function MapSplitView({
         drawerRef={drawerRef}
         drawerSize='large'
         features={mapFeatures}
+        hideBorder
         hideLegend
         initialSelectedLayerId='sites'
         initialViewState={initialMapViewState}
