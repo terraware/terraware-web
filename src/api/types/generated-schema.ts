@@ -6522,7 +6522,7 @@ export interface components {
             projectId: number;
             /** Format: int64 */
             projectZoneFigureValueId?: number;
-            sdgList: ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")[];
+            sdgList: (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17)[];
             standard?: string;
             totalExpansionPotential?: number;
             totalVCU?: number;
@@ -7074,8 +7074,11 @@ export interface components {
             users: components["schemas"]["UserWithGlobalRolesPayload"][];
         };
         GoalProgressPayloadV1: {
-            /** @enum {string} */
-            goal: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17";
+            /**
+             * Format: int32
+             * @enum {integer}
+             */
+            goal: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17;
             progress?: string;
         };
         ImageVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
@@ -8924,7 +8927,7 @@ export interface components {
             region?: "Antarctica" | "East Asia & Pacific" | "Europe & Central Asia" | "Latin America & Caribbean" | "Middle East & North Africa" | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
             /** Format: uri */
             riskTrackerLink?: string;
-            sdgList?: ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")[];
+            sdgList?: (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17)[];
             /** Format: uri */
             slackLink?: string;
             standard?: string;
@@ -10274,7 +10277,7 @@ export interface components {
             projectLead?: string;
             /** Format: uri */
             riskTrackerLink?: string;
-            sdgList?: ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")[];
+            sdgList?: (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17)[];
             /** Format: uri */
             slackLink?: string;
             standard?: string;
