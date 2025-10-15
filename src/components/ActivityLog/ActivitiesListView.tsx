@@ -31,7 +31,7 @@ import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
 import { getBoundingBoxFromPoints } from '../NewMap/utils';
 import { FilterField } from '../common/FilterGroup';
-import { FilterConfig, defaultPillValueRenderer } from '../common/SearchFiltersWrapperV2';
+import { FilterConfig, FilterConfigWithValues, defaultPillValueRenderer } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityDetailView from './ActivityDetailView';
@@ -486,16 +486,31 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
     return activeLocale ? _filters : [];
   }, [activeLocale, filterColumns, filterOptions]);
 
+  const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
+    const fFilters: FilterConfigWithValues[] = [
+      {
+        field: 'date',
+        label: strings.DATE,
+        options: [],
+        pillValueRenderer: (values: (string | number | null)[]) => values.map((value) => value).join(', '),
+        renderOption: (value: string | number) => value.toString(),
+      },
+    ];
+
+    return fFilters;
+  }, [strings]);
+
   const filterPillData = useMemo(() => {
-    return Object.keys(iconFilters)
+    return Object.keys(filters)
       .map((key): PillListItem<string> | false => {
-        const filterName = iconFilters[Number(key)].field;
         // If there are no values, there should be no pill
-        if (!filters[filterName] || (filters[filterName].values || []).length === 0) {
+        if (!filters[key] || (filters[key].values || []).length === 0) {
           return false;
         }
 
-        const filterConfig = [...(iconFilters || [])].find((filter: FilterConfig) => filter.field === filterName);
+        const filterConfig = [...(iconFilters || []), ...(featuredFilters || [])].find(
+          (filter: FilterConfig) => filter.field === key
+        );
 
         if (!filterConfig) {
           // Should not be possible, a filter must be present at this point
@@ -503,8 +518,8 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
         }
 
         const pillValue = filterConfig.pillValueRenderer
-          ? filterConfig.pillValueRenderer(filters[filterName].values)
-          : defaultPillValueRenderer(filters[filterName].values);
+          ? filterConfig.pillValueRenderer(filters[key].values)
+          : defaultPillValueRenderer(filters[key].values);
         const label = filterConfig.label;
 
         const removeFilter = (k: string) => {
@@ -514,14 +529,14 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
         };
 
         return {
-          id: filterName,
+          id: key,
           label,
           value: pillValue || '',
-          onRemove: () => removeFilter(filterName),
+          onRemove: () => removeFilter(key),
         };
       })
       .filter((item: PillListItem<string> | false): item is PillListItem<string> => !!item);
-  }, [filters, iconFilters]);
+  }, [featuredFilters, filters, iconFilters]);
 
   return (
     <MapSplitView
