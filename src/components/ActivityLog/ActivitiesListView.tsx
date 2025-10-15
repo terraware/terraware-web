@@ -546,22 +546,16 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
         <ActivitiesEmptyState projectId={projectId} />
       ) : (
         <>
-          <Box marginBottom={3}>
-            <Box display={'flex'}>
-              <DateRange
-                field='date'
-                onChange={onChangeDateRange}
-                onDelete={onDeleteDateRange}
-                values={filters.date?.values ?? []}
-              />
+          <DateRange
+            field='date'
+            iconFilters={
               <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
-            </Box>
-            {filterPillData.length > 0 && (
-              <Grid item xs={12} display='flex' marginTop={1}>
-                <PillList data={filterPillData} />
-              </Grid>
-            )}
-          </Box>
+            }
+            onChange={onChangeDateRange}
+            onDelete={onDeleteDateRange}
+            rightComponent={filterPillData.length ? <PillList data={filterPillData} /> : undefined}
+            values={filters.date?.values ?? []}
+          />
           {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
               {strings.NO_ACTIVITIES_TO_SHOW}
