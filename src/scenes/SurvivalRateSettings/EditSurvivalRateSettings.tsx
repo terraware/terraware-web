@@ -24,6 +24,7 @@ import strings from 'src/strings';
 import { SiteT0Data } from 'src/types/Tracking';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
+import ChangeTabWarningModal from './ChangeTabWarningModal';
 import EditPermanentPlotsTab from './EditPermanentPlotsTab';
 import EditTemporaryPlotsTab from './EditTemporaryPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
@@ -38,6 +39,7 @@ const EditSurvivalRateSettings = () => {
   const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
+  const [showChangeTabWarning, setShowChangeTabWarning] = useState(false);
   const dispatch = useAppDispatch();
   const [t0SiteData, setT0SiteData] = useState<SiteT0Data>();
   const params = useParams<{
@@ -136,15 +138,40 @@ const EditSurvivalRateSettings = () => {
     viewIdentifier: 'edit-survival-rate-settings',
   });
 
+  const continueChangeTab = useCallback(() => {
+    setShowChangeTabWarning(false);
+    onChangeTab(activeTab === 'permanent' ? 'temporary' : 'permanent');
+  }, [activeTab, onChangeTab]);
+
+  const onChangeTabHandler = useCallback(
+    (newTab: string) => {
+      if (newTab !== activeTab) {
+        setShowChangeTabWarning(true);
+      }
+    },
+    [activeTab]
+  );
+
+  const closeChangeTabWarning = useCallback(() => {
+    setShowChangeTabWarning(false);
+  }, []);
+
   return (
     <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
+      {showChangeTabWarning && (
+        <ChangeTabWarningModal
+          onClose={closeChangeTabWarning}
+          onExit={continueChangeTab}
+          type={activeTab ?? 'permanent'}
+        />
+      )}
       <Card radius='8px'>
         <Box marginBottom={theme.spacing(4)}>
           <SurvivalRateInstructions />
         </Box>
         <Tabs
           activeTab={activeTab}
-          onChangeTab={onChangeTab}
+          onChangeTab={onChangeTabHandler}
           tabs={tabs}
           headerBorder={true}
           sx={{
