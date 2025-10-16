@@ -870,8 +870,7 @@ LAST_MODIFIED_ON,Dernière modification effectuée le,93d681f9
 LAST_NAME,Nom de famille,84595f78
 LAST_OBSERVATION,Dernière observation : {0},f2de6421
 LAST_OBSERVED,Dernière observation,3dad61de
-LAST_REPORT_PUBLISHED,Dernier rapport publié {0},41d410d0
-LAST_REPORT_SUBMITTED,Dernier rapport soumis {0},13c96aef
+LAST_REPORT_PUBLISHED,Rapport {0} publié {1},0199dbf5
 LAST_UPDATED,Dernière mise à jour,9ea41799
 LATEST_OBSERVATION,Dernière observation,52d53fd1
 LATITUDE_LONGITUDE,"Latitude, longitude",fb596189

@@ -121,3 +121,8 @@ export type NewAcceleratorReportPhoto = {
   file: File;
   caption?: string;
 };
+
+export const getReportPrefix = (report: AcceleratorReport | PublishedReport): string => {
+  const year = report.startDate.split('-')[0];
+  return report.frequency === 'Annual' ? year : report.quarter ? `${year} ${report.quarter}` : '';
+};

@@ -871,8 +871,7 @@ LAST_MODIFIED_ON,Modificado por última vez el,93d681f9
 LAST_NAME,Apellido,84595f78
 LAST_OBSERVATION,Última observación: {0},f2de6421
 LAST_OBSERVED,Última observación,3dad61de
-LAST_REPORT_PUBLISHED,Último informe publicado {0},41d410d0
-LAST_REPORT_SUBMITTED,Último informe presentado {0},13c96aef
+LAST_REPORT_PUBLISHED,Informe {0} publicado {1},0199dbf5
 LAST_UPDATED,Última actualización,9ea41799
 LATEST_OBSERVATION,Última observación,52d53fd1
 LATITUDE_LONGITUDE,"Latitud, longitud",fb596189
