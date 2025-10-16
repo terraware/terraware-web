@@ -1,3 +1,5 @@
+95a9bb9b7f8 SW-7552 Warning message when switching tabs in edit mode (#4615)
+6e549755027 SW-7522 Clear values of date filter (#4613)
 240280b0c63 Update Copy for Survival Rate Settings view (#4614)
 cf71941c698 SW-7557: Clicking on Activity sometimes leads to details page being already scrolled down (#4612)
 1634f0a2456 SW-7449 Used name tags for planting site names (#4611)
