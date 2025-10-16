@@ -624,7 +624,10 @@ EXISTING_PROJECT_BATCHES_TITLE,Projet existant avec lots,0c2ab242
 EXISTING_PROJECT_PLANTING_SITES_BODY,"Certains sites de plantation ont déjà été ajoutés à un projet existant. Si vous sélectionnez ces sites de plantation ici, vous remplacerez le projet par {0} (au lieu de créer une association supplémentaire).",11f7a17c
 EXISTING_PROJECT_PLANTING_SITES_TITLE,Projet existant avec sites de plantation,bdd02838
 EXISTING_SPECIES_MSG,« {0} » est déjà dans votre liste d'espèces.,92747058
+EXIT,Quitter,5d64d7c7
 EXIT_APPLICATION,Fermer la candidature,71aff49c
+EXITING_PERMANENT_PLOTS,Sortie des Parcelles Permanentes,30ae747d
+EXITING_TEMPORARY_PLOTS,Sortie des Parcelles Temporaires,73a70b68
 EXPAND,Développer,2ecfd856
 EXPANSION_POTENTIAL,Potentiel d'expansion,cfcbb501
 EXPANSION_POTENTIAL_DESCRIPTION,"Terrain éligible non encore sécurisé par des accords, mais nous pensons qu’il peut l’être.",60ac9586
@@ -895,6 +898,8 @@ LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Les semences ne tolèrent pas les 
 LEARN_MORE_STRATA,"Pour en savoir plus sur la stratification des sites, cliquez ici",ba9a7d77
 LEAVE_AND_SAVE,Laissez et conservez,900e4d74
 LEAVE_ORGANIZATION,Quitter l'organisation,ce40fab6
+LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Vous quittez l’écran de modification des Parcelles Permanentes. Toute modification non enregistrée des Parcelles Permanentes ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,3df033ef
+LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Vous quittez l’écran de modification des Parcelles Temporaires. Toute modification non enregistrée des Parcelles Temporaires ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,a4409ad0
 LEGAL,Juridique,dc8b5907
 LEGEND,Légende,d312e5fb
 LESS_THAN_TWENTY_FIVE_PERCENT,< 25 %,c95f4f44

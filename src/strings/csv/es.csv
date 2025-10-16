@@ -625,7 +625,10 @@ EXISTING_PROJECT_BATCHES_TITLE,Proyecto existente con lotes,0c2ab242
 EXISTING_PROJECT_PLANTING_SITES_BODY,"Hay sitios de plantación que ya se añadieron a un proyecto existente. Si selecciona dichos sitios de plantación aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",11f7a17c
 EXISTING_PROJECT_PLANTING_SITES_TITLE,Proyecto existente con sitios de plantación,bdd02838
 EXISTING_SPECIES_MSG,"""{0}"" ya está en su lista de especies.",92747058
+EXIT,Salir,5d64d7c7
 EXIT_APPLICATION,Salir de la solicitud,71aff49c
+EXITING_PERMANENT_PLOTS,Saliendo de Parcelas Permanentes,30ae747d
+EXITING_TEMPORARY_PLOTS,Saliendo de Parcelas Temporales,73a70b68
 EXPAND,Expandir,2ecfd856
 EXPANSION_POTENTIAL,Potencial de expansión,cfcbb501
 EXPANSION_POTENTIAL_DESCRIPTION,"Terrenos elegibles aún no protegidos mediante acuerdos, pero se cree que pueden protegerse.",60ac9586
@@ -896,6 +899,8 @@ LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los nivele
 LEARN_MORE_STRATA,Obtenga más información sobre la estratificación de los sitios aquí.,ba9a7d77
 LEAVE_AND_SAVE,Salir y guardar,900e4d74
 LEAVE_ORGANIZATION,Salir de la organización,ce40fab6
+LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Está saliendo de la pantalla de edición de Parcelas Permanentes. Cualquier cambio no guardado en las Parcelas Permanentes no se guardará. ¿Está seguro de que desea salir?,3df033ef
+LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Está saliendo de la pantalla de edición de Parcelas Temporales. Cualquier cambio no guardado en las Parcelas Temporales no se guardará. ¿Está seguro de que desea salir?,a4409ad0
 LEGAL,Legal,dc8b5907
 LEGEND,Leyenda,d312e5fb
 LESS_THAN_TWENTY_FIVE_PERCENT,< 25%,c95f4f44
