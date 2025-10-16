@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/199</span>
+                <span class='fraction'>0/183</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
@@ -701,26 +701,7 @@
 <a name='L636'></a><a href='#L636'>636</a>
 <a name='L637'></a><a href='#L637'>637</a>
 <a name='L638'></a><a href='#L638'>638</a>
-<a name='L639'></a><a href='#L639'>639</a>
-<a name='L640'></a><a href='#L640'>640</a>
-<a name='L641'></a><a href='#L641'>641</a>
-<a name='L642'></a><a href='#L642'>642</a>
-<a name='L643'></a><a href='#L643'>643</a>
-<a name='L644'></a><a href='#L644'>644</a>
-<a name='L645'></a><a href='#L645'>645</a>
-<a name='L646'></a><a href='#L646'>646</a>
-<a name='L647'></a><a href='#L647'>647</a>
-<a name='L648'></a><a href='#L648'>648</a>
-<a name='L649'></a><a href='#L649'>649</a>
-<a name='L650'></a><a href='#L650'>650</a>
-<a name='L651'></a><a href='#L651'>651</a>
-<a name='L652'></a><a href='#L652'>652</a>
-<a name='L653'></a><a href='#L653'>653</a>
-<a name='L654'></a><a href='#L654'>654</a>
-<a name='L655'></a><a href='#L655'>655</a>
-<a name='L656'></a><a href='#L656'>656</a>
-<a name='L657'></a><a href='#L657'>657</a>
-<a name='L658'></a><a href='#L658'>658</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L639'></a><a href='#L639'>639</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -898,23 +879,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -927,12 +893,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1410,7 +1372,7 @@ import { selectProjectInternalUsersListRequest } from 'src/redux/features/projec
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
-import { PublishedReport } from 'src/types/AcceleratorReport';
+import { PublishedReport, getReportPrefix } from 'src/types/AcceleratorReport';
 import { Application } from 'src/types/Application';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import { ParticipantProject } from 'src/types/ParticipantProject';
@@ -1432,7 +1394,7 @@ type ProjectProfileViewProps = {
   projectScore?: Score | undefined;
   phaseVotes?: PhaseVotes | undefined;
   funderView?: boolean;
-  publishedReports?: PublishedReport[];
+  publishedReports: PublishedReport[];
 };
 &nbsp;
 const ProjectProfileView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
@@ -1444,7 +1406,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
   projectScore,
   phaseVotes,
   funderView,
-  publishedReports = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span>
+  publishedReports,
 }: ProjectProfileViewProps) =&gt; {
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -1551,21 +1513,6 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
     numberFormatter,
   ]);
 &nbsp;
-  const lastSubmittedReport = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (acceleratorReports?.length &gt; 0) {</span>
-      const submittedReports = <span class="cstat-no" title="statement not covered" >acceleratorReports</span>
-        .filter(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >['Submitted', 'Approved'].includes(r.status) &amp;&amp; !!r.submittedTime &amp;&amp; !!r.endDate)</span>
-        .toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {
-          const timeA = <span class="cstat-no" title="statement not covered" >a.endDate ? new Date(a.endDate).getTime() : 0;</span>
-          const timeB = <span class="cstat-no" title="statement not covered" >b.endDate ? new Date(b.endDate).getTime() : 0;</span>
-<span class="cstat-no" title="statement not covered" >          return timeB - timeA;</span>
-        });
-<span class="cstat-no" title="statement not covered" >      if (submittedReports.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >        return submittedReports[0];</span>
-      }
-    }
-  }, [acceleratorReports]);
-&nbsp;
   const lastPublishedReport = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (publishedReports?.length &gt; 0) {</span>
       const sortedReports = <span class="cstat-no" title="statement not covered" >publishedReports.toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
@@ -1578,11 +1525,6 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
       }
     }
   }, [publishedReports]);
-&nbsp;
-  const lastReportTime = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >funderView ? lastPublishedReport?.publishedTime : lastSubmittedReport?.submittedTime)</span>,
-    [funderView, lastPublishedReport, lastSubmittedReport]
-  );
 &nbsp;
   const reportMetricCardFormatter = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (v</span>alue: number | undefined) =&gt; (<span class="cstat-no" title="statement not covered" >value ? formatNumberScale(value, value &lt; 999 ? 0 : 1) : '0')</span>,
@@ -1762,12 +1704,13 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
       &lt;Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}&gt;
         {((funderView &amp;&amp; publishedReports?.length &gt; 0) || (!funderView &amp;&amp; acceleratorReports?.length &gt; 0)) &amp;&amp; (
           &lt;&gt;
-            {lastReportTime &amp;&amp; (
+            {lastPublishedReport &amp;&amp; (
               &lt;Grid item marginRight={theme.spacing(3)} marginLeft={theme.spacing(1)}&gt;
                 &lt;Typography fontWeight={500}&gt;
                   {strings.formatString(
-                    funderView ? strings.LAST_REPORT_PUBLISHED : strings.LAST_REPORT_SUBMITTED,
-                    getDateDisplayValue(lastReportTime)
+                    strings.LAST_REPORT_PUBLISHED,
+                    getReportPrefix(lastPublishedReport),
+                    getDateDisplayValue(lastPublishedReport.publishedTime)
                   )}
                 &lt;/Typography&gt;
               &lt;/Grid&gt;
@@ -2041,7 +1984,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-16T16:03:48.209Z
+                at 2025-10-16T19:47:07.822Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
