@@ -10,11 +10,14 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { requestPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
 import { selectPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboardView';
 import strings from 'src/strings';
+import { PublishedReport } from 'src/types/AcceleratorReport';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -42,6 +45,7 @@ const ProjectPage = () => {
   const query = useQuery();
   const [openPublishDialog, setOpenPublishDialog] = useState(false);
   const [publishRequestId, setPublishRequestId] = useState('');
+  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>([]);
   const publishProfileResponse = useAppSelector(selectPublishFunderProject(publishRequestId));
   const snackbar = useSnackbar();
   const { isDesktop } = useDeviceInfo();
@@ -62,6 +66,14 @@ const ProjectPage = () => {
     [getApplicationByProjectId, projectData.projectId]
   );
 
+  const reportsResponse = useAppSelector(selectListFunderReports(projectData.projectId.toString()));
+
+  useEffect(() => {
+    if (reportsResponse?.status === 'success') {
+      setPublishedReports(reportsResponse.data || []);
+    }
+  }, [reportsResponse]);
+
   const tabs = useMemo(() => {
     if (!activeLocale) {
       return [];
@@ -78,6 +90,7 @@ const ProjectPage = () => {
             projectApplication={projectApplication}
             projectScore={projectScore}
             phaseVotes={phaseVotes}
+            publishedReports={publishedReports}
           />
         ),
       },
@@ -112,7 +125,7 @@ const ProjectPage = () => {
         ),
       },
     ];
-  }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
+  }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes, publishedReports]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
@@ -161,6 +174,10 @@ const ProjectPage = () => {
       closePublishDialog();
     }
   }, [closePublishDialog, snackbar, publishProfileResponse]);
+
+  useEffect(() => {
+    void dispatch(requestListFunderReports(projectData.projectId));
+  }, [dispatch, projectData.projectId]);
 
   const rightComponent = useMemo(
     () => (

@@ -31,7 +31,7 @@ import { selectProjectInternalUsersListRequest } from 'src/redux/features/projec
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
-import { PublishedReport } from 'src/types/AcceleratorReport';
+import { PublishedReport, getReportPrefix } from 'src/types/AcceleratorReport';
 import { Application } from 'src/types/Application';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import { ParticipantProject } from 'src/types/ParticipantProject';
@@ -53,7 +53,7 @@ type ProjectProfileViewProps = {
   projectScore?: Score | undefined;
   phaseVotes?: PhaseVotes | undefined;
   funderView?: boolean;
-  publishedReports?: PublishedReport[];
+  publishedReports: PublishedReport[];
 };
 
 const ProjectProfileView = ({
@@ -65,7 +65,7 @@ const ProjectProfileView = ({
   projectScore,
   phaseVotes,
   funderView,
-  publishedReports = [],
+  publishedReports,
 }: ProjectProfileViewProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -172,21 +172,6 @@ const ProjectProfileView = ({
     numberFormatter,
   ]);
 
-  const lastSubmittedReport = useMemo(() => {
-    if (acceleratorReports?.length > 0) {
-      const submittedReports = acceleratorReports
-        .filter((r) => ['Submitted', 'Approved'].includes(r.status) && !!r.submittedTime && !!r.endDate)
-        .toSorted((a, b) => {
-          const timeA = a.endDate ? new Date(a.endDate).getTime() : 0;
-          const timeB = b.endDate ? new Date(b.endDate).getTime() : 0;
-          return timeB - timeA;
-        });
-      if (submittedReports.length > 0) {
-        return submittedReports[0];
-      }
-    }
-  }, [acceleratorReports]);
-
   const lastPublishedReport = useMemo(() => {
     if (publishedReports?.length > 0) {
       const sortedReports = publishedReports.toSorted((a, b) => {
@@ -199,11 +184,6 @@ const ProjectProfileView = ({
       }
     }
   }, [publishedReports]);
-
-  const lastReportTime = useMemo(
-    () => (funderView ? lastPublishedReport?.publishedTime : lastSubmittedReport?.submittedTime),
-    [funderView, lastPublishedReport, lastSubmittedReport]
-  );
 
   const reportMetricCardFormatter = useCallback(
     (value: number | undefined) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0'),
@@ -383,12 +363,13 @@ const ProjectProfileView = ({
       <Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}>
         {((funderView && publishedReports?.length > 0) || (!funderView && acceleratorReports?.length > 0)) && (
           <>
-            {lastReportTime && (
+            {lastPublishedReport && (
               <Grid item marginRight={theme.spacing(3)} marginLeft={theme.spacing(1)}>
                 <Typography fontWeight={500}>
                   {strings.formatString(
-                    funderView ? strings.LAST_REPORT_PUBLISHED : strings.LAST_REPORT_SUBMITTED,
-                    getDateDisplayValue(lastReportTime)
+                    strings.LAST_REPORT_PUBLISHED,
+                    getReportPrefix(lastPublishedReport),
+                    getDateDisplayValue(lastPublishedReport.publishedTime)
                   )}
                 </Typography>
               </Grid>
