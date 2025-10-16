@@ -50,11 +50,10 @@ export default function DateRange({
     (id: string) => (value?: Date | null) => {
       const newValues = [startDate, endDate];
       const date = value && isValid(value) ? getDateDisplayValue(value, userTimeZone?.id) : null;
-      if (id === 'startDate' && date) {
+      if (id === 'startDate') {
         setStartDate(date);
         newValues[0] = date;
-      }
-      if (id === 'endDate' && date) {
+      } else if (id === 'endDate') {
         setEndDate(date);
         newValues[1] = date;
       }
