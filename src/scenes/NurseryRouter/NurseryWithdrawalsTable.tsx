@@ -159,7 +159,7 @@ export default function NurseryWithdrawalsTable({
     [navigate]
   );
 
-  const getSearchChildren = useCallback(() => {
+  const searchChildren: SearchNodePayload[] = useMemo(() => {
     const { type, values } = parseSearchTerm(debouncedSearchTerm);
     const finalSearchValueChildren: SearchNodePayload[] = [];
     const searchValueChildren: SearchNodePayload[] = [];
@@ -238,7 +238,6 @@ export default function NurseryWithdrawalsTable({
 
   const onApplyFilters = useCallback(async () => {
     if (selectedOrganization) {
-      const searchChildren: SearchNodePayload[] = getSearchChildren();
       const requestId = Math.random().toString();
       setRequestId('searchWithdrawals', requestId);
       const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(
@@ -257,7 +256,7 @@ export default function NurseryWithdrawalsTable({
         }
       }
     }
-  }, [selectedOrganization, getSearchChildren, searchSortOrder, filters.destinationName?.values, setRows]);
+  }, [selectedOrganization, searchChildren, searchSortOrder, filters.destinationName?.values, setRows]);
 
   const reload = useCallback(() => {
     void onApplyFilters();

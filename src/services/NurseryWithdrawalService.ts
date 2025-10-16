@@ -128,7 +128,7 @@ const listNurseryWithdrawals = async (
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder, createdTimeOrder] : [{ field: 'id', direction: 'Ascending' }],
-    count: 1000,
+    count: 0,
   };
   const deletedSpecies = [{ batch_species_scientificName: strings.DELETED_SPECIES }];
 
@@ -228,9 +228,10 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
     ],
     search: SearchService.convertToSearchNodePayload({}, organizationId),
     sortOrder: [{ field: 'id', direction: 'Ascending' }],
-    count: 1000,
+    count: 0,
   };
 
+  // eventually convert this to utilize `SearchService.searchValues`
   const data = await SearchService.search(searchParams);
   return (data ?? []).reduce((acc, d) => {
     return Object.keys(d).reduce((innerAcc, k) => {
