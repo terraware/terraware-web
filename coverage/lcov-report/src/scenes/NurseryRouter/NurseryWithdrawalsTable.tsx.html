@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/93</span>
             </div>
         
             
@@ -417,7 +417,8 @@
 <a name='L352'></a><a href='#L352'>352</a>
 <a name='L353'></a><a href='#L353'>353</a>
 <a name='L354'></a><a href='#L354'>354</a>
-<a name='L355'></a><a href='#L355'>355</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -455,13 +456,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -488,6 +484,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -726,6 +723,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -736,10 +734,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -783,8 +785,7 @@ import SearchFiltersWrapper, {
   SearchFiltersProps,
 } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
-import { APP_PATHS } from 'src/constants';
-import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -809,6 +810,8 @@ import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
+import { exportNurseryWithdrawalResults } from './exportNurseryData';
+&nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
@@ -821,13 +824,7 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
   { key: 'menu', name: '', type: 'string' },
 ];
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >NurseryWithdrawalsTable(</span>{
-  rows,
-  setRows,
-}: {
-  rows: SearchResponseElement[] | null | undefined;
-  setRows: (rows: SearchResponseElement[] | null) =&gt; void;
-}): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >NurseryWithdrawalsTable(</span>): JSX.Element {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
@@ -839,6 +836,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   const projects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
 &nbsp;
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, SearchNodePayload&gt;&gt;({});</span>
+  const [rows, setRows] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseElement[] | null&gt;();</span>
   const [searchValue, setSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);</span>
   const [searchSortOrder, setSearchSortOrder] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchSortOrder | undefined&gt;({</span>
@@ -1093,6 +1091,10 @@ export default function <span class="fstat-no" title="function not covered" >Nur
 &nbsp;
   const isClickable = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >false,</span> []);</span>
 &nbsp;
+  const onExport = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: rows || [] });</span>
+  }, [rows]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid container&gt;
       &lt;Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}&gt;
@@ -1101,6 +1103,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
           onSearch={setSearchValue}
           filtersProps={filtersProps}
           featuredFilters={featuredFilters}
+          onExport={onExport}
         /&gt;
       &lt;/Grid&gt;
 &nbsp;
@@ -1132,7 +1135,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-17T23:42:34.439Z
+                at 2025-10-17T23:53:51.499Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
