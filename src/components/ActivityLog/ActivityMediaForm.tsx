@@ -242,9 +242,9 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
-            <Typography fontSize='14px'>{coordinatesLabel}</Typography>
+            {!isVideo && <Typography fontSize='14px'>{coordinatesLabel}</Typography>}
 
-            {isAcceleratorRoute && (
+            {!isVideo && isAcceleratorRoute && (
               <Checkbox
                 id={`activity-media-id-${activityId}-hide-on-map`}
                 label={strings.HIDE_ON_MAP}
