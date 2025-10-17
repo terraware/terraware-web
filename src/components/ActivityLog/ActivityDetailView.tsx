@@ -105,13 +105,11 @@ const ActivityMediaItem = ({
 
   const imageSrc = useMemo(
     () =>
-      mediaFile.type === 'Video'
-        ? '/assets/video-placeholder.svg'
-        : ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
-            '{fileId}',
-            mediaFile.fileId.toString()
-          ),
-    [activity.id, mediaFile.fileId, mediaFile.type]
+      ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+        '{fileId}',
+        mediaFile.fileId.toString()
+      ),
+    [activity.id, mediaFile.fileId]
   );
 
   const mediaItemHoverCallback = useCallback(

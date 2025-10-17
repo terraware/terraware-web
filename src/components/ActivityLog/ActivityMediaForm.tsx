@@ -66,24 +66,24 @@ const ActivityPhotoPreview = ({
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
 
-  const [isHeicPlaceholder, setIsHeicPlaceholder] = useState<boolean | undefined>();
+  const [showPlaceholder, setShowPlaceholder] = useState<boolean | undefined>();
 
   useEffect(() => {
-    const checkHeicPlaceholder = async () => {
+    const checkPlaceholder = async () => {
       if (mediaItem.type === 'new') {
-        const shouldShow = await shouldShowHeicPlaceholder(mediaItem.data.file);
-        setIsHeicPlaceholder(shouldShow);
+        const shouldShow = mediaItem.data.type === 'Video' || (await shouldShowHeicPlaceholder(mediaItem.data.file));
+        setShowPlaceholder(shouldShow);
       } else {
-        setIsHeicPlaceholder(false);
+        setShowPlaceholder(false);
       }
     };
 
-    void checkHeicPlaceholder();
+    void checkPlaceholder();
   }, [mediaItem]);
 
   const url = useMemo(() => {
     if (mediaItem.type === 'new') {
-      return isHeicPlaceholder ? '/assets/activity-media.svg' : URL.createObjectURL(mediaItem.data.file);
+      return showPlaceholder ? '/assets/activity-media.svg' : URL.createObjectURL(mediaItem.data.file);
     } else if (mediaItem.type === 'existing' && activityId) {
       return ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activityId.toString()).replace(
         '{fileId}',
@@ -92,7 +92,7 @@ const ActivityPhotoPreview = ({
     } else {
       return '';
     }
-  }, [activityId, mediaItem, isHeicPlaceholder]);
+  }, [activityId, mediaItem, showPlaceholder]);
 
   const isVideo = useMemo(() => mediaItem.data.type === 'Video', [mediaItem]);
 
@@ -181,12 +181,8 @@ const ActivityPhotoPreview = ({
       <Grid container spacing={2} textAlign='left'>
         <Grid item sm='auto' xs={12}>
           <Box position='relative'>
-            <PhotoPreview
-              imgUrl={isVideo ? '/assets/video-placeholder.svg' : url}
-              includeTrashIcon={false}
-              onTrashClick={onDelete}
-            />
-            {isHeicPlaceholder && (
+            <PhotoPreview imgUrl={url} includeTrashIcon={false} onTrashClick={onDelete} />
+            {showPlaceholder && (
               <Box
                 sx={{
                   backgroundColor: 'rgba(0, 0, 0, 0.7)',
