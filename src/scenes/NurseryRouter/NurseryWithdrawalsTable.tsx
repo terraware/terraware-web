@@ -10,8 +10,7 @@ import SearchFiltersWrapper, {
   SearchFiltersProps,
 } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
-import { APP_PATHS } from 'src/constants';
-import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -36,6 +35,8 @@ import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import { exportNurseryWithdrawalResults } from './exportNurseryData';
+
 const columns = (): TableColumnType[] => [
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
@@ -48,13 +49,7 @@ const columns = (): TableColumnType[] => [
   { key: 'menu', name: '', type: 'string' },
 ];
 
-export default function NurseryWithdrawalsTable({
-  rows,
-  setRows,
-}: {
-  rows: SearchResponseElement[] | null | undefined;
-  setRows: (rows: SearchResponseElement[] | null) => void;
-}): JSX.Element {
+export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const navigate = useSyncNavigate();
@@ -66,6 +61,7 @@ export default function NurseryWithdrawalsTable({
   const projects = useAppSelector(selectProjects);
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [rows, setRows] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
@@ -320,6 +316,10 @@ export default function NurseryWithdrawalsTable({
 
   const isClickable = useCallback(() => false, []);
 
+  const onExport = useCallback(() => {
+    void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: rows || [] });
+  }, [rows]);
+
   return (
     <Grid container>
       <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
@@ -328,6 +328,7 @@ export default function NurseryWithdrawalsTable({
           onSearch={setSearchValue}
           filtersProps={filtersProps}
           featuredFilters={featuredFilters}
+          onExport={onExport}
         />
       </Grid>
 

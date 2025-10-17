@@ -23,22 +23,11 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import PlantingProgressList from './PlantingProgressList';
 import PlantingProgressMap from './PlantingProgressMap';
+import { exportNurseryPlantingProgress } from './exportNurseryData';
 
 const initialView: View = 'list';
 
-type PlantingProgressProps = {
-  filters: Record<string, SearchNodePayload>;
-  search: string;
-  setFilters: (value: Record<string, SearchNodePayload>) => void;
-  setSearch: (value: string) => void;
-};
-
-export default function PlantingProgress({
-  filters,
-  search,
-  setFilters,
-  setSearch,
-}: PlantingProgressProps): JSX.Element {
+export default function PlantingProgress(): JSX.Element {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -47,12 +36,13 @@ export default function PlantingProgress({
 
   const projects = useAppSelector(selectProjects);
 
+  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [search, setSearch] = useState<string>('');
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
+  const rows = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), filters));
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(selectedPlantingSiteId)));
-
-  const plantingProgressResults = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), filters));
 
   const getProjectName = useCallback(
     (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
@@ -145,6 +135,10 @@ export default function PlantingProgress({
     });
   }, [activeLocale, plantingSitesNames]);
 
+  const onExport = useCallback(() => {
+    void exportNurseryPlantingProgress({ plantingProgress: rows || [] });
+  }, [rows]);
+
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
@@ -170,10 +164,11 @@ export default function PlantingProgress({
             view={activeView}
             onChangePlantingSite={setSelectedPlantingSiteId}
             featuredFilters={featuredFilters}
+            onExport={onExport}
             {...searchProps}
           />
         }
-        list={<PlantingProgressList reloadTracking={reloadTrackingAndObservations} rows={plantingProgressResults} />}
+        list={<PlantingProgressList reloadTracking={reloadTrackingAndObservations} rows={rows} />}
         map={
           <PlantingProgressMap plantingSiteId={selectedPlantingSiteId} reloadTracking={reloadTrackingAndObservations} />
         }
