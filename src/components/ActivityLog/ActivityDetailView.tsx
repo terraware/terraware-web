@@ -5,6 +5,7 @@ import { Button, Icon } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -237,6 +238,8 @@ const ActivityDetailView = ({
     }
   }, [activity?.verifiedBy, dispatch, verifiedByUser]);
 
+  const isActivityVideoSupportEnabled = useMemo(() => isEnabled('Activity Video Support'), []);
+
   const verifiedByLabel = useMemo(() => {
     const verifiedByName = verifiedByUser
       ? `${verifiedByUser?.firstName ?? ''} ${verifiedByUser?.lastName ?? ''}`.trim() || verifiedByUser.email
@@ -337,19 +340,21 @@ const ActivityDetailView = ({
         <Typography>{activity.description}</Typography>
       </Grid>
 
-      {activity.media.map((mediaFile, index) => (
-        <Grid item lg={6} xs={12} key={index}>
-          <ActivityMediaItem
-            activity={activity}
-            focusedFileId={focusedFileId}
-            hoveredFileId={hoveredFileId}
-            mediaFile={mediaFile}
-            onClickMediaItem={onClickMediaItem}
-            setHoverFileCallback={setHoverFileCallback}
-            setLightboxImageId={setLightboxImageId}
-          />
-        </Grid>
-      ))}
+      {activity.media
+        .filter((mediaFile) => mediaFile.type === 'Photo' || isActivityVideoSupportEnabled)
+        .map((mediaFile, index) => (
+          <Grid item key={index} lg={6} xs={12}>
+            <ActivityMediaItem
+              activity={activity}
+              focusedFileId={focusedFileId}
+              hoveredFileId={hoveredFileId}
+              mediaFile={mediaFile}
+              onClickMediaItem={onClickMediaItem}
+              setHoverFileCallback={setHoverFileCallback}
+              setLightboxImageId={setLightboxImageId}
+            />
+          </Grid>
+        ))}
 
       <ImageLightbox
         imageAlt={lightboxMediaItem?.caption}
