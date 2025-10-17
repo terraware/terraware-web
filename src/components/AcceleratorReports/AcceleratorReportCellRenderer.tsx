@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -7,8 +7,6 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
-import { selectUser } from 'src/redux/features/user/usersSelectors';
-import { useAppSelector } from 'src/redux/store';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 
 import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
@@ -27,10 +25,7 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
   const { activeLocale } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const modifiedByUser = useAppSelector(selectUser(row.modifiedBy));
-  const submittedByUser = useAppSelector(selectUser(row.submittedBy));
-
-  const createLinkToReport = useCallback(() => {
+  const linkToReport = useMemo(() => {
     const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
     const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId);
 
@@ -43,18 +38,6 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
       </Link>
     );
   }, [isAcceleratorRoute, projectId, row.frequency, row.id, row.quarter, row.startDate]);
-
-  const modifiedByName = useMemo(() => {
-    return modifiedByUser
-      ? `${modifiedByUser?.firstName ?? ''} ${modifiedByUser?.lastName ?? ''}`.trim() || modifiedByUser.email
-      : '';
-  }, [modifiedByUser]);
-
-  const submittedByName = useMemo(() => {
-    return submittedByUser
-      ? `${submittedByUser?.firstName ?? ''} ${submittedByUser?.lastName ?? ''}`.trim() || submittedByUser.email
-      : '';
-  }, [submittedByUser]);
 
   if (column.key === 'reportName') {
     return (
@@ -69,7 +52,7 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
             fontSize: '16px',
           },
         }}
-        value={createLinkToReport()}
+        value={linkToReport}
       />
     );
   }
@@ -86,11 +69,11 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
   }
 
   if (column.key === 'modifiedBy') {
-    return <CellRenderer {...renderProps} value={modifiedByName} />;
+    return <CellRenderer {...renderProps} value={row.modifiedByUser.fullName} />;
   }
 
   if (column.key === 'submittedBy') {
-    return <CellRenderer {...renderProps} value={submittedByName} />;
+    return <CellRenderer {...renderProps} value={row.submittedByUser?.fullName} />;
   }
 
   return <CellRenderer {...renderProps} />;

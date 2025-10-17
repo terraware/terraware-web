@@ -53,6 +53,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/activities/admin/{id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publishes an activity.
+         * @description Only verified activities may be published.
+         */
+        post: operations["adminPublishActivity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/activities/{activityId}": {
         parameters: {
             query?: never;
@@ -125,7 +145,7 @@ export interface paths {
          * Gets streaming details for a video for an activity.
          * @description This does not return the actual streaming data; it just returns the necessary information to stream video from Mux.
          */
-        get: operations["getActivityMediaStream"];
+        get: operations["getActivityMediaStream_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1821,6 +1841,63 @@ export interface paths {
          * @description This endpoint does not require authentication; it's intended to offer temporary file access for third-party services such as video transcoding.
          */
         get: operations["getFileForToken"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/funder/activities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Returns a list of published activities for a project. */
+        get: operations["funderListActivities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/funder/activities/{activityId}/media/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets a photo file for an activity.
+         * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+         */
+        get: operations["getActivityMedia_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/funder/activities/{activityId}/media/{fileId}/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets streaming details for a video for an activity.
+         * @description This does not return the actual streaming data; it just returns the necessary information to stream video from Mux.
+         */
+        get: operations["getActivityMediaStream"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4494,6 +4571,7 @@ export interface components {
             internalComment?: string;
             /** Format: int64 */
             modifiedBy: number;
+            modifiedByUser: components["schemas"]["SimpleUserPayload"];
             /** Format: date-time */
             modifiedTime: string;
             photos: components["schemas"]["ReportPhotoPayload"][];
@@ -4509,6 +4587,7 @@ export interface components {
             status: "Not Submitted" | "Submitted" | "Approved" | "Needs Update" | "Not Needed";
             /** Format: int64 */
             submittedBy?: number;
+            submittedByUser?: components["schemas"]["SimpleUserPayload"];
             /** Format: date-time */
             submittedTime?: string;
             systemMetrics: components["schemas"]["ReportSystemMetricPayload"][];
@@ -4646,6 +4725,8 @@ export interface components {
             id: number;
             isHighlight: boolean;
             media: components["schemas"]["ActivityMediaFilePayload"][];
+            /** Format: date-time */
+            publishedTime?: string;
             /** @enum {string} */
             status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
@@ -4690,6 +4771,10 @@ export interface components {
             modifiedBy: number;
             /** Format: date-time */
             modifiedTime: string;
+            /** Format: int64 */
+            publishedBy?: number;
+            /** Format: date-time */
+            publishedTime?: string;
             /** @enum {string} */
             status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
@@ -6486,6 +6571,35 @@ export interface components {
             /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
             values: (string | null)[];
         };
+        FunderActivityMediaFilePayload: {
+            caption?: string;
+            /** Format: date */
+            capturedDate: string;
+            /** Format: int64 */
+            fileId: number;
+            geolocation?: components["schemas"]["Point"];
+            isCoverPhoto: boolean;
+            isHiddenOnMap: boolean;
+            /** Format: int32 */
+            listPosition: number;
+            /** @enum {string} */
+            type: "Photo" | "Video";
+        };
+        FunderActivityPayload: {
+            /** Format: date */
+            date: string;
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            isHighlight: boolean;
+            media: components["schemas"]["FunderActivityMediaFilePayload"][];
+            /** @enum {string} */
+            type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
+        };
+        FunderListActivitiesResponsePayload: {
+            activities: components["schemas"]["FunderActivityPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         FunderPayload: {
             accountCreated: boolean;
             /** Format: date-time */
@@ -6553,10 +6667,6 @@ export interface components {
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
-            /** @enum {string} */
-            type: "GeometryCollection";
-        } & {
-            geometries: Record<string, never>[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -8920,7 +9030,6 @@ export interface components {
             projectHighlightPhotoValueId?: number;
             /** Format: int64 */
             projectId: number;
-            projectLead?: string;
             /** Format: int64 */
             projectZoneFigureValueId?: number;
             /** @enum {string} */
@@ -9502,6 +9611,11 @@ export interface components {
         };
         SimpleSuccessResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
+        };
+        SimpleUserPayload: {
+            fullName: string;
+            /** Format: int64 */
+            userId: number;
         };
         SiteT0DataResponsePayload: {
             /** Format: int64 */
@@ -10274,7 +10388,6 @@ export interface components {
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
             projectArea?: number;
-            projectLead?: string;
             /** Format: uri */
             riskTrackerLink?: string;
             sdgList?: (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17)[];
@@ -10902,6 +11015,28 @@ export interface operations {
             };
         };
     };
+    adminPublishActivity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
     getActivity: {
         parameters: {
             query?: never;
@@ -11010,6 +11145,8 @@ export interface operations {
                 maxWidth?: number;
                 /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
                 maxHeight?: number;
+                /** @description If true, return the originally uploaded media file verbatim. maxWidth and maxHeight are ignored when raw is true. */
+                raw?: boolean;
             };
             header?: never;
             path: {
@@ -11081,7 +11218,7 @@ export interface operations {
             };
         };
     };
-    getActivityMediaStream: {
+    getActivityMediaStream_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -15047,6 +15184,80 @@ export interface operations {
                 };
                 content: {
                     "*/*": string;
+                };
+            };
+        };
+    };
+    funderListActivities: {
+        parameters: {
+            query: {
+                projectId: number;
+                includeMedia?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FunderListActivitiesResponsePayload"];
+                };
+            };
+        };
+    };
+    getActivityMedia_1: {
+        parameters: {
+            query?: {
+                /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+                maxWidth?: number;
+                /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+                maxHeight?: number;
+            };
+            header?: never;
+            path: {
+                activityId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    getActivityMediaStream: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                activityId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetActivityStreamResponsePayload"];
                 };
             };
         };

@@ -11,8 +11,6 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
 import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 import useQuery from 'src/utils/useQuery';
@@ -31,7 +29,6 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 export default function AcceleratorReportsTable(): JSX.Element {
-  const dispatch = useAppDispatch();
   const { strings } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
@@ -39,7 +36,6 @@ export default function AcceleratorReportsTable(): JSX.Element {
   const [yearFilter, setYearFilter] = useState<string>();
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
   const [allAcceleratorReports, setAllAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
-  const [userIdsRequested, setUserIdsRequested] = useState(new Set<number>());
 
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
@@ -136,31 +132,6 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
     return Array.from(years).sort((a, b) => b - a);
   }, [allAcceleratorReports]);
-
-  const allReportUserIds = useMemo(() => {
-    const userIds: Set<number> = new Set();
-
-    allAcceleratorReports?.forEach((report) => {
-      if (report.modifiedBy) {
-        userIds.add(report.modifiedBy);
-      }
-      if (report.submittedBy) {
-        userIds.add(report.submittedBy);
-      }
-    });
-
-    return Array.from(userIds).sort((a, b) => a - b);
-  }, [allAcceleratorReports]);
-
-  useEffect(() => {
-    allReportUserIds.forEach((userId) => {
-      if (userIdsRequested.has(userId)) {
-        return;
-      }
-      setUserIdsRequested((prev) => new Set(prev).add(userId));
-      void dispatch(requestGetUser(userId));
-    });
-  }, [allReportUserIds, userIdsRequested, dispatch]);
 
   const yearFilterOptions = useMemo(() => {
     return allReportYears.map((year) => year.toString());
