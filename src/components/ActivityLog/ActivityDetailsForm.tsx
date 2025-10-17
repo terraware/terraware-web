@@ -95,7 +95,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const [source, setSource] = useState<string | null>();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
-  const [mediaFiles, setMediaFiles] = useState<ActivityMediaItem[]>([]);
+  const [mediaItems, setMediaItems] = useState<ActivityMediaItem[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [syncMediaRequestId, setSyncMediaRequestId] = useState('');
   const [getActivityRequestId, setGetActivityRequestId] = useState('');
@@ -260,7 +260,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const syncMediaFiles = useCallback(
     (newActivityId: number) => {
       // Only sync if there are any media operations to perform
-      const hasMediaOperations = mediaFiles.some(
+      const hasMediaOperations = mediaItems.some(
         (item) => item.type === 'new' || (item.type === 'existing' && (item.isDeleted || item.isModified))
       );
 
@@ -268,7 +268,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         const request = dispatch(
           requestSyncActivityMedia({
             activityId: newActivityId,
-            mediaItems: mediaFiles,
+            mediaItems,
           })
         );
         setSyncMediaRequestId(request.requestId);
@@ -278,7 +278,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         navToActivityLog();
       }
     },
-    [dispatch, mediaFiles, setBusy, navToActivityLog]
+    [dispatch, mediaItems, setBusy, navToActivityLog]
   );
 
   // initialize record, if creating new
@@ -343,14 +343,14 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   useEffect(() => {
     if (isEditing && activity && activity.media) {
       const existingMediaItems: ActivityMediaItem[] = activity.media
-        .map((mediaFile) => ({
-          data: mediaFile,
+        .map((mediaItem) => ({
+          data: mediaItem,
           isDeleted: false,
           isModified: false,
           type: 'existing' as const,
         }))
         .sort((a, b) => a.data.listPosition - b.data.listPosition);
-      setMediaFiles(existingMediaItems);
+      setMediaItems(existingMediaItems);
     }
   }, [isEditing, activity]);
 
@@ -509,13 +509,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const activityWithMedia = useMemo(() => {
     if (activity) {
-      const media = mediaFiles
+      const media = mediaItems
         .filter((file): file is ExistingActivityMediaItem => file.type === 'existing' && !file.isDeleted)
         .map((file) => file.data);
 
       return { ...activity, media };
     }
-  }, [activity, mediaFiles]);
+  }, [activity, mediaItems]);
 
   if (!record) {
     return <></>;
@@ -653,9 +653,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             <ActivityMediaForm
               activityId={activityId}
               focusedFileId={focusedFileId}
-              mediaFiles={mediaFiles}
-              onMediaFileClick={onFileClicked}
-              onMediaFilesChange={setMediaFiles}
+              mediaItems={mediaItems}
+              onClickMediaItem={onFileClicked}
+              onChangeMediaItems={setMediaItems}
             />
           </Grid>
         </MapSplitView>

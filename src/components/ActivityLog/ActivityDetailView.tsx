@@ -19,11 +19,191 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ActivityStatusBadges from './ActivityStatusBadges';
 
+type ActivityMediaItemProps = {
+  activity: Activity;
+  focusedFileId?: number;
+  hoveredFileId?: number;
+  mediaFile: ActivityMediaFile;
+  onClickMediaItem: (fileId: number) => () => void;
+  setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
+  setLightboxImageId: (fileId: number | undefined) => void;
+};
+
+const ActivityMediaItem = ({
+  activity,
+  focusedFileId,
+  hoveredFileId,
+  mediaFile,
+  onClickMediaItem,
+  setHoverFileCallback,
+  setLightboxImageId,
+}: ActivityMediaItemProps): JSX.Element => {
+  const { strings } = useLocalization();
+  const theme = useTheme();
+
+  const imageStyles = useMemo(
+    () => ({
+      aspectRatio: '4/3',
+      backgroundColor: theme.palette.TwClrBgSecondary,
+      borderColor:
+        hoveredFileId === mediaFile.fileId || focusedFileId === mediaFile.fileId ? '#CC79A7' : theme.palette.TwClrBg,
+      borderStyle: 'solid',
+      borderWidth: '4px',
+      boxSizing: 'content-box' as const,
+      objectFit: 'cover' as const,
+      transition: 'border 0.2s ease-in-out',
+      width: '100%',
+    }),
+    [focusedFileId, hoveredFileId, mediaFile.fileId, theme.palette.TwClrBg, theme.palette.TwClrBgSecondary]
+  );
+
+  const infoPanelStyles = useMemo(
+    () => ({
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      bottom: '10px',
+      color: '#fff',
+      cursor: 'pointer',
+      left: '4px',
+      opacity: 0,
+      padding: theme.spacing(1),
+      position: 'absolute',
+      transition: 'opacity 0.2s ease-in-out',
+      userSelect: 'none',
+      width: '100%',
+      zIndex: 1,
+    }),
+    [theme]
+  );
+
+  const captionStyles = useMemo(
+    () => ({
+      fontSize: '16px',
+      lineHeight: '16px',
+      marginTop: theme.spacing(1),
+      whiteSpace: 'normal',
+      wordWrap: 'break-word',
+    }),
+    [theme]
+  );
+
+  const iconButtonStyles: SxProps<Theme> = useMemo(
+    () => ({
+      backgroundColor: '#fff',
+      borderRadius: '4px',
+      height: '24px',
+      padding: 0,
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(2),
+      width: '24px',
+      zIndex: 2,
+      '&:hover': { backgroundColor: '#eee' },
+    }),
+    [theme]
+  );
+
+  const imageSrc = useMemo(
+    () =>
+      mediaFile.type === 'Video'
+        ? '/assets/video-placeholder.svg'
+        : ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+            '{fileId}',
+            mediaFile.fileId.toString()
+          ),
+    [activity.id, mediaFile.fileId, mediaFile.type]
+  );
+
+  const mediaItemHoverCallback = useCallback(
+    (hovered: boolean) => () => {
+      if (mediaFile.geolocation && !mediaFile.isHiddenOnMap) {
+        setHoverFileCallback(mediaFile.fileId, hovered);
+      }
+    },
+    [mediaFile, setHoverFileCallback]
+  );
+
+  const onClickDownload = useCallback(
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+      event?.stopPropagation();
+
+      if (mediaFile.type === 'Video') {
+        alert('TODO: Implement video file download');
+        return;
+      }
+
+      const imageURL = ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+        '{fileId}',
+        mediaFile.fileId.toString()
+      );
+
+      const link = document.createElement('a');
+      link.href = imageURL;
+      link.download = `activity-${activity.id}-image-${mediaFile.fileId}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+    [activity.id, mediaFile.fileId, mediaFile.type]
+  );
+
+  const onClickExpand = useCallback(
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      event?.stopPropagation();
+
+      if (mediaFile.type === 'Video') {
+        alert('TODO: Implement video lightbox');
+        return;
+      }
+
+      setLightboxImageId(mediaFile.fileId);
+    },
+    [mediaFile.fileId, mediaFile.type, setLightboxImageId]
+  );
+
+  return (
+    <Box display='inline-block' position='relative' sx={{ '&:hover .info-panel': { opacity: 1 } }} width='100%'>
+      <img
+        alt={mediaFile?.caption}
+        id={`activity-media-item-${mediaFile.fileId}`}
+        onClick={onClickMediaItem(mediaFile.fileId)}
+        onMouseEnter={mediaItemHoverCallback(true)}
+        onMouseLeave={mediaItemHoverCallback(false)}
+        src={imageSrc}
+        style={imageStyles}
+      />
+
+      <Box className='info-panel' onClick={onClickMediaItem(mediaFile.fileId)} sx={infoPanelStyles}>
+        <Typography component='div' fontSize='16px' lineHeight='16px' variant='body2'>
+          {activity.date}
+        </Typography>
+
+        {mediaFile.caption && (
+          <Typography component='div' sx={captionStyles} variant='body2'>
+            {mediaFile.caption}
+          </Typography>
+        )}
+      </Box>
+
+      <IconButton
+        onClick={onClickDownload}
+        sx={[iconButtonStyles, { right: theme.spacing(5) }]}
+        title={strings.DOWNLOAD}
+      >
+        <Icon name='downloadFromTheCloud' />
+      </IconButton>
+
+      <IconButton onClick={onClickExpand} sx={iconButtonStyles} title={strings.EXPAND}>
+        <Icon name='expand' />
+      </IconButton>
+    </Box>
+  );
+};
+
 type ActivityDetailViewProps = {
   activity: Activity;
   focusedFileId?: number;
   hoveredFileId?: number;
-  onMediaItemClick: (fileId: number) => () => void;
+  onClickMediaItem: (fileId: number) => () => void;
   projectId: number;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
 };
@@ -32,7 +212,7 @@ const ActivityDetailView = ({
   activity,
   focusedFileId,
   hoveredFileId,
-  onMediaItemClick,
+  onClickMediaItem,
   projectId,
   setHoverFileCallback,
 }: ActivityDetailViewProps): JSX.Element => {
@@ -80,50 +260,6 @@ const ActivityDetailView = ({
     [location, navigate, query, strings.PROJECT_ACTIVITY]
   );
 
-  const iconButtonStyles: SxProps<Theme> = useMemo(
-    () => ({
-      backgroundColor: '#fff',
-      borderRadius: '4px',
-      height: '24px',
-      padding: 0,
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(2),
-      width: '24px',
-      zIndex: 2,
-      '&:hover': { backgroundColor: '#eee' },
-    }),
-    [theme]
-  );
-
-  const mediaItemHoverCallback = useCallback(
-    (mediaItem: ActivityMediaFile, hovered: boolean) => () => {
-      if (mediaItem.geolocation && !mediaItem.isHiddenOnMap) {
-        setHoverFileCallback(mediaItem.fileId, hovered);
-      }
-    },
-    [setHoverFileCallback]
-  );
-
-  const handleDownloadClick = useCallback(
-    (mediaItem: ActivityMediaFile) => (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
-      event?.stopPropagation();
-
-      const imageURL = ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
-        '{fileId}',
-        mediaItem.fileId.toString()
-      );
-
-      const link = document.createElement('a');
-      link.href = imageURL;
-      link.download = `activity-${activity.id}-image-${mediaItem.fileId}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    },
-    [activity.id]
-  );
-
   const goToProjectActivityEdit = useCallback(() => {
     if (!projectId || !activity.id) {
       return;
@@ -135,14 +271,6 @@ const ActivityDetailView = ({
       goToActivityEdit(projectId, activity.id);
     }
   }, [goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId, activity.id]);
-
-  const handleExpandClick = useCallback(
-    (fileId: number) => (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      event?.stopPropagation();
-      setLightboxImageId(fileId);
-    },
-    []
-  );
 
   const handleCloseLightbox = useCallback(() => {
     setLightboxImageId(undefined);
@@ -209,85 +337,17 @@ const ActivityDetailView = ({
         <Typography>{activity.description}</Typography>
       </Grid>
 
-      {activity.media.map((mediaItem, index) => (
+      {activity.media.map((mediaFile, index) => (
         <Grid item lg={6} xs={12} key={index}>
-          <Box display='inline-block' position='relative' sx={{ '&:hover .info-panel': { opacity: 1 } }} width='100%'>
-            <img
-              alt={mediaItem?.caption}
-              id={`activity-media-item-${mediaItem.fileId}`}
-              onClick={onMediaItemClick(mediaItem.fileId)}
-              // Hover effects only for photos with corresponding markers
-              onMouseEnter={mediaItemHoverCallback(mediaItem, true)}
-              onMouseLeave={mediaItemHoverCallback(mediaItem, false)}
-              src={ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
-                '{fileId}',
-                mediaItem.fileId.toString()
-              )}
-              style={{
-                aspectRatio: '4/3',
-                backgroundColor: theme.palette.TwClrBgSecondary,
-                borderColor:
-                  hoveredFileId === mediaItem.fileId || focusedFileId === mediaItem.fileId
-                    ? '#CC79A7'
-                    : theme.palette.TwClrBg,
-                borderStyle: 'solid',
-                borderWidth: '4px',
-                boxSizing: 'content-box',
-                objectFit: 'cover',
-                transition: 'border 0.2s ease-in-out',
-                width: '100%',
-              }}
-            />
-
-            <Box
-              className='info-panel'
-              onClick={onMediaItemClick(mediaItem.fileId)}
-              sx={{
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                bottom: '10px',
-                color: '#fff',
-                cursor: 'pointer',
-                left: '4px',
-                opacity: 0,
-                padding: theme.spacing(1),
-                position: 'absolute',
-                transition: 'opacity 0.2s ease-in-out',
-                userSelect: 'none',
-                width: '100%',
-                zIndex: 1,
-              }}
-            >
-              <Typography component='div' fontSize='16px' lineHeight='16px' variant='body2'>
-                {activity.date}
-              </Typography>
-
-              {mediaItem.caption && (
-                <Typography
-                  component='div'
-                  fontSize='16px'
-                  lineHeight='16px'
-                  marginTop={theme.spacing(1)}
-                  sx={{ wordWrap: 'break-word' }}
-                  variant='body2'
-                  whiteSpace='normal'
-                >
-                  {mediaItem.caption}
-                </Typography>
-              )}
-            </Box>
-
-            <IconButton
-              onClick={handleDownloadClick(mediaItem)}
-              sx={{ ...iconButtonStyles, right: theme.spacing(5) }}
-              title={strings.DOWNLOAD}
-            >
-              <Icon name='downloadFromTheCloud' />
-            </IconButton>
-
-            <IconButton onClick={handleExpandClick(mediaItem.fileId)} sx={iconButtonStyles} title={strings.EXPAND}>
-              <Icon name='expand' />
-            </IconButton>
-          </Box>
+          <ActivityMediaItem
+            activity={activity}
+            focusedFileId={focusedFileId}
+            hoveredFileId={hoveredFileId}
+            mediaFile={mediaFile}
+            onClickMediaItem={onClickMediaItem}
+            setHoverFileCallback={setHoverFileCallback}
+            setLightboxImageId={setLightboxImageId}
+          />
         </Grid>
       ))}
 

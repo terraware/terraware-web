@@ -1,11 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Updated Nursery Growth Phases'
-  | 'Survival Rate Calculation'
-  | 'Activity Log';
+export type FeatureName = 'Show Production View' | 'Survival Rate Calculation' | 'Activity Video Support';
 
 export type Feature = {
   name: FeatureName;
@@ -46,6 +42,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['New survival rate calculation for Plant Monitoring Observations'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Activity Video Support',
+    preferenceName: 'activityVideoSupport',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Support for video files in activity logs'],
     disclosure: ['This is a WIP'],
   },
 ];
