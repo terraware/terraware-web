@@ -2,8 +2,6 @@ import { PlantingProgress } from 'src/redux/features/plantings/plantingsSelector
 import strings from 'src/strings';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 
-type NurseryWithdrawalResults = any[];
-
 const makePlantingProgressCsv = ({
   plantingProgress,
 }: {
@@ -67,60 +65,6 @@ const makePlantingProgressCsv = ({
   return makeCsv(columnHeaders, data);
 };
 
-const makeNurseryWithdrawalResultsCsv = ({
-  nurseryWithdrawalResults,
-}: {
-  nurseryWithdrawalResults: NurseryWithdrawalResults;
-}): Blob => {
-  const columnHeaders = [
-    {
-      key: 'withdrawnDate',
-      displayLabel: strings.DATE,
-    },
-    {
-      key: 'purpose',
-      displayLabel: strings.PURPOSE,
-    },
-    {
-      key: 'facility_name',
-      displayLabel: strings.FROM_NURSERY,
-    },
-    {
-      key: 'destinationName',
-      displayLabel: strings.DESTINATION,
-    },
-    {
-      key: 'project_names',
-      displayLabel: strings.PROJECTS,
-    },
-    {
-      key: 'plantingSubzoneNames',
-      displayLabel: strings.TO_SUBZONE,
-    },
-    {
-      key: 'speciesScientificNames',
-      displayLabel: strings.SPECIES,
-    },
-    {
-      key: 'totalWithdrawn',
-      displayLabel: strings.TOTAL_QUANTITY,
-    },
-  ];
-
-  const data = nurseryWithdrawalResults.map((withdrawal) => ({
-    withdrawnDate: withdrawal.withdrawnDate,
-    purpose: withdrawal.purpose,
-    facility_name: withdrawal.facility_name,
-    destinationName: withdrawal.destinationName,
-    project_names: withdrawal.project_names.filter((projectName: string) => !!projectName).join(', '),
-    plantingSubzoneNames: withdrawal.plantingSubzoneNames,
-    speciesScientificNames: withdrawal.speciesScientificNames.join(', '),
-    totalWithdrawn: withdrawal.totalWithdrawn,
-  }));
-
-  return makeCsv(columnHeaders, data);
-};
-
 export const exportNurseryPlantingProgress = async ({
   plantingProgress,
 }: {
@@ -129,19 +73,6 @@ export const exportNurseryPlantingProgress = async ({
   const nurseryName = plantingProgress?.[0]?.siteName || strings.UNKNOWN;
   const filename = `${nurseryName}-${strings.PLANTING_PROGRESS}`;
   const fileBlob = makePlantingProgressCsv({ plantingProgress });
-  const fileContent = await fileBlob.text();
-
-  downloadCsv(filename, fileContent);
-};
-
-export const exportNurseryWithdrawalResults = async ({
-  nurseryWithdrawalResults,
-}: {
-  nurseryWithdrawalResults: NurseryWithdrawalResults;
-}) => {
-  const nurseryName = nurseryWithdrawalResults?.[0]?.facility_name || strings.UNKNOWN;
-  const filename = `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`;
-  const fileBlob = makeNurseryWithdrawalResultsCsv({ nurseryWithdrawalResults });
   const fileContent = await fileBlob.text();
 
   downloadCsv(filename, fileContent);

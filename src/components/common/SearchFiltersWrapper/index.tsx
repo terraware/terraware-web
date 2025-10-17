@@ -10,6 +10,7 @@ import strings from 'src/strings';
 import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import ExportTableComponent, { ExportTableProps } from './ExportTableComponent';
 import FeaturedFilters from './FeaturedFilters';
 import IconFilters from './IconFilters';
 
@@ -71,11 +72,16 @@ export type SearchFiltersProps = {
   pillValuesRenderer?: (filterName: string, values: unknown[]) => string | undefined;
 };
 
+/**
+ * Should only define one of [onExport] and [exportProps]
+ */
 export type SearchProps = SearchInputProps & {
   filtersProps?: SearchFiltersProps;
   featuredFilters?: FeaturedFilterConfig[];
   // If set, add an export button and call this function when it's clicked
   onExport?: () => void;
+  // If set, add an export button that uses these props to define functionality
+  exportProps?: ExportTableProps;
   width?: string | number;
 };
 
@@ -85,6 +91,7 @@ export default function SearchFiltersWrapper({
   filtersProps,
   featuredFilters,
   onExport,
+  exportProps,
   width,
 }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -163,6 +170,8 @@ export default function SearchFiltersWrapper({
             <Button onClick={onExport} icon='iconExport' type='passive' priority='ghost' />
           </Tooltip>
         )}
+
+        {exportProps && <ExportTableComponent {...exportProps} />}
 
         <TableSettingsButton />
       </Grid>

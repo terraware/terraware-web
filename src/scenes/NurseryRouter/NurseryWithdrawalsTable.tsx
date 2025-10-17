@@ -3,21 +3,23 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
+import { ColumnHeader } from 'export-to-csv/output/lib/types';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import SearchFiltersWrapper, {
   FeaturedFilterConfig,
   SearchFiltersProps,
 } from 'src/components/common/SearchFiltersWrapper';
+import { ExportTableProps } from 'src/components/common/SearchFiltersWrapper/ExportTableComponent';
 import Table from 'src/components/common/table';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
+import { PlantingProgress } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import WithdrawalLogRenderer from 'src/scenes/NurseryRouter/WithdrawalLogRenderer';
 import { NurseryWithdrawalService } from 'src/services';
-import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import {
   AndNodePayload,
@@ -29,29 +31,16 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
+import { CsvData } from 'src/utils/csv';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import { exportNurseryWithdrawalResults } from './exportNurseryData';
-
-const columns = (): TableColumnType[] => [
-  { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
-  { key: 'purpose', name: strings.PURPOSE, type: 'string' },
-  { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
-  { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
-  { key: 'project_names', name: strings.PROJECTS, type: 'string' },
-  { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
-  { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
-  { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
-  { key: 'menu', name: '', type: 'string' },
-];
-
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
@@ -75,23 +64,73 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     [projects]
   );
 
+  const columns = useMemo<TableColumnType[]>(
+    () => [
+      { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
+      { key: 'purpose', name: strings.PURPOSE, type: 'string' },
+      { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
+      { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
+      { key: 'project_names', name: strings.PROJECTS, type: 'string' },
+      { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
+      { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
+      { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
+      { key: 'menu', name: '', type: 'string' },
+    ],
+    [strings]
+  );
+
   const filterColumns = useMemo<FilterField[]>(
-    () =>
-      activeLocale
-        ? [
-            { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
-            { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
-            { name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' },
-            { name: 'plantingSubzoneNames', label: strings.SUBZONE, type: 'multiple_selection' },
-            {
-              name: 'batchWithdrawals.batch_species_scientificName',
-              label: strings.SPECIES,
-              type: 'multiple_selection',
-            },
-            { name: 'withdrawnDate', label: strings.WITHDRAWN_DATE, type: 'date_range' },
-          ]
-        : [],
-    [activeLocale]
+    () => [
+      { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
+      { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
+      { name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' },
+      { name: 'plantingSubzoneNames', label: strings.SUBZONE, type: 'multiple_selection' },
+      {
+        name: 'batchWithdrawals.batch_species_scientificName',
+        label: strings.SPECIES,
+        type: 'multiple_selection',
+      },
+      { name: 'withdrawnDate', label: strings.WITHDRAWN_DATE, type: 'date_range' },
+    ],
+    [strings]
+  );
+
+  const exportColumnHeaders = useMemo<ColumnHeader[]>(
+    () => [
+      {
+        key: 'withdrawnDate',
+        displayLabel: strings.DATE,
+      },
+      {
+        key: 'purpose',
+        displayLabel: strings.PURPOSE,
+      },
+      {
+        key: 'facility_name',
+        displayLabel: strings.FROM_NURSERY,
+      },
+      {
+        key: 'destinationName',
+        displayLabel: strings.DESTINATION,
+      },
+      {
+        key: 'project_names',
+        displayLabel: strings.PROJECTS,
+      },
+      {
+        key: 'plantingSubzoneNames',
+        displayLabel: strings.TO_SUBZONE,
+      },
+      {
+        key: 'speciesScientificNames',
+        displayLabel: strings.SPECIES,
+      },
+      {
+        key: 'totalWithdrawn',
+        displayLabel: strings.TOTAL_QUANTITY,
+      },
+    ],
+    [strings]
   );
 
   const filtersProps: SearchFiltersProps = useMemo(
@@ -106,35 +145,30 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   );
 
   const featuredFilters: FeaturedFilterConfig[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            {
-              field: 'project_id',
-              options: (projects || [])?.map((project: Project) => `${project.id}`),
-              searchNodeCreator: (values: (number | string | null)[]) => ({
-                field: 'batchWithdrawals.batch_project_id',
-                operation: 'field',
-                type: 'Exact',
-                values: values.map((value: number | string | null): string | null =>
-                  value === null ? value : `${value}`
-                ),
-              }),
-              label: strings.PROJECTS,
-              renderOption: (id: string | number) => getProjectName(Number(id)),
-              notPresentFilterShown: true,
-              notPresentFilterLabel: strings.NO_PROJECT,
-              pillValuesRenderer: (values: unknown[]): string | undefined => {
-                if (values.length === 1 && values[0] === null) {
-                  return strings.NO_PROJECT;
-                }
+    () => [
+      {
+        field: 'project_id',
+        options: (projects || [])?.map((project: Project) => `${project.id}`),
+        searchNodeCreator: (values: (number | string | null)[]) => ({
+          field: 'batchWithdrawals.batch_project_id',
+          operation: 'field',
+          type: 'Exact',
+          values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
+        }),
+        label: strings.PROJECTS,
+        renderOption: (id: string | number) => getProjectName(Number(id)),
+        notPresentFilterShown: true,
+        notPresentFilterLabel: strings.NO_PROJECT,
+        pillValuesRenderer: (values: unknown[]): string | undefined => {
+          if (values.length === 1 && values[0] === null) {
+            return strings.NO_PROJECT;
+          }
 
-                return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
-              },
-            },
-          ]
-        : [],
-    [activeLocale, getProjectName, projects]
+          return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
+        },
+      },
+    ],
+    [strings, getProjectName, projects]
   );
 
   useEffect(() => {
@@ -316,9 +350,25 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const isClickable = useCallback(() => false, []);
 
-  const onExport = useCallback(() => {
-    void exportNurseryWithdrawalResults({ nurseryWithdrawalResults: rows || [] });
-  }, [rows]);
+  const exportProps: ExportTableProps | undefined = useMemo(() => {
+    if (!rows || rows.length === 0) {
+      return;
+    }
+    const nurseryName = (rows[0]?.facility_name as string) || strings.UNKNOWN;
+    return {
+      filename: `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`,
+      columnHeaders: exportColumnHeaders,
+      rows: (rows || []) as PlantingProgress[],
+      convertRow: (withdrawal: SearchResponseElement) =>
+        ({
+          ...withdrawal,
+          project_names: (withdrawal.project_names as string[] | undefined)
+            ?.filter((projectName) => !!projectName)
+            .join(', '),
+          speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
+        }) as CsvData,
+    };
+  }, [exportColumnHeaders, rows, strings]);
 
   return (
     <Grid container>
@@ -328,7 +378,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           onSearch={setSearchValue}
           filtersProps={filtersProps}
           featuredFilters={featuredFilters}
-          onExport={onExport}
+          exportProps={exportProps}
         />
       </Grid>
 
