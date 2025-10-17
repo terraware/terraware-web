@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -148,26 +148,7 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,9 +177,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -207,18 +185,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -267,7 +233,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -276,8 +242,6 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
-import { selectUser } from 'src/redux/features/user/usersSelectors';
-import { useAppSelector } from 'src/redux/store';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 &nbsp;
 import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
@@ -296,10 +260,7 @@ const ReportCell = <span class="cstat-no" title="statement not covered" ><span c
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
 &nbsp;
-  const modifiedByUser = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUser(row.modifiedBy));</span>
-  const submittedByUser = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUser(row.submittedBy));</span>
-&nbsp;
-  const createLinkToReport = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const linkToReport = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const reportUrl = <span class="cstat-no" title="statement not covered" >isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;</span>
     const to = <span class="cstat-no" title="statement not covered" >reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId);</span>
 &nbsp;
@@ -312,18 +273,6 @@ const ReportCell = <span class="cstat-no" title="statement not covered" ><span c
       &lt;/Link&gt;
     );
   }, [isAcceleratorRoute, projectId, row.frequency, row.id, row.quarter, row.startDate]);
-&nbsp;
-  const modifiedByName = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return modifiedByUser</span>
-      ? `${modifiedByUser?.firstName ?? ''} ${modifiedByUser?.lastName ?? ''}`.trim() || modifiedByUser.email
-      : '';
-  }, [modifiedByUser]);
-&nbsp;
-  const submittedByName = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return submittedByUser</span>
-      ? `${submittedByUser?.firstName ?? ''} ${submittedByUser?.lastName ?? ''}`.trim() || submittedByUser.email
-      : '';
-  }, [submittedByUser]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (column.key === 'reportName') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -338,7 +287,7 @@ const ReportCell = <span class="cstat-no" title="statement not covered" ><span c
             fontSize: '16px',
           },
         }}
-        value={createLinkToReport()}
+        value={linkToReport}
       /&gt;
     );
   }
@@ -355,11 +304,11 @@ const ReportCell = <span class="cstat-no" title="statement not covered" ><span c
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (column.key === 'modifiedBy') {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...renderProps} value={modifiedByName} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...renderProps} value={row.modifiedByUser.fullName} /&gt;;</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (column.key === 'submittedBy') {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...renderProps} value={submittedByName} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...renderProps} value={row.submittedByUser?.fullName} /&gt;;</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...renderProps} /&gt;;</span>
@@ -376,7 +325,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-16T23:16:53.065Z
+                at 2025-10-17T23:42:34.439Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
