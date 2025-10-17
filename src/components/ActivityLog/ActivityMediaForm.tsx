@@ -205,7 +205,7 @@ const ActivityPhotoPreview = ({
 
         <Grid item sm={true} xs={12}>
           <Box display='flex' flexDirection='column'>
-            <Box alignItems='center' display='flex' flexDirection='row' gap={1}>
+            <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginBottom={theme.spacing(1)}>
               <Button
                 disabled={currentPosition <= 1}
                 icon='caretUp'
@@ -242,7 +242,11 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
-            {!isVideo && <Typography fontSize='14px'>{coordinatesLabel}</Typography>}
+            {!isVideo && (
+              <Typography fontSize='14px' marginBottom={theme.spacing(1)}>
+                {coordinatesLabel}
+              </Typography>
+            )}
 
             {!isVideo && isAcceleratorRoute && (
               <Checkbox
@@ -262,6 +266,7 @@ const ActivityPhotoPreview = ({
               style={{
                 justifyContent: 'flex-start',
                 marginLeft: '-8px',
+                marginTop: 0,
                 maxWidth: '160px',
                 paddingLeft: '8px',
               }}
