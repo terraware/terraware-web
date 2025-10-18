@@ -4,21 +4,22 @@ import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/m
 import { Button, Checkbox, FileChooser, Textfield } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
 
-export type ActivityMediaPhoto = {
-  caption?: string;
+type NewActivityMediaFile = Omit<ActivityMediaFile, 'capturedDate' | 'fileId'> & {
   file: File;
-  isCoverPhoto: boolean;
-  isHiddenOnMap: boolean;
-  listPosition: number;
 };
 
-export type NewActivityMediaItem = { type: 'new'; data: ActivityMediaPhoto };
+export type NewActivityMediaItem = {
+  type: 'new';
+  data: NewActivityMediaFile;
+};
+
 export type ExistingActivityMediaItem = {
   type: 'existing';
   data: ActivityMediaFile | AdminActivityMediaFile;
@@ -26,8 +27,9 @@ export type ExistingActivityMediaItem = {
   isDeleted?: boolean;
 };
 
-// Unified type for handling both new photos and existing media files
 export type ActivityMediaItem = NewActivityMediaItem | ExistingActivityMediaItem;
+
+const isVideoFile = (file: File): boolean => file.type.startsWith('video/');
 
 const MAX_FILES = 20;
 
@@ -64,24 +66,24 @@ const ActivityPhotoPreview = ({
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
 
-  const [isHeicPlaceholder, setIsHeicPlaceholder] = useState<boolean | undefined>();
+  const [showPlaceholder, setShowPlaceholder] = useState<boolean | undefined>();
 
   useEffect(() => {
-    const checkHeicPlaceholder = async () => {
+    const checkPlaceholder = async () => {
       if (mediaItem.type === 'new') {
-        const shouldShow = await shouldShowHeicPlaceholder(mediaItem.data.file);
-        setIsHeicPlaceholder(shouldShow);
+        const shouldShow = mediaItem.data.type === 'Video' || (await shouldShowHeicPlaceholder(mediaItem.data.file));
+        setShowPlaceholder(shouldShow);
       } else {
-        setIsHeicPlaceholder(false);
+        setShowPlaceholder(false);
       }
     };
 
-    void checkHeicPlaceholder();
+    void checkPlaceholder();
   }, [mediaItem]);
 
   const url = useMemo(() => {
     if (mediaItem.type === 'new') {
-      return isHeicPlaceholder ? '/assets/activity-media.svg' : URL.createObjectURL(mediaItem.data.file);
+      return showPlaceholder ? '/assets/activity-media.svg' : URL.createObjectURL(mediaItem.data.file);
     } else if (mediaItem.type === 'existing' && activityId) {
       return ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activityId.toString()).replace(
         '{fileId}',
@@ -90,7 +92,9 @@ const ActivityPhotoPreview = ({
     } else {
       return '';
     }
-  }, [activityId, mediaItem, isHeicPlaceholder]);
+  }, [activityId, mediaItem, showPlaceholder]);
+
+  const isVideo = useMemo(() => mediaItem.data.type === 'Video', [mediaItem]);
 
   const caption = useMemo(() => mediaItem.data.caption || '', [mediaItem]);
 
@@ -178,7 +182,7 @@ const ActivityPhotoPreview = ({
         <Grid item sm='auto' xs={12}>
           <Box position='relative'>
             <PhotoPreview imgUrl={url} includeTrashIcon={false} onTrashClick={onDelete} />
-            {isHeicPlaceholder && (
+            {showPlaceholder && (
               <Box
                 sx={{
                   backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -201,7 +205,7 @@ const ActivityPhotoPreview = ({
 
         <Grid item sm={true} xs={12}>
           <Box display='flex' flexDirection='column'>
-            <Box alignItems='center' display='flex' flexDirection='row' gap={1}>
+            <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginBottom={theme.spacing(1)}>
               <Button
                 disabled={currentPosition <= 1}
                 icon='caretUp'
@@ -229,16 +233,22 @@ const ActivityPhotoPreview = ({
                 value={currentPosition.toString()}
               />
 
-              <FormControlLabel
-                control={<Radio checked={isCoverPhoto} name='coverPhoto' onChange={onCoverPhotoToggle} />}
-                label={strings.COVER_PHOTO}
-                sx={{ paddingLeft: '8px' }}
-              />
+              {!isVideo && (
+                <FormControlLabel
+                  control={<Radio checked={isCoverPhoto} name='coverPhoto' onChange={onCoverPhotoToggle} />}
+                  label={strings.COVER_PHOTO}
+                  sx={{ paddingLeft: '8px' }}
+                />
+              )}
             </Box>
 
-            <Typography fontSize='14px'>{coordinatesLabel}</Typography>
+            {!isVideo && (
+              <Typography fontSize='14px' marginBottom={theme.spacing(1)}>
+                {coordinatesLabel}
+              </Typography>
+            )}
 
-            {isAcceleratorRoute && (
+            {!isVideo && isAcceleratorRoute && (
               <Checkbox
                 id={`activity-media-id-${activityId}-hide-on-map`}
                 label={strings.HIDE_ON_MAP}
@@ -256,6 +266,7 @@ const ActivityPhotoPreview = ({
               style={{
                 justifyContent: 'flex-start',
                 marginLeft: '-8px',
+                marginTop: 0,
                 maxWidth: '160px',
                 paddingLeft: '8px',
               }}
@@ -283,29 +294,31 @@ export interface ActivityMediaFormProps {
   activityId?: number;
   focusedFileId?: number;
   maxFiles?: number;
-  mediaFiles: ActivityMediaItem[];
-  onMediaFileClick: (fileId: number) => () => void;
-  onMediaFilesChange: React.Dispatch<React.SetStateAction<ActivityMediaItem[]>>;
+  mediaItems: ActivityMediaItem[];
+  onClickMediaItem: (fileId: number) => () => void;
+  onChangeMediaItems: React.Dispatch<React.SetStateAction<ActivityMediaItem[]>>;
 }
 
 export default function ActivityMediaForm({
   activityId,
   focusedFileId,
   maxFiles = MAX_FILES,
-  mediaFiles,
-  onMediaFileClick,
-  onMediaFilesChange,
+  mediaItems,
+  onClickMediaItem,
+  onChangeMediaItems,
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = useLocalization();
 
-  const visibleMediaFiles = useMemo(
-    () => mediaFiles.filter((item) => item.type === 'new' || !item.isDeleted),
-    [mediaFiles]
+  const isActivityVideoSupportEnabled = useMemo(() => isEnabled('Activity Video Support'), []);
+
+  const visibleMediaItems = useMemo(
+    () => mediaItems.filter((item) => item.type === 'new' || !item.isDeleted),
+    [mediaItems]
   );
 
   const fileLimitReached = useMemo(
-    () => (maxFiles ? visibleMediaFiles.length >= maxFiles : false),
-    [visibleMediaFiles.length, maxFiles]
+    () => (maxFiles ? visibleMediaItems.length >= maxFiles : false),
+    [visibleMediaItems.length, maxFiles]
   );
 
   const onSetFiles = useCallback(
@@ -315,18 +328,19 @@ export default function ActivityMediaForm({
           isCoverPhoto: false,
           isHiddenOnMap: false,
           file,
-          listPosition: mediaFiles.length + index + 1,
+          listPosition: mediaItems.length + index + 1,
+          type: isVideoFile(file) ? 'Video' : 'Photo',
         },
         type: 'new' as const,
       }));
-      onMediaFilesChange((prevPhotos) => [...prevPhotos, ...newPhotos]);
+      onChangeMediaItems((prevPhotos) => [...prevPhotos, ...newPhotos]);
     },
-    [mediaFiles.length, onMediaFilesChange]
+    [mediaItems.length, onChangeMediaItems]
   );
 
   const getUpdatePhotoCaption = useCallback(
     (index: number) => (caption: string) => {
-      const updatedPhotos = mediaFiles.map((mediaItem, i) => {
+      const updatedPhotos = mediaItems.map((mediaItem, i) => {
         if (index !== i) {
           return mediaItem;
         }
@@ -344,15 +358,15 @@ export default function ActivityMediaForm({
           };
         }
       });
-      onMediaFilesChange(updatedPhotos);
+      onChangeMediaItems(updatedPhotos);
     },
-    [mediaFiles, onMediaFilesChange]
+    [mediaItems, onChangeMediaItems]
   );
 
   const getSetCoverPhoto = useCallback(
     (index: number) => (isCover: boolean) => {
       // update all photos to ensure only one is cover photo
-      const updatedPhotos = mediaFiles.map((mediaItem, i) => {
+      const updatedPhotos = mediaItems.map((mediaItem, i) => {
         const shouldBeCover = i === index ? isCover : false;
 
         if (mediaItem.type === 'new') {
@@ -370,14 +384,14 @@ export default function ActivityMediaForm({
           };
         }
       });
-      onMediaFilesChange(updatedPhotos);
+      onChangeMediaItems(updatedPhotos);
     },
-    [mediaFiles, onMediaFilesChange]
+    [mediaItems, onChangeMediaItems]
   );
 
   const getSetHiddenOnMap = useCallback(
     (index: number) => (isHidden: boolean) => {
-      const updatedPhotos = mediaFiles.map((mediaItem, i) => {
+      const updatedPhotos = mediaItems.map((mediaItem, i) => {
         if (index !== i) {
           return mediaItem;
         }
@@ -398,21 +412,21 @@ export default function ActivityMediaForm({
           };
         }
       });
-      onMediaFilesChange(updatedPhotos);
+      onChangeMediaItems(updatedPhotos);
     },
-    [mediaFiles, onMediaFilesChange]
+    [mediaItems, onChangeMediaItems]
   );
 
   const getDeletePhoto = useCallback(
     (index: number) => () => {
-      const mediaItem = mediaFiles[index];
+      const mediaItem = mediaItems[index];
       if (mediaItem.type === 'new') {
         // remove new photos completely
-        const updatedPhotos = mediaFiles.filter((_, i) => index !== i);
-        onMediaFilesChange(updatedPhotos);
+        const updatedPhotos = mediaItems.filter((_, i) => index !== i);
+        onChangeMediaItems(updatedPhotos);
       } else {
         // mark existing photos as deleted
-        const updatedPhotos = mediaFiles.map((item, i) => {
+        const updatedPhotos = mediaItems.map((item, i) => {
           if (index === i) {
             return {
               ...item,
@@ -421,21 +435,21 @@ export default function ActivityMediaForm({
           }
           return item;
         });
-        onMediaFilesChange(updatedPhotos);
+        onChangeMediaItems(updatedPhotos);
       }
     },
-    [mediaFiles, onMediaFilesChange]
+    [mediaItems, onChangeMediaItems]
   );
 
   const getUpdatePosition = useCallback(
     (currentIndex: number) => (newPosition: number) => {
       const targetIndex = newPosition - 1;
-      if (targetIndex < 0 || targetIndex >= visibleMediaFiles.length || currentIndex === targetIndex) {
+      if (targetIndex < 0 || targetIndex >= visibleMediaItems.length || currentIndex === targetIndex) {
         return;
       }
 
       // reorder the visible files
-      const reorderedFiles = [...visibleMediaFiles];
+      const reorderedFiles = [...visibleMediaItems];
       const [movedItem] = reorderedFiles.splice(currentIndex, 1);
       reorderedFiles.splice(targetIndex, 0, movedItem);
 
@@ -456,12 +470,12 @@ export default function ActivityMediaForm({
       });
 
       // merge back with deleted items (they maintain their original position in the array)
-      const deletedItems = mediaFiles.filter((item) => item.type === 'existing' && item.isDeleted);
+      const deletedItems = mediaItems.filter((item) => item.type === 'existing' && item.isDeleted);
       const finalFiles = [...updatedFiles, ...deletedItems];
 
-      onMediaFilesChange(finalFiles);
+      onChangeMediaItems(finalFiles);
     },
-    [mediaFiles, onMediaFilesChange, visibleMediaFiles]
+    [mediaItems, onChangeMediaItems, visibleMediaItems]
   );
 
   return (
@@ -469,7 +483,11 @@ export default function ActivityMediaForm({
       <Grid item xs={12}>
         {!fileLimitReached && (
           <FileChooser
-            acceptFileType='image/heic, image/jpeg, image/png'
+            acceptFileType={
+              isActivityVideoSupportEnabled
+                ? 'image/heic, image/jpeg, image/png, video/*'
+                : 'image/heic, image/jpeg, image/png'
+            }
             chooseFileText={strings.CHOOSE_FILE}
             maxFiles={maxFiles}
             multipleSelection
@@ -481,14 +499,14 @@ export default function ActivityMediaForm({
       </Grid>
 
       <Grid item xs={12}>
-        {mediaFiles.map((photo, index) => {
+        {mediaItems.map((mediaItem, index) => {
           // skip deleted existing photos
-          if (photo.type === 'existing' && photo.isDeleted) {
+          if (mediaItem.type === 'existing' && mediaItem.isDeleted) {
             return null;
           }
 
-          // Calculate position excluding deleted items (this is the index in visibleMediaFiles)
-          const visibleIndex = mediaFiles
+          // Calculate position excluding deleted items (this is the index in visibleMediaItems)
+          const visibleIndex = mediaItems
             .slice(0, index)
             .filter((item) => !(item.type === 'existing' && item.isDeleted)).length;
 
@@ -498,16 +516,16 @@ export default function ActivityMediaForm({
             <ActivityPhotoPreview
               activityId={activityId}
               currentPosition={currentPosition}
-              focused={photo.type === 'existing' && photo.data.fileId === focusedFileId}
-              isLast={visibleIndex === visibleMediaFiles.length - 1}
+              focused={mediaItem.type === 'existing' && mediaItem.data.fileId === focusedFileId}
+              isLast={visibleIndex === visibleMediaItems.length - 1}
               key={`photo-${index}`}
-              maxPosition={visibleMediaFiles.length}
-              onClick={photo.type === 'existing' ? onMediaFileClick(photo.data.fileId) : undefined}
+              maxPosition={visibleMediaItems.length}
+              onClick={mediaItem.type === 'existing' ? onClickMediaItem(mediaItem.data.fileId) : undefined}
               onCoverPhotoChange={getSetCoverPhoto(index)}
               onDelete={getDeletePhoto(index)}
               onHiddenOnMapChange={getSetHiddenOnMap(index)}
               onPositionChange={getUpdatePosition(visibleIndex)}
-              mediaItem={photo}
+              mediaItem={mediaItem}
               setCaption={getUpdatePhotoCaption(index)}
             />
           );

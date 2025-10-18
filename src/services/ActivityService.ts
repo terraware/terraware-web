@@ -17,6 +17,7 @@ const ACTIVITY_ADMIN_ENDPOINT = '/api/v1/accelerator/activities/admin/{id}';
 const ACTIVITY_ENDPOINT = '/api/v1/accelerator/activities/{activityId}';
 const ACTIVITY_MEDIA_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media';
 export const ACTIVITY_MEDIA_FILE_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media/{fileId}';
+const ACTIVITY_MEDIA_STREAM_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media/{fileId}/stream';
 
 type ListActivitiesResponse = paths[typeof ACTIVITIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type CreateActivityResponse =
@@ -41,6 +42,8 @@ type UpdateActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 type DeleteActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
+export type GetActivityMediaStreamResponse =
+  paths[typeof ACTIVITY_MEDIA_STREAM_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * List all activities for a project
@@ -241,6 +244,18 @@ const deleteActivityMedia = async (
 };
 
 /**
+ * Get activity media stream details
+ */
+const getActivityMediaStream = async (
+  activityId: number,
+  fileId: number
+): Promise<Response2<GetActivityMediaStreamResponse>> => {
+  return HttpService.root(ACTIVITY_MEDIA_STREAM_ENDPOINT).get2<GetActivityMediaStreamResponse>({
+    urlReplacements: { '{activityId}': activityId.toString(), '{fileId}': fileId.toString() },
+  });
+};
+
+/**
  * Exported ActivityService
  */
 const ActivityService = {
@@ -253,6 +268,7 @@ const ActivityService = {
   deleteActivityMedia,
   getActivity,
   getActivityMedia,
+  getActivityMediaStream,
   listActivities,
   updateActivity,
   updateActivityMedia,

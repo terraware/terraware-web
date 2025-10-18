@@ -421,7 +421,7 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
     []
   );
 
-  const onMediaItemClick = useCallback(
+  const onClickMediaItem = useCallback(
     (fileId: number) => () => {
       if (shownActivity) {
         if (focusedFileId === fileId) {
@@ -554,7 +554,7 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
           activity={shownActivity}
           focusedFileId={focusedFileId}
           hoveredFileId={hoveredFileId}
-          onMediaItemClick={onMediaItemClick}
+          onClickMediaItem={onClickMediaItem}
           projectId={projectId}
           setHoverFileCallback={setHoverFileCallback}
         />
