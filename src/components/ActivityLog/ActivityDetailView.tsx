@@ -125,11 +125,6 @@ const ActivityMediaItem = ({
     (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
       event?.stopPropagation();
 
-      if (mediaFile.type === 'Video') {
-        alert('TODO: Implement video file download');
-        return;
-      }
-
       const imageURL = ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
         '{fileId}',
         mediaFile.fileId.toString()
@@ -142,21 +137,15 @@ const ActivityMediaItem = ({
       link.click();
       document.body.removeChild(link);
     },
-    [activity.id, mediaFile.fileId, mediaFile.type]
+    [activity.id, mediaFile.fileId]
   );
 
   const onClickExpand = useCallback(
     (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       event?.stopPropagation();
-
-      if (mediaFile.type === 'Video') {
-        alert('TODO: Implement video lightbox');
-        return;
-      }
-
       setLightboxImageId(mediaFile.fileId);
     },
-    [mediaFile.fileId, mediaFile.type, setLightboxImageId]
+    [mediaFile.fileId, setLightboxImageId]
   );
 
   return (
