@@ -12,8 +12,11 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
-import { PlantingProgress, selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsSelectors';
+import {
+  PlantingProgress,
+  selectUpdatePlantingsCompleted,
+  selectZonesHaveStatistics,
+} from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 import strings from 'src/strings';
