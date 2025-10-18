@@ -42,7 +42,7 @@ type UpdateActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 type DeleteActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
-type GetActivityMediaStreamResponse =
+export type GetActivityMediaStreamResponse =
   paths[typeof ACTIVITY_MEDIA_STREAM_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**

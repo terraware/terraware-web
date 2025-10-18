@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { GetActivityMediaResponse } from 'src/services/ActivityService';
+import { GetActivityMediaResponse, GetActivityMediaStreamResponse } from 'src/services/ActivityService';
 import { ActivityPayload, AdminActivityPayload } from 'src/types/Activity';
 
 import {
@@ -14,6 +14,7 @@ import {
   requestDeleteActivityMedia,
   requestGetActivity,
   requestGetActivityMedia,
+  requestGetActivityMediaStream,
   requestGetFileForToken,
   requestListActivities,
   requestSyncActivityMedia,
@@ -177,6 +178,20 @@ export const activityMediaGetSlice = createSlice({
 });
 
 /**
+ * Activity media stream get
+ */
+const initialStateActivityMediaStreamGet: Record<string, StatusT<GetActivityMediaStreamResponse>> = {};
+
+export const activityMediaStreamGetSlice = createSlice({
+  name: 'activityMediaStreamGetSlice',
+  initialState: initialStateActivityMediaStreamGet,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetActivityMediaStream)(builder);
+  },
+});
+
+/**
  * Activity media update
  */
 const initialStateActivityMediaUpdate: Record<string, StatusT<boolean>> = {};
@@ -244,6 +259,7 @@ const activityReducers = {
   adminActivityUpdate: adminActivityUpdateSlice.reducer,
   activityMediaDelete: activityMediaDeleteSlice.reducer,
   activityMediaGet: activityMediaGetSlice.reducer,
+  activityMediaStreamGet: activityMediaStreamGetSlice.reducer,
   activityMediaUpdate: activityMediaUpdateSlice.reducer,
   activityMediaUpload: activityMediaUploadSlice.reducer,
   fileForToken: fileForTokenSlice.reducer,
