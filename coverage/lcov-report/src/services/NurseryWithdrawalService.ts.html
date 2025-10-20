@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">29.62% </span>
+                <span class="strong">32.14% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/27</span>
+                <span class='fraction'>9/28</span>
             </div>
         
             
@@ -380,7 +380,8 @@
 <a name='L315'></a><a href='#L315'>315</a>
 <a name='L316'></a><a href='#L316'>316</a>
 <a name='L317'></a><a href='#L317'>317</a>
-<a name='L318'></a><a href='#L318'>318</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -487,38 +488,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -802,7 +804,8 @@ export type NurseryWithdrawalsSearchResponseElement = {
 const listNurseryWithdrawals = async (
   organizationId: number,
   searchCriteria: SearchNodePayload[],
-  sortOrder?: SearchSortOrder
+  sortOrder?: SearchSortOrder,
+  limit: number = 1000
 ): Promise&lt;SearchResponseElement[] | null&gt; =&gt; {
   const createdTimeOrder = { direction: sortOrder?.direction, field: 'createdTime' };
   const searchParams: SearchRequestPayload = {
@@ -827,15 +830,15 @@ const listNurseryWithdrawals = async (
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? <span class="branch-0 cbranch-no" title="branch not covered" >[sortOrder, createdTimeOrder] </span>: [{ field: 'id', direction: 'Ascending' }],
-    count: 0,
+    count: limit,
   };
-  const deletedSpecies = [{ batch_species_scientificName: strings.DELETED_SPECIES }];
 &nbsp;
   const data: NurseryWithdrawalsSearchResponseElement[] | null = await SearchService.search(searchParams);
   if (data) {
     return data.map((datum) =&gt; {
       const { batchWithdrawals, ...remaining } = datum;
 &nbsp;
+      const deletedSpecies = [{ batch_species_scientificName: strings.DELETED_SPECIES }];
       // replace batchWithdrawals with species_scientificNames, which is an array of species names
       const speciesScientificNames = new Set(
         (batchWithdrawals || <span class="branch-1 cbranch-no" title="branch not covered" >deletedSpecies)</span>.map((batchWithdrawal) =&gt; batchWithdrawal.batch_species_scientificName)
@@ -1021,7 +1024,7 @@ export default NurseryWithdrawalService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-20T18:23:57.439Z
+                at 2025-10-20T18:35:08.772Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
