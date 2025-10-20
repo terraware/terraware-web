@@ -101,35 +101,51 @@ const EditSurvivalRateSettings = () => {
       return [];
     }
 
-    return [
-      {
-        id: 'permanent',
-        label: strings.PERMANENT_PLOTS,
-        children: (
-          <EditPermanentPlotsTab
-            plantingSiteId={plantingSiteId}
-            plotsWithObservations={permanentPlots}
-            t0Plots={t0SiteData?.plots}
-            reload={reload}
-            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
-          />
-        ),
-      },
-      {
-        id: 'temporary',
-        label: strings.TEMPORARY_PLOTS,
-        children: (
-          <EditTemporaryPlotsTab
-            plantingSiteId={plantingSiteId}
-            temporaryPlotsWithObservations={temporaryPlots}
-            zones={t0SiteData?.zones}
-            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
-            reload={reload}
-            alreadyIncluding={t0SiteData?.survivalRateIncludesTempPlots}
-          />
-        ),
-      },
-    ];
+    return (temporaryPlots?.length || 0) > 0
+      ? [
+          {
+            id: 'permanent',
+            label: strings.PERMANENT_PLOTS,
+            children: (
+              <EditPermanentPlotsTab
+                plantingSiteId={plantingSiteId}
+                plotsWithObservations={permanentPlots}
+                t0Plots={t0SiteData?.plots}
+                reload={reload}
+                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+              />
+            ),
+          },
+          {
+            id: 'temporary',
+            label: strings.TEMPORARY_PLOTS,
+            children: (
+              <EditTemporaryPlotsTab
+                plantingSiteId={plantingSiteId}
+                temporaryPlotsWithObservations={temporaryPlots}
+                zones={t0SiteData?.zones}
+                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+                reload={reload}
+                alreadyIncluding={t0SiteData?.survivalRateIncludesTempPlots}
+              />
+            ),
+          },
+        ]
+      : [
+          {
+            id: 'permanent',
+            label: strings.PERMANENT_PLOTS,
+            children: (
+              <EditPermanentPlotsTab
+                plantingSiteId={plantingSiteId}
+                plotsWithObservations={permanentPlots}
+                t0Plots={t0SiteData?.plots}
+                reload={reload}
+                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+              />
+            ),
+          },
+        ];
   }, [activeLocale, permanentPlots, plantingSiteId, reload, t0SiteData, temporaryPlots, withdrawnSpeciesPlots]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
