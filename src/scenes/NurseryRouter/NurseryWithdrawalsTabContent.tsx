@@ -1,4 +1,5 @@
 import React, { Typography, useTheme } from '@mui/material';
+import { IconTooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
@@ -19,6 +20,7 @@ export default function NurseryWithdrawalsTabContent(): JSX.Element {
         }}
       >
         {strings.WITHDRAWAL_HISTORY}
+        <IconTooltip placement='top' title={strings.WITHDRAWAL_HISTORY_ONLY_1000} />
       </Typography>
       <NurseryWithdrawalsTable />
     </Card>

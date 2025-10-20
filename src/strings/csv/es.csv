@@ -2266,6 +2266,7 @@ WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Ingresar una cantidad en al menos una 
 WITHDRAWAL_COUNT_GREATER_THAN_ZERO_ERROR,El conteo de extracción debe ser mayor a 0,e48b9963
 WITHDRAWAL_DETAILS,Detalles de extracción,5c86287a
 WITHDRAWAL_HISTORY,Historial de retiros,470f20eb
+WITHDRAWAL_HISTORY_ONLY_1000,"La tabla de Historial de Retiros muestra solo 1000 retiros. El conjunto de retiros que se muestra depende del orden por fecha. Para ver todos los retiros, utilice la función de “exportar” para descargar un archivo CSV que incluya todos los retiros.",cd4581e2
 WITHDRAWAL_UNDONE,Retiro deshecho,039d291e
 WITHDRAWAL_UNDONE_DESCRIPTION,Se deshizo el retiro y las cantidades se devolvieron al lote original.,f3b634f4
 WITHDRAWALS,Retiros,270c7f9e
