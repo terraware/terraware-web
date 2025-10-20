@@ -1,3 +1,4 @@
+463eed872b4 SW-7513 Fix "Responsable del proyecto" translation (#4625)
 387ea72f1ef Update actions/setup-node action to v6 (#4622)
 279e06cc9d7 SW-7433 Move export button into tables (#4619)
 388d179cde1 SW-7375 Use new user model for reports table users (#4618)
