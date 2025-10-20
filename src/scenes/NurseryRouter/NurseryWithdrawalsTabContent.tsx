@@ -3,7 +3,6 @@ import React from 'react';
 import { Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 
-
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
 
