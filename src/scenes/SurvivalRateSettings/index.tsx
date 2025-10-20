@@ -145,32 +145,55 @@ const SurvivalRateSettings = () => {
       return [];
     }
 
-    return [
-      {
-        id: 'permanent',
-        label: strings.PERMANENT_PLOTS,
-        children: (
-          <PermanentPlotsTab
-            plantingSiteId={plantingSiteId}
-            plotsWithObservations={permanentPlots}
-            t0Plots={t0SiteData?.plots}
-            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
-          />
-        ),
-      },
-      {
-        id: 'temporary',
-        label: strings.TEMPORARY_PLOTS,
-        children: (
-          <TemporaryPlotsTab
-            t0SiteData={t0SiteData}
-            zonesWithObservations={zonesWithObservations}
-            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
-          />
-        ),
-      },
-    ];
-  }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, withdrawnSpeciesPlots, zonesWithObservations]);
+    return (temporaryPlots?.length || 0) > 0
+      ? [
+          {
+            id: 'permanent',
+            label: strings.PERMANENT_PLOTS,
+            children: (
+              <PermanentPlotsTab
+                plantingSiteId={plantingSiteId}
+                plotsWithObservations={permanentPlots}
+                t0Plots={t0SiteData?.plots}
+                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+              />
+            ),
+          },
+          {
+            id: 'temporary',
+            label: strings.TEMPORARY_PLOTS,
+            children: (
+              <TemporaryPlotsTab
+                t0SiteData={t0SiteData}
+                zonesWithObservations={zonesWithObservations}
+                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+              />
+            ),
+          },
+        ]
+      : [
+          {
+            id: 'permanent',
+            label: strings.PERMANENT_PLOTS,
+            children: (
+              <PermanentPlotsTab
+                plantingSiteId={plantingSiteId}
+                plotsWithObservations={permanentPlots}
+                t0Plots={t0SiteData?.plots}
+                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+              />
+            ),
+          },
+        ];
+  }, [
+    activeLocale,
+    permanentPlots,
+    plantingSiteId,
+    t0SiteData,
+    temporaryPlots,
+    withdrawnSpeciesPlots,
+    zonesWithObservations,
+  ]);
 
   useEffect(() => {
     setSelectedPlantingSite(plantingSiteId);
@@ -242,23 +265,32 @@ const SurvivalRateSettings = () => {
               </Typography>
             )}
 
-            <Box height={'32px'} width={'1px'} sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }} marginX={1} />
-            {(t0SiteData?.zones.length || 0) === Object.entries(zonesWithObservations).length ? (
-              <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
-                {strings.T0_SET_FOR_TEMPORARY_PLOTS}
-              </Typography>
-            ) : numberOfSetZones === 0 ? (
-              <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
-                {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
-              </Typography>
-            ) : (
-              <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
-                {strings.formatString(
-                  strings.NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,
-                  numberOfSetZones,
-                  Object.entries(zonesWithObservations).length || 0
+            {(temporaryPlots?.length || 0) > 0 && (
+              <>
+                <Box
+                  height={'32px'}
+                  width={'1px'}
+                  sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }}
+                  marginX={1}
+                />
+                {(t0SiteData?.zones.length || 0) === Object.entries(zonesWithObservations).length ? (
+                  <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
+                    {strings.T0_SET_FOR_TEMPORARY_PLOTS}
+                  </Typography>
+                ) : numberOfSetZones === 0 ? (
+                  <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                    {strings.T0_NOT_SET_FOR_TEMPORARY_PLOTS}
+                  </Typography>
+                ) : (
+                  <Typography fontWeight={500} color={theme.palette.TwClrTxtWarning}>
+                    {strings.formatString(
+                      strings.NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,
+                      numberOfSetZones,
+                      Object.entries(zonesWithObservations).length || 0
+                    )}
+                  </Typography>
                 )}
-              </Typography>
+              </>
             )}
           </Box>
           <Box>
