@@ -266,27 +266,38 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     return finalSearchValueChildren;
   }, [filters, debouncedSearchTerm]);
 
-  const onApplyFilters = useCallback(async () => {
-    if (selectedOrganization) {
-      const requestId = Math.random().toString();
-      setRequestId('searchWithdrawals', requestId);
-      const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(
-        selectedOrganization.id,
-        searchChildren,
-        searchSortOrder
-      );
-      if (apiSearchResults) {
-        if (getRequestId('searchWithdrawals') === requestId) {
-          const destinationFilter = filters.destinationName?.values ?? [];
-          if (destinationFilter.length) {
-            setRows(apiSearchResults.filter((result) => destinationFilter.indexOf(result.destinationName) !== -1));
-          } else {
-            setRows(apiSearchResults);
+  const retrieveWithdrawals: (limit: number) => Promise<PlantingProgress[]> = useCallback(
+    async (limit: number) => {
+      if (selectedOrganization) {
+        const requestId = Math.random().toString();
+        setRequestId('searchWithdrawals', requestId);
+        const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(
+          selectedOrganization.id,
+          searchChildren,
+          searchSortOrder,
+          limit
+        );
+        if (apiSearchResults) {
+          if (getRequestId('searchWithdrawals') === requestId) {
+            const destinationFilter = filters.destinationName?.values ?? [];
+            if (destinationFilter.length) {
+              return apiSearchResults.filter(
+                (result) => destinationFilter.indexOf(result.destinationName) !== -1
+              ) as PlantingProgress[];
+            } else {
+              return apiSearchResults as PlantingProgress[];
+            }
           }
         }
       }
-    }
-  }, [selectedOrganization, searchChildren, searchSortOrder, filters.destinationName?.values, setRows]);
+      return [];
+    },
+    [filters.destinationName?.values, searchChildren, searchSortOrder, selectedOrganization]
+  );
+
+  const onApplyFilters = useCallback(async () => {
+    setRows(await retrieveWithdrawals(1000));
+  }, [retrieveWithdrawals]);
 
   const reload = useCallback(() => {
     void onApplyFilters();
@@ -358,7 +369,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     return {
       filename: `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`,
       columnHeaders: exportColumnHeaders,
-      rows: (rows || []) as PlantingProgress[],
+      retrieveResults: () => retrieveWithdrawals(0),
       convertRow: (withdrawal: SearchResponseElement) =>
         ({
           ...withdrawal,
@@ -368,7 +379,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
         }) as CsvData,
     };
-  }, [exportColumnHeaders, rows, strings]);
+  }, [exportColumnHeaders, retrieveWithdrawals, rows, strings.NURSERY_WITHDRAWALS, strings.UNKNOWN]);
 
   return (
     <Grid container>

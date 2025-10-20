@@ -73,7 +73,7 @@ export type SearchFiltersProps = {
 };
 
 /**
- * Should only define one of [onExport] and [exportProps]
+ * Should only define a max of one of [onExport] and [exportProps]
  */
 export type SearchProps = SearchInputProps & {
   filtersProps?: SearchFiltersProps;

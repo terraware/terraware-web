@@ -8,14 +8,19 @@ import { CsvData, downloadCsv, makeCsv } from 'src/utils/csv';
 
 export type ExportTableProps = {
   columnHeaders: ColumnHeader[];
+  retrieveResults: () => Promise<CsvData[]>;
   convertRow?: (row: any) => CsvData;
   filename?: string;
-  rows?: CsvData[];
 };
 
-export default function ExportTableComponent({ columnHeaders, convertRow, filename, rows }: ExportTableProps) {
+export default function ExportTableComponent({
+  columnHeaders,
+  retrieveResults,
+  convertRow,
+  filename,
+}: ExportTableProps) {
   const onExportAsync = useCallback(async () => {
-    const results: CsvData[] = rows || [];
+    const results: CsvData[] = (await retrieveResults()) || [];
     if (results.length === 0) {
       return;
     }
@@ -25,7 +30,7 @@ export default function ExportTableComponent({ columnHeaders, convertRow, filena
     const fileContents = await fileBlob.text();
 
     downloadCsv(filename || 'export', fileContents);
-  }, [columnHeaders, convertRow, filename, rows]);
+  }, [columnHeaders, convertRow, filename, retrieveResults]);
 
   const onExport = useCallback(() => void onExportAsync(), [onExportAsync]);
 
