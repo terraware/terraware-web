@@ -76,9 +76,10 @@ const ZoneT0EditBox = ({
 
   const zoneTotalDensity = useMemo(() => {
     const selectedZone = record.zones.find((z) => z.plantingZoneId.toString() === zoneData?.plantingZoneId.toString());
-    const total = selectedZone?.densityData.reduce((sum, density) => {
-      return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;
-    }, 0);
+    const total =
+      selectedZone?.densityData.reduce((sum, density) => {
+        return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;
+      }, 0) || 0;
     return total;
   }, [record, zoneData]);
 
