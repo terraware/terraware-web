@@ -2266,6 +2266,7 @@ WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Enter a quantity in at least one seedl
 WITHDRAWAL_COUNT_GREATER_THAN_ZERO_ERROR,Withdrawal Count Must Be Greater Than 0,
 WITHDRAWAL_DETAILS,Withdrawal Details,
 WITHDRAWAL_HISTORY,Withdrawal History,
+WITHDRAWAL_HISTORY_ONLY_1000,"The Withdrawal History table displays only 1000 withdrawals. The set of withdrawals displayed depends on the sorting and filters. To view all withdrawals, use the “export” feature to download a CSV including all withdrawals.",
 WITHDRAWAL_UNDONE,Withdrawal Undone,
 WITHDRAWAL_UNDONE_DESCRIPTION,Withdraw was undone and the quantities were restored to the original batch.,
 WITHDRAWALS,Withdrawals,
