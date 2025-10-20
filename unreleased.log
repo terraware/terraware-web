@@ -1,3 +1,4 @@
+7402bb008b5 Hide temporary plots tab if no temporary plots (#4626)
 6c5e5904424 SW-7433 Create Export Table Component with general purpose props (#4620)
 5f9e08e9759 SW-7474 Show empty tables instead of empty state When all batches are zero (#4627)
 463eed872b4 SW-7513 Fix "Responsable del proyecto" translation (#4625)
