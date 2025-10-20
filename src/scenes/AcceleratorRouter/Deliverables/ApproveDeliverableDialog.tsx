@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
-import React, { Typography, useTheme } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import { Confirm } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';

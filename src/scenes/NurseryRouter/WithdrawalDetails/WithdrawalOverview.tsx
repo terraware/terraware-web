@@ -1,4 +1,6 @@
-import React, { Grid } from '@mui/material';
+import React from 'react';
+
+import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers/hooks';

@@ -1,4 +1,6 @@
-import React, { Box, Typography, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';

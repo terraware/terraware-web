@@ -1,4 +1,6 @@
-import React, { Box, Typography, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';

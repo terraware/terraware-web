@@ -1,4 +1,6 @@
-import React, { Typography, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 

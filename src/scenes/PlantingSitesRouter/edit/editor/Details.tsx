@@ -1,4 +1,6 @@
-import React, { Box } from '@mui/material';
+import React from 'react';
+
+import { Box } from '@mui/material';
 
 import DetailsInputForm from 'src/scenes/PlantingSitesRouter/edit/DetailsInputForm';
 import strings from 'src/strings';
