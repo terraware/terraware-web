@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -299,7 +299,8 @@
 <a name='L234'></a><a href='#L234'>234</a>
 <a name='L235'></a><a href='#L235'>235</a>
 <a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -460,8 +461,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -478,20 +477,23 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -695,10 +697,8 @@ export default function <span class="fstat-no" title="function not covered" >Inv
         };
       });
 &nbsp;
-      let updatedResult: InventoryResultWithBatchNumber[] | undefined;
-&nbsp;
       // format results
-<span class="cstat-no" title="statement not covered" >      updatedResult = processedResults?.map(<span class="fstat-no" title="function not covered" >(u</span>R) =&gt; {</span>
+      const updatedResult = <span class="cstat-no" title="statement not covered" >processedResults?.map(<span class="fstat-no" title="function not covered" >(u</span>R) =&gt; {</span>
         const resultTyped = <span class="cstat-no" title="statement not covered" >uR as BatchInventoryResult;</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           ...resultTyped,
@@ -708,14 +708,16 @@ export default function <span class="fstat-no" title="function not covered" >Inv
         } as InventoryResultWithBatchNumber;
       });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      updatedResult = updatedResult?.filter(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >showEmptyBatches || !isBatchEmpty(result))</span>;</span>
+      const filteredResult = <span class="cstat-no" title="statement not covered" >updatedResult?.filter(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >showEmptyBatches || !isBatchEmpty(result))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (updatedResult) {</span>
 <span class="cstat-no" title="statement not covered" >        if (!debouncedSearchTerm &amp;&amp; !filters.facilityIds?.length &amp;&amp; !filters.projectIds?.length) {</span>
 <span class="cstat-no" title="statement not covered" >          setShowResults(updatedResult.length &gt; 0);</span>
         }
+      }
+<span class="cstat-no" title="statement not covered" >      if (filteredResult) {</span>
 <span class="cstat-no" title="statement not covered" >        if (getRequestId('searchInventory') === requestId) {</span>
-<span class="cstat-no" title="statement not covered" >          setSearchResults(updatedResult);</span>
+<span class="cstat-no" title="statement not covered" >          setSearchResults(filteredResult);</span>
         }
       }
     }
@@ -752,6 +754,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
           reloadData={reloadData}
           origin='Batches'
           allowSelectionProjectAssign
+          emptyTableMessage={strings.NO_BATCHES_WITH_INVENTORY_MESSAGE}
         /&gt;
       ) : searchResults === null ? (
         &lt;Box
@@ -778,7 +781,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-20T15:30:33.180Z
+                at 2025-10-20T18:13:24.393Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
