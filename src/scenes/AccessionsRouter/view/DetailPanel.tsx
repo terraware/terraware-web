@@ -120,10 +120,10 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
-              {strings.COLLECTOR}
+              {strings.COLLECTORS}
             </Grid>
             <Grid item xs={gridRightSide} sx={valueStyle}>
-              {accession.collectors && accession.collectors.length > 0 ? accession.collectors[0] : ''}
+              {accession.collectors && accession.collectors.length > 0 ? accession.collectors.join(', ') : ''}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
