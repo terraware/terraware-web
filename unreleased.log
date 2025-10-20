@@ -1,3 +1,4 @@
+387ea72f1ef Update actions/setup-node action to v6 (#4622)
 279e06cc9d7 SW-7433 Move export button into tables (#4619)
 388d179cde1 SW-7375 Use new user model for reports table users (#4618)
 346d5878abd SW-7433 Include all withdrawals in history table and export (#4617)
