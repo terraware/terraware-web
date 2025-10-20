@@ -1,4 +1,6 @@
-import React, { Box, Theme, Typography, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { Property } from 'csstype';
 
 import strings from 'src/strings';

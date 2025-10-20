@@ -1,4 +1,6 @@
-import React, { Box, Typography, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 

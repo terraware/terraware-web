@@ -1,4 +1,6 @@
-import React, { Box, Typography, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Box, Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';

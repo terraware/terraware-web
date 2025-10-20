@@ -1,4 +1,6 @@
-import React, { Box, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 export type UndoRedoBoundaryControlProps = {
