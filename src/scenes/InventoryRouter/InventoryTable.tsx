@@ -30,6 +30,7 @@ interface InventoryTableProps {
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   temporalSearchValue: string;
+  emptyTableMessage?: string;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
@@ -45,6 +46,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     reloadData,
     origin,
     allowSelectionProjectAssign,
+    emptyTableMessage,
   } = props;
 
   const { strings } = useLocalization();
@@ -230,6 +232,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 sortHandler={onSortChange}
                 isPresorted={isPresorted}
                 reloadData={reloadData}
+                emptyTableMessage={emptyTableMessage}
               />
             </Grid>
           </Grid>

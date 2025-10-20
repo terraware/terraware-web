@@ -158,10 +158,8 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         };
       });
 
-      let updatedResult: InventoryResultWithBatchNumber[] | undefined;
-
       // format results
-      updatedResult = processedResults?.map((uR) => {
+      const updatedResult = processedResults?.map((uR) => {
         const resultTyped = uR as BatchInventoryResult;
         return {
           ...resultTyped,
@@ -171,14 +169,16 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         } as InventoryResultWithBatchNumber;
       });
 
-      updatedResult = updatedResult?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
+      const filteredResult = updatedResult?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
 
       if (updatedResult) {
         if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.projectIds?.length) {
           setShowResults(updatedResult.length > 0);
         }
+      }
+      if (filteredResult) {
         if (getRequestId('searchInventory') === requestId) {
-          setSearchResults(updatedResult);
+          setSearchResults(filteredResult);
         }
       }
     }
@@ -215,6 +215,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           reloadData={reloadData}
           origin='Batches'
           allowSelectionProjectAssign
+          emptyTableMessage={strings.NO_BATCHES_WITH_INVENTORY_MESSAGE}
         />
       ) : searchResults === null ? (
         <Box
