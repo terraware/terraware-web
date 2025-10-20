@@ -103,7 +103,8 @@ export type NurseryWithdrawalsSearchResponseElement = {
 const listNurseryWithdrawals = async (
   organizationId: number,
   searchCriteria: SearchNodePayload[],
-  sortOrder?: SearchSortOrder
+  sortOrder?: SearchSortOrder,
+  limit: number = 1000
 ): Promise<SearchResponseElement[] | null> => {
   const createdTimeOrder = { direction: sortOrder?.direction, field: 'createdTime' };
   const searchParams: SearchRequestPayload = {
@@ -128,15 +129,15 @@ const listNurseryWithdrawals = async (
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder, createdTimeOrder] : [{ field: 'id', direction: 'Ascending' }],
-    count: 0,
+    count: limit,
   };
-  const deletedSpecies = [{ batch_species_scientificName: strings.DELETED_SPECIES }];
 
   const data: NurseryWithdrawalsSearchResponseElement[] | null = await SearchService.search(searchParams);
   if (data) {
     return data.map((datum) => {
       const { batchWithdrawals, ...remaining } = datum;
 
+      const deletedSpecies = [{ batch_species_scientificName: strings.DELETED_SPECIES }];
       // replace batchWithdrawals with species_scientificNames, which is an array of species names
       const speciesScientificNames = new Set(
         (batchWithdrawals || deletedSpecies).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
