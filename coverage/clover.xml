@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760985309557" clover="3.2.0">
-  <project timestamp="1760985309557" name="All files">
+<coverage generated="1760987189692" clover="3.2.0">
+  <project timestamp="1760987189692" name="All files">
     <metrics statements="34869" coveredstatements="1349" conditionals="24322" coveredconditionals="392" methods="10686" coveredmethods="213" elements="69877" coveredelements="1954" complexity="0" loc="34869" ncloc="34869" packages="280" files="1365" classes="1365"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -28008,8 +28008,8 @@
       </file>
       <file name="NurseryWithdrawalsTabContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/NurseryRouter/NurseryWithdrawalsTabContent.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
       </file>
       <file name="NurseryWithdrawalsTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/NurseryRouter/NurseryWithdrawalsTable.tsx">
         <metrics statements="106" coveredstatements="0" conditionals="58" coveredconditionals="0" methods="33" coveredmethods="0"/>

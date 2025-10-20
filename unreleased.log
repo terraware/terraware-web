@@ -1,3 +1,4 @@
+db15d6901d1 SW-7433 Add tooltip to withdrawal history table (#4630)
 7c0d1ce0641 SW-7433 Add limit back to withdrawal history table, remove only on export (#4629)
 7402bb008b5 Hide temporary plots tab if no temporary plots (#4626)
 6c5e5904424 SW-7433 Create Export Table Component with general purpose props (#4620)
