@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/115</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/98</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
@@ -466,7 +466,12 @@
 <a name='L401'></a><a href='#L401'>401</a>
 <a name='L402'></a><a href='#L402'>402</a>
 <a name='L403'></a><a href='#L403'>403</a>
-<a name='L404'></a><a href='#L404'>404</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -543,6 +548,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -945,9 +955,14 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
 <span class="cstat-no" title="statement not covered" >    return species.filter(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >!withdrawnSpeciesIds.includes(s.id) &amp;&amp; !existingNewSpeciesIds.includes(s.id))</span>;</span>
   }, [allWithdrawnSpecies, newSpeciesRows, species]);
 &nbsp;
-  const plotTotalDensity = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return '';</span>
-  }, []);
+  const zoneTotalDensity = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const selectedZone = <span class="cstat-no" title="statement not covered" >record.zones.find(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId.toString() === zoneData?.plantingZoneId.toString())</span>;</span>
+    const total =
+<span class="cstat-no" title="statement not covered" >      selectedZone?.densityData.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, density) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;</span>
+      }, 0) || 0;
+<span class="cstat-no" title="statement not covered" >    return total;</span>
+  }, [record, zoneData]);
 &nbsp;
   const zoneToSave = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!plotsWithObservations?.length) {</span>
@@ -1259,7 +1274,7 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
                   &lt;/Box&gt;
                 &lt;/td&gt;
                 &lt;td&gt;
-                  &lt;Typography fontWeight={600}&gt;{plotTotalDensity}&lt;/Typography&gt;
+                  &lt;Typography fontWeight={600}&gt;{zoneTotalDensity}&lt;/Typography&gt;
                 &lt;/td&gt;
               &lt;/tr&gt;
             &lt;/tbody&gt;
@@ -1279,7 +1294,7 @@ export default ZoneT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-21T03:20:39.159Z
+                at 2025-10-21T12:56:35.468Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
