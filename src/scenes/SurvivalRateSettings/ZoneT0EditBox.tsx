@@ -74,9 +74,14 @@ const ZoneT0EditBox = ({
     return species.filter((s) => !withdrawnSpeciesIds.includes(s.id) && !existingNewSpeciesIds.includes(s.id));
   }, [allWithdrawnSpecies, newSpeciesRows, species]);
 
-  const plotTotalDensity = useMemo(() => {
-    return '';
-  }, []);
+  const zoneTotalDensity = useMemo(() => {
+    const selectedZone = record.zones.find((z) => z.plantingZoneId.toString() === zoneData?.plantingZoneId.toString());
+    const total =
+      selectedZone?.densityData.reduce((sum, density) => {
+        return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;
+      }, 0) || 0;
+    return total;
+  }, [record, zoneData]);
 
   const zoneToSave = useMemo(() => {
     if (!plotsWithObservations?.length) {
@@ -388,7 +393,7 @@ const ZoneT0EditBox = ({
                   </Box>
                 </td>
                 <td>
-                  <Typography fontWeight={600}>{plotTotalDensity}</Typography>
+                  <Typography fontWeight={600}>{zoneTotalDensity}</Typography>
                 </td>
               </tr>
             </tbody>
