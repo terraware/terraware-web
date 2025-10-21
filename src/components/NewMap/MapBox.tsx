@@ -103,6 +103,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   const { isDesktop } = useDeviceInfo();
   const [cursor, setCursor] = useState<MapCursor>('auto');
   const [hoverFeatureId, setHoverFeatureId] = useState<string>();
+  const [zoom, setZoom] = useState<number>();
 
   const loadImages = useCallback(
     (map: MapRef) => {
@@ -123,6 +124,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
     (map: MapRef | null) => {
       if (map !== null) {
         mapRef.current = map;
+        setZoom(map.getZoom());
         loadImages(map);
       }
     },
@@ -131,6 +133,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
 
   const onMove = useCallback(
     (view: ViewStateChangeEvent) => {
+      setZoom(view.viewState.zoom);
       onMapMove?.(view);
     },
     [onMapMove]
@@ -438,8 +441,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   const onMarkerClusterClick = useCallback(
     (latitude: number, longitude: number, onClusterClick?: () => void) => (event: MarkerEvent<MouseEvent>) => {
       const map = mapRef.current;
-      if (map) {
-        const zoom = map.getZoom();
+      if (map && zoom) {
         if (clusterMaxZoom && onClusterClick && zoom >= clusterMaxZoom) {
           // On max zoom
           onClusterClick();
@@ -453,7 +455,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         }
       }
     },
-    [clusterMaxZoom, mapRef]
+    [clusterMaxZoom, mapRef, zoom]
   );
 
   const markersComponents = useMemo(() => {
@@ -680,6 +682,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       onMouseMove={onMouseMove}
+      onZoom={onMove}
     >
       {isDesktop && !hideFullScreenControl && <FullscreenControl position='top-left' containerId={containerId} />}
       {!hideZoomControl && (
