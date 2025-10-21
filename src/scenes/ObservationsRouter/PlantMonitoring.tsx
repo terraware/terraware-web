@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -15,7 +15,12 @@ import {
   selectAdHocObservationResults,
   selectObservationsResults,
 } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
+import {
+  PlotsWithObservationsSearchResult,
+  requestPermanentPlotsWithObservations,
+} from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import ObservationsDataView from 'src/scenes/ObservationsRouter/ObservationsDataView';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -38,6 +43,10 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
+  const [plotsRequestId, setPlotsRequestId] = useState('');
+  const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
+  const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
+  const dispatch = useAppDispatch();
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
       return [];
@@ -63,6 +72,19 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
       return matchesSite;
     });
   }, [allAdHocObservationResults, selectedPlantingSite]);
+
+  useEffect(() => {
+    if (selectedPlantingSite && selectedPlantingSite.id !== -1) {
+      const requestPlots = dispatch(requestPermanentPlotsWithObservations(selectedPlantingSite.id));
+      setPlotsRequestId(requestPlots.requestId);
+    }
+  }, [dispatch, selectedPlantingSite]);
+
+  useEffect(() => {
+    if (plotsWithObservationsResponse?.status === 'success') {
+      setPlotsWithObservations(plotsWithObservationsResponse.data);
+    }
+  }, [plotsWithObservationsResponse]);
 
   const navigateToSurvivalRateSettings = useCallback(
     () =>
@@ -121,16 +143,19 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
             </Box>
           </>
         )}
-        {selectedPlantingSite && isSurvivalRateCalculationEnabled && selectedPlotSelection === 'assigned' && (
-          <Link
-            onClick={navigateToSurvivalRateSettings}
-            fontSize='16px'
-            style={{ paddingLeft: theme.spacing(2) }}
-            disabled={selectedPlantingSite.id === -1 || (observationsResults?.length || 0) === 0}
-          >
-            {strings.SURVIVAL_RATE_SETTINGS}
-          </Link>
-        )}
+        {selectedPlantingSite &&
+          isSurvivalRateCalculationEnabled &&
+          selectedPlotSelection === 'assigned' &&
+          (plotsWithObservations?.length || 0) > 0 && (
+            <Link
+              onClick={navigateToSurvivalRateSettings}
+              fontSize='16px'
+              style={{ paddingLeft: theme.spacing(2) }}
+              disabled={selectedPlantingSite.id === -1 || (observationsResults?.length || 0) === 0}
+            >
+              {strings.SURVIVAL_RATE_SETTINGS}
+            </Link>
+          )}
       </Box>
       {(selectedPlotSelection === 'assigned' && observationsResults === undefined) ||
       (selectedPlotSelection === 'adHoc' && adHocObservationResults === undefined) ? (
