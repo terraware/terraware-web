@@ -46,6 +46,9 @@ export default function CohortNewView(): JSX.Element {
       setIsBusy(false);
       snackbar.toastSuccess(strings.formatString(strings.COHORT_ADDED, cohortName) as string);
       goToCohortView(newCohortId);
+    } else if (updateCohortModulesRequest?.status === 'error') {
+      setIsBusy(false);
+      snackbar.toastError();
     }
   }, [cohortName, goToCohortView, newCohortId, snackbar, updateCohortModulesRequest?.status]);
 
