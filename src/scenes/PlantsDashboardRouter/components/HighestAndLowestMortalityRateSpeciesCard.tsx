@@ -96,7 +96,9 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
           </Box>
           {(!lowestSpeciesName || lowestSpeciesName === highestSpeciesName) && (
             <Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}>
-              {strings.SINGLE_SPECIES_MORTALITY_RATE_MESSAGE}
+              {isSurvivalRateCalculationEnabled
+                ? strings.SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE
+                : strings.SINGLE_SPECIES_MORTALITY_RATE_MESSAGE}
             </Typography>
           )}
         </>
