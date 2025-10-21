@@ -1,3 +1,4 @@
+de8c5e70a1b SW-7568 Mortality rate text showing below survival rate in Plants Dashboard (#4637)
 edfed592be2 SW-7054 When creating cohort, added modules are not saved (#4635)
 46b020ad3de SW-7563 Disable settings links if no plots to show (#4636)
 c1d0cbb519e Show total density of zone in edit view (#4633)

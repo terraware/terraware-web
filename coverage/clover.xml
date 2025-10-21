@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761060863151" clover="3.2.0">
-  <project timestamp="1761060863151" name="All files">
-    <metrics statements="34932" coveredstatements="1351" conditionals="24363" coveredconditionals="392" methods="10704" coveredmethods="213" elements="69999" coveredelements="1956" complexity="0" loc="34932" ncloc="34932" packages="280" files="1365" classes="1365"/>
+<coverage generated="1761079327741" clover="3.2.0">
+  <project timestamp="1761079327742" name="All files">
+    <metrics statements="34932" coveredstatements="1351" conditionals="24367" coveredconditionals="392" methods="10704" coveredmethods="213" elements="70003" coveredelements="1956" complexity="0" loc="34932" ncloc="34932" packages="280" files="1365" classes="1365"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -32657,9 +32657,9 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter.components">
-      <metrics statements="890" coveredstatements="0" conditionals="639" coveredconditionals="0" methods="261" coveredmethods="0"/>
+      <metrics statements="890" coveredstatements="0" conditionals="643" coveredconditionals="0" methods="261" coveredmethods="0"/>
       <file name="HighestAndLowestMortalityRateSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/HighestAndLowestMortalityRateSpeciesCard.tsx">
-        <metrics statements="38" coveredstatements="0" conditionals="41" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="38" coveredstatements="0" conditionals="43" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
@@ -32700,7 +32700,7 @@
         <line num="75" count="0" type="stmt"/>
       </file>
       <file name="HighestAndLowestMortalityRateZonesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/HighestAndLowestMortalityRateZonesCard.tsx">
-        <metrics statements="35" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="35" coveredstatements="0" conditionals="39" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
