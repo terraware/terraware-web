@@ -73,10 +73,19 @@ export type MapHighlightGroup = {
 
 export type MapMarker = {
   id: string; // Must be unique
-  longitude: number;
   latitude: number;
+  longitude: number;
   onClick?: () => void;
   selected?: boolean;
+};
+
+export type MapMarkerCluster = {
+  latitude: number;
+  longitude: number;
+  markers: MapMarker[];
+  onClick?: () => void;
+  selected?: boolean;
+  size: number;
 };
 
 export type MapMarkerGroup = {
@@ -84,6 +93,7 @@ export type MapMarkerGroup = {
   label: string;
   markers: MapMarker[];
   markerGroupId: string;
+  onClusterClick?: (markers: MapMarker[]) => void;
   style: MapIconComponentStyle;
   visible: boolean;
 };
