@@ -1490,7 +1490,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
   const [source, setSource] = <span class="cstat-no" title="statement not covered" >useState&lt;string | null&gt;();</span>
   const [activity, setActivity] = <span class="cstat-no" title="statement not covered" >useState&lt;Activity | null&gt;(null);</span>
   const [record, setRecord, onChange, onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;FormRecord&gt;(undefined);</span>
-  const [mediaFiles, setMediaFiles] = <span class="cstat-no" title="statement not covered" >useState&lt;ActivityMediaItem[]&gt;([]);</span>
+  const [mediaItems, setMediaItems] = <span class="cstat-no" title="statement not covered" >useState&lt;ActivityMediaItem[]&gt;([]);</span>
   const [validateFields, setValidateFields] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [syncMediaRequestId, setSyncMediaRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [getActivityRequestId, setGetActivityRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -1655,7 +1655,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
   const syncMediaFiles = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (n</span>ewActivityId: number) =&gt; {
       // Only sync if there are any media operations to perform
-      const hasMediaOperations = <span class="cstat-no" title="statement not covered" >mediaFiles.some(</span>
+      const hasMediaOperations = <span class="cstat-no" title="statement not covered" >mediaItems.some(</span>
 <span class="fstat-no" title="function not covered" >        (i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.type === 'new' || (item.type === 'existing' &amp;&amp; (item.isDeleted || item.isModified))</span>
       );
 &nbsp;
@@ -1663,7 +1663,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
         const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
           requestSyncActivityMedia({
             activityId: newActivityId,
-            mediaItems: mediaFiles,
+            mediaItems,
           })
         );
 <span class="cstat-no" title="statement not covered" >        setSyncMediaRequestId(request.requestId);</span>
@@ -1673,7 +1673,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
 <span class="cstat-no" title="statement not covered" >        navToActivityLog();</span>
       }
     },
-    [dispatch, mediaFiles, setBusy, navToActivityLog]
+    [dispatch, mediaItems, setBusy, navToActivityLog]
   );
 &nbsp;
   // initialize record, if creating new
@@ -1738,14 +1738,14 @@ export default function <span class="fstat-no" title="function not covered" >Act
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isEditing &amp;&amp; activity &amp;&amp; activity.media) {</span>
       const existingMediaItems: ActivityMediaItem[] = <span class="cstat-no" title="statement not covered" >activity.media</span>
-        .map(<span class="fstat-no" title="function not covered" >(m</span>ediaFile) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-          data: mediaFile,
+        .map(<span class="fstat-no" title="function not covered" >(m</span>ediaItem) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+          data: mediaItem,
           isDeleted: false,
           isModified: false,
           type: 'existing' as const,
         }))
         .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.data.listPosition - b.data.listPosition)</span>;
-<span class="cstat-no" title="statement not covered" >      setMediaFiles(existingMediaItems);</span>
+<span class="cstat-no" title="statement not covered" >      setMediaItems(existingMediaItems);</span>
     }
   }, [isEditing, activity]);
 &nbsp;
@@ -1904,13 +1904,13 @@ export default function <span class="fstat-no" title="function not covered" >Act
 &nbsp;
   const activityWithMedia = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (activity) {</span>
-      const media = <span class="cstat-no" title="statement not covered" >mediaFiles</span>
+      const media = <span class="cstat-no" title="statement not covered" >mediaItems</span>
         .filter(<span class="fstat-no" title="function not covered" >(f</span>ile): file is ExistingActivityMediaItem =&gt; <span class="cstat-no" title="statement not covered" >file.type === 'existing' &amp;&amp; !file.isDeleted)</span>
         .map(<span class="fstat-no" title="function not covered" >(f</span>ile) =&gt; <span class="cstat-no" title="statement not covered" >file.data)</span>;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return { ...activity, media };</span>
     }
-  }, [activity, mediaFiles]);
+  }, [activity, mediaItems]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!record) {</span>
 <span class="cstat-no" title="statement not covered" >    return &lt;&gt;&lt;/&gt;;</span>
@@ -2048,9 +2048,9 @@ export default function <span class="fstat-no" title="function not covered" >Act
             &lt;ActivityMediaForm
               activityId={activityId}
               focusedFileId={focusedFileId}
-              mediaFiles={mediaFiles}
-              onMediaFileClick={onFileClicked}
-              onMediaFilesChange={setMediaFiles}
+              mediaItems={mediaItems}
+              onClickMediaItem={onFileClicked}
+              onChangeMediaItems={setMediaItems}
             /&gt;
           &lt;/Grid&gt;
         &lt;/MapSplitView&gt;
@@ -2065,7 +2065,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-20T21:34:07.603Z
+                at 2025-10-21T03:20:39.159Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

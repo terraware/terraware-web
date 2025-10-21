@@ -1,3 +1,4 @@
+a5f652e64ea SW-7326: Activity video support (#4621)
 ea92d06f2c4 Fix react imports from material (#4634)
 30e284ebb0f SW-7490 Not all Seed Collectors added to Accession are shown in Detail View (#4632)
 db15d6901d1 SW-7433 Add tooltip to withdrawal history table (#4630)
