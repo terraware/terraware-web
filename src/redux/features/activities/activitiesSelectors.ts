@@ -25,6 +25,9 @@ export const selectActivityMediaUpload = (requestId: string) => (state: RootStat
 
 export const selectActivityMediaGet = (requestId: string) => (state: RootState) => state.activityMediaGet[requestId];
 
+export const selectActivityMediaStreamGet = (requestId: string) => (state: RootState) =>
+  state.activityMediaStreamGet[requestId];
+
 export const selectActivityMediaUpdate = (requestId: string) => (state: RootState) =>
   state.activityMediaUpdate[requestId];
 
