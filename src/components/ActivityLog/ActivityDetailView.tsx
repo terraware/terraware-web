@@ -48,7 +48,7 @@ const ActivityMediaItem = ({
 
   const imageStyles: CSSProperties = useMemo(
     () => ({
-      aspectRatio: '4/3',
+      aspectRatio: 4 / 3,
       backgroundColor: theme.palette.TwClrBgSecondary,
       borderColor:
         hoveredFileId === mediaFile.fileId || focusedFileId === mediaFile.fileId ? '#CC79A7' : theme.palette.TwClrBg,
@@ -173,7 +173,7 @@ const ActivityMediaItem = ({
   const processingFallbackStyles: SxProps<Theme> = useMemo(
     () => ({
       alignItems: 'center',
-      aspectRatio: '4/3',
+      aspectRatio: 4 / 3,
       backgroundColor: theme.palette.TwClrBgSecondary,
       borderColor: theme.palette.TwClrBg,
       borderStyle: 'solid',
@@ -198,11 +198,11 @@ const ActivityMediaItem = ({
   if (mediaFile.type === 'Video' && imageLoadError) {
     return (
       <Box sx={processingFallbackStyles}>
-        <Typography fontSize='20px' fontWeight={600} variant='h3'>
+        <Typography fontSize='14px' fontWeight={600}>
           {strings.VIDEO_PROCESSING}
         </Typography>
-        <img src='/assets/loading.gif' alt={strings.LOADING} style={{ height: '48px', width: '48px' }} />
-        <Typography color='textSecondary' variant='body1'>
+        <img alt={strings.LOADING} src='/assets/loading.gif' style={{ height: '48px', width: '48px' }} />
+        <Typography fontSize='12px' fontWeight={400}>
           {strings.YOUR_VIDEO_IS_PROCESSING}
         </Typography>
       </Box>
@@ -229,12 +229,12 @@ const ActivityMediaItem = ({
       )}
 
       <Box className='info-panel' onClick={onClickMediaItem(mediaFile.fileId)} sx={infoPanelStyles}>
-        <Typography component='div' fontSize='16px' lineHeight='16px' variant='body2'>
+        <Typography component='div' fontSize='16px' lineHeight='16px'>
           {activity.date}
         </Typography>
 
         {mediaFile.caption && (
-          <Typography component='div' sx={captionStyles} variant='body2'>
+          <Typography component='div' sx={captionStyles}>
             {mediaFile.caption}
           </Typography>
         )}
