@@ -12,7 +12,7 @@ import useTableDensity from './useTableDensity';
 
 function renderPaginationText(from: number, to: number, total: number): string {
   if (total > 0) {
-    return strings.formatString(strings.PAGINATION_FOOTER, from, to, total) as string;
+    return strings.formatString(strings.PAGINATION_FOOTER_RANGE, from, to, total) as string;
   } else {
     return strings.PAGINATION_FOOTER_EMPTY;
   }

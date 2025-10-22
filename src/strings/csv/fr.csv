@@ -1261,8 +1261,9 @@ OVERWRITTEN_ORIGINAL_VALUE,Remplacement – original : {0},c504c96d
 OWNER,Propriétaire,f1db93f1
 OZ,oz,63ec7cc2
 OZ_OUNCES,oz (onces),45ec05af
-PAGINATION_FOOTER,{0} à {1} sur {2},ce14c917
+PAGINATION_FOOTER,{0} sur {1},056416b6
 PAGINATION_FOOTER_EMPTY,0 sur 0,0ee978bd
+PAGINATION_FOOTER_RANGE,{0} à {1} sur {2},ce14c917
 PAPER,Papier,df5f30a1
 PAPER_PETRI_DISH,Boîte de Petri en papier,d478bf2a
 PARTIAL_ERRORS,Certaines demandes ont échoué. Vous pouvez réessayer plus tard.,2d39959f

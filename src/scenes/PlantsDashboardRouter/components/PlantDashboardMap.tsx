@@ -28,6 +28,7 @@ import {
 import { PlantingSite } from 'src/types/Tracking';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import MapDrawerPagination from './MapDrawerPagination';
 import MapPhotoDrawer from './MapPhotoDrawer';
 import MapPlantDrawer from './MapPlantDrawer';
 import MapStatsDrawer from './MapStatsDrawer';
@@ -72,6 +73,7 @@ const PlantDashboardMap = ({
   const { strings } = useLocalization();
   const theme = useTheme();
 
+  const [drawerPage, setDrawerPage] = useState<number>(1);
   const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
   const [selectedPhotos, setSelectedPhotos] = useState<PlotPhoto[]>([]);
   const [selectedPlants, setSelectedPlants] = useState<PlotPlant[]>([]);
@@ -116,6 +118,7 @@ const PlantDashboardMap = ({
       setSelectedPhotos([]);
       setDrawerOpen(true);
       setDrawerSize('small');
+      setDrawerPage(1);
     },
     []
   );
@@ -127,9 +130,29 @@ const PlantDashboardMap = ({
       setSelectedPlants([]);
       setDrawerOpen(true);
       setDrawerSize('medium');
+      setDrawerPage(1);
     },
     []
   );
+
+  const selectPhotosFromMarkers = useCallback((markers: MapMarker[]) => {
+    const photos = markers
+      .map((marker): PlotPhoto | undefined => {
+        if (marker.properties) {
+          const observationId = marker.properties.observationId as number;
+          const monitoringPlotId = marker.properties.monitoringPlotId as number;
+          const photo = marker.properties.photo as ObservationMonitoringPlotPhoto;
+          return { monitoringPlotId, observationId, photo };
+        }
+      })
+      .filter((photo): photo is PlotPhoto => photo !== undefined);
+    setSelectedFeature(undefined);
+    setSelectedPhotos(photos);
+    setSelectedPlants([]);
+    setDrawerOpen(true);
+    setDrawerSize('medium');
+    setDrawerPage(1);
+  }, []);
 
   const selectPlant = useCallback(
     (monitoringPlotId: number, observationId: number, plant: RecordedPlant) => () => {
@@ -138,9 +161,29 @@ const PlantDashboardMap = ({
       setSelectedPlants([{ monitoringPlotId, observationId, plant }]);
       setDrawerOpen(true);
       setDrawerSize('small');
+      setDrawerPage(1);
     },
     []
   );
+
+  const selectPlantsFromMarkers = useCallback((markers: MapMarker[]) => {
+    const plants = markers
+      .map((marker): PlotPlant | undefined => {
+        if (marker.properties) {
+          const observationId = marker.properties.observationId as number;
+          const monitoringPlotId = marker.properties.monitoringPlotId as number;
+          const plant = marker.properties.plant as RecordedPlant;
+          return { monitoringPlotId, observationId, plant };
+        }
+      })
+      .filter((plant): plant is PlotPlant => plant !== undefined);
+    setSelectedFeature(undefined);
+    setSelectedPhotos([]);
+    setSelectedPlants(plants);
+    setDrawerOpen(true);
+    setDrawerSize('medium');
+    setDrawerPage(1);
+  }, []);
 
   const drawerContent = useMemo(() => {
     if (selectedFeature) {
@@ -154,22 +197,30 @@ const PlantDashboardMap = ({
     if (selectedPhotos.length > 0) {
       return (
         <MapPhotoDrawer
-          monitoringPlotId={selectedPhotos[0].monitoringPlotId}
-          observationId={selectedPhotos[0].observationId}
-          photo={selectedPhotos[0].photo}
+          monitoringPlotId={selectedPhotos[drawerPage - 1].monitoringPlotId}
+          observationId={selectedPhotos[drawerPage - 1].observationId}
+          photo={selectedPhotos[drawerPage - 1].photo}
         />
       );
     }
     if (selectedPlants.length > 0) {
       return (
         <MapPlantDrawer
-          monitoringPlotId={selectedPlants[0].monitoringPlotId}
-          observationId={selectedPlants[0].observationId}
-          plant={selectedPlants[0].plant}
+          monitoringPlotId={selectedPlants[drawerPage - 1].monitoringPlotId}
+          observationId={selectedPlants[drawerPage - 1].observationId}
+          plant={selectedPlants[drawerPage - 1].plant}
         />
       );
     }
-  }, [selectedFeature, selectedPhotos, selectedPlants]);
+  }, [drawerPage, selectedFeature, selectedPhotos, selectedPlants]);
+
+  const drawerHeader = useMemo(() => {
+    if (selectedPhotos.length > 1 || selectedPlants.length > 1) {
+      const totalPages = Math.max(selectedPhotos.length, selectedPlants.length);
+
+      return <MapDrawerPagination page={drawerPage} setPage={setDrawerPage} totalPages={totalPages} />;
+    }
+  }, [drawerPage, selectedPhotos.length, selectedPlants.length]);
 
   const extractFeaturesFromSite = useCallback(
     (
@@ -267,11 +318,16 @@ const PlantDashboardMap = ({
         .flatMap((plot): MapMarker[] =>
           plot.photos.map((photo) => {
             return {
-              id: `${photo.fileId}`,
+              id: `photos/${photo.fileId}`,
               longitude: photo.gpsCoordinates.coordinates[1],
               latitude: photo.gpsCoordinates.coordinates[0],
               onClick: selectPhoto(plot.monitoringPlotId, results.observationId, photo),
               selected: selectedPhotos.find((selected) => selected.photo.fileId === photo.fileId) !== undefined,
+              properties: {
+                monitoringPlotId: plot.monitoringPlotId,
+                observationId: results.observationId,
+                photo,
+              },
             };
           })
         )
@@ -293,11 +349,16 @@ const PlantDashboardMap = ({
               const filteredPlants = plot.plants.filter((plant) => plant.status === status);
               return filteredPlants.map(
                 (plant): MapMarker => ({
-                  id: `${plant.id}`,
+                  id: `plants/${plant.id}`,
                   longitude: plant.gpsCoordinates.coordinates[1],
                   latitude: plant.gpsCoordinates.coordinates[0],
                   onClick: selectPlant(plot.monitoringPlotId, results.observationId, plant),
                   selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+                  properties: {
+                    monitoringPlotId: plot.monitoringPlotId,
+                    observationId: results.observationId,
+                    plant,
+                  },
                 })
               );
             } else {
@@ -437,6 +498,7 @@ const PlantDashboardMap = ({
             label: strings.MONITORING_PLOTS,
             markers: photoMarkers,
             markerGroupId: 'plot-photos',
+            onClusterClick: selectPhotosFromMarkers,
             style: {
               iconColor: '#CC79A7',
               iconName: 'iconPhoto',
@@ -455,6 +517,7 @@ const PlantDashboardMap = ({
             label: strings.LIVE_PLANTS,
             markers: plantsMarkers('Live'),
             markerGroupId: 'live-plants',
+            onClusterClick: selectPlantsFromMarkers,
             style: {
               iconColor: '#40B0A6',
               iconName: 'iconLivePlant',
@@ -466,6 +529,7 @@ const PlantDashboardMap = ({
             label: strings.DEAD_PLANTS,
             markers: plantsMarkers('Dead'),
             markerGroupId: 'dead-plants',
+            onClusterClick: selectPlantsFromMarkers,
             style: {
               iconColor: '#E1BE6A',
               iconName: 'iconLivePlant',
@@ -615,6 +679,8 @@ const PlantDashboardMap = ({
     photoMarkers,
     plantsMarkers,
     plotPhotoVisible,
+    selectPhotosFromMarkers,
+    selectPlantsFromMarkers,
     strings,
   ]);
 
@@ -673,7 +739,9 @@ const PlantDashboardMap = ({
 
   return token ? (
     <MapComponent
+      clusterMaxZoom={20}
       drawerChildren={drawerContent}
+      drawerHeader={drawerHeader}
       drawerOpen={drawerOpen}
       drawerSize={drawerSize}
       features={mapFeatures}

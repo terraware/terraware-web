@@ -36,6 +36,7 @@ export type MapMarkerFeatureSection = {
 export type MapFeatureSection = MapHighlightFeatureSection | MapLayerFeatureSection | MapMarkerFeatureSection;
 
 export type MapComponentProps = {
+  clusterMaxZoom?: number;
   clusterRadius?: number;
   containerStyle?: CSSProperties;
   controlBottomLeft?: React.ReactNode;
@@ -75,6 +76,7 @@ export type MapComponentProps = {
 
 const MapComponent = (props: MapComponentProps) => {
   const {
+    clusterMaxZoom,
     clusterRadius,
     containerStyle,
     controlBottomLeft,
@@ -234,6 +236,7 @@ const MapComponent = (props: MapComponentProps) => {
   const map = useMemo(() => {
     return (
       <MapBox
+        clusterMaxZoom={clusterMaxZoom}
         clusterRadius={clusterRadius}
         containerId={mapContainerId ?? 'map-container'}
         controlBottomLeft={controlBottomLeft}
@@ -264,6 +267,7 @@ const MapComponent = (props: MapComponentProps) => {
       />
     );
   }, [
+    clusterMaxZoom,
     clusterRadius,
     controlBottomLeft,
     controlTopLeft,
