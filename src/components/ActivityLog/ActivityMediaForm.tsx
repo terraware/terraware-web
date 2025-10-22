@@ -205,7 +205,7 @@ const ActivityPhotoPreview = ({
 
         <Grid item sm={true} xs={12}>
           <Box display='flex' flexDirection='column'>
-            <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginBottom={theme.spacing(1)}>
+            <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginBottom={theme.spacing(2)}>
               <Button
                 disabled={currentPosition <= 1}
                 icon='caretUp'
@@ -242,21 +242,41 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
-            {!isVideo && (
-              <Typography fontSize='14px' marginBottom={theme.spacing(1)}>
+            <Box
+              display='flex'
+              flexDirection='row'
+              flexWrap='wrap'
+              sx={{
+                '& .MuiButtonBase-root': {
+                  marginBottom: 0,
+                },
+                '& .MuiFormControlLabel-root': {
+                  marginBottom: theme.spacing(1),
+                  marginTop: 0,
+                },
+              }}
+            >
+              <Typography
+                fontSize='14px'
+                lineHeight='24px'
+                marginBottom={theme.spacing(2)}
+                marginRight={theme.spacing(1)}
+                sx={{ opacity: mediaItem.data.isHiddenOnMap ? 0.5 : 1 }}
+              >
                 {coordinatesLabel}
               </Typography>
-            )}
 
-            {!isVideo && isAcceleratorRoute && (
-              <Checkbox
-                id={`activity-media-id-${activityId}-hide-on-map`}
-                label={strings.HIDE_ON_MAP}
-                name='isHiddenOnMap'
-                onChange={onHiddenOnMapToggle}
-                value={isHiddenOnMap}
-              />
-            )}
+              {isAcceleratorRoute && (
+                <Checkbox
+                  id={`activity-media-id-${activityId}-hide-on-map`}
+                  label={strings.HIDE_ON_MAP}
+                  name='isHiddenOnMap'
+                  onChange={onHiddenOnMapToggle}
+                  sx={{ marginBottom: theme.spacing(1) }}
+                  value={isHiddenOnMap}
+                />
+              )}
+            </Box>
 
             <Button
               icon='iconTrashCan'
@@ -265,6 +285,7 @@ const ActivityPhotoPreview = ({
               priority='ghost'
               style={{
                 justifyContent: 'flex-start',
+                marginBottom: 0,
                 marginLeft: '-8px',
                 marginTop: 0,
                 maxWidth: '160px',
