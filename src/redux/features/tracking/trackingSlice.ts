@@ -16,6 +16,7 @@ import {
   requestAssignT0SiteData,
   requestAssignT0TempSiteData,
   requestGetPlantingSiteHistory,
+  requestGetPlantingSiteT0AllSet,
   requestListPlantingSiteHistories,
   requestListPlantingSites,
   requestListProjectPlantingSites,
@@ -274,6 +275,17 @@ export const assignT0TempSiteData = createSlice({
   },
 });
 
+const initialPlantingSiteT0AllSetState: { [key: string]: StatusT<boolean> } = {};
+
+export const plantingSiteT0AllSetSlice = createSlice({
+  name: 'plantingSiteT0AllSetSlice',
+  initialState: initialPlantingSiteT0AllSetState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetPlantingSiteT0AllSet, true)(builder);
+  },
+});
+
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
@@ -291,6 +303,7 @@ const trackingReducers = {
   assignT0SiteData: assignT0SiteData.reducer,
   assignT0TempSiteData: assignT0TempSiteData.reducer,
   projectPlantingSites: projectPlantingSiteListSlice.reducer,
+  plantingSiteT0AllSet: plantingSiteT0AllSetSlice.reducer,
 };
 
 export default trackingReducers;
