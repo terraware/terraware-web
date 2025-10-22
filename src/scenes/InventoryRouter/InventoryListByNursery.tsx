@@ -10,6 +10,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
+import { NurseryBatchService } from 'src/services';
 import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -99,6 +100,8 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
         searchSortOrder,
       });
 
+      const allBatchesResult = await NurseryBatchService.getAllBatches(selectedOrganization.id, searchSortOrder);
+
       const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
@@ -119,10 +122,8 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
       });
 
       if (updatedResult) {
-        if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.speciesIds?.length) {
-          setShowResults(updatedResult.length > 0);
-        }
         if (getRequestId('searchInventory') === requestId) {
+          setShowResults((allBatchesResult?.length || 0) > 0);
           setSearchResults(updatedResult);
         }
       }
@@ -158,6 +159,11 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
           isPresorted={!!searchSortOrder}
           columns={columns}
           origin='Nursery'
+          emptyTableMessage={
+            !debouncedSearchTerm && !filters.facilityIds?.length && !filters.speciesIds?.length
+              ? strings.NO_BATCHES_WITH_INVENTORY
+              : ''
+          }
         />
       ) : searchResults === null ? (
         <Box
