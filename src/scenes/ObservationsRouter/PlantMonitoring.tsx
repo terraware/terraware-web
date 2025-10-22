@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
-import { Dropdown } from '@terraware/web-components';
+import { Dropdown, Icon } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
@@ -15,9 +15,10 @@ import {
   selectAdHocObservationResults,
   selectObservationsResults,
 } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSiteT0AllSet, selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
+  requestGetPlantingSiteT0AllSet,
   requestPermanentPlotsWithObservations,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -44,8 +45,11 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const [plotsRequestId, setPlotsRequestId] = useState('');
+  const [allSetRequestId, setAllSetRequestId] = useState('');
   const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
+  const t0AllSetResponse = useAppSelector(selectPlantingSiteT0AllSet(allSetRequestId));
+  const [survivalRateSet, setSurvivalRateSet] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
@@ -77,8 +81,17 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     if (selectedPlantingSite && selectedPlantingSite.id !== -1) {
       const requestPlots = dispatch(requestPermanentPlotsWithObservations(selectedPlantingSite.id));
       setPlotsRequestId(requestPlots.requestId);
+      const requestAllSet = dispatch(requestGetPlantingSiteT0AllSet(selectedPlantingSite.id));
+      setAllSetRequestId(requestAllSet.requestId);
     }
   }, [dispatch, selectedPlantingSite]);
+
+  useEffect(() => {
+    if (t0AllSetResponse?.status === 'success') {
+      console.log('t0AllSetResponse', t0AllSetResponse);
+      setSurvivalRateSet(t0AllSetResponse.data ?? false);
+    }
+  }, [plotsWithObservationsResponse, t0AllSetResponse]);
 
   useEffect(() => {
     if (plotsWithObservationsResponse?.status === 'success') {
@@ -148,14 +161,21 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
           isSurvivalRateCalculationEnabled &&
           selectedPlotSelection === 'assigned' &&
           (plotsWithObservations?.length || 0) > 0 && (
-            <Link
-              onClick={navigateToSurvivalRateSettings}
-              fontSize='16px'
-              style={{ paddingLeft: theme.spacing(2) }}
-              disabled={selectedPlantingSite.id === -1 || (observationsResults?.length || 0) === 0}
-            >
-              {strings.SURVIVAL_RATE_SETTINGS}
-            </Link>
+            <Box display={'flex'} alignItems={'center'}>
+              <Link
+                onClick={navigateToSurvivalRateSettings}
+                fontSize='16px'
+                style={{ paddingLeft: theme.spacing(2), paddingRight: theme.spacing(0.5) }}
+                disabled={selectedPlantingSite?.id === -1 || (observationsResults?.length || 0) === 0}
+              >
+                {strings.SURVIVAL_RATE_SETTINGS}
+              </Link>
+              {survivalRateSet ? (
+                <Icon name='success' fillColor={theme.palette.TwClrBgSuccess} />
+              ) : (
+                <Icon name='iconUndo' fillColor={theme.palette.TwClrBgDanger} />
+              )}
+            </Box>
           )}
       </Box>
       {(selectedPlotSelection === 'assigned' && observationsResults === undefined) ||

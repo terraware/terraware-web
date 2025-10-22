@@ -4133,6 +4133,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/t0/site/{plantingSiteId}/allSet": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get whether or not all T0 Data has been set for a planting site */
+        get: operations["getAllT0SiteDataSet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users": {
         parameters: {
             query?: never;
@@ -6696,6 +6713,10 @@ export interface components {
         GetActivityStreamResponsePayload: {
             playbackId: string;
             playbackToken: string;
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetAllSiteT0DataSetResponsePayload: {
+            allSet: boolean;
             status: components["schemas"]["SuccessOrError"];
         };
         GetApplicationDeliverablesResponsePayload: {
@@ -19892,6 +19913,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetSiteT0DataResponsePayload"];
+                };
+            };
+        };
+    };
+    getAllT0SiteDataSet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSiteId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetAllSiteT0DataSetResponsePayload"];
                 };
             };
         };
