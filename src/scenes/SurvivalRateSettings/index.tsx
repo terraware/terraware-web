@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
 
+import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
@@ -24,6 +25,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { SiteT0Data } from 'src/types/Tracking';
+import useQuery from 'src/utils/useQuery';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';
@@ -48,6 +50,7 @@ const SurvivalRateSettings = () => {
     plantingSiteId: string;
   }>();
   const theme = useTheme();
+  const query = useQuery();
 
   const plantingSiteId = Number(params.plantingSiteId);
 
@@ -241,8 +244,25 @@ const SurvivalRateSettings = () => {
     });
   }, [activeTab, navigate, plantingSiteId]);
 
+  const crumbs: Crumb[] = useMemo(
+    () => [
+      {
+        name: activeLocale ? strings.OBSERVATIONS : '',
+        to: APP_PATHS.OBSERVATIONS,
+      },
+    ],
+    [activeLocale]
+  );
+
+  const showCrumbs = useMemo(() => {
+    return query.get('fromObservationsPage');
+  }, [query]);
+
   return (
-    <Page title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
+    <Page
+      crumbs={showCrumbs ? crumbs : undefined}
+      title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}
+    >
       <Card radius='8px'>
         <SurvivalRateInstructions />
         <Box width={'100%'} display='flex' justifyContent={'space-between'} alignItems={'center'}>
