@@ -77,6 +77,7 @@ export type MapMarker = {
   longitude: number;
   onClick?: () => void;
   selected?: boolean;
+  properties?: { [k: string]: any };
 };
 
 export type MapMarkerCluster = {
