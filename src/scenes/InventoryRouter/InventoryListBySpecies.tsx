@@ -14,6 +14,7 @@ import {
   InventoryResult,
   InventoryResultWithFacilityNames,
 } from 'src/scenes/InventoryRouter/InventoryV2View';
+import { NurseryBatchService } from 'src/services';
 import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -109,6 +110,9 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         facilityIds: filters.facilityIds,
         searchSortOrder,
       });
+
+      const allBatchesResult = await NurseryBatchService.getAllBatches(selectedOrganization.id, searchSortOrder);
+
       const apiSearchResults = await NurseryInventoryService.searchInventory({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
@@ -181,10 +185,8 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         });
       }
       if (updatedResult) {
-        if (!debouncedSearchTerm && !filters.facilityIds?.length) {
-          setShowResults(updatedResult.length > 0);
-        }
         if (getRequestId('searchInventory') === requestId) {
+          setShowResults((allBatchesResult?.length || 0) > 0);
           setSearchResults(updatedResult);
         }
       }
@@ -220,6 +222,9 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
           isPresorted={!!searchSortOrder}
           columns={columns}
           origin='Species'
+          emptyTableMessage={
+            !debouncedSearchTerm && !filters.facilityIds?.length ? strings.NO_BATCHES_WITH_INVENTORY : ''
+          }
         />
       ) : searchResults === null ? (
         <Box
