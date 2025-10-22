@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.15% </span>
+                <span class="strong">46.91% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>36/78</span>
+                <span class='fraction'>38/81</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.75% </span>
+                <span class="strong">47.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>36/77</span>
+                <span class='fraction'>38/80</span>
             </div>
         
             
@@ -578,7 +578,18 @@
 <a name='L513'></a><a href='#L513'>513</a>
 <a name='L514'></a><a href='#L514'>514</a>
 <a name='L515'></a><a href='#L515'>515</a>
-<a name='L516'></a><a href='#L516'>516</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a>
+<a name='L518'></a><a href='#L518'>518</a>
+<a name='L519'></a><a href='#L519'>519</a>
+<a name='L520'></a><a href='#L520'>520</a>
+<a name='L521'></a><a href='#L521'>521</a>
+<a name='L522'></a><a href='#L522'>522</a>
+<a name='L523'></a><a href='#L523'>523</a>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -615,6 +626,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1065,10 +1080,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1128,6 +1150,7 @@ const PLANTING_SITE_HISTORY_ENDPOINT = '/api/v1/tracking/sites/{id}/history/{his
 const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
 const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
+const PLANTING_SITE_T0_ALL_SET_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/allSet';
 const PLANTING_SITES_T0_ENDPOINT = '/api/v1/tracking/t0/site';
 const PLANTING_SITES_T0_TEMP_ENDPOINT = '/api/v1/tracking/t0/site/temp';
 &nbsp;
@@ -1187,6 +1210,9 @@ export type ListPlantingSiteHistoriesPayload =
 &nbsp;
 export type AssignT0SiteDataResponsePayload =
   paths[typeof PLANTING_SITES_T0_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+&nbsp;
+export type GetAllSiteT0DataSetResponsePayload =
+  paths[typeof PLANTING_SITE_T0_ALL_SET_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 &nbsp;
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
 const httpPlantingSitesValidate = HttpService.root(PLANTING_SITES_VALIDATE_ENDPOINT);
@@ -1580,6 +1606,12 @@ const assignT0TempSiteData = <span class="fstat-no" title="function not covered"
     entity: payload,
   });
 &nbsp;
+const getT0AllSet = <span class="fstat-no" title="function not covered" >as</span>ync (plantingSiteId: number): Promise&lt;Response2&lt;GetAllSiteT0DataSetResponsePayload&gt;&gt; =&gt; {
+<span class="cstat-no" title="statement not covered" >  return HttpService.root(</span>
+    PLANTING_SITE_T0_ALL_SET_ENDPOINT.replace('{plantingSiteId}', plantingSiteId.toString())
+  ).get2&lt;GetAllSiteT0DataSetResponsePayload&gt;();
+};
+&nbsp;
 /**
  * Exported functions
  */
@@ -1605,6 +1637,7 @@ const TrackingService = {
   getPlotsWithObservations,
   assignT0SiteData,
   assignT0TempSiteData,
+  getT0AllSet,
 };
 &nbsp;
 export default TrackingService;
@@ -1615,7 +1648,7 @@ export default TrackingService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-22T18:26:27.363Z
+                at 2025-10-22T21:15:19.649Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
