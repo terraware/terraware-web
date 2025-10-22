@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import MuxPlayer from '@mux/mux-player-react';
 import { Button, Icon } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
@@ -10,6 +11,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
+import { requestGetActivityMediaStream } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -42,7 +44,9 @@ const ActivityMediaItem = ({
   const { strings } = useLocalization();
   const theme = useTheme();
 
-  const imageStyles = useMemo(
+  const [imageLoadError, setImageLoadError] = useState<boolean>(false);
+
+  const imageStyles: CSSProperties = useMemo(
     () => ({
       aspectRatio: '4/3',
       backgroundColor: theme.palette.TwClrBgSecondary,
@@ -58,7 +62,7 @@ const ActivityMediaItem = ({
     [focusedFileId, hoveredFileId, mediaFile.fileId, theme.palette.TwClrBg, theme.palette.TwClrBgSecondary]
   );
 
-  const infoPanelStyles = useMemo(
+  const infoPanelStyles: SxProps<Theme> = useMemo(
     () => ({
       backgroundColor: 'rgba(0, 0, 0, 0.6)',
       bottom: '10px',
@@ -76,7 +80,7 @@ const ActivityMediaItem = ({
     [theme]
   );
 
-  const captionStyles = useMemo(
+  const captionStyles: SxProps<Theme> = useMemo(
     () => ({
       fontSize: '16px',
       lineHeight: '16px',
@@ -141,12 +145,69 @@ const ActivityMediaItem = ({
   );
 
   const onClickExpand = useCallback(
-    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       event?.stopPropagation();
       setLightboxImageId(mediaFile.fileId);
     },
     [mediaFile.fileId, setLightboxImageId]
   );
+
+  const playButtonOverlayStyles: SxProps<Theme> = useMemo(
+    () => ({
+      cursor: 'pointer',
+      height: '80px',
+      left: '50%',
+      position: 'absolute',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      transition: 'transform 0.2s ease-in-out',
+      width: '80px',
+      zIndex: 1,
+      '&:hover': {
+        transform: 'translate(-50%, -50%) scale(1.1)',
+      },
+    }),
+    []
+  );
+
+  const processingFallbackStyles: SxProps<Theme> = useMemo(
+    () => ({
+      alignItems: 'center',
+      aspectRatio: '4/3',
+      backgroundColor: theme.palette.TwClrBgSecondary,
+      borderColor: theme.palette.TwClrBg,
+      borderStyle: 'solid',
+      borderWidth: '4px',
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: theme.spacing(2),
+      justifyContent: 'center',
+      padding: theme.spacing(3),
+      textAlign: 'center',
+      width: '100%',
+    }),
+    [theme]
+  );
+
+  const handleImageError = useCallback(() => {
+    setImageLoadError(true);
+  }, []);
+
+  // if this is a video and the thumbnail failed to load (likely a 412 error during processing)
+  if (mediaFile.type === 'Video' && imageLoadError) {
+    return (
+      <Box sx={processingFallbackStyles}>
+        <Typography fontSize='20px' fontWeight={600} variant='h3'>
+          Video Processing
+        </Typography>
+        <Box component='img' src='/assets/loading.gif' alt='Loading' sx={{ height: '48px', width: '48px' }} />
+        <Typography color='textSecondary' variant='body1'>
+          Your video is processing and will show up momentarily.
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box display='inline-block' position='relative' sx={{ '&:hover .info-panel': { opacity: 1 } }} width='100%'>
@@ -154,11 +215,21 @@ const ActivityMediaItem = ({
         alt={mediaFile?.caption}
         id={`activity-media-item-${mediaFile.fileId}`}
         onClick={onClickMediaItem(mediaFile.fileId)}
+        onError={handleImageError}
         onMouseEnter={mediaItemHoverCallback(true)}
         onMouseLeave={mediaItemHoverCallback(false)}
         src={imageSrc}
         style={imageStyles}
       />
+
+      {mediaFile.type === 'Video' && (
+        <Box onClick={onClickExpand} sx={playButtonOverlayStyles}>
+          <svg viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'>
+            <circle cx='40' cy='40' r='40' fill='rgba(0, 0, 0, 0.6)' />
+            <polygon points='30,20 30,60 60,40' fill='#fff' />
+          </svg>
+        </Box>
+      )}
 
       <Box className='info-panel' onClick={onClickMediaItem(mediaFile.fileId)} sx={infoPanelStyles}>
         <Typography component='div' fontSize='16px' lineHeight='16px' variant='body2'>
@@ -217,7 +288,13 @@ const ActivityDetailView = ({
   const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
   const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
 
-  const [lightboxImageId, setLightboxImageId] = useState<number | undefined>(undefined);
+  const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
+  const [getActivityMediaStreamRequestId, setGetActivityMediaStreamRequestId] = useState<string | undefined>();
+  const [mediaStream, setMediaStream] = useState<{ playbackId: string; playbackToken: string } | undefined>();
+
+  const getActivityMediaStreamRequest = useAppSelector((state) =>
+    getActivityMediaStreamRequestId ? state.activityMediaStreamGet[getActivityMediaStreamRequestId] : undefined
+  );
 
   useEffect(() => {
     if (activity?.verifiedBy && !verifiedByUser) {
@@ -263,24 +340,41 @@ const ActivityDetailView = ({
   }, [goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId, activity.id]);
 
   const handleCloseLightbox = useCallback(() => {
-    setLightboxImageId(undefined);
+    setLightboxMediaFileId(undefined);
+    setMediaStream(undefined);
   }, []);
 
-  const lightboxMediaItem = useMemo(
-    () => activity.media.find((item) => item.fileId === lightboxImageId),
-    [activity.media, lightboxImageId]
+  const lightboxMediaFile = useMemo(
+    () => activity.media.find((item) => item.fileId === lightboxMediaFileId),
+    [activity.media, lightboxMediaFileId]
   );
 
   const lightboxImageSrc = useMemo(
     () =>
-      lightboxMediaItem
+      lightboxMediaFile
         ? ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
             '{fileId}',
-            lightboxMediaItem.fileId.toString()
+            lightboxMediaFile.fileId.toString()
           )
         : '',
-    [activity.id, lightboxMediaItem]
+    [activity.id, lightboxMediaFile]
   );
+
+  useEffect(() => {
+    if (activity && lightboxMediaFile?.type === 'Video') {
+      const request = dispatch(
+        requestGetActivityMediaStream({ activityId: activity.id, fileId: lightboxMediaFile.fileId })
+      );
+      setGetActivityMediaStreamRequestId(request.requestId);
+    }
+  }, [activity, dispatch, lightboxMediaFile]);
+
+  useEffect(() => {
+    if (getActivityMediaStreamRequest?.status === 'success' && getActivityMediaStreamRequest?.data) {
+      const { playbackId, playbackToken } = getActivityMediaStreamRequest.data;
+      setMediaStream({ playbackId, playbackToken });
+    }
+  }, [getActivityMediaStreamRequest]);
 
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
@@ -338,15 +432,28 @@ const ActivityDetailView = ({
               mediaFile={mediaFile}
               onClickMediaItem={onClickMediaItem}
               setHoverFileCallback={setHoverFileCallback}
-              setLightboxImageId={setLightboxImageId}
+              setLightboxImageId={setLightboxMediaFileId}
             />
           </Grid>
         ))}
 
       <ImageLightbox
-        imageAlt={lightboxMediaItem?.caption}
+        altComponent={
+          mediaStream ? (
+            <MuxPlayer
+              accentColor={theme.palette.TwClrBgBrand}
+              playbackId={mediaStream.playbackId}
+              playbackToken={mediaStream.playbackToken}
+              style={{
+                aspectRatio: 16 / 9,
+                width: '100%',
+              }}
+            />
+          ) : undefined
+        }
+        imageAlt={lightboxMediaFile?.caption}
         imageSrc={lightboxImageSrc}
-        isOpen={!!lightboxImageId}
+        isOpen={!!lightboxMediaFileId}
         onClose={handleCloseLightbox}
       />
     </Grid>
