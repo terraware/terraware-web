@@ -46,12 +46,12 @@ export type MapComponentProps = {
   disableDoubleClickZoom?: boolean;
   disableZoom?: boolean;
   drawerChildren?: ReactNode;
+  drawerHeader?: ReactNode;
   drawerHideCloseButton?: boolean;
   drawerHideHeader?: boolean;
   drawerOpen?: boolean;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
   drawerSize?: MapDrawerSize;
-  drawerTitle?: string;
   features?: MapFeatureSection[];
   hideBorder?: boolean;
   hideFullScreenControl?: boolean;
@@ -85,12 +85,12 @@ const MapComponent = (props: MapComponentProps) => {
     disableDoubleClickZoom,
     disableZoom,
     drawerChildren,
+    drawerHeader,
     drawerHideCloseButton,
     drawerHideHeader,
     drawerOpen,
     drawerRef,
     drawerSize,
-    drawerTitle,
     features,
     hideBorder,
     hideFullScreenControl,
@@ -299,13 +299,13 @@ const MapComponent = (props: MapComponentProps) => {
       drawer={
         <MapDrawer
           drawerRef={drawerRef}
+          headerComponent={drawerHeader}
           hideBorder={hideBorder}
           hideCloseButton={drawerHideCloseButton}
           hideHeader={drawerHideHeader}
           open={drawerOpen ?? false}
           onClose={closeDrawer}
           size={drawerSize ?? 'small'}
-          title={drawerTitle ?? ''}
         >
           {drawerChildren}
         </MapDrawer>
