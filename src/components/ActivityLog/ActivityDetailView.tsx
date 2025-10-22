@@ -107,6 +107,42 @@ const ActivityMediaItem = ({
     [theme]
   );
 
+  const playButtonOverlayStyles: SxProps<Theme> = useMemo(
+    () => ({
+      cursor: 'pointer',
+      height: '80px',
+      left: '50%',
+      position: 'absolute',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      transition: 'transform 0.2s ease-in-out',
+      width: '80px',
+      zIndex: 1,
+      '&:hover': {
+        transform: 'translate(-50%, -50%) scale(1.1)',
+      },
+    }),
+    []
+  );
+
+  const processingFallbackStyles: SxProps<Theme> = useMemo(
+    () => ({
+      alignItems: 'center',
+      aspectRatio: 4 / 3,
+      backgroundColor: theme.palette.TwClrBaseGray100,
+      borderColor: theme.palette.TwClrBg,
+      borderStyle: 'solid',
+      borderWidth: '4px',
+      boxSizing: 'content-box',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      textAlign: 'center',
+      width: '100%',
+    }),
+    [theme]
+  );
+
   const imageSrc = useMemo(
     () =>
       ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
@@ -150,42 +186,6 @@ const ActivityMediaItem = ({
       setLightboxImageId(mediaFile.fileId);
     },
     [mediaFile.fileId, setLightboxImageId]
-  );
-
-  const playButtonOverlayStyles: SxProps<Theme> = useMemo(
-    () => ({
-      cursor: 'pointer',
-      height: '80px',
-      left: '50%',
-      position: 'absolute',
-      top: '50%',
-      transform: 'translate(-50%, -50%)',
-      transition: 'transform 0.2s ease-in-out',
-      width: '80px',
-      zIndex: 1,
-      '&:hover': {
-        transform: 'translate(-50%, -50%) scale(1.1)',
-      },
-    }),
-    []
-  );
-
-  const processingFallbackStyles: SxProps<Theme> = useMemo(
-    () => ({
-      alignItems: 'center',
-      aspectRatio: 4 / 3,
-      backgroundColor: theme.palette.TwClrBaseGray100,
-      borderColor: theme.palette.TwClrBg,
-      borderStyle: 'solid',
-      borderWidth: '4px',
-      boxSizing: 'content-box',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      textAlign: 'center',
-      width: '100%',
-    }),
-    [theme]
   );
 
   const handleImageError = useCallback(() => {
