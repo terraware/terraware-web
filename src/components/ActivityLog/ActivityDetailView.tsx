@@ -54,8 +54,8 @@ const ActivityMediaItem = ({
         hoveredFileId === mediaFile.fileId || focusedFileId === mediaFile.fileId ? '#CC79A7' : theme.palette.TwClrBg,
       borderStyle: 'solid',
       borderWidth: '4px',
-      boxSizing: 'content-box' as const,
-      objectFit: 'cover' as const,
+      boxSizing: 'content-box',
+      objectFit: 'cover',
       transition: 'border 0.2s ease-in-out',
       width: '100%',
     }),
@@ -174,16 +174,14 @@ const ActivityMediaItem = ({
     () => ({
       alignItems: 'center',
       aspectRatio: 4 / 3,
-      backgroundColor: theme.palette.TwClrBgSecondary,
+      backgroundColor: theme.palette.TwClrBaseGray100,
       borderColor: theme.palette.TwClrBg,
       borderStyle: 'solid',
       borderWidth: '4px',
-      boxSizing: 'border-box',
+      boxSizing: 'content-box',
       display: 'flex',
       flexDirection: 'column',
-      gap: theme.spacing(2),
       justifyContent: 'center',
-      padding: theme.spacing(3),
       textAlign: 'center',
       width: '100%',
     }),
@@ -201,7 +199,9 @@ const ActivityMediaItem = ({
         <Typography fontSize='14px' fontWeight={600}>
           {strings.VIDEO_PROCESSING}
         </Typography>
-        <img alt={strings.LOADING} src='/assets/loading.gif' style={{ height: '48px', width: '48px' }} />
+
+        <img alt={strings.LOADING} height='24px' src='/assets/loading.gif' style={{ margin: '24px 0' }} width='24px' />
+
         <Typography fontSize='12px' fontWeight={400}>
           {strings.YOUR_VIDEO_IS_PROCESSING}
         </Typography>
