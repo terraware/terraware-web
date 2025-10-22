@@ -24,6 +24,7 @@ import {
   MapHighlightGroup,
   MapLayer,
   MapMarker,
+  MapMarkerCluster,
   MapMarkerGroup,
   MapNameTag,
   MapProperties,
@@ -139,10 +140,9 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   );
 
   const clusterMarkers = useCallback(
-    (map: MapRef | null, markers: MapMarker[]): MapMarker[][] => {
-      if (!map || map.getZoom() > (clusterMaxZoom ?? 20)) {
-        // Too zoomed in. Return all marker as is
-        return markers.map((marker) => [marker]);
+    (map: MapRef | null, markers: MapMarker[], onClusterClick?: (markers: MapMarker[]) => void): MapMarkerCluster[] => {
+      if (!map) {
+        return [];
       }
 
       const visited = new Set<string>();
@@ -175,9 +175,24 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         }
       });
 
-      return clusters;
+      return clusters.map((clusteredMarkers: MapMarker[]): MapMarkerCluster => {
+        const latSum = clusteredMarkers.reduce((sum, marker) => sum + marker.latitude, 0);
+        const lngSum = clusteredMarkers.reduce((sum, marker) => sum + marker.longitude, 0);
+        const latAvg = latSum / clusteredMarkers.length;
+        const lngAvg = lngSum / clusteredMarkers.length;
+
+        const selected = clusteredMarkers.some((marker) => marker.selected);
+        return {
+          latitude: latAvg,
+          longitude: lngAvg,
+          markers: clusteredMarkers,
+          onClick: onClusterClick ? () => onClusterClick(clusteredMarkers) : undefined,
+          selected,
+          size: clusteredMarkers.length,
+        };
+      });
     },
-    [clusterMaxZoom, clusterRadius]
+    [clusterRadius]
   );
 
   // Find all layers with at least some clickable elements
@@ -424,15 +439,23 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   );
 
   const onMarkerClusterClick = useCallback(
-    (latitude: number, longitude: number) => (event: MarkerEvent<MouseEvent>) => {
-      mapRef.current?.easeTo({
-        center: { lat: latitude, lon: longitude },
-        zoom: (zoom ?? 10) + 1,
-        duration: 500,
-      });
-      event.originalEvent.stopPropagation();
+    (latitude: number, longitude: number, onClusterClick?: () => void) => (event: MarkerEvent<MouseEvent>) => {
+      const map = mapRef.current;
+      if (map && zoom) {
+        if (clusterMaxZoom && onClusterClick && zoom >= clusterMaxZoom) {
+          // On max zoom
+          onClusterClick();
+        } else {
+          mapRef.current?.easeTo({
+            center: { lat: latitude, lon: longitude },
+            zoom: (zoom ?? 10) + 1,
+            duration: 500,
+          });
+          event.originalEvent.stopPropagation();
+        }
+      }
     },
-    [mapRef, zoom]
+    [clusterMaxZoom, mapRef, zoom]
   );
 
   const markersComponents = useMemo(() => {
@@ -444,16 +467,16 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       // cluster markers here
       const clusteredMarkers = clusterMarkers(mapRef.current, markerGroup.markers);
 
-      return clusteredMarkers.map((markers, i) => {
-        if (markers.length === 1) {
-          const marker = markers[0];
+      return clusteredMarkers.map((cluster, i) => {
+        if (cluster.size === 1) {
+          const marker = cluster.markers[0];
 
           return (
             <Marker
               className='map-marker'
               key={`group-${markerGroup.markerGroupId}-marker-${i}`}
-              longitude={marker.longitude}
-              latitude={marker.latitude}
+              longitude={cluster.longitude}
+              latitude={cluster.latitude}
               anchor='center'
               onClick={onMarkerClick(marker)}
               style={{ backgroundColor: marker.selected ? markerGroup.style.iconColor : theme.palette.TwClrBg }}
@@ -465,27 +488,20 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
               />
             </Marker>
           );
-        } else if (markers.length > 1) {
-          const latSum = markers.reduce((sum, marker) => sum + marker.latitude, 0);
-          const lngSum = markers.reduce((sum, marker) => sum + marker.longitude, 0);
-          const latAvg = latSum / markers.length;
-          const lngAvg = lngSum / markers.length;
-
-          const selected = markers.some((marker) => marker.selected);
-
+        } else if (cluster.size > 1) {
           return (
             <Marker
               className='map-marker map-marker--cluster'
               key={`group-${markerGroup.markerGroupId}-marker-cluster-${i}`}
-              longitude={lngAvg}
-              latitude={latAvg}
+              longitude={cluster.longitude}
+              latitude={cluster.latitude}
               anchor='center'
-              onClick={onMarkerClusterClick(latAvg, lngAvg)}
-              style={{ backgroundColor: selected ? markerGroup.style.iconColor : theme.palette.TwClrBg }}
+              onClick={onMarkerClusterClick(cluster.latitude, cluster.longitude, cluster.onClick)}
+              style={{ backgroundColor: cluster.selected ? markerGroup.style.iconColor : theme.palette.TwClrBg }}
             >
-              <p className='count'>{markers.length}</p>
+              <p className='count'>{cluster.size}</p>
               <Icon
-                fillColor={selected ? theme.palette.TwClrBg : markerGroup.style.iconColor}
+                fillColor={cluster.selected ? theme.palette.TwClrBg : markerGroup.style.iconColor}
                 name={markerGroup.style.iconName}
                 size={'small'}
               />
@@ -666,6 +682,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       onMouseMove={onMouseMove}
+      onZoom={onMove}
     >
       {isDesktop && !hideFullScreenControl && <FullscreenControl position='top-left' containerId={containerId} />}
       {!hideZoomControl && (
