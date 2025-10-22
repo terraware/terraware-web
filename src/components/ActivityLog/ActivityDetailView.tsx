@@ -11,7 +11,11 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
-import { requestGetActivityMediaStream } from 'src/redux/features/activities/activitiesAsyncThunks';
+import {
+  requestGetActivityMedia,
+  requestGetActivityMediaStream,
+} from 'src/redux/features/activities/activitiesAsyncThunks';
+import { selectActivityMediaGet } from 'src/redux/features/activities/activitiesSelectors';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -43,8 +47,12 @@ const ActivityMediaItem = ({
 }: ActivityMediaItemProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const dispatch = useAppDispatch();
 
-  const [imageLoadError, setImageLoadError] = useState<boolean>(false);
+  const [is412Error, setIs412Error] = useState<boolean>(false);
+  const [getActivityMediaRequestId, setGetActivityMediaRequestId] = useState<string>('');
+
+  const getActivityMediaRequest = useAppSelector(selectActivityMediaGet(getActivityMediaRequestId));
 
   const imageStyles: CSSProperties = useMemo(
     () => ({
@@ -189,11 +197,43 @@ const ActivityMediaItem = ({
   );
 
   const handleImageError = useCallback(() => {
-    setImageLoadError(true);
-  }, []);
+    // only check for 412 error if this is a video
+    if (mediaFile.type === 'Video') {
+      // request a small version of the image to check the error status code
+      const request = dispatch(
+        requestGetActivityMedia({
+          activityId: activity.id,
+          fileId: mediaFile.fileId,
+          maxHeight: 1,
+          maxWidth: 1,
+        })
+      );
+      setGetActivityMediaRequestId(request.requestId);
+    }
+  }, [activity.id, dispatch, mediaFile.fileId, mediaFile.type]);
 
-  // if this is a video and the thumbnail failed to load (likely a 412 error during processing)
-  if (mediaFile.type === 'Video' && imageLoadError) {
+  useEffect(() => {
+    if (getActivityMediaRequest?.status === 'error' && getActivityMediaRequest?.data) {
+      // check if the error is a 412 (Precondition Failed) - video is still processing
+      const errorData = getActivityMediaRequest.data as { error?: string; statusCode?: number };
+      if (errorData.statusCode === 412) {
+        setIs412Error(true);
+
+        // retry after one minute
+        const timeoutId = setTimeout(() => {
+          setIs412Error(false);
+          setGetActivityMediaRequestId('');
+        }, 60000);
+
+        return () => {
+          clearTimeout(timeoutId);
+        };
+      }
+    }
+  }, [getActivityMediaRequest]);
+
+  // only show processing fallback if this is a video with a 412 error
+  if (mediaFile.type === 'Video' && is412Error) {
     return (
       <Box sx={processingFallbackStyles}>
         <Typography fontSize='14px' fontWeight={600}>
