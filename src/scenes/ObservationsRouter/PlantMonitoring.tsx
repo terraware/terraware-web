@@ -90,7 +90,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     if (t0AllSetResponse?.status === 'success') {
       setSurvivalRateSet(t0AllSetResponse.data ?? false);
     }
-  }, [plotsWithObservationsResponse, t0AllSetResponse]);
+  }, [t0AllSetResponse]);
 
   useEffect(() => {
     if (plotsWithObservationsResponse?.status === 'success') {
