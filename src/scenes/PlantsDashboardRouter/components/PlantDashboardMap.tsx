@@ -195,20 +195,22 @@ const PlantDashboardMap = ({
       );
     }
     if (selectedPhotos.length > 0) {
+      const selectedPhoto = selectedPhotos[drawerPage - 1];
       return (
         <MapPhotoDrawer
-          monitoringPlotId={selectedPhotos[drawerPage - 1].monitoringPlotId}
-          observationId={selectedPhotos[drawerPage - 1].observationId}
-          photo={selectedPhotos[drawerPage - 1].photo}
+          monitoringPlotId={selectedPhoto.monitoringPlotId}
+          observationId={selectedPhoto.observationId}
+          photo={selectedPhoto.photo}
         />
       );
     }
     if (selectedPlants.length > 0) {
+      const selectedPlant = selectedPlants[drawerPage - 1];
       return (
         <MapPlantDrawer
-          monitoringPlotId={selectedPlants[drawerPage - 1].monitoringPlotId}
-          observationId={selectedPlants[drawerPage - 1].observationId}
-          plant={selectedPlants[drawerPage - 1].plant}
+          monitoringPlotId={selectedPlant.monitoringPlotId}
+          observationId={selectedPlant.observationId}
+          plant={selectedPlant.plant}
         />
       );
     }
