@@ -88,7 +88,6 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
 
   useEffect(() => {
     if (t0AllSetResponse?.status === 'success') {
-      console.log('t0AllSetResponse', t0AllSetResponse);
       setSurvivalRateSet(t0AllSetResponse.data ?? false);
     }
   }, [plotsWithObservationsResponse, t0AllSetResponse]);
@@ -173,7 +172,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
               {survivalRateSet ? (
                 <Icon name='success' fillColor={theme.palette.TwClrBgSuccess} />
               ) : (
-                <Icon name='iconUndo' fillColor={theme.palette.TwClrBgDanger} />
+                <Icon name='iconUnavailable' fillColor={theme.palette.TwClrBgDanger} />
               )}
             </Box>
           )}
