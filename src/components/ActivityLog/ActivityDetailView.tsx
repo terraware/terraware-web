@@ -224,10 +224,7 @@ const ActivityMediaItem = ({
 
       {mediaFile.type === 'Video' && (
         <Box onClick={onClickExpand} sx={playButtonOverlayStyles}>
-          <svg viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'>
-            <circle cx='40' cy='40' r='40' fill='rgba(0, 0, 0, 0.6)' />
-            <polygon points='30,20 30,60 60,40' fill='#fff' />
-          </svg>
+          <img alt='Play video' src='/assets/play-button-overlay.svg' style={{ width: '100%', height: '100%' }} />
         </Box>
       )}
 
