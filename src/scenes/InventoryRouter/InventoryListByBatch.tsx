@@ -215,7 +215,11 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           reloadData={reloadData}
           origin='Batches'
           allowSelectionProjectAssign
-          emptyTableMessage={strings.NO_BATCHES_WITH_INVENTORY_MESSAGE}
+          emptyTableMessage={
+            !debouncedSearchTerm && !filters.facilityIds?.length && !filters.projectIds?.length
+              ? strings.NO_BATCHES_WITH_INVENTORY_MESSAGE
+              : ''
+          }
         />
       ) : searchResults === null ? (
         <Box
