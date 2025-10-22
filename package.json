@@ -53,6 +53,8 @@
     "@mui/lab": "^6.0.1-beta.36",
     "@mui/material": "^6.0.0",
     "@mui/styled-engine-sc": "^5.14.12",
+    "@mux/mux-player": "^3.6.1",
+    "@mux/mux-player-react": "^3.6.1",
     "@reduxjs/toolkit": "^1.9.3",
     "@terraware/web-components": "^3.9.3",
     "@testing-library/jest-dom": "^6.0.0",
