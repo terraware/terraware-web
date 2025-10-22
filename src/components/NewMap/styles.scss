@@ -62,21 +62,8 @@
   &--header {
     padding: $tw-spc-base-x-small;
     display: flex;
-    justify-content: space-between;
+    flex-direction: row-reverse;
     align-items: center;
-    .title {
-      font-family: $tw-fnt-mssg-title-font-family;
-      font-size: $tw-fnt-mssg-title-font-size;
-      font-weight: $tw-fnt-mssg-title-font-weight;
-      line-height: $tw-fnt-mssg-title-line-height;
-      color: $tw-clr-txt;
-      text-align: center;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      margin: 0;
-      width: 100%;
-    }
 
     .icon-close {
       fill: $tw-clr-icn-secondary;

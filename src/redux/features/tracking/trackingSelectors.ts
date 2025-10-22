@@ -50,3 +50,6 @@ export const selectAssignT0TempSiteData = (requestId: string) => (state: RootSta
 
 export const selectProjectPlantingSiteList = (requestId: string) => (state: RootState) =>
   state.projectPlantingSites[requestId];
+
+export const selectPlantingSiteT0AllSet = (requestId: string) => (state: RootState) =>
+  state.plantingSiteT0AllSet[requestId];

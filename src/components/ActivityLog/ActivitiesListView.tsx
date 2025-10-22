@@ -606,7 +606,7 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
                 <Box display='flex' justifyContent='center' marginTop={theme.spacing(3)} alignItems='center'>
                   <Typography fontSize={'14px'} paddingRight={'8px'}>
                     {strings.formatString(
-                      strings.PAGINATION_FOOTER,
+                      strings.PAGINATION_FOOTER_RANGE,
                       (currentPage - 1) * itemsPerPage + 1,
                       Math.min(currentPage * itemsPerPage, results.length),
                       results.length

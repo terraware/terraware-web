@@ -1262,8 +1262,9 @@ OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
 OWNER,Propietario,f1db93f1
 OZ,oz,63ec7cc2
 OZ_OUNCES,oz (onzas),45ec05af
-PAGINATION_FOOTER,{0} para {1} de {2},ce14c917
+PAGINATION_FOOTER,{0} de {1},056416b6
 PAGINATION_FOOTER_EMPTY,0 de 0,0ee978bd
+PAGINATION_FOOTER_RANGE,{0} para {1} de {2},ce14c917
 PAPER,Papel,df5f30a1
 PAPER_PETRI_DISH,Placa petri de papel,d478bf2a
 PARTIAL_ERRORS,Fallaron algunas de las solicitudes. Puede intentar de nuevo más tarde.,2d39959f

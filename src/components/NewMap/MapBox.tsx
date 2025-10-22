@@ -465,7 +465,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
       }
 
       // cluster markers here
-      const clusteredMarkers = clusterMarkers(mapRef.current, markerGroup.markers);
+      const clusteredMarkers = clusterMarkers(mapRef.current, markerGroup.markers, markerGroup.onClusterClick);
 
       return clusteredMarkers.map((cluster, i) => {
         if (cluster.size === 1) {
