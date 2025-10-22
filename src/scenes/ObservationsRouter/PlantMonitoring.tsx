@@ -93,6 +93,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
           ':plantingSiteId',
           selectedPlantingSite?.id.toString() || ''
         ),
+        search: 'fromObservationsPage=true',
       }),
     [navigate, selectedPlantingSite?.id]
   );
