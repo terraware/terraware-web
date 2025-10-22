@@ -1372,6 +1372,7 @@ PLANTS_PER_HA,Plantes par ha,1b8bb685
 PLANTS_PER_HA_LC,plants/ha,606dca50
 PLANTS_PER_HA_TOOLTIP,"La rubrique « Tendance des plantes par hectare » représente le nombre de plantes par hectare, tel qu'il a été observé au cours de toutes les observations.",95449181
 PLANTS_PER_HECTARE,plantes/ha,606dca50
+PLAY_VIDEO,Lire la vidéo,56432671
 PLEASE_NOTE,Veuillez noter que :,f37ff0f0
 PLOT,Terrain,8d3cefee
 PLOT_CONDITIONS,Conditions de la parcelle,2b615357

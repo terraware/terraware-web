@@ -264,7 +264,11 @@ const ActivityMediaItem = ({
 
       {mediaFile.type === 'Video' && (
         <Box onClick={onClickExpand} sx={playButtonOverlayStyles}>
-          <img alt='Play video' src='/assets/play-button-overlay.svg' style={{ width: '100%', height: '100%' }} />
+          <img
+            alt={strings.PLAY_VIDEO}
+            src='/assets/play-button-overlay.svg'
+            style={{ width: '100%', height: '100%' }}
+          />
         </Box>
       )}
 

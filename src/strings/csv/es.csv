@@ -1373,6 +1373,7 @@ PLANTS_PER_HA,Plantas por hectárea,1b8bb685
 PLANTS_PER_HA_LC,plantas/ha,606dca50
 PLANTS_PER_HA_TOOLTIP,"La ""Tendencia de plantas por hectárea"" representa la cantidad de plantas por hectárea registradas en todas las observaciones.",95449181
 PLANTS_PER_HECTARE,plantas/ha,606dca50
+PLAY_VIDEO,Reproducir video,56432671
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,f37ff0f0
 PLOT,Parcela,8d3cefee
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
