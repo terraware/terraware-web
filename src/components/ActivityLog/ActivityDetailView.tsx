@@ -15,7 +15,10 @@ import {
   requestGetActivityMedia,
   requestGetActivityMediaStream,
 } from 'src/redux/features/activities/activitiesAsyncThunks';
-import { selectActivityMediaGet } from 'src/redux/features/activities/activitiesSelectors';
+import {
+  selectActivityMediaGet,
+  selectActivityMediaStreamGet,
+} from 'src/redux/features/activities/activitiesSelectors';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -330,12 +333,10 @@ const ActivityDetailView = ({
   const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
 
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
-  const [getActivityMediaStreamRequestId, setGetActivityMediaStreamRequestId] = useState<string | undefined>();
+  const [getActivityMediaStreamRequestId, setGetActivityMediaStreamRequestId] = useState<string>('');
   const [mediaStream, setMediaStream] = useState<{ playbackId: string; playbackToken: string } | undefined>();
 
-  const getActivityMediaStreamRequest = useAppSelector((state) =>
-    getActivityMediaStreamRequestId ? state.activityMediaStreamGet[getActivityMediaStreamRequestId] : undefined
-  );
+  const getActivityMediaStreamRequest = useAppSelector(selectActivityMediaStreamGet(getActivityMediaStreamRequestId));
 
   useEffect(() => {
     if (activity?.verifiedBy && !verifiedByUser) {
