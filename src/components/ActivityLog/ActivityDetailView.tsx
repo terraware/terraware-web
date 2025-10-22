@@ -201,7 +201,7 @@ const ActivityMediaItem = ({
         <Typography fontSize='20px' fontWeight={600} variant='h3'>
           Video Processing
         </Typography>
-        <Box component='img' src='/assets/loading.gif' alt='Loading' sx={{ height: '48px', width: '48px' }} />
+        <img src='/assets/loading.gif' alt='Loading' style={{ height: '48px', width: '48px' }} />
         <Typography color='textSecondary' variant='body1'>
           Your video is processing and will show up momentarily.
         </Typography>
