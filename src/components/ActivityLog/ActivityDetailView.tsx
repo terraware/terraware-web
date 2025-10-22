@@ -442,6 +442,7 @@ const ActivityDetailView = ({
           mediaStream ? (
             <MuxPlayer
               accentColor={theme.palette.TwClrBgBrand}
+              autoPlay
               playbackId={mediaStream.playbackId}
               playbackToken={mediaStream.playbackToken}
               style={{
