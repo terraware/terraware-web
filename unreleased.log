@@ -1,3 +1,5 @@
+7a73a7b90bd SW-7592 Not all Density have values warning showing even after disabling temp plots (#4656)
+76ba1bf6894 SW-7583 Update tool-tip copy for All Species for both Permanent and Temporary Plots (#4655)
 952df1d6d47 SW-7577 All Species value not showing in Edit View in real time (#4652)
 62a344dc86f SW-7321 FE: Highlight Checkbox (#4650)
 5cf8916a882 SW-7576 Update species survival rate charts to use survival rates, not raw counts (#4649)
