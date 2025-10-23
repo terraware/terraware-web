@@ -26,7 +26,7 @@ const TemporaryPlotsTab = ({
   const theme = useTheme();
 
   const onChangeTemporaryPlotsCheck = useCallback(() => {
-    // don't do anyhting since it's always disabled
+    // don't do anything since it's always disabled
     return true;
   }, []);
 
