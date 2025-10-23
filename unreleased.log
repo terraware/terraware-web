@@ -1,3 +1,8 @@
+62a344dc86f SW-7321 FE: Highlight Checkbox (#4650)
+5cf8916a882 SW-7576 Update species survival rate charts to use survival rates, not raw counts (#4649)
+ce1554b5979 SW-7528 Always enable Breadcrumb on Survival Rate Settings view (#4648)
+97ef8d6c080 SW-7573 When Temp plots not used, Detail and Edit Views of Temp plots should only show checkbox (#4647)
+b440a7a2438 SW-7572  Survival Rate section when rates cannot be calculated styles (#4646)
 1d16de81039 Fixed map drawer size (#4645)
 5d76828665c SW-7537 Add "set" and "not set" icon indicators next to settings link in Observations page (#4642)
 949270ccbe2 SW-7536 Added pagination for multi-select of plants/photos in plant dashboard (#4643)
