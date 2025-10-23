@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/119</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/104</span>
             </div>
         
             
@@ -471,7 +471,13 @@
 <a name='L406'></a><a href='#L406'>406</a>
 <a name='L407'></a><a href='#L407'>407</a>
 <a name='L408'></a><a href='#L408'>408</a>
-<a name='L409'></a><a href='#L409'>409</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -550,7 +556,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -956,13 +968,19 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
   }, [allWithdrawnSpecies, newSpeciesRows, species]);
 &nbsp;
   const zoneTotalDensity = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const selectedZone = <span class="cstat-no" title="statement not covered" >record.zones.find(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId.toString() === zoneData?.plantingZoneId.toString())</span>;</span>
-    const total =
-<span class="cstat-no" title="statement not covered" >      selectedZone?.densityData.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, density) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;</span>
-      }, 0) || 0;
-<span class="cstat-no" title="statement not covered" >    return total;</span>
-  }, [record, zoneData]);
+    const editingZoneId = <span class="cstat-no" title="statement not covered" >plotsWithObservations?.length</span>
+      ? plotsWithObservations[0].plantingSubzone_plantingZone_id
+      : null;
+<span class="cstat-no" title="statement not covered" >    if (editingZoneId) {</span>
+      const selectedZone = <span class="cstat-no" title="statement not covered" >record.zones.find(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId.toString() === editingZoneId.toString())</span>;</span>
+      const total =
+<span class="cstat-no" title="statement not covered" >        selectedZone?.densityData.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, density) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          return isNaN(density.density) ? sum : sum + density.density;</span>
+        }, 0) || 0;
+<span class="cstat-no" title="statement not covered" >      return total;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return 0;</span>
+  }, [plotsWithObservations, record]);
 &nbsp;
   const zoneToSave = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!plotsWithObservations?.length) {</span>
@@ -1294,7 +1312,7 @@ export default ZoneT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-23T16:06:51.124Z
+                at 2025-10-23T19:19:43.801Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
