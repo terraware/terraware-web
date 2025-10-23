@@ -115,7 +115,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
           </Typography>
         </Box>
       )}
-      {highestMortalityRate === undefined && (
+      {highestMortalityRate === undefined && !isSurvivalRateCalculationEnabled && (
         <Box sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: 1, borderRadius: 1, marginBottom: 1 }}>
           <Typography fontSize='16px' fontWeight={400}>
             {strings.INSUFFICIENT_DATA}
@@ -127,6 +127,39 @@ export default function TotalMortalityRateCard(): JSX.Element {
             -
           </Typography>
         </Box>
+      )}
+      {highestMortalityRate === undefined && lowestMortalityRate === undefined && isSurvivalRateCalculationEnabled && (
+        <>
+          <Box
+            sx={{
+              backgroundColor: '#5D822B33',
+              padding: 1,
+              borderRadius: 1,
+              marginBottom: 1,
+            }}
+          >
+            <Typography fontSize='16px' fontWeight={400}>
+              {strings.HIGHEST}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+              {strings.CANNOT_BE_CALCULATED}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              backgroundColor: '#CB4D4533',
+              padding: 1,
+              borderRadius: 1,
+            }}
+          >
+            <Typography fontSize='16px' fontWeight={400}>
+              {strings.LOWEST}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+              {strings.CANNOT_BE_CALCULATED}
+            </Typography>
+          </Box>
+        </>
       )}
     </Box>
   );

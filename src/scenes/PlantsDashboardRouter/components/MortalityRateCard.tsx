@@ -50,9 +50,15 @@ export default function MortalityRateCard(): JSX.Element {
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           {isSurvivalRateCalculationEnabled ? (
-            <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-              {latestResult?.survivalRate !== undefined ? <FormattedNumber value={latestResult.survivalRate} /> : '-'}
-            </Typography>
+            latestResult?.survivalRate !== undefined ? (
+              <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+                <FormattedNumber value={latestResult.survivalRate} />
+              </Typography>
+            ) : (
+              <Typography fontSize='20px' fontWeight={500}>
+                {strings.CANNOT_BE_CALCULATED}
+              </Typography>
+            )
           ) : (
             <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
               {latestResult?.mortalityRate !== undefined ? <FormattedNumber value={latestResult.mortalityRate} /> : '-'}
@@ -73,9 +79,6 @@ export default function MortalityRateCard(): JSX.Element {
 
         {isSurvivalRateCalculationEnabled && latestResult?.survivalRate === undefined && (
           <Box>
-            <Typography fontSize='20px' fontWeight={500}>
-              {strings.CANNOT_BE_CALCULATED}
-            </Typography>
             {plantingSite?.id && (
               <Typography>
                 {strings.formatString(
