@@ -1137,7 +1137,7 @@ NUMBER_OF_PHOTOS,Número de fotos,643d471f
 NUMBER_OF_PLANTS,Número de plantas,41fe8f14
 NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION,Número de parcelas en la observación más reciente,ce786371
 NUMBER_OF_PLOTS_SET_FOR_PERMANENT_PLOTS,t0 establecido para {0} de {1} Parcelas Permanentes,8a4987bd
-NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,t0 establecido para {0} de {1} Parcelas Temporales,0c92adac
+NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,t0 establecido para {0} de {1} Zonas de Parcelas Temporales,5633c114
 NUMBER_OF_SEEDS_COMPROMISED,# semillas afectadas,aee08b67
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *,44a0ef6a
 NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas,aee08b67
