@@ -181,7 +181,7 @@ const PlantDashboardMap = ({
     setSelectedPhotos([]);
     setSelectedPlants(plants);
     setDrawerOpen(true);
-    setDrawerSize('medium');
+    setDrawerSize('small');
     setDrawerPage(1);
   }, []);
 
