@@ -107,7 +107,9 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
         </Box>
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
           <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}</Box>
-          {!activity.isHighlight && <Icon name='search' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />}
+          {activity.isHighlight && isAcceleratorRoute && (
+            <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
+          )}
         </Box>
 
         <Typography>{activity.description}</Typography>
