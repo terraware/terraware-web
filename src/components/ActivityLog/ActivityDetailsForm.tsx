@@ -428,9 +428,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [onChange]
   );
 
-  const onChangeIsVerified = useCallback(
+  const onChangeIsHighlight = useCallback(
     (value: boolean): void => {
-      onChange('isVerified', value);
+      onChange('isHighlight', value);
     },
     [onChange]
   );
@@ -626,19 +626,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               />
             </Grid>
 
-            {isAcceleratorRoute && activityId === undefined && (
-              <Grid item xs={12}>
-                <Checkbox
-                  id='verified'
-                  label={strings.VERIFIED}
-                  name='verified'
-                  onChange={onChangeIsVerified}
-                  value={record?.isVerified}
-                />
-              </Grid>
-            )}
-
-            {isAcceleratorRoute && activityId !== undefined && (
+            {isAcceleratorRoute && (
               <Grid item xs={12}>
                 <Dropdown
                   required
@@ -646,6 +634,18 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                   onChange={onChangeStatus}
                   selectedValue={record?.status}
                   options={activityStatusOptions}
+                />
+              </Grid>
+            )}
+
+            {isAcceleratorRoute && (
+              <Grid item xs={12}>
+                <Checkbox
+                  id='isHighlight'
+                  label={strings.MAKE_HIGHLIGHT}
+                  name='isHighlight'
+                  onChange={onChangeIsHighlight}
+                  value={record?.isHighlight}
                 />
               </Grid>
             )}
