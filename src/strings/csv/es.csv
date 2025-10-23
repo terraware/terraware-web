@@ -1374,6 +1374,7 @@ PLANTS_PER_HA,Plantas por hectárea,1b8bb685
 PLANTS_PER_HA_LC,plantas/ha,606dca50
 PLANTS_PER_HA_TOOLTIP,"La ""Tendencia de plantas por hectárea"" representa la cantidad de plantas por hectárea registradas en todas las observaciones.",95449181
 PLANTS_PER_HECTARE,plantas/ha,606dca50
+PLAY_VIDEO,Reproducir video,56432671
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,f37ff0f0
 PLOT,Parcela,8d3cefee
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
@@ -2226,6 +2227,7 @@ VIABILITY_TEST_START_DATE_ERROR,Esto no debería ser antes de la fecha de recole
 VIABILITY_TESTING,Ensayo de viabilidad,cb87d231
 VIABILITY_TESTING_EMPTY_MESSAGE,El Ensayo de viabilidad te ayuda a monitorear la calidad de la semilla. Realizar una prueba de germinación en vivero o laboratorio o una prueba de corte en sus semillas.,d0729b19
 VIABILITY_TESTS,Pruebas de viabilidad,097a958c
+VIDEO_PROCESSING,Procesamiento de video,998e847c
 VIEW,Ver,02cff17a
 VIEW_APPLICATION,Ver solicitud,bbdc193f
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
@@ -2306,6 +2308,7 @@ YOU_ARE_ABOUT_TO_PUBLISH,Va a publicar en el portal del financiador.,8adda943
 YOU_ARE_ABOUT_TO_SUBMIT_THIS_SPECIES_DELIVERABLE,¿Está seguro(a) de que desea enviar esta lista de especies para su aprobación?,47f7bdd3
 YOU_ARE_HERE,Se encuentra aquí,183a5491
 YOUR_APPLICATIONS,Tus solicitudes,7da0f423
+YOUR_VIDEO_IS_PROCESSING,Su video se está procesando y aparecerá en breve.,fb65d59c
 ZERO,Cero,16bd92ef
 ZONE,Zona,17bc60dc
 ZONE_BOUNDARIES,Límites de la zona,15e88feb

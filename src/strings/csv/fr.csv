@@ -1373,6 +1373,7 @@ PLANTS_PER_HA,Plantes par ha,1b8bb685
 PLANTS_PER_HA_LC,plants/ha,606dca50
 PLANTS_PER_HA_TOOLTIP,"La rubrique « Tendance des plantes par hectare » représente le nombre de plantes par hectare, tel qu'il a été observé au cours de toutes les observations.",95449181
 PLANTS_PER_HECTARE,plantes/ha,606dca50
+PLAY_VIDEO,Lire la vidéo,56432671
 PLEASE_NOTE,Veuillez noter que :,f37ff0f0
 PLOT,Terrain,8d3cefee
 PLOT_CONDITIONS,Conditions de la parcelle,2b615357
@@ -2225,6 +2226,7 @@ VIABILITY_TEST_START_DATE_ERROR,La date ne doit pas être antérieure à la date
 VIABILITY_TESTING,Test de viabilité,cb87d231
 VIABILITY_TESTING_EMPTY_MESSAGE,"Le test de viabilité vous aide à contrôler la qualité des semences. Vous pouvez effectuer un test de germination en pépinière ou en laboratoire, ou réaliser un test de coupe.",d0729b19
 VIABILITY_TESTS,Tests de viabilité,097a958c
+VIDEO_PROCESSING,Traitement de la vidéo,998e847c
 VIEW,Voir,02cff17a
 VIEW_APPLICATION,Voir la demande,bbdc193f
 VIEW_FULL_DASHBOARD,Afficher le tableau de bord complet,25189646
@@ -2305,6 +2307,7 @@ YOU_ARE_ABOUT_TO_PUBLISH,Vous êtes sur le point de publier sur le portail des f
 YOU_ARE_ABOUT_TO_SUBMIT_THIS_SPECIES_DELIVERABLE,Voulez-vous vraiment soumettre cette liste d'espèces pour approbation ?,47f7bdd3
 YOU_ARE_HERE,Vous êtes ici,183a5491
 YOUR_APPLICATIONS,Vos candidatures,7da0f423
+YOUR_VIDEO_IS_PROCESSING,Votre vidéo est en cours de traitement et apparaîtra sous peu.,fb65d59c
 ZERO,zéro,16bd92ef
 ZONE,Zone,17bc60dc
 ZONE_BOUNDARIES,Limites de la zone,15e88feb

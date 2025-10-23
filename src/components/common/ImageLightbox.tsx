@@ -4,13 +4,14 @@ import { Box, IconButton, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 type ImageLightboxProps = {
+  altComponent?: React.ReactNode;
   imageAlt?: string;
   imageSrc: string;
   isOpen: boolean;
   onClose: () => void;
 };
 
-const ImageLightbox: React.FC<ImageLightboxProps> = ({ imageAlt = '', imageSrc, isOpen, onClose }) => {
+const ImageLightbox: React.FC<ImageLightboxProps> = ({ altComponent, imageAlt = '', imageSrc, isOpen, onClose }) => {
   const theme = useTheme();
 
   const handleKeyDown = useCallback(
@@ -95,15 +96,19 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({ imageAlt = '', imageSrc, 
           maxWidth: '90vw',
         }}
       >
-        <img
-          alt={imageAlt}
-          src={imageSrc}
-          style={{
-            maxHeight: '90vh',
-            maxWidth: '90vw',
-            objectFit: 'contain',
-          }}
-        />
+        {altComponent ? (
+          altComponent
+        ) : (
+          <img
+            alt={imageAlt}
+            src={imageSrc}
+            style={{
+              maxHeight: '70vh',
+              maxWidth: '70vw',
+              objectFit: 'contain',
+            }}
+          />
+        )}
       </Box>
     </Box>
   );

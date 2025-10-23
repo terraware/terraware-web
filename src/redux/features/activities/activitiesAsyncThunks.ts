@@ -205,7 +205,7 @@ export const requestGetActivityMedia = createAsyncThunk(
       return response.data;
     }
 
-    return rejectWithValue(strings.GENERIC_ERROR);
+    return rejectWithValue({ error: response?.error || strings.GENERIC_ERROR, statusCode: response?.statusCode });
   }
 );
 
