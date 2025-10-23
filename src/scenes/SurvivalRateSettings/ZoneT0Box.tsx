@@ -101,7 +101,7 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
                         <td style={{ paddingRight: '64px' }}>
                           <Box display={'flex'}>
                             <Typography fontWeight={600}>{strings.ALL_SPECIES}</Typography>
-                            <IconTooltip title={strings.TOTAL_DENSITY_TOOLTIP} />
+                            <IconTooltip title={strings.TOTAL_DENSITY_VIEW_TOOLTIP} />
                           </Box>
                         </td>
                         <td>

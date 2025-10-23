@@ -2077,6 +2077,7 @@ TOOLTIP_VIABILITY_TEST_TREATMENT,"The biological, physical and chemical agents a
 TOTAL,Total,
 TOTAL_ACTIVE_ACCESSIONS,Total Active Accessions,
 TOTAL_DENSITY_TOOLTIP,Total plant density (plants/ha) of the input values above.
+TOTAL_DENSITY_VIEW_TOOLTIP,Total of all of the listed species' plant densities.
 TOTAL_EXPANSION_POTENTIAL,Total Expansion Potential (ha),
 TOTAL_HECTARES_PLANTED,Total Hectares Planted,
 TOTAL_HECTARES_PLANTED_TOOLTIP,This is the total number of hectares marked as “Planting Complete” in this Planting Site,
