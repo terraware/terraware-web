@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/222</span>
+                <span class='fraction'>0/223</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/147</span>
+                <span class='fraction'>0/151</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/210</span>
+                <span class='fraction'>0/211</span>
             </div>
         
             
@@ -699,7 +699,14 @@
 <a name='L634'></a><a href='#L634'>634</a>
 <a name='L635'></a><a href='#L635'>635</a>
 <a name='L636'></a><a href='#L636'>636</a>
-<a name='L637'></a><a href='#L637'>637</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L637'></a><a href='#L637'>637</a>
+<a name='L638'></a><a href='#L638'>638</a>
+<a name='L639'></a><a href='#L639'>639</a>
+<a name='L640'></a><a href='#L640'>640</a>
+<a name='L641'></a><a href='#L641'>641</a>
+<a name='L642'></a><a href='#L642'>642</a>
+<a name='L643'></a><a href='#L643'>643</a>
+<a name='L644'></a><a href='#L644'>644</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -742,24 +749,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -768,6 +757,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1339,8 +1353,9 @@
 import { MapRef } from 'react-map-gl/mapbox';
 &nbsp;
 import { Box, Grid, Pagination, Typography, useTheme } from '@mui/material';
-import { PillList, PillListItem } from '@terraware/web-components';
+import { Icon, PillList, PillListItem } from '@terraware/web-components';
 &nbsp;
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
@@ -1389,6 +1404,7 @@ const ActivityListItem = <span class="cstat-no" title="statement not covered" ><
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+  const isActivityHighlightEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Activity Log Highlights');</span>
 &nbsp;
   const coverPhoto = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >activity.media.find(<span class="fstat-no" title="function not covered" >(f</span>ile) =&gt; <span class="cstat-no" title="statement not covered" >file.isCoverPhoto)</span>,</span> [activity.media]);</span>
 &nbsp;
@@ -1432,21 +1448,26 @@ const ActivityListItem = <span class="cstat-no" title="statement not covered" ><
       &lt;/Grid&gt;
 &nbsp;
       &lt;Grid item xs={true}&gt;
-        &lt;Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'&gt;
-          {activityType}
-        &lt;/Typography&gt;
-&nbsp;
-        {isAcceleratorRoute &amp;&amp; &lt;ActivityStatusBadges activity={activity} /&gt;}
+        &lt;Box display='flex' justifyContent={'space-between'} alignItems={'center'}&gt;
+          &lt;Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'&gt;
+            {activityType}
+          &lt;/Typography&gt;
+          {isDesktop &amp;&amp; (
+            &lt;Grid item xs='auto'&gt;
+              &lt;Typography&gt;{activity.date}&lt;/Typography&gt;
+            &lt;/Grid&gt;
+          )}
+        &lt;/Box&gt;
+        &lt;Box display='flex' justifyContent={'space-between'} alignItems={'center'}&gt;
+          &lt;Box&gt;{isAcceleratorRoute &amp;&amp; &lt;ActivityStatusBadges activity={activity} /&gt;}&lt;/Box&gt;
+          {activity.isHighlight &amp;&amp; isAcceleratorRoute &amp;&amp; isActivityHighlightEnabled &amp;&amp; (
+            &lt;Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} /&gt;
+          )}
+        &lt;/Box&gt;
 &nbsp;
         &lt;Typography&gt;{activity.description}&lt;/Typography&gt;
         {!isDesktop &amp;&amp; &lt;Typography&gt;{activity.date}&lt;/Typography&gt;}
       &lt;/Grid&gt;
-&nbsp;
-      {isDesktop &amp;&amp; (
-        &lt;Grid item xs='auto'&gt;
-          &lt;Typography&gt;{activity.date}&lt;/Typography&gt;
-        &lt;/Grid&gt;
-      )}
     &lt;/Grid&gt;
   );
 };
@@ -1978,7 +1999,7 @@ export default ActivitiesListView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-23T19:56:03.319Z
+                at 2025-10-23T20:11:13.912Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
