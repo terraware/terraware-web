@@ -71,16 +71,18 @@ const EditTemporaryPlotsTab = ({
   }, [navigate, plantingSiteId]);
 
   const updatePlantingSiteSetting = useCallback(() => {
-    void dispatch(
-      updatePlantingSite({
-        id: plantingSiteId,
-        plantingSite: {
-          survivalRateIncludesTempPlots: isTemporaryPlotsChecked,
-          name: plantingSite?.name || '',
-        },
-      })
-    );
-  }, [dispatch, isTemporaryPlotsChecked, plantingSite, plantingSiteId]);
+    if (alreadyIncluding !== isTemporaryPlotsChecked) {
+      void dispatch(
+        updatePlantingSite({
+          id: plantingSiteId,
+          plantingSite: {
+            survivalRateIncludesTempPlots: isTemporaryPlotsChecked,
+            name: plantingSite?.name || '',
+          },
+        })
+      );
+    }
+  }, [alreadyIncluding, dispatch, isTemporaryPlotsChecked, plantingSite?.name, plantingSiteId]);
 
   const zonesWithObservations = useMemo(() => {
     if (!temporaryPlotsWithObservations) {
