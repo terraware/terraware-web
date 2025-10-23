@@ -52,7 +52,7 @@ const ActivityMediaItem = ({
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const [is412Error, setIs412Error] = useState<boolean>(false);
+  const [isPreconditionFailedError, setIsPreconditionFailedError] = useState<boolean>(false);
   const [getActivityMediaRequestId, setGetActivityMediaRequestId] = useState<string>('');
 
   const getActivityMediaRequest = useAppSelector(selectActivityMediaGet(getActivityMediaRequestId));
@@ -220,11 +220,11 @@ const ActivityMediaItem = ({
       // check if the error is a 412 (Precondition Failed) - video is still processing
       const errorData = getActivityMediaRequest.data as { error?: string; statusCode?: number };
       if (errorData.statusCode === 412) {
-        setIs412Error(true);
+        setIsPreconditionFailedError(true);
 
         // retry after one minute
         const timeoutId = setTimeout(() => {
-          setIs412Error(false);
+          setIsPreconditionFailedError(false);
           setGetActivityMediaRequestId('');
         }, 60000);
 
@@ -236,7 +236,7 @@ const ActivityMediaItem = ({
   }, [getActivityMediaRequest]);
 
   // only show processing fallback if this is a video with a 412 error
-  if (mediaFile.type === 'Video' && is412Error) {
+  if (mediaFile.type === 'Video' && isPreconditionFailedError) {
     return (
       <Box sx={processingFallbackStyles}>
         <Typography fontSize='14px' fontWeight={600}>
