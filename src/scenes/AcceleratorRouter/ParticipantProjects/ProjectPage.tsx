@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
@@ -48,8 +49,9 @@ const ProjectPage = () => {
   const [publishedReports, setPublishedReports] = useState<PublishedReport[]>([]);
   const publishProfileResponse = useAppSelector(selectPublishFunderProject(publishRequestId));
   const snackbar = useSnackbar();
-  const { isDesktop } = useDeviceInfo();
+  const { isDesktop, isMobile } = useDeviceInfo();
 
+  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
@@ -142,6 +144,10 @@ const ProjectPage = () => {
     goToAcceleratorActivityCreate(projectData.projectId);
   }, [goToAcceleratorActivityCreate, projectData.projectId]);
 
+  const openActivityHighlightsPreview = useCallback(() => {
+    console.log('TODO: open activity highlights preview');
+  }, []);
+
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
 
   const publishProfile = useCallback(() => {
@@ -212,16 +218,35 @@ const ProjectPage = () => {
           )}
 
           {activeTab === 'activityLog' && isAllowedCreateActivities && !activityId && (
-            <Button
-              icon='plus'
-              id='addActivity'
-              label={strings.ADD_ACTIVITY}
-              onClick={goToProjectActivityCreate}
-              priority='primary'
-              size='medium'
-              sx={{ whiteSpace: 'nowrap' }}
-              type='productive'
-            />
+            <Box
+              alignItems='center'
+              display='flex'
+              flexDirection='row'
+              flexWrap={isMobile ? 'wrap' : 'nowrap'}
+              justifyContent={isDesktop ? 'flex-end' : 'flex-start'}
+            >
+              <Button
+                icon='plus'
+                id='addActivity'
+                label={strings.ADD_ACTIVITY}
+                onClick={goToProjectActivityCreate}
+                priority='primary'
+                size='medium'
+                sx={{ minWidth: '160px', whiteSpace: 'nowrap' }}
+                type='productive'
+              />
+              {isActivityHighlightEnabled && (
+                <Button
+                  id='previewHighlights'
+                  label={strings.PREVIEW_HIGHLIGHTS}
+                  onClick={openActivityHighlightsPreview}
+                  priority='secondary'
+                  size='medium'
+                  sx={{ minWidth: '180px', whiteSpace: 'nowrap' }}
+                  type='productive'
+                />
+              )}
+            </Box>
           )}
 
           {activeTab === 'documents' && (
@@ -245,11 +270,14 @@ const ProjectPage = () => {
       goToDocumentNew,
       goToProjectActivityCreate,
       goToProjectEdit,
+      isActivityHighlightEnabled,
       isAllowedCreateActivities,
       isAllowedEdit,
       isAllowedPublish,
       isDesktop,
+      isMobile,
       onOptionItemClick,
+      openActivityHighlightsPreview,
       theme,
     ]
   );
