@@ -1,3 +1,4 @@
+1d16de81039 Fixed map drawer size (#4645)
 5d76828665c SW-7537 Add "set" and "not set" icon indicators next to settings link in Observations page (#4642)
 949270ccbe2 SW-7536 Added pagination for multi-select of plants/photos in plant dashboard (#4643)
 cb67dbe953f SW-7568 Update some survival rate copy (#4641)
