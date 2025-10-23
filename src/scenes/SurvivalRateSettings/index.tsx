@@ -170,6 +170,7 @@ const SurvivalRateSettings = () => {
                 t0SiteData={t0SiteData}
                 zonesWithObservations={zonesWithObservations}
                 withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+                including={t0SiteData?.survivalRateIncludesTempPlots}
               />
             ),
           },
@@ -285,7 +286,7 @@ const SurvivalRateSettings = () => {
               </Typography>
             )}
 
-            {(temporaryPlots?.length || 0) > 0 && (
+            {(temporaryPlots?.length || 0) > 0 && t0SiteData?.survivalRateIncludesTempPlots && (
               <>
                 <Box
                   height={'32px'}
