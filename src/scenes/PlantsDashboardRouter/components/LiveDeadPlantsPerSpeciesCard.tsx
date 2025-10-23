@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import PieChart from 'src/components/common/Chart/PieChart';
+import isEnabled from 'src/features';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
@@ -21,6 +22,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   >();
   const [showChart, setShowChart] = useState(false);
   const { observationSummaries } = usePlantingSiteData();
+  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   useEffect(() => {
     if (observationSummaries?.[0]) {
@@ -49,15 +51,24 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
 
       if (selectedObservationSpecies) {
         setShowChart(true);
-        const dead = selectedObservationSpecies.cumulativeDead;
-        const live = selectedObservationSpecies.permanentLive;
+        let live = 0;
+        let dead = 0;
+        if (isSurvivalRateCalculationEnabled) {
+          if (selectedObservationSpecies.survivalRate) {
+            live = selectedObservationSpecies.survivalRate;
+            dead = 100 - live;
+          }
+        } else {
+          dead = selectedObservationSpecies.cumulativeDead;
+          live = selectedObservationSpecies.permanentLive;
+        }
         setValues([live, dead]);
       }
     } else {
       setLabels([]);
       setValues([]);
     }
-  }, [selectedSpecies, observationSummaries]);
+  }, [selectedSpecies, observationSummaries, isSurvivalRateCalculationEnabled]);
 
   return (
     <Box display='flex' flexDirection='column'>
