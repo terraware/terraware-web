@@ -1,7 +1,11 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Survival Rate Calculation' | 'Activity Video Support';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Survival Rate Calculation'
+  | 'Activity Video Support'
+  | 'Activity Log Highlights';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +55,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for video files in activity logs'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Activity Log Highlights',
+    preferenceName: 'activityLogHighlights',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Support for activity highlights in activity logs'],
     disclosure: ['This is a WIP'],
   },
 ];

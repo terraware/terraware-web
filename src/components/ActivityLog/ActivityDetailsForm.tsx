@@ -11,6 +11,7 @@ import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
@@ -118,6 +119,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
+  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
@@ -638,7 +640,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Grid>
             )}
 
-            {isAcceleratorRoute && (
+            {isAcceleratorRoute && isActivityHighlightEnabled && (
               <Grid item xs={12}>
                 <Checkbox
                   id='isHighlight'
