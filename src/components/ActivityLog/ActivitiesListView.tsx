@@ -4,6 +4,7 @@ import { MapRef } from 'react-map-gl/mapbox';
 import { Box, Grid, Pagination, Typography, useTheme } from '@mui/material';
 import { Icon, PillList, PillListItem } from '@terraware/web-components';
 
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
@@ -52,6 +53,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
 
@@ -107,7 +109,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
         </Box>
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
           <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}</Box>
-          {activity.isHighlight && isAcceleratorRoute && (
+          {activity.isHighlight && isAcceleratorRoute && isActivityHighlightEnabled && (
             <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
           )}
         </Box>
