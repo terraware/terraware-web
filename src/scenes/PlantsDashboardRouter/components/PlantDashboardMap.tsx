@@ -5,6 +5,7 @@ import { Box, useTheme } from '@mui/material';
 
 import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
+import MapDrawerPagination from 'src/components/NewMap/MapDrawerPagination';
 import {
   MapFillComponentStyle,
   MapLayer,
@@ -28,7 +29,6 @@ import {
 import { PlantingSite } from 'src/types/Tracking';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
-import MapDrawerPagination from './MapDrawerPagination';
 import MapPhotoDrawer from './MapPhotoDrawer';
 import MapPlantDrawer from './MapPlantDrawer';
 import MapStatsDrawer from './MapStatsDrawer';
@@ -220,9 +220,16 @@ const PlantDashboardMap = ({
     if (selectedPhotos.length > 1 || selectedPlants.length > 1) {
       const totalPages = Math.max(selectedPhotos.length, selectedPlants.length);
 
-      return <MapDrawerPagination page={drawerPage} setPage={setDrawerPage} totalPages={totalPages} />;
+      return (
+        <MapDrawerPagination
+          drawerSize={drawerSize}
+          page={drawerPage}
+          setPage={setDrawerPage}
+          totalPages={totalPages}
+        />
+      );
     }
-  }, [drawerPage, selectedPhotos.length, selectedPlants.length]);
+  }, [drawerPage, drawerSize, selectedPhotos.length, selectedPlants.length]);
 
   const extractFeaturesFromSite = useCallback(
     (
