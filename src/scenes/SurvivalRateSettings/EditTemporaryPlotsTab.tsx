@@ -146,7 +146,7 @@ const EditTemporaryPlotsTab = ({
       });
     });
 
-    if (shouldShowWarning) {
+    if (isTemporaryPlotsChecked && shouldShowWarning) {
       setShowSpeciesDensityWarningMessage(true);
       return;
     }
@@ -154,7 +154,15 @@ const EditTemporaryPlotsTab = ({
     updatePlantingSiteSetting();
     const saveRequest = dispatch(requestAssignT0TempSiteData(record));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, goToViewSettings, record, updatePlantingSiteSetting, withdrawnSpeciesPlots, zonesWithObservations]);
+  }, [
+    dispatch,
+    goToViewSettings,
+    isTemporaryPlotsChecked,
+    record,
+    updatePlantingSiteSetting,
+    withdrawnSpeciesPlots,
+    zonesWithObservations,
+  ]);
 
   const onChangeTemporaryPlotsCheck = useCallback(
     (value: boolean) => {

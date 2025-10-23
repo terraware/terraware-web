@@ -25,7 +25,6 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { SiteT0Data } from 'src/types/Tracking';
-import useQuery from 'src/utils/useQuery';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';
@@ -50,7 +49,6 @@ const SurvivalRateSettings = () => {
     plantingSiteId: string;
   }>();
   const theme = useTheme();
-  const query = useQuery();
 
   const plantingSiteId = Number(params.plantingSiteId);
 
@@ -170,6 +168,7 @@ const SurvivalRateSettings = () => {
                 t0SiteData={t0SiteData}
                 zonesWithObservations={zonesWithObservations}
                 withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+                including={t0SiteData?.survivalRateIncludesTempPlots}
               />
             ),
           },
@@ -254,15 +253,8 @@ const SurvivalRateSettings = () => {
     [activeLocale]
   );
 
-  const showCrumbs = useMemo(() => {
-    return query.get('fromObservationsPage');
-  }, [query]);
-
   return (
-    <Page
-      crumbs={showCrumbs ? crumbs : undefined}
-      title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}
-    >
+    <Page crumbs={crumbs} title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
       <Card radius='8px'>
         <SurvivalRateInstructions />
         <Box width={'100%'} display='flex' justifyContent={'space-between'} alignItems={'center'}>
@@ -285,7 +277,7 @@ const SurvivalRateSettings = () => {
               </Typography>
             )}
 
-            {(temporaryPlots?.length || 0) > 0 && (
+            {(temporaryPlots?.length || 0) > 0 && t0SiteData?.survivalRateIncludesTempPlots && (
               <>
                 <Box
                   height={'32px'}

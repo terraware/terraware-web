@@ -933,6 +933,7 @@ LOG_OUT,Déconnexion,48c18649
 LONG_TERM_PERMANENT,Long terme/Permanent,566657d6
 LOSS_RATE,Taux de perte,544aa2af
 LOWEST,Les plus faibles,b651e8a7
+MAKE_HIGHLIGHT,Créer une mise en avant,c3fda88f
 MANAGE_COLUMNS,Gérer les colonnes,1dba3733
 MANAGED_LOCATION_TYPE_NURSERY,Pépinière,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Site de plantation,ee55d884
@@ -2075,6 +2076,7 @@ TOOLTIP_VIABILITY_TEST_TREATMENT,"Les agents et techniques biologiques, physique
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total des accessions actives,8950dbea
 TOTAL_DENSITY_TOOLTIP,Densité totale de plantation (plants/ha) des valeurs saisies ci-dessus.,edb8e740
+TOTAL_DENSITY_VIEW_TOOLTIP,Total de la densité des plants de toutes les espèces répertoriées.,528e094c
 TOTAL_EXPANSION_POTENTIAL,Potentiel total d'expansion (ha),51e2b16e
 TOTAL_HECTARES_PLANTED,Nombre total d’hectares plantés,5410325f
 TOTAL_HECTARES_PLANTED_TOOLTIP,Il s’agit du nombre total d’hectares marqués comme « Plantation terminée » dans ce site de plantation.,1dd1dbf3

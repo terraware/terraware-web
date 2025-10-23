@@ -934,6 +934,7 @@ LOG_OUT,Cerrar sesión,48c18649
 LONG_TERM_PERMANENT,A largo plazo/permanente,566657d6
 LOSS_RATE,Tasa de pérdidas,544aa2af
 LOWEST,Más baja,b651e8a7
+MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
 MANAGED_LOCATION_TYPE_NURSERY,Vivero,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Sitio de plantación,ee55d884
@@ -2076,6 +2077,7 @@ TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos 
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,8950dbea
 TOTAL_DENSITY_TOOLTIP,Densidad total de plantas (plantas/ha) de los valores ingresados arriba.,edb8e740
+TOTAL_DENSITY_VIEW_TOOLTIP,Total de las densidades de plantas de todas las especies listadas.,528e094c
 TOTAL_EXPANSION_POTENTIAL,Potencial de expansión total (ha),51e2b16e
 TOTAL_HECTARES_PLANTED,Total de hectáreas plantadas,5410325f
 TOTAL_HECTARES_PLANTED_TOOLTIP,"Este es el número total de hectáreas marcadas con ""Plantación completa"" en este lugar de plantación.",1dd1dbf3
