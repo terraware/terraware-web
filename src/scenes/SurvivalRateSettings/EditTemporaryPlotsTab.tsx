@@ -71,7 +71,7 @@ const EditTemporaryPlotsTab = ({
   }, [navigate, plantingSiteId]);
 
   const updatePlantingSiteSetting = useCallback(() => {
-    if (isTemporaryPlotsChecked) {
+    if (alreadyIncluding !== isTemporaryPlotsChecked) {
       void dispatch(
         updatePlantingSite({
           id: plantingSiteId,
@@ -82,7 +82,7 @@ const EditTemporaryPlotsTab = ({
         })
       );
     }
-  }, [dispatch, isTemporaryPlotsChecked, plantingSite, plantingSiteId]);
+  }, [alreadyIncluding, dispatch, isTemporaryPlotsChecked, plantingSite?.name, plantingSiteId]);
 
   const zonesWithObservations = useMemo(() => {
     if (!temporaryPlotsWithObservations) {
