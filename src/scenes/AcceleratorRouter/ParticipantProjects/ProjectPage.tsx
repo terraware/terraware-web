@@ -304,6 +304,7 @@ const ProjectPage = () => {
         {highlightsModalOpen && (
           <ActivityHighlightsModal
             open={highlightsModalOpen}
+            projectId={projectData.projectId}
             setOpen={setHighlightsModalOpen}
             title={projectData.participantProject?.dealName}
           />
