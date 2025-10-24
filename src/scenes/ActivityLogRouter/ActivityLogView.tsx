@@ -124,6 +124,7 @@ export default function ActivityLogView(): JSX.Element {
           />
           {isActivityHighlightEnabled && (
             <Button
+              disabled={!projectId}
               id='previewHighlights'
               label={strings.PREVIEW_HIGHLIGHTS}
               onClick={openActivityHighlightsPreview}
