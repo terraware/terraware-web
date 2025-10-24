@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/156</span>
+                <span class='fraction'>0/167</span>
             </div>
         
             
@@ -730,7 +730,19 @@
 <a name='L665'></a><a href='#L665'>665</a>
 <a name='L666'></a><a href='#L666'>666</a>
 <a name='L667'></a><a href='#L667'>667</a>
-<a name='L668'></a><a href='#L668'>668</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L668'></a><a href='#L668'>668</a>
+<a name='L669'></a><a href='#L669'>669</a>
+<a name='L670'></a><a href='#L670'>670</a>
+<a name='L671'></a><a href='#L671'>671</a>
+<a name='L672'></a><a href='#L672'>672</a>
+<a name='L673'></a><a href='#L673'>673</a>
+<a name='L674'></a><a href='#L674'>674</a>
+<a name='L675'></a><a href='#L675'>675</a>
+<a name='L676'></a><a href='#L676'>676</a>
+<a name='L677'></a><a href='#L677'>677</a>
+<a name='L678'></a><a href='#L678'>678</a>
+<a name='L679'></a><a href='#L679'>679</a>
+<a name='L680'></a><a href='#L680'>680</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1256,6 +1268,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1401,7 +1425,7 @@
 import { MapRef } from 'react-map-gl/mapbox';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
@@ -1968,13 +1992,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
           onActivityMarkerClick={onActivityMarkerClick}
         &gt;
           &lt;Grid container spacing={2} textAlign='left'&gt;
-            &lt;Grid item md={8} xs={12}&gt;
-              &lt;Typography fontSize='20px' fontWeight='bold' variant='h2'&gt;
-                {secondaryHeader}
-              &lt;/Typography&gt;
-            &lt;/Grid&gt;
-&nbsp;
-            &lt;Grid item md={4} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}&gt;
+            &lt;Grid item xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}&gt;
               {isEditing &amp;&amp; activity &amp;&amp; isAllowedDeleteActivitiesNonPublished &amp;&amp; (
                 &lt;Button
                   label={strings.DELETE_ACTIVITY}
@@ -1986,7 +2004,25 @@ export default function <span class="fstat-no" title="function not covered" >Act
             &lt;/Grid&gt;
 &nbsp;
             &lt;Grid item xs={12}&gt;
-              {isAcceleratorRoute &amp;&amp; isEditing &amp;&amp; activity &amp;&amp; &lt;ActivityStatusBadges activity={activity} /&gt;}
+              &lt;Box
+                display='flex'
+                alignItems={isMobile ? 'start' : 'center'}
+                flexDirection={isMobile ? 'column' : 'row'}
+              &gt;
+                &lt;Typography fontSize='20px' fontWeight='bold' variant='h2'&gt;
+                  {secondaryHeader}
+                &lt;/Typography&gt;
+                {isAcceleratorRoute &amp;&amp; isEditing &amp;&amp; activity &amp;&amp; (
+                  &lt;Box display='flex' alignItems={'center'} paddingTop={isMobile ? theme.spacing(3) : 0}&gt;
+                    &lt;Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}&gt;
+                      &lt;ActivityStatusBadges activity={activity} /&gt;
+                    &lt;/Box&gt;
+                    {activity.isHighlight &amp;&amp; isActivityHighlightEnabled &amp;&amp; (
+                      &lt;Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} /&gt;
+                    )}
+                  &lt;/Box&gt;
+                )}
+              &lt;/Box&gt;
             &lt;/Grid&gt;
 &nbsp;
             &lt;Grid item lg={6} xs={12}&gt;
@@ -2071,7 +2107,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T16:19:42.690Z
+                at 2025-10-24T19:19:06.606Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
