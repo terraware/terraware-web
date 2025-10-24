@@ -144,6 +144,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
             <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
               {strings.CANNOT_BE_CALCULATED}
             </Typography>
+            <Box height={'36px'} />
           </Box>
           <Box
             sx={{
@@ -158,6 +159,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
             <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
               {strings.CANNOT_BE_CALCULATED}
             </Typography>
+            <Box height={'36px'} />
           </Box>
         </>
       )}
