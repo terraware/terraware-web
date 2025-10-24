@@ -4,14 +4,14 @@ import { Box } from '@mui/material';
 import DialogBox, { DialogBoxSize } from '@terraware/web-components/components/DialogBox/DialogBox';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-type HighlightsModalProps = {
+type ActivityHighlightsModalProps = {
   onCancel?: () => void;
   open: boolean;
   setOpen: (open: boolean) => void;
   title?: string;
 };
 
-const HighlightsModal = ({ open, setOpen, onCancel, title = '' }: HighlightsModalProps) => {
+const ActivityHighlightsModal = ({ open, setOpen, onCancel, title = '' }: ActivityHighlightsModalProps) => {
   const { isMobile, isTablet } = useDeviceInfo();
 
   const onClose = useCallback(() => {
@@ -38,4 +38,4 @@ const HighlightsModal = ({ open, setOpen, onCancel, title = '' }: HighlightsModa
   );
 };
 
-export default HighlightsModal;
+export default ActivityHighlightsModal;

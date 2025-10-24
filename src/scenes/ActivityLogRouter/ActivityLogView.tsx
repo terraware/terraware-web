@@ -4,7 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
-import HighlightsModal from 'src/components/ActivityLog/HighlightsModal';
+import ActivityHighlightsModal from 'src/components/ActivityLog/ActivityHighlightsModal';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
@@ -160,7 +160,11 @@ export default function ActivityLogView(): JSX.Element {
         titleContainerStyle={{ minHeight: '56px' }}
       >
         {highlightsModalOpen && (
-          <HighlightsModal open={highlightsModalOpen} setOpen={setHighlightsModalOpen} title={projectDealName} />
+          <ActivityHighlightsModal
+            open={highlightsModalOpen}
+            setOpen={setHighlightsModalOpen}
+            title={projectDealName}
+          />
         )}
         <Card
           style={{

@@ -4,7 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import HighlightsModal from 'src/components/ActivityLog/HighlightsModal';
+import ActivityHighlightsModal from 'src/components/ActivityLog/ActivityHighlightsModal';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import isEnabled from 'src/features';
@@ -302,7 +302,7 @@ const ProjectPage = () => {
         rightComponent={rightComponent}
       >
         {highlightsModalOpen && (
-          <HighlightsModal
+          <ActivityHighlightsModal
             open={highlightsModalOpen}
             setOpen={setHighlightsModalOpen}
             title={projectData.participantProject?.dealName}
