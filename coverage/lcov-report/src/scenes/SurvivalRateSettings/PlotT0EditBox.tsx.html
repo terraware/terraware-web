@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/141</span>
+                <span class='fraction'>0/145</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/119</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
@@ -573,7 +573,15 @@
 <a name='L508'></a><a href='#L508'>508</a>
 <a name='L509'></a><a href='#L509'>509</a>
 <a name='L510'></a><a href='#L510'>510</a>
-<a name='L511'></a><a href='#L511'>511</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L511'></a><a href='#L511'>511</a>
+<a name='L512'></a><a href='#L512'>512</a>
+<a name='L513'></a><a href='#L513'>513</a>
+<a name='L514'></a><a href='#L514'>514</a>
+<a name='L515'></a><a href='#L515'>515</a>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a>
+<a name='L518'></a><a href='#L518'>518</a>
+<a name='L519'></a><a href='#L519'>519</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -786,7 +794,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1295,9 +1311,17 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
 <span class="cstat-no" title="statement not covered" >    setNewSpeciesRows(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >[...prev, { id: newRowId, density: '' }])</span>;</span>
   }, []);
 &nbsp;
-  const onNewSpeciesChange = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(r</span>owId: string, speciesId: number) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setNewSpeciesRows(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >prev.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt; (<span class="cstat-no" title="statement not covered" >row.id === rowId ? { ...row, speciesId } : row)</span>))</span>;</span>
-  }, []);
+  const onNewSpeciesChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (r</span>owId: string, speciesId: number) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setNewSpeciesRows(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >prev.map(<span class="fstat-no" title="function not covered" >(i</span>Row) =&gt; (<span class="cstat-no" title="statement not covered" >iRow.id === rowId ? { ...iRow, speciesId } : iRow)</span>))</span>;</span>
+      // If density was already entered before selecting species, save it to the record
+      const row = <span class="cstat-no" title="statement not covered" >newSpeciesRows.find(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.id === rowId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      if (row?.density) {</span>
+<span class="cstat-no" title="statement not covered" >        onChangeDensity(speciesId.toString(), row.density);</span>
+      }
+    },
+    [newSpeciesRows, onChangeDensity]
+  );
 &nbsp;
   const onNewSpeciesDensityChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (r</span>owId: string, density: string) =&gt; {
@@ -1600,7 +1624,7 @@ export default PlotT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-23T22:37:50.301Z
+                at 2025-10-24T16:19:42.690Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

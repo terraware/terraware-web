@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/110</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/106</span>
+                <span class='fraction'>0/107</span>
             </div>
         
             
@@ -569,7 +569,10 @@
 <a name='L504'></a><a href='#L504'>504</a>
 <a name='L505'></a><a href='#L505'>505</a>
 <a name='L506'></a><a href='#L506'>506</a>
-<a name='L507'></a><a href='#L507'>507</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -908,6 +911,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -990,6 +994,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1414,6 +1420,7 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
   const [mediaStream, setMediaStream] = <span class="cstat-no" title="statement not covered" >useState&lt;{ playbackId: string; playbackToken: string } | undefined&gt;();</span>
 &nbsp;
   const getActivityMediaStreamRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectActivityMediaStreamGet(getActivityMediaStreamRequestId));</span>
+  const isActivityHighlightEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Activity Log Highlights');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (activity?.verifiedBy &amp;&amp; !verifiedByUser) {</span>
@@ -1503,12 +1510,6 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
             &lt;BreadCrumbs crumbs={crumbs} /&gt;
           &lt;/Box&gt;
         )}
-&nbsp;
-        &lt;Box display='flex' flexDirection='row' alignItems='center'&gt;
-          &lt;Typography fontSize='24px' fontWeight={600} lineHeight='32px'&gt;
-            {activityType}
-          &lt;/Typography&gt;
-        &lt;/Box&gt;
       &lt;/Grid&gt;
 &nbsp;
       &lt;Grid item md={4} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}&gt;
@@ -1524,11 +1525,19 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
         )}
       &lt;/Grid&gt;
 &nbsp;
-      {isAcceleratorRoute &amp;&amp; (
-        &lt;Grid item xs={12}&gt;
-          &lt;ActivityStatusBadges activity={activity} /&gt;
-        &lt;/Grid&gt;
-      )}
+      &lt;Grid item&gt;
+        &lt;Box display='flex' flexDirection='row' alignItems='center'&gt;
+          &lt;Typography fontSize='24px' fontWeight={600} lineHeight='32px'&gt;
+            {activityType}
+          &lt;/Typography&gt;
+          &lt;Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}&gt;
+            {isAcceleratorRoute &amp;&amp; &lt;ActivityStatusBadges activity={activity} /&gt;}
+          &lt;/Box&gt;
+          {activity.isHighlight &amp;&amp; isActivityHighlightEnabled &amp;&amp; (
+            &lt;Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} /&gt;
+          )}
+        &lt;/Box&gt;
+      &lt;/Grid&gt;
 &nbsp;
       &lt;Grid item xs={12}&gt;
         &lt;Typography&gt;
@@ -1588,7 +1597,7 @@ export default ActivityDetailView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-23T22:37:50.301Z
+                at 2025-10-24T16:19:42.690Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

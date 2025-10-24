@@ -1,2 +1,6 @@
-6b0c8317b98 SW-7400 Used custom pagination toolbar for the small drawer (#4659)
-b0dab133998 SW-7326: FE: Video Support (Video Playback) (#4644)
+d6aea7d3a74 SW-7589 Add star icon in activity detail view (#4664)
+4b1e0ff0fca SW-7537 Hide set icon if no observations (#4666)
+26b71da0ed9 SW-7594 Species not added if plant density is added before species is selected for species added using "Add Species" (#4663)
+001651fcb8c SW-7578 Fix warning about values not set for all species in zone not shown (#4662)
+6ea8a527b0d SW-7572 Make empty survival rate boxes same size (#4661)
+305812bd79f Remove period in copy (#4660)
