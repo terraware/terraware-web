@@ -105,7 +105,7 @@ const EditTemporaryPlotsTab = ({
   }, [temporaryPlotsWithObservations]);
 
   const saveSettings = useCallback(() => {
-    if (!record.zones || record.zones.length === 0) {
+    if (Object.entries(zonesWithObservations).length === 0) {
       goToViewSettings();
       return;
     }

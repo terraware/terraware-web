@@ -337,6 +337,7 @@ const ActivityDetailView = ({
   const [mediaStream, setMediaStream] = useState<{ playbackId: string; playbackToken: string } | undefined>();
 
   const getActivityMediaStreamRequest = useAppSelector(selectActivityMediaStreamGet(getActivityMediaStreamRequestId));
+  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   useEffect(() => {
     if (activity?.verifiedBy && !verifiedByUser) {
@@ -426,12 +427,6 @@ const ActivityDetailView = ({
             <BreadCrumbs crumbs={crumbs} />
           </Box>
         )}
-
-        <Box display='flex' flexDirection='row' alignItems='center'>
-          <Typography fontSize='24px' fontWeight={600} lineHeight='32px'>
-            {activityType}
-          </Typography>
-        </Box>
       </Grid>
 
       <Grid item md={4} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
@@ -447,11 +442,19 @@ const ActivityDetailView = ({
         )}
       </Grid>
 
-      {isAcceleratorRoute && (
-        <Grid item xs={12}>
-          <ActivityStatusBadges activity={activity} />
-        </Grid>
-      )}
+      <Grid item>
+        <Box display='flex' flexDirection='row' alignItems='center'>
+          <Typography fontSize='24px' fontWeight={600} lineHeight='32px'>
+            {activityType}
+          </Typography>
+          <Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}>
+            {isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}
+          </Box>
+          {activity.isHighlight && isActivityHighlightEnabled && isAcceleratorRoute && (
+            <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
+          )}
+        </Box>
+      </Grid>
 
       <Grid item xs={12}>
         <Typography>

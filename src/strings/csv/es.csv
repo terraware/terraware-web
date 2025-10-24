@@ -774,6 +774,7 @@ HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
 HIDE_ON_MAP,Ocultar en el mapa,089ea8d7
 HIGHEST,Más alta,5c2f89d6
+HIGHLIGHTED_ACTIVITY,Actividad destacada,483c0ed0
 HIGHLIGHTS,Destacados,a76b6c49
 HISTORY,Historial,fe7205b3
 HOME,Inicio,8e2553bd
@@ -1137,7 +1138,7 @@ NUMBER_OF_PHOTOS,Número de fotos,643d471f
 NUMBER_OF_PLANTS,Número de plantas,41fe8f14
 NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION,Número de parcelas en la observación más reciente,ce786371
 NUMBER_OF_PLOTS_SET_FOR_PERMANENT_PLOTS,t0 establecido para {0} de {1} Parcelas Permanentes,8a4987bd
-NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,t0 establecido para {0} de {1} Zonas de Parcelas Temporales,5633c114
+NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,t0 establecido para {0} de {1} Zonas de Parcelas Temporales,e54f563a
 NUMBER_OF_SEEDS_COMPROMISED,# semillas afectadas,aee08b67
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *,44a0ef6a
 NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas,aee08b67
@@ -2078,7 +2079,7 @@ TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos 
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,8950dbea
 TOTAL_DENSITY_TOOLTIP,Densidad total de plantas (plantas/ha) de los valores ingresados arriba.,edb8e740
-TOTAL_DENSITY_VIEW_TOOLTIP,Total de las densidades de plantas de todas las especies listadas.,528e094c
+TOTAL_DENSITY_VIEW_TOOLTIP,Total de las densidades de plantas de todas las especies listadas,04705106
 TOTAL_EXPANSION_POTENTIAL,Potencial de expansión total (ha),51e2b16e
 TOTAL_HECTARES_PLANTED,Total de hectáreas plantadas,5410325f
 TOTAL_HECTARES_PLANTED_TOOLTIP,"Este es el número total de hectáreas marcadas con ""Plantación completa"" en este lugar de plantación.",1dd1dbf3

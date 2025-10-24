@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, Grid, Pagination, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Pagination, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, PillList, PillListItem } from '@terraware/web-components';
 
 import isEnabled from 'src/features';
@@ -110,7 +110,11 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
           <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}</Box>
           {activity.isHighlight && isAcceleratorRoute && isActivityHighlightEnabled && (
-            <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
+            <Tooltip title={strings.HIGHLIGHTED_ACTIVITY}>
+              <Box display='inline-flex'>
+                <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
+              </Box>
+            </Tooltip>
           )}
         </Box>
 
