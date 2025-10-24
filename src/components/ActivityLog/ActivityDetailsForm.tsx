@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
@@ -569,13 +569,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           onActivityMarkerClick={onActivityMarkerClick}
         >
           <Grid container spacing={2} textAlign='left'>
-            <Grid item md={8} xs={12}>
-              <Typography fontSize='20px' fontWeight='bold' variant='h2'>
-                {secondaryHeader}
-              </Typography>
-            </Grid>
-
-            <Grid item md={4} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+            <Grid item xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
               {isEditing && activity && isAllowedDeleteActivitiesNonPublished && (
                 <Button
                   label={strings.DELETE_ACTIVITY}
@@ -587,7 +581,25 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             </Grid>
 
             <Grid item xs={12}>
-              {isAcceleratorRoute && isEditing && activity && <ActivityStatusBadges activity={activity} />}
+              <Box
+                display='flex'
+                alignItems={isMobile ? 'start' : 'center'}
+                flexDirection={isMobile ? 'column' : 'row'}
+              >
+                <Typography fontSize='20px' fontWeight='bold' variant='h2'>
+                  {secondaryHeader}
+                </Typography>
+                {isAcceleratorRoute && isEditing && activity && (
+                  <Box display='flex' alignItems={'center'} paddingTop={isMobile ? theme.spacing(3) : 0}>
+                    <Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}>
+                      <ActivityStatusBadges activity={activity} />
+                    </Box>
+                    {activity.isHighlight && isActivityHighlightEnabled && (
+                      <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
+                    )}
+                  </Box>
+                )}
+              </Box>
             </Grid>
 
             <Grid item lg={6} xs={12}>
