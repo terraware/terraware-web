@@ -210,9 +210,17 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     setNewSpeciesRows((prev) => [...prev, { id: newRowId, density: '' }]);
   }, []);
 
-  const onNewSpeciesChange = useCallback((rowId: string, speciesId: number) => {
-    setNewSpeciesRows((prev) => prev.map((row) => (row.id === rowId ? { ...row, speciesId } : row)));
-  }, []);
+  const onNewSpeciesChange = useCallback(
+    (rowId: string, speciesId: number) => {
+      setNewSpeciesRows((prev) => prev.map((iRow) => (iRow.id === rowId ? { ...iRow, speciesId } : iRow)));
+      // If density was already entered before selecting species, save it to the record
+      const row = newSpeciesRows.find((r) => r.id === rowId);
+      if (row?.density) {
+        onChangeDensity(speciesId.toString(), row.density);
+      }
+    },
+    [newSpeciesRows, onChangeDensity]
+  );
 
   const onNewSpeciesDensityChange = useCallback(
     (rowId: string, density: string) => {
