@@ -53,7 +53,7 @@ const ActivityHighlightsModal = ({ open, setOpen, onCancel, projectId, title = '
           width='100%'
         >
           <Box alignItems='center' display='flex' flexDirection='row' justifyContent='flex-start'>
-            <Typography fontSize='24px' fontWeight={600}>
+            <Typography fontSize='24px' fontWeight={600} paddingRight='24px'>
               {title}
             </Typography>
 
