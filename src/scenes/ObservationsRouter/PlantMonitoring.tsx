@@ -168,10 +168,14 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
               >
                 {strings.SURVIVAL_RATE_SETTINGS}
               </Link>
-              {survivalRateSet ? (
-                <Icon name='success' fillColor={theme.palette.TwClrBgSuccess} />
-              ) : (
-                <Icon name='iconUnavailable' fillColor={theme.palette.TwClrBgDanger} />
+              {selectedPlantingSite?.id !== -1 && (observationsResults?.length || 0) > 0 && (
+                <>
+                  {survivalRateSet ? (
+                    <Icon name='success' fillColor={theme.palette.TwClrBgSuccess} />
+                  ) : (
+                    <Icon name='iconUnavailable' fillColor={theme.palette.TwClrBgDanger} />
+                  )}
+                </>
               )}
             </Box>
           )}
