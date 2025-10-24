@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 import DialogBox, { DialogBoxSize } from '@terraware/web-components/components/DialogBox/DialogBox';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -43,25 +44,38 @@ const ActivityHighlightsModal = ({ open, setOpen, onCancel, projectId, title = '
       }}
     >
       <DialogBox onClose={onClose} open={open} size={dialogSize} skrim title={title}>
-        <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center'>
-          <Typography fontSize='24px' fontWeight={600} marginBottom='24px'>
-            {title}
-          </Typography>
-          {/* TODO: render quarter dropdown here */}
-          {/* TODO: render close modal button (use 'x' icon) */}
+        <Box
+          alignItems='center'
+          display='flex'
+          flexDirection='row'
+          justifyContent='space-between'
+          marginBottom='24px'
+          width='100%'
+        >
+          <Box alignItems='center' display='flex' flexDirection='row' justifyContent='flex-start'>
+            <Typography fontSize='24px' fontWeight={600}>
+              {title}
+            </Typography>
+
+            <Typography>TODO: render quarter dropdown</Typography>
+          </Box>
+
+          <IconButton onClick={onClose}>
+            <Icon name='close' size='medium' />
+          </IconButton>
         </Box>
 
         <MapSplitView
           activities={[]}
           // activityMarkerHighlighted={activityMarkerHighlighted}
           drawerRef={mapDrawerRef}
-          mapRef={mapRef}
-          // heightOffsetPx={overrideHeightOffsetPx ?? 256}
           heightOffsetPx={204}
+          // heightOffsetPx={overrideHeightOffsetPx ?? 256}
+          mapRef={mapRef}
           // onActivityMarkerClick={onActivityMarkerClick}
           projectId={projectId}
         >
-          <p>TODO: render activity highlights</p>
+          <Typography>TODO: render activity highlights</Typography>
         </MapSplitView>
       </DialogBox>
     </Box>
