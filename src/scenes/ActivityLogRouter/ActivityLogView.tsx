@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
+import HighlightsModal from 'src/components/ActivityLog/HighlightsModal';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
@@ -30,6 +31,7 @@ export default function ActivityLogView(): JSX.Element {
 
   const [activityId, setActivityId] = useState<number>();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
+  const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
@@ -56,6 +58,11 @@ export default function ActivityLogView(): JSX.Element {
       .sort((a, b) => a.dealName!.localeCompare(b.dealName!, activeLocale || undefined));
   }, [activeLocale, participantProjects]);
 
+  const projectDealName = useMemo(() => {
+    const project = availableProjects.find((p) => p.id === projectId);
+    return project?.dealName || '';
+  }, [availableProjects, projectId]);
+
   const goToProjectActivityCreate = useCallback(() => {
     if (!projectId) {
       return;
@@ -69,7 +76,7 @@ export default function ActivityLogView(): JSX.Element {
   }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectId]);
 
   const openActivityHighlightsPreview = useCallback(() => {
-    console.log('TODO: open activity highlights preview');
+    setHighlightsModalOpen(true);
   }, []);
 
   useEffect(() => {
@@ -143,23 +150,28 @@ export default function ActivityLogView(): JSX.Element {
   );
 
   return (
-    <Page
-      hierarchicalCrumbs={false}
-      isLoading={isAcceleratorRoute && participantProjectsLoading}
-      leftComponent={PageHeaderLeftComponent}
-      rightComponent={PageHeaderRightComponent}
-      title={strings.ACTIVITY_LOG}
-      titleContainerStyle={{ minHeight: '56px' }}
-    >
-      <Card
-        style={{
-          borderRadius: theme.spacing(1),
-          padding: theme.spacing(3),
-          width: '100%',
-        }}
+    <>
+      <Page
+        hierarchicalCrumbs={false}
+        isLoading={isAcceleratorRoute && participantProjectsLoading}
+        leftComponent={PageHeaderLeftComponent}
+        rightComponent={PageHeaderRightComponent}
+        title={strings.ACTIVITY_LOG}
+        titleContainerStyle={{ minHeight: '56px' }}
       >
-        {projectId && <ActivitiesListView projectId={projectId} />}
-      </Card>
-    </Page>
+        {highlightsModalOpen && (
+          <HighlightsModal open={highlightsModalOpen} setOpen={setHighlightsModalOpen} title={projectDealName} />
+        )}
+        <Card
+          style={{
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(3),
+            width: '100%',
+          }}
+        >
+          {projectId && <ActivitiesListView projectId={projectId} />}
+        </Card>
+      </Page>
+    </>
   );
 }

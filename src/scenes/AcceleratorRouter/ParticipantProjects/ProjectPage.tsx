@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import HighlightsModal from 'src/components/ActivityLog/HighlightsModal';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import isEnabled from 'src/features';
@@ -57,6 +58,7 @@ const ProjectPage = () => {
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
 
   const [activityId, setActivityId] = useState<number>();
+  const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
 
   useEffect(() => {
     const _activityId = query.get('activityId');
@@ -145,7 +147,7 @@ const ProjectPage = () => {
   }, [goToAcceleratorActivityCreate, projectData.projectId]);
 
   const openActivityHighlightsPreview = useCallback(() => {
-    console.log('TODO: open activity highlights preview');
+    setHighlightsModalOpen(true);
   }, []);
 
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
@@ -299,6 +301,13 @@ const ProjectPage = () => {
         hierarchicalCrumbs={false}
         rightComponent={rightComponent}
       >
+        {highlightsModalOpen && (
+          <HighlightsModal
+            open={highlightsModalOpen}
+            setOpen={setHighlightsModalOpen}
+            title={projectData.participantProject?.dealName}
+          />
+        )}
         {projectData.status === 'pending' && <BusySpinner />}
 
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
