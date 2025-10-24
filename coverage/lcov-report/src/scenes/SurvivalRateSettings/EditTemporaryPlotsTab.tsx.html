@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/88</span>
             </div>
         
             
@@ -317,7 +317,15 @@
 <a name='L252'></a><a href='#L252'>252</a>
 <a name='L253'></a><a href='#L253'>253</a>
 <a name='L254'></a><a href='#L254'>254</a>
-<a name='L255'></a><a href='#L255'>255</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -473,6 +481,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -508,6 +520,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -725,8 +741,12 @@ const EditTemporaryPlotsTab = <span class="cstat-no" title="statement not covere
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    updatePlantingSiteSetting();</span>
-    const saveRequest = <span class="cstat-no" title="statement not covered" >dispatch(requestAssignT0TempSiteData(record));</span>
-<span class="cstat-no" title="statement not covered" >    setAssignRequestId(saveRequest.requestId);</span>
+<span class="cstat-no" title="statement not covered" >    if (record.zones &amp;&amp; record.zones.length &gt; 0) {</span>
+      const saveRequest = <span class="cstat-no" title="statement not covered" >dispatch(requestAssignT0TempSiteData(record));</span>
+<span class="cstat-no" title="statement not covered" >      setAssignRequestId(saveRequest.requestId);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      goToViewSettings();</span>
+    }
   }, [
     dispatch,
     goToViewSettings,
@@ -760,9 +780,13 @@ const EditTemporaryPlotsTab = <span class="cstat-no" title="statement not covere
 &nbsp;
   const saveWithDefaultDensity = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    updatePlantingSiteSetting();</span>
-    const saveRequest = <span class="cstat-no" title="statement not covered" >dispatch(requestAssignT0TempSiteData(record));</span>
-<span class="cstat-no" title="statement not covered" >    setAssignRequestId(saveRequest.requestId);</span>
-  }, [dispatch, record, updatePlantingSiteSetting]);
+<span class="cstat-no" title="statement not covered" >    if (record.zones &amp;&amp; record.zones.length &gt; 0) {</span>
+      const saveRequest = <span class="cstat-no" title="statement not covered" >dispatch(requestAssignT0TempSiteData(record));</span>
+<span class="cstat-no" title="statement not covered" >      setAssignRequestId(saveRequest.requestId);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      goToViewSettings();</span>
+    }
+  }, [dispatch, goToViewSettings, record, updatePlantingSiteSetting]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;PageForm
@@ -832,7 +856,7 @@ export default EditTemporaryPlotsTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T19:19:06.606Z
+                at 2025-10-24T20:00:21.419Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

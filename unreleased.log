@@ -1,3 +1,4 @@
+e0bcabf51e6 SW-7578 Don't save changes to BE if record is empty (#4667)
 20a1084a9f8 SW-7590 Add star icon in activity edit view (#4665)
 d6aea7d3a74 SW-7589 Add star icon in activity detail view (#4664)
 4b1e0ff0fca SW-7537 Hide set icon if no observations (#4666)
