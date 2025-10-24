@@ -67,12 +67,9 @@ const ActivityHighlightsModal = ({ open, setOpen, onCancel, projectId, title = '
 
         <MapSplitView
           activities={[]}
-          // activityMarkerHighlighted={activityMarkerHighlighted}
           drawerRef={mapDrawerRef}
           heightOffsetPx={204}
-          // heightOffsetPx={overrideHeightOffsetPx ?? 256}
           mapRef={mapRef}
-          // onActivityMarkerClick={onActivityMarkerClick}
           projectId={projectId}
         >
           <Typography>TODO: render activity highlights</Typography>
