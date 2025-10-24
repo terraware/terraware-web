@@ -152,8 +152,12 @@ const EditTemporaryPlotsTab = ({
     }
 
     updatePlantingSiteSetting();
-    const saveRequest = dispatch(requestAssignT0TempSiteData(record));
-    setAssignRequestId(saveRequest.requestId);
+    if (record.zones && record.zones.length > 0) {
+      const saveRequest = dispatch(requestAssignT0TempSiteData(record));
+      setAssignRequestId(saveRequest.requestId);
+    } else {
+      goToViewSettings();
+    }
   }, [
     dispatch,
     goToViewSettings,
@@ -187,9 +191,13 @@ const EditTemporaryPlotsTab = ({
 
   const saveWithDefaultDensity = useCallback(() => {
     updatePlantingSiteSetting();
-    const saveRequest = dispatch(requestAssignT0TempSiteData(record));
-    setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record, updatePlantingSiteSetting]);
+    if (record.zones && record.zones.length > 0) {
+      const saveRequest = dispatch(requestAssignT0TempSiteData(record));
+      setAssignRequestId(saveRequest.requestId);
+    } else {
+      goToViewSettings();
+    }
+  }, [dispatch, goToViewSettings, record, updatePlantingSiteSetting]);
 
   return (
     <PageForm
