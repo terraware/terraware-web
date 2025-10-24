@@ -589,14 +589,16 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                 <Typography fontSize='20px' fontWeight='bold' variant='h2'>
                   {secondaryHeader}
                 </Typography>
-                <Box display='flex' alignItems={'center'} paddingTop={isMobile ? theme.spacing(3) : 0}>
-                  <Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}>
-                    {isAcceleratorRoute && isEditing && activity && <ActivityStatusBadges activity={activity} />}
+                {isAcceleratorRoute && isEditing && activity && (
+                  <Box display='flex' alignItems={'center'} paddingTop={isMobile ? theme.spacing(3) : 0}>
+                    <Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}>
+                      <ActivityStatusBadges activity={activity} />
+                    </Box>
+                    {activity.isHighlight && isActivityHighlightEnabled && (
+                      <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
+                    )}
                   </Box>
-                  {activity && isEditing && activity.isHighlight && isActivityHighlightEnabled && (
-                    <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
-                  )}
-                </Box>
+                )}
               </Box>
             </Grid>
 

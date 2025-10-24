@@ -450,7 +450,7 @@ const ActivityDetailView = ({
           <Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}>
             {isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}
           </Box>
-          {activity.isHighlight && isActivityHighlightEnabled && (
+          {activity.isHighlight && isActivityHighlightEnabled && isAcceleratorRoute && (
             <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
           )}
         </Box>
