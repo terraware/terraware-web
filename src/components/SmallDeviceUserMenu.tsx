@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 
 import { APP_PATHS } from 'src/constants';
+import { useDocLinks } from 'src/docLinks';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
@@ -39,6 +40,7 @@ export default function SmallDeviceUserMenu({
   const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
     useOrganization();
   const { user } = useUser();
+  const docLinks = useDocLinks();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
@@ -219,6 +221,24 @@ export default function SmallDeviceUserMenu({
                       {strings.MY_ACCOUNT}
                     </MenuItem>
                   )}
+                  <MenuItem
+                    onClick={(e) => {
+                      window.open(docLinks.privacy_policy, '_blank');
+                      handleClose(e);
+                    }}
+                    sx={menuItemStyles}
+                  >
+                    {strings.PRIVACY_POLICY}
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      navigateTo(APP_PATHS.HELP_SUPPORT);
+                      handleClose(e);
+                    }}
+                    sx={menuItemStyles}
+                  >
+                    {strings.HELP_SUPPORT}
+                  </MenuItem>
                   <MenuItem
                     onClick={(e) => {
                       onLogout();
