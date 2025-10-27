@@ -301,7 +301,7 @@ const ProjectPage = () => {
         hierarchicalCrumbs={false}
         rightComponent={rightComponent}
       >
-        {highlightsModalOpen && (
+        {isActivityHighlightEnabled && highlightsModalOpen && (
           <ActivityHighlightsModal
             open={highlightsModalOpen}
             projectId={projectData.projectId}

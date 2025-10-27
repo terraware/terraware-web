@@ -160,7 +160,7 @@ export default function ActivityLogView(): JSX.Element {
         title={strings.ACTIVITY_LOG}
         titleContainerStyle={{ minHeight: '56px' }}
       >
-        {highlightsModalOpen && projectId && (
+        {isActivityHighlightEnabled && highlightsModalOpen && projectId && (
           <ActivityHighlightsModal
             open={highlightsModalOpen}
             projectId={projectId}
