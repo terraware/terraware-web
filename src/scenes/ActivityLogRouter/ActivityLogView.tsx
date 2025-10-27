@@ -1,17 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
+import ActivityHighlightsModal from 'src/components/ActivityLog/ActivityHighlightsModal';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 
 export default function ActivityLogView(): JSX.Element {
@@ -20,21 +23,23 @@ export default function ActivityLogView(): JSX.Element {
   const { isAllowed } = useUser();
   const theme = useTheme();
   const query = useQuery();
+  const { isDesktop, isMobile } = useDeviceInfo();
   const { goToAcceleratorActivityCreate, goToActivityCreate } = useNavigateTo();
   const { currentParticipantProject, allParticipantProjects, setCurrentParticipantProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { participantProjects, isLoading: participantProjectsLoading } = useParticipantProjects();
 
   const [activityId, setActivityId] = useState<number>();
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
+  const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
     [isAcceleratorRoute, selectedOrganization]
   );
 
+  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES', { organization });
-
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
   const projectId = useMemo(
     () => (projectFilter.projectId ? Number(projectFilter.projectId) : undefined),
@@ -53,6 +58,11 @@ export default function ActivityLogView(): JSX.Element {
       .sort((a, b) => a.dealName!.localeCompare(b.dealName!, activeLocale || undefined));
   }, [activeLocale, participantProjects]);
 
+  const projectDealName = useMemo(() => {
+    const project = availableProjects.find((p) => p.id === projectId);
+    return project?.dealName || '';
+  }, [availableProjects, projectId]);
+
   const goToProjectActivityCreate = useCallback(() => {
     if (!projectId) {
       return;
@@ -64,6 +74,10 @@ export default function ActivityLogView(): JSX.Element {
       goToActivityCreate(projectId);
     }
   }, [goToAcceleratorActivityCreate, goToActivityCreate, isAcceleratorRoute, projectId]);
+
+  const openActivityHighlightsPreview = useCallback(() => {
+    setHighlightsModalOpen(true);
+  }, []);
 
   useEffect(() => {
     const _activityId = query.get('activityId');
@@ -93,36 +107,77 @@ export default function ActivityLogView(): JSX.Element {
   const PageHeaderRightComponent = useMemo(
     () =>
       isAllowedCreateActivities && !activityId ? (
-        <Button
-          disabled={!projectId}
-          icon='plus'
-          label={strings.ADD_ACTIVITY}
-          onClick={goToProjectActivityCreate}
-          size='medium'
-          sx={{ whiteSpace: 'nowrap' }}
-        />
+        <Box
+          alignItems='center'
+          display='flex'
+          flexDirection='row'
+          flexWrap={isMobile ? 'wrap' : 'nowrap'}
+          justifyContent={isDesktop ? 'flex-end' : 'flex-start'}
+        >
+          <Button
+            disabled={!projectId}
+            icon='plus'
+            label={strings.ADD_ACTIVITY}
+            onClick={goToProjectActivityCreate}
+            size='medium'
+            sx={{ minWidth: '160px', whiteSpace: 'nowrap' }}
+          />
+          {isActivityHighlightEnabled && (
+            <Button
+              disabled={!projectId}
+              id='previewHighlights'
+              label={strings.PREVIEW_HIGHLIGHTS}
+              onClick={openActivityHighlightsPreview}
+              priority='secondary'
+              size='medium'
+              sx={{ minWidth: '180px', whiteSpace: 'nowrap' }}
+              type='productive'
+            />
+          )}
+        </Box>
       ) : null,
-    [activityId, goToProjectActivityCreate, isAllowedCreateActivities, projectId, strings]
+    [
+      activityId,
+      goToProjectActivityCreate,
+      isActivityHighlightEnabled,
+      isAllowedCreateActivities,
+      isDesktop,
+      isMobile,
+      openActivityHighlightsPreview,
+      projectId,
+      strings.ADD_ACTIVITY,
+      strings.PREVIEW_HIGHLIGHTS,
+    ]
   );
 
   return (
-    <Page
-      hierarchicalCrumbs={false}
-      isLoading={isAcceleratorRoute && participantProjectsLoading}
-      leftComponent={PageHeaderLeftComponent}
-      rightComponent={PageHeaderRightComponent}
-      title={strings.ACTIVITY_LOG}
-      titleContainerStyle={{ minHeight: '56px' }}
-    >
-      <Card
-        style={{
-          borderRadius: theme.spacing(1),
-          padding: theme.spacing(3),
-          width: '100%',
-        }}
+    <>
+      <Page
+        hierarchicalCrumbs={false}
+        isLoading={isAcceleratorRoute && participantProjectsLoading}
+        leftComponent={PageHeaderLeftComponent}
+        rightComponent={PageHeaderRightComponent}
+        title={strings.ACTIVITY_LOG}
+        titleContainerStyle={{ minHeight: '56px' }}
       >
-        {projectId && <ActivitiesListView projectId={projectId} />}
-      </Card>
-    </Page>
+        {isActivityHighlightEnabled && highlightsModalOpen && projectId && (
+          <ActivityHighlightsModal
+            open={highlightsModalOpen}
+            projectId={projectId}
+            setOpen={setHighlightsModalOpen}
+            title={projectDealName}
+          />
+        )}
+        <Card
+          style={{
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(3),
+            width: '100%',
+          }}
+        >
+          {projectId && <ActivitiesListView projectId={projectId} />}
+        </Card>
+      </Page>
+    </>
   );
 }
