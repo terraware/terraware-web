@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
+import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
 import isEnabled from 'src/features';
@@ -70,6 +71,11 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
     }
   }, [selectedSpecies, observationSummaries, isSurvivalRateCalculationEnabled]);
 
+  const tooltipRenderer = useCallback((tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
+    const v = tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();
+    return `${v}%`;
+  }, []);
+
   return (
     <Box display='flex' flexDirection='column'>
       <Dropdown
@@ -98,6 +104,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
             }}
             maxWidth='100%'
             elementColor={['#99B85F', '#CE9E97']}
+            customTooltipLabel={isSurvivalRateCalculationEnabled ? tooltipRenderer : undefined}
           />
         </Box>
       )}

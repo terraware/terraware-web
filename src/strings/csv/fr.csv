@@ -1867,7 +1867,7 @@ SPECIES_SCIENTIFIC_NAME,Nom scientifique des espèces,bc37b10f
 SPECIES_SELECTED,Espèce sélectionnée,820edb46
 SPECIES_SURVIVAL,Survie des espèces,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Répartition de la survie des espèces,837eaa3b
-SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,La répartition de la survie indique le nombre de plants par espèce enregistrés comme vivants ou morts dans l'ensemble des zones observées.,8e100f36
+SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,La répartition de la survie indique le pourcentage de plants par espèce qui sont encore vivants depuis la plantation initiale.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,La survie des espèces affiche les espèces ayant les taux de survie les plus élevés et les plus faibles parmi les zones observées.,dfaff418
 SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour calculer les taux de survie des parcelles et des espèces.,6e5f03ec
 SPECIES_USAGE,Utilisation des espèces,0669cb85
