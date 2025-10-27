@@ -1868,7 +1868,7 @@ SPECIES_SCIENTIFIC_NAME,Nombre científico de la especie,bc37b10f
 SPECIES_SELECTED,Especie seleccionada,820edb46
 SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
-SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra la cantidad de plantas por especie que fueron registradas como vivas y muertas dentro de todas las zonas observadas.,8e100f36
+SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra el porcentaje de plantas por especie que siguen vivas desde la plantación inicial.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,"La Supervivencia de Especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las zonas que fueron observadas.",dfaff418
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
