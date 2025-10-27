@@ -1,3 +1,5 @@
+f9971c7c100 Update dependency @babel/traverse to v7.28.5 (#4672)
+c68a9028f65 Update Node.js to v22.21.0 (#4669)
 e0bcabf51e6 SW-7578 Don't save changes to BE if record is empty (#4667)
 20a1084a9f8 SW-7590 Add star icon in activity edit view (#4665)
 d6aea7d3a74 SW-7589 Add star icon in activity detail view (#4664)
