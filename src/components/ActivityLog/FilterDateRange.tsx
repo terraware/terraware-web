@@ -20,6 +20,7 @@ const datePickerStyles = {
 interface DateRangeProps {
   field: string;
   iconFilters?: ReactNode;
+  exportButton: ReactNode;
   onChange: (filter: FieldNodePayload) => void;
   onDelete: () => void;
   rightComponent?: ReactNode;
@@ -29,6 +30,7 @@ interface DateRangeProps {
 export default function DateRange({
   field,
   iconFilters,
+  exportButton,
   onChange,
   onDelete,
   rightComponent,
@@ -102,6 +104,7 @@ export default function DateRange({
           value={endDate}
         />
         {iconFilters}
+        {exportButton}
       </Box>
 
       {rightComponent && (

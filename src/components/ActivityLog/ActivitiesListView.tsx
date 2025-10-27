@@ -3,6 +3,7 @@ import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Pagination, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, PillList, PillListItem } from '@terraware/web-components';
+import { ColumnHeader } from 'export-to-csv';
 
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -22,6 +23,7 @@ import {
   activityTypeLabel,
 } from 'src/types/Activity';
 import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
+import { CsvData } from 'src/utils/csv';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -32,6 +34,7 @@ import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
 import { getBoundingBoxFromPoints } from '../NewMap/utils';
 import { FilterField } from '../common/FilterGroup';
+import ExportTableComponent, { ExportTableProps } from '../common/SearchFiltersWrapper/ExportTableComponent';
 import { FilterConfig, FilterConfigWithValues, defaultPillValueRenderer } from '../common/SearchFiltersWrapperV2';
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
@@ -550,6 +553,68 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
       .filter((item: PillListItem<string> | false): item is PillListItem<string> => !!item);
   }, [featuredFilters, filters, iconFilters]);
 
+  const exportColumnHeaders = useMemo<ColumnHeader[]>(
+    () => [
+      {
+        key: 'date',
+        displayLabel: strings.DATE,
+      },
+      {
+        key: 'type',
+        displayLabel: strings.TYPE,
+      },
+      {
+        key: 'description',
+        displayLabel: strings.DESCRIPTION,
+      },
+      ...(isAcceleratorRoute
+        ? [
+            {
+              key: 'status',
+              displayLabel: strings.STATUS,
+            },
+            {
+              key: 'isHighlight',
+              displayLabel: strings.HIGHLIGHTED_ACTIVITY,
+            },
+          ]
+        : []),
+    ],
+    [isAcceleratorRoute, strings]
+  );
+
+  const convertActivityRow = useCallback(
+    (activity: Activity): CsvData => ({
+      date: activity.date,
+      type: activityTypeLabel(activity.type, strings),
+      description: activity.description || '',
+      ...(isAcceleratorRoute
+        ? {
+            status: activityStatusTagLabel(activity.status, strings),
+            isHighlight: activity.isHighlight ? strings.YES : strings.NO,
+          }
+        : {}),
+    }),
+    [isAcceleratorRoute, strings]
+  );
+
+  const retrieveActivities = useCallback(async () => {
+    return Promise.resolve(results as unknown as CsvData[]);
+  }, [results]);
+
+  const exportProps: ExportTableProps | undefined = useMemo(() => {
+    if (!results || results.length === 0) {
+      return;
+    }
+
+    return {
+      filename: strings.ACTIVITY_LOG,
+      columnHeaders: exportColumnHeaders,
+      retrieveResults: retrieveActivities,
+      convertRow: convertActivityRow,
+    };
+  }, [convertActivityRow, exportColumnHeaders, results, retrieveActivities, strings.ACTIVITY_LOG]);
+
   return (
     <MapSplitView
       activities={activitiesVisibleOnMap}
@@ -578,6 +643,7 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
             iconFilters={
               <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
             }
+            exportButton={exportProps && <ExportTableComponent {...exportProps} />}
             onChange={onChangeDateRange}
             onDelete={onDeleteDateRange}
             rightComponent={filterPillData.length ? <PillList data={filterPillData} /> : undefined}
