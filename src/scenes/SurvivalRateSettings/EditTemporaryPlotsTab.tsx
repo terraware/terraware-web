@@ -156,6 +156,7 @@ const EditTemporaryPlotsTab = ({
       const saveRequest = dispatch(requestAssignT0TempSiteData(record));
       setAssignRequestId(saveRequest.requestId);
     } else {
+      reload();
       goToViewSettings();
     }
   }, [
@@ -163,6 +164,7 @@ const EditTemporaryPlotsTab = ({
     goToViewSettings,
     isTemporaryPlotsChecked,
     record,
+    reload,
     updatePlantingSiteSetting,
     withdrawnSpeciesPlots,
     zonesWithObservations,
@@ -195,9 +197,10 @@ const EditTemporaryPlotsTab = ({
       const saveRequest = dispatch(requestAssignT0TempSiteData(record));
       setAssignRequestId(saveRequest.requestId);
     } else {
+      reload();
       goToViewSettings();
     }
-  }, [dispatch, goToViewSettings, record, updatePlantingSiteSetting]);
+  }, [dispatch, goToViewSettings, record, reload, updatePlantingSiteSetting]);
 
   return (
     <PageForm
