@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761665159975" clover="3.2.0">
-  <project timestamp="1761665159976" name="All files">
-    <metrics statements="35125" coveredstatements="1353" conditionals="24536" coveredconditionals="392" methods="10751" coveredmethods="213" elements="70412" coveredelements="1958" complexity="0" loc="35125" ncloc="35125" packages="280" files="1367" classes="1367"/>
+<coverage generated="1761676481735" clover="3.2.0">
+  <project timestamp="1761676481736" name="All files">
+    <metrics statements="35126" coveredstatements="1353" conditionals="24537" coveredconditionals="392" methods="10751" coveredmethods="213" elements="70414" coveredelements="1958" complexity="0" loc="35126" ncloc="35126" packages="280" files="1367" classes="1367"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -29878,7 +29878,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.map">
-      <metrics statements="112" coveredstatements="0" conditionals="119" coveredconditionals="0" methods="37" coveredmethods="0"/>
+      <metrics statements="113" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="ObservationMapView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/map/ObservationMapView.tsx">
         <metrics statements="94" coveredstatements="0" conditionals="93" coveredconditionals="0" methods="34" coveredmethods="0"/>
         <line num="42" count="0" type="stmt"/>
@@ -29977,7 +29977,7 @@
         <line num="255" count="0" type="stmt"/>
       </file>
       <file name="TooltipContents.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/map/TooltipContents.tsx">
-        <metrics statements="18" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="19" coveredstatements="0" conditionals="27" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
@@ -29986,16 +29986,17 @@
         <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.org">
