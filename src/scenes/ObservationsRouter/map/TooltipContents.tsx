@@ -30,6 +30,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
 
   const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
 
+  const observationAbandoned = observationState === 'Abandoned';
   const observationInProgress = observationState === 'InProgress';
   const observationOverdue = observationState === 'Overdue';
 
@@ -94,23 +95,26 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
             </>
           )}
         </Box>
-        {!monitoringPlot?.completedTime && replaceObservationPlotEnabled && showReassignmentButton && (
-          <Box display='flex' padding={theme.spacing(2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
-            <Button
-              id='reassignPlot'
-              label={`${strings.REQUEST_REASSIGNMENT}...`}
-              type='passive'
-              onClick={openModal}
-              priority='secondary'
-              sx={{
-                marginLeft: 'auto',
-                '&:focus': {
-                  outline: 'none',
-                },
-              }}
-            />
-          </Box>
-        )}
+        {!monitoringPlot?.completedTime &&
+          replaceObservationPlotEnabled &&
+          showReassignmentButton &&
+          !observationAbandoned && (
+            <Box display='flex' padding={theme.spacing(2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
+              <Button
+                id='reassignPlot'
+                label={`${strings.REQUEST_REASSIGNMENT}...`}
+                type='passive'
+                onClick={openModal}
+                priority='secondary'
+                sx={{
+                  marginLeft: 'auto',
+                  '&:focus': {
+                    outline: 'none',
+                  },
+                }}
+              />
+            </Box>
+          )}
       </Box>
     </>
   );
