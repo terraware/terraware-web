@@ -39,20 +39,17 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     hasObservedTemporaryPlots: boolean;
   };
 
-export type AdHocObservationResults = Omit<
-  ObservationResultsPayload &
-    Boundary & {
-      plantingSiteName: string;
-      totalPlants: number;
-      plotName?: string;
-      plotNumber?: number;
-      plantingZones: ObservationPlantingZoneResultsWithLastObv[];
-    },
-  'plantingZones'
-> & {
-  plantingZones: ObservationPlantingZoneResultsWithLastObv[];
-  totalLive: number | undefined;
-};
+export type AdHocObservationResults = Omit<ObservationResultsPayload, 'plantingZones' | 'adHocPlot'> &
+  Boundary & {
+    adHocPlot: components['schemas']['ObservationMonitoringPlotResultsPayload'];
+    plantingSiteName: string;
+    plantingZones: ObservationPlantingZoneResultsWithLastObv[];
+    plotName?: string;
+    plotNumber?: number;
+    timeZone: string;
+    totalLive: number | undefined;
+    totalPlants: number;
+  };
 
 export type ObservationResultsWithLastObv = Omit<
   Omit<ObservationResultsPayload, 'species'> &

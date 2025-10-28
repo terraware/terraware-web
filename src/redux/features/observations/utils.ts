@@ -276,21 +276,26 @@ export const mergeAdHocObservations = (
 
   return observations
     .filter((observation) => sites[observation.plantingSiteId])
+    .filter((observation) => observation.adHocPlot)
     .map((observation: ObservationResultsPayload): AdHocObservationResults => {
       const { plantingSiteId } = observation;
       const site = sites[plantingSiteId];
       const species = speciesReverseMap([]);
+      const adHocPlot = observation.adHocPlot!;
+      const timeZone = site.timeZone ?? defaultTimeZone;
 
       const mergedZones = mergeZones(observation.plantingZones, species, site.timeZone ?? defaultTimeZone);
 
       return {
         ...observation,
+        adHocPlot,
         boundary: site.boundary,
         plantingSiteName: site.name,
         plantingZones: mergedZones,
-        plotName: observation?.adHocPlot?.monitoringPlotName,
-        plotNumber: observation?.adHocPlot?.monitoringPlotNumber,
-        totalLive: getObservationSpeciesLivePlantsCount(observation.adHocPlot?.species),
+        plotName: adHocPlot.monitoringPlotName,
+        plotNumber: adHocPlot.monitoringPlotNumber,
+        timeZone,
+        totalLive: getObservationSpeciesLivePlantsCount(adHocPlot.species),
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
       };
     });
