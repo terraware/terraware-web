@@ -121,7 +121,7 @@ export default function ActivityLogView(): JSX.Element {
             size='medium'
             sx={{ minWidth: '160px', whiteSpace: 'nowrap' }}
           />
-          {isActivityHighlightEnabled && (
+          {isActivityHighlightEnabled && isAcceleratorRoute && (
             <Button
               disabled={!projectId}
               id='previewHighlights'
@@ -138,6 +138,7 @@ export default function ActivityLogView(): JSX.Element {
     [
       activityId,
       goToProjectActivityCreate,
+      isAcceleratorRoute,
       isActivityHighlightEnabled,
       isAllowedCreateActivities,
       isDesktop,
