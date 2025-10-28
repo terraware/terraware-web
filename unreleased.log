@@ -1,3 +1,4 @@
+d22cce7824d SW-7547 Unify ad-hoc monitoring CSV format (#4685)
 35c253d3ef0 SW-7611 Reload planting site data after editing survival rate settings (#4691)
 45af7c8fda4 SW-7612 Fix equal values highest and lowest (#4689)
 af6eafdfe00 SW-7320: FE: Highlights Preview View (Add Carousel) (#4678)

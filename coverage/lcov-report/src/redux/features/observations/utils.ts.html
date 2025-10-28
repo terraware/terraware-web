@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/104</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -398,7 +398,12 @@
 <a name='L333'></a><a href='#L333'>333</a>
 <a name='L334'></a><a href='#L334'>334</a>
 <a name='L335'></a><a href='#L335'>335</a>
-<a name='L336'></a><a href='#L336'>336</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -676,14 +681,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1011,21 +1021,26 @@ export const mergeAdHocObservations = <span class="cstat-no" title="statement no
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return observations</span>
     .filter(<span class="fstat-no" title="function not covered" >(o</span>bservation) =&gt; <span class="cstat-no" title="statement not covered" >sites[observation.plantingSiteId])</span>
+    .filter(<span class="fstat-no" title="function not covered" >(o</span>bservation) =&gt; <span class="cstat-no" title="statement not covered" >observation.adHocPlot)</span>
     .map(<span class="fstat-no" title="function not covered" >(o</span>bservation: ObservationResultsPayload): AdHocObservationResults =&gt; {
       const { plantingSiteId } = <span class="cstat-no" title="statement not covered" >observation;</span>
       const site = <span class="cstat-no" title="statement not covered" >sites[plantingSiteId];</span>
       const species = <span class="cstat-no" title="statement not covered" >speciesReverseMap([]);</span>
+      const adHocPlot = <span class="cstat-no" title="statement not covered" >observation.adHocPlot!;</span>
+      const timeZone = <span class="cstat-no" title="statement not covered" >site.timeZone ?? defaultTimeZone;</span>
 &nbsp;
       const mergedZones = <span class="cstat-no" title="statement not covered" >mergeZones(observation.plantingZones, species, site.timeZone ?? defaultTimeZone);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return {</span>
         ...observation,
+        adHocPlot,
         boundary: site.boundary,
         plantingSiteName: site.name,
         plantingZones: mergedZones,
-        plotName: observation?.adHocPlot?.monitoringPlotName,
-        plotNumber: observation?.adHocPlot?.monitoringPlotNumber,
-        totalLive: getObservationSpeciesLivePlantsCount(observation.adHocPlot?.species),
+        plotName: adHocPlot.monitoringPlotName,
+        plotNumber: adHocPlot.monitoringPlotNumber,
+        timeZone,
+        totalLive: getObservationSpeciesLivePlantsCount(adHocPlot.species),
         totalPlants: observation.plantingZones.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; <span class="cstat-no" title="statement not covered" >acc + curr.totalPlants,</span> 0),
       };
     });
@@ -1075,7 +1090,7 @@ export const getConditionString = <span class="cstat-no" title="statement not co
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-28T19:48:10.507Z
+                at 2025-10-28T20:58:56.943Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
