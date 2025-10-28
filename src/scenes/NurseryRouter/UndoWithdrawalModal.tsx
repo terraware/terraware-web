@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -15,9 +15,12 @@ export interface UndoWithdrawalModalProps {
 export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JSX.Element {
   const { onClose, row, reload } = props;
   const snackbar = useSnackbar();
+  const [busy, setBusy] = useState(false);
 
   const onSubmit = async () => {
+    setBusy(true);
     const response = await NurseryWithdrawalService.undoNurseryWithdrawal(row.id);
+    setBusy(false);
     if (response.requestSucceeded) {
       if (reload) {
         reload();
@@ -44,7 +47,7 @@ export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JS
           onClick={onClose}
           key='button-1'
         />,
-        <Button id='undoWithdrawal' label={strings.UNDO_WITHDRAWAL} onClick={() => void onSubmit()} key='button-2' />,
+        <Button disabled={busy} id='undoWithdrawal' label={strings.UNDO_WITHDRAWAL} onClick={() => void onSubmit()} key='button-2' />,
       ]}
       message={strings.UNDO_WITHDRAWAL_CONFIRMATION}
       skrim={true}
