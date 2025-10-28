@@ -13,57 +13,7 @@ interface ExportAdHocObservationsResultsParams {
   plantingSite?: PlantingSite;
 }
 
-const makeAdHocObservationsResultsCsv = ({
-  adHocObservationsResults,
-  plantingSite,
-}: {
-  adHocObservationsResults: AdHocObservationResults[];
-  plantingSite?: PlantingSite;
-}): Blob => {
-  const columnHeaders = [
-    {
-      key: 'monitoringPlot',
-      displayLabel: strings.MONITORING_PLOT,
-    },
-    {
-      key: 'plantingSiteName',
-      displayLabel: strings.PLANTING_SITE,
-    },
-    {
-      key: 'startDate',
-      displayLabel: strings.START_DATE,
-    },
-    {
-      key: 'totalLive',
-      displayLabel: strings.LIVE_PLANTS,
-    },
-    {
-      key: 'totalPlants',
-      displayLabel: strings.TOTAL_PLANTS,
-    },
-    {
-      key: 'totalSpecies',
-      displayLabel: strings.SPECIES,
-    },
-  ];
-
-  const data = adHocObservationsResults.map((observation) => ({
-    monitoringPlot: observation.plotNumber,
-    plantingSiteName: observation.plantingSiteName,
-    startDate: getDateDisplayValue(observation.startDate, plantingSite?.timeZone),
-    totalLive: observation.totalLive,
-    totalPlants: observation.adHocPlot?.totalPlants,
-    totalSpecies: observation.adHocPlot?.totalSpecies,
-  }));
-
-  return makeCsv(columnHeaders, data);
-};
-
-const makeAdHocObservationCsv = (adHocObservation: AdHocObservationResults, plantingSite: PlantingSite): Blob => {
-  if (!adHocObservation?.adHocPlot) {
-    return new Blob([], { type: 'text/csv' });
-  }
-
+const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResults[]): Blob => {
   const columnHeaders = [
     {
       key: 'monitoringPlotNumber',
@@ -114,10 +64,6 @@ const makeAdHocObservationCsv = (adHocObservation: AdHocObservationResults, plan
       displayLabel: strings.TOTAL_PLANTS_OBSERVED,
     },
     {
-      key: 'preExistingPlants',
-      displayLabel: strings.PREEXISTING_PLANTS_OBSERVED,
-    },
-    {
       key: 'livePlants',
       displayLabel: strings.LIVE_PLANTS_OBSERVED,
     },
@@ -139,34 +85,32 @@ const makeAdHocObservationCsv = (adHocObservation: AdHocObservationResults, plan
     },
   ];
 
-  const aggregateSpeciesData = adHocObservation.adHocPlot.species.reduce(
-    (acc, species) => {
-      acc.cumulativeDead += species.totalDead || 0;
-      acc.permanentLive += species.totalLive || 0;
-      acc.totalPlants += species.totalPlants || 0;
-      acc.totalExisting += species.totalExisting || 0;
-      acc.totalLive += species.totalLive || 0;
-      acc.totalDead += species.totalDead || 0;
-      return acc;
-    },
-    {
-      cumulativeDead: 0,
-      permanentLive: 0,
-      totalPlants: 0,
-      totalExisting: 0,
-      totalLive: 0,
-      totalDead: 0,
-    }
-  );
+  const data = adHocObservations.map((adHocObservation: AdHocObservationResults) => {
+    const aggregateSpeciesData = adHocObservation.adHocPlot.species.reduce(
+      (acc, species) => {
+        acc.cumulativeDead += species.totalDead || 0;
+        acc.permanentLive += species.totalLive || 0;
+        acc.totalPlants += species.totalPlants || 0;
+        acc.totalLive += species.totalLive || 0;
+        acc.totalDead += species.totalDead || 0;
+        return acc;
+      },
+      {
+        cumulativeDead: 0,
+        permanentLive: 0,
+        totalPlants: 0,
+        totalLive: 0,
+        totalDead: 0,
+      }
+    );
 
-  const plotBoundaryCoordinates = adHocObservation.adHocPlot.boundary.coordinates[0];
+    const plotBoundaryCoordinates = adHocObservation.adHocPlot.boundary.coordinates[0];
 
-  const data = [
-    {
+    return {
       monitoringPlotNumber: adHocObservation.adHocPlot.monitoringPlotNumber,
-      plantingSiteName: plantingSite.name,
+      plantingSiteName: adHocObservation.plantingSiteName,
       dateObserved: adHocObservation.completedTime
-        ? getDateDisplayValue(adHocObservation.completedTime || '', plantingSite.timeZone)
+        ? getDateDisplayValue(adHocObservation.completedTime || '', adHocObservation.timeZone)
         : '',
       southwestLatitude: plotBoundaryCoordinates[0][0],
       southwestLongitude: plotBoundaryCoordinates[0][1],
@@ -177,15 +121,14 @@ const makeAdHocObservationCsv = (adHocObservation: AdHocObservationResults, plan
       northeastLatitude: plotBoundaryCoordinates[3][0],
       northeastLongitude: plotBoundaryCoordinates[3][1],
       totalPlants: adHocObservation.adHocPlot.totalPlants || 0,
-      preExistingPlants: aggregateSpeciesData.totalExisting || 0,
       livePlants: aggregateSpeciesData.totalLive || 0,
       deadPlants: aggregateSpeciesData.totalDead || 0,
       totalSpecies: adHocObservation.adHocPlot.totalSpecies || 0,
       conditions:
         adHocObservation.adHocPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '',
       notes: adHocObservation.adHocPlot?.notes || '',
-    },
-  ];
+    };
+  });
 
   return makeCsv(columnHeaders, data);
 };
@@ -255,10 +198,7 @@ export const exportAdHocObservationsResults = async ({
   const plantingSiteName = plantingSite?.name || strings.ALL_PLANTING_SITES;
   const filename = `${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`;
 
-  const fileBlob = makeAdHocObservationsResultsCsv({
-    adHocObservationsResults,
-    plantingSite,
-  });
+  const fileBlob = makeAdHocObservationsCsv(adHocObservationsResults);
   const fileContent = await fileBlob.text();
 
   downloadCsv(filename, fileContent);
@@ -279,7 +219,7 @@ export const exportAdHocObservationDetails = (
     files: [
       {
         fileName: `${dirName}-${strings.PLOT}`,
-        content: makeAdHocObservationCsv(adHocObservation, plantingSite),
+        content: makeAdHocObservationsCsv([adHocObservation]),
       },
       {
         fileName: `${dirName}-${strings.SPECIES}`,
