@@ -47,7 +47,7 @@ const EditTemporaryPlotsTab = ({
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const { plantingSite } = usePlantingSiteData();
+  const { plantingSite, reload: reloadPlantingSiteData } = usePlantingSiteData();
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({
     plantingSiteId,
@@ -157,6 +157,7 @@ const EditTemporaryPlotsTab = ({
       setAssignRequestId(saveRequest.requestId);
     } else {
       reload();
+      reloadPlantingSiteData();
       goToViewSettings();
     }
   }, [
@@ -165,6 +166,7 @@ const EditTemporaryPlotsTab = ({
     isTemporaryPlotsChecked,
     record,
     reload,
+    reloadPlantingSiteData,
     updatePlantingSiteSetting,
     withdrawnSpeciesPlots,
     zonesWithObservations,
@@ -180,12 +182,13 @@ const EditTemporaryPlotsTab = ({
   useEffect(() => {
     if (saveResponse?.status === 'success') {
       reload();
+      reloadPlantingSiteData();
       goToViewSettings();
     }
     if (saveResponse?.status === 'error') {
       snackbar.toastError();
     }
-  }, [goToViewSettings, reload, saveResponse, snackbar]);
+  }, [goToViewSettings, reload, reloadPlantingSiteData, saveResponse, snackbar]);
 
   const cancelWarningHandler = useCallback(() => {
     setShowSpeciesDensityWarningMessage(false);
@@ -198,9 +201,10 @@ const EditTemporaryPlotsTab = ({
       setAssignRequestId(saveRequest.requestId);
     } else {
       reload();
+      reloadPlantingSiteData();
       goToViewSettings();
     }
-  }, [dispatch, goToViewSettings, record, reload, updatePlantingSiteSetting]);
+  }, [dispatch, goToViewSettings, record, reload, reloadPlantingSiteData, updatePlantingSiteSetting]);
 
   if (Object.entries(zonesWithObservations).length === 0) {
     return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}</Box>;
