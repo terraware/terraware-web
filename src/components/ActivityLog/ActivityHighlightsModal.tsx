@@ -56,30 +56,28 @@ const ActivityHighlightsModal = ({
   return (
     <Box sx={containerStyles}>
       <DialogBox onClose={onClose} open={open} size={dialogSize} skrim title={title}>
-        <Box>
-          <Box
-            alignItems='center'
-            display='flex'
-            flexDirection='row'
-            justifyContent='space-between'
-            marginBottom='24px'
-            width='100%'
-          >
-            <Box alignItems='center' display='flex' flexDirection='row' justifyContent='flex-start'>
-              <Typography fontSize='24px' fontWeight={600} paddingRight='24px'>
-                {title}
-              </Typography>
+        <Box
+          alignItems='center'
+          display='flex'
+          flexDirection='row'
+          justifyContent='space-between'
+          marginBottom='24px'
+          width='100%'
+        >
+          <Box alignItems='center' display='flex' flexDirection='row' justifyContent='flex-start'>
+            <Typography fontSize='24px' fontWeight={600} paddingRight='24px'>
+              {title}
+            </Typography>
 
-              <Typography>TODO: render quarter dropdown</Typography>
-            </Box>
-
-            <IconButton onClick={onClose}>
-              <Icon name='close' size='medium' />
-            </IconButton>
+            <Typography>TODO: render quarter dropdown</Typography>
           </Box>
 
-          <ActivityHighlightsView activities={activities} projectId={projectId} />
+          <IconButton onClick={onClose}>
+            <Icon name='close' size='medium' />
+          </IconButton>
         </Box>
+
+        <ActivityHighlightsView activities={activities} projectId={projectId} />
       </DialogBox>
     </Box>
   );
