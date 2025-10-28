@@ -57,7 +57,11 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
         if (isSurvivalRateCalculationEnabled) {
           if (selectedObservationSpecies.survivalRate) {
             live = selectedObservationSpecies.survivalRate;
-            dead = 100 - live;
+            if (live < 100) {
+              dead = 100 - live;
+            } else {
+              dead = 0;
+            }
           }
         } else {
           dead = selectedObservationSpecies.cumulativeDead;
