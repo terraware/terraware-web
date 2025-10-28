@@ -211,7 +211,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             date: record?.date as string,
             description: record?.description as string,
             isHighlight: !!record?.isHighlight,
-            isVerified: !!record?.isVerified,
             status: record?.status as AdminActivityPayload['status'],
             type: record?.type as AdminActivityPayload['type'],
           } as AdminActivityPayload,
@@ -239,8 +238,8 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           date: record?.date as string,
           description: record?.description as string,
           isHighlight: !!record?.isHighlight,
-          isVerified: !!record?.isVerified,
           projectId,
+          status: record?.status as AdminCreateActivityRequestPayload['status'],
           type: record?.type as AdminCreateActivityRequestPayload['type'],
         })
       );
@@ -293,7 +292,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       date: getTodaysDateFormatted(),
       description: '',
       isHighlight: false,
-      isVerified: false,
       projectId,
     };
 
@@ -332,7 +330,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         description: activity.description,
         id: activity.id,
         isHighlight: activity.isHighlight,
-        isVerified: activity.isVerified,
         projectId,
         status: activity.status,
         type: activity.type,

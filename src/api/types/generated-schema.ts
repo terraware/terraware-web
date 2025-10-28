@@ -4806,9 +4806,10 @@ export interface components {
             date: string;
             description: string;
             isHighlight: boolean;
-            isVerified: boolean;
             /** Format: int64 */
             projectId: number;
+            /** @enum {string} */
+            status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
             type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };
