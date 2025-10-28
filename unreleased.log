@@ -1,3 +1,7 @@
+35c253d3ef0 SW-7611 Reload planting site data after editing survival rate settings (#4691)
+45af7c8fda4 SW-7612 Fix equal values highest and lowest (#4689)
+af6eafdfe00 SW-7320: FE: Highlights Preview View (Add Carousel) (#4678)
+c046aa6fccc SW-7614 Disable save button on page forms when busy (#4690)
 196b40ca6ea SW-7541 Updated types for activity create form (#4687)
 3d3e11fe493 SW-7545 Hide reassignment button for abandoned plots (#4688)
 119ea2da6a2 SW-7578 No temporary plots within zones message (#4684)

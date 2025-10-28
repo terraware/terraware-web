@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
@@ -383,7 +383,14 @@
 <a name='L318'></a><a href='#L318'>318</a>
 <a name='L319'></a><a href='#L319'>319</a>
 <a name='L320'></a><a href='#L320'>320</a>
-<a name='L321'></a><a href='#L321'>321</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -418,7 +425,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -469,6 +475,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -516,6 +533,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -678,14 +700,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -709,7 +723,6 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
-import ActivityHighlightsModal from 'src/components/ActivityLog/ActivityHighlightsModal';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import isEnabled from 'src/features';
@@ -806,7 +819,14 @@ const ProjectPage = <span class="cstat-no" title="statement not covered" ><span 
       {
         id: 'activityLog',
         label: strings.PROJECT_ACTIVITY,
-        children: &lt;ProjectActivityLogView projectId={projectData.projectId} /&gt;,
+        children: (
+          &lt;ProjectActivityLogView
+            highlightsModalOpen={highlightsModalOpen}
+            projectDealName={projectData.participantProject?.dealName}
+            projectId={projectData.projectId}
+            setHighlightsModalOpen={setHighlightsModalOpen}
+          /&gt;
+        ),
       },
       {
         id: 'deliverables',
@@ -834,7 +854,16 @@ const ProjectPage = <span class="cstat-no" title="statement not covered" ><span 
         ),
       },
     ];
-  }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes, publishedReports]);
+  }, [
+    activeLocale,
+    highlightsModalOpen,
+    projectData,
+    projectApplication,
+    projectScore,
+    phaseVotes,
+    publishedReports,
+    setHighlightsModalOpen,
+  ]);
 &nbsp;
   const { activeTab, onChangeTab } = <span class="cstat-no" title="statement not covered" >useStickyTabs({</span>
     defaultTab: 'projectProfile',
@@ -1006,14 +1035,6 @@ const ProjectPage = <span class="cstat-no" title="statement not covered" ><span 
         hierarchicalCrumbs={false}
         rightComponent={rightComponent}
       &gt;
-        {isActivityHighlightEnabled &amp;&amp; highlightsModalOpen &amp;&amp; (
-          &lt;ActivityHighlightsModal
-            open={highlightsModalOpen}
-            projectId={projectData.projectId}
-            setOpen={setHighlightsModalOpen}
-            title={projectData.participantProject?.dealName}
-          /&gt;
-        )}
         {projectData.status === 'pending' &amp;&amp; &lt;BusySpinner /&gt;}
 &nbsp;
         &lt;Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} /&gt;
@@ -1030,7 +1051,7 @@ export default ProjectPage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-28T18:43:14.285Z
+                at 2025-10-28T19:48:10.507Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
