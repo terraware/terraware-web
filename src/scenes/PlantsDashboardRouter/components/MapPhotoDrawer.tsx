@@ -6,7 +6,7 @@ import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
+import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -15,7 +15,7 @@ const PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:monitorin
 type MapPhotoDrawerProps = {
   monitoringPlotId: number;
   observationId: number;
-  photo: ObservationMonitoringPlotPhoto;
+  photo: ObservationMonitoringPlotPhotoWithGps;
 };
 
 const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDrawerProps): JSX.Element | undefined => {

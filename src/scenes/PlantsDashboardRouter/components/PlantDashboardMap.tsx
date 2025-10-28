@@ -22,6 +22,7 @@ import { useLocalization } from 'src/providers';
 import { MapService } from 'src/services';
 import {
   ObservationMonitoringPlotPhoto,
+  ObservationMonitoringPlotPhotoWithGps,
   ObservationResultsPayload,
   RecordedPlant,
   RecordedPlantStatus,
@@ -36,7 +37,7 @@ import MapStatsDrawer from './MapStatsDrawer';
 type PlotPhoto = {
   observationId: number;
   monitoringPlotId: number;
-  photo: ObservationMonitoringPlotPhoto;
+  photo: ObservationMonitoringPlotPhotoWithGps;
 };
 
 type PlotPlant = {
@@ -124,7 +125,7 @@ const PlantDashboardMap = ({
   );
 
   const selectPhoto = useCallback(
-    (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhoto) => () => {
+    (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhotoWithGps) => () => {
       setSelectedFeature(undefined);
       setSelectedPhotos([{ monitoringPlotId, observationId, photo }]);
       setSelectedPlants([]);
@@ -141,7 +142,7 @@ const PlantDashboardMap = ({
         if (marker.properties) {
           const observationId = marker.properties.observationId as number;
           const monitoringPlotId = marker.properties.monitoringPlotId as number;
-          const photo = marker.properties.photo as ObservationMonitoringPlotPhoto;
+          const photo = marker.properties.photo as ObservationMonitoringPlotPhotoWithGps;
           return { monitoringPlotId, observationId, photo };
         }
       })
@@ -320,12 +321,15 @@ const PlantDashboardMap = ({
       return [];
     }
 
+    const hasGpsCoordinates = (photo: ObservationMonitoringPlotPhoto): photo is ObservationMonitoringPlotPhotoWithGps =>
+      !!photo.gpsCoordinates;
+
     return observationResults.flatMap((results) =>
       results.plantingZones
         .flatMap((zone) => zone.plantingSubzones)
         .flatMap((subzone) => subzone.monitoringPlots)
         .flatMap((plot): MapMarker[] =>
-          plot.photos.map((photo) => {
+          plot.photos.filter(hasGpsCoordinates).map((photo) => {
             return {
               id: `photos/${photo.fileId}`,
               longitude: photo.gpsCoordinates.coordinates[1],
