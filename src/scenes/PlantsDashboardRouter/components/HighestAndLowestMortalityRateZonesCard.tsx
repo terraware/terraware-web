@@ -31,7 +31,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
             _highestMortalityRate = zone.survivalRate;
             _highestZoneId = zone.plantingZoneId;
           }
-          if (zone.survivalRate <= _lowestMortalityRate) {
+          if (zone.survivalRate < _lowestMortalityRate) {
             _lowestMortalityRate = zone.survivalRate;
             _lowestZoneId = zone.plantingZoneId;
           }

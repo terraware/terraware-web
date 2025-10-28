@@ -46,7 +46,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
             _highestMortalityRate = observationSpecies.survivalRate;
             _highestSpeciesName = speciesName;
           }
-          if (observationSpecies.survivalRate <= _lowestMortalityRate) {
+          if (observationSpecies.survivalRate < _lowestMortalityRate) {
             _lowestMortalityRate = observationSpecies.survivalRate;
             _lowestSpeciesName = speciesName;
           }
