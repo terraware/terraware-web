@@ -17,6 +17,7 @@ export default function WrappedPageForm(props: PageFormProps): JSX.Element {
       {busy && <BusySpinner withSkrim={true} />}
       <PageForm
         {...formProps}
+        saveDisabled={busy}
         saveButtonText={saveButtonText || strings.SAVE}
         cancelButtonText={cancelButtonText || strings.CANCEL}
       />
