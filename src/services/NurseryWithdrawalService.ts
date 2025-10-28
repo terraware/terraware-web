@@ -109,7 +109,7 @@ const listNurseryWithdrawals = async (
   limit: number = 1000,
   offset: number = 0
 ): Promise<SearchResponseElement[] | null> => {
-  const createdTimeOrder = { direction: sortOrder?.direction, field: 'createdTime' };
+  const createdTimeOrder = { direction: 'Ascending', field: 'createdTime' } as SearchSortOrder;
   const searchParams: SearchRequestPayload = {
     prefix: NURSERY_WITHDRAWALS_PREFIX,
     fields: [

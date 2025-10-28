@@ -373,7 +373,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       orderBy === 'speciesScientificNames'
         ? 'batchWithdrawals.batch_species_scientificName'
         : orderBy === 'project_names'
-          ? null
+          ? 'batchWithdrawals.batch_project_name'
           : orderBy;
     setSearchSortOrder(
       orderByStr
@@ -433,7 +433,11 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           columns={columns}
           rows={rows || []}
           Renderer={WithdrawalLogRenderer}
-          orderBy={searchSortOrder?.field || 'project_names'}
+          orderBy={
+            searchSortOrder?.field === 'batchWithdrawals.batch_project_name'
+              ? 'project_names'
+              : searchSortOrder?.field || 'project_names'
+          }
           order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
           isPresorted={true}
           onSelect={onWithdrawalClicked}
