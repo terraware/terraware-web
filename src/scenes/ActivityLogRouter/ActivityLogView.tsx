@@ -4,7 +4,6 @@ import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
-import ActivityHighlightsModal from 'src/components/ActivityLog/ActivityHighlightsModal';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
@@ -122,7 +121,7 @@ export default function ActivityLogView(): JSX.Element {
             size='medium'
             sx={{ minWidth: '160px', whiteSpace: 'nowrap' }}
           />
-          {isActivityHighlightEnabled && (
+          {isActivityHighlightEnabled && isAcceleratorRoute && (
             <Button
               disabled={!projectId}
               id='previewHighlights'
@@ -139,6 +138,7 @@ export default function ActivityLogView(): JSX.Element {
     [
       activityId,
       goToProjectActivityCreate,
+      isAcceleratorRoute,
       isActivityHighlightEnabled,
       isAllowedCreateActivities,
       isDesktop,
@@ -160,14 +160,6 @@ export default function ActivityLogView(): JSX.Element {
         title={strings.ACTIVITY_LOG}
         titleContainerStyle={{ minHeight: '56px' }}
       >
-        {isActivityHighlightEnabled && highlightsModalOpen && projectId && (
-          <ActivityHighlightsModal
-            open={highlightsModalOpen}
-            projectId={projectId}
-            setOpen={setHighlightsModalOpen}
-            title={projectDealName}
-          />
-        )}
         <Card
           style={{
             borderRadius: theme.spacing(1),
@@ -175,7 +167,14 @@ export default function ActivityLogView(): JSX.Element {
             width: '100%',
           }}
         >
-          {projectId && <ActivitiesListView projectId={projectId} />}
+          {projectId && (
+            <ActivitiesListView
+              highlightsModalOpen={highlightsModalOpen}
+              projectDealName={projectDealName}
+              projectId={projectId}
+              setHighlightsModalOpen={setHighlightsModalOpen}
+            />
+          )}
         </Card>
       </Page>
     </>

@@ -4,7 +4,6 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import ActivityHighlightsModal from 'src/components/ActivityLog/ActivityHighlightsModal';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import isEnabled from 'src/features';
@@ -101,7 +100,14 @@ const ProjectPage = () => {
       {
         id: 'activityLog',
         label: strings.PROJECT_ACTIVITY,
-        children: <ProjectActivityLogView projectId={projectData.projectId} />,
+        children: (
+          <ProjectActivityLogView
+            highlightsModalOpen={highlightsModalOpen}
+            projectDealName={projectData.participantProject?.dealName}
+            projectId={projectData.projectId}
+            setHighlightsModalOpen={setHighlightsModalOpen}
+          />
+        ),
       },
       {
         id: 'deliverables',
@@ -129,7 +135,16 @@ const ProjectPage = () => {
         ),
       },
     ];
-  }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes, publishedReports]);
+  }, [
+    activeLocale,
+    highlightsModalOpen,
+    projectData,
+    projectApplication,
+    projectScore,
+    phaseVotes,
+    publishedReports,
+    setHighlightsModalOpen,
+  ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
@@ -301,14 +316,6 @@ const ProjectPage = () => {
         hierarchicalCrumbs={false}
         rightComponent={rightComponent}
       >
-        {isActivityHighlightEnabled && highlightsModalOpen && (
-          <ActivityHighlightsModal
-            open={highlightsModalOpen}
-            projectId={projectData.projectId}
-            setOpen={setHighlightsModalOpen}
-            title={projectData.participantProject?.dealName}
-          />
-        )}
         {projectData.status === 'pending' && <BusySpinner />}
 
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
