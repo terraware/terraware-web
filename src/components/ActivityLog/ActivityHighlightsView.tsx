@@ -59,12 +59,9 @@ const ActivityHighlightsView = ({ activities, projectId }: ActivityHighlightsVie
   return (
     <MapSplitView
       activities={highlightedActivities}
-      // activityMarkerHighlighted={activityMarkerHighlighted}
       drawerRef={mapDrawerRef}
       heightOffsetPx={204}
-      // heightOffsetPx={overrideHeightOffsetPx ?? 256}
       mapRef={mapRef}
-      // onActivityMarkerClick={onActivityMarkerClick}
       projectId={projectId}
     >
       <Box sx={carouselContainerStyles}>
