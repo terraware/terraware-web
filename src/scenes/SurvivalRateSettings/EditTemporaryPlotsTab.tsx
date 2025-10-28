@@ -202,6 +202,10 @@ const EditTemporaryPlotsTab = ({
     }
   }, [dispatch, goToViewSettings, record, reload, updatePlantingSiteSetting]);
 
+  if (Object.entries(zonesWithObservations).length === 0) {
+    return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}</Box>;
+  }
+
   return (
     <PageForm
       cancelID='cancelSettings'

@@ -30,6 +30,10 @@ const TemporaryPlotsTab = ({
     return true;
   }, []);
 
+  if (Object.entries(zonesWithObservations).length === 0) {
+    return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}</Box>;
+  }
+
   return including ? (
     Object.entries(zonesWithObservations).map(([zoneId, plots]) => {
       const plotIds = plots.map((plot) => plot.id.toString());
