@@ -47,7 +47,13 @@ export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JS
           onClick={onClose}
           key='button-1'
         />,
-        <Button disabled={busy} id='undoWithdrawal' label={strings.UNDO_WITHDRAWAL} onClick={() => void onSubmit()} key='button-2' />,
+        <Button
+          disabled={busy}
+          id='undoWithdrawal'
+          label={strings.UNDO_WITHDRAWAL}
+          onClick={() => void onSubmit()}
+          key='button-2'
+        />,
       ]}
       message={strings.UNDO_WITHDRAWAL_CONFIRMATION}
       skrim={true}
