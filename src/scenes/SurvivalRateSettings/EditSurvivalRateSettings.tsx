@@ -52,6 +52,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
   const plantingSiteId = Number(params.plantingSiteId);
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { reload: reloadPlantingSiteData } = usePlantingSiteData();
 
   useEffect(() => {
     setSelectedPlantingSite(plantingSiteId);
@@ -60,6 +61,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
   const reload = useCallback(() => {
     if (plantingSite && plantingSite.id !== -1) {
       reloadObservations();
+      reloadPlantingSiteData();
       const request = dispatch(requestPlantingSiteT0(plantingSite.id));
       setRequestId(request.requestId);
       const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSite.id));
@@ -67,7 +69,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
       const requestSpeciesPlots = dispatch(requestPlantingSiteWithdrawnSpecies(plantingSite.id));
       setSpeciesRequestId(requestSpeciesPlots.requestId);
     }
-  }, [dispatch, plantingSite, reloadObservations]);
+  }, [dispatch, plantingSite, reloadObservations, reloadPlantingSiteData]);
 
   useEffect(() => {
     if (plantingSite) {
