@@ -96,35 +96,45 @@ const exportCsv = async (observationId: number): Promise<any> => {
   });
 };
 
-const exportBiomassObservationsCsv = async (organizationId: number, plantingSiteId?: number): Promise<any> => {
-  let fieldName: string;
-  let fieldValue: string;
-  if (plantingSiteId && plantingSiteId > 0) {
-    fieldName = 'plantingSite_id';
-    fieldValue = `${plantingSiteId}`;
-  } else {
-    fieldName = 'plantingSite_organization_id';
-    fieldValue = `${organizationId}`;
-  }
-
-  return SearchService.searchCsv({
-    prefix: 'plantingSites.observations',
+const exportBiomassPlotCsvByField = (fieldName: string, fieldValue: string) =>
+  SearchService.searchCsv({
+    prefix: 'plantingSites.observations.observationPlots',
     fields: [
-      'observationPlots_monitoringPlot_plotNumber',
-      'observationPlots_biomassDetails_description',
-      'plantingSite_name',
-      'startDate',
-      'observationPlots_biomassDetails_numPlants',
-      'observationPlots_biomassDetails_numSpecies',
+      'monitoringPlot_plotNumber',
+      'monitoringPlot_plantingSite_name',
+      'completedTime',
+      'biomassDetails_description',
+      'monitoringPlot_southwestLatitude',
+      'monitoringPlot_southwestLongitude',
+      'monitoringPlot_northwestLatitude',
+      'monitoringPlot_northwestLongitude',
+      'monitoringPlot_southeastLatitude',
+      'monitoringPlot_southeastLongitude',
+      'monitoringPlot_northeastLatitude',
+      'monitoringPlot_northeastLongitude',
+      'biomassDetails_forestType',
+      'biomassDetails_herbaceousCoverPercent',
+      'biomassDetails_ph',
+      'biomassDetails_smallTreesCountLow',
+      'biomassDetails_smallTreesCountHigh',
+      'biomassDetails_salinity',
+      'biomassDetails_soilAssessment',
+      'biomassDetails_tide',
+      'biomassDetails_tideTime',
+      'biomassDetails_waterDepth',
+      'biomassDetails_numPlants',
+      'biomassDetails_numSpecies',
+      'conditions.condition',
+      'notes',
     ],
-    sortOrder: [{ field: 'observationPlots_monitoringPlot_plotNumber', direction: 'Descending' }],
+    sortOrder: [{ field: 'monitoringPlot_plotNumber', direction: 'Descending' }],
     search: {
       operation: 'and',
       children: [
         {
           operation: 'field',
           type: 'Exact',
-          field: 'type(raw)',
+          field: 'observation_type(raw)',
           values: ['Biomass Measurements'],
         },
         {
@@ -137,48 +147,17 @@ const exportBiomassObservationsCsv = async (organizationId: number, plantingSite
     },
     count: 0,
   });
+
+const exportBiomassObservationsCsv = async (organizationId: number, plantingSiteId?: number): Promise<any> => {
+  if (plantingSiteId && plantingSiteId > 0) {
+    return exportBiomassPlotCsvByField('monitoringPlot_plantingSite_id', `${plantingSiteId}`);
+  } else {
+    return exportBiomassPlotCsvByField('monitoringPlot_plantingSite_organization_id', `${organizationId}`);
+  }
 };
 
 const exportBiomassPlotCsv = async (observationId: number): Promise<any> => {
-  return SearchService.searchCsv({
-    prefix: 'plantingSites.observations',
-    fields: [
-      'observationPlots_monitoringPlot_plotNumber',
-      'plantingSite_name',
-      'observationPlots_completedTime',
-      'observationPlots_monitoringPlot_southwestLatitude',
-      'observationPlots_monitoringPlot_southwestLongitude',
-      'observationPlots_monitoringPlot_northwestLatitude',
-      'observationPlots_monitoringPlot_northwestLongitude',
-      'observationPlots_monitoringPlot_southeastLatitude',
-      'observationPlots_monitoringPlot_southeastLongitude',
-      'observationPlots_monitoringPlot_northeastLatitude',
-      'observationPlots_monitoringPlot_northeastLongitude',
-      'observationPlots_biomassDetails_description',
-      'observationPlots_biomassDetails_forestType',
-      'observationPlots_biomassDetails_herbaceousCoverPercent',
-      'observationPlots_biomassDetails_ph',
-      'observationPlots_biomassDetails_smallTreesCountLow',
-      'observationPlots_biomassDetails_smallTreesCountHigh',
-      'observationPlots_biomassDetails_salinity',
-      'observationPlots_biomassDetails_soilAssessment',
-      'observationPlots_biomassDetails_tide',
-      'observationPlots_biomassDetails_tideTime',
-      'observationPlots_biomassDetails_waterDepth',
-      'observationPlots_biomassDetails_numPlants',
-      'observationPlots_biomassDetails_numSpecies',
-      'observationPlots.conditions_condition',
-      'observationPlots_notes',
-    ],
-    sortOrder: [{ field: 'observationPlots_monitoringPlot_plotNumber' }],
-    search: {
-      operation: 'field',
-      type: 'Exact',
-      field: 'id',
-      values: [`${observationId}`],
-    },
-    count: 0,
-  });
+  return exportBiomassPlotCsvByField('observation_id', `${observationId}`);
 };
 
 const exportBiomassSpeciesCsv = async (observationId: number): Promise<any> => {
