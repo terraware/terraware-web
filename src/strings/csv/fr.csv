@@ -1103,6 +1103,7 @@ NO_SPECIES_CONTRIBUTOR_MSG,"Aucune espèce ne figure dans votre liste d'espèces
 NO_SPECIES_DESCRIPTION,"Il semble que vous n'ayez ajouté aucune espèce pour le moment. Le fait de disposer d'une liste principale des espèces permet de rationaliser la saisie des données relatives aux semences et aux plantes au sein de votre organisation. Vous pouvez ajouter des espèces manuellement et individuellement, ou importer des données à partir d'un fichier CSV.",048a81f6
 NO_SUB_LOCATIONS,Modifiez cette banque de semences pour ajouter des sous-emplacements.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Modifier cette pépinière pour ajouter des sous-emplacements.,8a939067
+NO_TEMPORARY_PLOTS_WITHIN_ZONES,Il n’y a aucune parcelle temporaire dans les zones du site de plantation. Seules les parcelles temporaires situées dans les zones peuvent être utilisées pour le calcul du taux de survie.,b9c67f0a
 NO_VOTERS,Pas de votants,7db4c3bf
 NO_VOTERS_FOR_PROJECT,Il n'y a pas de votants pour ce projet. Contactez un administrateur de l'accélérateur pour ajouter des votants.,6753a8bc
 NO_WITHDRAWABLE_QUANTITIES_FOUND,Aucune quantité retirable n'a été trouvée,ab95517f

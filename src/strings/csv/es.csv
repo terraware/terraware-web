@@ -1104,6 +1104,7 @@ NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo l
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
 NO_SUB_LOCATIONS,Edite este banco de semillas para añadir sublocalizaciones.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Edite este vivero para añadir sublocalizaciones.,8a939067
+NO_TEMPORARY_PLOTS_WITHIN_ZONES,No hay parcelas temporales dentro de las Zonas del Sitio de Plantación. Solo las Parcelas Temporales dentro de las Zonas pueden usarse para los cálculos de la Tasa de Supervivencia.,b9c67f0a
 NO_VOTERS,No hay votantes,7db4c3bf
 NO_VOTERS_FOR_PROJECT,Este proyecto no tiene votantes. Póngase en contacto con un administrador acelerador para agregar votantes.,6753a8bc
 NO_WITHDRAWABLE_QUANTITIES_FOUND,No se encontraron cantidades retirables,ab95517f
