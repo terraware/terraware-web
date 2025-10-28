@@ -1,14 +1,26 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { MapRef } from 'react-map-gl/mapbox';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, IconButton, Typography } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import DialogBox, { DialogBoxSize } from '@terraware/web-components/components/DialogBox/DialogBox';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import MapSplitView from './MapSplitView';
+import { Activity } from 'src/types/Activity';
+
+import ActivityHighlightsView from './ActivityHighlightsView';
+
+const containerStyles = {
+  '& .dialog-box': {
+    minHeight: '90vh',
+    minWidth: '96vw',
+  },
+  '& .dialog-box--header': {
+    display: 'none',
+  },
+};
 
 type ActivityHighlightsModalProps = {
+  activities: Activity[];
   onCancel?: () => void;
   open: boolean;
   projectId: number;
@@ -16,10 +28,15 @@ type ActivityHighlightsModalProps = {
   title?: string;
 };
 
-const ActivityHighlightsModal = ({ open, setOpen, onCancel, projectId, title = '' }: ActivityHighlightsModalProps) => {
+const ActivityHighlightsModal = ({
+  activities,
+  open,
+  setOpen,
+  onCancel,
+  projectId,
+  title = '',
+}: ActivityHighlightsModalProps) => {
   const { isMobile, isTablet } = useDeviceInfo();
-  const mapDrawerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<MapRef | null>(null);
 
   const onClose = useCallback(() => {
     onCancel?.();
@@ -37,43 +54,32 @@ const ActivityHighlightsModal = ({ open, setOpen, onCancel, projectId, title = '
   }, [isMobile, isTablet]);
 
   return (
-    <Box
-      sx={{
-        '& .dialog-box': { minHeight: '90vh', minWidth: '96vw' },
-        '& .dialog-box--header': { display: 'none' },
-      }}
-    >
+    <Box sx={containerStyles}>
       <DialogBox onClose={onClose} open={open} size={dialogSize} skrim title={title}>
-        <Box
-          alignItems='center'
-          display='flex'
-          flexDirection='row'
-          justifyContent='space-between'
-          marginBottom='24px'
-          width='100%'
-        >
-          <Box alignItems='center' display='flex' flexDirection='row' justifyContent='flex-start'>
-            <Typography fontSize='24px' fontWeight={600} paddingRight='24px'>
-              {title}
-            </Typography>
+        <Box>
+          <Box
+            alignItems='center'
+            display='flex'
+            flexDirection='row'
+            justifyContent='space-between'
+            marginBottom='24px'
+            width='100%'
+          >
+            <Box alignItems='center' display='flex' flexDirection='row' justifyContent='flex-start'>
+              <Typography fontSize='24px' fontWeight={600} paddingRight='24px'>
+                {title}
+              </Typography>
 
-            <Typography>TODO: render quarter dropdown</Typography>
+              <Typography>TODO: render quarter dropdown</Typography>
+            </Box>
+
+            <IconButton onClick={onClose}>
+              <Icon name='close' size='medium' />
+            </IconButton>
           </Box>
 
-          <IconButton onClick={onClose}>
-            <Icon name='close' size='medium' />
-          </IconButton>
+          <ActivityHighlightsView activities={activities} projectId={projectId} />
         </Box>
-
-        <MapSplitView
-          activities={[]}
-          drawerRef={mapDrawerRef}
-          heightOffsetPx={204}
-          mapRef={mapRef}
-          projectId={projectId}
-        >
-          <Typography>TODO: render activity highlights</Typography>
-        </MapSplitView>
       </DialogBox>
     </Box>
   );

@@ -29,6 +29,7 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import { groupActivitiesByQuarter } from '../../utils/activityUtils';
 import { MapPoint } from '../NewMap/types';
 import useMapDrawer from '../NewMap/useMapDrawer';
 import useMapUtils from '../NewMap/useMapUtils';
@@ -39,6 +40,7 @@ import { FilterConfig, FilterConfigWithValues, defaultPillValueRenderer } from '
 import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityDetailView from './ActivityDetailView';
+import ActivityHighlightsModal from './ActivityHighlightsModal';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
@@ -129,11 +131,20 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
 };
 
 type ActivitiesListViewProps = {
+  highlightsModalOpen: boolean;
   overrideHeightOffsetPx?: number;
+  projectDealName?: string;
   projectId: number;
+  setHighlightsModalOpen: (open: boolean) => void;
 };
 
-const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesListViewProps): JSX.Element => {
+const ActivitiesListView = ({
+  highlightsModalOpen,
+  overrideHeightOffsetPx,
+  projectDealName,
+  projectId,
+  setHighlightsModalOpen,
+}: ActivitiesListViewProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
@@ -146,6 +157,7 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
   const location = useStateLocation();
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
@@ -337,42 +349,10 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
   const onDeleteDateRange = useCallback(() => onDeleteFilter('date'), [onDeleteFilter]);
 
   // group activities by quarter and year
-  const groupedActivities = useMemo(() => {
-    const groups: Record<string, Activity[]> = {};
-
-    paginatedActivities.forEach((activity) => {
-      const date = new Date(activity.date);
-      const year = date.getFullYear();
-      const quarter = Math.ceil((date.getMonth() + 1) / 3);
-      const quarterKey = strings.formatString(strings.QUARTER_YEAR, quarter, year)?.toString() || '';
-
-      if (!groups[quarterKey]) {
-        groups[quarterKey] = [];
-      }
-      groups[quarterKey].push(activity);
-    });
-
-    // sort quarters in descending order (most recent first)
-    const sortedQuarters = Object.keys(groups).sort((a, b) => {
-      const [aQuarter, aYear] = a.split(' ');
-      const [bQuarter, bYear] = b.split(' ');
-
-      if (aYear !== bYear) {
-        return parseInt(bYear, 10) - parseInt(aYear, 10);
-      }
-      return parseInt(bQuarter.substring(1), 10) - parseInt(aQuarter.substring(1), 10);
-    });
-
-    // sort activities within each quarter by date (most recent first)
-    sortedQuarters.forEach((quarterKey) => {
-      groups[quarterKey].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    });
-
-    return sortedQuarters.map((quarterKey) => ({
-      quarter: quarterKey,
-      activities: groups[quarterKey],
-    }));
-  }, [paginatedActivities, strings]);
+  const groupedActivities = useMemo(
+    () => groupActivitiesByQuarter(paginatedActivities, strings),
+    [paginatedActivities, strings]
+  );
 
   const totalPages = useMemo(() => {
     return Math.ceil(results.length / itemsPerPage);
@@ -616,97 +596,108 @@ const ActivitiesListView = ({ overrideHeightOffsetPx, projectId }: ActivitiesLis
   }, [convertActivityRow, exportColumnHeaders, results, retrieveActivities, strings.ACTIVITY_LOG]);
 
   return (
-    <MapSplitView
-      activities={activitiesVisibleOnMap}
-      activityMarkerHighlighted={activityMarkerHighlighted}
-      drawerRef={mapDrawerRef}
-      mapRef={mapRef}
-      heightOffsetPx={overrideHeightOffsetPx ?? 256}
-      onActivityMarkerClick={onActivityMarkerClick}
-      projectId={projectId}
-    >
-      {showActivityId && shownActivity ? (
-        <ActivityDetailView
-          activity={shownActivity}
-          focusedFileId={focusedFileId}
-          hoveredFileId={hoveredFileId}
-          onClickMediaItem={onClickMediaItem}
+    <>
+      {isActivityHighlightEnabled && highlightsModalOpen && (
+        <ActivityHighlightsModal
+          activities={activities}
+          open={highlightsModalOpen}
           projectId={projectId}
-          setHoverFileCallback={setHoverFileCallback}
+          setOpen={setHighlightsModalOpen}
+          title={projectDealName}
         />
-      ) : activities.length === 0 && !busy ? (
-        <ActivitiesEmptyState projectId={projectId} />
-      ) : (
-        <>
-          <DateRange
-            field='date'
-            iconFilters={
-              <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
-            }
-            exportButton={exportProps && <ExportTableComponent {...exportProps} />}
-            onChange={onChangeDateRange}
-            onDelete={onDeleteDateRange}
-            rightComponent={filterPillData.length ? <PillList data={filterPillData} /> : undefined}
-            values={filters.date?.values ?? []}
-          />
-          {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
-            <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
-              {strings.NO_ACTIVITIES_TO_SHOW}
-            </Typography>
-          ) : (
-            <>
-              {groupedActivities.map(({ quarter, activities: groupActivities }) => (
-                <Fragment key={quarter}>
-                  <Typography
-                    color={theme.palette.TwClrTxt}
-                    fontSize='20px'
-                    fontWeight={600}
-                    lineHeight='28px'
-                    marginY={theme.spacing(1)}
-                  >
-                    {quarter}
-                  </Typography>
-
-                  {groupActivities.map((activity) => (
-                    <ActivityListItem
-                      activity={activity}
-                      focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
-                      key={activity.id}
-                      onClick={getOnClickActivityListItem(activity.id)}
-                      onMouseEnter={setHoverActivityCallback(activity.id, true)}
-                      onMouseLeave={setHoverActivityCallback(activity.id, false)}
-                    />
-                  ))}
-                </Fragment>
-              ))}
-              {totalPages > 1 && (
-                <Box display='flex' justifyContent='center' marginTop={theme.spacing(3)} alignItems='center'>
-                  <Typography fontSize={'14px'} paddingRight={'8px'}>
-                    {strings.formatString(
-                      strings.PAGINATION_FOOTER_RANGE,
-                      (currentPage - 1) * itemsPerPage + 1,
-                      Math.min(currentPage * itemsPerPage, results.length),
-                      results.length
-                    )}
-                  </Typography>
-                  <Pagination
-                    count={totalPages}
-                    page={currentPage}
-                    onChange={handlePageChange}
-                    sx={{
-                      '.MuiButtonBase-root.MuiPaginationItem-root.Mui-selected': {
-                        backgroundColor: theme.palette.TwClrBgGhostActive,
-                        borderRadius: '4px',
-                      },
-                    }}
-                  />
-                </Box>
-              )}
-            </>
-          )}
-        </>
       )}
-    </MapSplitView>
+      <MapSplitView
+        activities={activitiesVisibleOnMap}
+        activityMarkerHighlighted={activityMarkerHighlighted}
+        drawerRef={mapDrawerRef}
+        mapRef={mapRef}
+        heightOffsetPx={overrideHeightOffsetPx ?? 256}
+        onActivityMarkerClick={onActivityMarkerClick}
+        projectId={projectId}
+      >
+        {showActivityId && shownActivity ? (
+          <ActivityDetailView
+            activity={shownActivity}
+            focusedFileId={focusedFileId}
+            hoveredFileId={hoveredFileId}
+            onClickMediaItem={onClickMediaItem}
+            projectId={projectId}
+            setHoverFileCallback={setHoverFileCallback}
+          />
+        ) : activities.length === 0 && !busy ? (
+          <ActivitiesEmptyState projectId={projectId} />
+        ) : (
+          <>
+            <DateRange
+              field='date'
+              iconFilters={
+                <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
+              }
+              exportButton={exportProps && <ExportTableComponent {...exportProps} />}
+              onChange={onChangeDateRange}
+              onDelete={onDeleteDateRange}
+              rightComponent={filterPillData.length ? <PillList data={filterPillData} /> : undefined}
+              values={filters.date?.values ?? []}
+            />
+            {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
+              <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
+                {strings.NO_ACTIVITIES_TO_SHOW}
+              </Typography>
+            ) : (
+              <>
+                {groupedActivities.map(({ quarter, activities: groupActivities }) => (
+                  <Fragment key={quarter}>
+                    <Typography
+                      color={theme.palette.TwClrTxt}
+                      fontSize='20px'
+                      fontWeight={600}
+                      lineHeight='28px'
+                      marginY={theme.spacing(1)}
+                    >
+                      {quarter}
+                    </Typography>
+
+                    {groupActivities.map((activity) => (
+                      <ActivityListItem
+                        activity={activity}
+                        focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
+                        key={activity.id}
+                        onClick={getOnClickActivityListItem(activity.id)}
+                        onMouseEnter={setHoverActivityCallback(activity.id, true)}
+                        onMouseLeave={setHoverActivityCallback(activity.id, false)}
+                      />
+                    ))}
+                  </Fragment>
+                ))}
+                {totalPages > 1 && (
+                  <Box display='flex' justifyContent='center' marginTop={theme.spacing(3)} alignItems='center'>
+                    <Typography fontSize={'14px'} paddingRight={'8px'}>
+                      {strings.formatString(
+                        strings.PAGINATION_FOOTER_RANGE,
+                        (currentPage - 1) * itemsPerPage + 1,
+                        Math.min(currentPage * itemsPerPage, results.length),
+                        results.length
+                      )}
+                    </Typography>
+                    <Pagination
+                      count={totalPages}
+                      page={currentPage}
+                      onChange={handlePageChange}
+                      sx={{
+                        '.MuiButtonBase-root.MuiPaginationItem-root.Mui-selected': {
+                          backgroundColor: theme.palette.TwClrBgGhostActive,
+                          borderRadius: '4px',
+                        },
+                      }}
+                    />
+                  </Box>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </MapSplitView>
+    </>
   );
 };
 
