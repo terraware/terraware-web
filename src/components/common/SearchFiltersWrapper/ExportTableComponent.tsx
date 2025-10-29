@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Button, Tooltip } from '@terraware/web-components';
 import { ColumnHeader } from 'export-to-csv/output/lib/types';
@@ -29,19 +29,25 @@ export default function ExportTableComponent({
   convertRow,
   filename,
 }: ExportTableProps) {
+  const [alreadyDownloaded, setAlreadyDownloaded] = useState<boolean>(false);
+
   const downloadResults = useCallback(
     async (results: CsvData[]) => {
+      if (alreadyDownloaded) {
+        return;
+      }
+
       const data: CsvData[] = convertRow ? results.map((row) => convertRow(row)) : results;
       const fileBlob = makeCsv(columnHeaders, data);
       const fileContents = await fileBlob.text();
 
       downloadCsv(filename || 'export', fileContents);
+      setAlreadyDownloaded(true);
     },
-    [columnHeaders, convertRow, filename]
+    [alreadyDownloaded, columnHeaders, convertRow, filename]
   );
 
-  // For non-Redux components with pre-fetched data
-  const onExportAsync = useCallback(async () => {
+  const downloadDirectly = useCallback(async () => {
     const results: CsvData[] = (await retrieveResults?.()) || [];
     if (results.length === 0) {
       return;
@@ -50,19 +56,17 @@ export default function ExportTableComponent({
     await downloadResults(results);
   }, [downloadResults, retrieveResults]);
 
-  // Handle both Redux and non-Redux patterns
   const onExport = useCallback(() => {
     if (retrieveResults) {
-      // Non-Redux case: use async retrieve function
-      void onExportAsync();
+      void downloadDirectly();
     } else if (requestResults) {
-      // Redux case: dispatch action
+      setAlreadyDownloaded(false);
       requestResults();
     }
-  }, [retrieveResults, requestResults, onExportAsync]);
+  }, [retrieveResults, requestResults, downloadDirectly]);
 
-  // For Redux components: listen for response and download when ready
   useEffect(() => {
+    // For Redux components: listen for response and download when ready
     if (resultsResponse?.status === 'success') {
       const results: CsvData[] = resultsResponse.data || [];
       if (results.length === 0) {
