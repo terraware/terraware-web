@@ -57,10 +57,10 @@ export default function ExportTableComponent({
   }, [downloadResults, retrieveResults]);
 
   const onExport = useCallback(() => {
+    setAlreadyDownloaded(false);
     if (retrieveResults) {
       void downloadDirectly();
     } else if (requestResults) {
-      setAlreadyDownloaded(false);
       requestResults();
     }
   }, [retrieveResults, requestResults, downloadDirectly]);
