@@ -40,6 +40,11 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const ITEMS_PER_PAGE = 100;
 
+const DEFAULT_SORT_ORDER: SearchSortOrder = {
+  field: 'withdrawnDate',
+  direction: 'Descending',
+};
+
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
@@ -57,10 +62,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalRowCount, setTotalRowCount] = useState<number>();
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
-    field: 'withdrawnDate',
-    direction: 'Descending',
-  } as SearchSortOrder);
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>(DEFAULT_SORT_ORDER);
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
   const getProjectName = useCallback(
@@ -381,7 +383,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             field: orderByStr,
             direction: order === 'asc' ? 'Ascending' : 'Descending',
           }
-        : undefined
+        : DEFAULT_SORT_ORDER
     );
   }, []);
 
@@ -434,11 +436,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           rows={rows || []}
           Renderer={WithdrawalLogRenderer}
           orderBy={
-            searchSortOrder?.field === 'batchWithdrawals.batch_project_name'
-              ? 'project_names'
-              : searchSortOrder?.field || 'project_names'
+            searchSortOrder.field === 'batchWithdrawals.batch_project_name' ? 'project_names' : searchSortOrder.field
           }
-          order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
+          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
           isPresorted={true}
           onSelect={onWithdrawalClicked}
           controlledOnSelect={true}
