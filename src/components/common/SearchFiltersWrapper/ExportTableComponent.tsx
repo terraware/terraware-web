@@ -22,13 +22,13 @@ export type ExportTableProps = {
 };
 
 export default function ExportTableComponent({
-                                               columnHeaders,
-                                               requestResults,
-                                               resultsResponse,
-                                               retrieveResults,
-                                               convertRow,
-                                               filename,
-                                             }: ExportTableProps) {
+  columnHeaders,
+  requestResults,
+  resultsResponse,
+  retrieveResults,
+  convertRow,
+  filename,
+}: ExportTableProps) {
   const downloadResults = useCallback(
     async (results: CsvData[]) => {
       const data: CsvData[] = convertRow ? results.map((row) => convertRow(row)) : results;
