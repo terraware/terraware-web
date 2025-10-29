@@ -8,6 +8,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useLocalization } from 'src/providers';
 import { Activity } from 'src/types/Activity';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
+import useQuery from 'src/utils/useQuery';
 
 import ActivityHighlightsView from './ActivityHighlightsView';
 
@@ -40,8 +41,14 @@ const ActivityHighlightsModal = ({
 }: ActivityHighlightsModalProps) => {
   const { activeLocale, strings } = useLocalization();
   const { isMobile, isTablet } = useDeviceInfo();
+  const query = useQuery();
 
   const [selectedQuarter, setSelectedQuarter] = useState<string | number | undefined>(undefined);
+
+  const highlightActivityId = useMemo(() => {
+    const activityIdParam = query.get('highlightActivityId');
+    return activityIdParam ? Number(activityIdParam) : undefined;
+  }, [query]);
 
   const highlightedActivities = useMemo(() => activities.filter((activity) => activity.isHighlight), [activities]);
 
@@ -67,7 +74,7 @@ const ActivityHighlightsModal = ({
   const onClose = useCallback(() => {
     onCancel?.();
     setOpen(false);
-  }, [setOpen, onCancel]);
+  }, [onCancel, setOpen]);
 
   const dialogSize = useMemo((): DialogBoxSize => {
     if (isMobile) {
@@ -83,6 +90,7 @@ const ActivityHighlightsModal = ({
     setSelectedQuarter(value);
   }, []);
 
+  // set initial selected quarter when modal opens
   useEffect(() => {
     if (open && dropdownOptions.length > 0 && !selectedQuarter) {
       setSelectedQuarter(dropdownOptions[0].value);
@@ -91,7 +99,14 @@ const ActivityHighlightsModal = ({
 
   return (
     <Box sx={containerStyles}>
-      <DialogBox onClose={onClose} open={open} size={dialogSize} skrim title={title}>
+      <DialogBox
+        onClose={onClose}
+        open={open}
+        scrolled={highlightActivityId ? true : false}
+        size={dialogSize}
+        skrim
+        title={title}
+      >
         <Box
           alignItems='flex-start'
           display='flex'

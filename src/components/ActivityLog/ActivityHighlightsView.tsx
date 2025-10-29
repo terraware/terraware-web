@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, SxProps, Theme, Typography, useTheme } from '@mui/material';
@@ -8,10 +8,18 @@ import 'swiper/css/pagination';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import { MapPoint } from '../NewMap/types';
+import useMapDrawer from '../NewMap/useMapDrawer';
+import useMapUtils from '../NewMap/useMapUtils';
+import { getBoundingBoxFromPoints } from '../NewMap/utils';
+import ActivityDetailView from './ActivityDetailView';
 import MapSplitView from './MapSplitView';
 
 const carouselContainerStyles = {
@@ -60,6 +68,7 @@ const carouselSlideCardStyles = {
   backgroundColor: '#fff',
   borderRadius: '8px',
   color: '#000',
+  cursor: 'pointer',
   display: 'flex',
   flexDirection: 'column',
   padding: '16px',
@@ -95,6 +104,81 @@ const ActivityHighlightsView = ({ activities, projectId }: ActivityHighlightsVie
   const theme = useTheme();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
+  const query = useQuery();
+  const location = useStateLocation();
+  const navigate = useSyncNavigate();
+  const { scrollToTop } = useMapDrawer(mapDrawerRef);
+  const { fitBounds } = useMapUtils(mapRef);
+
+  const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
+  const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
+
+  const highlightActivityId = useMemo(() => {
+    const activityIdParam = query.get('highlightActivityId');
+    return activityIdParam ? Number(activityIdParam) : undefined;
+  }, [query]);
+
+  const shownActivity = useMemo(
+    () => activities.find((activity) => activity.id === highlightActivityId),
+    [activities, highlightActivityId]
+  );
+
+  useEffect(() => {
+    if (!highlightActivityId) {
+      // exiting activity detail view, clear focused & hovered states
+      setFocusedFileId(undefined);
+      setHoveredFileId(undefined);
+    }
+  }, [highlightActivityId]);
+
+  useEffect(() => {
+    if (shownActivity) {
+      const points = shownActivity.media
+        .map((_media): MapPoint | undefined => {
+          if (!_media.isHiddenOnMap && _media.geolocation) {
+            return {
+              lat: _media.geolocation.coordinates[1],
+              lng: _media.geolocation.coordinates[0],
+            };
+          }
+        })
+        .filter((point): point is MapPoint => point !== undefined);
+
+      if (points.length > 0) {
+        const bbox = getBoundingBoxFromPoints(points);
+        fitBounds(bbox);
+      }
+    }
+  }, [fitBounds, shownActivity]);
+
+  const onClickSlide = useCallback(
+    (activityId: number) => () => {
+      query.set('highlightActivityId', activityId.toString());
+      navigate(getLocation(location.pathname, location, query.toString()));
+      scrollToTop();
+    },
+    [location, navigate, query, scrollToTop]
+  );
+
+  const setHoverFileCallback = useCallback(
+    (fileId: number, hover: boolean) => () => {
+      setHoveredFileId(hover ? fileId : undefined);
+    },
+    []
+  );
+
+  const onClickMediaItem = useCallback(
+    (fileId: number) => () => {
+      if (shownActivity) {
+        if (focusedFileId === fileId) {
+          setFocusedFileId(undefined);
+          return;
+        }
+        setFocusedFileId(fileId);
+      }
+    },
+    [shownActivity, focusedFileId]
+  );
 
   const slides = useMemo(() => {
     const _slides: ActivityHighlightSlide[] = [];
@@ -124,50 +208,63 @@ const ActivityHighlightsView = ({ activities, projectId }: ActivityHighlightsVie
         mapRef={mapRef}
         projectId={projectId}
       >
-        <Box
-          sx={[
-            carouselContainerStyles,
-            {
-              maxHeight: {
-                xs: `calc(100vh - ${HEIGHT_OFFSET_MOBILE_PX}px)`,
-                md: `calc(100vh - ${HEIGHT_OFFSET_PX}px)`,
+        {highlightActivityId && shownActivity ? (
+          <ActivityDetailView
+            activity={shownActivity}
+            focusedFileId={focusedFileId}
+            hoveredFileId={hoveredFileId}
+            onClickMediaItem={onClickMediaItem}
+            projectId={projectId}
+            setHoverFileCallback={setHoverFileCallback}
+          />
+        ) : (
+          <Box
+            sx={[
+              carouselContainerStyles,
+              {
+                maxHeight: highlightActivityId
+                  ? undefined
+                  : {
+                      xs: `calc(100vh - ${HEIGHT_OFFSET_MOBILE_PX}px)`,
+                      md: `calc(100vh - ${HEIGHT_OFFSET_PX}px)`,
+                    },
               },
-            },
-          ]}
-        >
-          <Swiper
-            key={activities.map((a) => a.id).join('-')}
-            direction='vertical'
-            loop
-            modules={[Mousewheel, Navigation, Pagination]}
-            mousewheel
-            pagination={{ clickable: true }}
-            slidesPerView={1}
-            spaceBetween={30}
-            style={{ height: '100%', width: '100%' }}
+            ]}
           >
-            {slides.map((_slide, index) => (
-              <SwiperSlide key={index} style={{ position: 'relative' }}>
-                <Box sx={carouselSlideContentStyles(_slide.coverPhotoURL)}>
-                  <Box sx={carouselSlideCardStyles}>
-                    <Box sx={carouselSlideCardMetadataStyles(theme)}>
-                      <Typography>{_slide.activity.date}</Typography>
-                      <Typography
-                        color={theme.palette.TwClrTxtBrand}
-                        fontSize='24px'
-                        fontWeight={600}
-                        lineHeight='32px'
-                      >
-                        {_slide.activityType}
-                      </Typography>
+            <Swiper
+              direction='vertical'
+              key={activities.map((a) => a.id).join('-')}
+              loop
+              modules={[Mousewheel, Navigation, Pagination]}
+              mousewheel
+              pagination={{ clickable: true }}
+              slidesPerView={1}
+              spaceBetween={30}
+              style={{ height: '100%', width: '100%' }}
+            >
+              {slides.map((slide, index) => (
+                <SwiperSlide key={index} style={{ position: 'relative' }}>
+                  <Box sx={carouselSlideContentStyles(slide.coverPhotoURL)}>
+                    <Box sx={carouselSlideCardStyles} onClick={onClickSlide(slide.activity.id)}>
+                      <Box sx={carouselSlideCardMetadataStyles(theme)}>
+                        <Typography>{slide.activity.date}</Typography>
+                        <Typography
+                          color={theme.palette.TwClrTxtBrand}
+                          fontSize='24px'
+                          fontWeight={600}
+                          lineHeight='32px'
+                        >
+                          {slide.activityType}
+                        </Typography>
+                      </Box>
+                      <Typography>{slide.activity.description}</Typography>
                     </Box>
-                    <Typography>{_slide.activity.description}</Typography>
                   </Box>
-                </Box>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </Box>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </Box>
+        )}
       </MapSplitView>
     </Box>
   );
