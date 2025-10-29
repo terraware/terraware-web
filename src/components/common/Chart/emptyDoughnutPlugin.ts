@@ -25,11 +25,18 @@ export const emptyDoughnutPlugin = {
       const centerY = (top + bottom) / 2;
       const r = Math.min(right - left, bottom - top) / 2;
 
+      ctx.save();
       ctx.beginPath();
       ctx.lineWidth = width || 2;
       ctx.strokeStyle = color || 'rgba(255, 128, 0, 0.5)';
       ctx.arc(centerX, centerY, r - (radiusDecrease || 0), 0, 2 * Math.PI);
-      ctx.stroke();
+      if (!width && !radiusDecrease) {
+        ctx.fillStyle = color;
+        ctx.fill();
+      } else {
+        ctx.stroke();
+      }
+      ctx.restore();
     }
   },
 };
