@@ -82,14 +82,14 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
   const mortalityChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
       const zone = sc.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
-      if (zone?.mortalityRate !== undefined) {
+      if ((isSurvivalRateCalculationEnabled ? zone?.survivalRate : zone?.mortalityRate) !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
       const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedMortalityZone);
-      return zone?.mortalityRate || 0;
+      return (isSurvivalRateCalculationEnabled ? zone?.survivalRate : zone?.mortalityRate) || 0;
     });
 
     return {
@@ -103,7 +103,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
         },
       ],
     };
-  }, [observationSummaries, selectedMortalityZone, selectedPlantsPerHaZone]);
+  }, [isSurvivalRateCalculationEnabled, observationSummaries, selectedMortalityZone, selectedPlantsPerHaZone]);
 
   return (
     <Card
