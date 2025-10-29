@@ -6,7 +6,7 @@ import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { MonitoringPlotStatus, ObservationMonitoringPlotResultsPayload, getPlotStatus } from 'src/types/Observations';
+import { MonitoringPlotStatus, ObservationMonitoringPlotResultsPayload, ObservationState, getPlotStatus } from 'src/types/Observations';
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate', 'plantingDensity'];
 
@@ -15,7 +15,8 @@ const ObservationPlantingZoneRenderer =
     plantingSiteId: number,
     observationId: number,
     plantingZoneName: string,
-    setReplaceObservationPlot: React.Dispatch<React.SetStateAction<ObservationMonitoringPlotResultsPayload | undefined>>
+    setReplaceObservationPlot: React.Dispatch<React.SetStateAction<ObservationMonitoringPlotResultsPayload | undefined>>,
+    observationState?: ObservationState,
   ) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
@@ -70,7 +71,7 @@ const ObservationPlantingZoneRenderer =
         <TableRowPopupMenu
           menuItems={[
             {
-              disabled: row.completedTime, // cannot replace observation plots that are completed
+              disabled: row.completedTime || observationState === 'Abandoned', // cannot replace observation plots that are completed
               label: strings.REQUEST_REASSIGNMENT,
               onClick: () => {
                 setReplaceObservationPlot(row as ObservationMonitoringPlotResultsPayload);

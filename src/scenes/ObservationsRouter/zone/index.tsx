@@ -27,6 +27,7 @@ import { isManagerOrHigher } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
+import useObservation from 'src/hooks/useObservation';
 
 const replaceObservationPlotColumn = (): TableColumnType[] => [
   {
@@ -51,6 +52,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   const observationId = Number(params.observationId);
   const plantingZoneName = params.plantingZoneName!;
 
+  const { observation } = useObservation(observationId);
   const [search, onSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [replaceObservationPlot, setReplaceObservationPlot] = useState<
@@ -199,7 +201,8 @@ export default function ObservationPlantingZone(): JSX.Element {
                   plantingSiteId,
                   observationId,
                   plantingZoneName,
-                  setReplaceObservationPlot
+                  setReplaceObservationPlot,
+                  observation?.state,
                 )}
                 tableComments={
                   plantingZone?.plantingSubzones && has25mPlots(plantingZone.plantingSubzones)
