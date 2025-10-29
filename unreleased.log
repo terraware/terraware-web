@@ -1,3 +1,5 @@
+c028bb80817 SW-7621 Add planting site name to ad-hoc plot CSV (#4697)
+537015feb84 SW-7606 Handle observation photos without GPS (#4696)
 65cebd48edc SW-7619 Move reloadPlantingSite data to specific places to avoid infinite render (#4694)
 ed9bf924ffd SW-7593 Updates to Species Survival pie chart for "not calculated" state (#4692)
 728eae4bdfb SW-7618 Plants dashboard species categories chart should have an "Other" category (#4693)

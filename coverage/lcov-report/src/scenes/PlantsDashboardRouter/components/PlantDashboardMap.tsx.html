@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/213</span>
+                <span class='fraction'>0/215</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/209</span>
+                <span class='fraction'>0/211</span>
             </div>
         
             
@@ -835,7 +835,11 @@
 <a name='L770'></a><a href='#L770'>770</a>
 <a name='L771'></a><a href='#L771'>771</a>
 <a name='L772'></a><a href='#L772'>772</a>
-<a name='L773'></a><a href='#L773'>773</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L773'></a><a href='#L773'>773</a>
+<a name='L774'></a><a href='#L774'>774</a>
+<a name='L775'></a><a href='#L775'>775</a>
+<a name='L776'></a><a href='#L776'>776</a>
+<a name='L777'></a><a href='#L777'>777</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -896,6 +900,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1155,7 +1160,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1631,6 +1639,7 @@ import { useLocalization } from 'src/providers';
 import { MapService } from 'src/services';
 import {
   ObservationMonitoringPlotPhoto,
+  ObservationMonitoringPlotPhotoWithGps,
   ObservationResultsPayload,
   RecordedPlant,
   RecordedPlantStatus,
@@ -1645,7 +1654,7 @@ import MapStatsDrawer from './MapStatsDrawer';
 type PlotPhoto = {
   observationId: number;
   monitoringPlotId: number;
-  photo: ObservationMonitoringPlotPhoto;
+  photo: ObservationMonitoringPlotPhotoWithGps;
 };
 &nbsp;
 type PlotPlant = {
@@ -1733,7 +1742,7 @@ const PlantDashboardMap = <span class="cstat-no" title="statement not covered" >
   );
 &nbsp;
   const selectPhoto = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (m</span>onitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhoto) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="fstat-no" title="function not covered" >    (m</span>onitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhotoWithGps) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedFeature(undefined);</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedPhotos([{ monitoringPlotId, observationId, photo }]);</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedPlants([]);</span>
@@ -1750,7 +1759,7 @@ const PlantDashboardMap = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >        if (marker.properties) {</span>
           const observationId = <span class="cstat-no" title="statement not covered" >marker.properties.observationId as number;</span>
           const monitoringPlotId = <span class="cstat-no" title="statement not covered" >marker.properties.monitoringPlotId as number;</span>
-          const photo = <span class="cstat-no" title="statement not covered" >marker.properties.photo as ObservationMonitoringPlotPhoto;</span>
+          const photo = <span class="cstat-no" title="statement not covered" >marker.properties.photo as ObservationMonitoringPlotPhotoWithGps;</span>
 <span class="cstat-no" title="statement not covered" >          return { monitoringPlotId, observationId, photo };</span>
         }
       })
@@ -1929,12 +1938,15 @@ const PlantDashboardMap = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
 &nbsp;
+    const hasGpsCoordinates = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>hoto: ObservationMonitoringPlotPhoto): photo is ObservationMonitoringPlotPhotoWithGps =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      !!photo.gpsCoordinates;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return observationResults.flatMap(<span class="fstat-no" title="function not covered" >(r</span>esults) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      results.plantingZones</span>
         .flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>
         .flatMap(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; <span class="cstat-no" title="statement not covered" >subzone.monitoringPlots)</span>
         .flatMap(<span class="fstat-no" title="function not covered" >(p</span>lot): MapMarker[] =&gt;
-<span class="cstat-no" title="statement not covered" >          plot.photos.map(<span class="fstat-no" title="function not covered" >(p</span>hoto) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          plot.photos.filter(hasGpsCoordinates).map(<span class="fstat-no" title="function not covered" >(p</span>hoto) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            return {</span>
               id: `photos/${photo.fileId}`,
               longitude: photo.gpsCoordinates.coordinates[1],
@@ -2386,7 +2398,7 @@ export default PlantDashboardMap;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-29T12:27:15.540Z
+                at 2025-10-29T15:33:41.690Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
