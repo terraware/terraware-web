@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761752022453" clover="3.2.0">
-  <project timestamp="1761752022453" name="All files">
+<coverage generated="1761760964519" clover="3.2.0">
+  <project timestamp="1761760964519" name="All files">
     <metrics statements="35144" coveredstatements="1354" conditionals="24547" coveredconditionals="392" methods="10760" coveredmethods="213" elements="70451" coveredelements="1959" complexity="0" loc="35144" ncloc="35144" packages="280" files="1369" classes="1369"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -3135,15 +3135,15 @@
         <line num="698" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="699" count="0" type="stmt"/>
         <line num="717" count="0" type="stmt"/>
-        <line num="747" count="0" type="stmt"/>
-        <line num="783" count="0" type="stmt"/>
-        <line num="808" count="0" type="stmt"/>
-        <line num="828" count="0" type="stmt"/>
-        <line num="845" count="0" type="stmt"/>
-        <line num="867" count="0" type="stmt"/>
-        <line num="884" count="0" type="stmt"/>
-        <line num="900" count="0" type="stmt"/>
-        <line num="910" count="0" type="stmt"/>
+        <line num="748" count="0" type="stmt"/>
+        <line num="784" count="0" type="stmt"/>
+        <line num="809" count="0" type="stmt"/>
+        <line num="829" count="0" type="stmt"/>
+        <line num="846" count="0" type="stmt"/>
+        <line num="868" count="0" type="stmt"/>
+        <line num="885" count="0" type="stmt"/>
+        <line num="901" count="0" type="stmt"/>
+        <line num="911" count="0" type="stmt"/>
       </file>
       <file name="WithdrawalBatchesCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/BatchWithdrawFlow/flow/WithdrawalBatchesCellRenderer.tsx">
         <metrics statements="34" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="6" coveredmethods="0"/>
