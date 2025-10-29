@@ -1,3 +1,4 @@
+e661960aff7 SW-7320: FE: Highlights Preview View (#4698)
 6a021a9c8a2 SW-7515 Disable undo withdrawl button when request is in flight (#4695)
 575334b6e52 SW-7593 Fix empty state chart (#4701)
 2b23ba9ecdf SW-7608 Inventory: When planting withdrawals are done using the Inventory tables, long Planting Site list is cut off (#4700)
