@@ -30,3 +30,9 @@ export const formatNumberScale = (value?: number | string, decimalPlaces: number
   const scaledNum = num / scale.threshold;
   return `${scaledNum.toFixed(decimalPlaces)}${scale.suffix}`;
 };
+
+export const disableDecimalChar = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  if (e.key === '.' || e.key === ',') {
+    e.preventDefault();
+  }
+};
