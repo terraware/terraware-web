@@ -56,7 +56,6 @@ const ActivityHighlightsModal = ({
     () => groupActivitiesByQuarter(highlightedActivities, strings),
     [highlightedActivities, strings]
   );
-  console.log('groupedActivities:', groupedActivities);
 
   const selectedGroup = useMemo(() => {
     return groupedActivities.find((group) => group.quarter === selectedQuarter);
