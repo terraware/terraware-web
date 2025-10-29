@@ -258,7 +258,7 @@ const ZoneT0EditBox = ({
     (withdrawnSpecies: { density: number; speciesId: number }) => {
       const density = zoneToSave?.densityData.find(
         (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
-      )?.plotDensity;
+      )?.density;
       if (density) {
         return Math.round(density);
       }
