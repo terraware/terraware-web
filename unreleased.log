@@ -1,3 +1,4 @@
+c9052230a9c SW-7613 Fix survival rate trend chart to use survival instead of mortality rates (#4702)
 e661960aff7 SW-7320: FE: Highlights Preview View (#4698)
 6a021a9c8a2 SW-7515 Disable undo withdrawl button when request is in flight (#4695)
 575334b6e52 SW-7593 Fix empty state chart (#4701)
