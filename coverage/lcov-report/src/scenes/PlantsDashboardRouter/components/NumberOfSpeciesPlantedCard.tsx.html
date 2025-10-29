@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/128</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/120</span>
+                <span class='fraction'>0/121</span>
             </div>
         
             
@@ -364,7 +364,10 @@
 <a name='L299'></a><a href='#L299'>299</a>
 <a name='L300'></a><a href='#L300'>300</a>
 <a name='L301'></a><a href='#L301'>301</a>
-<a name='L302'></a><a href='#L302'>302</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -489,6 +492,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -579,6 +584,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -586,6 +592,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -603,7 +610,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -673,11 +679,11 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 &nbsp;
 import PieChart from 'src/components/common/Chart/PieChart';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
-import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { conservationCategories } from 'src/types/Species';
 &nbsp;
 type CategoryData = {
@@ -708,7 +714,7 @@ const processConservationCategories = <span class="cstat-no" title="statement no
 &nbsp;
   const rareSpeciesPercentage = <span class="cstat-no" title="statement not covered" >totalSpecies &gt; 0 ? Number(((totalRare * 100) / totalSpecies).toFixed(2)) : 0;</span>
   const labels = <span class="cstat-no" title="statement not covered" >Object.keys(finalCategoryTotals).map(</span>
-<span class="fstat-no" title="function not covered" >    (c</span>tId) =&gt; <span class="cstat-no" title="statement not covered" >conservationCategories().find(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.value === ctId)</span>?.label || ''</span>
+<span class="fstat-no" title="function not covered" >    (c</span>tId) =&gt; <span class="cstat-no" title="statement not covered" >conservationCategories().find(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c.value === ctId)</span>?.label || strings.OTHER</span>
   );
   const values = <span class="cstat-no" title="statement not covered" >Object.values(finalCategoryTotals).map(<span class="fstat-no" title="function not covered" >(c</span>at) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    totalSpecies &gt; 0 ? Number(((cat * 100) / totalSpecies).toFixed(2)) : 0</span>
@@ -789,6 +795,8 @@ const RolledUpCard = <span class="cstat-no" title="statement not covered" ><span
           } else {
 <span class="cstat-no" title="statement not covered" >            categoryTotals[species.conservationCategory] = 1;</span>
           }
+        } else {
+<span class="cstat-no" title="statement not covered" >          categoryTotals[strings.OTHER] = (categoryTotals[strings.OTHER] || 0) + 1;</span>
         }
       }
     });
@@ -879,6 +887,8 @@ const SiteWithZonesCard = <span class="cstat-no" title="statement not covered" >
             } else {
 <span class="cstat-no" title="statement not covered" >              categoryTotals[species.conservationCategory] = 1;</span>
             }
+          } else {
+<span class="cstat-no" title="statement not covered" >            categoryTotals[strings.OTHER] = (categoryTotals[strings.OTHER] || 0) + 1;</span>
           }
         }
       });
@@ -906,7 +916,6 @@ type ChartDataProps = {
 &nbsp;
 const ChartData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
   const tooltipRenderer = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(t</span>ooltipItem: TooltipItem&lt;keyof ChartTypeRegistry&gt;) =&gt; {</span>
     const v = <span class="cstat-no" title="statement not covered" >tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();</span>
@@ -973,7 +982,7 @@ const ChartData = <span class="cstat-no" title="statement not covered" ><span cl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-28T21:18:56.910Z
+                at 2025-10-29T12:27:15.540Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

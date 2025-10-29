@@ -1,3 +1,6 @@
+65cebd48edc SW-7619 Move reloadPlantingSite data to specific places to avoid infinite render (#4694)
+ed9bf924ffd SW-7593 Updates to Species Survival pie chart for "not calculated" state (#4692)
+728eae4bdfb SW-7618 Plants dashboard species categories chart should have an "Other" category (#4693)
 4ba130481ad SW-7554 Unify biomass observation CSV export (#4686)
 d22cce7824d SW-7547 Unify ad-hoc monitoring CSV format (#4685)
 35c253d3ef0 SW-7611 Reload planting site data after editing survival rate settings (#4691)
