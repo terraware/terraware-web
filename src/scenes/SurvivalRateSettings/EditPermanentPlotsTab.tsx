@@ -4,6 +4,7 @@ import { PageForm } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { selectAssignT0SiteData } from 'src/redux/features/tracking/trackingSelectors';
 import { PlotsWithObservationsSearchResult, requestAssignT0SiteData } from 'src/redux/features/tracking/trackingThunks';
@@ -37,6 +38,7 @@ const EditPermanentPlotsTab = ({
   const saveResponse = useAppSelector(selectAssignT0SiteData(assignRequestId));
   const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
+  const { reload: reloadPlantingSiteData } = usePlantingSiteData();
 
   const [record, setRecord] = useForm<AssignSiteT0Data>({
     plantingSiteId,
@@ -98,12 +100,13 @@ const EditPermanentPlotsTab = ({
   useEffect(() => {
     if (saveResponse?.status === 'success') {
       reload();
+      reloadPlantingSiteData();
       goToViewSettings();
     }
     if (saveResponse?.status === 'error') {
       snackbar.toastError();
     }
-  }, [goToViewSettings, reload, saveResponse, snackbar]);
+  }, [goToViewSettings, reload, saveResponse, snackbar, reloadPlantingSiteData]);
 
   const cancelWarningHandler = useCallback(() => {
     setShowSpeciesDensityWarningMessage(false);
