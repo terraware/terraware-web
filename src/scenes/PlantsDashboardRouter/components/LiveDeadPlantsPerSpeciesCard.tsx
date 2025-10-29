@@ -25,7 +25,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const { observationSummaries } = usePlantingSiteData();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const theme = useTheme();
-  const { strings } = useLocalization();
+  const { strings, activeLocale } = useLocalization();
 
   const LIVE_DEAD_LABELS = useMemo(() => {
     return [strings.LIVE, strings.DEAD];
@@ -46,14 +46,14 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
             '',
           value: sp.speciesId?.toString() || '',
         }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        .sort((a, b) => a.label.localeCompare(b.label, activeLocale || undefined));
 
       setAllSpecies(speciesNames);
       if (speciesNames.length > 0) {
         setSelectedSpecies(speciesNames[0].value);
       }
     }
-  }, [observationSummaries, availableSpecies, isSurvivalRateCalculationEnabled]);
+  }, [observationSummaries, availableSpecies, isSurvivalRateCalculationEnabled, activeLocale]);
 
   useEffect(() => {
     if (selectedSpecies) {
