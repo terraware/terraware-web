@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -6,11 +6,10 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
 import isEnabled from 'src/features';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import strings from 'src/strings';
 
-const LIVE_DEAD_LABELS = [strings.LIVE, strings.DEAD];
 export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -26,6 +25,11 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const { observationSummaries } = usePlantingSiteData();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const theme = useTheme();
+  const { strings } = useLocalization();
+
+  const LIVE_DEAD_LABELS = useMemo(() => {
+    return [strings.LIVE, strings.DEAD];
+  }, [strings]);
 
   useEffect(() => {
     if (observationSummaries?.[0]) {
@@ -67,23 +71,30 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
             } else {
               dead = 0;
             }
+            setValues([live, dead]);
           }
         } else {
           dead = selectedObservationSpecies.cumulativeDead;
           live = selectedObservationSpecies.permanentLive;
+          setValues([live, dead]);
         }
-        setValues([live, dead]);
       }
     } else {
       setLabels([]);
       setValues([]);
     }
-  }, [selectedSpecies, observationSummaries, isSurvivalRateCalculationEnabled]);
+  }, [selectedSpecies, observationSummaries, isSurvivalRateCalculationEnabled, LIVE_DEAD_LABELS]);
 
   const tooltipRenderer = useCallback((tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
     const v = tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();
     return `${v}%`;
   }, []);
+
+  const allSpeciesNoValues = useMemo(() => {
+    return observationSummaries?.[0].species.every((sp) => {
+      return !sp.survivalRate;
+    });
+  }, [observationSummaries]);
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -98,7 +109,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
             maxWidth: '228px',
           },
         }}
-        disabled={!allSpecies || allSpecies.length === 0}
+        disabled={!allSpecies || allSpecies.length === 0 || allSpeciesNoValues}
         placeholder={strings.SELECT}
       />
       {(showChart || isSurvivalRateCalculationEnabled) && (
@@ -119,8 +130,6 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
             pluginsOptions={{
               emptyDoughnut: {
                 color: theme.palette.TwClrBaseGray050,
-                width: 120,
-                radiusDecrease: 100,
               },
               legend: isSurvivalRateCalculationEnabled
                 ? {
