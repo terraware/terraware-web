@@ -722,6 +722,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         {strings.VIEW_SITES_ZONES_SUBZONES}
                       </a>
                     }
+                    selectStyles={{ optionsContainer: { maxHeight: '250px' } }}
                   />
                 </Grid>
                 {!!zones.length && (
