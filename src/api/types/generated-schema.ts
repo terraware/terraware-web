@@ -8119,7 +8119,7 @@ export interface components {
         ObservationMonitoringPlotPhotoPayload: {
             /** Format: int64 */
             fileId: number;
-            gpsCoordinates: components["schemas"]["Point"];
+            gpsCoordinates?: components["schemas"]["Point"];
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /** @enum {string} */

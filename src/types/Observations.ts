@@ -106,6 +106,8 @@ export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsP
 
 // monitoring plot photos
 export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotPhotoPayload'];
+export type ObservationMonitoringPlotPhotoWithGps = Omit<ObservationMonitoringPlotPhoto, 'gpsCoordinates'> &
+  Required<Pick<ObservationMonitoringPlotPhoto, 'gpsCoordinates'>>;
 
 // species related observation statistics
 export type ObservationSpeciesResultsPayload = components['schemas']['ObservationSpeciesResultsPayload'];
