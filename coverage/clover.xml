@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761761660351" clover="3.2.0">
-  <project timestamp="1761761660351" name="All files">
-    <metrics statements="35155" coveredstatements="1354" conditionals="24552" coveredconditionals="392" methods="10763" coveredmethods="213" elements="70470" coveredelements="1959" complexity="0" loc="35155" ncloc="35155" packages="280" files="1369" classes="1369"/>
+<coverage generated="1761768426925" clover="3.2.0">
+  <project timestamp="1761768426925" name="All files">
+    <metrics statements="35158" coveredstatements="1354" conditionals="24552" coveredconditionals="392" methods="10763" coveredmethods="213" elements="70473" coveredelements="1959" complexity="0" loc="35158" ncloc="35158" packages="280" files="1369" classes="1369"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -28011,7 +28011,7 @@
       </file>
     </package>
     <package name="src.scenes.NurseryRouter">
-      <metrics statements="592" coveredstatements="0" conditionals="339" coveredconditionals="0" methods="185" coveredmethods="0"/>
+      <metrics statements="595" coveredstatements="0" conditionals="339" coveredconditionals="0" methods="185" coveredmethods="0"/>
       <file name="NurseryPlantingsAndWithdrawalsView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -28555,19 +28555,22 @@
         <line num="43" count="0" type="stmt"/>
       </file>
       <file name="UndoWithdrawalModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/NurseryRouter/UndoWithdrawalModal.tsx">
-        <metrics statements="12" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
       </file>
       <file name="WithdrawalHistoryMenu.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/NurseryRouter/WithdrawalHistoryMenu.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
