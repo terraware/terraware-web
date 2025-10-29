@@ -6,11 +6,11 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
 import { useProjectPlantings } from 'src/hooks/useProjectPlantings';
-import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { conservationCategories } from 'src/types/Species';
 
 type CategoryData = {
@@ -41,7 +41,7 @@ const processConservationCategories = (
 
   const rareSpeciesPercentage = totalSpecies > 0 ? Number(((totalRare * 100) / totalSpecies).toFixed(2)) : 0;
   const labels = Object.keys(finalCategoryTotals).map(
-    (ctId) => conservationCategories().find((c) => c.value === ctId)?.label || ''
+    (ctId) => conservationCategories().find((c) => c.value === ctId)?.label || strings.OTHER
   );
   const values = Object.values(finalCategoryTotals).map((cat) =>
     totalSpecies > 0 ? Number(((cat * 100) / totalSpecies).toFixed(2)) : 0
@@ -122,6 +122,8 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
           } else {
             categoryTotals[species.conservationCategory] = 1;
           }
+        } else {
+          categoryTotals[strings.OTHER] = (categoryTotals[strings.OTHER] || 0) + 1;
         }
       }
     });
@@ -212,6 +214,8 @@ const SiteWithZonesCard = (): JSX.Element => {
             } else {
               categoryTotals[species.conservationCategory] = 1;
             }
+          } else {
+            categoryTotals[strings.OTHER] = (categoryTotals[strings.OTHER] || 0) + 1;
           }
         }
       });
@@ -239,7 +243,6 @@ type ChartDataProps = {
 
 const ChartData = ({ labels, values, rareSpecies }: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
-  const { strings } = useLocalization();
 
   const tooltipRenderer = useCallback((tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
     const v = tooltipItem.dataset.data[tooltipItem.dataIndex]?.toString();
