@@ -269,6 +269,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       ...pluginsOptions,
       annotation: barAnnotations,
       legend: {
+        ...(pluginsOptions?.legend ?? {}),
         display: customLegend ? false : !!showLegend,
       },
       htmlLegend: {

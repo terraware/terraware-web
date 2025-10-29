@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
@@ -10,6 +10,7 @@ import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
+const LIVE_DEAD_LABELS = [strings.LIVE, strings.DEAD];
 export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -24,6 +25,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const [showChart, setShowChart] = useState(false);
   const { observationSummaries } = usePlantingSiteData();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
+  const theme = useTheme();
 
   useEffect(() => {
     if (observationSummaries?.[0]) {
@@ -45,7 +47,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
 
   useEffect(() => {
     if (selectedSpecies) {
-      setLabels([strings.LIVE, strings.DEAD]);
+      setLabels(LIVE_DEAD_LABELS);
       const selectedObservationSpecies = observationSummaries?.[0]?.species.find(
         (sp) => sp.speciesId?.toString() === selectedSpecies
       );
@@ -55,7 +57,10 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
         let live = 0;
         let dead = 0;
         if (isSurvivalRateCalculationEnabled) {
-          if (selectedObservationSpecies.survivalRate) {
+          if (
+            selectedObservationSpecies.survivalRate !== undefined &&
+            selectedObservationSpecies.survivalRate !== null
+          ) {
             live = selectedObservationSpecies.survivalRate;
             if (live < 100) {
               dead = 100 - live;
@@ -93,13 +98,15 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
             maxWidth: '228px',
           },
         }}
+        disabled={!allSpecies || allSpecies.length === 0}
+        placeholder={strings.SELECT}
       />
-      {showChart && (
+      {(showChart || isSurvivalRateCalculationEnabled) && (
         <Box>
           <PieChart
             chartId='liveDeadplantsBySpecies'
             chartData={{
-              labels: labels ?? [],
+              labels: isSurvivalRateCalculationEnabled ? LIVE_DEAD_LABELS : labels ?? [],
               datasets: [
                 {
                   values: values ?? [],
@@ -109,6 +116,31 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
             maxWidth='100%'
             elementColor={['#99B85F', '#CE9E97']}
             customTooltipLabel={isSurvivalRateCalculationEnabled ? tooltipRenderer : undefined}
+            pluginsOptions={{
+              emptyDoughnut: {
+                color: theme.palette.TwClrBaseGray050,
+                width: 120,
+                radiusDecrease: 100,
+              },
+              legend: isSurvivalRateCalculationEnabled
+                ? {
+                    labels: {
+                      generateLabels: (chart: any) => {
+                        const colors = ['#99B85F', '#CE9E97'];
+                        const chartLabels = chart.data.labels || [];
+                        return chartLabels.map((label: string, i: number) => ({
+                          text: label,
+                          fillStyle: colors[i],
+                          strokeStyle: colors[i],
+                          hidden: false,
+                          datasetIndex: 0,
+                          index: i,
+                        }));
+                      },
+                    },
+                  }
+                : undefined,
+            }}
           />
         </Box>
       )}
