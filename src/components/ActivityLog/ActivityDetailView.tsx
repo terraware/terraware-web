@@ -363,6 +363,7 @@ const ActivityDetailView = ({
         name: strings.PROJECT_ACTIVITY,
         onClick: () => {
           query.delete('activityId');
+          query.delete('highlightActivityId');
           navigate(getLocation(location.pathname, location, query.toString()));
         },
       },
