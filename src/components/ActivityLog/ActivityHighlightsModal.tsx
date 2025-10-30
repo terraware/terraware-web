@@ -132,7 +132,11 @@ const ActivityHighlightsModal = ({
           </IconButton>
         </Box>
 
-        <ActivityHighlightsView activities={selectedGroup?.activities || []} projectId={projectId} />
+        <ActivityHighlightsView
+          activities={selectedGroup?.activities || []}
+          projectId={projectId}
+          selectedQuarter={selectedQuarter}
+        />
       </DialogBox>
     </Box>
   );

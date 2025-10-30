@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
+import { AcceleratorReport } from 'src/types/AcceleratorReport';
 import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -85,20 +87,31 @@ const HEIGHT_OFFSET_PX = 204;
 
 const HEIGHT_OFFSET_MOBILE_PX = 240;
 
+const getReportMetrics = (strings: any) => [
+  {
+    metric: strings.HECTARES_PLANTED,
+    formatter: (value: number) => strings.formatString(strings.X_HA, value),
+  },
+  { metric: strings.SPECIES_PLANTED, formatter: (value: number) => value },
+  { metric: strings.TREES_PLANTED, formatter: (value: number) => value },
+];
+
 type ActivityHighlightsViewProps = {
   activities: Activity[];
   projectId: number;
+  selectedQuarter?: string;
 };
 
 type ActivityHighlightSlide = {
-  activity: Activity;
-  activityType: string;
-  coverPhoto: ActivityMediaFile | undefined;
-  coverPhotoURL: string | undefined;
+  activity?: Activity;
+  coverPhoto?: ActivityMediaFile;
+  coverPhotoURL?: string;
+  report?: AcceleratorReport;
+  title: string;
 };
 
-const ActivityHighlightsView = ({ activities, projectId }: ActivityHighlightsViewProps) => {
-  const { strings } = useLocalization();
+const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: ActivityHighlightsViewProps) => {
+  const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
@@ -107,6 +120,27 @@ const ActivityHighlightsView = ({ activities, projectId }: ActivityHighlightsVie
   const navigate = useSyncNavigate();
   const { scrollToTop } = useMapDrawer(mapDrawerRef);
   const { fitBounds } = useMapUtils(mapRef);
+  const { acceleratorReports } = useProjectReports(projectId);
+
+  const selectedQuarterReport = useMemo(() => {
+    if (acceleratorReports.length === 0 || !selectedQuarter) {
+      return undefined;
+    }
+
+    // filter by selectedQuarter
+    const quarterReports = acceleratorReports.filter((report) => {
+      const year = report.endDate.split('-')[0];
+      const reportQuarterYear = `${report.quarter} ${year}`;
+      return reportQuarterYear === selectedQuarter;
+    });
+
+    if (quarterReports.length === 0) {
+      return undefined;
+    }
+
+    const sorted = [...quarterReports].sort((a, b) => b.endDate.localeCompare(a.endDate, activeLocale || undefined));
+    return sorted[0];
+  }, [acceleratorReports, activeLocale, selectedQuarter]);
 
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
@@ -181,9 +215,17 @@ const ActivityHighlightsView = ({ activities, projectId }: ActivityHighlightsVie
   const slides = useMemo(() => {
     const _slides: ActivityHighlightSlide[] = [];
 
+    if (selectedQuarterReport) {
+      const firstSlide = {
+        report: selectedQuarterReport,
+        title: `${selectedQuarterReport.quarter} ${selectedQuarterReport.endDate.split('-')[0]}`,
+      };
+      _slides.push(firstSlide);
+    }
+
     for (const activity of activities) {
-      const activityType = activityTypeLabel(activity.type, strings);
-      const coverPhoto = activity.media.find((file) => file.isCoverPhoto);
+      const title = activityTypeLabel(activity.type, strings);
+      const coverPhoto = activity.media.find((file) => file.isCoverPhoto && !file.isHiddenOnMap);
       const coverPhotoURL = coverPhoto
         ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
             '{fileId}',
@@ -191,11 +233,11 @@ const ActivityHighlightsView = ({ activities, projectId }: ActivityHighlightsVie
           )}`
         : undefined;
 
-      _slides.push({ activity, activityType, coverPhoto, coverPhotoURL });
+      _slides.push({ activity, coverPhoto, coverPhotoURL, title });
     }
 
     return _slides;
-  }, [activities, strings]);
+  }, [activities, selectedQuarterReport, strings]);
 
   return (
     <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>
@@ -243,19 +285,71 @@ const ActivityHighlightsView = ({ activities, projectId }: ActivityHighlightsVie
               {slides.map((slide, index) => (
                 <SwiperSlide key={index} style={{ position: 'relative' }}>
                   <Box sx={carouselSlideContentStyles(slide.coverPhotoURL)}>
-                    <Box sx={carouselSlideCardStyles} onClick={onClickSlide(slide.activity.id)}>
+                    <Box
+                      sx={carouselSlideCardStyles}
+                      onClick={slide.activity ? onClickSlide(slide.activity.id) : undefined}
+                    >
                       <Box sx={carouselSlideCardMetadataStyles(theme)}>
-                        <Typography>{slide.activity.date}</Typography>
-                        <Typography
-                          color={theme.palette.TwClrTxtBrand}
-                          fontSize='24px'
-                          fontWeight={600}
-                          lineHeight='32px'
+                        {slide.activity?.date && <Typography>{slide.activity.date}</Typography>}
+                        <Box
+                          display='flex'
+                          sx={{
+                            alignItems: {
+                              xs: 'flex-start',
+                              sm: 'center',
+                            },
+                            flexDirection: {
+                              xs: 'column',
+                              sm: 'row',
+                            },
+                          }}
                         >
-                          {slide.activityType}
-                        </Typography>
+                          {slide.report && (
+                            <Typography
+                              fontSize='24px'
+                              fontWeight={600}
+                              lineHeight='32px'
+                              marginRight='10px'
+                              sx={{
+                                marginBottom: {
+                                  xs: '8px',
+                                  sm: 0,
+                                },
+                              }}
+                            >
+                              {strings.QUARTERLY_HIGHLIGHTS}
+                            </Typography>
+                          )}
+                          <Typography
+                            color={theme.palette.TwClrTxtBrand}
+                            fontSize='24px'
+                            fontWeight={600}
+                            lineHeight='32px'
+                          >
+                            {slide.title}
+                          </Typography>
+                        </Box>
                       </Box>
-                      <Typography>{slide.activity.description}</Typography>
+
+                      {slide.report && (
+                        <Grid container spacing={2}>
+                          {getReportMetrics(strings).map(({ metric, formatter }) => {
+                            const value =
+                              slide.report?.systemMetrics.find((sm) => sm.metric === metric)?.systemValue || 0;
+
+                            return (
+                              <Grid item xs={12} sm={6} md={4} key={metric}>
+                                <Typography fontWeight={600}>{metric}</Typography>
+                                <Typography fontSize='24px' fontWeight={600}>
+                                  {formatter(value)}
+                                </Typography>
+                              </Grid>
+                            );
+                          })}
+                        </Grid>
+                      )}
+
+                      <Typography>{slide.activity?.description}</Typography>
                     </Box>
                   </Box>
                 </SwiperSlide>
