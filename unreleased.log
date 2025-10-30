@@ -1,3 +1,7 @@
+370455ccde1 SW-7624 Adjust the y-axis for values >100% (#4705)
+8aed22347df SW-7623 Exclude plots without subzones from survival rate settings (#4703)
+b7b25da0d11 SW-7617 Round densities to nearest whole number in edit settings (#4699)
+72d83bdd146 SW-7593 Sort species dropdown alphabetically and use survival rate values  (#4706)
 c9052230a9c SW-7613 Fix survival rate trend chart to use survival instead of mortality rates (#4702)
 e661960aff7 SW-7320: FE: Highlights Preview View (#4698)
 6a021a9c8a2 SW-7515 Disable undo withdrawl button when request is in flight (#4695)
