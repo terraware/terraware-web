@@ -2276,7 +2276,6 @@ WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Saisissez une quantité dans au moins 
 WITHDRAWAL_COUNT_GREATER_THAN_ZERO_ERROR,Le nombre de retraits doit être supérieur à zéro,e48b9963
 WITHDRAWAL_DETAILS,Détails du retrait,5c86287a
 WITHDRAWAL_HISTORY,Historique des retraits,470f20eb
-WITHDRAWAL_HISTORY_ONLY_1000,"Le tableau de l’historique des retraits affiche uniquement 1 000 retraits. L’ensemble des retraits affichés dépend du tri et des filtres appliqués. Pour consulter tous les retraits, utilisez la fonction « exporter » afin de télécharger un fichier CSV contenant l’ensemble des retraits.",70059909
 WITHDRAWAL_UNDONE,Retrait annulé,039d291e
 WITHDRAWAL_UNDONE_DESCRIPTION,Le retrait a été annulé et les quantités ont été rétablies dans le lot d'origine.,f3b634f4
 WITHDRAWALS,Retraits,270c7f9e

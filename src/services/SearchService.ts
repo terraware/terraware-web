@@ -14,6 +14,7 @@ import HttpService, { Response } from './HttpService';
 
 // endpoint
 const SEARCH_ENDPOINT = '/api/v1/search';
+const SEARCH_COUNT_ENDPOINT = '/api/v1/search/count';
 const SEARCH_VALUES_ENDPOINT = '/api/v1/search/values';
 
 /*
@@ -36,6 +37,12 @@ export type RawSearchRequestPayload =
 export type SearchResponsePayload =
   paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
+export type RawSearchCountRequestPayload =
+  paths[typeof SEARCH_COUNT_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+export type SearchCountResponsePayload =
+  paths[typeof SEARCH_COUNT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
 export type RawSearchValuesRequestPayload =
   paths[typeof SEARCH_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
@@ -43,6 +50,7 @@ export type SearchValuesResponsePayload =
   paths[typeof SEARCH_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const httpSearch = HttpService.root(SEARCH_ENDPOINT);
+const httpSearchCount = HttpService.root(SEARCH_COUNT_ENDPOINT);
 const httpSearchValues = HttpService.root(SEARCH_VALUES_ENDPOINT);
 
 /**
@@ -80,6 +88,15 @@ async function search<T extends SearchResponseElement>(entity: RawSearchRequestP
   }
 }
 
+async function searchCount(entity: RawSearchCountRequestPayload): Promise<number | null> {
+  try {
+    const response: SearchCountResponsePayload = (await httpSearchCount.post({ entity })).data;
+    return response.count ?? null;
+  } catch {
+    return null;
+  }
+}
+
 async function searchValues<T extends SearchValuesResponseElement>(
   entity: RawSearchValuesRequestPayload
 ): Promise<T | null> {
@@ -110,6 +127,7 @@ async function searchCsv(entity: RawSearchRequestPayload): Promise<any> {
 const SearchService = {
   convertToSearchNodePayload,
   search,
+  searchCount,
   searchValues,
   searchCsv,
 };

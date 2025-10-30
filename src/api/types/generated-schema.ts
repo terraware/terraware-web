@@ -3075,6 +3075,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/search/count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Get the total count of values matching a set of search criteria.
+         * @description Note that fields, sortOrder, cursor, and count in the payload are unused in the count query and thus can be included or left out.
+         */
+        post: operations["searchCount"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/search/values": {
         parameters: {
             query?: never;
@@ -9532,6 +9552,10 @@ export interface components {
              * @description If `null`, a score has not been selected.
              */
             value?: number;
+        };
+        SearchCountResponsePayload: {
+            /** Format: int64 */
+            count: number;
         };
         /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
         SearchNodePayload: {
@@ -17744,6 +17768,30 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SearchResponsePayload"];
                     "text/csv": string;
+                };
+            };
+        };
+    };
+    searchCount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SearchRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SearchCountResponsePayload"];
                 };
             };
         };
