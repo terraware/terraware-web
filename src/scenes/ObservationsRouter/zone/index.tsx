@@ -11,6 +11,7 @@ import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersW
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import useObservation from 'src/hooks/useObservation';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
@@ -27,7 +28,6 @@ import { isManagerOrHigher } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
-import useObservation from 'src/hooks/useObservation';
 
 const replaceObservationPlotColumn = (): TableColumnType[] => [
   {
@@ -202,7 +202,7 @@ export default function ObservationPlantingZone(): JSX.Element {
                   observationId,
                   plantingZoneName,
                   setReplaceObservationPlot,
-                  observation?.state,
+                  observation?.state
                 )}
                 tableComments={
                   plantingZone?.plantingSubzones && has25mPlots(plantingZone.plantingSubzones)
