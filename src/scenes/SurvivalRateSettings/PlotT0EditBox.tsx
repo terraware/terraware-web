@@ -12,7 +12,7 @@ import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { allowOneDecimal } from 'src/utils/numbers';
+import { allowOneDecimal, formatNumberScale } from 'src/utils/numbers';
 
 export type AddedSpecies = { id: string; speciesId?: number; density: string };
 
@@ -133,7 +133,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
       return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;
     }, 0);
     if (total) {
-      return Math.round(total * 10) / 10;
+      return formatNumberScale(total, 1);
     }
     return total;
   }, [plot.id, record]);
@@ -293,7 +293,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     (withdrawnSpecies: { density: number; speciesId: number }) => {
       const found = plotToSave?.densityData.find((densityData) => densityData.speciesId === withdrawnSpecies.speciesId);
       if (found) {
-        return Math.round(found.plotDensity * 10) / 10;
+        return formatNumberScale(found.plotDensity, 1);
       }
     },
     [plotToSave?.densityData]
@@ -469,7 +469,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                           <TextField
                             type='number'
                             id={`new-${row.id}`}
-                            value={row.density ? Math.round(Number(row.density) * 10) / 10 : row.density}
+                            value={row.density ? formatNumberScale(row.density, 1) : row.density}
                             onChange={handleNewSpeciesDensityChange(row.id)}
                             label={''}
                             min={0}
