@@ -5,8 +5,24 @@ import { Box, Grid, Pagination, Tooltip, Typography, useTheme } from '@mui/mater
 import { Icon, PillList, PillListItem } from '@terraware/web-components';
 import { ColumnHeader } from 'export-to-csv';
 
+import { MapPoint } from 'src/components/NewMap/types';
+import useMapDrawer from 'src/components/NewMap/useMapDrawer';
+import useMapUtils from 'src/components/NewMap/useMapUtils';
+import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import { FilterField } from 'src/components/common/FilterGroup';
+import ExportTableComponent, {
+  ExportTableProps,
+} from 'src/components/common/SearchFiltersWrapper/ExportTableComponent';
+import {
+  FilterConfig,
+  FilterConfigWithValues,
+  defaultPillValueRenderer,
+} from 'src/components/common/SearchFiltersWrapperV2';
+import IconFilters from 'src/components/common/SearchFiltersWrapperV2/IconFilters';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useClientSideFilter from 'src/hooks/useClientSideFiltering';
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { requestAdminListActivities, requestListActivities } from 'src/redux/features/activities/activitiesAsyncThunks';
@@ -22,22 +38,15 @@ import {
   activityStatusTagLabel,
   activityTypeLabel,
 } from 'src/types/Activity';
+import { FunderActivity } from 'src/types/FunderActivity';
 import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
+import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
 import { CsvData } from 'src/utils/csv';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import { groupActivitiesByQuarter } from '../../utils/activityUtils';
-import { MapPoint } from '../NewMap/types';
-import useMapDrawer from '../NewMap/useMapDrawer';
-import useMapUtils from '../NewMap/useMapUtils';
-import { getBoundingBoxFromPoints } from '../NewMap/utils';
-import { FilterField } from '../common/FilterGroup';
-import ExportTableComponent, { ExportTableProps } from '../common/SearchFiltersWrapper/ExportTableComponent';
-import { FilterConfig, FilterConfigWithValues, defaultPillValueRenderer } from '../common/SearchFiltersWrapperV2';
-import IconFilters from '../common/SearchFiltersWrapperV2/IconFilters';
 import ActivitiesEmptyState from './ActivitiesEmptyState';
 import ActivityDetailView from './ActivityDetailView';
 import ActivityHighlightsModal from './ActivityHighlightsModal';
@@ -46,7 +55,7 @@ import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
 
 type ActivityListItemProps = {
-  activity: Activity;
+  activity: Activity | FunderActivity;
   focused?: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
@@ -58,6 +67,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isFunderRoute } = useFunderPortal();
   const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
@@ -113,8 +123,8 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
           )}
         </Box>
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
-          <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}</Box>
-          {activity.isHighlight && isAcceleratorRoute && isActivityHighlightEnabled && (
+          <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity as Activity} />}</Box>
+          {activity.isHighlight && (isAcceleratorRoute || isFunderRoute) && isActivityHighlightEnabled && (
             <Tooltip title={strings.HIGHLIGHTED_ACTIVITY}>
               <Box display='inline-flex'>
                 <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
@@ -161,13 +171,10 @@ const ActivitiesListView = ({
   const theme = useTheme();
   const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
+  const [initialized, setInitialized] = useState(false);
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
-  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [requestId, setRequestId] = useState('');
-  const [busy, setBusy] = useState<boolean>(false);
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [results, setResults] = useState<Activity[]>([]);
-  const [resultsRequestId, setResultsRequestId] = useState('');
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
@@ -177,19 +184,46 @@ const ActivitiesListView = ({
 
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
-  const listResultsActivitiesRequest = useAppSelector(selectActivityList(resultsRequestId));
-  const adminListResultsActivitiesRequest = useAppSelector(selectAdminActivityList(resultsRequestId));
+
+  const activityFilterOptions: FieldOptionsMap = useMemo(
+    () => ({
+      status: { partial: false, values: ACTIVITY_STATUSES },
+      type: { partial: false, values: ACTIVITY_TYPES },
+    }),
+    []
+  );
+
+  const search = useMemo((): SearchNodePayload | undefined => {
+    const searchNodeChildren: SearchNodePayload[] = [];
+    if (Object.keys(filters).length > 0) {
+      const filterValueChildren = Object.keys(filters)
+        .filter((field: string) => (filters[field]?.values || []).length > 0)
+        .map((field: string): SearchNodePayload => filters[field]);
+
+      searchNodeChildren.push({
+        operation: 'and',
+        children: filterValueChildren,
+      });
+
+      return {
+        operation: 'and',
+        children: searchNodeChildren,
+      };
+    }
+  }, [filters]);
+
+  const filteredActivities = useClientSideFilter(activities, search);
+
+  const busy = useMemo(() => {
+    return listActivitiesRequest?.status === 'pending' || adminListActivitiesRequest?.status === 'pending';
+  }, [listActivitiesRequest, adminListActivitiesRequest]);
 
   const reload = useCallback(() => {
     if (isAcceleratorRoute) {
-      const request = dispatch(
-        requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
-      );
+      const request = dispatch(requestAdminListActivities({ includeMedia: true, projectId }));
       setRequestId(request.requestId);
     } else {
-      const request = dispatch(
-        requestListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
-      );
+      const request = dispatch(requestListActivities({ includeMedia: true, projectId }));
       setRequestId(request.requestId);
     }
   }, [activeLocale, dispatch, isAcceleratorRoute, projectId]);
@@ -199,15 +233,12 @@ const ActivitiesListView = ({
   }, [reload]);
 
   useEffect(() => {
-    if (listActivitiesRequest?.status === 'pending' || adminListActivitiesRequest?.status === 'pending') {
-      setBusy(true);
-      setActivities([]);
-    } else if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
-      setBusy(false);
+    if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
+      setInitialized(true);
     } else if (listActivitiesRequest?.status === 'success' || adminListActivitiesRequest?.status === 'success') {
-      setBusy(false);
       setActivities((listActivitiesRequest?.data || adminListActivitiesRequest?.data || []) as Activity[]);
+      setInitialized(true);
     }
   }, [
     adminListActivitiesRequest?.data,
@@ -250,8 +281,8 @@ const ActivitiesListView = ({
   const paginatedActivities = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return results.slice(startIndex, endIndex);
-  }, [results, currentPage, itemsPerPage]);
+    return filteredActivities.slice(startIndex, endIndex);
+  }, [currentPage, filteredActivities, itemsPerPage]);
 
   const activitiesVisibleOnMap = useMemo(
     () => (showActivityId && shownActivity ? [shownActivity] : paginatedActivities),
@@ -277,59 +308,6 @@ const ActivitiesListView = ({
       }
     }
   }, [fitBounds, shownActivity]);
-
-  useEffect(() => {
-    if (listResultsActivitiesRequest?.status === 'error' || adminListResultsActivitiesRequest?.status === 'error') {
-      setBusy(false);
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (
-      listResultsActivitiesRequest?.status === 'success' ||
-      adminListResultsActivitiesRequest?.status === 'success'
-    ) {
-      setBusy(false);
-      setResults((listResultsActivitiesRequest?.data || adminListResultsActivitiesRequest?.data || []) as Activity[]);
-
-      const activityFilterOptions = {
-        status: { partial: false, values: ACTIVITY_STATUSES },
-        type: { partial: false, values: ACTIVITY_TYPES },
-      } as FieldOptionsMap;
-
-      setFilterOptions(activityFilterOptions);
-    }
-  }, [adminListResultsActivitiesRequest, listResultsActivitiesRequest, snackbar, strings]);
-
-  useEffect(() => {
-    setBusy(true);
-
-    const searchNodeChildren: SearchNodePayload[] = [];
-    if (Object.keys(filters).length > 0) {
-      const filterValueChildren = Object.keys(filters)
-        .filter((field: string) => (filters[field]?.values || []).length > 0)
-        .map((field: string): SearchNodePayload => filters[field]);
-
-      searchNodeChildren.push({
-        operation: 'and',
-        children: filterValueChildren,
-      });
-    }
-
-    const search: SearchNodePayload = {
-      operation: 'and',
-      children: searchNodeChildren,
-    };
-
-    if (isAcceleratorRoute) {
-      const request = dispatch(
-        requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId, search })
-      );
-      setResultsRequestId(request.requestId);
-    } else {
-      const request = dispatch(
-        requestListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId, search })
-      );
-      setResultsRequestId(request.requestId);
-    }
-  }, [activeLocale, activities, dispatch, filters, isAcceleratorRoute, projectId, strings]);
 
   const onDeleteFilter = useCallback(
     (key: string) => {
@@ -367,8 +345,8 @@ const ActivitiesListView = ({
   );
 
   const totalPages = useMemo(() => {
-    return Math.ceil(results.length / itemsPerPage);
-  }, [results.length, itemsPerPage]);
+    return Math.ceil(filteredActivities.length / itemsPerPage);
+  }, [filteredActivities.length, itemsPerPage]);
 
   const handlePageChange = useCallback((_event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -486,12 +464,12 @@ const ActivitiesListView = ({
     const _filters = filterColumns.map((filter) => ({
       field: filter.name,
       label: filter.label,
-      options: filterOptions?.[filter.name]?.values || [],
+      options: activityFilterOptions?.[filter.name]?.values || [],
       pillValueRenderer: filter.pillValueRenderer,
     }));
 
     return activeLocale ? _filters : [];
-  }, [activeLocale, filterColumns, filterOptions]);
+  }, [activeLocale, activityFilterOptions, filterColumns]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const fFilters: FilterConfigWithValues[] = [
@@ -530,9 +508,7 @@ const ActivitiesListView = ({
         const label = filterConfig.label;
 
         const removeFilter = (k: string) => {
-          const result = { ...filters };
-          delete result[k];
-          setFilters(result);
+          onDeleteFilter(k);
         };
 
         return {
@@ -543,7 +519,7 @@ const ActivitiesListView = ({
         };
       })
       .filter((item: PillListItem<string> | false): item is PillListItem<string> => !!item);
-  }, [featuredFilters, filters, iconFilters]);
+  }, [featuredFilters, filters, iconFilters, onDeleteFilter]);
 
   const exportColumnHeaders = useMemo<ColumnHeader[]>(
     () => [
@@ -591,11 +567,11 @@ const ActivitiesListView = ({
   );
 
   const retrieveActivities = useCallback(async () => {
-    return Promise.resolve(results as unknown as CsvData[]);
-  }, [results]);
+    return Promise.resolve(filteredActivities as unknown as CsvData[]);
+  }, [filteredActivities]);
 
   const exportProps: ExportTableProps | undefined = useMemo(() => {
-    if (!results || results.length === 0) {
+    if (!filteredActivities || filteredActivities.length === 0) {
       return;
     }
 
@@ -605,7 +581,7 @@ const ActivitiesListView = ({
       retrieveResults: retrieveActivities,
       convertRow: convertActivityRow,
     };
-  }, [convertActivityRow, exportColumnHeaders, results, retrieveActivities, strings.ACTIVITY_LOG]);
+  }, [convertActivityRow, exportColumnHeaders, filteredActivities, retrieveActivities, strings.ACTIVITY_LOG]);
 
   return (
     <>
@@ -637,7 +613,7 @@ const ActivitiesListView = ({
             setHoverFileCallback={setHoverFileCallback}
             reload={reload}
           />
-        ) : activities.length === 0 && !busy ? (
+        ) : activities.length === 0 && initialized && !busy ? (
           <ActivitiesEmptyState projectId={projectId} />
         ) : (
           <>
@@ -652,7 +628,7 @@ const ActivitiesListView = ({
               rightComponent={filterPillData.length ? <PillList data={filterPillData} /> : undefined}
               values={filters.date?.values ?? []}
             />
-            {(!groupedActivities || groupedActivities.length === 0) && !busy ? (
+            {(!groupedActivities || groupedActivities.length === 0) && initialized && !busy ? (
               <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={400} marginTop={theme.spacing(2)}>
                 {strings.NO_ACTIVITIES_TO_SHOW}
               </Typography>
@@ -688,8 +664,8 @@ const ActivitiesListView = ({
                       {strings.formatString(
                         strings.PAGINATION_FOOTER_RANGE,
                         (currentPage - 1) * itemsPerPage + 1,
-                        Math.min(currentPage * itemsPerPage, results.length),
-                        results.length
+                        Math.min(currentPage * itemsPerPage, filteredActivities.length),
+                        filteredActivities.length
                       )}
                     </Typography>
                     <Pagination
