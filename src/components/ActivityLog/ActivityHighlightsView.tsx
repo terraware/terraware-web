@@ -44,13 +44,11 @@ const carouselContainerStyles = {
 
 const carouselSlideContentStyles =
   (coverPhotoURL: string | undefined): SxProps<Theme> =>
-  (theme: Theme) => ({
+  () => ({
     alignItems: 'flex-end',
-    backgroundColor: theme.palette.TwClrBgSecondary,
-    backgroundImage: coverPhotoURL ? `url(${coverPhotoURL})` : 'linear-gradient(180deg, #2C8658 0%, #123624 100%)',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
+    background: coverPhotoURL
+      ? `url(${coverPhotoURL}) center / cover no-repeat, url(/assets/logo-terraformation.svg) center / 33% no-repeat, linear-gradient(180deg, #2C8658 0%, #123624 100%)`
+      : 'url(/assets/logo-terraformation.svg) center / 33% no-repeat, linear-gradient(180deg, #2C8658 0%, #123624 100%)',
     borderRadius: '8px',
     bottom: 0,
     color: '#fff',
@@ -65,7 +63,7 @@ const carouselSlideContentStyles =
   });
 
 const carouselSlideCardStyles = {
-  backgroundColor: '#fff',
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
   borderRadius: '8px',
   color: '#000',
   cursor: 'pointer',
