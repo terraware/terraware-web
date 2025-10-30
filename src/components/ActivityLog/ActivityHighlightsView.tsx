@@ -11,6 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { ACCELERATOR_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
 import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
@@ -221,6 +222,11 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
     if (selectedQuarterReport) {
       const firstSlide: ActivityHighlightSlide = {
+        coverPhotoURL: selectedQuarterReport.photos.length
+          ? ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId?.toString())
+              .replace('{reportId}', selectedQuarterReport.id.toString())
+              .replace('{fileId}', selectedQuarterReport.photos[0].fileId.toString())
+          : undefined,
         description: selectedQuarterReport.highlights,
         report: selectedQuarterReport,
         title: `${selectedQuarterReport.quarter} ${selectedQuarterReport.endDate.split('-')[0]}`,
@@ -243,7 +249,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     }
 
     return _slides;
-  }, [activities, selectedQuarterReport, strings]);
+  }, [activities, projectId, selectedQuarterReport, strings]);
 
   return (
     <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>

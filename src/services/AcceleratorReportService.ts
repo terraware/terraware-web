@@ -57,7 +57,8 @@ const ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/re
 const PUBLISH_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/publish';
 const UPDATE_REPORT_TARGET_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/targets';
 const PHOTOS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos';
-const PHOTO_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}';
+export const ACCELERATOR_REPORT_PHOTO_ENDPOINT =
+  '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}';
 
 type GetAcceleratorReportResponsePayload =
   paths[typeof ACCELERATOR_REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -323,7 +324,9 @@ const publishAcceleratorReport = async (
 
 const deleteAcceleratorReportPhoto = async (projectId: string, reportId: string, fileId: string) => {
   return HttpService.root(
-    PHOTO_ENDPOINT.replace('{projectId}', projectId).replace('{reportId}', reportId).replace('{fileId}', fileId)
+    ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId)
+      .replace('{reportId}', reportId)
+      .replace('{fileId}', fileId)
   ).delete2();
 };
 
@@ -355,7 +358,9 @@ const updateAcceleratorReportPhoto = async (
   caption: string | undefined
 ) => {
   return HttpService.root(
-    PHOTO_ENDPOINT.replace('{projectId}', projectId).replace('{reportId}', reportId).replace('{fileId}', fileId)
+    ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId)
+      .replace('{reportId}', reportId)
+      .replace('{fileId}', fileId)
   ).put2({
     entity: { caption },
   });
