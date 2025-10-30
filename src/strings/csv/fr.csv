@@ -1477,7 +1477,7 @@ PROVIDE_PLANT_DENSITY_PER_SPECIES,Indiquer la densité de plants par espèce,846
 PROVIDE_PLANT_DENSITY_PER_SPECIES_TOOLTIP,Saisissez les densités pour chaque espèce plantée. Les densités de plantation basées sur les données du journal des retraits sont affichées et peuvent être saisies comme densités de plantation.,3b3ef9f3
 PUBLISH,Publier,c1d4ecf7
 PUBLISH_ACTIVITY,Publier l’activité,a00f9120
-PUBLISH_ACTIVITY_MODAL_MESSAGE,Vous êtes sur le point de publier la plantation de {0}. Êtes-vous sûr ?,dec9da7e
+PUBLISH_ACTIVITY_MODAL_MESSAGE,Vous êtes sur le point de publier {0} de {1}. Êtes-vous sûr de vouloir continuer ?,6e0d670f
 PUBLISH_TO_FUNDER_PORTAL,Publier sur le portail des financeurs,ec2ddbec
 PUBLISHED,Publié,baa0bfba
 PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, celui fourni aux donateurs sur leur portail.",64413dc4

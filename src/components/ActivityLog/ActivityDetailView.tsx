@@ -476,7 +476,7 @@ const ActivityDetailView = ({
               type='destructive'
             />,
           ]}
-          message={strings.formatString(strings.PUBLISH_ACTIVITY_MODAL_MESSAGE, activity.date)}
+          message={strings.formatString(strings.PUBLISH_ACTIVITY_MODAL_MESSAGE, activityType, activity.date)}
         />
       )}
       <Grid item md={4} xs={12}>

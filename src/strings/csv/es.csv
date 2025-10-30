@@ -1478,7 +1478,7 @@ PROVIDE_PLANT_DENSITY_PER_SPECIES,Proporcione la densidad de plantas por especie
 PROVIDE_PLANT_DENSITY_PER_SPECIES_TOOLTIP,Ingrese las densidades para cada especie plantada. Se muestran las densidades de plantas basadas en los datos del Registro de Retiros y pueden ser ingresadas como las densidades de plantas.,3b3ef9f3
 PUBLISH,Publicar,c1d4ecf7
 PUBLISH_ACTIVITY,Publicar actividad,a00f9120
-PUBLISH_ACTIVITY_MODAL_MESSAGE,Está a punto de publicar la Plantación de {0}. ¿Está seguro?,dec9da7e
+PUBLISH_ACTIVITY_MODAL_MESSAGE,Está a punto de publicar {0} de {1}. ¿Está seguro?,6e0d670f
 PUBLISH_TO_FUNDER_PORTAL,Publicar en el portal del financiador,ec2ddbec
 PUBLISHED,Publicado,baa0bfba
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
