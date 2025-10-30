@@ -2045,6 +2045,7 @@ TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,«Germinación/establecimiento» indi
 TOOLTIP_HARDENING_OFF_QUANTITY,Lo que determina que una planta esté en «Curación» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,El ID de la accesión utilizada para crear este lote. No disponible para especies que no tienen ninguna accesión.,a6a3a0af
 TOOLTIP_LIVE_PLANTS,Las plantas vivas observadas solo incluyen las plantas registradas como vivas; no incluyen las plantas registradas como preexistentes.,93092e08
+TOOLTIP_LIVE_PLANTS_ADHOC,Las plantas vivas observadas incluyen solo las plantas registradas como vivas.,8f4746d4
 TOOLTIP_READY_TO_PLANT_QUANTITY,Lo que determina que una planta esté «Lista para plantar» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.,be7a8ced
 TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Categoría de conservación de la Lista Roja de la IUCN,83da1fe2
@@ -2058,6 +2059,7 @@ TOOLTIP_TIME_ZONE_ORGANIZATION,"Usamos zonas horarias para notificaciones y para
 TOOLTIP_TIME_ZONE_PLANTING_SITE,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este sitio de plantación específico. Todo el trabajo realizado en este sitio de plantación usará esta zona horaria.,e474775a
 TOOLTIP_TIME_ZONE_SEEDBANK,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este banco de semillas. Todo el trabajo realizado en este banco de semillas usará esta zona horaria.,1b3db070
 TOOLTIP_TOTAL_PLANTS,"Las plantas en total observadas incluyen las plantas vivas y muertas de especies conocidas y desconocidas; no obstante, no incluyen las plantas registradas como preexistentes.",d21e64f0
+TOOLTIP_TOTAL_PLANTS_ADHOC,"El total de plantas observadas incluye todas las plantas vivas y muertas, tanto de especies conocidas como desconocidas.",947c9c88
 TOOLTIP_TOTAL_QUANTITY,La cantidad total es la suma de las cantidades no listas y listas.,4a6f0489
 TOOLTIP_TOTAL_WITHDRAWN,El número total de plantas extraídas para cualquier fin.,2de74db3
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Plato que contiene un medio de cultivo de agar solidificado.,7391d8f5
