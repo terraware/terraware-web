@@ -5,10 +5,13 @@ import { Dropdown, Icon } from '@terraware/web-components';
 import DialogBox, { DialogBoxSize } from '@terraware/web-components/components/DialogBox/DialogBox';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { Activity } from 'src/types/Activity';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
 import useQuery from 'src/utils/useQuery';
+import { getLocation } from 'src/utils/useStateLocation';
+import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityHighlightsView from './ActivityHighlightsView';
 
@@ -42,6 +45,8 @@ const ActivityHighlightsModal = ({
   const { activeLocale, strings } = useLocalization();
   const { isMobile, isTablet } = useDeviceInfo();
   const query = useQuery();
+  const location = useStateLocation();
+  const navigate = useSyncNavigate();
 
   const [selectedQuarter, setSelectedQuarter] = useState<string | undefined>(undefined);
 
@@ -71,9 +76,11 @@ const ActivityHighlightsModal = ({
   }, [activeLocale, groupedActivities]);
 
   const onClose = useCallback(() => {
+    query.delete('highlightActivityId');
+    navigate(getLocation(location.pathname, location, query.toString()));
     onCancel?.();
     setOpen(false);
-  }, [onCancel, setOpen]);
+  }, [location, navigate, onCancel, query, setOpen]);
 
   const dialogSize = useMemo((): DialogBoxSize => {
     if (isMobile) {
