@@ -12,7 +12,6 @@ import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/t
 import strings from 'src/strings';
 import { PlotT0Data } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { formatNumberScale } from 'src/utils/numbers';
 
 type PlotT0BoxProps = {
   plot: PlotsWithObservationsSearchResult;
@@ -28,7 +27,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
 
   const getPlotTotalDensity = useMemo(() => {
     const total = t0Plot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
-    return total ? formatNumberScale(total, 1) : undefined;
+    return total ? Math.round(total * 10) / 10 : undefined;
   }, [t0Plot]);
 
   const someWithdrawnSpeciesMissing = useMemo(() => {
@@ -108,7 +107,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                           <td style={{ paddingRight: '64px' }}>
                             {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
                           </td>
-                          <td>{formatNumberScale(densityData.plotDensity, 1)}</td>
+                          <td>{Math.round(densityData.plotDensity * 10) / 10}</td>
                         </tr>
                       ))}
                       <tr>

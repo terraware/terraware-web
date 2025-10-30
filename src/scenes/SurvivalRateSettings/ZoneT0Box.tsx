@@ -8,7 +8,6 @@ import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdr
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { ZoneT0Data } from 'src/types/Tracking';
-import { formatNumberScale } from 'src/utils/numbers';
 
 type ZoneT0BoxProps = {
   plotsWithObservations: PlotsWithObservationsSearchResult[];
@@ -22,7 +21,7 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
 
   const getZoneTotalDensity = useMemo(() => {
     const total = t0Zone?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
-    return total ? formatNumberScale(total, 1) : undefined;
+    return total ? Math.round(total * 10) / 10 : undefined;
   }, [t0Zone]);
 
   const allWithdrawnSpecies = React.useMemo(() => {
@@ -98,7 +97,7 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
                           <td style={{ paddingRight: '64px' }}>
                             {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
                           </td>
-                          <td>{formatNumberScale(densityData.density, 1)}</td>
+                          <td>{Math.round(densityData.density * 10) / 10}</td>
                         </tr>
                       ))}
                       <tr>
