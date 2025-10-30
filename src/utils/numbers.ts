@@ -72,8 +72,8 @@ export const allowOneDecimal = (e: React.KeyboardEvent<HTMLInputElement>) => {
         const selectionEnd = input.selectionEnd || 0;
         const hasSelection = selectionStart !== selectionEnd;
 
-        // Only allow if replacing selected text
-        if (!hasSelection) {
+        // Only allow if replacing selected text or editing before decimal point
+        if (!hasSelection && selectionStart > decimalIndex) {
           e.preventDefault();
         }
       }
