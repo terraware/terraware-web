@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Box, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -332,21 +332,31 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                       </Box>
 
                       {slide.report && (
-                        <Grid container spacing={2}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: {
+                              xs: 'column',
+                              sm: 'row',
+                            },
+                            gap: 2,
+                            flexWrap: 'wrap',
+                          }}
+                        >
                           {getReportMetrics(strings).map(({ metric, formatter }) => {
                             const value =
                               slide.report?.systemMetrics.find((sm) => sm.metric === metric)?.systemValue || 0;
 
                             return (
-                              <Grid item xs={12} sm={6} md={4} key={metric}>
+                              <Box key={metric}>
                                 <Typography fontWeight={600}>{metric}</Typography>
                                 <Typography fontSize='24px' fontWeight={600}>
                                   {formatter(value)}
                                 </Typography>
-                              </Grid>
+                              </Box>
                             );
                           })}
-                        </Grid>
+                        </Box>
                       )}
 
                       <Typography>{slide.activity?.description}</Typography>
