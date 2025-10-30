@@ -38,7 +38,10 @@ export const disableDecimalChar = (e: React.KeyboardEvent<HTMLDivElement>) => {
 };
 
 export const allowOneDecimal = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  const input = e.currentTarget;
+  const input = e.currentTarget.querySelector('input');
+  if (!input) {
+    return;
+  }
   const value = input.value;
   const key = e.key;
 
@@ -59,15 +62,20 @@ export const allowOneDecimal = (e: React.KeyboardEvent<HTMLInputElement>) => {
   // If a digit is entered
   if (/^\d$/.test(key)) {
     const decimalIndex = Math.max(value.indexOf('.'), value.indexOf(','));
-    // If there's a decimal separator
+    // If there's a decimal separator and already has one decimal digit
     if (decimalIndex !== -1) {
-      const selectionStart = input.selectionStart || 0;
-      const selectionEnd = input.selectionEnd || 0;
-      const hasSelection = selectionStart !== selectionEnd;
+      const decimalsAfter = value.slice(decimalIndex + 1).length;
 
-      // If typing after decimal separator and already one digit there (and no selection)
-      if (!hasSelection && selectionStart > decimalIndex && value.length > decimalIndex + 1) {
-        e.preventDefault();
+      // If there's already one or more decimal digits
+      if (decimalsAfter >= 1) {
+        const selectionStart = input.selectionStart || 0;
+        const selectionEnd = input.selectionEnd || 0;
+        const hasSelection = selectionStart !== selectionEnd;
+
+        // Only allow if replacing selected text
+        if (!hasSelection) {
+          e.preventDefault();
+        }
       }
     }
   }

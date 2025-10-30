@@ -469,7 +469,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                           <TextField
                             type='number'
                             id={`new-${row.id}`}
-                            value={row.density}
+                            value={row.density ? Math.round(Number(row.density) * 10) / 10 : row.density}
                             onChange={handleNewSpeciesDensityChange(row.id)}
                             label={''}
                             min={0}
