@@ -106,6 +106,7 @@ type ActivityHighlightSlide = {
   activity?: Activity;
   coverPhoto?: ActivityMediaFile;
   coverPhotoURL?: string;
+  description?: string;
   report?: AcceleratorReport;
   title: string;
 };
@@ -216,7 +217,8 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     const _slides: ActivityHighlightSlide[] = [];
 
     if (selectedQuarterReport) {
-      const firstSlide = {
+      const firstSlide: ActivityHighlightSlide = {
+        description: selectedQuarterReport.highlights,
         report: selectedQuarterReport,
         title: `${selectedQuarterReport.quarter} ${selectedQuarterReport.endDate.split('-')[0]}`,
       };
@@ -225,6 +227,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
     for (const activity of activities) {
       const title = activityTypeLabel(activity.type, strings);
+      const description = activity.description;
       const coverPhoto = activity.media.find((file) => file.isCoverPhoto && !file.isHiddenOnMap);
       const coverPhotoURL = coverPhoto
         ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
@@ -233,7 +236,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
           )}`
         : undefined;
 
-      _slides.push({ activity, coverPhoto, coverPhotoURL, title });
+      _slides.push({ activity, coverPhoto, coverPhotoURL, description, title });
     }
 
     return _slides;
@@ -359,7 +362,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                         </Box>
                       )}
 
-                      <Typography>{slide.activity?.description}</Typography>
+                      {slide.description && <Typography>{slide.description}</Typography>}
                     </Box>
                   </Box>
                 </SwiperSlide>
