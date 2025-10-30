@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761864798730" clover="3.2.0">
-  <project timestamp="1761864798730" name="All files">
-    <metrics statements="35380" coveredstatements="1363" conditionals="24710" coveredconditionals="393" methods="10826" coveredmethods="213" elements="70916" coveredelements="1969" complexity="0" loc="35380" ncloc="35380" packages="280" files="1369" classes="1369"/>
+<coverage generated="1761865190216" clover="3.2.0">
+  <project timestamp="1761865190216" name="All files">
+    <metrics statements="35397" coveredstatements="1363" conditionals="24718" coveredconditionals="393" methods="10831" coveredmethods="213" elements="70946" coveredelements="1969" complexity="0" loc="35397" ncloc="35397" packages="281" files="1374" classes="1374"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13754,12 +13754,12 @@
       <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="rootReducer.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/rootReducer.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="99" count="0" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="105" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
         <line num="106" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
+        <line num="107" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
       </file>
       <file name="store.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/store.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -15118,6 +15118,29 @@
         <line num="101" count="0" type="stmt"/>
         <line num="106" count="0" type="stmt"/>
         <line num="110" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.redux.features.funder.activities">
+      <metrics statements="11" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <file name="funderActivitiesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/funder/activities/funderActivitiesAsyncThunks.ts">
+        <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="14" count="0" type="stmt"/>
+      </file>
+      <file name="funderActivitiesSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/funder/activities/funderActivitiesSelectors.ts">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+      </file>
+      <file name="funderActivitiesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/funder/activities/funderActivitiesSlice.ts">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.funder.entities">
@@ -38287,7 +38310,16 @@
       </file>
     </package>
     <package name="src.services.funder">
-      <metrics statements="75" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="20" coveredmethods="0"/>
+      <metrics statements="81" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="21" coveredmethods="0"/>
+      <file name="FunderActivityService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/funder/FunderActivityService.ts">
+        <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+      </file>
       <file name="FunderProjectService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/funder/FunderProjectService.ts">
         <metrics statements="13" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -38862,6 +38894,9 @@
         <line num="24" count="0" type="stmt"/>
       </file>
       <file name="File.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/File.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="FunderActivity.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/FunderActivity.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
       <file name="FunderProject.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/FunderProject.ts">
