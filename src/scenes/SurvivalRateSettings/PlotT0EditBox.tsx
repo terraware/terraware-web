@@ -12,7 +12,7 @@ import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { disableDecimalChar } from 'src/utils/numbers';
+import { allowOneDecimal } from 'src/utils/numbers';
 
 export type AddedSpecies = { id: string; speciesId?: number; density: string };
 
@@ -133,7 +133,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
       return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;
     }, 0);
     if (total) {
-      return Math.round(total);
+      return Math.round(total * 10) / 10;
     }
     return total;
   }, [plot.id, record]);
@@ -293,7 +293,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     (withdrawnSpecies: { density: number; speciesId: number }) => {
       const found = plotToSave?.densityData.find((densityData) => densityData.speciesId === withdrawnSpecies.speciesId);
       if (found) {
-        return Math.round(found.plotDensity);
+        return Math.round(found.plotDensity * 10) / 10;
       }
     },
     [plotToSave?.densityData]
@@ -415,7 +415,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                           onChange={onChangeDensity}
                           label={''}
                           min={0}
-                          onKeyDown={disableDecimalChar}
+                          onKeyDown={allowOneDecimal}
                           sx={{ width: '85px' }}
                         />
                       </td>
@@ -473,7 +473,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                             onChange={handleNewSpeciesDensityChange(row.id)}
                             label={''}
                             min={0}
-                            onKeyDown={disableDecimalChar}
+                            onKeyDown={allowOneDecimal}
                             sx={{ width: '85px' }}
                           />
                         </td>

@@ -36,3 +36,39 @@ export const disableDecimalChar = (e: React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
   }
 };
+
+export const allowOneDecimal = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const input = e.currentTarget;
+  const value = input.value;
+  const key = e.key;
+
+  // Allow control keys
+  if (['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+    return;
+  }
+
+  // If decimal separator is entered
+  if (key === '.' || key === ',') {
+    // Prevent if already has a decimal separator
+    if (value.includes('.') || value.includes(',')) {
+      e.preventDefault();
+    }
+    return;
+  }
+
+  // If a digit is entered
+  if (/^\d$/.test(key)) {
+    const decimalIndex = Math.max(value.indexOf('.'), value.indexOf(','));
+    // If there's a decimal separator
+    if (decimalIndex !== -1) {
+      const selectionStart = input.selectionStart || 0;
+      const selectionEnd = input.selectionEnd || 0;
+      const hasSelection = selectionStart !== selectionEnd;
+
+      // If typing after decimal separator and already one digit there (and no selection)
+      if (!hasSelection && selectionStart > decimalIndex && value.length > decimalIndex + 1) {
+        e.preventDefault();
+      }
+    }
+  }
+};

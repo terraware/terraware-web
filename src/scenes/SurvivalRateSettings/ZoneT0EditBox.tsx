@@ -10,7 +10,7 @@ import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/t
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0TempData, ZoneT0Data } from 'src/types/Tracking';
-import { disableDecimalChar } from 'src/utils/numbers';
+import { allowOneDecimal } from 'src/utils/numbers';
 
 import { AddedSpecies } from './PlotT0EditBox';
 
@@ -85,7 +85,7 @@ const ZoneT0EditBox = ({
         selectedZone?.densityData.reduce((sum, density) => {
           return isNaN(density.density) ? sum : sum + density.density;
         }, 0) || 0;
-      return Math.round(total);
+      return Math.round(total * 10) / 10;
     }
     return 0;
   }, [plotsWithObservations, record]);
@@ -260,7 +260,7 @@ const ZoneT0EditBox = ({
         (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
       )?.density;
       if (density) {
-        return Math.round(density);
+        return Math.round(density * 10) / 10;
       }
     },
     [zoneToSave?.densityData]
@@ -322,7 +322,7 @@ const ZoneT0EditBox = ({
                       label={''}
                       min={0}
                       sx={{ width: '85px' }}
-                      onKeyDown={disableDecimalChar}
+                      onKeyDown={allowOneDecimal}
                     />
                   </td>
                   <td>
@@ -380,7 +380,7 @@ const ZoneT0EditBox = ({
                         label={''}
                         min={0}
                         sx={{ width: '85px' }}
-                        onKeyDown={disableDecimalChar}
+                        onKeyDown={allowOneDecimal}
                       />
                     </td>
                     <td>

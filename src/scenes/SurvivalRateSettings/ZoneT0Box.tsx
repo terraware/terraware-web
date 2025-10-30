@@ -21,7 +21,7 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
 
   const getZoneTotalDensity = useMemo(() => {
     const total = t0Zone?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
-    return total ? Math.round(total) : undefined;
+    return total ? Math.round(total * 10) / 10 : undefined;
   }, [t0Zone]);
 
   const allWithdrawnSpecies = React.useMemo(() => {
@@ -97,7 +97,7 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
                           <td style={{ paddingRight: '64px' }}>
                             {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
                           </td>
-                          <td>{Math.round(densityData.density)}</td>
+                          <td>{Math.round(densityData.density * 10) / 10}</td>
                         </tr>
                       ))}
                       <tr>
