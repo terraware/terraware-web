@@ -40,6 +40,7 @@ ACTIVE_GROWTH_QUANTITY_REMAINING,Cantidad de crecimiento activo ({0} restante),6
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Cantidad de crecimiento activo *,b8c156d3
 ACTIVITY_DELETED,Actividad eliminada,e2df95fd
 ACTIVITY_LOG,Registro de actividades,112b2d64
+ACTIVITY_PUBLISHED,Actividad publicada,6ce064cc
 ACTIVITY_TYPE,Tipo de actividad,5f057b66
 ACTUAL,Real,1235cf68
 AD_HOC,Ad hoc,2acaf742
@@ -1478,6 +1479,8 @@ PROPOSED_RESTORATION_ACTIVITIES,Actividades de restauración propuestas,4c6b833a
 PROVIDE_PLANT_DENSITY_PER_SPECIES,Proporcione la densidad de plantas por especie,846ce9aa
 PROVIDE_PLANT_DENSITY_PER_SPECIES_TOOLTIP,Ingrese las densidades para cada especie plantada. Se muestran las densidades de plantas basadas en los datos del Registro de Retiros y pueden ser ingresadas como las densidades de plantas.,3b3ef9f3
 PUBLISH,Publicar,c1d4ecf7
+PUBLISH_ACTIVITY,Publicar actividad,a00f9120
+PUBLISH_ACTIVITY_MODAL_MESSAGE,Está a punto de publicar {0} de {1}. ¿Está seguro?,6e0d670f
 PUBLISH_TO_FUNDER_PORTAL,Publicar en el portal del financiador,ec2ddbec
 PUBLISHED,Publicado,baa0bfba
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
@@ -2282,7 +2285,6 @@ WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Ingresar una cantidad en al menos una 
 WITHDRAWAL_COUNT_GREATER_THAN_ZERO_ERROR,El conteo de extracción debe ser mayor a 0,e48b9963
 WITHDRAWAL_DETAILS,Detalles de extracción,5c86287a
 WITHDRAWAL_HISTORY,Historial de retiros,470f20eb
-WITHDRAWAL_HISTORY_ONLY_1000,"La tabla de Historial de Retiros muestra solo 1000 retiros. El conjunto de retiros que se muestra depende del orden y los filtros aplicados. Para ver todos los retiros, utilice la función de “exportar” para descargar un archivo CSV que incluya todos los retiros.",70059909
 WITHDRAWAL_UNDONE,Retiro deshecho,039d291e
 WITHDRAWAL_UNDONE_DESCRIPTION,Se deshizo el retiro y las cantidades se devolvieron al lote original.,f3b634f4
 WITHDRAWALS,Retiros,270c7f9e

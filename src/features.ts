@@ -5,7 +5,8 @@ export type FeatureName =
   | 'Show Production View'
   | 'Survival Rate Calculation'
   | 'Activity Video Support'
-  | 'Activity Log Highlights';
+  | 'Activity Log Highlights'
+  | 'Activity Log in Funder Portal';
 
 export type Feature = {
   name: FeatureName;
@@ -64,6 +65,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for activity highlights in activity logs'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Activity Log in Funder Portal',
+    preferenceName: 'activityLogInFunderPortal',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Support for activity log in funder portal'],
     disclosure: ['This is a WIP'],
   },
 ];

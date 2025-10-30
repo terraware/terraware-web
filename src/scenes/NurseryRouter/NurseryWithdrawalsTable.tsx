@@ -38,6 +38,13 @@ import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+const ITEMS_PER_PAGE = 100;
+
+const DEFAULT_SORT_ORDER: SearchSortOrder = {
+  field: 'withdrawnDate',
+  direction: 'Descending',
+};
+
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
@@ -52,11 +59,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [rows, setRows] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
+  const [currentPage, setCurrentPage] = useState<number>();
+  const [totalRowCount, setTotalRowCount] = useState<number>();
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
-    field: 'withdrawnDate',
-    direction: 'Descending',
-  } as SearchSortOrder);
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>(DEFAULT_SORT_ORDER);
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
   const getProjectName = useCallback(
@@ -266,8 +272,24 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     return finalSearchValueChildren;
   }, [filters, debouncedSearchTerm]);
 
-  const retrieveWithdrawals: (limit: number) => Promise<PlantingProgress[]> = useCallback(
-    async (limit: number) => {
+  const retrieveTotalRowCount = useCallback(
+    async (orgId: number) => {
+      const count = await NurseryWithdrawalService.countNurseryWithdrawals(orgId, searchChildren);
+      if (count) {
+        setTotalRowCount(count);
+      }
+    },
+    [searchChildren]
+  );
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void retrieveTotalRowCount(selectedOrganization.id);
+    }
+  }, [retrieveTotalRowCount, selectedOrganization]);
+
+  const retrieveWithdrawals: (limit: number, pageNumber: number) => Promise<PlantingProgress[]> = useCallback(
+    async (limit: number, pageNumber: number) => {
       if (selectedOrganization) {
         const requestId = Math.random().toString();
         setRequestId('searchWithdrawals', requestId);
@@ -275,7 +297,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           selectedOrganization.id,
           searchChildren,
           searchSortOrder,
-          limit
+          limit,
+          (pageNumber - 1) * ITEMS_PER_PAGE
         );
         if (apiSearchResults) {
           if (getRequestId('searchWithdrawals') === requestId) {
@@ -295,13 +318,25 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     [filters.destinationName?.values, searchChildren, searchSortOrder, selectedOrganization]
   );
 
-  const onApplyFilters = useCallback(async () => {
-    setRows(await retrieveWithdrawals(1000));
-  }, [retrieveWithdrawals]);
+  const onApplyFilters = useCallback(
+    async (pageNumber?: number) => {
+      const newPageNumber = pageNumber || 1;
+      if (!pageNumber) {
+        setCurrentPage(newPageNumber);
+      }
+      const newRows = await retrieveWithdrawals(ITEMS_PER_PAGE, newPageNumber);
+      setRows(newRows);
+    },
+    [retrieveWithdrawals]
+  );
 
   const reload = useCallback(() => {
     void onApplyFilters();
   }, [onApplyFilters]);
+
+  useEffect(() => {
+    reload();
+  }, [searchChildren, reload]);
 
   useEffect(() => {
     if (siteParam) {
@@ -335,29 +370,22 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [subzoneParam, query, navigate, location]);
 
-  useEffect(() => {
-    void onApplyFilters();
-  }, [filters, onApplyFilters]);
-
-  const onSortChange = useCallback(
-    (order: SortOrder, orderBy: string) => {
-      const orderByStr =
-        orderBy === 'speciesScientificNames'
-          ? 'batchWithdrawals.batch_species_scientificName'
-          : orderBy === 'project_names'
-            ? null
-            : orderBy;
-      setSearchSortOrder(
-        orderByStr
-          ? {
-              field: orderByStr,
-              direction: order === 'asc' ? 'Ascending' : 'Descending',
-            }
-          : undefined
-      );
-    },
-    [setSearchSortOrder]
-  );
+  const onSortChange = useCallback((order: SortOrder, orderBy: string) => {
+    const orderByStr =
+      orderBy === 'speciesScientificNames'
+        ? 'batchWithdrawals.batch_species_scientificName'
+        : orderBy === 'project_names'
+          ? 'batchWithdrawals.batch_project_name'
+          : orderBy;
+    setSearchSortOrder(
+      orderByStr
+        ? {
+            field: orderByStr,
+            direction: order === 'asc' ? 'Ascending' : 'Descending',
+          }
+        : DEFAULT_SORT_ORDER
+    );
+  }, []);
 
   const isClickable = useCallback(() => false, []);
 
@@ -369,7 +397,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     return {
       filename: `${nurseryName}-${strings.NURSERY_WITHDRAWALS}`,
       columnHeaders: exportColumnHeaders,
-      retrieveResults: () => retrieveWithdrawals(0),
+      retrieveResults: () => retrieveWithdrawals(0, 1),
       convertRow: (withdrawal: SearchResponseElement) =>
         ({
           ...withdrawal,
@@ -380,6 +408,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         }) as CsvData,
     };
   }, [exportColumnHeaders, retrieveWithdrawals, rows, strings.NURSERY_WITHDRAWALS, strings.UNKNOWN]);
+
+  const onPageChange = useCallback(
+    (newPage: number) => {
+      setCurrentPage(newPage);
+      void onApplyFilters(newPage);
+    },
+    [onApplyFilters]
+  );
 
   return (
     <Grid container>
@@ -399,16 +435,20 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           columns={columns}
           rows={rows || []}
           Renderer={WithdrawalLogRenderer}
-          orderBy={searchSortOrder?.field || 'project_names'}
-          order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
-          isPresorted={
-            searchSortOrder !== undefined && searchSortOrder.field !== 'batchWithdrawals.batch_species_scientificName'
+          orderBy={
+            searchSortOrder.field === 'batchWithdrawals.batch_project_name' ? 'project_names' : searchSortOrder.field
           }
+          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+          isPresorted={true}
           onSelect={onWithdrawalClicked}
           controlledOnSelect={true}
           sortHandler={onSortChange}
           isClickable={isClickable}
           reloadData={reload}
+          onPageChange={onPageChange}
+          totalRowCount={totalRowCount}
+          maxItemsPerPage={ITEMS_PER_PAGE}
+          currentPage={currentPage}
         />
       </Grid>
     </Grid>

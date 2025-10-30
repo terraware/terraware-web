@@ -97,6 +97,8 @@ export type NurseryWithdrawalsSearchResponseElement = {
   }[];
 };
 
+const NURSERY_WITHDRAWALS_PREFIX = 'nurseryWithdrawals';
+
 /**
  * List nursery withdrawals
  */
@@ -104,11 +106,12 @@ const listNurseryWithdrawals = async (
   organizationId: number,
   searchCriteria: SearchNodePayload[],
   sortOrder?: SearchSortOrder,
-  limit: number = 1000
+  limit: number = 1000,
+  offset: number = 0
 ): Promise<SearchResponseElement[] | null> => {
-  const createdTimeOrder = { direction: sortOrder?.direction, field: 'createdTime' };
+  const createdTimeOrder = { direction: 'Ascending', field: 'createdTime' } as SearchSortOrder;
   const searchParams: SearchRequestPayload = {
-    prefix: 'nurseryWithdrawals',
+    prefix: NURSERY_WITHDRAWALS_PREFIX,
     fields: [
       'id',
       'createdTime',
@@ -130,6 +133,7 @@ const listNurseryWithdrawals = async (
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder, createdTimeOrder] : [{ field: 'id', direction: 'Ascending' }],
     count: limit,
+    cursor: offset.toString(),
   };
 
   const data: NurseryWithdrawalsSearchResponseElement[] | null = await SearchService.search(searchParams);
@@ -157,12 +161,26 @@ const listNurseryWithdrawals = async (
   return null;
 };
 
+const countNurseryWithdrawals = async (
+  organizationId: number,
+  searchCriteria: SearchNodePayload[]
+): Promise<number | null> => {
+  const searchParams: SearchRequestPayload = {
+    prefix: NURSERY_WITHDRAWALS_PREFIX,
+    fields: [],
+    search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
+    count: 0,
+  };
+
+  return await SearchService.searchCount(searchParams);
+};
+
 /**
  * Check if an org has nursery withdrawals
  */
 const hasNurseryWithdrawals = async (organizationId: number): Promise<boolean> => {
   const searchParams: SearchRequestPayload = {
-    prefix: 'nurseryWithdrawals',
+    prefix: NURSERY_WITHDRAWALS_PREFIX,
     fields: ['id'],
     search: SearchService.convertToSearchNodePayload({}, organizationId),
     count: 1,
@@ -218,7 +236,7 @@ const getWithdrawalPhotosList = async (withdrawalId: number): Promise<Response &
  */
 const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap> => {
   const searchParams: SearchRequestPayload = {
-    prefix: 'nurseryWithdrawals',
+    prefix: NURSERY_WITHDRAWALS_PREFIX,
     fields: [
       'id',
       'purpose',
@@ -305,6 +323,7 @@ const getPlantingSiteWithdrawnSpecies = async (
  */
 const NurseryWithdrawalService = {
   createBatchWithdrawal,
+  countNurseryWithdrawals,
   uploadWithdrawalPhotos,
   listNurseryWithdrawals,
   hasNurseryWithdrawals,

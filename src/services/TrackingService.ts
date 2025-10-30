@@ -471,6 +471,15 @@ const getPlotsWithObservations = async <T extends SearchResponseElement>(
             values: [null],
           },
         },
+        {
+          operation: 'not',
+          child: {
+            operation: 'field',
+            field: 'plantingSubzone_id',
+            type: 'Exact',
+            values: [null],
+          },
+        },
       ],
     },
     count: 1000,

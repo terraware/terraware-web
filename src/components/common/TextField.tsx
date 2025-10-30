@@ -12,6 +12,7 @@ export interface Props {
   disabled?: boolean;
   endAdornment?: JSX.Element;
   onKeyPress?: KeyboardEventHandler;
+  onKeyDown?: KeyboardEventHandler;
   min?: number;
   error?: boolean;
   helperText?: string;
@@ -39,6 +40,7 @@ export default function TextField(props: Props): JSX.Element {
       fullWidth={true}
       disabled={props.disabled}
       onKeyPress={props.onKeyPress}
+      onKeyDown={props.onKeyDown}
       InputProps={{
         endAdornment: props.endAdornment,
         inputProps: {

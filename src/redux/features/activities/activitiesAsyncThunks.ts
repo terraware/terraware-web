@@ -403,3 +403,16 @@ export const requestSyncActivityMedia = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestPublishActivity = createAsyncThunk(
+  'publishActivity',
+  async (activityId: string, { rejectWithValue }) => {
+    const response = await ActivityService.publishActivity(activityId);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
