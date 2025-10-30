@@ -11,6 +11,7 @@ import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersW
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import useObservation from 'src/hooks/useObservation';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
@@ -51,6 +52,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   const observationId = Number(params.observationId);
   const plantingZoneName = params.plantingZoneName!;
 
+  const { observation } = useObservation(observationId);
   const [search, onSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [replaceObservationPlot, setReplaceObservationPlot] = useState<
@@ -199,7 +201,8 @@ export default function ObservationPlantingZone(): JSX.Element {
                   plantingSiteId,
                   observationId,
                   plantingZoneName,
-                  setReplaceObservationPlot
+                  setReplaceObservationPlot,
+                  observation?.state
                 )}
                 tableComments={
                   plantingZone?.plantingSubzones && has25mPlots(plantingZone.plantingSubzones)
