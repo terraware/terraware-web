@@ -27,6 +27,7 @@ const containerStyles = {
 
 type ActivityHighlightsModalProps = {
   activities: Activity[];
+  busy: boolean;
   onCancel?: () => void;
   open: boolean;
   projectId: number;
@@ -36,6 +37,7 @@ type ActivityHighlightsModalProps = {
 
 const ActivityHighlightsModal = ({
   activities,
+  busy,
   open,
   setOpen,
   onCancel,
@@ -139,11 +141,25 @@ const ActivityHighlightsModal = ({
           </IconButton>
         </Box>
 
-        <ActivityHighlightsView
-          activities={selectedGroup?.activities || []}
-          projectId={projectId}
-          selectedQuarter={selectedQuarter}
-        />
+        {busy ? (
+          <img
+            alt={strings.LOADING}
+            height='24px'
+            src='/assets/loading.gif'
+            style={{ margin: '24px 0' }}
+            width='24px'
+          />
+        ) : (selectedGroup?.activities || []).length === 0 ? (
+          <Box sx={{ height: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+            <Typography>No highlights yet</Typography>
+          </Box>
+        ) : (
+          <ActivityHighlightsView
+            activities={selectedGroup?.activities || []}
+            projectId={projectId}
+            selectedQuarter={selectedQuarter}
+          />
+        )}
       </DialogBox>
     </Box>
   );

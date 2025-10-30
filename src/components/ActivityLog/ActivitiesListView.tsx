@@ -600,6 +600,7 @@ const ActivitiesListView = ({
       {isActivityHighlightEnabled && highlightsModalOpen && (
         <ActivityHighlightsModal
           activities={activities}
+          busy={busy}
           open={highlightsModalOpen}
           projectId={projectId}
           setOpen={setHighlightsModalOpen}
