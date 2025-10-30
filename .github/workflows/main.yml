@@ -105,7 +105,12 @@ jobs:
 
       - name: Run end-to-end playwright tests
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn test:e2e
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 20
+          max_attempts: 2
+          retry_on: timeout
+          command: yarn test:e2e
         env:
           REACT_APP_TERRAWARE_API: 'http://localhost:8080'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
