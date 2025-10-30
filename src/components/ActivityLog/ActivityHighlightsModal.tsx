@@ -43,7 +43,7 @@ const ActivityHighlightsModal = ({
   const { isMobile, isTablet } = useDeviceInfo();
   const query = useQuery();
 
-  const [selectedQuarter, setSelectedQuarter] = useState<string | number | undefined>(undefined);
+  const [selectedQuarter, setSelectedQuarter] = useState<string | undefined>(undefined);
 
   const highlightActivityId = useMemo(() => {
     const activityIdParam = query.get('highlightActivityId');
@@ -85,7 +85,7 @@ const ActivityHighlightsModal = ({
     }
   }, [isMobile, isTablet]);
 
-  const onChangeActivityQuarter = useCallback((value: string | number | undefined) => {
+  const onChangeActivityQuarter = useCallback((value: string | undefined) => {
     setSelectedQuarter(value);
   }, []);
 
