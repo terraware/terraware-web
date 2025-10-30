@@ -1,3 +1,4 @@
+47f80a278e1 SW-7579 Extend matrix view table to fill the viewport (#4718)
 7a289cd64b5 SW-7617 Allow only one decimal for densities (#4714)
 1809c4308e3 SW-7624 Keep the y-axis fixed 0-100 when values are in that range (#4715)
 2c4a9778b8d SW-7320: FE: Highlights Preview View (Intro Slide) (#4710)
