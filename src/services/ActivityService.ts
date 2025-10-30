@@ -18,6 +18,7 @@ const ACTIVITY_ENDPOINT = '/api/v1/accelerator/activities/{activityId}';
 const ACTIVITY_MEDIA_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media';
 export const ACTIVITY_MEDIA_FILE_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media/{fileId}';
 const ACTIVITY_MEDIA_STREAM_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media/{fileId}/stream';
+const PUBLISH_ACTIVITY_ENDPOINT = '/api/v1/accelerator/activities/admin/{id}/publish';
 
 type ListActivitiesResponse = paths[typeof ACTIVITIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type CreateActivityResponse =
@@ -44,6 +45,8 @@ type DeleteActivityMediaResponse =
   paths[typeof ACTIVITY_MEDIA_FILE_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 export type GetActivityMediaStreamResponse =
   paths[typeof ACTIVITY_MEDIA_STREAM_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type PublishActivityResponse =
+  paths[typeof PUBLISH_ACTIVITY_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 /**
  * List all activities for a project
@@ -255,6 +258,10 @@ const getActivityMediaStream = async (
   });
 };
 
+const publishActivity = async (activityId: string): Promise<Response2<PublishActivityResponse>> => {
+  return HttpService.root(PUBLISH_ACTIVITY_ENDPOINT.replace('{id}', activityId)).post2<PublishActivityResponse>();
+};
+
 /**
  * Exported ActivityService
  */
@@ -273,6 +280,7 @@ const ActivityService = {
   updateActivity,
   updateActivityMedia,
   uploadActivityMedia,
+  publishActivity,
 };
 
 export default ActivityService;

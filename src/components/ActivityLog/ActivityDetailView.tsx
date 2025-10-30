@@ -2,7 +2,7 @@ import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 
 
 import { Box, Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
-import { Button, Icon } from '@terraware/web-components';
+import { Button, DialogBox, Icon } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
@@ -14,10 +14,12 @@ import { useLocalization, useUser } from 'src/providers';
 import {
   requestGetActivityMedia,
   requestGetActivityMediaStream,
+  requestPublishActivity,
 } from 'src/redux/features/activities/activitiesAsyncThunks';
 import {
   selectActivityMediaGet,
   selectActivityMediaStreamGet,
+  selectPublishActivity,
 } from 'src/redux/features/activities/activitiesSelectors';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
@@ -25,6 +27,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
+import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ActivityStatusBadges from './ActivityStatusBadges';
@@ -339,11 +342,26 @@ const ActivityDetailView = ({
   const getActivityMediaStreamRequest = useAppSelector(selectActivityMediaStreamGet(getActivityMediaStreamRequestId));
   const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
+  const [publishActivityModalOpened, setPublishActivityModalOpened] = useState(false);
+  const [requestId, setRequestId] = useState('');
+  const publishActivityResponse = useAppSelector(selectPublishActivity(requestId));
+  const snackbar = useSnackbar();
+
   useEffect(() => {
     if (activity?.verifiedBy && !verifiedByUser) {
       void dispatch(requestGetUser(activity?.verifiedBy));
     }
   }, [activity?.verifiedBy, dispatch, verifiedByUser]);
+
+  useEffect(() => {
+    if (publishActivityResponse?.status === 'success') {
+      snackbar.toastSuccess(strings.ACTIVITY_PUBLISHED);
+      setPublishActivityModalOpened(false);
+    }
+    if (publishActivityResponse?.status === 'error') {
+      snackbar.toastError();
+    }
+  }, [publishActivityResponse, snackbar, strings]);
 
   const isActivityVideoSupportEnabled = useMemo(() => isEnabled('Activity Video Support'), []);
 
@@ -420,9 +438,48 @@ const ActivityDetailView = ({
     }
   }, [getActivityMediaStreamRequest]);
 
+  const openPublishActivityModal = useCallback(() => {
+    setPublishActivityModalOpened(true);
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    setPublishActivityModalOpened(false);
+  }, []);
+
+  const publishActivity = useCallback(() => {
+    const request = dispatch(requestPublishActivity(activity.id.toString()));
+    setRequestId(request.requestId);
+  }, [activity.id, dispatch]);
+
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
-      <Grid item md={8} xs={12}>
+      {publishActivityModalOpened && (
+        <DialogBox
+          onClose={onCloseModal}
+          open={true}
+          title={strings.PUBLISH_ACTIVITY}
+          size='medium'
+          middleButtons={[
+            <Button
+              id='cancelPublishActivity'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={onCloseModal}
+              key='button-1'
+            />,
+            <Button
+              id='publishActivity'
+              label={strings.PUBLISH}
+              onClick={publishActivity}
+              key='button-2'
+              type='destructive'
+            />,
+          ]}
+          message={strings.formatString(strings.PUBLISH_ACTIVITY_MODAL_MESSAGE, activityType, activity.date)}
+        />
+      )}
+      <Grid item md={4} xs={12}>
         {crumbs && (
           <Box marginBottom={theme.spacing(2)}>
             <BreadCrumbs crumbs={crumbs} />
@@ -430,16 +487,26 @@ const ActivityDetailView = ({
         )}
       </Grid>
 
-      <Grid item md={4} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+      <Grid item md={8} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
         {isAllowedEditActivities && (
-          <Button
-            disabled={!projectId}
-            icon='iconEdit'
-            label={strings.EDIT_ACTIVITY}
-            onClick={goToProjectActivityEdit}
-            size='medium'
-            sx={{ whiteSpace: 'nowrap' }}
-          />
+          <Box display='flex' justifyContent={'end'}>
+            <Button
+              disabled={!projectId}
+              icon='iconEdit'
+              label={strings.EDIT_ACTIVITY}
+              onClick={goToProjectActivityEdit}
+              size='medium'
+              sx={{ whiteSpace: 'nowrap' }}
+            />
+            <Button
+              disabled={!projectId}
+              label={strings.PUBLISH_ACTIVITY}
+              onClick={openPublishActivityModal}
+              size='medium'
+              sx={{ whiteSpace: 'nowrap' }}
+              priority='secondary'
+            />
+          </Box>
         )}
       </Grid>
 
