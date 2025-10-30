@@ -5,6 +5,7 @@ import { Dropdown, Icon } from '@terraware/web-components';
 import DialogBox, { DialogBoxSize } from '@terraware/web-components/components/DialogBox/DialogBox';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { Activity } from 'src/types/Activity';
@@ -49,6 +50,7 @@ const ActivityHighlightsModal = ({
   const query = useQuery();
   const location = useStateLocation();
   const navigate = useSyncNavigate();
+  const { acceleratorReports, busy: isLoadingReports } = useProjectReports(projectId);
 
   const [selectedQuarter, setSelectedQuarter] = useState<string | undefined>(undefined);
 
@@ -98,12 +100,32 @@ const ActivityHighlightsModal = ({
     setSelectedQuarter(value);
   }, []);
 
-  // set initial selected quarter when modal opens
+  // set initial selected quarter when modal opens and data has loaded
   useEffect(() => {
-    if (open && dropdownOptions.length > 0 && !selectedQuarter) {
-      setSelectedQuarter(dropdownOptions[0].value);
+    if (open && dropdownOptions.length > 0 && !selectedQuarter && !busy && !isLoadingReports) {
+      let defaultQuarter = dropdownOptions[0].value;
+
+      // try to find the quarter of the latest submitted report
+      if (acceleratorReports.length > 0) {
+        const submittedReports = acceleratorReports.filter((report) => report.status === 'Submitted');
+        if (submittedReports.length > 0) {
+          const sorted = [...submittedReports].sort((a, b) =>
+            b.endDate.localeCompare(a.endDate, activeLocale || undefined)
+          );
+          const latestReport = sorted[0];
+          const year = latestReport.endDate.split('-')[0];
+          const latestReportQuarter = `${latestReport.quarter} ${year}`;
+
+          // only use it if it exists in the dropdown options
+          if (dropdownOptions.some((option) => option.value === latestReportQuarter)) {
+            defaultQuarter = latestReportQuarter;
+          }
+        }
+      }
+
+      setSelectedQuarter(defaultQuarter);
     }
-  }, [open, dropdownOptions, selectedQuarter]);
+  }, [acceleratorReports, activeLocale, busy, dropdownOptions, isLoadingReports, open, selectedQuarter]);
 
   return (
     <Box sx={containerStyles}>
