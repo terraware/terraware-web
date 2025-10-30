@@ -128,12 +128,14 @@ const ActivityHighlightsModal = ({
               {title}
             </Typography>
 
-            <Dropdown
-              label=''
-              onChange={onChangeActivityQuarter}
-              options={dropdownOptions}
-              selectedValue={selectedQuarter}
-            />
+            {dropdownOptions.length > 0 && (
+              <Dropdown
+                label=''
+                onChange={onChangeActivityQuarter}
+                options={dropdownOptions}
+                selectedValue={selectedQuarter}
+              />
+            )}
           </Box>
 
           <IconButton onClick={onClose}>
