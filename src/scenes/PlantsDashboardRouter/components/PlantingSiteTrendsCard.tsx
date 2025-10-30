@@ -195,7 +195,14 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
             chartData={mortalityChartData}
             maxWidth='100%'
             minHeight='100px'
-            yLimits={{ min: 0, max: isSurvivalRateCalculationEnabled ? undefined : 100 }}
+            yLimits={{
+              min: 0,
+              max:
+                !isSurvivalRateCalculationEnabled ||
+                mortalityChartData.datasets[0]?.values.every((value) => (value as number) <= 100)
+                  ? 100
+                  : undefined,
+            }}
             type={'line'}
             xAxisType='time'
             lineColor='#D29AB4'
