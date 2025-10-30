@@ -130,6 +130,9 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
     // filter by selectedQuarter
     const quarterReports = acceleratorReports.filter((report) => {
+      if (report.status !== 'Submitted') {
+        return false;
+      }
       const year = report.endDate.split('-')[0];
       const reportQuarterYear = `${report.quarter} ${year}`;
       return reportQuarterYear === selectedQuarter;
