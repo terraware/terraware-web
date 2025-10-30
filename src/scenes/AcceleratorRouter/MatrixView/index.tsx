@@ -718,7 +718,7 @@ const MatrixView = () => {
       if (correspondingValue?.linkUrl) {
         Cell = undefined;
         // URL input
-        // eslint-disable-next-line react/display-name, react/prop-types
+        // eslint-disable-next-line react/display-name
         Edit = ({
           cell,
           row,
@@ -905,6 +905,11 @@ const MatrixView = () => {
           boxShadow: '-4px 0 4px -4px rgba(97, 97, 97, 0.5) inset',
           zIndex: 1,
         },
+      },
+    },
+    muiTableProps: {
+      sx: {
+        tableLayout: 'fixed',
       },
     },
     muiTableHeadCellProps: ({ column }) => ({
