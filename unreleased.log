@@ -1,3 +1,4 @@
+fa67486624a SW-7322 Add "Published" status (#4711)
 2a203bf9c84 SW-7545 Added check for abandoned observations for plot reassignment action item (#4709)
 cb0b8fde4fb SW-7564 Convert Nusery Withdrawal History table to backend pagination (#4677)
 97325f0722c Add redux support to ExportTableComponent (#4704)
