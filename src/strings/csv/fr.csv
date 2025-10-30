@@ -301,6 +301,7 @@ CLICK_UP_LINK,Lien ClickUp,787363a6
 CLIMATE,Climat,63ba44ee
 CLIMATE_IMPACT,Impact sur le climat,876c48a4
 CLOSE,Fermer,e6e3f022
+CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
 COHORT,Cohorte,81afe896
 COHORT_ADDED,{0} Cohorte ajoutée,c8518668
 COHORT_NAME,Nom de la cohorte,655d8af3
@@ -765,6 +766,7 @@ HARDENING_OFF_QUANTITY_REMAINING,Quantité à acclimater ({0} restante),19e3987b
 HARDENING_OFF_QUANTITY_REQUIRED,Quantité à acclimater *,8bda8f0f
 HAS_CHANGED,a changé,089c641e
 HECTARES,Hectares,316902d7
+HECTARES_PLANTED,Hectares plantés,a24ce9f8
 HEIGHT_AT_MATURITY,Hauteur à maturité (cm),f8025719
 HEIGHT_M,Hauteur (m),fe61fc34
 HELP_SUPPORT,Aide et assistance,477f3e22
@@ -1491,6 +1493,7 @@ QUADRAT,Carré d’échantillonnage,ff115cb6
 QUANTITY,Quantité,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La quantité doit être supérieure ou égale à 0,5a55f459
 QUARTER_YEAR,T{0} {1},637ce0a5
+QUARTERLY_HIGHLIGHTS,Faits saillants trimestriels,863a818b
 QUESTION,Question,84cf257d
 RARE,Rare,c114e991
 RATIONALE,Justification,4e68d88e
@@ -1864,6 +1867,7 @@ SPECIES_MORTALITY_TOOLTIP,La rubrique « Mortalité des espèces » indique les 
 SPECIES_NAME,Nom de l'espèce,26123a34
 SPECIES_NOT_ACCEPTED,Espèces non acceptées,5383ef6c
 SPECIES_OBSERVED,Espèces observées,1759de27
+SPECIES_PLANTED,Espèces plantées,c5e0f029
 SPECIES_PROBLEM_NAME_IS_SYNONYM,Le nom est un synonyme,c38f5499
 SPECIES_PROBLEM_NAME_MISSPELLED,Nom mal orthographié,58f35a8c
 SPECIES_PROBLEM_NAME_NOT_FOUND,Nom introuvable,6f1d18da
@@ -2141,6 +2145,7 @@ TREATMENT_BEFORE,Traitement (avant),311905d8
 TREE,Arbre,786d8845
 TREES_AND_SHRUBS,Arbres et arbustes,e40ed4ab
 TREES_OR_SHRUBS,Arbres ou arbustes,ea17b41a
+TREES_PLANTED,Arbres plantés,cd803b87
 TREES_TRUNKS,Arbres / troncs,029487f6
 TRUNCATED_TEXT_MORE_LINK,plus,9c3efa68
 TRY_AGAIN,Réessayer,1e18e638

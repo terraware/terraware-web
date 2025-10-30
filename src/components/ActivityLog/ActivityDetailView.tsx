@@ -438,6 +438,11 @@ const ActivityDetailView = ({
     }
   }, [getActivityMediaStreamRequest]);
 
+  const highlightActivityId = useMemo(() => {
+    const activityIdParam = query.get('highlightActivityId');
+    return activityIdParam ? Number(activityIdParam) : undefined;
+  }, [query]);
+
   const openPublishActivityModal = useCallback(() => {
     setPublishActivityModalOpened(true);
   }, []);
@@ -493,8 +498,9 @@ const ActivityDetailView = ({
             <Button
               disabled={!projectId}
               icon='iconEdit'
-              label={strings.EDIT_ACTIVITY}
+              label={highlightActivityId ? strings.CLOSE_AND_EDIT : strings.EDIT_ACTIVITY}
               onClick={goToProjectActivityEdit}
+              priority={highlightActivityId ? 'secondary' : 'primary'}
               size='medium'
               sx={{ whiteSpace: 'nowrap' }}
             />
