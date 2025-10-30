@@ -44,6 +44,8 @@ ACTIVITY_PUBLISHED,Actividad publicada,6ce064cc
 ACTIVITY_TYPE,Tipo de actividad,5f057b66
 ACTUAL,Real,1235cf68
 AD_HOC,Ad hoc,2acaf742
+AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Actualmente no hay observaciones ad hoc de parcelas.,9ae089fc
+AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Las observaciones utilizando parcelas ad hoc para el Monitoreo de Plantas pueden registrarse a través de Observaciones de Parcelas Ad Hoc en la aplicación móvil.,f0775160
 AD_HOC_PLANT_MONITORING,Monitoreo de plantas ad hoc,589a6d6c
 ADD,Añadir,2ffae546
 ADD_A_NURSERY,Añadir un vivero,758726df

@@ -198,7 +198,11 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
         <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
           <EmptyStateContent
             title={''}
-            subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
+            subtitle={
+              selectedPlotSelection === 'assigned'
+                ? [strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+                : [strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+            }
           />
         </Card>
       )}
