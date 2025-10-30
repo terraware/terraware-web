@@ -10,6 +10,7 @@ import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/t
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0TempData, ZoneT0Data } from 'src/types/Tracking';
+import { disableDecimalChar } from 'src/utils/numbers';
 
 import { AddedSpecies } from './PlotT0EditBox';
 
@@ -84,7 +85,7 @@ const ZoneT0EditBox = ({
         selectedZone?.densityData.reduce((sum, density) => {
           return isNaN(density.density) ? sum : sum + density.density;
         }, 0) || 0;
-      return total;
+      return Math.round(total);
     }
     return 0;
   }, [plotsWithObservations, record]);
@@ -253,6 +254,18 @@ const ZoneT0EditBox = ({
     [species]
   );
 
+  const densityValue = useCallback(
+    (withdrawnSpecies: { density: number; speciesId: number }) => {
+      const density = zoneToSave?.densityData.find(
+        (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
+      )?.density;
+      if (density) {
+        return Math.round(density);
+      }
+    },
+    [zoneToSave?.densityData]
+  );
+
   return (
     <>
       <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
@@ -304,15 +317,12 @@ const ZoneT0EditBox = ({
                     <TextField
                       type='number'
                       id={`${withdrawnSpecies.speciesId}`}
-                      value={
-                        zoneToSave?.densityData.find(
-                          (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
-                        )?.plotDensity
-                      }
+                      value={densityValue(withdrawnSpecies)}
                       onChange={onChangeDensity}
                       label={''}
                       min={0}
                       sx={{ width: '85px' }}
+                      onKeyDown={disableDecimalChar}
                     />
                   </td>
                   <td>
@@ -370,6 +380,7 @@ const ZoneT0EditBox = ({
                         label={''}
                         min={0}
                         sx={{ width: '85px' }}
+                        onKeyDown={disableDecimalChar}
                       />
                     </td>
                     <td>

@@ -12,6 +12,7 @@ import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
+import { disableDecimalChar } from 'src/utils/numbers';
 
 export type AddedSpecies = { id: string; speciesId?: number; density: string };
 
@@ -131,6 +132,9 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     const total = selectedPlot?.densityData.reduce((sum, density) => {
       return isNaN(density.plotDensity) ? sum : sum + density.plotDensity;
     }, 0);
+    if (total) {
+      return Math.round(total);
+    }
     return total;
   }, [plot.id, record]);
 
@@ -285,6 +289,16 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
     [species]
   );
 
+  const densityValue = useCallback(
+    (withdrawnSpecies: { density: number; speciesId: number }) => {
+      const found = plotToSave?.densityData.find((densityData) => densityData.speciesId === withdrawnSpecies.speciesId);
+      if (found) {
+        return Math.round(found.plotDensity);
+      }
+    },
+    [plotToSave?.densityData]
+  );
+
   return (
     <>
       <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
@@ -397,14 +411,11 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                         <TextField
                           type='number'
                           id={`${withdrawnSpecies.speciesId}`}
-                          value={
-                            plotToSave?.densityData.find(
-                              (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
-                            )?.plotDensity
-                          }
+                          value={densityValue(withdrawnSpecies)}
                           onChange={onChangeDensity}
                           label={''}
                           min={0}
+                          onKeyDown={disableDecimalChar}
                           sx={{ width: '85px' }}
                         />
                       </td>
@@ -462,6 +473,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                             onChange={handleNewSpeciesDensityChange(row.id)}
                             label={''}
                             min={0}
+                            onKeyDown={disableDecimalChar}
                             sx={{ width: '85px' }}
                           />
                         </td>
