@@ -2,33 +2,39 @@ import React, { useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
-import { Activity } from 'src/types/Activity';
-
 import ActivityStatusBadge from './ActivityStatusBadge';
+import { TypedActivity } from './types';
 
 type ActivityStatusBadgesProps = {
-  activity: Activity;
+  activity: TypedActivity;
 };
 
 const ActivityStatusBadges = ({ activity }: ActivityStatusBadgesProps): JSX.Element => {
   const theme = useTheme();
 
   const isChanged = useMemo(() => {
+    if (activity.type === 'funder' || activity.type === 'base') {
+      return false;
+    }
     return (
-      activity.modifiedTime &&
-      activity.verifiedTime &&
-      new Date(activity.modifiedTime) > new Date(activity.verifiedTime)
+      activity.payload.modifiedTime &&
+      activity.payload.verifiedTime &&
+      new Date(activity.payload.modifiedTime) > new Date(activity.payload.verifiedTime)
     );
-  }, [activity.modifiedTime, activity.verifiedTime]);
+  }, [activity]);
 
   const isPublished = useMemo(() => {
-    return activity.publishedTime;
-  }, [activity.publishedTime]);
+    if (activity.type === 'funder' || activity.type === 'base') {
+      return false;
+    }
+
+    return activity.payload.publishedTime;
+  }, [activity]);
 
   return (
     <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' gap={1} marginY={theme.spacing(1)}>
       {isChanged && <ActivityStatusBadge status='Changed' />}
-      <ActivityStatusBadge status={activity.status} />
+      {activity.type === 'admin' && <ActivityStatusBadge status={activity.payload.status} />}
       {/* TODO: render badge for 'Do Not Use' when applicable */}
       {isPublished && <ActivityStatusBadge status='Published' />}
     </Box>

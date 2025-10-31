@@ -5,6 +5,7 @@ import { Button, Message } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
+import { TypedActivity } from 'src/components/ActivityLog/types';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
@@ -14,7 +15,6 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { Activity } from 'src/types/Activity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 
@@ -33,7 +33,7 @@ export default function ActivityLogView(): JSX.Element {
   const [activityId, setActivityId] = useState<number>();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
   const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState<Activity>();
+  const [selectedActivity, setSelectedActivity] = useState<TypedActivity>();
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
@@ -166,11 +166,12 @@ export default function ActivityLogView(): JSX.Element {
         {isAcceleratorRoute &&
           activityId &&
           selectedActivity &&
-          selectedActivity.verifiedBy &&
-          ((selectedActivity.modifiedTime &&
-            selectedActivity.publishedTime &&
-            selectedActivity.modifiedTime > selectedActivity.publishedTime) ||
-            (selectedActivity.modifiedTime && !selectedActivity.publishedTime)) && (
+          selectedActivity.type === 'admin' &&
+          selectedActivity.payload.verifiedBy &&
+          ((selectedActivity.payload.modifiedTime &&
+            selectedActivity.payload.publishedTime &&
+            selectedActivity.payload.modifiedTime > selectedActivity.payload.publishedTime) ||
+            (selectedActivity.payload.modifiedTime && !selectedActivity.payload.publishedTime)) && (
             <Box marginBottom={theme.spacing(3)} width={'100%'}>
               <Message
                 type='page'
@@ -178,7 +179,7 @@ export default function ActivityLogView(): JSX.Element {
                 title={strings.YOU_HAVE_UNPUBLISHED_CHANGES}
                 body={strings.formatString(
                   strings.LAST_CHANGES_MADE_ON,
-                  DateTime.fromISO(selectedActivity.modifiedTime).toFormat('yyyy/MM/dd')
+                  DateTime.fromISO(selectedActivity.payload.modifiedTime).toFormat('yyyy/MM/dd')
                 )}
               />
             </Box>

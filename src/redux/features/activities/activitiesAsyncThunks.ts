@@ -11,7 +11,6 @@ import {
   AdminCreateActivityRequestPayload,
   CreateActivityRequestPayload,
 } from 'src/types/Activity';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 type SyncActivityMediaResult = {
   error?: string;
@@ -34,15 +33,12 @@ export const requestListActivities = createAsyncThunk(
     request: {
       projectId: number;
       includeMedia?: boolean;
-      locale?: string;
-      search?: SearchNodePayload;
-      sortOrder?: SearchSortOrder;
     },
     { rejectWithValue }
   ) => {
-    const { projectId, includeMedia, locale, search, sortOrder } = request;
+    const { projectId, includeMedia } = request;
 
-    const response = await ActivityService.listActivities(projectId, includeMedia, locale, search, sortOrder);
+    const response = await ActivityService.listActivities(projectId, includeMedia);
 
     if (response?.requestSucceeded && response?.data) {
       return response.data.activities ?? [];
@@ -71,15 +67,12 @@ export const requestAdminListActivities = createAsyncThunk(
     request: {
       projectId: number;
       includeMedia?: boolean;
-      locale?: string;
-      search?: SearchNodePayload;
-      sortOrder?: SearchSortOrder;
     },
     { rejectWithValue }
   ) => {
-    const { projectId, includeMedia, locale, search, sortOrder } = request;
+    const { projectId, includeMedia } = request;
 
-    const response = await ActivityService.adminListActivities(projectId, includeMedia, locale, search, sortOrder);
+    const response = await ActivityService.adminListActivities(projectId, includeMedia);
 
     if (response?.requestSucceeded && response?.data) {
       return response.data.activities ?? [];

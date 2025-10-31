@@ -12,8 +12,9 @@ import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
+import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
-import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -23,6 +24,7 @@ import useMapUtils from '../NewMap/useMapUtils';
 import { getBoundingBoxFromPoints } from '../NewMap/utils';
 import ActivityDetailView from './ActivityDetailView';
 import MapSplitView from './MapSplitView';
+import { TypedActivity } from './types';
 
 const carouselContainerStyles = {
   display: 'flex',
@@ -97,13 +99,13 @@ const getReportMetrics = (strings: any) => [
 ];
 
 type ActivityHighlightsViewProps = {
-  activities: Activity[];
+  activities: TypedActivity[];
   projectId: number;
   selectedQuarter?: string;
 };
 
 type ActivityHighlightSlide = {
-  activity?: Activity;
+  activity?: TypedActivity;
   coverPhoto?: ActivityMediaFile;
   coverPhotoURL?: string;
   report?: AcceleratorReport;
@@ -151,7 +153,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   }, [query]);
 
   const shownActivity = useMemo(
-    () => activities.find((activity) => activity.id === highlightActivityId),
+    () => activities.find((activity) => activity.payload.id === highlightActivityId),
     [activities, highlightActivityId]
   );
 
@@ -165,7 +167,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
   useEffect(() => {
     if (shownActivity) {
-      const points = shownActivity.media
+      const points = shownActivity.payload.media
         .map((_media): MapPoint | undefined => {
           if (!_media.isHiddenOnMap && _media.geolocation) {
             return {
@@ -224,13 +226,13 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     }
 
     for (const activity of activities) {
-      const title = activityTypeLabel(activity.type, strings);
-      const coverPhoto = activity.media.find((file) => file.isCoverPhoto && !file.isHiddenOnMap);
+      const title = activityTypeLabel(activity.payload.type, strings);
+      const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+      const coverPhoto = activity.payload.media.find((file) => file.isCoverPhoto);
       const coverPhotoURL = coverPhoto
-        ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
-            '{fileId}',
-            coverPhoto.fileId.toString()
-          )}`
+        ? `${baseUrl
+            .replace('{activityId}', activity.payload.id.toString())
+            .replace('{fileId}', coverPhoto.fileId.toString())}`
         : undefined;
 
       _slides.push({ activity, coverPhoto, coverPhotoURL, title });
@@ -273,7 +275,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
           >
             <Swiper
               direction='vertical'
-              key={activities.map((a) => a.id).join('-')}
+              key={activities.map((a) => a.payload.id).join('-')}
               loop
               modules={[Mousewheel, Navigation, Pagination]}
               mousewheel
@@ -287,10 +289,10 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                   <Box sx={carouselSlideContentStyles(slide.coverPhotoURL)}>
                     <Box
                       sx={carouselSlideCardStyles}
-                      onClick={slide.activity ? onClickSlide(slide.activity.id) : undefined}
+                      onClick={slide.activity ? onClickSlide(slide.activity.payload.id) : undefined}
                     >
                       <Box sx={carouselSlideCardMetadataStyles(theme)}>
-                        {slide.activity?.date && <Typography>{slide.activity.date}</Typography>}
+                        {slide.activity?.payload?.date && <Typography>{slide.activity.payload.date}</Typography>}
                         <Box
                           display='flex'
                           sx={{
@@ -359,7 +361,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                         </Box>
                       )}
 
-                      <Typography>{slide.activity?.description}</Typography>
+                      <Typography>{slide.activity?.payload?.description}</Typography>
                     </Box>
                   </Box>
                 </SwiperSlide>
