@@ -145,7 +145,14 @@ const ActivityHighlightsModal = ({
           marginBottom='24px'
           width='100%'
         >
-          <Box display='flex' sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
+          <Box
+            display='flex'
+            sx={{
+              flexDirection: { xs: 'column', md: 'row' },
+              // z-index is necessary to ensure dropdown options appear above map components
+              '& .select .options-container': { zIndex: 1000 },
+            }}
+          >
             <Typography fontSize='24px' fontWeight={600} paddingRight='24px' sx={{ whiteSpace: 'nowrap' }}>
               {title}
             </Typography>
