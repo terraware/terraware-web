@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -146,10 +147,10 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     const sorted = [...quarterReports].sort((a, b) => b.endDate.localeCompare(a.endDate, activeLocale || undefined));
     return sorted[0];
   }, [acceleratorReports, activeLocale, selectedQuarter]);
-
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
+  const [swiper, setSwiper] = useState<SwiperType | null>(null);
 
   const highlightActivityId = useMemo(() => {
     const activityIdParam = query.get('highlightActivityId');
@@ -218,10 +219,6 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     [shownActivity, focusedFileId]
   );
 
-  const onSlideChange = useCallback((swiper: any) => {
-    setCurrentSlideIndex(swiper.realIndex);
-  }, []);
-
   const slides = useMemo(() => {
     const _slides: ActivityHighlightSlide[] = [];
 
@@ -274,6 +271,21 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     [activities, currentSlide.activity]
   );
 
+  const onSlideChange = useCallback((_swiper: any) => {
+    setCurrentSlideIndex(_swiper.realIndex);
+  }, []);
+
+  const onActivityMarkerClick = useCallback(
+    (activityId: number) => {
+      const targetSlideIndex = slides.findIndex((slide) => slide.activity?.id === activityId);
+      if (swiper && targetSlideIndex !== -1 && slides[targetSlideIndex]) {
+        // use slideToLoop for loop mode
+        swiper.slideToLoop(targetSlideIndex);
+      }
+    },
+    [slides, swiper]
+  );
+
   return (
     <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>
       <MapSplitView
@@ -281,6 +293,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
         drawerRef={mapDrawerRef}
         heightOffsetPx={HEIGHT_OFFSET_PX}
         mapRef={mapRef}
+        onActivityMarkerClick={onActivityMarkerClick}
         projectId={projectId}
       >
         {highlightActivityId && shownActivity ? (
@@ -313,6 +326,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
               modules={[Mousewheel, Navigation, Pagination]}
               mousewheel
               onSlideChange={onSlideChange}
+              onSwiper={setSwiper}
               pagination={{ clickable: true }}
               slidesPerView={1}
               spaceBetween={30}
