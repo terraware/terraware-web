@@ -6,6 +6,8 @@ import { Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingSiteWithdrawnSpecies } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
@@ -52,6 +54,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
   const plantingSiteId = Number(params.plantingSiteId);
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const navigate = useSyncNavigate();
 
   useEffect(() => {
     setSelectedPlantingSite(plantingSiteId);
@@ -153,7 +156,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
         ];
   }, [activeLocale, permanentPlots, plantingSiteId, reload, t0SiteData, temporaryPlots, withdrawnSpeciesPlots]);
 
-  const { activeTab, onChangeTab } = useStickyTabs({
+  const { activeTab } = useStickyTabs({
     defaultTab: 'permanent',
     tabs,
     viewIdentifier: 'edit-survival-rate-settings',
@@ -161,8 +164,12 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
 
   const continueChangeTab = useCallback(() => {
     setShowChangeTabWarning(false);
-    onChangeTab(activeTab === 'permanent' ? 'temporary' : 'permanent');
-  }, [activeTab, onChangeTab]);
+
+    navigate({
+      pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()),
+      search: `tab=${activeTab === 'permanent' ? 'temporary' : 'permanent'}`,
+    });
+  }, [activeTab, navigate, plantingSiteId]);
 
   const onChangeTabHandler = useCallback(
     (newTab: string) => {
