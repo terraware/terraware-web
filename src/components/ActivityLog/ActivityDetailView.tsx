@@ -8,6 +8,7 @@ import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
@@ -25,6 +26,7 @@ import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
+import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -158,14 +160,12 @@ const ActivityMediaItem = ({
     [theme]
   );
 
-  const imageSrc = useMemo(
-    () =>
-      ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
-        '{fileId}',
-        mediaFile.fileId.toString()
-      ),
-    [activity.payload.id, mediaFile.fileId]
-  );
+  const imageSrc = useMemo(() => {
+    const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+    return baseUrl
+      .replace('{activityId}', activity.payload.id.toString())
+      .replace('{fileId}', mediaFile.fileId.toString());
+  }, [activity, mediaFile.fileId]);
 
   const mediaItemHoverCallback = useCallback(
     (hovered: boolean) => () => {
@@ -180,10 +180,10 @@ const ActivityMediaItem = ({
     (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
       event?.stopPropagation();
 
-      const imageURL = ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
-        '{fileId}',
-        mediaFile.fileId.toString()
-      );
+      const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+      const imageURL = baseUrl
+        .replace('{activityId}', activity.payload.id.toString())
+        .replace('{fileId}', mediaFile.fileId.toString());
 
       const link = document.createElement('a');
       link.href = imageURL;
@@ -192,7 +192,7 @@ const ActivityMediaItem = ({
       link.click();
       document.body.removeChild(link);
     },
-    [activity.payload.id, mediaFile.fileId]
+    [activity, mediaFile.fileId]
   );
 
   const onClickExpand = useCallback(
@@ -333,6 +333,7 @@ const ActivityDetailView = ({
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isFunderRoute } = useFunderPortal();
   const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const query = useQuery();
@@ -427,16 +428,14 @@ const ActivityDetailView = ({
     [activity, lightboxMediaFileId]
   );
 
-  const lightboxImageSrc = useMemo(
-    () =>
-      lightboxMediaFile
-        ? ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
-            '{fileId}',
-            lightboxMediaFile.fileId.toString()
-          )
-        : '',
-    [activity.payload.id, lightboxMediaFile]
-  );
+  const lightboxImageSrc = useMemo(() => {
+    const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+    return lightboxMediaFile
+      ? baseUrl
+          .replace('{activityId}', activity.payload.id.toString())
+          .replace('{fileId}', lightboxMediaFile.fileId.toString())
+      : '';
+  }, [activity, lightboxMediaFile]);
 
   useEffect(() => {
     if (activity && lightboxMediaFile?.type === 'Video') {
@@ -509,7 +508,7 @@ const ActivityDetailView = ({
       </Grid>
 
       <Grid item md={8} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
-        {isAllowedEditActivities && (
+        {isAllowedEditActivities && !isFunderRoute && (
           <Box display='flex' justifyContent={'end'}>
             <Button
               disabled={!projectId}
@@ -520,7 +519,7 @@ const ActivityDetailView = ({
               size='medium'
               sx={{ whiteSpace: 'nowrap' }}
             />
-            {activity.verifiedBy && (
+            {activity.type === 'admin' && activity.payload.verifiedBy && isAcceleratorRoute && (
               <Button
                 disabled={!projectId}
                 label={strings.PUBLISH_ACTIVITY}

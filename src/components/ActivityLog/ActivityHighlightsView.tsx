@@ -12,6 +12,7 @@ import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
+import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
@@ -226,12 +227,12 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
     for (const activity of activities) {
       const title = activityTypeLabel(activity.payload.type, strings);
+      const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
       const coverPhoto = activity.payload.media.find((file) => file.isCoverPhoto);
       const coverPhotoURL = coverPhoto
-        ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
-            '{fileId}',
-            coverPhoto.fileId.toString()
-          )}`
+        ? `${baseUrl
+            .replace('{activityId}', activity.payload.id.toString())
+            .replace('{fileId}', coverPhoto.fileId.toString())}`
         : undefined;
 
       _slides.push({ activity, coverPhoto, coverPhotoURL, title });

@@ -27,8 +27,11 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { requestAdminListActivities, requestListActivities } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { selectActivityList, selectAdminActivityList } from 'src/redux/features/activities/activitiesSelectors';
+import { requestListFunderActivities } from 'src/redux/features/funder/activities/funderActivitiesAsyncThunks';
+import { selectListFunderActivitiesRequest } from 'src/redux/features/funder/activities/funderActivitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
+import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import {
   ACTIVITY_STATUSES,
   ACTIVITY_TYPES,
@@ -75,11 +78,11 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
   const activityType = useMemo(() => activityTypeLabel(activity.payload.type, strings), [activity, strings]);
 
   const coverPhotoURL = useMemo(() => {
+    const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
     return coverPhoto
-      ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
-          '{fileId}',
-          coverPhoto.fileId.toString()
-        )}?maxHeight=200&maxWidth=200`
+      ? `${baseUrl
+          .replace('{activityId}', activity.payload.id.toString())
+          .replace('{fileId}', coverPhoto.fileId.toString())}?maxHeight=200&maxWidth=200`
       : '/assets/activity-media.svg';
   }, [activity, coverPhoto]);
 
@@ -141,12 +144,12 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
 };
 
 type ActivitiesListViewProps = {
-  highlightsModalOpen: boolean;
+  highlightsModalOpen?: boolean;
   overrideHeightOffsetPx?: number;
   projectDealName?: string;
   projectId: number;
-  setHighlightsModalOpen: (open: boolean) => void;
-  setSelectedActivity?: React.Dispatch<React.SetStateAction<Activity | undefined>>;
+  setHighlightsModalOpen?: (open: boolean) => void;
+  setSelectedActivity?: React.Dispatch<React.SetStateAction<TypedActivity | undefined>>;
 };
 
 const ActivitiesListView = ({
@@ -163,6 +166,7 @@ const ActivitiesListView = ({
   const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { scrollToElementById, scrollToTop } = useMapDrawer(mapDrawerRef);
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isFunderRoute } = useFunderPortal();
   const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const query = useQuery();
@@ -184,6 +188,7 @@ const ActivitiesListView = ({
 
   const listActivitiesRequest = useAppSelector(selectActivityList(requestId));
   const adminListActivitiesRequest = useAppSelector(selectAdminActivityList(requestId));
+  const funderListActivitiesRequest = useAppSelector(selectListFunderActivitiesRequest(requestId));
 
   const activityFilterOptions: FieldOptionsMap = useMemo(
     () => ({
@@ -215,18 +220,25 @@ const ActivitiesListView = ({
   const filteredActivities = useClientSideFilter(activities, search);
 
   const busy = useMemo(() => {
-    return listActivitiesRequest?.status === 'pending' || adminListActivitiesRequest?.status === 'pending';
-  }, [listActivitiesRequest, adminListActivitiesRequest]);
+    return (
+      listActivitiesRequest?.status === 'pending' ||
+      adminListActivitiesRequest?.status === 'pending' ||
+      funderListActivitiesRequest?.status === 'pending'
+    );
+  }, [listActivitiesRequest?.status, adminListActivitiesRequest?.status, funderListActivitiesRequest?.status]);
 
   const reload = useCallback(() => {
     if (isAcceleratorRoute) {
       const request = dispatch(requestAdminListActivities({ includeMedia: true, projectId }));
       setRequestId(request.requestId);
+    } else if (isFunderRoute) {
+      const request = dispatch(requestListFunderActivities(projectId));
+      setRequestId(request.requestId);
     } else {
       const request = dispatch(requestListActivities({ includeMedia: true, projectId }));
       setRequestId(request.requestId);
     }
-  }, [activeLocale, dispatch, isAcceleratorRoute, projectId]);
+  }, [dispatch, isAcceleratorRoute, isFunderRoute, projectId]);
 
   useEffect(() => {
     reload();
@@ -242,10 +254,15 @@ const ActivitiesListView = ({
     } else if (adminListActivitiesRequest?.status === 'success') {
       setActivities(adminListActivitiesRequest?.data?.map((payload) => ({ type: 'admin', payload })) ?? []);
       setInitialized(true);
+    } else if (funderListActivitiesRequest?.status === 'success') {
+      setActivities(funderListActivitiesRequest?.data?.map((payload) => ({ type: 'funder', payload })) ?? []);
+      setInitialized(true);
     }
   }, [
     adminListActivitiesRequest?.data,
     adminListActivitiesRequest?.status,
+    funderListActivitiesRequest?.data,
+    funderListActivitiesRequest?.status,
     listActivitiesRequest?.data,
     listActivitiesRequest?.status,
     snackbar,
@@ -588,7 +605,7 @@ const ActivitiesListView = ({
 
   return (
     <>
-      {isActivityHighlightEnabled && highlightsModalOpen && (
+      {isActivityHighlightEnabled && highlightsModalOpen && setHighlightsModalOpen && (
         <ActivityHighlightsModal
           activities={activities}
           open={highlightsModalOpen}
