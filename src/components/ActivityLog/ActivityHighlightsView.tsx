@@ -253,22 +253,13 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     return _slides;
   }, [activities, projectId, selectedQuarterReport, strings]);
 
-  const currentSlide = slides[currentSlideIndex];
-
   const activitiesVisibleOnMap = useMemo(
     () =>
-      currentSlide.activity
-        ? [
-            {
-              ...currentSlide.activity,
-              media: currentSlide.activity.media.filter((item) => item.isCoverPhoto),
-            },
-          ]
-        : activities.map((activity) => ({
-            ...activity,
-            media: activity.media.filter((item) => item.isCoverPhoto),
-          })),
-    [activities, currentSlide.activity]
+      activities.map((activity) => ({
+        ...activity,
+        media: activity.media.filter((item) => item.isCoverPhoto),
+      })),
+    [activities]
   );
 
   const onSlideChange = useCallback((_swiper: any) => {
