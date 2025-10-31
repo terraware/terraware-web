@@ -165,7 +165,7 @@ const ActivityHighlightsModal = ({
           </IconButton>
         </Box>
 
-        {busy ? (
+        {busy || isLoadingReports ? (
           <img
             alt={strings.LOADING}
             height='24px'
