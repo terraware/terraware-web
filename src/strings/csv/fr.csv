@@ -869,6 +869,7 @@ LAND_USE_MODEL_TYPE,Type de modèle d'utilisation du sol,1b29eac7
 LANDOWNER,Propriétaire foncier,85b55541
 LANGUAGE,Langue,d8edd7b1
 LANGUAGE_AND_REGION,Langue et région,36cf8094
+LAST_CHANGES_MADE_ON,Dernières modifications effectuées le {0},201170f7
 LAST_EDITED,Dernière édition,df1e9e1d
 LAST_EDITED_BY,Dernière modification,0b49c0a8
 LAST_MODIFIED_BY,Dernière modification effectuée par,ee9c449a
@@ -2319,6 +2320,7 @@ YOU_ARE_ABOUT_TO_APPROVE_THIS_SPECIES_DELIVERABLE,Vous êtes sur le point d'appr
 YOU_ARE_ABOUT_TO_PUBLISH,Vous êtes sur le point de publier sur le portail des financeurs.,8adda943
 YOU_ARE_ABOUT_TO_SUBMIT_THIS_SPECIES_DELIVERABLE,Voulez-vous vraiment soumettre cette liste d'espèces pour approbation ?,47f7bdd3
 YOU_ARE_HERE,Vous êtes ici,183a5491
+YOU_HAVE_UNPUBLISHED_CHANGES,Vous avez des modifications non publiées,1825c403
 YOUR_APPLICATIONS,Vos candidatures,7da0f423
 YOUR_VIDEO_IS_PROCESSING,Votre vidéo est en cours de traitement et apparaîtra sous peu.,fb65d59c
 ZERO,zéro,16bd92ef

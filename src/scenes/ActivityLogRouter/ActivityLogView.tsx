@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Button, Message } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
 import Page from 'src/components/Page';
@@ -13,6 +14,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { Activity } from 'src/types/Activity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 
@@ -31,6 +33,7 @@ export default function ActivityLogView(): JSX.Element {
   const [activityId, setActivityId] = useState<number>();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
   const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<Activity>();
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
@@ -160,6 +163,26 @@ export default function ActivityLogView(): JSX.Element {
         title={strings.ACTIVITY_LOG}
         titleContainerStyle={{ minHeight: '56px' }}
       >
+        {isAcceleratorRoute &&
+          activityId &&
+          selectedActivity &&
+          selectedActivity.verifiedBy &&
+          ((selectedActivity.modifiedTime &&
+            selectedActivity.publishedTime &&
+            selectedActivity.modifiedTime > selectedActivity.publishedTime) ||
+            (selectedActivity.modifiedTime && !selectedActivity.publishedTime)) && (
+            <Box marginBottom={theme.spacing(3)} width={'100%'}>
+              <Message
+                type='page'
+                priority={'info'}
+                title={strings.YOU_HAVE_UNPUBLISHED_CHANGES}
+                body={strings.formatString(
+                  strings.LAST_CHANGES_MADE_ON,
+                  DateTime.fromISO(selectedActivity.modifiedTime).toFormat('yyyy/MM/dd')
+                )}
+              />
+            </Box>
+          )}
         <Card
           style={{
             borderRadius: theme.spacing(1),
@@ -173,6 +196,7 @@ export default function ActivityLogView(): JSX.Element {
               projectDealName={projectDealName}
               projectId={projectId}
               setHighlightsModalOpen={setHighlightsModalOpen}
+              setSelectedActivity={setSelectedActivity}
             />
           )}
         </Card>

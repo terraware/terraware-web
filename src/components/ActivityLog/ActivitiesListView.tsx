@@ -136,6 +136,7 @@ type ActivitiesListViewProps = {
   projectDealName?: string;
   projectId: number;
   setHighlightsModalOpen: (open: boolean) => void;
+  setSelectedActivity?: React.Dispatch<React.SetStateAction<Activity | undefined>>;
 };
 
 const ActivitiesListView = ({
@@ -144,6 +145,7 @@ const ActivitiesListView = ({
   projectDealName,
   projectId,
   setHighlightsModalOpen,
+  setSelectedActivity,
 }: ActivitiesListViewProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
@@ -178,7 +180,7 @@ const ActivitiesListView = ({
   const listResultsActivitiesRequest = useAppSelector(selectActivityList(resultsRequestId));
   const adminListResultsActivitiesRequest = useAppSelector(selectAdminActivityList(resultsRequestId));
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     if (isAcceleratorRoute) {
       const request = dispatch(
         requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
@@ -190,7 +192,11 @@ const ActivitiesListView = ({
       );
       setRequestId(request.requestId);
     }
-  }, [activeLocale, dispatch, filters, isAcceleratorRoute, projectId]);
+  }, [activeLocale, dispatch, isAcceleratorRoute, projectId]);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
 
   useEffect(() => {
     if (listActivitiesRequest?.status === 'pending' || adminListActivitiesRequest?.status === 'pending') {
@@ -234,6 +240,12 @@ const ActivitiesListView = ({
     () => activities.find((activity) => activity.id === showActivityId),
     [activities, showActivityId]
   );
+
+  useEffect(() => {
+    if (setSelectedActivity) {
+      setSelectedActivity(shownActivity);
+    }
+  }, [setSelectedActivity, shownActivity]);
 
   const paginatedActivities = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -623,6 +635,7 @@ const ActivitiesListView = ({
             onClickMediaItem={onClickMediaItem}
             projectId={projectId}
             setHoverFileCallback={setHoverFileCallback}
+            reload={reload}
           />
         ) : activities.length === 0 && !busy ? (
           <ActivitiesEmptyState projectId={projectId} />
