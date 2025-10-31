@@ -267,11 +267,12 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   const onSlideChange = useCallback(
     (_swiper: SwiperType) => {
       setCurrentSlideIndex(_swiper.realIndex);
+
       if (selectedQuarterReport && _swiper.realIndex === 0) {
         setFocusedActivityId(undefined);
         setFocusedFileId(undefined);
 
-        // Zoom the map to show all activities
+        // zoom the map to show all activities
         const allPoints = activitiesVisibleOnMap.flatMap((activity) =>
           activity.media
             .map((_media): MapPoint | undefined => {
@@ -291,17 +292,17 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
         }
       } else {
         const currentSlide = slides[_swiper.realIndex];
-        if (currentSlide.activity) {
+        if (currentSlide?.activity) {
           setFocusedActivityId(currentSlide.activity.id);
           setFocusedFileId(undefined);
         }
 
+        const media = currentSlide?.coverPhoto;
         const viewState = getCurrentViewState();
-        if (currentSlide.coverPhoto && currentSlide.coverPhoto.geolocation && viewState) {
-          const media = currentSlide.coverPhoto;
+        if (media && media.geolocation && viewState) {
           jumpTo({
-            latitude: media.geolocation!.coordinates[1],
-            longitude: media.geolocation!.coordinates[0],
+            latitude: media.geolocation.coordinates[1],
+            longitude: media.geolocation.coordinates[0],
             zoom: viewState.zoom,
           });
         }
