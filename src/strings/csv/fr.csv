@@ -1093,6 +1093,7 @@ NO_NOTIFICATIONS,Aucune notification à afficher,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer votre inventaire de pépinières, vous devez avoir une pépinière et des espèces dans Terraware. Seuls les administrateurs peuvent ajouter des pépinières ; veuillez contacter le vôtre pour obtenir de l'aide.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,Aucune observation n'a été planifiée,c05456cd
 NO_PARTICIPANT,Aucun participant,e9f659e8
+NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Lorsque des observations comprenant des placettes permanentes sont terminées, celles-ci apparaîtront ici, et les données t0 devront être définies pour toutes les placettes permanentes afin que les taux de survie puissent être calculés.",18f6a079
 NO_PLANTING_SITES_DESCRIPTION,Commencez par ajouter un site de plantation. L'ajout d'un site de plantation vous permettra de savoir où vont les semis après avoir quitté la pépinière.,b0104f6c
 NO_PLANTING_SITES_TITLE,"Un instant, ajoutons d'abord un site de plantation.",801ba14c
 NO_PLANTS,Aucune plante,6706c05b

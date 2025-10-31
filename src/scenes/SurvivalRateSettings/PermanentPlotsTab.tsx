@@ -1,7 +1,10 @@
 import React from 'react';
 
+import { Box, useTheme } from '@mui/material';
+
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import strings from 'src/strings';
 import { PlotT0Data } from 'src/types/Tracking';
 
 import PlotT0Box from './PlotT0Box';
@@ -18,6 +21,11 @@ const PermanentPlotsTab = ({
   t0Plots,
   withdrawnSpeciesPlots,
 }: PermanentPlotsTabProps) => {
+  const theme = useTheme();
+
+  if (!plotsWithObservations || plotsWithObservations.length === 0) {
+    return <Box padding={theme.spacing(2)}>{strings.NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION}</Box>;
+  }
   return (
     plantingSiteId &&
     plotsWithObservations?.map((plot) => (
