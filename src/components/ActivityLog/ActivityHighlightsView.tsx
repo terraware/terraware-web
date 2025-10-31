@@ -151,7 +151,6 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
-  const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
 
   const highlightActivityId = useMemo(() => {
@@ -266,8 +265,6 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
   const onSlideChange = useCallback(
     (_swiper: SwiperType) => {
-      setCurrentSlideIndex(_swiper.realIndex);
-
       if (selectedQuarterReport && _swiper.realIndex === 0) {
         setFocusedActivityId(undefined);
         setFocusedFileId(undefined);
