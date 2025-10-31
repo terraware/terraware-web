@@ -147,6 +147,8 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     const sorted = [...quarterReports].sort((a, b) => b.endDate.localeCompare(a.endDate, activeLocale || undefined));
     return sorted[0];
   }, [acceleratorReports, activeLocale, selectedQuarter]);
+
+  const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
@@ -262,16 +264,43 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     [activities]
   );
 
-  const onSlideChange = useCallback((_swiper: any) => {
-    setCurrentSlideIndex(_swiper.realIndex);
-  }, []);
+  const onSlideChange = useCallback(
+    (_swiper: any) => {
+      setCurrentSlideIndex(_swiper.realIndex);
+      if (selectedQuarterReport && _swiper.realIndex === 0) {
+        setFocusedActivityId(undefined);
+        setFocusedFileId(undefined);
+      } else {
+        const currentSlide = slides[_swiper.realIndex];
+        if (currentSlide.activity) {
+          setFocusedActivityId(currentSlide.activity.id);
+          setFocusedFileId(undefined);
+        }
+      }
+    },
+    [selectedQuarterReport, slides]
+  );
+
+  const activityMarkerHighlighted = useCallback(
+    (activityId: number, fileId: number) => {
+      if (highlightActivityId) {
+        // one activity is selected
+        return fileId === focusedFileId || fileId === hoveredFileId;
+      } else {
+        return activityId === focusedActivityId;
+      }
+    },
+    [focusedActivityId, focusedFileId, hoveredFileId, highlightActivityId]
+  );
 
   const onActivityMarkerClick = useCallback(
-    (activityId: number) => {
+    (activityId: number, fileId: number) => {
       const targetSlideIndex = slides.findIndex((slide) => slide.activity?.id === activityId);
       if (swiper && targetSlideIndex !== -1 && slides[targetSlideIndex]) {
         // use slideToLoop for loop mode
         swiper.slideToLoop(targetSlideIndex);
+        setFocusedActivityId(activityId);
+        setFocusedFileId(fileId);
       }
     },
     [slides, swiper]
@@ -281,6 +310,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>
       <MapSplitView
         activities={activitiesVisibleOnMap}
+        activityMarkerHighlighted={activityMarkerHighlighted}
         drawerRef={mapDrawerRef}
         heightOffsetPx={HEIGHT_OFFSET_PX}
         mapRef={mapRef}
