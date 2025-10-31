@@ -170,7 +170,7 @@ const isAllowedReadReports: PermissionCheckFn<ReadReportsMetadata> = (
  * Function related to reviewing accelerator reports targets
  */
 const isAllowedReviewReportsTargets: PermissionCheckFn = (user: User): boolean => {
-  return isAcceleratorAdmin(user);
+  return isTFExpertOrHigher(user);
 };
 
 /**
@@ -183,7 +183,7 @@ const isAllowedUpdateReportsTargets: PermissionCheckFn<UpdateReportsTargetsMetad
   _: GlobalRolePermission,
   metadata?: UpdateReportsTargetsMetadata
 ): boolean => {
-  return isAcceleratorAdmin(user) || isAdmin(metadata?.organization);
+  return isTFExpertOrHigher(user) || isAdmin(metadata?.organization);
 };
 
 /**

@@ -192,10 +192,10 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [setFilterOptions, zoneNames]);
 
   useEffect(() => {
-    if (!details) {
+    if (selectedOrganization && !details) {
       navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', `${plantingSiteId}`));
     }
-  }, [details, navigate, plantingSiteId]);
+  }, [details, navigate, plantingSiteId, selectedOrganization]);
 
   useEffect(() => {
     const initialZones = searchProps.filtersProps?.filters?.zone?.values ?? [];

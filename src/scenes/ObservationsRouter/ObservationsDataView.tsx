@@ -69,10 +69,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       return [];
     }
 
-    return allAdHocObservationResults?.filter((observationResult) => {
-      const isMonitoring = observationResult.type === 'Monitoring';
-      return isMonitoring;
-    });
+    return allAdHocObservationResults?.filter((observationResult) => observationResult.type === 'Monitoring');
   }, [allAdHocObservationResults, selectedPlantingSite]);
 
   const onExportAdHocObservationResults = useCallback(() => {

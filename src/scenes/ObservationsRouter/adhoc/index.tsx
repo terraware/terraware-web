@@ -68,7 +68,18 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
     }
   }, [observationResults, adHocObservationResults, observationId]);
 
+  const navigateToZoneDetails = useCallback(() => {
+    if (plantingZoneName) {
+      navigate(
+        APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
+          .replace(':observationId', Number(observationId).toString())
+          .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))
+      );
+    }
+  }, [navigate, observationId, plantingZoneName, plantingSiteId]);
+
   useEffect(() => {
+    let plotFound = false;
     if (result) {
       result.plantingZones.forEach((zone) =>
         zone.plantingSubzones.forEach((subzone) =>
@@ -77,13 +88,17 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
               setPlantingZoneResult(zone);
               setPlantingSubzoneResult(subzone);
               setMonitoringPlotResult(plot);
+              plotFound = true;
               return;
             }
           })
         )
       );
+      if (!plotFound) {
+        navigateToZoneDetails();
+      }
     }
-  }, [result, monitoringPlotId]);
+  }, [result, monitoringPlotId, navigateToZoneDetails]);
 
   const plantingZone = useMemo(() => {
     if (plantingZoneResult) {
@@ -204,16 +219,6 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       {text}
     </Typography>
   );
-
-  useEffect(() => {
-    if (plantingZoneName && !monitoringPlotResult) {
-      navigate(
-        APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
-          .replace(':observationId', Number(observationId).toString())
-          .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))
-      );
-    }
-  }, [navigate, monitoringPlotResult, observationId, plantingZoneName, plantingSiteId]);
 
   const goToSurvivalRateSettings = useCallback(
     () =>

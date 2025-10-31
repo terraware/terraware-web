@@ -42,7 +42,6 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const navigate = useSyncNavigate();
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
-  const allObservationsResults = useAppSelector(selectObservationsResults);
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const [plotsRequestId, setPlotsRequestId] = useState('');
   const [allSetRequestId, setAllSetRequestId] = useState('');
@@ -51,6 +50,9 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const t0AllSetResponse = useAppSelector(selectPlantingSiteT0AllSet(allSetRequestId));
   const [survivalRateSet, setSurvivalRateSet] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const allObservationsResults = useAppSelector(selectObservationsResults);
+  const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
+
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
       return [];
@@ -64,17 +66,16 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     });
   }, [allObservationsResults, selectedPlantingSite]);
 
-  const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
   const adHocObservationResults = useMemo(() => {
     if (!allAdHocObservationResults || !selectedPlantingSite?.id) {
       return [];
     }
 
-    return allAdHocObservationResults?.filter((observationResult) => {
-      const matchesSite =
-        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
-      return matchesSite;
-    });
+    return allAdHocObservationResults?.filter(
+      (observationResult) =>
+        (selectedPlantingSite.id === -1 || observationResult.plantingSiteId === selectedPlantingSite.id) &&
+        observationResult.type === 'Monitoring'
+    );
   }, [allAdHocObservationResults, selectedPlantingSite]);
 
   useEffect(() => {
@@ -197,7 +198,11 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
         <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
           <EmptyStateContent
             title={''}
-            subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
+            subtitle={
+              selectedPlotSelection === 'assigned'
+                ? [strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+                : [strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+            }
           />
         </Card>
       )}
