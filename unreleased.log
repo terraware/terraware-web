@@ -1,3 +1,4 @@
+98fce4d3240 Fix scrolling to media item on activity map (#4722)
 1380ff2d9ed SW-7453 Fix race conditions in observation links (#4716)
 55fb7ec00b7 SW-7634 Ad Hoc plant monitoring table displaying when empty (#4720)
 408f94a310c SW-7549 Allow console users to edit metric targets after report submission (#4719)
