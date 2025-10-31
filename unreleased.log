@@ -1,3 +1,6 @@
+e641cd28090 SW-7647 Changing tabs when editing survival rate settings does not exit edit mode (#4726)
+c042e823fe7 SW-7645 Edit survival rate - clicking the checkbox does not set the value to 0 (#4725)
+1552ca9a65b SW-7633 Show messaging when Permanent Plots are not yet available for Survival Rate calculations (#4724)
 314f14a1db6 Update Withdrawal History table to use redux (#4707)
 98fce4d3240 Fix scrolling to media item on activity map (#4722)
 1380ff2d9ed SW-7453 Fix race conditions in observation links (#4716)
