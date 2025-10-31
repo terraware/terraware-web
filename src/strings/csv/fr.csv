@@ -1085,6 +1085,7 @@ NO_COLUMNS_SELECTED,Aucune colonne sélectionnée,ac8b2bbe
 NO_COMMENTS_ADDED,Aucun commentaire ajouté,7fd30c97
 NO_DATA_YET,Pas encore de données,f2a0be82
 NO_FUTURE_DATES,Aucune date future autorisée,a0f0673b
+NO_HIGHLIGHTS_YET,Aucun point saillant pour le moment.,cafd3fe8
 NO_INVENTORY_DESCRIPTION,"Il semble que vous n'avez pas encore ajouté d'inventaire. Vous pouvez soit importer des données à partir d'un fichier CSV, soit ajouter un inventaire en utilisant notre formulaire d'inventaire.",66ee249c
 NO_LINK_ADDED,Aucun lien ajouté,14e4907f
 NO_LOCATION_FOUND,Emplacement non trouvé,8b4b8dab

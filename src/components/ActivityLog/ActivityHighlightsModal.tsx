@@ -5,6 +5,7 @@ import { Dropdown, Icon } from '@terraware/web-components';
 import DialogBox, { DialogBoxSize } from '@terraware/web-components/components/DialogBox/DialogBox';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
@@ -27,6 +28,7 @@ const containerStyles = {
 
 type ActivityHighlightsModalProps = {
   activities: TypedActivity[];
+  busy: boolean;
   onCancel?: () => void;
   open: boolean;
   projectId: number;
@@ -36,6 +38,7 @@ type ActivityHighlightsModalProps = {
 
 const ActivityHighlightsModal = ({
   activities,
+  busy,
   open,
   setOpen,
   onCancel,
@@ -47,6 +50,7 @@ const ActivityHighlightsModal = ({
   const query = useQuery();
   const location = useStateLocation();
   const navigate = useSyncNavigate();
+  const { acceleratorReports, busy: isLoadingReports } = useProjectReports(projectId);
 
   const [selectedQuarter, setSelectedQuarter] = useState<string | undefined>(undefined);
 
@@ -99,12 +103,32 @@ const ActivityHighlightsModal = ({
     setSelectedQuarter(value);
   }, []);
 
-  // set initial selected quarter when modal opens
+  // set initial selected quarter when modal opens and data has loaded
   useEffect(() => {
-    if (open && dropdownOptions.length > 0 && !selectedQuarter) {
-      setSelectedQuarter(dropdownOptions[0].value);
+    if (open && dropdownOptions.length > 0 && !selectedQuarter && !busy && !isLoadingReports) {
+      let defaultQuarter = dropdownOptions[0].value;
+
+      // try to find the quarter of the latest submitted report
+      if (acceleratorReports.length > 0) {
+        const submittedReports = acceleratorReports.filter((report) => report.status === 'Submitted');
+        if (submittedReports.length > 0) {
+          const sorted = [...submittedReports].sort((a, b) =>
+            b.endDate.localeCompare(a.endDate, activeLocale || undefined)
+          );
+          const latestReport = sorted[0];
+          const year = latestReport.endDate.split('-')[0];
+          const latestReportQuarter = `${latestReport.quarter} ${year}`;
+
+          // only use it if it exists in the dropdown options
+          if (dropdownOptions.some((option) => option.value === latestReportQuarter)) {
+            defaultQuarter = latestReportQuarter;
+          }
+        }
+      }
+
+      setSelectedQuarter(defaultQuarter);
     }
-  }, [open, dropdownOptions, selectedQuarter]);
+  }, [acceleratorReports, activeLocale, busy, dropdownOptions, isLoadingReports, open, selectedQuarter]);
 
   return (
     <Box sx={containerStyles}>
@@ -124,17 +148,26 @@ const ActivityHighlightsModal = ({
           marginBottom='24px'
           width='100%'
         >
-          <Box display='flex' sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
+          <Box
+            display='flex'
+            sx={{
+              flexDirection: { xs: 'column', md: 'row' },
+              // z-index is necessary to ensure dropdown options appear above map components
+              '& .select .options-container': { zIndex: 1000 },
+            }}
+          >
             <Typography fontSize='24px' fontWeight={600} paddingRight='24px' sx={{ whiteSpace: 'nowrap' }}>
               {title}
             </Typography>
 
-            <Dropdown
-              label=''
-              onChange={onChangeActivityQuarter}
-              options={dropdownOptions}
-              selectedValue={selectedQuarter}
-            />
+            {dropdownOptions.length > 0 && (
+              <Dropdown
+                label=''
+                onChange={onChangeActivityQuarter}
+                options={dropdownOptions}
+                selectedValue={selectedQuarter}
+              />
+            )}
           </Box>
 
           <IconButton onClick={onClose}>
@@ -142,11 +175,25 @@ const ActivityHighlightsModal = ({
           </IconButton>
         </Box>
 
-        <ActivityHighlightsView
-          activities={selectedGroup?.activities || []}
-          projectId={projectId}
-          selectedQuarter={selectedQuarter}
-        />
+        {busy || isLoadingReports ? (
+          <img
+            alt={strings.LOADING}
+            height='24px'
+            src='/assets/loading.gif'
+            style={{ margin: '24px 0' }}
+            width='24px'
+          />
+        ) : (selectedGroup?.activities || []).length === 0 ? (
+          <Box sx={{ alignItems: 'center', display: 'flex', height: '50vh', justifyContent: 'center', width: '100%' }}>
+            <Typography>{strings.NO_HIGHLIGHTS_YET}</Typography>
+          </Box>
+        ) : (
+          <ActivityHighlightsView
+            activities={selectedGroup?.activities || []}
+            projectId={projectId}
+            selectedQuarter={selectedQuarter}
+          />
+        )}
       </DialogBox>
     </Box>
   );

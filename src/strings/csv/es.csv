@@ -1086,6 +1086,7 @@ NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe
 NO_COMMENTS_ADDED,Ningún comentario añadido,7fd30c97
 NO_DATA_YET,Aún no hay datos.,f2a0be82
 NO_FUTURE_DATES,No se admiten fechas futuras.,a0f0673b
+NO_HIGHLIGHTS_YET,Aún no hay destacados.,cafd3fe8
 NO_INVENTORY_DESCRIPTION,Parece que aún no ha añadido inventario. Puede importar datos desde un archivo CSV o añadir inventario mediante nuestro formulario de inventario.,66ee249c
 NO_LINK_ADDED,Sin enlace agregado,14e4907f
 NO_LOCATION_FOUND,Ubicación no encontrada,8b4b8dab

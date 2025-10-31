@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -11,6 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { ACCELERATOR_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
@@ -108,6 +110,7 @@ type ActivityHighlightSlide = {
   activity?: TypedActivity;
   coverPhoto?: ActivityMediaFile;
   coverPhotoURL?: string;
+  description?: string;
   report?: AcceleratorReport;
   title: string;
 };
@@ -121,7 +124,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   const location = useStateLocation();
   const navigate = useSyncNavigate();
   const { scrollToTop } = useMapDrawer(mapDrawerRef);
-  const { fitBounds } = useMapUtils(mapRef);
+  const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { acceleratorReports } = useProjectReports(projectId);
 
   const selectedQuarterReport = useMemo(() => {
@@ -131,6 +134,9 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
     // filter by selectedQuarter
     const quarterReports = acceleratorReports.filter((report) => {
+      if (report.status !== 'Submitted') {
+        return false;
+      }
       const year = report.endDate.split('-')[0];
       const reportQuarterYear = `${report.quarter} ${year}`;
       return reportQuarterYear === selectedQuarter;
@@ -144,8 +150,10 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     return sorted[0];
   }, [acceleratorReports, activeLocale, selectedQuarter]);
 
+  const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
+  const [swiper, setSwiper] = useState<SwiperType | null>(null);
 
   const highlightActivityId = useMemo(() => {
     const activityIdParam = query.get('highlightActivityId');
@@ -218,7 +226,13 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     const _slides: ActivityHighlightSlide[] = [];
 
     if (selectedQuarterReport) {
-      const firstSlide = {
+      const firstSlide: ActivityHighlightSlide = {
+        coverPhotoURL: selectedQuarterReport.photos.length
+          ? ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId?.toString())
+              .replace('{reportId}', selectedQuarterReport.id.toString())
+              .replace('{fileId}', selectedQuarterReport.photos[0].fileId.toString())
+          : undefined,
+        description: selectedQuarterReport.highlights,
         report: selectedQuarterReport,
         title: `${selectedQuarterReport.quarter} ${selectedQuarterReport.endDate.split('-')[0]}`,
       };
@@ -227,27 +241,109 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
     for (const activity of activities) {
       const title = activityTypeLabel(activity.payload.type, strings);
+      const description = activity.payload.description;
       const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
-      const coverPhoto = activity.payload.media.find((file) => file.isCoverPhoto);
+      const coverPhoto = activity.payload.media.find((file) => file.isCoverPhoto && !file.isHiddenOnMap);
       const coverPhotoURL = coverPhoto
         ? `${baseUrl
             .replace('{activityId}', activity.payload.id.toString())
             .replace('{fileId}', coverPhoto.fileId.toString())}`
         : undefined;
 
-      _slides.push({ activity, coverPhoto, coverPhotoURL, title });
+      _slides.push({ activity, coverPhoto, coverPhotoURL, description, title });
     }
 
     return _slides;
-  }, [activities, selectedQuarterReport, strings]);
+  }, [activities, projectId, selectedQuarterReport, strings]);
+
+  const activitiesVisibleOnMap = useMemo(
+    () =>
+      activities.map((activity) => ({
+        ...activity,
+        media: activity.payload.media.filter((item) => item.isCoverPhoto && !item.isHiddenOnMap),
+      })),
+    [activities]
+  );
+
+  const onSlideChange = useCallback(
+    (_swiper: SwiperType) => {
+      if (selectedQuarterReport && _swiper.realIndex === 0) {
+        setFocusedActivityId(undefined);
+        setFocusedFileId(undefined);
+
+        // zoom the map to show all activities
+        const allPoints = activitiesVisibleOnMap.flatMap((activity) =>
+          activity.media
+            .map((_media): MapPoint | undefined => {
+              if (!_media.isHiddenOnMap && _media.geolocation) {
+                return {
+                  lat: _media.geolocation.coordinates[1],
+                  lng: _media.geolocation.coordinates[0],
+                };
+              }
+            })
+            .filter((point): point is MapPoint => point !== undefined)
+        );
+
+        if (allPoints.length > 0) {
+          const bbox = getBoundingBoxFromPoints(allPoints);
+          fitBounds(bbox);
+        }
+      } else {
+        const currentSlide = slides[_swiper.realIndex];
+        if (currentSlide?.activity) {
+          setFocusedActivityId(currentSlide.activity.payload.id);
+          setFocusedFileId(undefined);
+        }
+
+        const media = currentSlide?.coverPhoto;
+        const viewState = getCurrentViewState();
+        if (media && media.geolocation && viewState) {
+          jumpTo({
+            latitude: media.geolocation.coordinates[1],
+            longitude: media.geolocation.coordinates[0],
+            zoom: viewState.zoom,
+          });
+        }
+      }
+    },
+    [activitiesVisibleOnMap, fitBounds, getCurrentViewState, jumpTo, selectedQuarterReport, slides]
+  );
+
+  const activityMarkerHighlighted = useCallback(
+    (activityId: number, fileId: number) => {
+      if (highlightActivityId) {
+        // one activity is selected
+        return fileId === focusedFileId || fileId === hoveredFileId;
+      } else {
+        return activityId === focusedActivityId;
+      }
+    },
+    [focusedActivityId, focusedFileId, hoveredFileId, highlightActivityId]
+  );
+
+  const onActivityMarkerClick = useCallback(
+    (activityId: number, fileId: number) => {
+      const targetSlideIndex = slides.findIndex((slide) => slide.activity?.payload.id === activityId);
+      if (swiper && targetSlideIndex !== -1 && slides[targetSlideIndex]) {
+        // use slideToLoop for loop mode
+        swiper.slideToLoop(targetSlideIndex);
+        setFocusedActivityId(activityId);
+        setFocusedFileId(fileId);
+      }
+    },
+    [slides, swiper]
+  );
 
   return (
     <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>
       <MapSplitView
-        activities={activities}
+        activities={activitiesVisibleOnMap}
+        activityMarkerHighlighted={activityMarkerHighlighted}
         drawerRef={mapDrawerRef}
         heightOffsetPx={HEIGHT_OFFSET_PX}
         mapRef={mapRef}
+        onActivityMarkerClick={onActivityMarkerClick}
         projectId={projectId}
       >
         {highlightActivityId && shownActivity ? (
@@ -279,6 +375,8 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
               loop
               modules={[Mousewheel, Navigation, Pagination]}
               mousewheel
+              onSlideChange={onSlideChange}
+              onSwiper={setSwiper}
               pagination={{ clickable: true }}
               slidesPerView={1}
               spaceBetween={30}
@@ -361,7 +459,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                         </Box>
                       )}
 
-                      <Typography>{slide.activity?.payload?.description}</Typography>
+                      {slide.description && <Typography>{slide.description}</Typography>}
                     </Box>
                   </Box>
                 </SwiperSlide>

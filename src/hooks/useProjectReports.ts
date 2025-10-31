@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
@@ -12,12 +12,14 @@ const useProjectReports = (
   year?: string
 ) => {
   const dispatch = useAppDispatch();
+  const [busy, setBusy] = useState(true);
   const [requestId, setRequestId] = useState('');
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReport[]>([]);
   const listAcceleratorReportsRequest = useAppSelector(selectListAcceleratorReports(requestId));
 
   const reload = useCallback(() => {
     if (projectId) {
+      setBusy(true);
       const request = dispatch(
         requestListAcceleratorReports({
           projectId: projectId.toString(),
@@ -37,10 +39,9 @@ const useProjectReports = (
   useEffect(() => {
     if (listAcceleratorReportsRequest?.status === 'success') {
       setAcceleratorReports(listAcceleratorReportsRequest?.data || []);
+      setBusy(false);
     }
   }, [listAcceleratorReportsRequest]);
-
-  const busy = useMemo(() => listAcceleratorReportsRequest?.status === 'pending', [listAcceleratorReportsRequest]);
 
   return { busy, reload, acceleratorReports };
 };
