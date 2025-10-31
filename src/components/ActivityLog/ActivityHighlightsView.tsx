@@ -259,7 +259,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     () =>
       activities.map((activity) => ({
         ...activity,
-        media: activity.media.filter((item) => item.isCoverPhoto),
+        media: activity.media.filter((item) => item.isCoverPhoto && !item.isHiddenOnMap),
       })),
     [activities]
   );
