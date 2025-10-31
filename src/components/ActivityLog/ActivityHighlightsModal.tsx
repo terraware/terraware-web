@@ -175,7 +175,7 @@ const ActivityHighlightsModal = ({
           />
         ) : (selectedGroup?.activities || []).length === 0 ? (
           <Box sx={{ height: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-            <Typography>No highlights yet</Typography>
+            <Typography>{strings.NO_HIGHLIGHTS_YET}</Typography>
           </Box>
         ) : (
           <ActivityHighlightsView
