@@ -328,7 +328,7 @@ const ZoneT0EditBox = ({
                   <td>
                     <Checkbox
                       id={`density-${withdrawnSpecies.speciesId}`}
-                      label={withdrawnSpecies.density}
+                      label={roundToDecimal(withdrawnSpecies.density, 1)}
                       name={`density-${withdrawnSpecies.speciesId}`}
                       value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
                       onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
