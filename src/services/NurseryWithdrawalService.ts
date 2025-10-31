@@ -99,9 +99,14 @@ export type NurseryWithdrawalsSearchResponseElement = {
 
 const NURSERY_WITHDRAWALS_PREFIX = 'nurseryWithdrawals';
 
-/**
- * List nursery withdrawals
- */
+export type NurseryWithdrawalsSearchParams = {
+  organizationId: number;
+  searchCriteria: SearchNodePayload[];
+  sortOrder?: SearchSortOrder;
+  limit: number;
+  offset: number;
+};
+
 const listNurseryWithdrawals = async (
   organizationId: number,
   searchCriteria: SearchNodePayload[],
@@ -159,6 +164,11 @@ const listNurseryWithdrawals = async (
     });
   }
   return null;
+};
+
+export type NurseryWithdrawalsCountParams = {
+  organizationId: number;
+  searchCriteria: SearchNodePayload[];
 };
 
 const countNurseryWithdrawals = async (
