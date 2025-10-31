@@ -38,7 +38,6 @@ import {
   activityStatusTagLabel,
   activityTypeLabel,
 } from 'src/types/Activity';
-import { FunderActivity } from 'src/types/FunderActivity';
 import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
 import { CsvData } from 'src/utils/csv';
@@ -55,7 +54,7 @@ import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
 
 type ActivityListItemProps = {
-  activity: Activity | FunderActivity;
+  activity: Activity;
   focused?: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
@@ -123,7 +122,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
           )}
         </Box>
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
-          <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity as Activity} />}</Box>
+          <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}</Box>
           {activity.isHighlight && (isAcceleratorRoute || isFunderRoute) && isActivityHighlightEnabled && (
             <Tooltip title={strings.HIGHLIGHTED_ACTIVITY}>
               <Box display='inline-flex'>
