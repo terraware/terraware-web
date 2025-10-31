@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/167</span>
+                <span class='fraction'>0/169</span>
             </div>
         
             
@@ -739,7 +739,9 @@
 <a name='L674'></a><a href='#L674'>674</a>
 <a name='L675'></a><a href='#L675'>675</a>
 <a name='L676'></a><a href='#L676'>676</a>
-<a name='L677'></a><a href='#L677'>677</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L677'></a><a href='#L677'>677</a>
+<a name='L678'></a><a href='#L678'>678</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1482,6 +1484,7 @@ import ActivityMediaForm, { ActivityMediaItem, ExistingActivityMediaItem } from 
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
+import { TypedActivity } from './types';
 &nbsp;
 interface ActivityDetailsFormProps {
   activityId?: number;
@@ -1511,7 +1514,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
 &nbsp;
   const [source, setSource] = <span class="cstat-no" title="statement not covered" >useState&lt;string | null&gt;();</span>
-  const [activity, setActivity] = <span class="cstat-no" title="statement not covered" >useState&lt;Activity | null&gt;(null);</span>
+  const [activity, setActivity] = <span class="cstat-no" title="statement not covered" >useState&lt;TypedActivity&gt;();</span>
   const [record, setRecord, onChange, onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;FormRecord&gt;(undefined);</span>
   const [mediaItems, setMediaItems] = <span class="cstat-no" title="statement not covered" >useState&lt;ActivityMediaItem[]&gt;([]);</span>
   const [validateFields, setValidateFields] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -1622,9 +1625,9 @@ export default function <span class="fstat-no" title="function not covered" >Act
       // admin update activity
       const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
         requestAdminUpdateActivity({
-          activityId: activity.id,
+          activityId: activity.payload.id,
           activity: {
-            ...activity,
+            ...activity.payload,
             date: record?.date as string,
             description: record?.description as string,
             isHighlight: !!record?.isHighlight,
@@ -1638,9 +1641,9 @@ export default function <span class="fstat-no" title="function not covered" >Act
       // update activity
       const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
         requestUpdateActivity({
-          activityId: activity.id,
+          activityId: activity.payload.id,
           activity: {
-            ...activity,
+            ...activity.payload,
             date: record?.date as string,
             description: record?.description as string,
             type: record?.type as ActivityPayload['type'],
@@ -1733,9 +1736,9 @@ export default function <span class="fstat-no" title="function not covered" >Act
 <span class="cstat-no" title="statement not covered" >    if (getActivityRequest?.status === 'error' || adminGetActivityRequest?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     } else <span class="cstat-no" title="statement not covered" >if (getActivityRequest?.status === 'success' &amp;&amp; getActivityRequest?.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setActivity(getActivityRequest.data as Activity);</span>
+<span class="cstat-no" title="statement not covered" >      setActivity({ type: 'base', payload: getActivityRequest.data });</span>
     } else <span class="cstat-no" title="statement not covered" >if (adminGetActivityRequest?.status === 'success' &amp;&amp; adminGetActivityRequest?.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setActivity(adminGetActivityRequest.data as Activity);</span>
+<span class="cstat-no" title="statement not covered" >      setActivity({ type: 'admin', payload: adminGetActivityRequest.data });</span>
     }
   }, [getActivityRequest, adminGetActivityRequest, snackbar, strings.GENERIC_ERROR]);
 &nbsp;
@@ -1743,13 +1746,13 @@ export default function <span class="fstat-no" title="function not covered" >Act
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isEditing &amp;&amp; activity) {</span>
       const activityRecord: Partial&lt;FormRecord&gt; = <span class="cstat-no" title="statement not covered" >{</span>
-        date: activity.date,
-        description: activity.description,
-        id: activity.id,
-        isHighlight: activity.isHighlight,
+        date: activity.payload.date,
+        description: activity.payload.description,
+        id: activity.payload.id,
+        isHighlight: activity.payload.isHighlight,
         projectId,
-        status: activity.status,
-        type: activity.type,
+        status: activity.type === 'admin' ? activity.payload.status : undefined,
+        type: activity.payload.type,
       };
 <span class="cstat-no" title="statement not covered" >      setRecord({ ...activityRecord });</span>
     }
@@ -1757,8 +1760,8 @@ export default function <span class="fstat-no" title="function not covered" >Act
 &nbsp;
   // populate existing media files when editing
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (isEditing &amp;&amp; activity &amp;&amp; activity.media) {</span>
-      const existingMediaItems: ActivityMediaItem[] = <span class="cstat-no" title="statement not covered" >activity.media</span>
+<span class="cstat-no" title="statement not covered" >    if (isEditing &amp;&amp; activity &amp;&amp; activity.payload.media) {</span>
+      const existingMediaItems: ActivityMediaItem[] = <span class="cstat-no" title="statement not covered" >activity.payload.media</span>
         .map(<span class="fstat-no" title="function not covered" >(m</span>ediaItem) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
           data: mediaItem,
           isDeleted: false,
@@ -1889,7 +1892,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
   const onFileClicked = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (f</span>ileId: number) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (activity) {</span>
-        const media = <span class="cstat-no" title="statement not covered" >activity.media.find(<span class="fstat-no" title="function not covered" >(m</span>ediaFile) =&gt; <span class="cstat-no" title="statement not covered" >mediaFile.fileId === fileId)</span>;</span>
+        const media = <span class="cstat-no" title="statement not covered" >activity.payload.media.find(<span class="fstat-no" title="function not covered" >(m</span>ediaFile) =&gt; <span class="cstat-no" title="statement not covered" >mediaFile.fileId === fileId)</span>;</span>
         const viewState = <span class="cstat-no" title="statement not covered" >getCurrentViewState();</span>
 <span class="cstat-no" title="statement not covered" >        if (media &amp;&amp; !media.isHiddenOnMap &amp;&amp; media.geolocation &amp;&amp; viewState) {</span>
 <span class="cstat-no" title="statement not covered" >          jumpTo({</span>
@@ -2008,7 +2011,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
                     &lt;Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}&gt;
                       &lt;ActivityStatusBadges activity={activity} /&gt;
                     &lt;/Box&gt;
-                    {activity.isHighlight &amp;&amp; isActivityHighlightEnabled &amp;&amp; (
+                    {activity.payload.isHighlight &amp;&amp; isActivityHighlightEnabled &amp;&amp; (
                       &lt;Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} /&gt;
                     )}
                   &lt;/Box&gt;
@@ -2098,7 +2101,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-31T15:51:54.768Z
+                at 2025-10-31T18:03:14.074Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

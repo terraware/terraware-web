@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -269,7 +269,8 @@
 <a name='L204'></a><a href='#L204'>204</a>
 <a name='L205'></a><a href='#L205'>205</a>
 <a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -425,6 +426,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -482,6 +484,7 @@ import { Button, Message } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 &nbsp;
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
+import { TypedActivity } from 'src/components/ActivityLog/types';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
@@ -491,7 +494,6 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { Activity } from 'src/types/Activity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 &nbsp;
@@ -510,7 +512,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
   const [activityId, setActivityId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
   const [projectFilter, setProjectFilter] = <span class="cstat-no" title="statement not covered" >useState&lt;{ projectId?: number | string }&gt;({});</span>
   const [highlightsModalOpen, setHighlightsModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const [selectedActivity, setSelectedActivity] = <span class="cstat-no" title="statement not covered" >useState&lt;Activity&gt;();</span>
+  const [selectedActivity, setSelectedActivity] = <span class="cstat-no" title="statement not covered" >useState&lt;TypedActivity&gt;();</span>
 &nbsp;
   const organization = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >isAcceleratorRoute ? undefined : selectedOrganization)</span>,
@@ -643,11 +645,12 @@ export default function <span class="fstat-no" title="function not covered" >Act
         {isAcceleratorRoute &amp;&amp;
           activityId &amp;&amp;
           selectedActivity &amp;&amp;
-          selectedActivity.verifiedBy &amp;&amp;
-          ((selectedActivity.modifiedTime &amp;&amp;
-            selectedActivity.publishedTime &amp;&amp;
-            selectedActivity.modifiedTime &gt; selectedActivity.publishedTime) ||
-            (selectedActivity.modifiedTime &amp;&amp; !selectedActivity.publishedTime)) &amp;&amp; (
+          selectedActivity.type === 'admin' &amp;&amp;
+          selectedActivity.payload.verifiedBy &amp;&amp;
+          ((selectedActivity.payload.modifiedTime &amp;&amp;
+            selectedActivity.payload.publishedTime &amp;&amp;
+            selectedActivity.payload.modifiedTime &gt; selectedActivity.payload.publishedTime) ||
+            (selectedActivity.payload.modifiedTime &amp;&amp; !selectedActivity.payload.publishedTime)) &amp;&amp; (
             &lt;Box marginBottom={theme.spacing(3)} width={'100%'}&gt;
               &lt;Message
                 type='page'
@@ -655,7 +658,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
                 title={strings.YOU_HAVE_UNPUBLISHED_CHANGES}
                 body={strings.formatString(
                   strings.LAST_CHANGES_MADE_ON,
-                  DateTime.fromISO(selectedActivity.modifiedTime).toFormat('yyyy/MM/dd')
+                  DateTime.fromISO(selectedActivity.payload.modifiedTime).toFormat('yyyy/MM/dd')
                 )}
               /&gt;
             &lt;/Box&gt;
@@ -688,7 +691,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-31T15:51:54.768Z
+                at 2025-10-31T18:03:14.074Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

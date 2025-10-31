@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/91</span>
+                <span class='fraction'>0/92</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -438,7 +438,9 @@
 <a name='L373'></a><a href='#L373'>373</a>
 <a name='L374'></a><a href='#L374'>374</a>
 <a name='L375'></a><a href='#L375'>375</a>
-<a name='L376'></a><a href='#L376'>376</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -464,6 +466,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -667,7 +671,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -827,8 +831,9 @@ import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
+import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
-import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
@@ -838,6 +843,7 @@ import useMapUtils from '../NewMap/useMapUtils';
 import { getBoundingBoxFromPoints } from '../NewMap/utils';
 import ActivityDetailView from './ActivityDetailView';
 import MapSplitView from './MapSplitView';
+import { TypedActivity } from './types';
 &nbsp;
 const carouselContainerStyles = <span class="cstat-no" title="statement not covered" >{</span>
   display: 'flex',
@@ -912,13 +918,13 @@ const getReportMetrics = <span class="cstat-no" title="statement not covered" ><
 ];
 &nbsp;
 type ActivityHighlightsViewProps = {
-  activities: Activity[];
+  activities: TypedActivity[];
   projectId: number;
   selectedQuarter?: string;
 };
 &nbsp;
 type ActivityHighlightSlide = {
-  activity?: Activity;
+  activity?: TypedActivity;
   coverPhoto?: ActivityMediaFile;
   coverPhotoURL?: string;
   report?: AcceleratorReport;
@@ -966,7 +972,7 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
   }, [query]);
 &nbsp;
   const shownActivity = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >activities.find(<span class="fstat-no" title="function not covered" >(a</span>ctivity) =&gt; <span class="cstat-no" title="statement not covered" >activity.id === highlightActivityId)</span>,</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >activities.find(<span class="fstat-no" title="function not covered" >(a</span>ctivity) =&gt; <span class="cstat-no" title="statement not covered" >activity.payload.id === highlightActivityId)</span>,</span>
     [activities, highlightActivityId]
   );
 &nbsp;
@@ -980,7 +986,7 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (shownActivity) {</span>
-      const points = <span class="cstat-no" title="statement not covered" >shownActivity.media</span>
+      const points = <span class="cstat-no" title="statement not covered" >shownActivity.payload.media</span>
         .map(<span class="fstat-no" title="function not covered" >(_</span>media): MapPoint | undefined =&gt; {
 <span class="cstat-no" title="statement not covered" >          if (!_media.isHiddenOnMap &amp;&amp; _media.geolocation) {</span>
 <span class="cstat-no" title="statement not covered" >            return {</span>
@@ -1039,13 +1045,13 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const activity of activities) {</span>
-      const title = <span class="cstat-no" title="statement not covered" >activityTypeLabel(activity.type, strings);</span>
-      const coverPhoto = <span class="cstat-no" title="statement not covered" >activity.media.find(<span class="fstat-no" title="function not covered" >(f</span>ile) =&gt; <span class="cstat-no" title="statement not covered" >file.isCoverPhoto &amp;&amp; !file.isHiddenOnMap)</span>;</span>
+      const title = <span class="cstat-no" title="statement not covered" >activityTypeLabel(activity.payload.type, strings);</span>
+      const baseUrl = <span class="cstat-no" title="statement not covered" >activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;</span>
+      const coverPhoto = <span class="cstat-no" title="statement not covered" >activity.payload.media.find(<span class="fstat-no" title="function not covered" >(f</span>ile) =&gt; <span class="cstat-no" title="statement not covered" >file.isCoverPhoto)</span>;</span>
       const coverPhotoURL = <span class="cstat-no" title="statement not covered" >coverPhoto</span>
-        ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
-            '{fileId}',
-            coverPhoto.fileId.toString()
-          )}`
+        ? `${baseUrl
+            .replace('{activityId}', activity.payload.id.toString())
+            .replace('{fileId}', coverPhoto.fileId.toString())}`
         : undefined;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      _slides.push({ activity, coverPhoto, coverPhotoURL, title });</span>
@@ -1088,7 +1094,7 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
           &gt;
             &lt;Swiper
               direction='vertical'
-              key={activities.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.id)</span>.join('-')}
+              key={activities.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.payload.id)</span>.join('-')}
               loop
               modules={[Mousewheel, Navigation, Pagination]}
               mousewheel
@@ -1102,10 +1108,10 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
                   &lt;Box sx={carouselSlideContentStyles(slide.coverPhotoURL)}&gt;
                     &lt;Box
                       sx={carouselSlideCardStyles}
-                      onClick={slide.activity ? onClickSlide(slide.activity.id) : undefined}
+                      onClick={slide.activity ? onClickSlide(slide.activity.payload.id) : undefined}
                     &gt;
                       &lt;Box sx={carouselSlideCardMetadataStyles(theme)}&gt;
-                        {slide.activity?.date &amp;&amp; &lt;Typography&gt;{slide.activity.date}&lt;/Typography&gt;}
+                        {slide.activity?.payload?.date &amp;&amp; &lt;Typography&gt;{slide.activity.payload.date}&lt;/Typography&gt;}
                         &lt;Box
                           display='flex'
                           sx={{
@@ -1174,7 +1180,7 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
                         &lt;/Box&gt;
                       )}
 &nbsp;
-                      &lt;Typography&gt;{slide.activity?.description}&lt;/Typography&gt;
+                      &lt;Typography&gt;{slide.activity?.payload?.description}&lt;/Typography&gt;
                     &lt;/Box&gt;
                   &lt;/Box&gt;
                 &lt;/SwiperSlide&gt;
@@ -1195,7 +1201,7 @@ export default ActivityHighlightsView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-31T15:51:54.768Z
+                at 2025-10-31T18:03:14.074Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

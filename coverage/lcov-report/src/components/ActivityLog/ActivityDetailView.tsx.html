@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/133</span>
+                <span class='fraction'>0/137</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/130</span>
+                <span class='fraction'>0/135</span>
             </div>
         
             
@@ -658,7 +658,12 @@
 <a name='L593'></a><a href='#L593'>593</a>
 <a name='L594'></a><a href='#L594'>594</a>
 <a name='L595'></a><a href='#L595'>595</a>
-<a name='L596'></a><a href='#L596'>596</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L596'></a><a href='#L596'>596</a>
+<a name='L597'></a><a href='#L597'>597</a>
+<a name='L598'></a><a href='#L598'>598</a>
+<a name='L599'></a><a href='#L599'>599</a>
+<a name='L600'></a><a href='#L600'>600</a>
+<a name='L601'></a><a href='#L601'>601</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -702,6 +707,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -818,10 +826,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -840,7 +846,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -998,8 +1004,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1044,7 +1053,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1082,10 +1094,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1263,6 +1273,7 @@ import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
@@ -1280,15 +1291,17 @@ import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
+import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
 import ActivityStatusBadges from './ActivityStatusBadges';
+import { TypedActivity } from './types';
 &nbsp;
 type ActivityMediaItemProps = {
-  activity: Activity;
+  activity: TypedActivity;
   focusedFileId?: number;
   hoveredFileId?: number;
   mediaFile: ActivityMediaFile;
@@ -1412,14 +1425,12 @@ const ActivityMediaItem = <span class="cstat-no" title="statement not covered" >
     [theme]
   );
 &nbsp;
-  const imageSrc = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(</span>
-        '{fileId}',
-        mediaFile.fileId.toString()
-      ),
-    [activity.id, mediaFile.fileId]
-  );
+  const imageSrc = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const baseUrl = <span class="cstat-no" title="statement not covered" >activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;</span>
+<span class="cstat-no" title="statement not covered" >    return baseUrl</span>
+      .replace('{activityId}', activity.payload.id.toString())
+      .replace('{fileId}', mediaFile.fileId.toString());
+  }, [activity, mediaFile.fileId]);
 &nbsp;
   const mediaItemHoverCallback = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (h</span>overed: boolean) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1434,19 +1445,19 @@ const ActivityMediaItem = <span class="cstat-no" title="statement not covered" >
 <span class="fstat-no" title="function not covered" >    (e</span>vent?: React.MouseEvent&lt;HTMLButtonElement, MouseEvent&gt; | undefined) =&gt; {
 <span class="cstat-no" title="statement not covered" >      event?.stopPropagation();</span>
 &nbsp;
-      const imageURL = <span class="cstat-no" title="statement not covered" >ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(</span>
-        '{fileId}',
-        mediaFile.fileId.toString()
-      );
+      const baseUrl = <span class="cstat-no" title="statement not covered" >activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;</span>
+      const imageURL = <span class="cstat-no" title="statement not covered" >baseUrl</span>
+        .replace('{activityId}', activity.payload.id.toString())
+        .replace('{fileId}', mediaFile.fileId.toString());
 &nbsp;
       const link = <span class="cstat-no" title="statement not covered" >document.createElement('a');</span>
 <span class="cstat-no" title="statement not covered" >      link.href = imageURL;</span>
-<span class="cstat-no" title="statement not covered" >      link.download = `activity-${activity.id}-image-${mediaFile.fileId}.jpg`;</span>
+<span class="cstat-no" title="statement not covered" >      link.download = `activity-${activity.payload.id}-image-${mediaFile.fileId}.jpg`;</span>
 <span class="cstat-no" title="statement not covered" >      document.body.appendChild(link);</span>
 <span class="cstat-no" title="statement not covered" >      link.click();</span>
 <span class="cstat-no" title="statement not covered" >      document.body.removeChild(link);</span>
     },
-    [activity.id, mediaFile.fileId]
+    [activity, mediaFile.fileId]
   );
 &nbsp;
   const onClickExpand = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -1463,7 +1474,7 @@ const ActivityMediaItem = <span class="cstat-no" title="statement not covered" >
       // request a small version of the image to check the error status code
       const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
         requestGetActivityMedia({
-          activityId: activity.id,
+          activityId: activity.payload.id,
           fileId: mediaFile.fileId,
           maxHeight: 1,
           maxWidth: 1,
@@ -1471,7 +1482,7 @@ const ActivityMediaItem = <span class="cstat-no" title="statement not covered" >
       );
 <span class="cstat-no" title="statement not covered" >      setGetActivityMediaRequestId(request.requestId);</span>
     }
-  }, [activity.id, dispatch, mediaFile.fileId, mediaFile.type]);
+  }, [activity.payload.id, dispatch, mediaFile.fileId, mediaFile.type]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (getActivityMediaRequest?.status === 'error' &amp;&amp; getActivityMediaRequest?.data) {</span>
@@ -1540,7 +1551,7 @@ const ActivityMediaItem = <span class="cstat-no" title="statement not covered" >
 &nbsp;
       &lt;Box className='info-panel' onClick={onClickMediaItem(mediaFile.fileId)} sx={infoPanelStyles}&gt;
         &lt;Typography component='div' fontSize='16px' lineHeight='16px'&gt;
-          {activity.date}
+          {activity.payload.date}
         &lt;/Typography&gt;
 &nbsp;
         {mediaFile.caption &amp;&amp; (
@@ -1566,7 +1577,7 @@ const ActivityMediaItem = <span class="cstat-no" title="statement not covered" >
 };
 &nbsp;
 type ActivityDetailViewProps = {
-  activity: Activity;
+  activity: TypedActivity;
   focusedFileId?: number;
   hoveredFileId?: number;
   onClickMediaItem: (fileId: number) =&gt; () =&gt; void;
@@ -1587,6 +1598,7 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+  const { isFunderRoute } = <span class="cstat-no" title="statement not covered" >useFunderPortal();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
@@ -1594,7 +1606,9 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { goToAcceleratorActivityEdit, goToActivityEdit } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
-  const verifiedByUser = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUser(activity.verifiedBy));</span>
+  const verifiedByUser = <span class="cstat-no" title="statement not covered" >useAppSelector(</span>
+    selectUser(activity.type === 'admin' ? activity.payload.verifiedBy : undefined)
+  );
   const isAllowedEditActivities = <span class="cstat-no" title="statement not covered" >isAllowed('EDIT_ACTIVITIES');</span>
 &nbsp;
   const [lightboxMediaFileId, setLightboxMediaFileId] = <span class="cstat-no" title="statement not covered" >useState&lt;number | undefined&gt;(undefined);</span>
@@ -1610,10 +1624,10 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (activity?.verifiedBy &amp;&amp; !verifiedByUser) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestGetUser(activity?.verifiedBy));</span>
+<span class="cstat-no" title="statement not covered" >    if (activity.type === 'admin' &amp;&amp; activity?.payload?.verifiedBy &amp;&amp; !verifiedByUser) {</span>
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestGetUser(activity?.payload?.verifiedBy));</span>
     }
-  }, [activity?.verifiedBy, dispatch, verifiedByUser]);
+  }, [activity, dispatch, verifiedByUser]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (publishActivityResponse?.status === 'success') {</span>
@@ -1638,7 +1652,10 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
 <span class="cstat-no" title="statement not covered" >    return verifiedByName ? strings.formatString(strings.VERIFIED_BY, verifiedByName) : '';</span>
   }, [strings, verifiedByUser]);
 &nbsp;
-  const activityType = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >activityTypeLabel(activity.type, strings),</span> [activity.type, strings]);</span>
+  const activityType = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >activityTypeLabel(activity.payload.type, strings),</span>
+    [activity.payload.type, strings]
+  );
 &nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
@@ -1655,16 +1672,16 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
   );
 &nbsp;
   const goToProjectActivityEdit = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!projectId || !activity.id) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!projectId || !activity.payload.id) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute) {</span>
-<span class="cstat-no" title="statement not covered" >      goToAcceleratorActivityEdit(projectId, activity.id);</span>
+<span class="cstat-no" title="statement not covered" >      goToAcceleratorActivityEdit(projectId, activity.payload.id);</span>
     } else {
-<span class="cstat-no" title="statement not covered" >      goToActivityEdit(projectId, activity.id);</span>
+<span class="cstat-no" title="statement not covered" >      goToActivityEdit(projectId, activity.payload.id);</span>
     }
-  }, [goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId, activity.id]);
+  }, [activity, goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId]);
 &nbsp;
   const handleCloseLightbox = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setLightboxMediaFileId(undefined);</span>
@@ -1672,25 +1689,23 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
   }, []);
 &nbsp;
   const lightboxMediaFile = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >activity.media.find(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.fileId === lightboxMediaFileId)</span>,</span>
-    [activity.media, lightboxMediaFileId]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >activity.payload.media.find(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.fileId === lightboxMediaFileId)</span>,</span>
+    [activity, lightboxMediaFileId]
   );
 &nbsp;
-  const lightboxImageSrc = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      lightboxMediaFile</span>
-        ? ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
-            '{fileId}',
-            lightboxMediaFile.fileId.toString()
-          )
-        : '',
-    [activity.id, lightboxMediaFile]
-  );
+  const lightboxImageSrc = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const baseUrl = <span class="cstat-no" title="statement not covered" >activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;</span>
+<span class="cstat-no" title="statement not covered" >    return lightboxMediaFile</span>
+      ? baseUrl
+          .replace('{activityId}', activity.payload.id.toString())
+          .replace('{fileId}', lightboxMediaFile.fileId.toString())
+      : '';
+  }, [activity, lightboxMediaFile]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (activity &amp;&amp; lightboxMediaFile?.type === 'Video') {</span>
       const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
-        requestGetActivityMediaStream({ activityId: activity.id, fileId: lightboxMediaFile.fileId })
+        requestGetActivityMediaStream({ activityId: activity.payload.id, fileId: lightboxMediaFile.fileId })
       );
 <span class="cstat-no" title="statement not covered" >      setGetActivityMediaStreamRequestId(request.requestId);</span>
     }
@@ -1717,9 +1732,9 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
   }, []);
 &nbsp;
   const publishActivity = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const request = <span class="cstat-no" title="statement not covered" >dispatch(requestPublishActivity(activity.id.toString()));</span>
+    const request = <span class="cstat-no" title="statement not covered" >dispatch(requestPublishActivity(activity.payload.id.toString()));</span>
 <span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
-  }, [activity.id, dispatch]);
+  }, [activity.payload.id, dispatch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'&gt;
@@ -1746,7 +1761,7 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
               type='destructive'
             /&gt;,
           ]}
-          message={strings.formatString(strings.PUBLISH_ACTIVITY_MODAL_MESSAGE, activityType, activity.date)}
+          message={strings.formatString(strings.PUBLISH_ACTIVITY_MODAL_MESSAGE, activityType, activity.payload.date)}
         /&gt;
       )}
       &lt;Grid item md={4} xs={12}&gt;
@@ -1758,7 +1773,7 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
       &lt;/Grid&gt;
 &nbsp;
       &lt;Grid item md={8} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}&gt;
-        {isAllowedEditActivities &amp;&amp; (
+        {isAllowedEditActivities &amp;&amp; !isFunderRoute &amp;&amp; (
           &lt;Box display='flex' justifyContent={'end'}&gt;
             &lt;Button
               disabled={!projectId}
@@ -1769,7 +1784,7 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
               size='medium'
               sx={{ whiteSpace: 'nowrap' }}
             /&gt;
-            {activity.verifiedBy &amp;&amp; (
+            {activity.type === 'admin' &amp;&amp; activity.payload.verifiedBy &amp;&amp; isAcceleratorRoute &amp;&amp; (
               &lt;Button
                 disabled={!projectId}
                 label={strings.PUBLISH_ACTIVITY}
@@ -1791,7 +1806,7 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
           &lt;Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}&gt;
             {isAcceleratorRoute &amp;&amp; &lt;ActivityStatusBadges activity={activity} /&gt;}
           &lt;/Box&gt;
-          {activity.isHighlight &amp;&amp; isActivityHighlightEnabled &amp;&amp; isAcceleratorRoute &amp;&amp; (
+          {activity.payload.isHighlight &amp;&amp; isActivityHighlightEnabled &amp;&amp; isAcceleratorRoute &amp;&amp; (
             &lt;Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} /&gt;
           )}
         &lt;/Box&gt;
@@ -1799,15 +1814,15 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
 &nbsp;
       &lt;Grid item xs={12}&gt;
         &lt;Typography&gt;
-          {activity.date} {verifiedByLabel}
+          {activity.payload.date} {verifiedByLabel}
         &lt;/Typography&gt;
       &lt;/Grid&gt;
 &nbsp;
       &lt;Grid item xs={12}&gt;
-        &lt;Typography&gt;{activity.description}&lt;/Typography&gt;
+        &lt;Typography&gt;{activity.payload.description}&lt;/Typography&gt;
       &lt;/Grid&gt;
 &nbsp;
-      {activity.media
+      {activity.payload.media
         .filter(<span class="fstat-no" title="function not covered" >(m</span>ediaFile) =&gt; <span class="cstat-no" title="statement not covered" >mediaFile.type === 'Photo' || isActivityVideoSupportEnabled)</span>
         .map(<span class="fstat-no" title="function not covered" >(m</span>ediaFile, index) =&gt; (
 <span class="cstat-no" title="statement not covered" >          &lt;Grid item key={index} lg={6} xs={12}&gt;</span>
@@ -1855,7 +1870,7 @@ export default ActivityDetailView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-31T15:51:54.768Z
+                at 2025-10-31T18:03:14.074Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
