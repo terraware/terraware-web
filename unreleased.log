@@ -1,3 +1,5 @@
+f92ff36bd35 SW-7649 Add unpublished changes message (#4727)
+2492b84814e SW-7564 Create generic backend search table (#4708)
 e641cd28090 SW-7647 Changing tabs when editing survival rate settings does not exit edit mode (#4726)
 c042e823fe7 SW-7645 Edit survival rate - clicking the checkbox does not set the value to 0 (#4725)
 1552ca9a65b SW-7633 Show messaging when Permanent Plots are not yet available for Survival Rate calculations (#4724)

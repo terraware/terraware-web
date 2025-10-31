@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/215</span>
+                <span class='fraction'>0/220</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/162</span>
+                <span class='fraction'>0/164</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/205</span>
+                <span class='fraction'>0/210</span>
             </div>
         
             
@@ -767,7 +767,20 @@
 <a name='L702'></a><a href='#L702'>702</a>
 <a name='L703'></a><a href='#L703'>703</a>
 <a name='L704'></a><a href='#L704'>704</a>
-<a name='L705'></a><a href='#L705'>705</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L705'></a><a href='#L705'>705</a>
+<a name='L706'></a><a href='#L706'>706</a>
+<a name='L707'></a><a href='#L707'>707</a>
+<a name='L708'></a><a href='#L708'>708</a>
+<a name='L709'></a><a href='#L709'>709</a>
+<a name='L710'></a><a href='#L710'>710</a>
+<a name='L711'></a><a href='#L711'>711</a>
+<a name='L712'></a><a href='#L712'>712</a>
+<a name='L713'></a><a href='#L713'>713</a>
+<a name='L714'></a><a href='#L714'>714</a>
+<a name='L715'></a><a href='#L715'>715</a>
+<a name='L716'></a><a href='#L716'>716</a>
+<a name='L717'></a><a href='#L717'>717</a>
+<a name='L718'></a><a href='#L718'>718</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -907,6 +920,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -914,6 +928,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -958,7 +973,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1007,7 +1026,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1365,6 +1390,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1609,6 +1635,7 @@ type ActivitiesListViewProps = {
   projectDealName?: string;
   projectId: number;
   setHighlightsModalOpen: (open: boolean) =&gt; void;
+  setSelectedActivity?: React.Dispatch&lt;React.SetStateAction&lt;Activity | undefined&gt;&gt;;
 };
 &nbsp;
 const ActivitiesListView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
@@ -1617,6 +1644,7 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
   projectDealName,
   projectId,
   setHighlightsModalOpen,
+  setSelectedActivity,
 }: ActivitiesListViewProps): JSX.Element =&gt; {
   const { activeLocale, strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const mapDrawerRef = <span class="cstat-no" title="statement not covered" >useRef&lt;HTMLDivElement | null&gt;(null);</span>
@@ -1651,7 +1679,7 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
   const listResultsActivitiesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectActivityList(resultsRequestId));</span>
   const adminListResultsActivitiesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdminActivityList(resultsRequestId));</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute) {</span>
       const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
         requestAdminListActivities({ includeMedia: true, locale: activeLocale || undefined, projectId })
@@ -1663,7 +1691,11 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
       );
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
     }
-  }, [activeLocale, dispatch, filters, isAcceleratorRoute, projectId]);
+  }, [activeLocale, dispatch, isAcceleratorRoute, projectId]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    reload();</span>
+  }, [reload]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (listActivitiesRequest?.status === 'pending' || adminListActivitiesRequest?.status === 'pending') {</span>
@@ -1707,6 +1739,12 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >activities.find(<span class="fstat-no" title="function not covered" >(a</span>ctivity) =&gt; <span class="cstat-no" title="statement not covered" >activity.id === showActivityId)</span>,</span>
     [activities, showActivityId]
   );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (setSelectedActivity) {</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedActivity(shownActivity);</span>
+    }
+  }, [setSelectedActivity, shownActivity]);
 &nbsp;
   const paginatedActivities = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const startIndex = <span class="cstat-no" title="statement not covered" >(currentPage - 1) * itemsPerPage;</span>
@@ -2096,6 +2134,7 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
             onClickMediaItem={onClickMediaItem}
             projectId={projectId}
             setHoverFileCallback={setHoverFileCallback}
+            reload={reload}
           /&gt;
         ) : activities.length === 0 &amp;&amp; !busy ? (
           &lt;ActivitiesEmptyState projectId={projectId} /&gt;
@@ -2182,7 +2221,7 @@ export default ActivitiesListView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-31T15:44:47.745Z
+                at 2025-10-31T15:51:54.768Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
