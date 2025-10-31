@@ -44,6 +44,8 @@ ACTIVITY_PUBLISHED,Activité publiée,6ce064cc
 ACTIVITY_TYPE,Type d’activité,5f057b66
 ACTUAL,Réel,1235cf68
 AD_HOC,Ad Hoc,2acaf742
+AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Il n’y a actuellement aucune observation de parcelle ad hoc.,9ae089fc
+AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Les observations utilisant des parcelles ad hoc pour le suivi des plantes peuvent être enregistrées via les Observations de parcelles ad hoc dans l’application mobile.,f0775160
 AD_HOC_PLANT_MONITORING,Surveillance ad hoc des installations,589a6d6c
 ADD,Ajouter,2ffae546
 ADD_A_NURSERY,Ajouter une pépinière,758726df
