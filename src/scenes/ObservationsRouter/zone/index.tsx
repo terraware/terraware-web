@@ -140,7 +140,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   }, [activeLocale]);
 
   useEffect(() => {
-    if (!plantingZone) {
+    if (selectedOrganization && !plantingZone) {
       navigate(
         APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`).replace(
           ':observationId',
@@ -148,7 +148,7 @@ export default function ObservationPlantingZone(): JSX.Element {
         )
       );
     }
-  }, [navigate, observationId, plantingSiteId, plantingZone]);
+  }, [navigate, selectedOrganization, observationId, plantingSiteId, plantingZone]);
 
   const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string; totalLive?: number })[] = useMemo(
     () =>
