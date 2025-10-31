@@ -312,6 +312,7 @@ type ActivityDetailViewProps = {
   onClickMediaItem: (fileId: number) => () => void;
   projectId: number;
   setHoverFileCallback: (fileId: number, hover: boolean) => () => void;
+  reload?: () => void;
 };
 
 const ActivityDetailView = ({
@@ -321,6 +322,7 @@ const ActivityDetailView = ({
   onClickMediaItem,
   projectId,
   setHoverFileCallback,
+  reload,
 }: ActivityDetailViewProps): JSX.Element => {
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
@@ -357,11 +359,14 @@ const ActivityDetailView = ({
     if (publishActivityResponse?.status === 'success') {
       snackbar.toastSuccess(strings.ACTIVITY_PUBLISHED);
       setPublishActivityModalOpened(false);
+      if (reload) {
+        reload();
+      }
     }
     if (publishActivityResponse?.status === 'error') {
       snackbar.toastError();
     }
-  }, [publishActivityResponse, snackbar, strings]);
+  }, [publishActivityResponse, reload, snackbar, strings]);
 
   const isActivityVideoSupportEnabled = useMemo(() => isEnabled('Activity Video Support'), []);
 
@@ -504,14 +509,16 @@ const ActivityDetailView = ({
               size='medium'
               sx={{ whiteSpace: 'nowrap' }}
             />
-            <Button
-              disabled={!projectId}
-              label={strings.PUBLISH_ACTIVITY}
-              onClick={openPublishActivityModal}
-              size='medium'
-              sx={{ whiteSpace: 'nowrap' }}
-              priority='secondary'
-            />
+            {activity.verifiedBy && (
+              <Button
+                disabled={!projectId}
+                label={strings.PUBLISH_ACTIVITY}
+                onClick={openPublishActivityModal}
+                size='medium'
+                sx={{ whiteSpace: 'nowrap' }}
+                priority='secondary'
+              />
+            )}
           </Box>
         )}
       </Grid>
