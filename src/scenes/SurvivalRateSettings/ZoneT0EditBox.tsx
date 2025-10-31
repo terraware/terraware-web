@@ -115,7 +115,7 @@ const ZoneT0EditBox = ({
         );
         let zoneCopy: ZoneT0Data;
 
-        if (value) {
+        if (value !== undefined) {
           if (densityDataToUpdate?.plotDensity !== undefined || densityDataToUpdate?.density !== undefined) {
             const densityDataToUpdateCopy = {
               ...densityDataToUpdate,
@@ -259,7 +259,7 @@ const ZoneT0EditBox = ({
       const density = zoneToSave?.densityData.find(
         (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
       )?.density;
-      if (density) {
+      if (density !== undefined) {
         return roundToDecimal(density, 1);
       }
     },
