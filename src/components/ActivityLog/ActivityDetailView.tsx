@@ -256,10 +256,15 @@ const ActivityMediaItem = ({
   }
 
   return (
-    <Box display='inline-block' position='relative' sx={{ '&:hover .info-panel': { opacity: 1 } }} width='100%'>
+    <Box
+      display='inline-block'
+      position='relative'
+      id={`activity-media-item-${mediaFile.fileId}`}
+      sx={{ '&:hover .info-panel': { opacity: 1 } }}
+      width='100%'
+    >
       <img
         alt={mediaFile?.caption}
-        id={`activity-media-item-${mediaFile.fileId}`}
         onClick={onClickMediaItem(mediaFile.fileId)}
         onError={handleImageError}
         onMouseEnter={mediaItemHoverCallback(true)}
