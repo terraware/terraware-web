@@ -149,6 +149,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredFileId, setHoveredFileId] = useState<number | undefined>(undefined);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
 
   const highlightActivityId = useMemo(() => {
     const activityIdParam = query.get('highlightActivityId');
@@ -217,6 +218,10 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     [shownActivity, focusedFileId]
   );
 
+  const onSlideChange = useCallback((swiper: any) => {
+    setCurrentSlideIndex(swiper.realIndex);
+  }, []);
+
   const slides = useMemo(() => {
     const _slides: ActivityHighlightSlide[] = [];
 
@@ -251,10 +256,28 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     return _slides;
   }, [activities, projectId, selectedQuarterReport, strings]);
 
+  const currentSlide = slides[currentSlideIndex];
+
+  const activitiesVisibleOnMap = useMemo(
+    () =>
+      currentSlide.activity
+        ? [
+            {
+              ...currentSlide.activity,
+              media: currentSlide.activity.media.filter((item) => item.isCoverPhoto),
+            },
+          ]
+        : activities.map((activity) => ({
+            ...activity,
+            media: activity.media.filter((item) => item.isCoverPhoto),
+          })),
+    [activities, currentSlide.activity]
+  );
+
   return (
     <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>
       <MapSplitView
-        activities={activities}
+        activities={activitiesVisibleOnMap}
         drawerRef={mapDrawerRef}
         heightOffsetPx={HEIGHT_OFFSET_PX}
         mapRef={mapRef}
@@ -289,6 +312,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
               loop
               modules={[Mousewheel, Navigation, Pagination]}
               mousewheel
+              onSlideChange={onSlideChange}
               pagination={{ clickable: true }}
               slidesPerView={1}
               spaceBetween={30}
