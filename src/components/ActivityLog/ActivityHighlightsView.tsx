@@ -122,7 +122,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   const location = useStateLocation();
   const navigate = useSyncNavigate();
   const { scrollToTop } = useMapDrawer(mapDrawerRef);
-  const { fitBounds } = useMapUtils(mapRef);
+  const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { acceleratorReports } = useProjectReports(projectId);
 
   const selectedQuarterReport = useMemo(() => {
@@ -265,20 +265,49 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   );
 
   const onSlideChange = useCallback(
-    (_swiper: any) => {
+    (_swiper: SwiperType) => {
       setCurrentSlideIndex(_swiper.realIndex);
       if (selectedQuarterReport && _swiper.realIndex === 0) {
         setFocusedActivityId(undefined);
         setFocusedFileId(undefined);
+
+        // Zoom the map to show all activities
+        const allPoints = activitiesVisibleOnMap.flatMap((activity) =>
+          activity.media
+            .map((_media): MapPoint | undefined => {
+              if (!_media.isHiddenOnMap && _media.geolocation) {
+                return {
+                  lat: _media.geolocation.coordinates[1],
+                  lng: _media.geolocation.coordinates[0],
+                };
+              }
+            })
+            .filter((point): point is MapPoint => point !== undefined)
+        );
+
+        if (allPoints.length > 0) {
+          const bbox = getBoundingBoxFromPoints(allPoints);
+          fitBounds(bbox);
+        }
       } else {
         const currentSlide = slides[_swiper.realIndex];
         if (currentSlide.activity) {
           setFocusedActivityId(currentSlide.activity.id);
           setFocusedFileId(undefined);
         }
+
+        const viewState = getCurrentViewState();
+        if (currentSlide.coverPhoto && currentSlide.coverPhoto.geolocation && viewState) {
+          const media = currentSlide.coverPhoto;
+          jumpTo({
+            latitude: media.geolocation!.coordinates[1],
+            longitude: media.geolocation!.coordinates[0],
+            zoom: viewState.zoom,
+          });
+        }
       }
     },
-    [selectedQuarterReport, slides]
+    [activitiesVisibleOnMap, fitBounds, getCurrentViewState, jumpTo, selectedQuarterReport, slides]
   );
 
   const activityMarkerHighlighted = useCallback(
