@@ -324,7 +324,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
   const onActivityMarkerClick = useCallback(
     (activityId: number, fileId: number) => {
-      const targetSlideIndex = slides.findIndex((slide) => slide.activity?.id === activityId);
+      const targetSlideIndex = slides.findIndex((slide) => slide.activity?.payload.id === activityId);
       if (swiper && targetSlideIndex !== -1 && slides[targetSlideIndex]) {
         // use slideToLoop for loop mode
         swiper.slideToLoop(targetSlideIndex);
