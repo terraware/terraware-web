@@ -146,7 +146,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
         );
         let plotCopy: PlotT0Data;
 
-        if (value) {
+        if (value !== undefined) {
           if (densityDataToUpdate?.plotDensity !== undefined) {
             const densityDataToUpdateCopy = { ...densityDataToUpdate, plotDensity: Number(value) };
 
@@ -422,7 +422,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                       <td>
                         <Checkbox
                           id={`density-${withdrawnSpecies.speciesId}`}
-                          label={withdrawnSpecies.density}
+                          label={roundToDecimal(withdrawnSpecies.density, 1)}
                           name={`density-${withdrawnSpecies.speciesId}`}
                           value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
                           onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
