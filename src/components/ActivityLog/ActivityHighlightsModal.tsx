@@ -8,13 +8,13 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { Activity } from 'src/types/Activity';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
 import useQuery from 'src/utils/useQuery';
 import { getLocation } from 'src/utils/useStateLocation';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityHighlightsView from './ActivityHighlightsView';
+import { TypedActivity } from './types';
 
 const containerStyles = {
   '& .dialog-box': {
@@ -27,7 +27,7 @@ const containerStyles = {
 };
 
 type ActivityHighlightsModalProps = {
-  activities: Activity[];
+  activities: TypedActivity[];
   busy: boolean;
   onCancel?: () => void;
   open: boolean;
@@ -59,7 +59,10 @@ const ActivityHighlightsModal = ({
     return activityIdParam ? Number(activityIdParam) : undefined;
   }, [query]);
 
-  const highlightedActivities = useMemo(() => activities.filter((activity) => activity.isHighlight), [activities]);
+  const highlightedActivities = useMemo(
+    () => activities.filter((activity) => activity.payload.isHighlight),
+    [activities]
+  );
 
   const groupedActivities = useMemo(
     () => groupActivitiesByQuarter(highlightedActivities, strings),

@@ -6,8 +6,6 @@ import {
   CreateActivityRequestPayload,
   UpdateActivityMediaRequestPayload,
 } from 'src/types/Activity';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 import HttpService, { Response2 } from './HttpService';
 
@@ -53,31 +51,14 @@ type PublishActivityResponse =
  */
 const listActivities = async (
   projectId: number,
-  includeMedia?: boolean | undefined,
-  locale?: string,
-  search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder
+  includeMedia?: boolean | undefined
 ): Promise<Response2<ListActivitiesResponse>> => {
-  let searchOrderConfig: SearchOrderConfig | undefined;
-  if (sortOrder) {
-    searchOrderConfig = {
-      locale: locale ?? null,
-      sortOrder,
-    };
-  }
-
   const queryParams = {
     projectId: projectId.toString(),
     ...(includeMedia !== undefined && { includeMedia: includeMedia.toString() }),
   };
 
-  const response = await HttpService.root(ACTIVITIES_ENDPOINT).get2<ListActivitiesResponse>({ params: queryParams });
-
-  if (response?.data) {
-    response.data.activities = searchAndSort(response?.data?.activities || [], search, searchOrderConfig);
-  }
-
-  return response;
+  return await HttpService.root(ACTIVITIES_ENDPOINT).get2<ListActivitiesResponse>({ params: queryParams });
 };
 
 /**
@@ -94,33 +75,16 @@ const createActivity = async (activity: CreateActivityRequestPayload): Promise<R
  */
 const adminListActivities = async (
   projectId: number,
-  includeMedia?: boolean | undefined,
-  locale?: string,
-  search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder
+  includeMedia?: boolean | undefined
 ): Promise<Response2<AdminListActivitiesResponse>> => {
-  let searchOrderConfig: SearchOrderConfig | undefined;
-  if (sortOrder) {
-    searchOrderConfig = {
-      locale: locale ?? null,
-      sortOrder,
-    };
-  }
-
   const queryParams = {
     projectId: projectId.toString(),
     ...(includeMedia !== undefined && { includeMedia: includeMedia.toString() }),
   };
 
-  const response = await HttpService.root(ACTIVITIES_ADMIN_ENDPOINT).get2<AdminListActivitiesResponse>({
+  return await HttpService.root(ACTIVITIES_ADMIN_ENDPOINT).get2<AdminListActivitiesResponse>({
     params: queryParams,
   });
-
-  if (response?.data) {
-    response.data.activities = searchAndSort(response?.data?.activities || [], search, searchOrderConfig);
-  }
-
-  return response;
 };
 
 /**

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { Box, useTheme } from '@mui/material';
 import { PageForm } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
@@ -39,6 +40,7 @@ const EditPermanentPlotsTab = ({
   const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const { reload: reloadPlantingSiteData } = usePlantingSiteData();
+  const theme = useTheme();
 
   const [record, setRecord] = useForm<AssignSiteT0Data>({
     plantingSiteId,
@@ -130,6 +132,11 @@ const EditPermanentPlotsTab = ({
       {showSpeciesDensityWarningMessage && (
         <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} />
       )}
+
+      {!plotsWithObservations ||
+        (plotsWithObservations.length === 0 && (
+          <Box padding={theme.spacing(2)}>{strings.NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION}</Box>
+        ))}
 
       {plantingSiteId &&
         plotsWithObservations?.map((plot) => (

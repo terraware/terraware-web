@@ -869,6 +869,7 @@ LAND_USE_MODEL_TYPE,Type de modèle d'utilisation du sol,1b29eac7
 LANDOWNER,Propriétaire foncier,85b55541
 LANGUAGE,Langue,d8edd7b1
 LANGUAGE_AND_REGION,Langue et région,36cf8094
+LAST_CHANGES_MADE_ON,Dernières modifications effectuées le {0},201170f7
 LAST_EDITED,Dernière édition,df1e9e1d
 LAST_EDITED_BY,Dernière modification,0b49c0a8
 LAST_MODIFIED_BY,Dernière modification effectuée par,ee9c449a
@@ -1094,6 +1095,7 @@ NO_NOTIFICATIONS,Aucune notification à afficher,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer votre inventaire de pépinières, vous devez avoir une pépinière et des espèces dans Terraware. Seuls les administrateurs peuvent ajouter des pépinières ; veuillez contacter le vôtre pour obtenir de l'aide.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,Aucune observation n'a été planifiée,c05456cd
 NO_PARTICIPANT,Aucun participant,e9f659e8
+NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Lorsque des observations comprenant des placettes permanentes sont terminées, celles-ci apparaîtront ici, et les données t0 devront être définies pour toutes les placettes permanentes afin que les taux de survie puissent être calculés.",18f6a079
 NO_PLANTING_SITES_DESCRIPTION,Commencez par ajouter un site de plantation. L'ajout d'un site de plantation vous permettra de savoir où vont les semis après avoir quitté la pépinière.,b0104f6c
 NO_PLANTING_SITES_TITLE,"Un instant, ajoutons d'abord un site de plantation.",801ba14c
 NO_PLANTS,Aucune plante,6706c05b
@@ -2319,6 +2321,7 @@ YOU_ARE_ABOUT_TO_APPROVE_THIS_SPECIES_DELIVERABLE,Vous êtes sur le point d'appr
 YOU_ARE_ABOUT_TO_PUBLISH,Vous êtes sur le point de publier sur le portail des financeurs.,8adda943
 YOU_ARE_ABOUT_TO_SUBMIT_THIS_SPECIES_DELIVERABLE,Voulez-vous vraiment soumettre cette liste d'espèces pour approbation ?,47f7bdd3
 YOU_ARE_HERE,Vous êtes ici,183a5491
+YOU_HAVE_UNPUBLISHED_CHANGES,Vous avez des modifications non publiées,1825c403
 YOUR_APPLICATIONS,Vos candidatures,7da0f423
 YOUR_VIDEO_IS_PROCESSING,Votre vidéo est en cours de traitement et apparaîtra sous peu.,fb65d59c
 ZERO,zéro,16bd92ef

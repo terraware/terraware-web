@@ -3,6 +3,7 @@ import HttpService, { Response2 } from 'src/services/HttpService';
 
 // endpoints
 const FUNDER_ACTIVITIES_ENDPOINT = '/api/v1/funder/activities';
+export const FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT = '/api/v1/funder/activities/{activityId}/media/{fileId}';
 
 // responses
 type PublishFunderActivitiesResponse =

@@ -4,8 +4,10 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { PublishedReport } from 'src/types/AcceleratorReport';
@@ -34,6 +36,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const location = useStateLocation();
   const navigate = useSyncNavigate();
 
+  const funderPortalEnabled = isEnabled('Activity Log in Funder Portal');
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
 
   useEffect(() => {
@@ -71,8 +74,17 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
         label: strings.REPORT,
         children: <FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} />,
       },
+      ...(funderPortalEnabled
+        ? [
+            {
+              id: 'activities',
+              label: strings.PROJECT_ACTIVITY,
+              children: <ActivitiesListView projectId={projectDetails.projectId} />,
+            },
+          ]
+        : []),
     ];
-  }, [strings, projectDetails, publishedReports, selectedReport]);
+  }, [funderPortalEnabled, projectDetails, publishedReports, selectedReport, strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',

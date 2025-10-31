@@ -65,6 +65,7 @@ import ActivityMediaForm, { ActivityMediaItem, ExistingActivityMediaItem } from 
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
+import { TypedActivity } from './types';
 
 interface ActivityDetailsFormProps {
   activityId?: number;
@@ -94,7 +95,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const query = useQuery();
 
   const [source, setSource] = useState<string | null>();
-  const [activity, setActivity] = useState<Activity | null>(null);
+  const [activity, setActivity] = useState<TypedActivity>();
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
   const [mediaItems, setMediaItems] = useState<ActivityMediaItem[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -205,9 +206,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       // admin update activity
       const request = dispatch(
         requestAdminUpdateActivity({
-          activityId: activity.id,
+          activityId: activity.payload.id,
           activity: {
-            ...activity,
+            ...activity.payload,
             date: record?.date as string,
             description: record?.description as string,
             isHighlight: !!record?.isHighlight,
@@ -221,9 +222,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       // update activity
       const request = dispatch(
         requestUpdateActivity({
-          activityId: activity.id,
+          activityId: activity.payload.id,
           activity: {
-            ...activity,
+            ...activity.payload,
             date: record?.date as string,
             description: record?.description as string,
             type: record?.type as ActivityPayload['type'],
@@ -316,9 +317,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     if (getActivityRequest?.status === 'error' || adminGetActivityRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (getActivityRequest?.status === 'success' && getActivityRequest?.data) {
-      setActivity(getActivityRequest.data as Activity);
+      setActivity({ type: 'base', payload: getActivityRequest.data });
     } else if (adminGetActivityRequest?.status === 'success' && adminGetActivityRequest?.data) {
-      setActivity(adminGetActivityRequest.data as Activity);
+      setActivity({ type: 'admin', payload: adminGetActivityRequest.data });
     }
   }, [getActivityRequest, adminGetActivityRequest, snackbar, strings.GENERIC_ERROR]);
 
@@ -326,13 +327,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   useEffect(() => {
     if (isEditing && activity) {
       const activityRecord: Partial<FormRecord> = {
-        date: activity.date,
-        description: activity.description,
-        id: activity.id,
-        isHighlight: activity.isHighlight,
+        date: activity.payload.date,
+        description: activity.payload.description,
+        id: activity.payload.id,
+        isHighlight: activity.payload.isHighlight,
         projectId,
-        status: activity.status,
-        type: activity.type,
+        status: activity.type === 'admin' ? activity.payload.status : undefined,
+        type: activity.payload.type,
       };
       setRecord({ ...activityRecord });
     }
@@ -340,8 +341,8 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   // populate existing media files when editing
   useEffect(() => {
-    if (isEditing && activity && activity.media) {
-      const existingMediaItems: ActivityMediaItem[] = activity.media
+    if (isEditing && activity && activity.payload.media) {
+      const existingMediaItems: ActivityMediaItem[] = activity.payload.media
         .map((mediaItem) => ({
           data: mediaItem,
           isDeleted: false,
@@ -472,7 +473,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const onFileClicked = useCallback(
     (fileId: number) => () => {
       if (activity) {
-        const media = activity.media.find((mediaFile) => mediaFile.fileId === fileId);
+        const media = activity.payload.media.find((mediaFile) => mediaFile.fileId === fileId);
         const viewState = getCurrentViewState();
         if (media && !media.isHiddenOnMap && media.geolocation && viewState) {
           jumpTo({
@@ -591,7 +592,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                     <Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}>
                       <ActivityStatusBadges activity={activity} />
                     </Box>
-                    {activity.isHighlight && isActivityHighlightEnabled && (
+                    {activity.payload.isHighlight && isActivityHighlightEnabled && (
                       <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
                     )}
                   </Box>

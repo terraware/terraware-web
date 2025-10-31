@@ -870,6 +870,7 @@ LAND_USE_MODEL_TYPE,Tipo de modelo de uso del terreno,1b29eac7
 LANDOWNER,Propietario,85b55541
 LANGUAGE,Idioma,d8edd7b1
 LANGUAGE_AND_REGION,Idioma y región,36cf8094
+LAST_CHANGES_MADE_ON,Últimos cambios realizados el {0},201170f7
 LAST_EDITED,Última edición,df1e9e1d
 LAST_EDITED_BY,Última edición por,0b49c0a8
 LAST_MODIFIED_BY,Modificado por última vez por,ee9c449a
@@ -1095,6 +1096,7 @@ NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PARTICIPANT,Ningún participante,e9f659e8
+NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Cuando se completen las Observaciones que incluyan parcelas permanentes, estas aparecerán aquí y será necesario establecer los datos t0 para todas las parcelas permanentes para que se puedan calcular las Tasas de Supervivencia.",18f6a079
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
 NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",801ba14c
 NO_PLANTS,No hay plantas.,6706c05b
@@ -2320,6 +2322,7 @@ YOU_ARE_ABOUT_TO_APPROVE_THIS_SPECIES_DELIVERABLE,"Usted está a punto de aproba
 YOU_ARE_ABOUT_TO_PUBLISH,Va a publicar en el portal del financiador.,8adda943
 YOU_ARE_ABOUT_TO_SUBMIT_THIS_SPECIES_DELIVERABLE,¿Está seguro(a) de que desea enviar esta lista de especies para su aprobación?,47f7bdd3
 YOU_ARE_HERE,Se encuentra aquí,183a5491
+YOU_HAVE_UNPUBLISHED_CHANGES,Tiene cambios no publicados,1825c403
 YOUR_APPLICATIONS,Tus solicitudes,7da0f423
 YOUR_VIDEO_IS_PROCESSING,Su video se está procesando y aparecerá en breve.,fb65d59c
 ZERO,Cero,16bd92ef
