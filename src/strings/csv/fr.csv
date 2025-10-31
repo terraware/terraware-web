@@ -2056,6 +2056,7 @@ TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,La « germination/établissement » i
 TOOLTIP_HARDENING_OFF_QUANTITY,Les éléments qui déterminent qu'une plante est en phase d'endurcissement peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,L'identifiant de l'accession utilisée pour créer ce lot. Pas disponible pour les espèces qui n'ont pas d'accès.,a6a3a0af
 TOOLTIP_LIVE_PLANTS,Les plantes vivantes observées comprennent uniquement les plantes enregistrées comme vivantes ; elles n'incluent pas les plantes enregistrées comme préexistantes.,93092e08
+TOOLTIP_LIVE_PLANTS_ADHOC,Les plantes vivantes observées incluent uniquement les plantes enregistrées comme vivantes.,8f4746d4
 TOOLTIP_READY_TO_PLANT_QUANTITY,Les critères qui déterminent qu'une plante est « prête à être plantée » peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,Le nom latin binomial (genre + espèce) actuellement accepté dans la littérature botanique.,be7a8ced
 TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Catégories de la Liste Rouge de l'UICN,83da1fe2
@@ -2069,6 +2070,7 @@ TOOLTIP_TIME_ZONE_ORGANIZATION,"Nous utilisons les fuseaux horaires pour les not
 TOOLTIP_TIME_ZONE_PLANTING_SITE,Nous utilisons les fuseaux horaires pour les notifications et pour déterminer la date correcte pour votre région. Sélectionnez le fuseau horaire qui s'applique à ce site de plantation spécifique. Tous les travaux effectués sur ce site de plantation seront effectués dans ce fuseau horaire.,e474775a
 TOOLTIP_TIME_ZONE_SEEDBANK,Nous utilisons les fuseaux horaires pour les notifications et pour déterminer la date correcte pour votre région. Sélectionnez le fuseau horaire qui s'applique à cette banque de semences. Tous les travaux effectués dans cette banque de semences utiliseront ce fuseau horaire.,1b3db070
 TOOLTIP_TOTAL_PLANTS,"Le nombre total de plantes observées comprend les plantes vivantes et mortes d'espèces connues et inconnues, mais ne comprend pas les plantes enregistrées comme préexistantes.",d21e64f0
+TOOLTIP_TOTAL_PLANTS_ADHOC,"Le total des plantes observées inclut toutes les plantes vivantes et mortes, de toutes espèces connues ou inconnues.",947c9c88
 TOOLTIP_TOTAL_QUANTITY,La quantité totale est la somme des quantités non prêtes et prêtes.,4a6f0489
 TOOLTIP_TOTAL_WITHDRAWN,Le nombre total de plantes retirées pour n'importe quelle raison.,2de74db3
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Un plat qui contient un milieu de croissance composé d'agar solidifié.,7391d8f5

@@ -184,13 +184,13 @@ export default function OrgObservationsListView({
       {
         key: 'totalLive',
         name: strings.LIVE_PLANTS,
-        tooltipTitle: strings.TOOLTIP_LIVE_PLANTS,
+        tooltipTitle: strings.TOOLTIP_LIVE_PLANTS_ADHOC,
         type: 'number',
       },
       {
         key: 'totalPlants',
         name: strings.TOTAL_PLANTS,
-        tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS,
+        tooltipTitle: strings.TOOLTIP_TOTAL_PLANTS_ADHOC,
         type: 'number',
       },
       {
