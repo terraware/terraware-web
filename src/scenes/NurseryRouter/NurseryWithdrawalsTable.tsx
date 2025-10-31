@@ -11,7 +11,7 @@ import SearchFiltersWrapper, {
   SearchFiltersProps,
 } from 'src/components/common/SearchFiltersWrapper';
 import { ExportTableProps } from 'src/components/common/SearchFiltersWrapper/ExportTableComponent';
-import Table from 'src/components/common/table';
+import BackendSearchTable from 'src/components/common/table/BackendSearchTable';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -77,7 +77,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [rows, setRows] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
-  const [currentPage, setCurrentPage] = useState<number>();
   const [totalRowCount, setTotalRowCount] = useState<number>();
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>(DEFAULT_SORT_ORDER);
@@ -289,15 +288,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
-    if (selectedOrganization) {
-      const request = dispatch(
-        requestCountNurseryWithdrawals({ organizationId: selectedOrganization.id, searchCriteria: searchChildren })
-      );
-      setCountRequestId(request.requestId);
-    }
-  }, [dispatch, searchChildren, selectedOrganization]);
-
-  useEffect(() => {
     if (filterOptionsResult?.status === 'success' && filterOptionsResult?.data) {
       if (filterOptionsResult?.data) {
         setFilterOptions(filterOptionsResult.data);
@@ -313,50 +303,13 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [countResult]);
 
-  const retrieveWithdrawals = useCallback(
-    (limit: number, pageNumber: number) => {
-      if (selectedOrganization) {
-        const request = dispatch(
-          requestListNurseryWithdrawals({
-            organizationId: selectedOrganization.id,
-            searchCriteria: searchChildren,
-            sortOrder: searchSortOrder,
-            limit,
-            offset: (pageNumber - 1) * ITEMS_PER_PAGE,
-          })
-        );
-        setListRequestId(request.requestId);
-      }
-    },
-    [dispatch, searchChildren, searchSortOrder, selectedOrganization]
-  );
-
-  const onApplyFilters = useCallback(
-    (pageNumber?: number) => {
-      const newPageNumber = pageNumber || 1;
-      if (!pageNumber) {
-        setCurrentPage(newPageNumber);
-      }
-      retrieveWithdrawals(ITEMS_PER_PAGE, newPageNumber);
-    },
-    [retrieveWithdrawals]
-  );
-
   useEffect(() => {
     if (withdrawalsListResult?.status === 'success' && withdrawalsListResult?.data) {
       if (withdrawalsListResult?.data) {
         setRows(withdrawalsListResult.data);
       }
     }
-  }, [filters.destinationName?.values, withdrawalsListResult]);
-
-  const reload = useCallback(() => {
-    void onApplyFilters();
-  }, [onApplyFilters]);
-
-  useEffect(() => {
-    reload();
-  }, [searchChildren, reload]);
+  }, [withdrawalsListResult]);
 
   useEffect(() => {
     if (siteParam) {
@@ -445,12 +398,31 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     };
   }, [exportColumnHeaders, requestExportData, rows, strings, exportResult]);
 
-  const onPageChange = useCallback(
-    (newPage: number) => {
-      setCurrentPage(newPage);
-      void onApplyFilters(newPage);
+  const requestCount = useCallback(() => {
+    if (selectedOrganization) {
+      const request = dispatch(
+        requestCountNurseryWithdrawals({ organizationId: selectedOrganization.id, searchCriteria: searchChildren })
+      );
+      setCountRequestId(request.requestId);
+    }
+  }, [dispatch, searchChildren, selectedOrganization]);
+
+  const requestResults = useCallback(
+    (pageNumber: number) => {
+      if (selectedOrganization) {
+        const request = dispatch(
+          requestListNurseryWithdrawals({
+            organizationId: selectedOrganization.id,
+            searchCriteria: searchChildren,
+            sortOrder: searchSortOrder,
+            limit: ITEMS_PER_PAGE,
+            offset: (pageNumber - 1) * ITEMS_PER_PAGE,
+          })
+        );
+        setListRequestId(request.requestId);
+      }
     },
-    [onApplyFilters]
+    [dispatch, searchChildren, searchSortOrder, selectedOrganization]
   );
 
   return (
@@ -466,7 +438,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       </Grid>
 
       <Grid item xs={12}>
-        <Table
+        <BackendSearchTable
           id='withdrawal-log'
           columns={columns}
           rows={rows || []}
@@ -475,16 +447,15 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             searchSortOrder.field === 'batchWithdrawals.batch_project_name' ? 'project_names' : searchSortOrder.field
           }
           order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-          isPresorted={true}
           onSelect={onWithdrawalClicked}
           controlledOnSelect={true}
           sortHandler={onSortChange}
           isClickable={isClickable}
-          reloadData={reload}
-          onPageChange={onPageChange}
           totalRowCount={totalRowCount}
           maxItemsPerPage={ITEMS_PER_PAGE}
-          currentPage={currentPage}
+          requestResults={requestResults}
+          requestCount={requestCount}
+          searchNodePayload={searchChildren}
         />
       </Grid>
     </Grid>
