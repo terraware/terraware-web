@@ -181,7 +181,7 @@ const ActivityHighlightsModal = ({
             width='24px'
           />
         ) : (selectedGroup?.activities || []).length === 0 ? (
-          <Box sx={{ height: '50vh', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+          <Box sx={{ alignItems: 'center', display: 'flex', height: '50vh', justifyContent: 'center', width: '100%' }}>
             <Typography>{strings.NO_HIGHLIGHTS_YET}</Typography>
           </Box>
         ) : (
