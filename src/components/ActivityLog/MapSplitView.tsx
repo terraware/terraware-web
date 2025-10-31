@@ -19,11 +19,13 @@ import useMapUtils from 'src/components/NewMap/useMapUtils';
 import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useProjectPlantingSites } from 'src/hooks/useProjectPlantingSites';
 import { useLocalization } from 'src/providers';
-import { ActivityPayload, activityTypeColor } from 'src/types/Activity';
+import { activityTypeColor } from 'src/types/Activity';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import { TypedActivity } from './types';
+
 type MapSplitViewProps = {
-  activities?: ActivityPayload[];
+  activities?: TypedActivity[];
   activityMarkerHighlighted?: (activityId: number, fileId: number) => boolean;
   children: React.ReactNode;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
@@ -85,15 +87,15 @@ export default function MapSplitView({
     }
 
     return activities.map((activity): MapMarkerGroup => {
-      const markers = activity.media
+      const markers = activity.payload.media
         .map((media): MapMarker | undefined => {
           if (media.geolocation && !media.isHiddenOnMap) {
             return {
-              id: `activity-${activity.id}-media-${media.fileId}`,
+              id: `activity-${activity.payload.id}-media-${media.fileId}`,
               longitude: media.geolocation.coordinates[0],
               latitude: media.geolocation.coordinates[1],
-              onClick: onActivityMarkerClickCallback(activity.id, media.fileId),
-              selected: activityMarkerHighlighted?.(activity.id, media.fileId) ?? false,
+              onClick: onActivityMarkerClickCallback(activity.payload.id, media.fileId),
+              selected: activityMarkerHighlighted?.(activity.payload.id, media.fileId) ?? false,
             };
           } else {
             return undefined;
@@ -102,11 +104,11 @@ export default function MapSplitView({
         .filter((marker): marker is MapMarker => marker !== undefined);
 
       return {
-        label: `Activity ${activity.id}`,
+        label: `Activity ${activity.payload.id}`,
         markers,
-        markerGroupId: `activity-${activity.id}`,
+        markerGroupId: `activity-${activity.payload.id}`,
         style: {
-          iconColor: activityTypeColor(activity.type),
+          iconColor: activityTypeColor(activity.payload.type),
           iconName: 'iconPhoto',
           type: 'icon',
         },

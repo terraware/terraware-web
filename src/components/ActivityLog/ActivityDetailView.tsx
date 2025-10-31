@@ -25,15 +25,16 @@ import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { Activity, ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ActivityStatusBadges from './ActivityStatusBadges';
+import { TypedActivity } from './types';
 
 type ActivityMediaItemProps = {
-  activity: Activity;
+  activity: TypedActivity;
   focusedFileId?: number;
   hoveredFileId?: number;
   mediaFile: ActivityMediaFile;
@@ -159,11 +160,11 @@ const ActivityMediaItem = ({
 
   const imageSrc = useMemo(
     () =>
-      ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+      ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
         '{fileId}',
         mediaFile.fileId.toString()
       ),
-    [activity.id, mediaFile.fileId]
+    [activity.payload.id, mediaFile.fileId]
   );
 
   const mediaItemHoverCallback = useCallback(
@@ -179,19 +180,19 @@ const ActivityMediaItem = ({
     (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
       event?.stopPropagation();
 
-      const imageURL = ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+      const imageURL = ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
         '{fileId}',
         mediaFile.fileId.toString()
       );
 
       const link = document.createElement('a');
       link.href = imageURL;
-      link.download = `activity-${activity.id}-image-${mediaFile.fileId}.jpg`;
+      link.download = `activity-${activity.payload.id}-image-${mediaFile.fileId}.jpg`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     },
-    [activity.id, mediaFile.fileId]
+    [activity.payload.id, mediaFile.fileId]
   );
 
   const onClickExpand = useCallback(
@@ -208,7 +209,7 @@ const ActivityMediaItem = ({
       // request a small version of the image to check the error status code
       const request = dispatch(
         requestGetActivityMedia({
-          activityId: activity.id,
+          activityId: activity.payload.id,
           fileId: mediaFile.fileId,
           maxHeight: 1,
           maxWidth: 1,
@@ -216,7 +217,7 @@ const ActivityMediaItem = ({
       );
       setGetActivityMediaRequestId(request.requestId);
     }
-  }, [activity.id, dispatch, mediaFile.fileId, mediaFile.type]);
+  }, [activity.payload.id, dispatch, mediaFile.fileId, mediaFile.type]);
 
   useEffect(() => {
     if (getActivityMediaRequest?.status === 'error' && getActivityMediaRequest?.data) {
@@ -285,7 +286,7 @@ const ActivityMediaItem = ({
 
       <Box className='info-panel' onClick={onClickMediaItem(mediaFile.fileId)} sx={infoPanelStyles}>
         <Typography component='div' fontSize='16px' lineHeight='16px'>
-          {activity.date}
+          {activity.payload.date}
         </Typography>
 
         {mediaFile.caption && (
@@ -311,7 +312,7 @@ const ActivityMediaItem = ({
 };
 
 type ActivityDetailViewProps = {
-  activity: Activity;
+  activity: TypedActivity;
   focusedFileId?: number;
   hoveredFileId?: number;
   onClickMediaItem: (fileId: number) => () => void;
@@ -339,7 +340,9 @@ const ActivityDetailView = ({
   const theme = useTheme();
   const { goToAcceleratorActivityEdit, goToActivityEdit } = useNavigateTo();
 
-  const verifiedByUser = useAppSelector(selectUser(activity.verifiedBy));
+  const verifiedByUser = useAppSelector(
+    selectUser(activity.type === 'admin' ? activity.payload.verifiedBy : undefined)
+  );
   const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
 
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
@@ -355,10 +358,10 @@ const ActivityDetailView = ({
   const snackbar = useSnackbar();
 
   useEffect(() => {
-    if (activity?.verifiedBy && !verifiedByUser) {
-      void dispatch(requestGetUser(activity?.verifiedBy));
+    if (activity.type === 'admin' && activity?.payload?.verifiedBy && !verifiedByUser) {
+      void dispatch(requestGetUser(activity?.payload?.verifiedBy));
     }
-  }, [activity?.verifiedBy, dispatch, verifiedByUser]);
+  }, [activity, dispatch, verifiedByUser]);
 
   useEffect(() => {
     if (publishActivityResponse?.status === 'success') {
@@ -383,7 +386,10 @@ const ActivityDetailView = ({
     return verifiedByName ? strings.formatString(strings.VERIFIED_BY, verifiedByName) : '';
   }, [strings, verifiedByUser]);
 
-  const activityType = useMemo(() => activityTypeLabel(activity.type, strings), [activity.type, strings]);
+  const activityType = useMemo(
+    () => activityTypeLabel(activity.payload.type, strings),
+    [activity.payload.type, strings]
+  );
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -400,16 +406,16 @@ const ActivityDetailView = ({
   );
 
   const goToProjectActivityEdit = useCallback(() => {
-    if (!projectId || !activity.id) {
+    if (!projectId || !activity.payload.id) {
       return;
     }
 
     if (isAcceleratorRoute) {
-      goToAcceleratorActivityEdit(projectId, activity.id);
+      goToAcceleratorActivityEdit(projectId, activity.payload.id);
     } else {
-      goToActivityEdit(projectId, activity.id);
+      goToActivityEdit(projectId, activity.payload.id);
     }
-  }, [goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId, activity.id]);
+  }, [activity, goToAcceleratorActivityEdit, goToActivityEdit, isAcceleratorRoute, projectId]);
 
   const handleCloseLightbox = useCallback(() => {
     setLightboxMediaFileId(undefined);
@@ -417,25 +423,25 @@ const ActivityDetailView = ({
   }, []);
 
   const lightboxMediaFile = useMemo(
-    () => activity.media.find((item) => item.fileId === lightboxMediaFileId),
-    [activity.media, lightboxMediaFileId]
+    () => activity.payload.media.find((item) => item.fileId === lightboxMediaFileId),
+    [activity, lightboxMediaFileId]
   );
 
   const lightboxImageSrc = useMemo(
     () =>
       lightboxMediaFile
-        ? ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+        ? ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
             '{fileId}',
             lightboxMediaFile.fileId.toString()
           )
         : '',
-    [activity.id, lightboxMediaFile]
+    [activity.payload.id, lightboxMediaFile]
   );
 
   useEffect(() => {
     if (activity && lightboxMediaFile?.type === 'Video') {
       const request = dispatch(
-        requestGetActivityMediaStream({ activityId: activity.id, fileId: lightboxMediaFile.fileId })
+        requestGetActivityMediaStream({ activityId: activity.payload.id, fileId: lightboxMediaFile.fileId })
       );
       setGetActivityMediaStreamRequestId(request.requestId);
     }
@@ -462,9 +468,9 @@ const ActivityDetailView = ({
   }, []);
 
   const publishActivity = useCallback(() => {
-    const request = dispatch(requestPublishActivity(activity.id.toString()));
+    const request = dispatch(requestPublishActivity(activity.payload.id.toString()));
     setRequestId(request.requestId);
-  }, [activity.id, dispatch]);
+  }, [activity.payload.id, dispatch]);
 
   return (
     <Grid container paddingY={theme.spacing(2)} spacing={2} textAlign='left'>
@@ -491,7 +497,7 @@ const ActivityDetailView = ({
               type='destructive'
             />,
           ]}
-          message={strings.formatString(strings.PUBLISH_ACTIVITY_MODAL_MESSAGE, activityType, activity.date)}
+          message={strings.formatString(strings.PUBLISH_ACTIVITY_MODAL_MESSAGE, activityType, activity.payload.date)}
         />
       )}
       <Grid item md={4} xs={12}>
@@ -536,7 +542,7 @@ const ActivityDetailView = ({
           <Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}>
             {isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}
           </Box>
-          {activity.isHighlight && isActivityHighlightEnabled && isAcceleratorRoute && (
+          {activity.payload.isHighlight && isActivityHighlightEnabled && isAcceleratorRoute && (
             <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
           )}
         </Box>
@@ -544,15 +550,15 @@ const ActivityDetailView = ({
 
       <Grid item xs={12}>
         <Typography>
-          {activity.date} {verifiedByLabel}
+          {activity.payload.date} {verifiedByLabel}
         </Typography>
       </Grid>
 
       <Grid item xs={12}>
-        <Typography>{activity.description}</Typography>
+        <Typography>{activity.payload.description}</Typography>
       </Grid>
 
-      {activity.media
+      {activity.payload.media
         .filter((mediaFile) => mediaFile.type === 'Photo' || isActivityVideoSupportEnabled)
         .map((mediaFile, index) => (
           <Grid item key={index} lg={6} xs={12}>

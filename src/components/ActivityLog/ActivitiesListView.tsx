@@ -52,9 +52,10 @@ import ActivityHighlightsModal from './ActivityHighlightsModal';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DateRange from './FilterDateRange';
 import MapSplitView from './MapSplitView';
+import { TypedActivity } from './types';
 
 type ActivityListItemProps = {
-  activity: Activity;
+  activity: TypedActivity;
   focused?: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
@@ -69,25 +70,25 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
   const { isFunderRoute } = useFunderPortal();
   const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
-  const coverPhoto = useMemo(() => activity.media.find((file) => file.isCoverPhoto), [activity.media]);
+  const coverPhoto = useMemo(() => activity.payload.media.find((file) => file.isCoverPhoto), [activity]);
 
-  const activityType = useMemo(() => activityTypeLabel(activity.type, strings), [activity.type, strings]);
+  const activityType = useMemo(() => activityTypeLabel(activity.payload.type, strings), [activity, strings]);
 
   const coverPhotoURL = useMemo(() => {
     return coverPhoto
-      ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.id.toString()).replace(
+      ? `${ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activity.payload.id.toString()).replace(
           '{fileId}',
           coverPhoto.fileId.toString()
         )}?maxHeight=200&maxWidth=200`
       : '/assets/activity-media.svg';
-  }, [activity.id, coverPhoto]);
+  }, [activity, coverPhoto]);
 
   return (
     <Grid
       container
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      id={`activity-log-item-${activity.id}`}
+      id={`activity-log-item-${activity.payload.id}`}
       onClick={onClick}
       paddingY={theme.spacing(2)}
       sx={{
@@ -117,13 +118,13 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
           </Typography>
           {isDesktop && (
             <Grid item xs='auto'>
-              <Typography>{activity.date}</Typography>
+              <Typography>{activity.payload.date}</Typography>
             </Grid>
           )}
         </Box>
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
           <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}</Box>
-          {activity.isHighlight && (isAcceleratorRoute || isFunderRoute) && isActivityHighlightEnabled && (
+          {activity.payload.isHighlight && (isAcceleratorRoute || isFunderRoute) && isActivityHighlightEnabled && (
             <Tooltip title={strings.HIGHLIGHTED_ACTIVITY}>
               <Box display='inline-flex'>
                 <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
@@ -132,8 +133,8 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
           )}
         </Box>
 
-        <Typography>{activity.description}</Typography>
-        {!isDesktop && <Typography>{activity.date}</Typography>}
+        <Typography>{activity.payload.description}</Typography>
+        {!isDesktop && <Typography>{activity.payload.date}</Typography>}
       </Grid>
     </Grid>
   );
@@ -173,7 +174,7 @@ const ActivitiesListView = ({
   const [initialized, setInitialized] = useState(false);
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [requestId, setRequestId] = useState('');
-  const [activities, setActivities] = useState<Activity[]>([]);
+  const [activities, setActivities] = useState<TypedActivity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
   const [hoveredActivityId, setHoveredActivityId] = useState<number | undefined>(undefined);
@@ -235,8 +236,11 @@ const ActivitiesListView = ({
     if (listActivitiesRequest?.status === 'error' || adminListActivitiesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
       setInitialized(true);
-    } else if (listActivitiesRequest?.status === 'success' || adminListActivitiesRequest?.status === 'success') {
-      setActivities((listActivitiesRequest?.data || adminListActivitiesRequest?.data || []) as Activity[]);
+    } else if (listActivitiesRequest?.status === 'success') {
+      setActivities(listActivitiesRequest?.data?.map((payload) => ({ type: 'base', payload })) ?? []);
+      setInitialized(true);
+    } else if (adminListActivitiesRequest?.status === 'success') {
+      setActivities(adminListActivitiesRequest?.data?.map((payload) => ({ type: 'admin', payload })) ?? []);
       setInitialized(true);
     }
   }, [
@@ -267,7 +271,7 @@ const ActivitiesListView = ({
   }, [showActivityId]);
 
   const shownActivity = useMemo(
-    () => activities.find((activity) => activity.id === showActivityId),
+    () => activities.find((activity) => activity.payload.id === showActivityId),
     [activities, showActivityId]
   );
 
@@ -290,7 +294,7 @@ const ActivitiesListView = ({
 
   useEffect(() => {
     if (shownActivity) {
-      const points = shownActivity.media
+      const points = shownActivity.payload.media
         .map((_media): MapPoint | undefined => {
           if (!_media.isHiddenOnMap && _media.geolocation) {
             return {
@@ -412,7 +416,7 @@ const ActivitiesListView = ({
           return;
         }
         setFocusedFileId(fileId);
-        const media = shownActivity.media.find((mediaFile) => mediaFile.fileId === fileId);
+        const media = shownActivity.payload.media.find((mediaFile) => mediaFile.fileId === fileId);
         const viewState = getCurrentViewState();
         if (media && !media.isHiddenOnMap && media.geolocation && viewState) {
           jumpTo({
@@ -648,11 +652,11 @@ const ActivitiesListView = ({
                     {groupActivities.map((activity) => (
                       <ActivityListItem
                         activity={activity}
-                        focused={activity.id === focusedActivityId || activity.id === hoveredActivityId}
-                        key={activity.id}
-                        onClick={getOnClickActivityListItem(activity.id)}
-                        onMouseEnter={setHoverActivityCallback(activity.id, true)}
-                        onMouseLeave={setHoverActivityCallback(activity.id, false)}
+                        focused={activity.payload.id === focusedActivityId || activity.payload.id === hoveredActivityId}
+                        key={activity.payload.id}
+                        onClick={getOnClickActivityListItem(activity.payload.id)}
+                        onMouseEnter={setHoverActivityCallback(activity.payload.id, true)}
+                        onMouseLeave={setHoverActivityCallback(activity.payload.id, false)}
                       />
                     ))}
                   </Fragment>
