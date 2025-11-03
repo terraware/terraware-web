@@ -583,7 +583,9 @@ const ActivityDetailView = ({
               playbackToken={mediaStream.playbackToken}
               style={{
                 aspectRatio: 16 / 9,
-                width: '100%',
+                height: '80vh',
+                maxWidth: '80vw',
+                width: 'auto',
               }}
             />
           ) : undefined
