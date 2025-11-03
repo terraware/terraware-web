@@ -5,11 +5,16 @@ import { SelectT, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
+import ActivityHighlightsContent from 'src/components/ActivityLog/ActivityHighlightsContent';
+import { TypedActivity } from 'src/components/ActivityLog/types';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
 import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { requestListFunderActivities } from 'src/redux/features/funder/activities/funderActivitiesAsyncThunks';
+import { selectListFunderActivitiesRequest } from 'src/redux/features/funder/activities/funderActivitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { PublishedReport } from 'src/types/AcceleratorReport';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
@@ -35,6 +40,22 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const query = useQuery();
   const location = useStateLocation();
   const navigate = useSyncNavigate();
+  const [requestId, setRequestId] = useState('');
+  const [activities, setActivities] = useState<TypedActivity[]>([]);
+  const dispatch = useAppDispatch();
+
+  const funderListActivitiesRequest = useAppSelector(selectListFunderActivitiesRequest(requestId));
+
+  useEffect(() => {
+    const request = dispatch(requestListFunderActivities(projectDetails.projectId));
+    setRequestId(request.requestId);
+  }, [dispatch, projectDetails.projectId]);
+
+  useEffect(() => {
+    if (funderListActivitiesRequest?.status === 'success') {
+      setActivities(funderListActivitiesRequest?.data?.map((payload) => ({ type: 'funder', payload })) ?? []);
+    }
+  }, [funderListActivitiesRequest]);
 
   const funderPortalEnabled = isEnabled('Activity Log in Funder Portal');
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
@@ -77,6 +98,13 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
       ...(funderPortalEnabled
         ? [
             {
+              id: 'quarterlyHighlights',
+              label: strings.QUARTERLY_HIGHLIGHTS,
+              children: (
+                <ActivityHighlightsContent activities={activities} busy={false} projectId={projectDetails.projectId} />
+              ),
+            },
+            {
               id: 'activities',
               label: strings.PROJECT_ACTIVITY,
               children: <ActivitiesListView projectId={projectDetails.projectId} />,
@@ -84,7 +112,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
           ]
         : []),
     ];
-  }, [funderPortalEnabled, projectDetails, publishedReports, selectedReport, strings]);
+  }, [funderPortalEnabled, projectDetails, publishedReports, selectedReport, strings, activities]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
