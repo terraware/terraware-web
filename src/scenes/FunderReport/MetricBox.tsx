@@ -67,7 +67,7 @@ const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) => 
       <Box display='flex' marginTop={1} paddingRight={isDesktop ? 3 : 0} marginRight={3}>
         <Box flex='0 0 50%'>
           <Typography fontWeight={600}>
-            {year} {strings.TARGET}
+            {quarter} {year} {strings.TARGET}
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
             {metric.target !== undefined && numberFormatter.format(metric.target)} {metric.target ? addPercentSign : ''}
