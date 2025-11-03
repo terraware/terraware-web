@@ -361,7 +361,7 @@ const ZoneT0EditBox = ({
                         toT={toTSpecies}
                         selectStyles={{
                           inputContainer: { width: '450px', 'max-width': '100%' },
-                          optionsContainer: { width: '450px', 'max-width': '100%' },
+                          optionsContainer: { width: '450px', 'max-width': '100%', maxHeight: '175px' },
                         }}
                         sx={{
                           '.textfield-container': {

@@ -455,7 +455,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                             toT={toTSpecies}
                             selectStyles={{
                               inputContainer: { width: '450px', 'max-width': '100%' },
-                              optionsContainer: { width: '450px', 'max-width': '100%' },
+                              optionsContainer: { width: '450px', 'max-width': '100%', maxHeight: '175px' },
                             }}
                             sx={{
                               '.textfield-container': {
