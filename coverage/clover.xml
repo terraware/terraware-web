@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1762174171564" clover="3.2.0">
-  <project timestamp="1762174171564" name="All files">
+<coverage generated="1762193231786" clover="3.2.0">
+  <project timestamp="1762193231786" name="All files">
     <metrics statements="35513" coveredstatements="1363" conditionals="24826" coveredconditionals="393" methods="10868" coveredmethods="213" elements="71207" coveredelements="1969" complexity="0" loc="35513" ncloc="35513" packages="281" files="1377" classes="1377"/>
     <package name="src">
       <metrics statements="178" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -38199,14 +38199,14 @@
         <line num="435" count="0" type="stmt"/>
         <line num="440" count="1" type="stmt"/>
         <line num="443" count="0" type="stmt"/>
-        <line num="488" count="0" type="stmt"/>
-        <line num="491" count="1" type="stmt"/>
-        <line num="492" count="0" type="stmt"/>
-        <line num="496" count="1" type="stmt"/>
-        <line num="497" count="0" type="stmt"/>
-        <line num="501" count="1" type="stmt"/>
-        <line num="502" count="0" type="stmt"/>
-        <line num="510" count="1" type="stmt"/>
+        <line num="496" count="0" type="stmt"/>
+        <line num="499" count="1" type="stmt"/>
+        <line num="500" count="0" type="stmt"/>
+        <line num="504" count="1" type="stmt"/>
+        <line num="505" count="0" type="stmt"/>
+        <line num="509" count="1" type="stmt"/>
+        <line num="510" count="0" type="stmt"/>
+        <line num="518" count="1" type="stmt"/>
       </file>
       <file name="UserInternalInterestsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/UserInternalInterestsService.ts">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
