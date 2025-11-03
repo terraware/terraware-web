@@ -466,22 +466,30 @@ const getPlotsWithObservations = async <T extends SearchResponseElement>(
           operation: 'not',
           child: {
             operation: 'field',
-            field: 'observationPlots.completedTime',
-            type: 'Exact',
-            values: [null],
-          },
-        },
-        {
-          operation: 'not',
-          child: {
-            operation: 'field',
             field: 'plantingSubzone_id',
             type: 'Exact',
             values: [null],
           },
         },
+        {
+          operation: 'field',
+          field: 'observationPlots.observation_state',
+          type: 'Exact',
+          values: ['Completed', 'Abandoned'],
+        },
       ],
     },
+    filters: [
+      {
+        prefix: 'observationPlots',
+        search: {
+          operation: 'field',
+          field: 'observation_state',
+          type: 'Exact',
+          values: ['Completed', 'Abandoned'],
+        },
+      },
+    ],
     count: 1000,
   };
 
