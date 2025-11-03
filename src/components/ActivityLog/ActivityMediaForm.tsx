@@ -31,7 +31,7 @@ export type ActivityMediaItem = NewActivityMediaItem | ExistingActivityMediaItem
 
 const isVideoFile = (file: File): boolean => file.type.startsWith('video/');
 
-const MAX_FILES = 20;
+const MAX_FILES = 100;
 
 type ActivityPhotoPreviewProps = {
   activityId?: number;
