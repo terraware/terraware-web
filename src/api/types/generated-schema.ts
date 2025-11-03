@@ -4746,6 +4746,7 @@ export interface components {
             capturedDate: string;
             /** Format: int64 */
             fileId: number;
+            fileName: string;
             geolocation?: components["schemas"]["Point"];
             isCoverPhoto: boolean;
             isHiddenOnMap: boolean;
@@ -4784,6 +4785,7 @@ export interface components {
             createdTime: string;
             /** Format: int64 */
             fileId: number;
+            fileName: string;
             geolocation?: components["schemas"]["Point"];
             isCoverPhoto: boolean;
             isHiddenOnMap: boolean;
@@ -6615,6 +6617,7 @@ export interface components {
             capturedDate: string;
             /** Format: int64 */
             fileId: number;
+            fileName: string;
             geolocation?: components["schemas"]["Point"];
             isCoverPhoto: boolean;
             isHiddenOnMap: boolean;
