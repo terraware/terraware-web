@@ -182,6 +182,23 @@ const ActivityPhotoPreview = ({
         <Grid item sm='auto' xs={12}>
           <Box position='relative'>
             <PhotoPreview imgUrl={url} includeTrashIcon={false} onTrashClick={onDelete} />
+            {isVideo && (
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  height: '100%',
+                  justifyContent: 'center',
+                  left: 0,
+                  pointerEvents: 'none',
+                  position: 'absolute',
+                  top: 0,
+                  width: '100%',
+                }}
+              >
+                <img alt='video file' src='/assets/video-icon.svg' style={{ height: '56px', width: '56px' }} />
+              </Box>
+            )}
             {showPlaceholder && (
               <Box
                 sx={{
