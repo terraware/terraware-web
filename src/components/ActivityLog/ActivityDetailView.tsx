@@ -181,18 +181,18 @@ const ActivityMediaItem = ({
       event?.stopPropagation();
 
       const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
-      const imageURL = baseUrl
+      const imageURL = `${baseUrl
         .replace('{activityId}', activity.payload.id.toString())
-        .replace('{fileId}', mediaFile.fileId.toString());
+        .replace('{fileId}', mediaFile.fileId.toString())}?raw=true`;
 
       const link = document.createElement('a');
       link.href = imageURL;
-      link.download = `activity-${activity.payload.id}-image-${mediaFile.fileId}.jpg`;
+      link.download = mediaFile.fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     },
-    [activity, mediaFile.fileId]
+    [activity.payload.id, activity.type, mediaFile.fileId, mediaFile.fileName]
   );
 
   const onClickExpand = useCallback(
