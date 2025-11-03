@@ -349,6 +349,7 @@ export default function ActivityMediaForm({
           isCoverPhoto: false,
           isHiddenOnMap: false,
           file,
+          fileName: file.name,
           listPosition: mediaItems.length + index + 1,
           type: isVideoFile(file) ? 'Video' : 'Photo',
         },
