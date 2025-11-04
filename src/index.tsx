@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Route, BrowserRouter as Router, Routes } from 'react-router';
+import { RouterProvider, createBrowserRouter } from 'react-router';
 
 import { ThemeProvider } from '@mui/material';
 
@@ -8,10 +8,28 @@ import App from './App';
 import AppError from './AppError';
 import { APP_PATHS } from './constants';
 import './index.css';
-import './index.css';
 import reportWebVitals from './reportWebVitals';
 import strings from './strings';
 import theme from './theme';
+
+const router = createBrowserRouter([
+  {
+    path: APP_PATHS.ERROR,
+    element: (
+      <ThemeProvider theme={theme}>
+        <AppError />
+      </ThemeProvider>
+    ),
+  },
+  {
+    path: '*',
+    element: (
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    ),
+  },
+]);
 
 const root = createRoot(document.getElementById('root')!);
 
@@ -22,27 +40,7 @@ root.render(
   // of the HTML which is later parsed by PagedJS
   // <React.StrictMode>
   <React.Suspense fallback={strings.LOADING}>
-    <Router>
-      <Routes>
-        <Route
-          path={APP_PATHS.ERROR}
-          element={
-            <ThemeProvider theme={theme}>
-              <AppError />
-            </ThemeProvider>
-          }
-        />
-
-        <Route
-          path={'*'}
-          element={
-            <ThemeProvider theme={theme}>
-              <App />
-            </ThemeProvider>
-          }
-        />
-      </Routes>
-    </Router>
+    <RouterProvider router={router} />
   </React.Suspense>
   // </React.StrictMode>
 );
