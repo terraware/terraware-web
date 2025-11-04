@@ -579,6 +579,9 @@ const ActivityDetailView = ({
             <MuxPlayer
               accentColor={theme.palette.TwClrBgBrand}
               autoPlay
+              metadata={{
+                video_title: `Activity media File ID ${lightboxMediaFile?.fileId ?? '?'} for Activity ID ${activity.payload.id} for Project ID ${projectId}`,
+              }}
               playbackId={mediaStream.playbackId}
               playbackToken={mediaStream.playbackToken}
               style={{
