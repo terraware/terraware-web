@@ -8,14 +8,14 @@ const appVersion = process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || packageJs
 const applicationId = process.env.REACT_APP_DATADOG_APP_ID;
 const clientToken = process.env.REACT_APP_DATADOG_CLIENT_TOKEN;
 
-const setupRum = () => {
-  if (tier === 'test' || !appVersion || !applicationId || !clientToken) {
-    return;
-  }
+export const canEnableRum = (): boolean => {
+  return !(tier === 'test' || !appVersion || !applicationId || !clientToken);
+};
 
+const setupRum = () => {
   datadogRum.init({
-    applicationId,
-    clientToken,
+    applicationId: applicationId as string,
+    clientToken: clientToken as string,
     site: 'us3.datadoghq.com',
     service: 'terraware-web',
     env: tier,

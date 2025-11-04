@@ -10,11 +10,13 @@ import AppError from './AppError';
 import { APP_PATHS } from './constants';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import setupRum from './setupRum';
+import setupRum, { canEnableRum } from './setupRum';
 import strings from './strings';
 import theme from './theme';
 
-setupRum();
+if (canEnableRum()) {
+  setupRum();
+}
 
 const routes = [
   {
@@ -35,8 +37,7 @@ const routes = [
   },
 ];
 
-const router =
-  process.env.REACT_APP_TERRAWARE_TIER === 'test' ? createBrowserRouter(routes) : createDatadogRouter(routes);
+const router = canEnableRum() ? createDatadogRouter(routes) : createBrowserRouter(routes);
 
 const root = createRoot(document.getElementById('root')!);
 
