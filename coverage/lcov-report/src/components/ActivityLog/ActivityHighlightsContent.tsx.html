@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -227,7 +227,32 @@
 <a name='L162'></a><a href='#L162'>162</a>
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
-<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -260,6 +285,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -267,10 +294,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -329,6 +352,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -407,6 +441,12 @@ import useStateLocation from 'src/utils/useStateLocation';
 import ActivityHighlightsView from './ActivityHighlightsView';
 import { TypedActivity } from './types';
 &nbsp;
+export type QuarterDropdownData = {
+  dropdownOptions: { label: string; value: string }[];
+  selectedQuarter: string | undefined;
+  onChangeQuarter: (value: string | undefined) =&gt; void;
+};
+&nbsp;
 type ActivityHighlightsContentProps = {
   activities: TypedActivity[];
   busy: boolean;
@@ -414,6 +454,8 @@ type ActivityHighlightsContentProps = {
   showCloseButton?: boolean;
   onClose?: () =&gt; void;
   title?: string;
+  showDropdownInline?: boolean;
+  onDropdownDataReady?: (data: QuarterDropdownData) =&gt; void;
 };
 &nbsp;
 const ActivityHighlightsContent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
@@ -423,6 +465,8 @@ const ActivityHighlightsContent = <span class="cstat-no" title="statement not co
   showCloseButton = <span class="branch-0 cbranch-no" title="branch not covered" >false,</span>
   onClose,
   title = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span>
+  showDropdownInline = <span class="branch-0 cbranch-no" title="branch not covered" >true,</span>
+  onDropdownDataReady,
 }: ActivityHighlightsContentProps) =&gt; {
   const { activeLocale, strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
@@ -431,10 +475,6 @@ const ActivityHighlightsContent = <span class="cstat-no" title="statement not co
   const { acceleratorReports, busy: isLoadingReports } = <span class="cstat-no" title="statement not covered" >useProjectReports(projectId);</span>
 &nbsp;
   const [selectedQuarter, setSelectedQuarter] = <span class="cstat-no" title="statement not covered" >useState&lt;string | undefined&gt;(undefined);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    console.log('activities', activities);</span>
-  }, [activities]);
 &nbsp;
   const highlightedActivities = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >activities.filter(<span class="fstat-no" title="function not covered" >(a</span>ctivity) =&gt; <span class="cstat-no" title="statement not covered" >activity.payload.isHighlight)</span>,</span>
@@ -496,6 +536,17 @@ const ActivityHighlightsContent = <span class="cstat-no" title="statement not co
     }
   }, [acceleratorReports, activeLocale, busy, dropdownOptions, isLoadingReports, selectedQuarter]);
 &nbsp;
+  // Notify parent component with dropdown data when it's ready
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (onDropdownDataReady &amp;&amp; dropdownOptions.length &gt; 0 &amp;&amp; selectedQuarter !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >      onDropdownDataReady({</span>
+        dropdownOptions,
+        selectedQuarter,
+        onChangeQuarter: onChangeActivityQuarter,
+      });
+    }
+  }, [dropdownOptions, selectedQuarter, onChangeActivityQuarter, onDropdownDataReady]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       &lt;Box
@@ -520,7 +571,7 @@ const ActivityHighlightsContent = <span class="cstat-no" title="statement not co
             &lt;/Typography&gt;
           )}
 &nbsp;
-          {dropdownOptions.length &gt; 0 &amp;&amp; (
+          {showDropdownInline &amp;&amp; dropdownOptions.length &gt; 0 &amp;&amp; (
             &lt;Dropdown
               label=''
               onChange={onChangeActivityQuarter}
@@ -562,7 +613,7 @@ export default ActivityHighlightsContent;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-04T00:16:53.410Z
+                at 2025-11-04T17:19:09.702Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
