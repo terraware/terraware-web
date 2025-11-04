@@ -1,6 +1,7 @@
-import React, { ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode, useCallback } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 
+import { addReactError } from '@datadog/browser-rum-react';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -17,17 +18,23 @@ const ErrorBoundary = (props: Props) => {
   const navigate = useSyncNavigate();
   const { isDesktop } = useDeviceInfo();
 
+  const handleError = useCallback(
+    (error: Error, info: ErrorInfo) => {
+      addReactError(error, info);
+      props.setShowNavBar?.(false);
+    },
+    [props]
+  );
+
+  const handleReset = useCallback(() => {
+    if (isDesktop) {
+      props.setShowNavBar?.(true);
+    }
+    navigate(APP_PATHS.HOME);
+  }, [isDesktop, navigate, props]);
+
   return (
-    <ReactErrorBoundary
-      fallback={<ErrorContent inApp />}
-      onError={() => props.setShowNavBar?.(false)}
-      onReset={() => {
-        if (isDesktop) {
-          props.setShowNavBar?.(true);
-        }
-        navigate(APP_PATHS.HOME);
-      }}
-    >
+    <ReactErrorBoundary fallback={<ErrorContent inApp />} onError={handleError} onReset={handleReset}>
       {props.children}
     </ReactErrorBoundary>
   );

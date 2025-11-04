@@ -1,7 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router';
+import { RouterProvider } from 'react-router';
 
+import { createBrowserRouter } from '@datadog/browser-rum-react/react-router-v7';
 import { ThemeProvider } from '@mui/material';
 
 import App from './App';
@@ -9,8 +10,11 @@ import AppError from './AppError';
 import { APP_PATHS } from './constants';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import setupRum from './setupRum';
 import strings from './strings';
 import theme from './theme';
+
+setupRum();
 
 const router = createBrowserRouter([
   {

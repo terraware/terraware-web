@@ -1590,6 +1590,34 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz#2cbcf822bf3764c9658c4d2e568bd0c0cb748016"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
 
+"@datadog/browser-core@6.23.0":
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-6.23.0.tgz#4bddb7e1de2ed91fb367fc23c356258c0b4eed7a"
+  integrity sha512-VSBynPVukGiw4LclLIk+CnyF6ANNKOIaxOcN2NgVFp+RXvr98UwtpeIu4QSo/DykJg5dhfw6CFlc3B32lo/gkQ==
+
+"@datadog/browser-rum-core@6.23.0":
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-6.23.0.tgz#dd216f6e6bd91545d9846a79673b6013589a574f"
+  integrity sha512-ZdLiOb9wATGujDN/5nSyhsYxY6BXAoAlyjVqwMqPg6V4LCHy0S/fLFrQBSt2U9JT5HXwNKR4pANT5w9kq6dFOw==
+  dependencies:
+    "@datadog/browser-core" "6.23.0"
+
+"@datadog/browser-rum-react@^6.23.0":
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-react/-/browser-rum-react-6.23.0.tgz#bad630bb5fd2a55d81ca275c35818075988b702f"
+  integrity sha512-ht+PB3ZrI8D3ppSRPnvDrPWjfq9u+CrWNkBlalNpuiEmvc+a+aJoVCLmotIOpxBJ1FnpQpRDMpIDrwjoXBt1WA==
+  dependencies:
+    "@datadog/browser-core" "6.23.0"
+    "@datadog/browser-rum-core" "6.23.0"
+
+"@datadog/browser-rum@^6.23.0":
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-6.23.0.tgz#0a17ea5352c24db8a7f6a9842a43752fc37e085c"
+  integrity sha512-0hOqB0VeZCyt6pQjXLoOqGE6bLRJq/vc3WsQzG2QZ3iMQMSXtfKHRYxRNa3WWhrAoxulfvn8PoWNPt2+sXU//w==
+  dependencies:
+    "@datadog/browser-core" "6.23.0"
+    "@datadog/browser-rum-core" "6.23.0"
+
 "@discoveryjs/json-ext@^0.5.3":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
