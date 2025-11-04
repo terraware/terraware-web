@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { SelectT, Tabs } from '@terraware/web-components';
+import { Dropdown, SelectT, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
-import ActivityHighlightsContent from 'src/components/ActivityLog/ActivityHighlightsContent';
+import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/ActivityLog/ActivityHighlightsContent';
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
@@ -59,6 +59,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
 
   const funderPortalEnabled = isEnabled('Activity Log in Funder Portal');
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
+  const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
   useEffect(() => {
     if (!selectedReport && publishedReports?.length) {
@@ -101,7 +102,13 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
               id: 'quarterlyHighlights',
               label: strings.QUARTERLY_HIGHLIGHTS,
               children: (
-                <ActivityHighlightsContent activities={activities} busy={false} projectId={projectDetails.projectId} />
+                <ActivityHighlightsContent
+                  activities={activities}
+                  busy={false}
+                  projectId={projectDetails.projectId}
+                  showDropdownInline={false}
+                  onDropdownDataReady={setQuarterDropdownData}
+                />
               ),
             },
             {
@@ -170,6 +177,16 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
                 selectStyles={{ inputContainer: { 'margin-top': isMobile ? theme.spacing(2) : 0 } }}
               />
             )}
+            {activeTab === 'quarterlyHighlights' &&
+              quarterDropdownData &&
+              quarterDropdownData.dropdownOptions.length > 0 && (
+                <Dropdown
+                  label=''
+                  onChange={quarterDropdownData.onChangeQuarter}
+                  options={quarterDropdownData.dropdownOptions}
+                  selectedValue={quarterDropdownData.selectedQuarter}
+                />
+              )}
           </Box>
           <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
         </Box>

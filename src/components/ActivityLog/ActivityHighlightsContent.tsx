@@ -14,6 +14,12 @@ import useStateLocation from 'src/utils/useStateLocation';
 import ActivityHighlightsView from './ActivityHighlightsView';
 import { TypedActivity } from './types';
 
+export type QuarterDropdownData = {
+  dropdownOptions: { label: string; value: string }[];
+  selectedQuarter: string | undefined;
+  onChangeQuarter: (value: string | undefined) => void;
+};
+
 type ActivityHighlightsContentProps = {
   activities: TypedActivity[];
   busy: boolean;
@@ -21,6 +27,8 @@ type ActivityHighlightsContentProps = {
   showCloseButton?: boolean;
   onClose?: () => void;
   title?: string;
+  showDropdownInline?: boolean;
+  onDropdownDataReady?: (data: QuarterDropdownData) => void;
 };
 
 const ActivityHighlightsContent = ({
@@ -30,6 +38,8 @@ const ActivityHighlightsContent = ({
   showCloseButton = false,
   onClose,
   title = '',
+  showDropdownInline = true,
+  onDropdownDataReady,
 }: ActivityHighlightsContentProps) => {
   const { activeLocale, strings } = useLocalization();
   const query = useQuery();
@@ -38,10 +48,6 @@ const ActivityHighlightsContent = ({
   const { acceleratorReports, busy: isLoadingReports } = useProjectReports(projectId);
 
   const [selectedQuarter, setSelectedQuarter] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    console.log('activities', activities);
-  }, [activities]);
 
   const highlightedActivities = useMemo(
     () => activities.filter((activity) => activity.payload.isHighlight),
@@ -103,6 +109,17 @@ const ActivityHighlightsContent = ({
     }
   }, [acceleratorReports, activeLocale, busy, dropdownOptions, isLoadingReports, selectedQuarter]);
 
+  // Notify parent component with dropdown data when it's ready
+  useEffect(() => {
+    if (onDropdownDataReady && dropdownOptions.length > 0 && selectedQuarter !== undefined) {
+      onDropdownDataReady({
+        dropdownOptions,
+        selectedQuarter,
+        onChangeQuarter: onChangeActivityQuarter,
+      });
+    }
+  }, [dropdownOptions, selectedQuarter, onChangeActivityQuarter, onDropdownDataReady]);
+
   return (
     <>
       <Box
@@ -127,7 +144,7 @@ const ActivityHighlightsContent = ({
             </Typography>
           )}
 
-          {dropdownOptions.length > 0 && (
+          {showDropdownInline && dropdownOptions.length > 0 && (
             <Dropdown
               label=''
               onChange={onChangeActivityQuarter}
