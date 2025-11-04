@@ -1,8 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider } from 'react-router';
+import { RouterProvider, createBrowserRouter } from 'react-router';
 
-import { createBrowserRouter } from '@datadog/browser-rum-react/react-router-v7';
+import { createBrowserRouter as createDatadogRouter } from '@datadog/browser-rum-react/react-router-v7';
 import { ThemeProvider } from '@mui/material';
 
 import App from './App';
@@ -16,7 +16,7 @@ import theme from './theme';
 
 setupRum();
 
-const router = createBrowserRouter([
+const routes = [
   {
     path: APP_PATHS.ERROR,
     element: (
@@ -33,7 +33,10 @@ const router = createBrowserRouter([
       </ThemeProvider>
     ),
   },
-]);
+];
+
+const router =
+  process.env.REACT_APP_TERRAWARE_TIER === 'test' ? createBrowserRouter(routes) : createDatadogRouter(routes);
 
 const root = createRoot(document.getElementById('root')!);
 
