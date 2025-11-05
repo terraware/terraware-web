@@ -458,6 +458,16 @@ const ActivityDetailView = ({
     return activityIdParam ? Number(activityIdParam) : undefined;
   }, [query]);
 
+  const isActivityEditable = useMemo(() => {
+    if (activity.type === 'admin') {
+      return true;
+    } else if (activity.type === 'base') {
+      return !activity.payload.publishedTime;
+    } else {
+      return false;
+    }
+  }, [activity]);
+
   const openPublishActivityModal = useCallback(() => {
     setPublishActivityModalOpened(true);
   }, []);
@@ -511,7 +521,7 @@ const ActivityDetailView = ({
         {isAllowedEditActivities && !isFunderRoute && (
           <Box display='flex' justifyContent={'end'}>
             <Button
-              disabled={!projectId}
+              disabled={!projectId || !isActivityEditable}
               icon='iconEdit'
               label={highlightActivityId ? strings.CLOSE_AND_EDIT : strings.EDIT_ACTIVITY}
               onClick={goToProjectActivityEdit}
