@@ -143,6 +143,19 @@ const isAllowedCreateSubmission: PermissionCheckFn<CreateSubmissionMetadata> = (
 };
 
 /**
+ * Function related to edit survival rate settings, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type EditSurvivalRateSettingsMetadata = { organization: Organization };
+const isAllowedEditSurvivalRateSettings: PermissionCheckFn<EditSurvivalRateSettingsMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: CreateSubmissionMetadata
+): boolean => {
+  return isAcceleratorAdmin(user) || isManagerOrHigher(metadata?.organization);
+};
+
+/**
  * Function related to reading of deliverables, since the permission also applies to
  * org roles, we need to check the passed-in organization
  */
@@ -286,7 +299,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   DELETE_PARTICIPANTS: AcceleratorAdminPlus,
   EDIT_ACTIVITIES: isAllowedEditActivities,
   EDIT_REPORTS: AcceleratorAdminPlus,
-  EDIT_SURVIVAL_RATE_SETTINGS: AcceleratorAdminPlus,
+  EDIT_SURVIVAL_RATE_SETTINGS: isAllowedEditSurvivalRateSettings,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
   INVITE_FUNDER: isAllowedInviteFunders,
