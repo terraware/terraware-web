@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
@@ -52,6 +53,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const dispatch = useAppDispatch();
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
+  const { isMobile } = useDeviceInfo();
 
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
@@ -112,7 +114,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
 
   return (
     <Card>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
         <Typography
           sx={{
             fontSize: '20px',
@@ -160,11 +162,15 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
           isSurvivalRateCalculationEnabled &&
           selectedPlotSelection === 'assigned' &&
           (plotsWithObservations?.length || 0) > 0 && (
-            <Box display={'flex'} alignItems={'center'}>
+            <Box display={'flex'} alignItems={'center'} flexBasis={isMobile ? '100%' : 'content'}>
               <Link
                 onClick={navigateToSurvivalRateSettings}
                 fontSize='16px'
-                style={{ paddingLeft: theme.spacing(2), paddingRight: theme.spacing(0.5) }}
+                style={{
+                  paddingLeft: isMobile ? 0 : theme.spacing(2),
+                  paddingRight: theme.spacing(0.5),
+                  paddingTop: isMobile ? theme.spacing(1) : 0,
+                }}
                 disabled={selectedPlantingSite?.id === -1 || (observationsResults?.length || 0) === 0}
               >
                 {strings.SURVIVAL_RATE_SETTINGS}
