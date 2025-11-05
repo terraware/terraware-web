@@ -120,11 +120,8 @@ export default function AccessionTests() {
     await page.locator('#row1-accessionNumber').getByText('25-1-2-001').click();
     await page.getByRole('button', { name: 'Withdraw' }).click();
     await page.locator('#destinationFacilityId').getByRole('textbox').click();
-    await page
-      .getByText(/My New Nursery/)
-      .nth(0)
-      .click();
-    await page.getByLabel('Seed Count', { exact: true }).check();
+    await page.getByText('Nursery', exactOptions).nth(0).click();
+    await page.getByLabel('Seed Count', exactOptions).check();
     await page.locator('#withdrawnQuantity').getByRole('textbox').fill('300');
     await page.getByRole('button', { name: 'Add Notes' }).click();
     await page.locator('textarea').fill('Adding some test notes here!');
@@ -138,12 +135,12 @@ export default function AccessionTests() {
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await expect(page.locator('#row1-species_scientificName')).toContainText('Coconut');
-    await expect(page.locator('#row1-facilityInventories')).toContainText(/My New Nursery/);
+    await expect(page.locator('#row1-facilityInventories')).toContainText('Nursery');
     await expect(page.locator('#row1-germinatingQuantity')).toContainText('300');
     await page.getByRole('tab', { name: 'By Nursery' }).click();
-    await expect(page.locator('#row1-facility_name')).toContainText(/My New Nursery/);
+    await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
     await page.getByRole('tab', { name: 'By Batch' }).click();
-    await expect(page.locator('#row1-batchNumber')).toContainText('2-2-002');
+    await expect(page.locator('#row1-batchNumber')).toContainText('2-1-002');
   });
 
   test('Withdraw to Outplant', async ({ page }, testInfo) => {
