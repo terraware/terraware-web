@@ -519,9 +519,9 @@ const ActivityDetailView = ({
               size='medium'
               sx={{ whiteSpace: 'nowrap' }}
             />
-            {activity.type === 'admin' && activity.payload.verifiedBy && isAcceleratorRoute && (
+            {activity.type === 'admin' && isAcceleratorRoute && (
               <Button
-                disabled={!projectId}
+                disabled={!projectId || !activity.payload.verifiedBy}
                 label={strings.PUBLISH_ACTIVITY}
                 onClick={openPublishActivityModal}
                 size='medium'
