@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1762370114236" clover="3.2.0">
-  <project timestamp="1762370114236" name="All files">
-    <metrics statements="35552" coveredstatements="1364" conditionals="24898" coveredconditionals="393" methods="10876" coveredmethods="213" elements="71326" coveredelements="1970" complexity="0" loc="35552" ncloc="35552" packages="281" files="1378" classes="1378"/>
+<coverage generated="1762378654841" clover="3.2.0">
+  <project timestamp="1762378654841" name="All files">
+    <metrics statements="35552" coveredstatements="1364" conditionals="24899" coveredconditionals="393" methods="10876" coveredmethods="213" elements="71327" coveredelements="1970" complexity="0" loc="35552" ncloc="35552" packages="281" files="1378" classes="1378"/>
     <package name="src">
       <metrics statements="179" coveredstatements="9" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1749,7 +1749,7 @@
       </file>
     </package>
     <package name="src.components.ActivityLog">
-      <metrics statements="960" coveredstatements="0" conditionals="737" coveredconditionals="0" methods="287" coveredmethods="0"/>
+      <metrics statements="960" coveredstatements="0" conditionals="738" coveredconditionals="0" methods="287" coveredmethods="0"/>
       <file name="ActivitiesEmptyState.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesEmptyState.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -1969,7 +1969,7 @@
         <line num="12" count="0" type="stmt"/>
       </file>
       <file name="ActivityDetailView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityDetailView.tsx">
-        <metrics statements="135" coveredstatements="0" conditionals="100" coveredconditionals="0" methods="37" coveredmethods="0"/>
+        <metrics statements="135" coveredstatements="0" conditionals="101" coveredconditionals="0" methods="37" coveredmethods="0"/>
         <line num="48" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>

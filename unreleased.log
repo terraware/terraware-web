@@ -1,3 +1,4 @@
+9d354d3c775 “Publish” button disabled for activities that are not “Verified” (#4749)
 4e17fbc6d06 SW-7671 Contributors should not have ability to edit survival rates settings (#4747)
 4785254be6d SW-7677 Add/remove Unpublished changes tag (#4748)
 bb3c3fefea5 SW-7670 Mobile survival rate settings needs fixes (#4746)
