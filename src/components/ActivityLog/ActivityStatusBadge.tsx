@@ -18,7 +18,7 @@ const ActivityStatusBadge = (props: ActivityStatusBadgeProps): JSX.Element => {
 
   const badgeColors = useMemo((): Omit<BadgeProps, 'label'> | undefined => {
     switch (status) {
-      case 'Changed':
+      case 'Unpublished Changes':
         return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
