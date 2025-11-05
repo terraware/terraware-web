@@ -18,8 +18,8 @@ const ActivityStatusBadges = ({ activity }: ActivityStatusBadgesProps): JSX.Elem
     }
     return (
       activity.payload.modifiedTime &&
-      activity.payload.verifiedTime &&
-      new Date(activity.payload.modifiedTime) > new Date(activity.payload.verifiedTime)
+      activity.payload.publishedTime &&
+      new Date(activity.payload.modifiedTime) > new Date(activity.payload.publishedTime)
     );
   }, [activity]);
 
@@ -33,7 +33,7 @@ const ActivityStatusBadges = ({ activity }: ActivityStatusBadgesProps): JSX.Elem
 
   return (
     <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' gap={1} marginY={theme.spacing(1)}>
-      {isChanged && <ActivityStatusBadge status='Changed' />}
+      {isChanged && <ActivityStatusBadge status='Unpublished Changes' />}
       {activity.type === 'admin' && <ActivityStatusBadge status={activity.payload.status} />}
       {/* TODO: render badge for 'Do Not Use' when applicable */}
       {isPublished && <ActivityStatusBadge status='Published' />}
