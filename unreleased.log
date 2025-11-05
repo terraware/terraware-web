@@ -1,3 +1,5 @@
+9d313caacb7 Disable edit button for published activity (#4750)
+38b7f4dcb8f SW-7643 Enable Datadog's Real User Monitoring (#4741)
 9d354d3c775 “Publish” button disabled for activities that are not “Verified” (#4749)
 4e17fbc6d06 SW-7671 Contributors should not have ability to edit survival rates settings (#4747)
 4785254be6d SW-7677 Add/remove Unpublished changes tag (#4748)
