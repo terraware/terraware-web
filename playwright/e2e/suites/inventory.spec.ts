@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test';
+import { Locator, expect, test } from '@playwright/test';
+import { Page } from 'playwright-core';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions, waitFor } from '../utils/utils';
@@ -67,10 +68,10 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
-    await page.locator('li').filter({ hasText: 'Coconut' }).locator('div').click();
+    await page.locator('li').filter({ hasText: 'Kousa Dogwood' }).locator('div').click();
 
     await page.locator('#accessionId').getByRole('textbox').click();
-    await page.getByText('-1-2-001').click(); // TODO this is dependent on the AccessionTests
+    await page.getByText('-1-2-001').click();
 
     await page.locator('#facilityId path').click();
     await page.locator('li').getByText('Nursery', exactOptions).nth(0).click();
@@ -89,7 +90,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Coconut', exactOptions)).toBeVisible();
+    await expect(page.getByText('Kousa Dogwood (Kousa Dogwood)', exactOptions)).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('Germination/Establishment Quantity 25')).toBeVisible();
     await expect(page.getByText('Active Growth Quantity 25')).toBeVisible();
@@ -109,7 +110,8 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
-    await page.getByRole('link', { name: '-2-1-004' }).click();
+    const batchNumber = await getBatchNumberBySpeciesAndNursery(page, 'Kousa Dogwood', 'Nursery');
+    await page.getByRole('link', { name: batchNumber }).click();
     await page.getByLabel('Details').getByRole('button').nth(1).click();
     await page.getByRole('spinbutton').click();
     await page.getByRole('spinbutton').fill('20');
@@ -141,26 +143,26 @@ export default function InventoryTests() {
     await page.getByRole('link', { name: 'Withdrawal - Dead' }).click();
     await expect(page.getByText('Purpose Dead')).toBeVisible();
     await expect(page.getByText('Quantity 15')).toBeVisible();
-    await expect(page.getByRole('link', { name: '-2-1-004' })).toBeVisible();
-    await expect(page.locator('#row1-name')).toContainText('Coconut');
+    await expect(page.getByRole('link', { name: batchNumber })).toBeVisible();
+    await expect(page.locator('#row1-name')).toContainText('Kousa Dogwood');
     await expect(page.locator('#row1-germinating')).toContainText('5');
     await expect(page.locator('#row1-activeGrowth')).toContainText('10');
     await expect(page.locator('#row1-ready')).toContainText('0');
     await expect(page.locator('#row1-total')).toContainText('15');
     await page.getByRole('link', { name: 'Withdrawal History' }).click();
-    await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
+    await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
     await expect(page.getByRole('cell', { name: '15', ...exactOptions })).toBeVisible();
   });
 
   test('Transfer Nurseries', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
 
-    // todo this one is failing
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
-    await page.getByRole('link', { name: '-2-1-003' }).click();
+    const batchNumber = await getBatchNumberBySpeciesAndNursery(page, 'Banana', 'Nursery');
+    await page.getByRole('link', { name: batchNumber }).click();
     await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
     await page.waitForTimeout(1000); //Wait for modal to load
     await page.getByLabel('Nursery Transfer').check();
@@ -186,13 +188,13 @@ export default function InventoryTests() {
     await expect(page.getByText('Quantity 150')).toBeVisible();
     await expect(page.getByText('Destination Other Nursery')).toBeVisible();
     await expect(page.getByText('Notes Transferring some banana')).toBeVisible();
-    await expect(page.getByRole('cell', { name: '-2-1-003' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: batchNumber })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Banana' })).toBeVisible();
     await expect(page.locator('#row1-germinating')).toBeVisible();
     await expect(page.locator('#row1-activeGrowth')).toBeVisible();
     await expect(page.locator('#row1-ready')).toBeVisible();
     await expect(page.getByRole('cell', { name: '150' })).toBeVisible();
-    await page.getByRole('link', { name: '-2-1-003' }).click();
+    await page.getByRole('link', { name: batchNumber }).click();
     await expect(page.getByText('Germination/Establishment Quantity 450')).toBeVisible();
     await expect(page.getByText('Active Growth Quantity 50')).toBeVisible();
     await expect(page.getByText('Ready to Plant Quantity 50', exactOptions)).toBeVisible();
@@ -202,7 +204,7 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-editedByName')).toBeVisible();
     await page.getByRole('link', { name: 'Inventory / Batches of Banana' }).click();
     await page.locator('#row1-germinatingQuantity').click();
-    await expect(page.getByRole('cell', { name: '-2-1-003' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: batchNumber })).toBeVisible();
     await expect(page.locator('#row1-germinatingQuantity')).toContainText('50');
     await expect(page.locator('#row1-activeGrowthQuantity')).toContainText('50');
     await expect(page.locator('#row1-hardeningOffQuantity')).toContainText('0');
@@ -221,7 +223,8 @@ export default function InventoryTests() {
     await expect(page.getByText('Total Quantity 100')).toBeVisible();
     await expect(page.getByText('Batches at Other Nursery')).toBeVisible();
     await expect(page.getByText('Species Banana')).toBeVisible();
-    await page.getByRole('button', { name: '-2-2-003' }).click();
+    const newBatchNumber = await getBatchNumberBySpecies(page.locator('.MuiTable-root'), 'Banana');
+    await page.getByRole('button', { name: newBatchNumber }).click();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Nursery Transfer' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Super Admin' })).toBeVisible();
@@ -241,7 +244,8 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
 
-    await page.getByRole('link', { name: '-2-1-004' }).click();
+    const batchNumber = await getBatchNumberBySpeciesAndNursery(page, 'Kousa Dogwood', 'Nursery');
+    await page.getByRole('link', { name: batchNumber }).click();
     await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
     await page.getByLabel('Planting').check();
     await page.locator('#plantingSiteId').getByPlaceholder('Select...').click();
@@ -271,7 +275,7 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
     await expect(page.locator('#row1-plantingSubzoneNames')).toContainText('East-North');
-    await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
+    await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
     await expect(page.locator('#row1-totalWithdrawn')).toContainText('60');
   });
 
@@ -314,9 +318,37 @@ export default function InventoryTests() {
     });
 
     await expect(page.getByText('60 Seedlings Sent')).toBeVisible();
-    await expect(page.getByText('Coconut')).toBeVisible();
+    await expect(page.getByText('Kousa Dogwood')).toBeVisible();
     await page.getByRole('link', { name: 'See Withdrawal History' }).click();
     await expect(page.getByText('Destination:Planting Site')).toBeVisible();
     await expect(page.getByText('Subzone:East-North')).toBeVisible();
   });
 }
+
+const getBatchNumberBySpeciesAndNursery = async (page: Page, species: string, nursery: string) => {
+  const rowNumber = (
+    await page
+      .getByText(nursery, exactOptions)
+      .locator('../..')
+      .getByText(species)
+      .first()
+      .locator('..')
+      .evaluate((el) => el.id)
+  )
+    .replace('-species_scientificName', '')
+    .replace('_noLink', '');
+  return (await page.locator(`#${rowNumber}-batchNumber`).textContent()) as string;
+};
+
+const getBatchNumberBySpecies = async (parent: Page | Locator, species: string) => {
+  const rowNumber = (
+    await parent
+      .getByText(species)
+      .first()
+      .locator('../..')
+      .evaluate((el) => el.id)
+  )
+    .replace('-species_scientificName', '')
+    .replace('_noLink', '');
+  return (await parent.locator(`#${rowNumber}-batchNumber`).textContent()) as string;
+};
