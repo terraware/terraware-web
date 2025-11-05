@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
@@ -19,6 +20,7 @@ type ZoneT0BoxProps = {
 const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: ZoneT0BoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
+  const { isMobile } = useDeviceInfo();
 
   const getZoneTotalDensity = useMemo(() => {
     const total = t0Zone?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
@@ -50,7 +52,12 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
 
   return (
     <>
-      <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        paddingY={theme.spacing(2)}
+        gap={theme.spacing(2)}
+      >
         <Box
           minHeight='100px'
           minWidth='80px'

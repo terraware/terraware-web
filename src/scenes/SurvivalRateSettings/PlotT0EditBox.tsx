@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Divider, FormControlLabel, IconButton, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Icon, IconTooltip, Message, SelectT } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import TextField from 'src/components/common/TextField';
 import { useLocalization } from 'src/providers';
@@ -31,6 +32,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
 
   const { species } = useSpeciesData();
   const locale = useLocalization().activeLocale;
+  const { isMobile } = useDeviceInfo();
 
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
 
@@ -301,7 +303,34 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
 
   return (
     <>
-      <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        paddingY={theme.spacing(2)}
+        gap={theme.spacing(2)}
+      >
+        {isMobile && (
+          <Box
+            sx={{ background: theme.palette.TwClrBgSecondary }}
+            display='flex'
+            flexDirection='column'
+            padding={1}
+            height='fit-content'
+          >
+            <Box display='flex' paddingRight={3}>
+              <Typography fontWeight={600} paddingRight={0.5}>
+                {strings.ZONE}
+              </Typography>
+              <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
+            </Box>
+            <Box display='flex'>
+              <Typography fontWeight={600} paddingRight={0.5}>
+                {strings.SUBZONE}
+              </Typography>
+              <Typography>{plot.plantingSubzone_name}</Typography>
+            </Box>
+          </Box>
+        )}
         <Box
           minHeight='100px'
           minWidth='80px'
@@ -315,7 +344,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
           <Box display='flex' flexGrow={1} alignItems={'start'} width={'100%'}>
             <Box flexGrow={1} display={'flex'} alignItems={'center'}>
               <RadioGroup name='radio-buttons-t0' onChange={onChangeT0Origin} value={t0Origin}>
-                <Box display='flex'>
+                <Box display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                   <Box display='flex' paddingRight={2} sx={{ alignItems: 'center' }}>
                     <FormControlLabel
                       control={<Radio />}
@@ -353,20 +382,22 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                 </Box>
               </RadioGroup>
             </Box>
-            <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1} height='fit-content'>
-              <Box display='flex' paddingRight={3}>
-                <Typography fontWeight={600} paddingRight={0.5}>
-                  {strings.ZONE}
-                </Typography>
-                <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
+            {!isMobile && (
+              <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1} height='fit-content'>
+                <Box display='flex' paddingRight={3}>
+                  <Typography fontWeight={600} paddingRight={0.5}>
+                    {strings.ZONE}
+                  </Typography>
+                  <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
+                </Box>
+                <Box display='flex'>
+                  <Typography fontWeight={600} paddingRight={0.5}>
+                    {strings.SUBZONE}
+                  </Typography>
+                  <Typography>{plot.plantingSubzone_name}</Typography>
+                </Box>
               </Box>
-              <Box display='flex'>
-                <Typography fontWeight={600} paddingRight={0.5}>
-                  {strings.SUBZONE}
-                </Typography>
-                <Typography>{plot.plantingSubzone_name}</Typography>
-              </Box>
-            </Box>
+            )}
           </Box>
           {t0Origin === 'manual' && (
             <Box paddingY={'16px'}>
