@@ -9,7 +9,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingSiteWithdrawnSpecies } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
 import {
@@ -25,6 +25,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { SiteT0Data } from 'src/types/Tracking';
+import { isContributor } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';
@@ -49,8 +50,11 @@ const SurvivalRateSettings = () => {
     plantingSiteId: string;
   }>();
   const theme = useTheme();
+  const { selectedOrganization } = useOrganization();
 
   const plantingSiteId = Number(params.plantingSiteId);
+
+  const userCanEdit = !isContributor(selectedOrganization);
 
   const permanentPlots = useMemo(() => {
     return plotsWithObservations?.filter((p) => !!p.permanentIndex);
@@ -306,14 +310,16 @@ const SurvivalRateSettings = () => {
             )}
           </Box>
           <Box>
-            <Button
-              icon='iconEdit'
-              label={activeTab === 'permanent' ? strings.EDIT_PERMANENT_PLOTS : strings.EDIT_TEMPORARY_PLOTS}
-              onClick={goToEditSurvivalRateSettings}
-              disabled={!plotsWithObservations || plotsWithObservations.length === 0}
-              priority='secondary'
-              size='medium'
-            />
+            {userCanEdit && (
+              <Button
+                icon='iconEdit'
+                label={activeTab === 'permanent' ? strings.EDIT_PERMANENT_PLOTS : strings.EDIT_TEMPORARY_PLOTS}
+                onClick={goToEditSurvivalRateSettings}
+                disabled={!plotsWithObservations || plotsWithObservations.length === 0}
+                priority='secondary'
+                size='medium'
+              />
+            )}
           </Box>
         </Box>
 
