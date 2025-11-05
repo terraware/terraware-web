@@ -285,7 +285,7 @@ const SurvivalRateSettings = () => {
                   sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }}
                   marginX={1}
                 />
-                {(t0SiteData?.zones.length || 0) === Object.entries(zonesWithObservations).length ? (
+                {(t0SiteData?.zones.length || 0) === numberOfSetZones ? (
                   <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
                     {strings.T0_SET_FOR_TEMPORARY_PLOTS}
                   </Typography>
