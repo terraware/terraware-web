@@ -667,6 +667,7 @@ FEEDBACK,Commentaires,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Commentaires (partagés avec le projet),d56b8ddb
 FERN,Fougère,35767f4d
 FIELD_NOTES,Notes de terrain,1c50984e
+FIFTY_TO_SEVENTY_FIVE_PERCENT,50 % à 75 %,174fb41a
 FILE_NAME,Nom du fichier,fc9f4f98
 FILE_NAMING,Noms de fichiers,ab7d2f6d
 FILE_SELECTED,Fichier sélectionné,23a60a8d
@@ -758,6 +759,7 @@ GPX_FILE,Fichier GPX,16b83a81
 GRAMINOID,Graminoïdes,3d34e325
 GRAMS,Grammes,3ba23872
 GREATER_THAN_FIFTY_PERCENT,> 50 %,78ecfce0
+GREATER_THAN_SEVENTY_FIVE_PERCENT,> 75 %,92f440d4
 GROWTH_FORM,Type de plante,59ac71af
 HARDENING_OFF,Acclimatation,1d8714ea
 HARDENING_OFF_QUANTITY,Quantité à acclimater,43eb2e86
@@ -908,6 +910,7 @@ LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Vous quittez l’écran de mod
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Vous quittez l’écran de modification des Parcelles Temporaires. Toute modification non enregistrée des Parcelles Temporaires ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,a4409ad0
 LEGAL,Juridique,dc8b5907
 LEGEND,Légende,d312e5fb
+LESS_THAN_FIFTY_PERCENT,< 50 %,d26d7627
 LESS_THAN_TWENTY_FIVE_PERCENT,< 25 %,c95f4f44
 LIANA,Liane,812e082e
 LICHEN,Lichen,4f8de0bf

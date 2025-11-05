@@ -668,6 +668,7 @@ FEEDBACK,Comentarios,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Comentarios (compartidos con el proyecto),d56b8ddb
 FERN,Helecho,35767f4d
 FIELD_NOTES,Notas de campo,1c50984e
+FIFTY_TO_SEVENTY_FIVE_PERCENT,50% a 75%,174fb41a
 FILE_NAME,Nombre de archivo,fc9f4f98
 FILE_NAMING,Nombres de archivos,ab7d2f6d
 FILE_SELECTED,Archivo seleccionado,23a60a8d
@@ -759,6 +760,7 @@ GPX_FILE,Archivo GPX,16b83a81
 GRAMINOID,Gramínea,3d34e325
 GRAMS,Gramos,3ba23872
 GREATER_THAN_FIFTY_PERCENT,> 50%,78ecfce0
+GREATER_THAN_SEVENTY_FIVE_PERCENT,> 75%,92f440d4
 GROWTH_FORM,Forma de crecimiento,59ac71af
 HARDENING_OFF,Aclimatación,1d8714ea
 HARDENING_OFF_QUANTITY,Cantidad en aclimatación,43eb2e86
@@ -909,6 +911,7 @@ LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Está saliendo de la pantalla 
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Está saliendo de la pantalla de edición de Parcelas Temporales. Cualquier cambio no guardado en las Parcelas Temporales no se guardará. ¿Está seguro de que desea salir?,a4409ad0
 LEGAL,Legal,dc8b5907
 LEGEND,Leyenda,d312e5fb
+LESS_THAN_FIFTY_PERCENT,< 50%,d26d7627
 LESS_THAN_TWENTY_FIVE_PERCENT,< 25%,c95f4f44
 LIANA,Liana,812e082e
 LICHEN,Liquen,4f8de0bf
