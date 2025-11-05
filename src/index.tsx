@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router';
 
+import { createBrowserRouter as createDatadogRouter } from '@datadog/browser-rum-react/react-router-v7';
 import { ThemeProvider } from '@mui/material';
 
 import App from './App';
@@ -9,10 +10,15 @@ import AppError from './AppError';
 import { APP_PATHS } from './constants';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import setupRum, { canEnableRum } from './setupRum';
 import strings from './strings';
 import theme from './theme';
 
-const router = createBrowserRouter([
+if (canEnableRum()) {
+  setupRum();
+}
+
+const routes = [
   {
     path: APP_PATHS.ERROR,
     element: (
@@ -29,7 +35,9 @@ const router = createBrowserRouter([
       </ThemeProvider>
     ),
   },
-]);
+];
+
+const router = canEnableRum() ? createDatadogRouter(routes) : createBrowserRouter(routes);
 
 const root = createRoot(document.getElementById('root')!);
 

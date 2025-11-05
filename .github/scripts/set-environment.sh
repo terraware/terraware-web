@@ -27,7 +27,8 @@ DOCKER_TAGS=$docker_tags
 ECS_CLUSTER_VAR_NAME=${TIER}_ECS_CLUSTER
 ECS_SERVICE_VAR_NAME=${TIER}_ECS_SERVICE
 IS_CD=true
-TIER=$TIER" >> $GITHUB_ENV
+TIER=$TIER
+LOWER_TIER=$(echo $TIER | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
 # Define secret names based on the tier; the values of the secrets will be looked up
 # by the GitHub Actions steps.
