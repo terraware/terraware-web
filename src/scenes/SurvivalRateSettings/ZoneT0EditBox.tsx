@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Divider, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Icon, IconTooltip, SelectT } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import TextField from 'src/components/common/TextField';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -30,6 +31,7 @@ const ZoneT0EditBox = ({
 }: ZoneT0EditBoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
+  const { isMobile } = useDeviceInfo();
 
   const onAddNewSpecies = useCallback(() => {
     const newRowId = `new-species-${crypto.randomUUID()}`;
@@ -268,7 +270,12 @@ const ZoneT0EditBox = ({
 
   return (
     <>
-      <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        paddingY={theme.spacing(2)}
+        gap={theme.spacing(2)}
+      >
         <Box
           minHeight='100px'
           minWidth='80px'

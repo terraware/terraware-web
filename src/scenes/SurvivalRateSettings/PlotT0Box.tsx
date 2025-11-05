@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
@@ -25,6 +26,7 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
   const theme = useTheme();
   const { species } = useSpeciesData();
   const { activeLocale } = useLocalization();
+  const { isMobile } = useDeviceInfo();
 
   const getPlotTotalDensity = useMemo(() => {
     const total = t0Plot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
@@ -45,7 +47,30 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
 
   return (
     <>
-      <Box display='flex' paddingY={theme.spacing(2)} gap={theme.spacing(2)}>
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        paddingY={theme.spacing(2)}
+        gap={theme.spacing(2)}
+      >
+        {isMobile && (
+          <Box>
+            <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' flexDirection='column' padding={1}>
+              <Box display='flex' paddingRight={3}>
+                <Typography fontWeight={600} paddingRight={0.5}>
+                  {strings.ZONE}
+                </Typography>
+                <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
+              </Box>
+              <Box display='flex'>
+                <Typography fontWeight={600} paddingRight={0.5}>
+                  {strings.SUBZONE}
+                </Typography>
+                <Typography>{plot.plantingSubzone_name}</Typography>
+              </Box>
+            </Box>
+          </Box>
+        )}
         <Box
           minHeight='100px'
           minWidth='80px'
@@ -133,22 +158,24 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
             </Typography>
           )}
         </Box>
-        <Box>
-          <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1}>
-            <Box display='flex' paddingRight={3}>
-              <Typography fontWeight={600} paddingRight={0.5}>
-                {strings.ZONE}
-              </Typography>
-              <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
-            </Box>
-            <Box display='flex'>
-              <Typography fontWeight={600} paddingRight={0.5}>
-                {strings.SUBZONE}
-              </Typography>
-              <Typography>{plot.plantingSubzone_name}</Typography>
+        {!isMobile && (
+          <Box>
+            <Box sx={{ background: theme.palette.TwClrBgSecondary }} display='flex' padding={1}>
+              <Box display='flex' paddingRight={3}>
+                <Typography fontWeight={600} paddingRight={0.5}>
+                  {strings.ZONE}
+                </Typography>
+                <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
+              </Box>
+              <Box display='flex'>
+                <Typography fontWeight={600} paddingRight={0.5}>
+                  {strings.SUBZONE}
+                </Typography>
+                <Typography>{plot.plantingSubzone_name}</Typography>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        )}
       </Box>
       <Divider />
     </>
