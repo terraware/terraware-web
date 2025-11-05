@@ -9,7 +9,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingSiteWithdrawnSpecies } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
 import {
@@ -45,12 +45,16 @@ const SurvivalRateSettings = () => {
   const [t0SiteData, setT0SiteData] = useState<SiteT0Data>();
   const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
   const params = useParams<{
     plantingSiteId: string;
   }>();
   const theme = useTheme();
+  const { selectedOrganization } = useOrganization();
 
   const plantingSiteId = Number(params.plantingSiteId);
+
+  const userCanEdit = isAllowed('EDIT_SURVIVAL_RATE_SETTINGS', { organization: selectedOrganization });
 
   const permanentPlots = useMemo(() => {
     return plotsWithObservations?.filter((p) => !!p.permanentIndex);
@@ -306,14 +310,16 @@ const SurvivalRateSettings = () => {
             )}
           </Box>
           <Box>
-            <Button
-              icon='iconEdit'
-              label={activeTab === 'permanent' ? strings.EDIT_PERMANENT_PLOTS : strings.EDIT_TEMPORARY_PLOTS}
-              onClick={goToEditSurvivalRateSettings}
-              disabled={!plotsWithObservations || plotsWithObservations.length === 0}
-              priority='secondary'
-              size='medium'
-            />
+            {userCanEdit && (
+              <Button
+                icon='iconEdit'
+                label={activeTab === 'permanent' ? strings.EDIT_PERMANENT_PLOTS : strings.EDIT_TEMPORARY_PLOTS}
+                onClick={goToEditSurvivalRateSettings}
+                disabled={!plotsWithObservations || plotsWithObservations.length === 0}
+                priority='secondary'
+                size='medium'
+              />
+            )}
           </Box>
         </Box>
 

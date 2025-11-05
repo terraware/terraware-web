@@ -65,6 +65,7 @@ type PermissionParticipantProject =
   | 'UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING'
   | 'EXPORT_PARTICIPANT_PROJECT'
   | 'PUBLISH_PROJECT_DETAILS';
+type PermissionSurvivalRate = 'EDIT_SURVIVAL_RATE_SETTINGS';
 
 export type GlobalRolePermission =
   | PermissionAcceleratorReports
@@ -78,7 +79,8 @@ export type GlobalRolePermission =
   | PermissionGlobalRole
   | PermissionOrganization
   | PermissionParticipant
-  | PermissionParticipantProject;
+  | PermissionParticipantProject
+  | PermissionSurvivalRate;
 
 type PermissionCheckFn<T = any> = (user: User, permission: GlobalRolePermission, metadata?: T) => boolean;
 
@@ -133,6 +135,19 @@ const isAllowedAssignSomeGlobalRoles: PermissionCheckFn = (user: User): boolean 
  */
 type CreateSubmissionMetadata = { organization: Organization };
 const isAllowedCreateSubmission: PermissionCheckFn<CreateSubmissionMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: CreateSubmissionMetadata
+): boolean => {
+  return isAcceleratorAdmin(user) || isManagerOrHigher(metadata?.organization);
+};
+
+/**
+ * Function related to edit survival rate settings, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type EditSurvivalRateSettingsMetadata = { organization: Organization };
+const isAllowedEditSurvivalRateSettings: PermissionCheckFn<EditSurvivalRateSettingsMetadata> = (
   user: User,
   _: GlobalRolePermission,
   metadata?: CreateSubmissionMetadata
@@ -284,6 +299,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   DELETE_PARTICIPANTS: AcceleratorAdminPlus,
   EDIT_ACTIVITIES: isAllowedEditActivities,
   EDIT_REPORTS: AcceleratorAdminPlus,
+  EDIT_SURVIVAL_RATE_SETTINGS: isAllowedEditSurvivalRateSettings,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
   INVITE_FUNDER: isAllowedInviteFunders,
