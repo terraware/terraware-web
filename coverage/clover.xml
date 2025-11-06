@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1762457186213" clover="3.2.0">
-  <project timestamp="1762457186213" name="All files">
+<coverage generated="1762466501303" clover="3.2.0">
+  <project timestamp="1762466501303" name="All files">
     <metrics statements="35573" coveredstatements="1364" conditionals="24929" coveredconditionals="393" methods="10879" coveredmethods="213" elements="71381" coveredelements="1970" complexity="0" loc="35573" ncloc="35573" packages="281" files="1379" classes="1379"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -27255,15 +27255,15 @@
         <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="25" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
       </file>
       <file name="useAccessions.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/useAccessions.ts">
         <metrics statements="17" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
