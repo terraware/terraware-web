@@ -6,7 +6,8 @@ export type FeatureName =
   | 'Survival Rate Calculation'
   | 'Activity Video Support'
   | 'Activity Log Highlights'
-  | 'Activity Log in Funder Portal';
+  | 'Activity Log in Funder Portal'
+  | 'Edit Observations';
 
 export type Feature = {
   name: FeatureName;
@@ -74,6 +75,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for activity log in funder portal'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Edit Observations',
+    preferenceName: 'editObservations',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Support for editing observation data'],
     disclosure: ['This is a WIP'],
   },
 ];
