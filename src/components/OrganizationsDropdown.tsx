@@ -53,7 +53,7 @@ export default function OrganizationsDropdown(): JSX.Element {
   );
 
   return (
-    <div>
+    <div id={'organizationsDropdown'}>
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
         onCancel={onCloseCreateOrganizationModal}
