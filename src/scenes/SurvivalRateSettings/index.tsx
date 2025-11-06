@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -46,6 +47,7 @@ const SurvivalRateSettings = () => {
   const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
+  const { isMobile } = useDeviceInfo();
   const params = useParams<{
     plantingSiteId: string;
   }>();
@@ -259,10 +261,15 @@ const SurvivalRateSettings = () => {
 
   return (
     <Page crumbs={crumbs} title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
-      <Card radius='8px'>
+      <Card radius='8px' flushMobile>
         <SurvivalRateInstructions />
         <Box width={'100%'} display='flex' justifyContent={'space-between'} alignItems={'center'}>
-          <Box paddingY={3} display={'flex'} alignItems={'center'}>
+          <Box
+            paddingY={3}
+            display={'flex'}
+            alignItems={isMobile ? 'start' : 'center'}
+            flexDirection={isMobile ? 'column' : 'row'}
+          >
             {(permanentPlots?.length || 0) > 0 && (permanentPlots?.length || 0) === numberOfSetPermanentPlots ? (
               <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
                 {strings.T0_SET_FOR_PERMANENT_PLOTS}
@@ -283,12 +290,14 @@ const SurvivalRateSettings = () => {
 
             {(temporaryPlots?.length || 0) > 0 && t0SiteData?.survivalRateIncludesTempPlots && (
               <>
-                <Box
-                  height={'32px'}
-                  width={'1px'}
-                  sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }}
-                  marginX={1}
-                />
+                {!isMobile && (
+                  <Box
+                    height={'32px'}
+                    width={'1px'}
+                    sx={{ backgroundColor: theme.palette.TwClrBrdrTertiary }}
+                    marginX={1}
+                  />
+                )}
                 {(t0SiteData?.zones.length || 0) === numberOfSetZones ? (
                   <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
                     {strings.T0_SET_FOR_TEMPORARY_PLOTS}
@@ -313,7 +322,13 @@ const SurvivalRateSettings = () => {
             {userCanEdit && (
               <Button
                 icon='iconEdit'
-                label={activeTab === 'permanent' ? strings.EDIT_PERMANENT_PLOTS : strings.EDIT_TEMPORARY_PLOTS}
+                label={
+                  isMobile
+                    ? undefined
+                    : activeTab === 'permanent'
+                      ? strings.EDIT_PERMANENT_PLOTS
+                      : strings.EDIT_TEMPORARY_PLOTS
+                }
                 onClick={goToEditSurvivalRateSettings}
                 disabled={!plotsWithObservations || plotsWithObservations.length === 0}
                 priority='secondary'

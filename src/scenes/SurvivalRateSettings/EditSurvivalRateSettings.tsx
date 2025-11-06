@@ -193,7 +193,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
           type={activeTab ?? 'permanent'}
         />
       )}
-      <Card radius='8px'>
+      <Card radius='8px' flushMobile>
         <Box marginBottom={theme.spacing(4)}>
           <SurvivalRateInstructions />
         </Box>
