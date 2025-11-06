@@ -640,7 +640,9 @@ const PlantDashboardMap = ({
                 ? mortalityRateHighlights.lessThanFifty
                 : mortalityRateHighlights.lessThanTwentyFive)!,
               style: {
-                fillPatternUrl: '/assets/mortality-rate-less-25.png',
+                fillPatternUrl: isSurvivalRateCalculationEnabled
+                  ? '/assets/mortality-rate-more-50.png'
+                  : '/assets/mortality-rate-less-25.png',
                 type: 'fill',
               },
             },
@@ -658,7 +660,9 @@ const PlantDashboardMap = ({
                 ? mortalityRateHighlights.greaterThanSeventyFive
                 : mortalityRateHighlights.greaterThanFifty)!,
               style: {
-                fillPatternUrl: '/assets/mortality-rate-more-50.png',
+                fillPatternUrl: isSurvivalRateCalculationEnabled
+                  ? '/assets/mortality-rate-less-25.png'
+                  : '/assets/mortality-rate-more-50.png',
                 type: 'fill',
               },
             },
