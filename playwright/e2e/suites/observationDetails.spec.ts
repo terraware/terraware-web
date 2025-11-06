@@ -1,24 +1,22 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { waitFor } from '../utils/utils';
+import { selectOrg, waitFor } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function ObservationDetailsTests() {
-  test('Observation level detail view, including statistics and charts', async ({ page }, testInfo) => {
+test.describe('ObservationDetailsTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
-
+    await selectOrg(page, 'Terraformation (staging)');
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
     // wait for table rows to load
     await waitFor(page, '#row1');
+  });
 
+  test('Observation level detail view, including statistics and charts', async ({ page }, testInfo) => {
     // navigate to observation details
     await page.locator('a:has-text("May 2025")').click();
     await waitFor(page, '#home');
@@ -56,15 +54,6 @@ export default function ObservationDetailsTests() {
   });
 
   test('Zone level observation detail view, including statistics and charts', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-
-    await page.getByRole('button', { name: 'Plants' }).click();
-    await page.getByRole('button', { name: 'Observations' }).click();
-
-    // wait for table rows to load
-    await waitFor(page, '#row1');
-
     // navigate to observation details
     await page.locator('a:has-text("May 2025")').click();
     await waitFor(page, '#home');
@@ -113,15 +102,6 @@ export default function ObservationDetailsTests() {
   });
 
   test('Plot level observation detail view, including statistics, charts, and photos', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-
-    await page.getByRole('button', { name: 'Plants' }).click();
-    await page.getByRole('button', { name: 'Observations' }).click();
-
-    // wait for table rows to load
-    await waitFor(page, '#row1');
-
     // navigate to observation details
     await page.locator('a:has-text("May 2025")').click();
     await waitFor(page, '#home');
@@ -214,4 +194,4 @@ export default function ObservationDetailsTests() {
     // photos
     await expect(page.getByText('Photos', { exact: true })).toBeVisible();
   });
-}
+});

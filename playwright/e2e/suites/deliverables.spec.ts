@@ -34,17 +34,17 @@ import {
   verifyHomepageDeliverableStatus,
 } from '../utils/participantDeliverable';
 import { changeToContributor, changeToReadOnlyUser, changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, waitFor } from '../utils/utils';
+import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
-test.beforeEach(async ({ context }) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function DeliverableTests() {
-  test('Deliverables tab shows up once cohort has module with deliverables', async ({ page, context }) => {
+test.describe('DeliverableTests', () => {
+  test.beforeEach(async ({ page, context }) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
+    await selectOrg(page, 'Terraformation (staging)');
+  });
 
+  test('Deliverables tab shows up once cohort has module with deliverables', async ({ page, context }) => {
     const today = new Date();
     const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
@@ -83,9 +83,6 @@ export default function DeliverableTests() {
   });
 
   test('Questionnaire Deliverable', async ({ page }) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-
     const deliverableName = 'Phase 1 Questions';
     const today = new Date();
     const todayString = today.toISOString().split('T')[0];
@@ -293,9 +290,6 @@ export default function DeliverableTests() {
   });
 
   test('Species Deliverable', async ({ page }) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-
     const deliverableName = 'Phase 1 Species';
     await verifyHomepageDeliverableStatus(deliverableName, 'Incomplete', true, 'Not Submitted', page);
     await page.getByText('Deliverables', exactOptions).click();
@@ -355,4 +349,4 @@ export default function DeliverableTests() {
     await validateSpeciesStatus('Banana', 'Update Needed', page);
     await validateSpeciesStatus('Kousa Dogwood', 'Approved', page);
   });
-}
+});

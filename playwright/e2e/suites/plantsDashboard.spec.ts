@@ -1,19 +1,18 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { waitFor } from '../utils/utils';
+import { selectOrg, waitFor } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function PlantsDashboardTests() {
-  test('Console Dashboard Empty State for project', async ({ page }, testInfo) => {
+test.describe('PlantsDashboardTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
+    await waitFor(page, '#acceleratorConsoleButton');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
     await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
+  });
+
+  test('Console Dashboard Empty State for project', async ({ page }, testInfo) => {
     await page.getByRole('link', { name: 'Phase 0 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 0 Project Deal', { exact: true })).toBeVisible();
@@ -59,10 +58,6 @@ export default function PlantsDashboardTests() {
   });
 
   test('Console rolled-up dashboard for project', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-    await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
     await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
@@ -105,10 +100,6 @@ export default function PlantsDashboardTests() {
   });
 
   test('Console dashboard for project planting site with no observations', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-    await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
     await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
@@ -153,10 +144,6 @@ export default function PlantsDashboardTests() {
   });
 
   test('Console dashboard for project planting site with observations', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-    await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await expect(page.getByRole('main').getByText('Overview')).toBeVisible();
     await page.getByRole('link', { name: 'Phase 1 Project Deal' }).click();
     await page.getByRole('tab', { name: 'Plants Dashboard' }).click();
     await expect(page.getByText('Phase 1 Project Deal', { exact: true })).toBeVisible();
@@ -246,4 +233,4 @@ export default function PlantsDashboardTests() {
         .getByRole('checkbox')
     ).toBeChecked({ checked: false });
   });
-}
+});
