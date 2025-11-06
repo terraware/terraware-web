@@ -8,6 +8,10 @@ test.beforeEach(async ({ context }, testInfo) => {
   await changeToSuperAdmin(context);
 });
 
+const yearId = new Date().getFullYear().toString().slice(-2);
+let accessionId = 'UNSET';
+let accessionRow = 'UNSET';
+
 export default function AccessionTests() {
   test('Add An Accession', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
@@ -40,10 +44,12 @@ export default function AccessionTests() {
     await page.getByText('garage').click();
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByRole('main')).toContainText('25-1-2-00');
+    const accessionPrefix = `${yearId}-1-2-00`;
+    await expect(page.getByRole('main')).toContainText(accessionPrefix);
     await expect(page.getByRole('main')).toContainText('Coconut');
     await expect(page.getByRole('main')).toContainText('Status Awaiting Check-In');
     await expect(page.getByRole('main')).toContainText('Location garage');
+    accessionId = (await page.getByText(accessionPrefix).textContent()) as string;
 
     await expect(page.getByLabel('Accession Details')).toContainText('Alex');
     await expect(page.getByLabel('Accession Details').getByRole('paragraph')).toContainText('(Owner: Ashtyn)');
@@ -105,8 +111,16 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('~495 ct');
 
     await page.getByRole('button', { name: 'Accessions' }).click();
-    await expect(page.locator('#row1-accessionNumber')).toContainText('25-1-2-001');
-    await page.getByText('-1-2-001').click();
+
+    accessionRow = (
+      await page
+        .getByText(accessionId)
+        .locator('../..')
+        .evaluate((el) => el.id)
+    ).replace('-accessionNumber', '');
+
+    await expect(page.locator(`#${accessionRow}-accessionNumber`)).toContainText(accessionId);
+    await page.getByText(accessionId).click();
     await expect(page.getByRole('main')).toContainText('Coconut');
   });
 
@@ -117,14 +131,11 @@ export default function AccessionTests() {
 
     await page.getByRole('button', { name: 'Seeds' }).click();
     await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator('#row1-accessionNumber').getByText('25-1-2-001').click();
+    await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
     await page.getByRole('button', { name: 'Withdraw' }).click();
     await page.locator('#destinationFacilityId').getByRole('textbox').click();
-    await page
-      .getByText(/My New Nursery/)
-      .nth(0)
-      .click();
-    await page.getByLabel('Seed Count', { exact: true }).check();
+    await page.getByText('Nursery', exactOptions).nth(0).click();
+    await page.getByLabel('Seed Count', exactOptions).check();
     await page.locator('#withdrawnQuantity').getByRole('textbox').fill('300');
     await page.getByRole('button', { name: 'Add Notes' }).click();
     await page.locator('textarea').fill('Adding some test notes here!');
@@ -138,12 +149,12 @@ export default function AccessionTests() {
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await expect(page.locator('#row1-species_scientificName')).toContainText('Coconut');
-    await expect(page.locator('#row1-facilityInventories')).toContainText(/My New Nursery/);
+    await expect(page.locator('#row1-facilityInventories')).toContainText('Nursery');
     await expect(page.locator('#row1-germinatingQuantity')).toContainText('300');
     await page.getByRole('tab', { name: 'By Nursery' }).click();
-    await expect(page.locator('#row1-facility_name')).toContainText(/My New Nursery/);
+    await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
     await page.getByRole('tab', { name: 'By Batch' }).click();
-    await expect(page.locator('#row1-batchNumber')).toContainText('2-2-002');
+    await expect(page.locator('#row1-batchNumber')).toContainText('2-1-002');
   });
 
   test('Withdraw to Outplant', async ({ page }, testInfo) => {
@@ -153,7 +164,7 @@ export default function AccessionTests() {
 
     await page.getByRole('button', { name: 'Seeds' }).click();
     await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator('#row1-accessionNumber').getByText('25-1-2-001').click();
+    await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
     await page.getByRole('button', { name: 'Withdraw' }).click();
 
     await page.getByPlaceholder('Select...').first().click();
@@ -172,7 +183,7 @@ export default function AccessionTests() {
 
     await page.getByRole('button', { name: 'Seeds' }).click();
     await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator('#row1-accessionNumber').getByText('25-1-2-001').click();
+    await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
     await page.getByRole('button', { name: 'Withdraw' }).click();
     await page.locator('.textfield-value > .tw-icon > path').first().click();
     await page.getByText('Viability Testing').click();

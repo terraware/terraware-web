@@ -29,6 +29,7 @@ function SubLocationsDropdown<T extends { subLocationIds?: number[] } | undefine
   return (
     <MultiSelect<number, string>
       fullWidth={true}
+      id='subLocationId'
       label={!minimal ? strings.SUB_LOCATIONS : undefined}
       onAdd={(subLocationId: number) => {
         setRecord((previousValue) => ({

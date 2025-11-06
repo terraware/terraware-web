@@ -200,13 +200,17 @@ export default function ParticipantPlantsDashboardTests() {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Terraformation (staging)' }).click();
-    await page.getByRole('menuitem', { name: 'My New Org-' }).click();
+    await page.getByRole('menuitem', { name: 'Empty Organization' }).click();
+    // Remove this reload and the 5000ms timeout below once SW-7678 is fixed
+    await page.reload();
 
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
-    await expect(page.getByText('To view data in this dashboard, add a planting site', { exact: true })).toBeVisible();
+    await expect(page.getByText('To view data in this dashboard, add a planting site', { exact: true })).toBeVisible({
+      timeout: 5000,
+    });
     await expect(
       page.getByText(
         'This dashboard displays data from your plant tracking and monitoring activities. Add at least one planting site to start tracking where your seedlings are planted and to see the data in this dashboard.',
