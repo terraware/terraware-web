@@ -1,20 +1,18 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, waitFor } from '../utils/utils';
+import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
-test.setTimeout(60000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function SpeciesTests() {
-  test('Add and Delete A Species', async ({ page }, testInfo) => {
+test.describe('SpeciesTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
-
-    const newSpeciesName = `Acacia koa-${new Date().getTime()}`;
-
     await waitFor(page, '#home');
+    await selectOrg(page, 'Terraformation (staging)');
+  });
+
+  test('Add and Delete A Species', async ({ page }, testInfo) => {
+    const newSpeciesName = `Acacia koa-${new Date().getTime()}`;
 
     await page.getByRole('button', { name: 'Species', ...exactOptions }).click();
 
@@ -66,4 +64,4 @@ export default function SpeciesTests() {
     await page.waitForTimeout(1000); //Test is slow here for some reason???
     await expect(page.getByText(newSpeciesName)).toBeHidden();
   });
-}
+});

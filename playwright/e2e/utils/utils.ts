@@ -8,3 +8,11 @@ export const waitFor = async (page: Page, selector: string, timeout = 3000) => {
 
 // Just a typing saver for various usages
 export const exactOptions = { exact: true };
+
+export const selectOrg = async (page: Page, orgName: string) => {
+  if (!(await page.locator('#organizationsDropdown').getByText(orgName, exactOptions).isVisible())) {
+    await page.locator('#organizationsDropdown').click();
+    await page.getByRole('menuitem', { name: orgName }).click();
+    await waitFor(page, '#home');
+  }
+};

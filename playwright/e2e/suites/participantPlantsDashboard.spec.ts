@@ -1,17 +1,18 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, waitFor } from '../utils/utils';
+import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function ParticipantPlantsDashboardTests() {
-  test('Rolled-up dashboard for selected project', async ({ page }, testInfo) => {
+test.describe('ParticipantPlantsDashboardTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
+  });
+
+  test('Rolled-up dashboard for selected project', async ({ page }, testInfo) => {
+    await selectOrg(page, 'Terraformation (staging)');
+
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
@@ -57,8 +58,8 @@ export default function ParticipantPlantsDashboardTests() {
   });
 
   test('Planting site dashboard no observations', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
+    await selectOrg(page, 'Terraformation (staging)');
+
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
@@ -104,8 +105,8 @@ export default function ParticipantPlantsDashboardTests() {
   });
 
   test('Planting site dashboard observations', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
+    await selectOrg(page, 'Terraformation (staging)');
+
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
@@ -197,10 +198,7 @@ export default function ParticipantPlantsDashboardTests() {
   });
 
   test('Plants Dashboard empty state', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-    await page.getByRole('button', { name: 'Terraformation (staging)' }).click();
-    await page.getByRole('menuitem', { name: 'Empty Organization' }).click();
+    await selectOrg(page, 'Empty Organization');
     // Remove this reload and the 5000ms timeout below once SW-7678 is fixed
     await page.reload();
 
@@ -253,4 +251,4 @@ export default function ParticipantPlantsDashboardTests() {
         .getByRole('checkbox')
     ).toBeDisabled();
   });
-}
+});

@@ -2,14 +2,12 @@ import { expect, test } from '@playwright/test';
 
 import { navigateToProjectProfile } from '../utils/navigation';
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { waitFor } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
+test.describe('ProjectDeliverablesTests', () => {
+  test.beforeEach(async ({ context }, testInfo) => {
+    await changeToSuperAdmin(context);
+  });
 
-export default function ProjectDeliverablesTests() {
   test('View Project Deliverables Table', async ({ page }, testInfo) => {
     await navigateToProjectProfile('Phase 2 Project Deal', page);
     await page.getByRole('tab', { name: 'Deliverables' }).click();
@@ -45,4 +43,4 @@ export default function ProjectDeliverablesTests() {
     await expect(page.getByRole('columnheader', { name: 'Category' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Type' })).toBeVisible();
   });
-}
+});

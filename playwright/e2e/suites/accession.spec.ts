@@ -1,23 +1,23 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, waitFor } from '../utils/utils';
-
-test.setTimeout(60000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
+import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
 const yearId = new Date().getFullYear().toString().slice(-2);
-let accessionId = 'UNSET';
-let accessionRow = 'UNSET';
 
-export default function AccessionTests() {
-  test('Add An Accession', async ({ page }, testInfo) => {
+test.describe('AccessionTests', () => {
+  // Skip the withdraw tests if the first test fails (Add An Accession)
+  test.describe.configure({ mode: 'serial' });
+
+  let accessionId = 'UNSET';
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
-
     await waitFor(page, '#home');
+    await selectOrg(page, 'Terraformation (staging)');
+  });
 
+  test('Add An Accession', async ({ page }, testInfo) => {
     await page.getByRole('button', { name: 'Seeds' }).click();
     await page.getByRole('button', { name: 'Accessions' }).click();
     await page.getByRole('button', { name: 'Add Accession' }).click();
@@ -112,7 +112,7 @@ export default function AccessionTests() {
 
     await page.getByRole('button', { name: 'Accessions' }).click();
 
-    accessionRow = (
+    const accessionRow = (
       await page
         .getByText(accessionId)
         .locator('../..')
@@ -124,101 +124,119 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('Coconut');
   });
 
-  test('Withdraw to Nursery by seed count', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
+  test.describe('Withdraw Tests', () => {
+    test.describe.configure({ mode: 'default' });
+    test('Withdraw to Nursery by seed count', async ({ page }, testInfo) => {
+      await page.getByRole('button', { name: 'Seeds' }).click();
+      await page.getByRole('button', { name: 'Accessions' }).click();
 
-    await waitFor(page, '#home');
+      const accessionRow = (
+        await page
+          .getByText(accessionId)
+          .locator('../..')
+          .evaluate((el) => el.id)
+      ).replace('-accessionNumber', '');
+      await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
+      await page.getByRole('button', { name: 'Withdraw' }).click();
+      await page.locator('#destinationFacilityId').getByRole('textbox').click();
+      await page.getByText('Nursery', exactOptions).nth(0).click();
+      await page.getByLabel('Seed Count', exactOptions).check();
+      await page.locator('#withdrawnQuantity').getByRole('textbox').fill('300');
+      await page.getByRole('button', { name: 'Add Notes' }).click();
+      await page.locator('textarea').fill('Adding some test notes here!');
+      await page.locator('#saveWithdraw').click();
+      await expect(page.getByRole('main')).toContainText('195 Grams');
+      await expect(page.getByRole('main')).toContainText('~195 ct');
+      await page.getByRole('tab', { name: 'History' }).click();
+      await expect(page.getByLabel('History')).toContainText(
+        'Super Admin withdrew 300 seeds for nurseryAdding some test notes here!'
+      );
+      await page.getByRole('button', { name: 'Seedlings' }).click();
+      await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+      const coconutRowNum = (
+        await page
+          .getByText('Coconut', exactOptions)
+          .locator('../..')
+          .evaluate((el) => el.id)
+      ).replace('-species_scientificName', '');
+      await expect(page.locator(`#${coconutRowNum}-species_scientificName`)).toContainText('Coconut');
+      await expect(page.locator(`#${coconutRowNum}-facilityInventories`)).toContainText('Nursery');
+      await expect(page.locator(`#${coconutRowNum}-germinatingQuantity`)).toContainText('300');
+      await page.getByRole('tab', { name: 'By Nursery' }).click();
+      await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
+      await page.getByRole('tab', { name: 'By Batch' }).click();
+      await expect(page.locator('#row1-batchNumber')).toContainText('2-1-002');
+    });
 
-    await page.getByRole('button', { name: 'Seeds' }).click();
-    await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
-    await page.getByRole('button', { name: 'Withdraw' }).click();
-    await page.locator('#destinationFacilityId').getByRole('textbox').click();
-    await page.getByText('Nursery', exactOptions).nth(0).click();
-    await page.getByLabel('Seed Count', exactOptions).check();
-    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('300');
-    await page.getByRole('button', { name: 'Add Notes' }).click();
-    await page.locator('textarea').fill('Adding some test notes here!');
-    await page.locator('#saveWithdraw').click();
-    await expect(page.getByRole('main')).toContainText('195 Grams');
-    await expect(page.getByRole('main')).toContainText('~195 ct');
-    await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByLabel('History')).toContainText(
-      'Super Admin withdrew 300 seeds for nurseryAdding some test notes here!'
-    );
-    await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
-    await expect(page.locator('#row1-species_scientificName')).toContainText('Coconut');
-    await expect(page.locator('#row1-facilityInventories')).toContainText('Nursery');
-    await expect(page.locator('#row1-germinatingQuantity')).toContainText('300');
-    await page.getByRole('tab', { name: 'By Nursery' }).click();
-    await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
-    await page.getByRole('tab', { name: 'By Batch' }).click();
-    await expect(page.locator('#row1-batchNumber')).toContainText('2-1-002');
+    test('Withdraw to Outplant', async ({ page }, testInfo) => {
+      await page.getByRole('button', { name: 'Seeds' }).click();
+      await page.getByRole('button', { name: 'Accessions' }).click();
+
+      const accessionRow = (
+        await page
+          .getByText(accessionId)
+          .locator('../..')
+          .evaluate((el) => el.id)
+      ).replace('-accessionNumber', '');
+      await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
+      await page.getByRole('button', { name: 'Withdraw' }).click();
+
+      await page.getByPlaceholder('Select...').first().click();
+      await page.getByText('Out-planting').click();
+      await page.getByLabel('Seed Count', { exact: true }).check();
+      await page.locator('#withdrawnQuantity').getByRole('textbox').fill('100');
+      await page.locator('#saveWithdraw').click();
+      await expect(page.getByRole('main')).toContainText('95 Grams');
+      await expect(page.getByRole('main')).toContainText('~95 ct');
+    });
+
+    test('Withdraw to Viability Test', async ({ page }, testInfo) => {
+      await page.getByRole('button', { name: 'Seeds' }).click();
+      await page.getByRole('button', { name: 'Accessions' }).click();
+
+      const accessionRow = (
+        await page
+          .getByText(accessionId)
+          .locator('../..')
+          .evaluate((el) => el.id)
+      ).replace('-accessionNumber', '');
+      await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
+      await page.getByRole('button', { name: 'Withdraw' }).click();
+      await page.locator('.textfield-value > .tw-icon > path').first().click();
+      await page.getByText('Viability Testing').click();
+      await page.getByPlaceholder('Select...').nth(1).click();
+      await page.getByText('Nursery').click();
+      await page.locator('div:nth-child(3) > .select > .textfield-container > .textfield-value').click();
+      await page.getByText('Soil').click();
+      await page.getByPlaceholder('Select...').nth(3).click();
+      await page.getByText('Soak').click();
+      await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('20');
+      await page.locator('#saveWithdraw').click();
+      await expect(page.getByRole('main')).toContainText('75 Grams');
+      await expect(page.getByRole('main')).toContainText('~75 ct');
+      await page.getByRole('tab', { name: 'Viability Tests' }).click();
+      await expect(page.locator('#row1-testType')).toContainText('Nursery Germination');
+      await page.getByRole('table', { name: 'enhanced table' }).getByRole('img').click();
+      await expect(page.getByRole('main')).toContainText('Viability Result: Pending');
+      await expect(page.getByRole('main')).toContainText('Soil');
+      await expect(page.getByRole('main')).toContainText('Soak');
+      await expect(page.getByRole('main')).toContainText('20');
+      await page.getByRole('button', { name: 'Edit' }).click();
+      await page.getByPlaceholder('Select...').nth(1).click();
+      await page.getByText('Fresh').click();
+      await page.getByRole('button', { name: 'Add Observation' }).click();
+      await page.locator('#seedsGerminated').getByRole('textbox').fill('15');
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.waitForTimeout(1000); //Wait for modal to close
+      await page.locator('#row1-viabilityPercent').click();
+      await expect(page.getByRole('main')).toContainText('15');
+      await page.getByRole('button', { name: 'Edit' }).click();
+      await page.getByRole('button', { name: 'Add Observation' }).click();
+      await page.locator('div:nth-child(3) > div:nth-child(2) > div > .textfield > #seedsGerminated > input').fill('3');
+      await page.getByLabel('Mark as Complete').check();
+      await page.getByRole('button', { name: 'Save' }).click();
+      await page.getByRole('button', { name: 'Apply Result' }).click();
+      await expect(page.locator('#row1-viabilityPercent')).toContainText('90%');
+    });
   });
-
-  test('Withdraw to Outplant', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-
-    await waitFor(page, '#home');
-
-    await page.getByRole('button', { name: 'Seeds' }).click();
-    await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
-    await page.getByRole('button', { name: 'Withdraw' }).click();
-
-    await page.getByPlaceholder('Select...').first().click();
-    await page.getByText('Out-planting').click();
-    await page.getByLabel('Seed Count', { exact: true }).check();
-    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('100');
-    await page.locator('#saveWithdraw').click();
-    await expect(page.getByRole('main')).toContainText('95 Grams');
-    await expect(page.getByRole('main')).toContainText('~95 ct');
-  });
-
-  test('Withdraw to Viability Test', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-
-    await waitFor(page, '#home');
-
-    await page.getByRole('button', { name: 'Seeds' }).click();
-    await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
-    await page.getByRole('button', { name: 'Withdraw' }).click();
-    await page.locator('.textfield-value > .tw-icon > path').first().click();
-    await page.getByText('Viability Testing').click();
-    await page.getByPlaceholder('Select...').nth(1).click();
-    await page.getByText('Nursery').click();
-    await page.locator('div:nth-child(3) > .select > .textfield-container > .textfield-value').click();
-    await page.getByText('Soil').click();
-    await page.getByPlaceholder('Select...').nth(3).click();
-    await page.getByText('Soak').click();
-    await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('20');
-    await page.locator('#saveWithdraw').click();
-    await expect(page.getByRole('main')).toContainText('75 Grams');
-    await expect(page.getByRole('main')).toContainText('~75 ct');
-    await page.getByRole('tab', { name: 'Viability Tests' }).click();
-    await expect(page.locator('#row1-testType')).toContainText('Nursery Germination');
-    await page.getByRole('table', { name: 'enhanced table' }).getByRole('img').click();
-    await expect(page.getByRole('main')).toContainText('Viability Result: Pending');
-    await expect(page.getByRole('main')).toContainText('Soil');
-    await expect(page.getByRole('main')).toContainText('Soak');
-    await expect(page.getByRole('main')).toContainText('20');
-    await page.getByRole('button', { name: 'Edit' }).click();
-    await page.getByPlaceholder('Select...').nth(1).click();
-    await page.getByText('Fresh').click();
-    await page.getByRole('button', { name: 'Add Observation' }).click();
-    await page.locator('#seedsGerminated').getByRole('textbox').fill('15');
-    await page.getByRole('button', { name: 'Save' }).click();
-    await page.waitForTimeout(1000); //Wait for modal to close
-    await page.locator('#row1-viabilityPercent').click();
-    await expect(page.getByRole('main')).toContainText('15');
-    await page.getByRole('button', { name: 'Edit' }).click();
-    await page.getByRole('button', { name: 'Add Observation' }).click();
-    await page.locator('div:nth-child(3) > div:nth-child(2) > div > .textfield > #seedsGerminated > input').fill('3');
-    await page.getByLabel('Mark as Complete').check();
-    await page.getByRole('button', { name: 'Save' }).click();
-    await page.getByRole('button', { name: 'Apply Result' }).click();
-    await expect(page.locator('#row1-viabilityPercent')).toContainText('90%');
-  });
-}
+});

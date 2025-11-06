@@ -1,20 +1,18 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { waitFor } from '../utils/utils';
+import { selectOrg, waitFor } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function LocationTests() {
-  test('Create a Seedbank', async ({ page }, testInfo) => {
+test.describe('LocationTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
-
-    const newSeedBankName = `My New Seed Bank-${new Date().getTime()}`;
-
     await waitFor(page, '#home');
+    await selectOrg(page, 'Terraformation (staging)');
+  });
+
+  test('Create a Seedbank', async ({ page }, testInfo) => {
+    const newSeedBankName = `My New Seed Bank-${new Date().getTime()}`;
 
     await page.getByRole('button', { name: 'Locations' }).click();
     await page.getByRole('button', { name: 'Seed Banks' }).click();
@@ -58,11 +56,8 @@ export default function LocationTests() {
   });
 
   test('Create a Nursery', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-
     const newNurseryName = `My New Nursery-${new Date().getTime()}`;
 
-    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Locations' }).click();
     await page.getByRole('button', { name: 'Nurseries' }).click();
     await page.getByRole('button', { name: 'Add Nursery' }).click();
@@ -100,11 +95,8 @@ export default function LocationTests() {
   });
 
   test('Add an Organization ', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-
     const newOrgName = `My New Org-${new Date().getTime()}`;
 
-    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Terraformation (staging)' }).click();
     await page.getByRole('menuitem', { name: 'Create New Organization' }).click();
     await page.locator('#name').getByRole('textbox').click();
@@ -153,4 +145,4 @@ export default function LocationTests() {
     await page.getByRole('menuitem', { name: 'Terraformation (staging)' }).click();
     await page.waitForTimeout(1000);
   });
-}
+});
