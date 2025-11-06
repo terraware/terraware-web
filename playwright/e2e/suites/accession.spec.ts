@@ -105,7 +105,7 @@ export default function AccessionTests() {
     await page.getByLabel('Mark as Complete').check();
     await page.getByRole('button', { name: 'Save' }).click();
     await page.getByRole('button', { name: 'Apply Result' }).click();
-    await expect(page.locator(`#row1-viabilityPercent`)).toContainText('60%');
+    await expect(page.locator('#row1-viabilityPercent')).toContainText('60%');
     await expect(page.getByRole('main')).toContainText('60%');
     await expect(page.getByRole('main')).toContainText('495 Grams');
     await expect(page.getByRole('main')).toContainText('~495 ct');
@@ -148,13 +148,13 @@ export default function AccessionTests() {
     );
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
-    await expect(page.locator(`#row1-species_scientificName`)).toContainText('Coconut');
-    await expect(page.locator(`#row1-facilityInventories`)).toContainText('Nursery');
-    await expect(page.locator(`#row1-germinatingQuantity`)).toContainText('300');
+    await expect(page.locator('#row1-species_scientificName')).toContainText('Coconut');
+    await expect(page.locator('#row1-facilityInventories')).toContainText('Nursery');
+    await expect(page.locator('#row1-germinatingQuantity')).toContainText('300');
     await page.getByRole('tab', { name: 'By Nursery' }).click();
-    await expect(page.locator(`#row1-facility_name`)).toContainText('Nursery');
+    await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
     await page.getByRole('tab', { name: 'By Batch' }).click();
-    await expect(page.locator(`#row1-batchNumber`)).toContainText('2-1-002');
+    await expect(page.locator('#row1-batchNumber')).toContainText('2-1-002');
   });
 
   test('Withdraw to Outplant', async ({ page }, testInfo) => {
@@ -198,7 +198,7 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('75 Grams');
     await expect(page.getByRole('main')).toContainText('~75 ct');
     await page.getByRole('tab', { name: 'Viability Tests' }).click();
-    await expect(page.locator(`#row1-testType`)).toContainText('Nursery Germination');
+    await expect(page.locator('#row1-testType')).toContainText('Nursery Germination');
     await page.getByRole('table', { name: 'enhanced table' }).getByRole('img').click();
     await expect(page.getByRole('main')).toContainText('Viability Result: Pending');
     await expect(page.getByRole('main')).toContainText('Soil');
@@ -211,7 +211,7 @@ export default function AccessionTests() {
     await page.locator('#seedsGerminated').getByRole('textbox').fill('15');
     await page.getByRole('button', { name: 'Save' }).click();
     await page.waitForTimeout(1000); //Wait for modal to close
-    await page.locator(`#row1-viabilityPercent`).click();
+    await page.locator('#row1-viabilityPercent').click();
     await expect(page.getByRole('main')).toContainText('15');
     await page.getByRole('button', { name: 'Edit' }).click();
     await page.getByRole('button', { name: 'Add Observation' }).click();
@@ -219,6 +219,6 @@ export default function AccessionTests() {
     await page.getByLabel('Mark as Complete').check();
     await page.getByRole('button', { name: 'Save' }).click();
     await page.getByRole('button', { name: 'Apply Result' }).click();
-    await expect(page.locator(`#row1-viabilityPercent`)).toContainText('90%');
+    await expect(page.locator('#row1-viabilityPercent')).toContainText('90%');
   });
 }
