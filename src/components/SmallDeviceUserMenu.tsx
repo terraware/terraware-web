@@ -155,7 +155,14 @@ export default function SmallDeviceUserMenu({
                   autoFocusItem={open}
                   id='composition-menu'
                   aria-labelledby='composition-button'
-                  sx={{ display: 'flex', flexDirection: 'column', padding: '24px' }}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    padding: '24px',
+                    maxHeight: '100vh',
+                    overflowY: 'auto',
+                    WebkitOverflowScrolling: 'touch',
+                  }}
                 >
                   <Box sx={{ display: 'flex' }}>
                     <ButtonBase
