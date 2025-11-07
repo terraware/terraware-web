@@ -94,7 +94,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     [observation, plantingSite, species]
   );
 
-  const mainTitle = () => {
+  const mainTitle = useMemo(() => {
     const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
     const swCoordinatesLong = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
 
@@ -127,7 +127,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
         </Tooltip>
       </Box>
     );
-  };
+  }, [monitoringPlot, theme]);
 
   const data: Record<string, any>[] = useMemo(() => {
     const handleMissingData = (num?: number) => (!monitoringPlot?.completedTime && !num ? '' : num);
@@ -210,7 +210,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
 
   return (
     <DetailsPage
-      title={isEditObservationsEnabled ? mainTitle() : monitoringPlot?.monitoringPlotNumber?.toString() ?? ''}
+      title={isEditObservationsEnabled ? mainTitle : monitoringPlot?.monitoringPlotNumber?.toString() ?? ''}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
       rightComponent={

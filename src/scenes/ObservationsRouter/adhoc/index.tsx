@@ -209,7 +209,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
     plantingSubzone?.name,
   ]);
 
-  const mainTitle = () => {
+  const mainTitle = useMemo(() => {
     const swCoordinatesLat = monitoringPlotResult?.boundary?.coordinates?.[0]?.[0]?.[0];
     const swCoordinatesLong = monitoringPlotResult?.boundary?.coordinates?.[0]?.[0]?.[1];
 
@@ -249,7 +249,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
         </Tooltip>
       </Box>
     );
-  };
+  }, [monitoringPlotResult, plantingSubzone?.name, plantingZone?.name, theme]);
 
   const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
     <Typography
@@ -313,7 +313,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
 
   return (
     <DetailsPage
-      title={isEditObservationsEnabled ? mainTitle() : monitoringPlotResult?.monitoringPlotNumber.toString() ?? ''}
+      title={isEditObservationsEnabled ? mainTitle : monitoringPlotResult?.monitoringPlotNumber.toString() ?? ''}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
       plantingZoneName={plantingZoneName}
