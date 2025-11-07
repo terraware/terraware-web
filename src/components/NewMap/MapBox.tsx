@@ -445,6 +445,7 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
         if (clusterMaxZoom && onClusterClick && zoom >= clusterMaxZoom) {
           // On max zoom
           onClusterClick();
+          event.originalEvent.stopPropagation();
         } else {
           mapRef.current?.easeTo({
             center: { lat: latitude, lon: longitude },
