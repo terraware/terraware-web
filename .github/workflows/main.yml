@@ -123,7 +123,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Save playwright binaries
+      - name: Cache playwright binaries
         if: always() && steps.playwright-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
