@@ -11,7 +11,7 @@ test.describe('MatrixViewTests', () => {
   });
 
   test('Matrix view render', async ({ page }, testInfo) => {
-    await page.getByRole('link', { name: 'Accelerator Console' }).click();
+    await page.getByRole('link', { name: 'Accelerator Console' }).click({ delay: 50 });
     await page.getByRole('button', { name: 'Matrix View' }).click();
     await page.waitForTimeout(1000); //Wait for table to load
 
