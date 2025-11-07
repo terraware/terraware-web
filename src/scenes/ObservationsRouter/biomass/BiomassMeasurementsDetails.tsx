@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Tabs, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -10,6 +10,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { selectAdHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
 import { getConditionString } from 'src/redux/features/observations/utils';
@@ -25,7 +26,12 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
+import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import PhotosAndVideos from '../adhoc/PhotosAndVideos';
+import BiomassObservationDataTab from './BiomassObservationDataTab';
+import InvasiveAndThreatenedSpeciesTab from './InvasiveAndThreatedSpeciesTab';
 
 type BiomassMeasurementDetailsProps = {
   reload: () => void;
@@ -46,7 +52,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>([]);
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
-
+  const isEditObservationsEnabled = isEnabled('Edit Observations');
   const observation = allAdHocObservationResults?.find(
     (obsResult) => obsResult?.observationId.toString() === observationId?.toString()
   );
@@ -199,7 +205,43 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     setShowMatchSpeciesModal,
   });
 
-  return (
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      {
+        id: 'observationData',
+        label: strings.OBSERVATION_DATA,
+        children: <BiomassObservationDataTab trees={biomassMeasurements?.trees} />,
+      },
+      {
+        id: 'invasiveAndThreatenedSpecies',
+        label: strings.INVASIVE_AND_THREATENED_SPECIES,
+        children: <InvasiveAndThreatenedSpeciesTab />,
+      },
+      {
+        id: 'photosAndVideos',
+        label: strings.PHOTOS_AND_VIDEOS,
+        children: <PhotosAndVideos />,
+      },
+    ];
+  }, [activeLocale, biomassMeasurements?.trees]);
+
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'observationData',
+    tabs,
+    viewIdentifier: 'assignedObservations',
+  });
+
+  return isEditObservationsEnabled ? (
+    <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
+      <Box width='100%'>
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+      </Box>
+    </Page>
+  ) : (
     <Page
       crumbs={crumbs}
       title={title}

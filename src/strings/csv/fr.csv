@@ -833,6 +833,7 @@ INVALID_DATE,Date invalide,4945dd0d
 INVALID_EDITOR,Ce rapport est en cours d'édition par un autre utilisateur,6c883a63
 INVALID_VALUE,Valeur invalide,6efa77a5
 INVASIVE,Invasive,6d785c90
+INVASIVE_AND_THREATENED_SPECIES,Espèces envahissantes et menacées,d12cca9f
 INVENTORY,Inventaire,001c6bdb
 INVENTORY_IMPORT_COMPLETE,Importation des données d'inventaire achevée !,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Définir les pépinières affectées à l'inventaire des semis,393e62d3
@@ -1180,6 +1181,7 @@ NURSERY_TRANSFER,Transfert de pépinière,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Les transferts de pépinières nécessitent une pépinière d'origine et une pépinière de destination.,7fe70d84
 NURSERY_WITHDRAWALS,Retraits en pépinière,754c7946
 OBSERVATION,Observation,ac4f24f0
+OBSERVATION_DATA,Données d’observation,7e9f4079
 OBSERVATION_DATE,Date de l’observation,62a4f110
 OBSERVATION_END_DATE,Date de fin de l'observation,7997df5c
 OBSERVATION_ENDED,Observation terminée,dc4f5f65
@@ -1307,6 +1309,7 @@ PHOTO_NORTHWEST_QUADRAT,Quadrat nord-ouest,9af609f8
 PHOTO_SOUTHEAST_QUADRAT,Quadrat sud-est,cbfacb71
 PHOTO_SOUTHWEST_QUADRAT,Quadrat sud-ouest,9afd74aa
 PHOTOS,Photos,a440be46
+PHOTOS_AND_VIDEOS,Photos et vidéos,754d8e11
 PHOTOS_TO_UPLOAD,Photos à télécharger,2735bfdb
 PHOTOS_TO_UPLOAD_LIMIT,(Limite de {0} plus),121ba2ad
 PLACEHOLDER,Espace réservé,e7c25185

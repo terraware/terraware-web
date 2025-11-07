@@ -2,7 +2,7 @@ import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'rea
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Icon, IconTooltip, Textfield, Tooltip } from '@terraware/web-components';
+import { Icon, IconTooltip, Tabs, Textfield, Tooltip } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import Card from 'src/components/common/Card';
@@ -29,9 +29,12 @@ import {
 import { getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
+import ObservationDataTab from './ObservationDataTab';
+import PhotosAndVideos from './PhotosAndVideos';
 
 export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const params = useParams<{
@@ -251,16 +254,19 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
     );
   }, [monitoringPlotResult, plantingSubzone?.name, plantingZone?.name, theme]);
 
-  const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
-    <Typography
-      fontSize='20px'
-      lineHeight='28px'
-      fontWeight={600}
-      color={theme.palette.TwClrTxt}
-      margin={theme.spacing(marginTop ?? 3, 0, marginBottom ?? 2)}
-    >
-      {text}
-    </Typography>
+  const title = useCallback(
+    (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
+      <Typography
+        fontSize='20px'
+        lineHeight='28px'
+        fontWeight={600}
+        color={theme.palette.TwClrTxt}
+        margin={theme.spacing(marginTop ?? 3, 0, marginBottom ?? 2)}
+      >
+        {text}
+      </Typography>
+    ),
+    [theme]
   );
 
   const goToSurvivalRateSettings = useCallback(
@@ -271,7 +277,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
     [navigate, plantingSiteId]
   );
 
-  const getReplacedPlotsNames = (): JSX.Element[] => {
+  const getReplacedPlotsNames = useCallback((): JSX.Element[] => {
     const names =
       monitoringPlotResult?.overlapsWithPlotIds.map((plotId, index) => {
         const allPlots = observationResults?.flatMap((obv) =>
@@ -305,15 +311,56 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
 
     const elements = (names ?? []).filter((element): element is JSX.Element => element !== undefined);
     return elements;
-  };
+  }, [monitoringPlotResult?.overlapsWithPlotIds, observationResults, plantingSiteId, plantingZoneName]);
+
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      {
+        id: 'observationData',
+        label: strings.OBSERVATION_DATA,
+        children: (
+          <ObservationDataTab
+            monitoringPlotSpecies={monitoringPlotSpecies}
+            isPermanent={monitoringPlotResult?.isPermanent}
+          />
+        ),
+      },
+      {
+        id: 'photosAndVideos',
+        label: strings.PHOTOS_AND_VIDEOS,
+        children: <PhotosAndVideos />,
+      },
+    ];
+  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies]);
+
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'observationData',
+    tabs,
+    viewIdentifier: 'assignedObservations',
+  });
 
   if (!plantingSiteId || !observationId) {
     return undefined;
   }
 
-  return (
+  return isEditObservationsEnabled ? (
     <DetailsPage
-      title={isEditObservationsEnabled ? mainTitle : monitoringPlotResult?.monitoringPlotNumber.toString() ?? ''}
+      title={mainTitle}
+      plantingSiteId={Number(plantingSiteId)}
+      observationId={Number(observationId)}
+      plantingZoneName={plantingZoneName}
+    >
+      <Box width='100%'>
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+      </Box>
+    </DetailsPage>
+  ) : (
+    <DetailsPage
+      title={monitoringPlotResult?.monitoringPlotNumber.toString()}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
       plantingZoneName={plantingZoneName}
