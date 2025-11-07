@@ -101,7 +101,7 @@ jobs:
 
       - name: Install Playwright Browsers
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') && steps.playwright-cache.outputs.cache-hit != 'true'
-        run: yarn playwright install --with-deps chromium
+        run: yarn playwright install --with-deps --only-shell
 
       - name: Run end-to-end playwright tests
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
