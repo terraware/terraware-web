@@ -42,7 +42,7 @@ test.describe('AccessionTests', () => {
     await page.locator('#gpsCoords1').getByRole('textbox').fill('8, 8dfdsf');
     await page.locator('#location').getByRole('img').click();
     await page.getByText('garage').click();
-    await page.getByRole('button', { name: 'Save' }).click();
+    await page.getByRole('button', { name: 'Save' }).click({ delay: 50 });
 
     const accessionPrefix = `${yearId}-1-2-00`;
     await expect(page.getByRole('main')).toContainText(accessionPrefix);
