@@ -1391,6 +1391,7 @@ PLEASE_NOTE,Veuillez noter que :,f37ff0f0
 PLOT,Terrain,8d3cefee
 PLOT_CONDITIONS,Conditions de la parcelle,2b615357
 PLOT_DESCRIPTION,Description de la parcelle,67e5afa5
+PLOT_INFO,Informations sur la parcelle,38a9b59d
 PLOT_LOCATION,Emplacement de la placette,59f1374a
 PLOT_PHOTO,Photo de la parcelle,969c0fc9
 PLOT_SELECTION,Sélection de parcelles,ba150031

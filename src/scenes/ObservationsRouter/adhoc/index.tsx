@@ -1,8 +1,8 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
-import { Icon, IconTooltip, Textfield } from '@terraware/web-components';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Icon, IconTooltip, Textfield, Tooltip } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import Card from 'src/components/common/Card';
@@ -58,6 +58,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const [plantingSubzoneResult, setPlantingSubzoneResult] = useState<ObservationPlantingSubzoneResultsPayload>();
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
+  const isEditObservationsEnabled = isEnabled('Edit Observations');
 
   const result = useMemo(() => {
     if (!Number.isNaN(observationId)) {
@@ -208,6 +209,48 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
     plantingSubzone?.name,
   ]);
 
+  const mainTitle = useMemo(() => {
+    const swCoordinatesLat = monitoringPlotResult?.boundary?.coordinates?.[0]?.[0]?.[0];
+    const swCoordinatesLong = monitoringPlotResult?.boundary?.coordinates?.[0]?.[0]?.[1];
+
+    return (
+      <Box display='flex' alignItems={'end'}>
+        <Typography fontSize='24px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+          {monitoringPlotResult?.monitoringPlotNumber.toString()}
+        </Typography>
+        <Tooltip
+          placement='bottom'
+          title={
+            <Box>
+              <Typography>
+                {strings.ZONE}: {plantingZone?.name}
+              </Typography>
+              <Typography>
+                {strings.SUBZONE}: {plantingSubzone?.name}
+              </Typography>
+              <Typography>
+                {strings.PLOT_TYPE}:{' '}
+                {monitoringPlotResult ? (monitoringPlotResult.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : ''}
+              </Typography>
+              <Typography>
+                {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLong}
+              </Typography>
+            </Box>
+          }
+        >
+          <Typography
+            fontSize='16px'
+            color={theme.palette.TwClrTxtBrand}
+            fontWeight={400}
+            paddingLeft={theme.spacing(1)}
+          >
+            {strings.PLOT_INFO}
+          </Typography>
+        </Tooltip>
+      </Box>
+    );
+  }, [monitoringPlotResult, plantingSubzone?.name, plantingZone?.name, theme]);
+
   const title = (text: string | ReactNode, marginTop?: number, marginBottom?: number) => (
     <Typography
       fontSize='20px'
@@ -270,7 +313,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
 
   return (
     <DetailsPage
-      title={monitoringPlotResult?.monitoringPlotNumber.toString() ?? ''}
+      title={isEditObservationsEnabled ? mainTitle : monitoringPlotResult?.monitoringPlotNumber.toString() ?? ''}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
       plantingZoneName={plantingZoneName}
