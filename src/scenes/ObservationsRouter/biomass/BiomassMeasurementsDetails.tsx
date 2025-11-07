@@ -31,7 +31,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PhotosAndVideos from '../adhoc/PhotosAndVideos';
 import BiomassObservationDataTab from './BiomassObservationDataTab';
-import InvasiveAndThreatenedSpeciesTab from './InvasiveAndThreatedSpeciesTab';
+import InvasiveAndThreatenedSpeciesTab from './InvasiveAndThreatenedSpeciesTab';
 
 type BiomassMeasurementDetailsProps = {
   reload: () => void;
