@@ -13,7 +13,7 @@ type DetailsPageProps = {
   plantingSiteId: number;
   observationId: number;
   plantingZoneName?: string;
-  title: string;
+  title: string | React.ReactNode;
   children: React.ReactNode;
   rightComponent?: React.ReactNode;
 };

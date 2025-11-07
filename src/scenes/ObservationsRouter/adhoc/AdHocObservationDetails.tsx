@@ -2,13 +2,14 @@ import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'rea
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { DropdownItem, IconTooltip, Textfield } from '@terraware/web-components';
+import { DropdownItem, IconTooltip, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import _ from 'lodash';
 
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -57,6 +58,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>([]);
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
+  const isEditObservationsEnabled = isEnabled('Edit Observations');
 
   const onCloseMatchSpeciesModal = useCallback(() => setShowMatchSpeciesModal(false), []);
 
@@ -91,6 +93,41 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     },
     [observation, plantingSite, species]
   );
+
+  const mainTitle = () => {
+    const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+    const swCoordinatesLong = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
+
+    return (
+      <Box display='flex' alignItems={'end'}>
+        <Typography fontSize='24px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+          {monitoringPlot?.monitoringPlotNumber?.toString() || ''}
+        </Typography>
+        <Tooltip
+          placement='bottom'
+          title={
+            <Box>
+              <Typography>
+                {strings.PLOT_TYPE}: {strings.AD_HOC}
+              </Typography>
+              <Typography>
+                {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLong}
+              </Typography>
+            </Box>
+          }
+        >
+          <Typography
+            fontSize='16px'
+            color={theme.palette.TwClrTxtBrand}
+            fontWeight={400}
+            paddingLeft={theme.spacing(1)}
+          >
+            {strings.PLOT_INFO}
+          </Typography>
+        </Tooltip>
+      </Box>
+    );
+  };
 
   const data: Record<string, any>[] = useMemo(() => {
     const handleMissingData = (num?: number) => (!monitoringPlot?.completedTime && !num ? '' : num);
@@ -173,7 +210,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
 
   return (
     <DetailsPage
-      title={monitoringPlot?.monitoringPlotNumber?.toString() ?? ''}
+      title={isEditObservationsEnabled ? mainTitle() : monitoringPlot?.monitoringPlotNumber?.toString() ?? ''}
       plantingSiteId={Number(plantingSiteId)}
       observationId={Number(observationId)}
       rightComponent={
