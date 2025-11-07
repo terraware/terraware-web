@@ -2,7 +2,7 @@ import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'rea
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { DropdownItem, IconTooltip, Textfield, Tooltip } from '@terraware/web-components';
+import { DropdownItem, IconTooltip, Tabs, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import _ from 'lodash';
 
@@ -29,9 +29,12 @@ import { AdHocObservationResults } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { exportAdHocObservationDetails } from '../exportAdHocObservations';
+import ObservationDataTab from './ObservationDataTab';
+import PhotosAndVideos from './PhotosAndVideos';
 
 type AdHocObservationDetailsProps = {
   reload: () => void;
@@ -204,11 +207,44 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
 
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      {
+        id: 'observationData',
+        label: strings.OBSERVATION_DATA,
+        children: (
+          <ObservationDataTab monitoringPlotSpecies={monitoringPlot.species} isPermanent={monitoringPlot.isPermanent} />
+        ),
+      },
+      {
+        id: 'photosAndVideos',
+        label: strings.PHOTOS_AND_VIDEOS,
+        children: <PhotosAndVideos />,
+      },
+    ];
+  }, [activeLocale, monitoringPlot]);
+
+  const { activeTab, onChangeTab } = useStickyTabs({
+    defaultTab: 'observationData',
+    tabs,
+    viewIdentifier: 'assignedObservations',
+  });
+
   if (!plantingSiteId || !observationId) {
     return undefined;
   }
 
-  return (
+  return isEditObservationsEnabled ? (
+    <DetailsPage title={mainTitle} plantingSiteId={Number(plantingSiteId)} observationId={Number(observationId)}>
+      <Box width='100%'>
+        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+      </Box>
+    </DetailsPage>
+  ) : (
     <DetailsPage
       title={isEditObservationsEnabled ? mainTitle : monitoringPlot?.monitoringPlotNumber?.toString() ?? ''}
       plantingSiteId={Number(plantingSiteId)}

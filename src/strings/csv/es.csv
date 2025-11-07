@@ -834,6 +834,7 @@ INVALID_DATE,Fecha no válida,4945dd0d
 INVALID_EDITOR,Este informe está siendo editado por otro usuario,6c883a63
 INVALID_VALUE,Valor no válido,6efa77a5
 INVASIVE,Invasiva,6d785c90
+INVASIVE_AND_THREATENED_SPECIES,Especies invasoras y amenazadas,d12cca9f
 INVENTORY,Inventario,001c6bdb
 INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas,393e62d3
@@ -1181,6 +1182,7 @@ NURSERY_TRANSFER,Traslado de vivero,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Las transferencias de vivero requieren de un vivero fuente y uno meta.,7fe70d84
 NURSERY_WITHDRAWALS,Retiros del vivero,754c7946
 OBSERVATION,Observación,ac4f24f0
+OBSERVATION_DATA,Datos de observación,7e9f4079
 OBSERVATION_DATE,Fecha de observación,62a4f110
 OBSERVATION_END_DATE,Fecha de finalización de la observación,7997df5c
 OBSERVATION_ENDED,Observación finalizada,dc4f5f65
@@ -1308,6 +1310,7 @@ PHOTO_NORTHWEST_QUADRAT,Cuadrícula noroeste,9af609f8
 PHOTO_SOUTHEAST_QUADRAT,Cuadrícula sudeste,cbfacb71
 PHOTO_SOUTHWEST_QUADRAT,Cuadrícula suroeste,9afd74aa
 PHOTOS,Fotos,a440be46
+PHOTOS_AND_VIDEOS,Fotos y videos,754d8e11
 PHOTOS_TO_UPLOAD,Fotos a subir,2735bfdb
 PHOTOS_TO_UPLOAD_LIMIT,(Límite de {0} más),121ba2ad
 PLACEHOLDER,Marcador de posición,e7c25185
