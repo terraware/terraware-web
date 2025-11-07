@@ -57,7 +57,7 @@
     "@mui/styled-engine-sc": "^5.14.12",
     "@mux/mux-player": "^3.6.1",
     "@mux/mux-player-react": "^3.6.1",
-    "@reduxjs/toolkit": "^1.9.3",
+    "@reduxjs/toolkit": "^2.10.1",
     "@terraware/web-components": "^3.9.6",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
