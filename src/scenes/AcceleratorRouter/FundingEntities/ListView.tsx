@@ -6,8 +6,10 @@ import Page from 'src/components/Page';
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import Button from 'src/components/common/button/Button';
+import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
+import { useListFundingEntitiesQuery } from 'src/queries/funder/fundingEntities';
 import { requestFundingEntities } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectFundingEntitiesRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -39,6 +41,8 @@ const FundingEntitiesListView = () => {
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
   const { goToNewFundingEntity } = useNavigateTo();
+  const rtkQueryEnabled = isEnabled('Redux RTK Query');
+  const { data: rtkFundingEntities } = useListFundingEntitiesQuery(undefined, { skip: !rtkQueryEnabled });
 
   const defaultSortOrder: SearchSortOrder = {
     field: 'name',
@@ -46,11 +50,17 @@ const FundingEntitiesListView = () => {
   };
 
   useEffect(() => {
-    if (activeLocale) {
+    if (activeLocale && !rtkQueryEnabled) {
       const request = dispatch(requestFundingEntities());
       setListRequestId(request.requestId);
     }
-  }, [activeLocale, dispatch]);
+  }, [activeLocale, dispatch, rtkQueryEnabled]);
+
+  useEffect(() => {
+    if (rtkFundingEntities && rtkQueryEnabled) {
+      setFundingEntities(rtkFundingEntities ?? []);
+    }
+  }, [rtkFundingEntities, rtkQueryEnabled]);
 
   useEffect(() => {
     if (!listRequest) {

@@ -83,7 +83,7 @@ export const fundingEntitiesApi = createApi({
         { type: QueryTagTypes.FundingEntities, id: 'LIST' },
       ],
     }),
-    userFundingEntity: build.query<FundingEntity, number>({
+    getUserFundingEntity: build.query<FundingEntity, number>({
       query: (userId) => USER_FUNDING_ENTITY_ENDPOINT.replace('{userId}', userId.toString()),
       providesTags: (result, error, userId) => [
         ...(result ? [{ type: QueryTagTypes.FundingEntities, id: result.id.toString() }] : []),
@@ -94,3 +94,12 @@ export const fundingEntitiesApi = createApi({
     }),
   }),
 });
+
+export const {
+  useListFundingEntitiesQuery,
+  useCreateFundingEntitiesMutation,
+  useGetFundingEntityQuery,
+  useUpdateFundingEntityMutation,
+  useDeleteFundingEntityMutation,
+  useGetUserFundingEntityQuery,
+} = fundingEntitiesApi;
