@@ -169,7 +169,7 @@
     "@stylistic/eslint-plugin-js": "^4.0.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/user-event": "^14.4.3",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@types/geojson": "^7946.0.10",
     "@types/is-hotkey": "^0.1.10",
     "@types/jest": "^30.0.0",
