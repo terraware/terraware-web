@@ -1,3 +1,4 @@
+1542180f85e Fix playwright cache of browser binaries (#4759)
 a986edab52f SW-7687 Create new tabs (observation data, photos, and invasive and threatened species) (#4760)
 b645ae34e35 SW-7686 Create Plot info tooltip (#4758)
 7b8dfaac1c8 Stop other onClicks when a clustered marker is clicked (#4757)
