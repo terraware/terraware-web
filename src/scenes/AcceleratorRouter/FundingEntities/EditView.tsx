@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
+import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
+import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity } from 'src/providers';
+import { useGetFundingEntityQuery, useUpdateFundingEntityMutation } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 
@@ -14,16 +17,32 @@ const EditView = () => {
   const updateFundingEntity = useUpdateFundingEntity();
   const { goToFundingEntity } = useNavigateTo();
 
+  const pathParams = useParams<{ fundingEntityId: string }>();
+  const { data: rtkFundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
+  const [update, result] = useUpdateFundingEntityMutation();
+  const rtkQueryEnabled = isEnabled('Redux RTK Query');
+
   const goToViewFundingEntity = useCallback(() => {
     reload();
-    goToFundingEntity(String(fundingEntity?.id));
-  }, [fundingEntity, goToFundingEntity, reload]);
+    goToFundingEntity(Number(pathParams.fundingEntityId));
+  }, [goToFundingEntity, pathParams.fundingEntityId, reload]);
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
-      updateFundingEntity.update(record);
+      if (rtkQueryEnabled) {
+        const payload = {
+          id: record.id,
+          body: {
+            name: record.name,
+            projects: record.projects.map((project) => project.projectId),
+          },
+        };
+        update(payload);
+      } else {
+        updateFundingEntity.update(record);
+      }
     },
-    [updateFundingEntity]
+    [rtkQueryEnabled, update, updateFundingEntity]
   );
 
   useEffect(() => {
@@ -32,16 +51,30 @@ const EditView = () => {
     }
   }, [updateFundingEntity, goToViewFundingEntity]);
 
+  useEffect(() => {
+    if (result.isSuccess) {
+      goToViewFundingEntity();
+    }
+  }, [goToViewFundingEntity, result]);
+
   return (
     <Page
       title={strings.EDIT_FUNDING_ENTITY}
       description={strings.EDIT_FUNDING_ENTITY_DESC}
       contentStyle={{ display: 'flex', flexDirection: 'column' }}
     >
-      {fundingEntity && (
+      {!rtkQueryEnabled && fundingEntity && (
         <FundingEntityForm
           busy={updateFundingEntity.busy}
           fundingEntity={fundingEntity}
+          onCancel={goToViewFundingEntity}
+          onSave={handleOnSave}
+        />
+      )}
+      {rtkQueryEnabled && rtkFundingEntity && (
+        <FundingEntityForm
+          busy={updateFundingEntity.busy}
+          fundingEntity={rtkFundingEntity}
           onCancel={goToViewFundingEntity}
           onSave={handleOnSave}
         />

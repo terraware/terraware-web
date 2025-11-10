@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { paths } from 'src/api/types/generated-schema';
 import baseQuery from 'src/queries/baseQuery';
-import { QueryTagTypes } from 'src/queries/tags';
+import { QUERY_TAGS, QueryTagTypes } from 'src/queries/tags';
 import { FundingEntity } from 'src/types/FundingEntity';
 
 const FUNDING_ENTITIES_LIST_ENDPOINT = '/api/v1/funder/entities';
@@ -34,7 +34,7 @@ type UpdateFundingEntityPaylaod = {
 
 export const fundingEntitiesApi = createApi({
   baseQuery,
-  tagTypes: [QueryTagTypes.FundingEntities, QueryTagTypes.UserFundingEntity],
+  tagTypes: QUERY_TAGS,
   endpoints: (build) => ({
     listFundingEntities: build.query<FundingEntity[], void>({
       query: () => FUNDING_ENTITIES_LIST_ENDPOINT,

@@ -42,7 +42,7 @@ const FundingEntitiesListView = () => {
   const { isMobile } = useDeviceInfo();
   const { goToNewFundingEntity } = useNavigateTo();
   const rtkQueryEnabled = isEnabled('Redux RTK Query');
-  const { data: rtkFundingEntities } = useListFundingEntitiesQuery(undefined, { skip: !rtkQueryEnabled });
+  const { data: rtkFundingEntities, error } = useListFundingEntitiesQuery(undefined, { skip: !rtkQueryEnabled });
 
   const defaultSortOrder: SearchSortOrder = {
     field: 'name',
@@ -73,6 +73,12 @@ const FundingEntitiesListView = () => {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [listRequest, snackbar]);
+
+  useEffect(() => {
+    if (error) {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [error, snackbar]);
 
   const allProjects = useMemo<Record<string, string>>(
     () =>
