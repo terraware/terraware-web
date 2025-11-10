@@ -13,7 +13,6 @@ import ReactMapGL, {
 import { Box, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import centroid from '@turf/centroid';
-
 /**
  * The following is needed to deal with a mapbox bug
  * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
