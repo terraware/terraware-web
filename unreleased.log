@@ -1,3 +1,4 @@
+27464eef603 Update dependency @trivago/prettier-plugin-sort-imports to v6 (#4764)
 ec372e9688a Update JamesIves/github-pages-deploy-action action to v4.7.4 (#4763)
 b212705f238 Only install headless chromium for ci (#4761)
 1542180f85e Fix playwright cache of browser binaries (#4759)
