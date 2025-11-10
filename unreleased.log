@@ -1,3 +1,5 @@
+ec372e9688a Update JamesIves/github-pages-deploy-action action to v4.7.4 (#4763)
+b212705f238 Only install headless chromium for ci (#4761)
 1542180f85e Fix playwright cache of browser binaries (#4759)
 a986edab52f SW-7687 Create new tabs (observation data, photos, and invasive and threatened species) (#4760)
 b645ae34e35 SW-7686 Create Plot info tooltip (#4758)
