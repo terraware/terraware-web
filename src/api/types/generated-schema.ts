@@ -2534,7 +2534,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lists all the species that have been withdrawn to a planting site. */
+        /**
+         * Lists all the species that have been withdrawn to a planting site.
+         * @deprecated
+         */
         get: operations["getSpeciesWithdrawnToPlantingSite"];
         put?: never;
         post?: never;
@@ -3831,6 +3834,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/observations/{observationId}/plots/{plotId}/media/{fileId}/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets streaming details for a video for an observation. */
+        get: operations["getObservationMediaStream"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/observations/{observationId}/plots/{plotId}/otherMedia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Adds a photo of a monitoring plot after an observation is complete. */
+        post: operations["uploadOtherPlotMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos": {
         parameters: {
             query?: never;
@@ -3840,7 +3877,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Uploads a photo of a monitoring plot. */
+        /**
+         * Uploads a photo of a monitoring plot as part of the observation.
+         * @description Photos uploaded via this endpoint are considered to be part of the original observation and cannot be deleted later.
+         */
         post: operations["uploadPlotPhoto"];
         delete?: never;
         options?: never;
@@ -3860,9 +3900,14 @@ export interface paths {
          * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
          */
         get: operations["getPlotPhoto"];
-        put?: never;
+        /** Updates information about a specific photo from an observation of a monitoring plot. */
+        put: operations["updatePlotPhoto"];
         post?: never;
-        delete?: never;
+        /**
+         * Deletes a photo from an observation of a monitoring plot.
+         * @description Only photos that were not part of the original observation may be deleted.
+         */
+        delete: operations["deletePlotPhoto"];
         options?: never;
         head?: never;
         patch?: never;
@@ -4091,6 +4136,26 @@ export interface paths {
          * @description The list is based on nursery withdrawals to the planting site as well as past observations.
          */
         get: operations["listPlantingSubzoneSpecies"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/t0/plantingSite/{plantingSiteId}/species": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lists all the species that have been withdrawn to a planting site or recorded in observations (if not withdrawn).
+         * @description Species with densities are species that were withdrawn, species with null densities are species that were recorded in observations but not withdrawn to the plot's subzone.
+         */
+        get: operations["getT0SpeciesForPlantingSite"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5156,7 +5221,9 @@ export interface components {
              */
             type: "OutgoingWithdrawal";
         };
-        BatchHistoryPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime"> & (components["schemas"]["BatchHistoryDetailsEditedPayload"] | components["schemas"]["BatchHistoryIncomingWithdrawalPayload"] | components["schemas"]["BatchHistoryOutgoingWithdrawalPayload"] | components["schemas"]["BatchHistoryPhotoCreatedPayload"] | components["schemas"]["BatchHistoryPhotoDeletedPayload"] | components["schemas"]["BatchHistoryQuantityEditedPayload"] | components["schemas"]["BatchHistoryStatusChangedPayload"]);
+        BatchHistoryPayload: ({
+            type: string;
+        } & WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime">) & (components["schemas"]["BatchHistoryDetailsEditedPayload"] | components["schemas"]["BatchHistoryIncomingWithdrawalPayload"] | components["schemas"]["BatchHistoryOutgoingWithdrawalPayload"] | components["schemas"]["BatchHistoryPhotoCreatedPayload"] | components["schemas"]["BatchHistoryPhotoDeletedPayload"] | components["schemas"]["BatchHistoryQuantityEditedPayload"] | components["schemas"]["BatchHistoryStatusChangedPayload"]);
         BatchHistoryPayloadCommonProps: {
             /** Format: int64 */
             createdBy: number;
@@ -6734,11 +6801,6 @@ export interface components {
             activity: components["schemas"]["ActivityPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
-        GetActivityStreamResponsePayload: {
-            playbackId: string;
-            playbackToken: string;
-            status: components["schemas"]["SuccessOrError"];
-        };
         GetAllSiteT0DataSetResponsePayload: {
             allSet: boolean;
             status: components["schemas"]["SuccessOrError"];
@@ -6837,6 +6899,11 @@ export interface components {
         };
         GetModuleResponsePayload: {
             module: components["schemas"]["ModulePayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetMuxStreamResponsePayload: {
+            playbackId: string;
+            playbackToken: string;
             status: components["schemas"]["SuccessOrError"];
         };
         GetNotificationResponsePayload: {
@@ -8139,10 +8206,15 @@ export interface components {
             /** @enum {string} */
             position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
         };
-        ObservationMonitoringPlotPhotoPayload: {
+        ObservationMonitoringPlotMediaPayload: {
+            caption?: string;
             /** Format: int64 */
             fileId: number;
             gpsCoordinates?: components["schemas"]["Point"];
+            /** @description If true, this file was uploaded as part of the original observation. If false, it was uploaded later. */
+            isOriginal: boolean;
+            /** @enum {string} */
+            mediaKind: "Photo" | "Video";
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /** @enum {string} */
@@ -8163,6 +8235,7 @@ export interface components {
             isAdHoc: boolean;
             /** @description True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
             isPermanent: boolean;
+            media: components["schemas"]["ObservationMonitoringPlotMediaPayload"][];
             /** Format: int64 */
             monitoringPlotId: number;
             /** @description Full name of this monitoring plot, including zone and subzone prefixes. */
@@ -8182,7 +8255,7 @@ export interface components {
             overlappedByPlotIds: number[];
             /** @description IDs of any older monitoring plots this one overlaps with. */
             overlapsWithPlotIds: number[];
-            photos: components["schemas"]["ObservationMonitoringPlotPhotoPayload"][];
+            photos: components["schemas"]["ObservationMonitoringPlotMediaPayload"][];
             /**
              * Format: int32
              * @description Number of live plants per hectare.
@@ -8452,6 +8525,11 @@ export interface components {
              * @description Total number of live and existing plants of this species.
              */
             totalPlants: number;
+        };
+        OptionalSpeciesDensityPayload: {
+            density?: number;
+            /** Format: int64 */
+            speciesId: number;
         };
         /** @description Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
         OrNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
@@ -8950,7 +9028,7 @@ export interface components {
         PlotSpeciesDensitiesPayload: {
             /** Format: int64 */
             monitoringPlotId: number;
-            species: components["schemas"]["SpeciesDensityPayload"][];
+            species: components["schemas"]["OptionalSpeciesDensityPayload"][];
         };
         PlotT0DataPayload: {
             densityData: components["schemas"]["SpeciesDensityPayload"][];
@@ -10393,6 +10471,9 @@ export interface components {
             /** @description Observed coordinates, if any, up to one per position. */
             coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
         };
+        UpdatePlotPhotoRequestPayload: {
+            caption?: string;
+        };
         UpdateProjectAcceleratorDetailsRequestPayload: {
             accumulationRate?: number;
             annualCarbon?: number;
@@ -10694,7 +10775,19 @@ export interface components {
             /** Format: int64 */
             valueId: number;
         };
+        UploadPlotMediaRequestPayload: {
+            caption?: string;
+            /** @enum {string} */
+            position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /**
+             * @description Type of subject the uploaded file depicts.
+             * @default Plot
+             * @enum {string}
+             */
+            type: "Plot" | "Quadrat" | "Soil";
+        };
         UploadPlotPhotoRequestPayload: {
+            caption?: string;
             gpsCoordinates: components["schemas"]["Point"];
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
@@ -11285,7 +11378,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["GetActivityStreamResponsePayload"];
+                    "application/json": components["schemas"]["GetMuxStreamResponsePayload"];
                 };
             };
         };
@@ -15306,7 +15399,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["GetActivityStreamResponsePayload"];
+                    "application/json": components["schemas"]["GetMuxStreamResponsePayload"];
                 };
             };
         };
@@ -19438,6 +19531,70 @@ export interface operations {
             };
         };
     };
+    getObservationMediaStream: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                plotId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetMuxStreamResponsePayload"];
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a video with the requested ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    uploadOtherPlotMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                plotId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                    payload: components["schemas"]["UploadPlotMediaRequestPayload"];
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadPlotPhotoResponsePayload"];
+                };
+            };
+        };
+    };
     uploadPlotPhoto: {
         parameters: {
             query?: never;
@@ -19495,6 +19652,76 @@ export interface operations {
                 content: {
                     "image/jpeg": string;
                     "image/png": string;
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a photo with the requested ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updatePlotPhoto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                plotId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePlotPhotoRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a photo with the requested ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deletePlotPhoto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                plotId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
             /** @description The plot observation does not exist, or does not have a photo with the requested ID. */
@@ -19895,6 +20122,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListPlantingSubzoneSpeciesResponsePayload"];
+                };
+            };
+        };
+    };
+    getT0SpeciesForPlantingSite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSiteId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSitePlotSpeciesResponsePayload"];
                 };
             };
         };

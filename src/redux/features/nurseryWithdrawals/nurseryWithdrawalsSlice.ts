@@ -5,23 +5,10 @@ import { NurseryWithdrawalsSearchResponseElement } from 'src/services/NurseryWit
 import { FieldOptionsMap } from 'src/types/Search';
 
 import {
-  SpeciesPlot,
   requestCountNurseryWithdrawals,
   requestListNurseryWithdrawals,
   requestNurseryWithdrawalsFilterOptions,
-  requestPlantingSiteWithdrawnSpecies,
 } from './nurseryWithdrawalsThunks';
-
-const initialStatePlantingSiteWithdrawnSpecies: { [key: string]: StatusT<SpeciesPlot[]> } = {};
-
-export const plantingSiteWithdrawnSpeciesSlice = createSlice({
-  name: 'plantingSiteWithdrawnSpeciesSlice',
-  initialState: initialStatePlantingSiteWithdrawnSpecies,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestPlantingSiteWithdrawnSpecies)(builder);
-  },
-});
 
 const initialStateNurseryWithdrawalsList: { [key: string]: StatusT<NurseryWithdrawalsSearchResponseElement[]> } = {};
 
@@ -57,7 +44,6 @@ export const nurseryWithdrawalsCountSlice = createSlice({
 });
 
 const nurseryWithdrawalsReducers = {
-  plantingSiteWithdrawnSpecies: plantingSiteWithdrawnSpeciesSlice.reducer,
   nurseryWithdrawalsList: nurseryWithdrawalsListSlice.reducer,
   nurseryWithdrawalsFilterOptions: nurseryWithdrawalsFilterOptionsSlice.reducer,
   nurseryWithdrawalsCount: nurseryWithdrawalsCountSlice.reducer,

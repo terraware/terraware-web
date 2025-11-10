@@ -10,20 +10,20 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectPlantingSiteWithdrawnSpecies } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
 import {
-  SpeciesPlot,
-  requestPlantingSiteWithdrawnSpecies,
-} from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
-import { selectPlantingSiteT0, selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
+  selectPlantingSiteT0,
+  selectPlantingSiteT0Species,
+  selectPlotsWithObservations,
+} from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
+  requestGetPlantingSiteT0Species,
   requestPermanentPlotsWithObservations,
   requestPlantingSiteT0,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { SiteT0Data } from 'src/types/Tracking';
+import { SiteT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ChangeTabWarningModal from './ChangeTabWarningModal';
@@ -42,7 +42,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
   const [plotsRequestId, setPlotsRequestId] = useState('');
   const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
   const [speciesRequestId, setSpeciesRequestId] = useState('');
-  const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
+  const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteT0Species(speciesRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
   const [showChangeTabWarning, setShowChangeTabWarning] = useState(false);
@@ -67,7 +67,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
       setRequestId(request.requestId);
       const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSite.id));
       setPlotsRequestId(requestPlots.requestId);
-      const requestSpeciesPlots = dispatch(requestPlantingSiteWithdrawnSpecies(plantingSite.id));
+      const requestSpeciesPlots = dispatch(requestGetPlantingSiteT0Species(plantingSite.id));
       setSpeciesRequestId(requestSpeciesPlots.requestId);
     }
   }, [dispatch, plantingSite, reloadObservations]);

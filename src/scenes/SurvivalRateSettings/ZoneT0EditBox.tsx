@@ -6,11 +6,10 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import TextField from 'src/components/common/TextField';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import { AssignSiteT0TempData, ZoneT0Data } from 'src/types/Tracking';
+import { AssignSiteT0TempData, SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
 import { allowOneDecimal, roundToDecimal } from 'src/utils/numbers';
 
 import { AddedSpecies } from './PlotT0EditBox';
@@ -44,7 +43,7 @@ const ZoneT0EditBox = ({
     if (!withdrawnSpeciesPlot) {
       return [];
     }
-    const speciesMap = new Map<number, { density: number; speciesId: number }>();
+    const speciesMap = new Map<number, { density?: number; speciesId: number }>();
     withdrawnSpeciesPlot.forEach((plot) => {
       plot.species.forEach((wdSpecies) => {
         if (!speciesMap.has(wdSpecies.speciesId)) {
@@ -257,7 +256,7 @@ const ZoneT0EditBox = ({
   );
 
   const densityValue = useCallback(
-    (withdrawnSpecies: { density: number; speciesId: number }) => {
+    (withdrawnSpecies: { density?: number; speciesId: number }) => {
       const density = zoneToSave?.densityData.find(
         (densityData) => densityData.speciesId === withdrawnSpecies.speciesId
       )?.density;
@@ -333,13 +332,15 @@ const ZoneT0EditBox = ({
                     />
                   </td>
                   <td>
-                    <Checkbox
-                      id={`density-${withdrawnSpecies.speciesId}`}
-                      label={roundToDecimal(withdrawnSpecies.density, 1)}
-                      name={`density-${withdrawnSpecies.speciesId}`}
-                      value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
-                      onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
-                    />
+                    {withdrawnSpecies.density && (
+                      <Checkbox
+                        id={`density-${withdrawnSpecies.speciesId}`}
+                        label={roundToDecimal(withdrawnSpecies.density, 1)}
+                        name={`density-${withdrawnSpecies.speciesId}`}
+                        value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
+                        onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
+                      />
+                    )}
                   </td>
                 </tr>
               ))}

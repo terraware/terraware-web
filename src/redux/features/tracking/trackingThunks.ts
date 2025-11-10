@@ -251,3 +251,16 @@ export const requestGetPlantingSiteT0AllSet = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestGetPlantingSiteT0Species = createAsyncThunk(
+  't0Species',
+  async (plantingSiteId: number, { rejectWithValue }) => {
+    const response = await TrackingService.getT0Species(plantingSiteId);
+
+    if (response && response.requestSucceeded) {
+      return response.data?.plots;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

@@ -53,3 +53,6 @@ export const selectProjectPlantingSiteList = (requestId: string) => (state: Root
 
 export const selectPlantingSiteT0AllSet = (requestId: string) => (state: RootState) =>
   state.plantingSiteT0AllSet[requestId];
+
+export const selectPlantingSiteT0Species = (requestId: string) => (state: RootState) =>
+  state.plantingSiteT0Species[requestId];

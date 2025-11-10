@@ -5,10 +5,9 @@ import { IconTooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
-import { ZoneT0Data } from 'src/types/Tracking';
+import { SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
 import { roundToDecimal } from 'src/utils/numbers';
 
 type ZoneT0BoxProps = {
@@ -31,7 +30,7 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
     if (!withdrawnSpeciesPlot) {
       return [];
     }
-    const speciesMap = new Map<number, { density: number; speciesId: number }>();
+    const speciesMap = new Map<number, { density?: number; speciesId: number }>();
     withdrawnSpeciesPlot.forEach((plot) => {
       plot.species.forEach((wdSpecies) => {
         if (!speciesMap.has(wdSpecies.speciesId)) {
