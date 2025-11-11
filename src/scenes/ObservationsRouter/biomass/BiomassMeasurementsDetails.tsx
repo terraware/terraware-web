@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -206,6 +206,14 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     setShowMatchSpeciesModal,
   });
 
+  const onExportData = useCallback(() => {
+    void exportAllCsvs();
+  }, [exportAllCsvs]);
+
+  const onMatchSpecies = useCallback(() => {
+    setShowMatchSpeciesModal(true);
+  }, []);
+
   const tabs = useMemo(() => {
     if (!activeLocale) {
       return [];
@@ -216,19 +224,32 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
         children: (
-          <BiomassObservationDataTab
-            trees={biomassMeasurements?.trees}
-            totalPlants={monitoringPlot?.totalPlants}
-            livePlants={getObservationSpeciesLivePlantsCount(monitoringPlot?.species)}
-            deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlot?.species)}
-            totalSpecies={monitoringPlot?.totalSpecies}
-            completedTime={monitoringPlot?.completedTime}
-            observer={monitoringPlot?.claimedByName}
-            plotConditions={monitoringPlot?.conditions}
-            fieldNotes={monitoringPlot?.notes}
-            biomassMeasurement={biomassMeasurements}
-            plotLocation={`${swCoordinatesLat}, ${swCoordinatesLong}`}
-          />
+          <>
+            {showMatchSpeciesModal && (
+              <MatchSpeciesModal
+                onClose={() => setShowMatchSpeciesModal(false)}
+                onSave={onSaveMergedSpecies}
+                unrecognizedSpecies={unrecognizedSpecies || []}
+              />
+            )}
+
+            <BiomassObservationDataTab
+              trees={biomassMeasurements?.trees}
+              totalPlants={monitoringPlot?.totalPlants}
+              livePlants={getObservationSpeciesLivePlantsCount(monitoringPlot?.species)}
+              deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlot?.species)}
+              totalSpecies={monitoringPlot?.totalSpecies}
+              completedTime={monitoringPlot?.completedTime}
+              observer={monitoringPlot?.claimedByName}
+              plotConditions={monitoringPlot?.conditions}
+              fieldNotes={monitoringPlot?.notes}
+              biomassMeasurement={biomassMeasurements}
+              plotLocation={`${swCoordinatesLat}, ${swCoordinatesLong}`}
+              unrecognizedSpecies={unrecognizedSpecies}
+              onExportData={onExportData}
+              onMatchSpecies={onMatchSpecies}
+            />
+          </>
         ),
       },
       {
@@ -242,7 +263,18 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
         children: <PhotosAndVideos />,
       },
     ];
-  }, [activeLocale, biomassMeasurements, monitoringPlot, swCoordinatesLat, swCoordinatesLong]);
+  }, [
+    activeLocale,
+    showMatchSpeciesModal,
+    onSaveMergedSpecies,
+    unrecognizedSpecies,
+    biomassMeasurements,
+    monitoringPlot,
+    swCoordinatesLat,
+    swCoordinatesLong,
+    onExportData,
+    onMatchSpecies,
+  ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',
@@ -267,12 +299,12 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
             {
               label: strings.EXPORT_OBSERVATION_DETAILS_CSV,
               value: 'exportAll',
-              onClick: () => void exportAllCsvs(),
+              onClick: onExportData,
             },
             {
               label: strings.MATCH_UNRECOGNIZED_SPECIES,
               value: 'matchUnrecognizedSpecies',
-              onClick: () => setShowMatchSpeciesModal(true),
+              onClick: onMatchSpecies,
               disabled: unrecognizedSpecies.length === 0,
             },
           ]}

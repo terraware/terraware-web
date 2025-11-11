@@ -79,22 +79,32 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
 
   const gridSize = isMobile ? 12 : 4;
 
+  const onMatchSpecies = useCallback(() => {
+    setShowMatchSpeciesModal(true);
+  }, []);
+
+  const onExportData = useCallback(() => {
+    if (observation && plantingSite) {
+      void exportAdHocObservationDetails(
+        {
+          ...observation,
+          plantingSiteName: plantingSite.name,
+        } as AdHocObservationResults,
+        plantingSite,
+        species
+      );
+    }
+  }, [observation, plantingSite, species]);
+
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
       if (optionItem.value === 'match') {
-        return setShowMatchSpeciesModal(true);
+        return onMatchSpecies();
       } else if (optionItem.value === 'export' && observation && plantingSite) {
-        void exportAdHocObservationDetails(
-          {
-            ...observation,
-            plantingSiteName: plantingSite.name,
-          } as AdHocObservationResults,
-          plantingSite,
-          species
-        );
+        onExportData();
       }
     },
-    [observation, plantingSite, species]
+    [observation, onExportData, onMatchSpecies, plantingSite]
   );
 
   const mainTitle = useMemo(() => {
@@ -217,20 +227,33 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
         children: (
-          <ObservationDataTab
-            monitoringPlotSpecies={monitoringPlot.species}
-            isPermanent={monitoringPlot.isPermanent}
-            totalPlants={monitoringPlot?.totalPlants}
-            livePlants={getObservationSpeciesLivePlantsCount(monitoringPlot?.species)}
-            deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlot?.species)}
-            totalSpecies={monitoringPlot?.totalSpecies}
-            plantDensity={monitoringPlot?.plantingDensity}
-            survivalRate={monitoringPlot?.survivalRate}
-            completedTime={monitoringPlot?.completedTime}
-            observer={monitoringPlot?.claimedByName}
-            plotConditions={monitoringPlot?.conditions}
-            fieldNotes={monitoringPlot?.notes}
-          />
+          <>
+            {showMatchSpeciesModal && (
+              <MatchSpeciesModal
+                onClose={onCloseMatchSpeciesModal}
+                onSave={onSaveMergedSpecies}
+                unrecognizedSpecies={unrecognizedSpecies || []}
+              />
+            )}
+            <ObservationDataTab
+              monitoringPlotSpecies={monitoringPlot.species}
+              isPermanent={monitoringPlot.isPermanent}
+              totalPlants={monitoringPlot?.totalPlants}
+              livePlants={getObservationSpeciesLivePlantsCount(monitoringPlot?.species)}
+              deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlot?.species)}
+              totalSpecies={monitoringPlot?.totalSpecies}
+              plantDensity={monitoringPlot?.plantingDensity}
+              survivalRate={monitoringPlot?.survivalRate}
+              completedTime={monitoringPlot?.completedTime}
+              observer={monitoringPlot?.claimedByName}
+              plotConditions={monitoringPlot?.conditions}
+              fieldNotes={monitoringPlot?.notes}
+              type='adHoc'
+              unrecognizedSpecies={unrecognizedSpecies}
+              onExportData={onExportData}
+              onMatchSpecies={onMatchSpecies}
+            />
+          </>
         ),
       },
       {
@@ -239,7 +262,16 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
         children: <PhotosAndVideos />,
       },
     ];
-  }, [activeLocale, monitoringPlot]);
+  }, [
+    activeLocale,
+    monitoringPlot,
+    onCloseMatchSpeciesModal,
+    onExportData,
+    onMatchSpecies,
+    onSaveMergedSpecies,
+    showMatchSpeciesModal,
+    unrecognizedSpecies,
+  ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',
