@@ -8,9 +8,11 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { EMAIL_REGEX } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity } from 'src/providers';
+import { useInviteFunderMutation } from 'src/queries/funder/fundingEntities';
 import { requestFundingEntityInviteFunder } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { inviteFunderRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -34,6 +36,9 @@ const FunderInviteView = () => {
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const inviteFunderResponse = useAppSelector(inviteFunderRequest(requestId));
+
+  const rtkQueryEnabled = isEnabled('Redux RTK Query');
+  const [inviteFunder, result] = useInviteFunderMutation();
 
   const onCancel = useCallback(() => {
     if (isAcceleratorRoute) {
@@ -61,9 +66,27 @@ const FunderInviteView = () => {
       return;
     }
 
-    const request = dispatch(requestFundingEntityInviteFunder({ fundingEntityId, email: record.email }));
-    setRequestId(request.requestId);
-  }, [dispatch, snackbar, record.email, fundingEntityId]);
+    if (rtkQueryEnabled) {
+      const request = dispatch(requestFundingEntityInviteFunder({ fundingEntityId, email: record.email }));
+      setRequestId(request.requestId);
+    } else {
+      inviteFunder({
+        fundingEntityId,
+        email: record.email,
+      });
+    }
+  }, [fundingEntityId, record.email, rtkQueryEnabled, snackbar, dispatch, inviteFunder]);
+
+  useEffect(() => {
+    if (rtkQueryEnabled) {
+      if (result.isSuccess) {
+        snackbar.toastSuccess(strings.FUNDER_ADDED);
+        goToFundingEntity(fundingEntityId);
+      } else if (result.isError) {
+        snackbar.toastError();
+      }
+    }
+  }, [fundingEntityId, goToFundingEntity, result.isError, result.isSuccess, rtkQueryEnabled, snackbar]);
 
   useEffect(() => {
     if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') {

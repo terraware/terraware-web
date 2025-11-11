@@ -6,9 +6,11 @@ import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
+import { useDeleteFunderMutation, useListFundersForFundingEntityQuery } from 'src/queries/funder/fundingEntities';
 import {
   requestDeleteFunders,
   requestListFunders,
@@ -73,26 +75,58 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const listFundersResponse = useAppSelector(selectListFundersRequest(listFundersRequestId));
   const deleteFundersResponse = useAppSelector(selectDeleteFundersRequest(deleteFundersRequestId));
 
+  const rtkQueryEnabled = isEnabled('Redux RTK Query');
+  const { data: rtkFunders } = useListFundersForFundingEntityQuery(fundingEntityId, { skip: !rtkQueryEnabled });
+
+  const [deleteFunder, result] = useDeleteFunderMutation();
+
+  useEffect(() => {
+    if (rtkQueryEnabled) {
+      setFunders(rtkFunders ?? []);
+    }
+  }, [rtkFunders, rtkQueryEnabled]);
+
   const reload = useCallback(() => {
-    const request = dispatch(requestListFunders(fundingEntityId));
-    setListFundersRequestId(request.requestId);
-  }, [dispatch, fundingEntityId]);
+    if (!rtkQueryEnabled) {
+      const request = dispatch(requestListFunders(fundingEntityId));
+      setListFundersRequestId(request.requestId);
+    }
+  }, [dispatch, fundingEntityId, rtkQueryEnabled]);
 
   const onRemoveConfirm = useCallback(
     (selectedFunders: TableRowType[]) => {
-      const request = dispatch(
-        requestDeleteFunders({ fundingEntityId, userIds: selectedFunders.map((f) => f.userId) })
-      );
-      setDeleteFundersRequestId(request.requestId);
+      if (rtkQueryEnabled) {
+        deleteFunder({
+          fundingEntityId,
+          userIds: selectedFunders.map((funder) => funder.userId),
+        });
+      } else {
+        const request = dispatch(
+          requestDeleteFunders({ fundingEntityId, userIds: selectedFunders.map((f) => f.userId) })
+        );
+        setDeleteFundersRequestId(request.requestId);
+      }
     },
-    [dispatch, fundingEntityId]
+    [deleteFunder, dispatch, fundingEntityId, rtkQueryEnabled]
   );
 
   const isClickable = useCallback(() => false, []);
 
   useEffect(() => {
-    reload();
-  }, [dispatch, fundingEntityId, reload]);
+    if (!rtkQueryEnabled) {
+      reload();
+    }
+  }, [dispatch, reload, rtkQueryEnabled]);
+
+  useEffect(() => {
+    if (rtkQueryEnabled) {
+      if (result.isSuccess) {
+        snackbar.toastError(strings.FUNDERS_DELETED);
+      } else if (result.isError) {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+    }
+  }, [result.isError, result.isSuccess, rtkQueryEnabled, snackbar]);
 
   useEffect(() => {
     if (deleteFundersResponse) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestFundingEntityForUser } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectUserFundingEntityRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
@@ -34,11 +35,13 @@ export default function UserFundingEntityProvider({ children }: UserFundingEntit
     bootstrapped: false,
   });
 
+  const isRtkQueryEnabled = isEnabled('Redux RTK Query');
+
   useEffect(() => {
-    if (userBootstrapped && user && user.userType === 'Funder') {
+    if (!isRtkQueryEnabled && userBootstrapped && user && user.userType === 'Funder') {
       void dispatch(requestFundingEntityForUser(user.id));
     }
-  }, [userBootstrapped, user, dispatch]);
+  }, [userBootstrapped, user, dispatch, isRtkQueryEnabled]);
 
   useEffect(() => {
     if (!getUserFundingEntityRequest) {

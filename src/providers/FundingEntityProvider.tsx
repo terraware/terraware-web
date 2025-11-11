@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestFundingEntity } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectFundingEntityRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
@@ -29,6 +30,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
   const [entityAPIRequestStatus, setEntityAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const navigate = useSyncNavigate();
   const { isDev, isStaging } = useEnvironment();
+  const isRtkQueryEnabled = isEnabled('Redux RTK Query');
   const getFundingEntityRequest = useAppSelector(selectFundingEntityRequest(pathFundingEntityId));
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedFundingEntityData>({
     fundingEntity: undefined,
@@ -44,16 +46,16 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
   );
 
   const reload = useCallback(() => {
-    if (pathParamExists) {
+    if (!isRtkQueryEnabled && pathParamExists) {
       void dispatch(requestFundingEntity(pathFundingEntityId));
     }
-  }, [dispatch, pathFundingEntityId, pathParamExists]);
+  }, [dispatch, isRtkQueryEnabled, pathFundingEntityId, pathParamExists]);
 
   useEffect(() => {
-    if (pathParamExists) {
+    if (!isRtkQueryEnabled && pathParamExists) {
       void dispatch(requestFundingEntity(pathFundingEntityId));
     }
-  }, [pathFundingEntityId, dispatch, pathParamExists]);
+  }, [pathFundingEntityId, dispatch, pathParamExists, isRtkQueryEnabled]);
 
   useEffect(() => {
     if (!pathParamExists || !getFundingEntityRequest) {

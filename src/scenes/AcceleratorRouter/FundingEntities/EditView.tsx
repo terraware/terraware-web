@@ -17,11 +17,14 @@ const EditView = () => {
   const updateFundingEntity = useUpdateFundingEntity();
   const { goToFundingEntity } = useNavigateTo();
 
-  const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: rtkFundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
-  const [update, result] = useUpdateFundingEntityMutation();
   const rtkQueryEnabled = isEnabled('Redux RTK Query');
 
+  const pathParams = useParams<{ fundingEntityId: string }>();
+  const { data: rtkFundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId), {
+    skip: !rtkQueryEnabled,
+  });
+
+  const [update, result] = useUpdateFundingEntityMutation();
   const goToViewFundingEntity = useCallback(() => {
     reload();
     goToFundingEntity(Number(pathParams.fundingEntityId));

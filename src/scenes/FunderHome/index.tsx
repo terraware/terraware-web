@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useUserFundingEntity } from 'src/providers';
+import isEnabled from 'src/features';
+import { useUser, useUserFundingEntity } from 'src/providers';
+import { useLazyGetUserFundingEntityQuery } from 'src/queries/funder/fundingEntities';
 import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { requestGetFunderProjects } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
@@ -15,6 +17,11 @@ import ProjectView from './ProjectView';
 export default function FunderHome() {
   const dispatch = useAppDispatch();
   const { userFundingEntity } = useUserFundingEntity();
+
+  const { user } = useUser();
+  const rtkQueryEnabled = isEnabled('Redux RTK Query');
+  const [rtkGetUserFundingEntity, { data: rtkUserFundingEntity }] = useLazyGetUserFundingEntityQuery();
+
   const [fundingEntityProjectIds, setFundingEntityProjectIds] = useState<number[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
   const funderProjects: Record<number, FunderProjectDetails> = useAppSelector(
@@ -24,10 +31,22 @@ export default function FunderHome() {
   const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
 
   useEffect(() => {
-    if (userFundingEntity?.projects) {
-      setFundingEntityProjectIds(userFundingEntity.projects.map((p) => p.projectId));
+    if (rtkQueryEnabled && user) {
+      void rtkGetUserFundingEntity(user.id);
     }
-  }, [userFundingEntity?.projects]);
+  }, [rtkGetUserFundingEntity, rtkQueryEnabled, user]);
+
+  useEffect(() => {
+    if (rtkQueryEnabled) {
+      if (rtkUserFundingEntity?.projects) {
+        setFundingEntityProjectIds(rtkUserFundingEntity.projects.map((p) => p.projectId));
+      }
+    } else {
+      if (userFundingEntity?.projects) {
+        setFundingEntityProjectIds(userFundingEntity.projects.map((p) => p.projectId));
+      }
+    }
+  }, [rtkQueryEnabled, rtkUserFundingEntity?.projects, userFundingEntity?.projects]);
 
   useEffect(() => {
     if (!selectedProjectId && Object.keys(funderProjects).length === 1) {

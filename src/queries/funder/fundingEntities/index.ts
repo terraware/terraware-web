@@ -3,11 +3,12 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { paths } from 'src/api/types/generated-schema';
 import baseQuery from 'src/queries/baseQuery';
 import { QUERY_TAGS, QueryTagTypes } from 'src/queries/tags';
-import { FundingEntity } from 'src/types/FundingEntity';
+import { Funder, FundingEntity } from 'src/types/FundingEntity';
 
 const FUNDING_ENTITIES_LIST_ENDPOINT = '/api/v1/funder/entities';
 const FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}';
 const USER_FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/users/{userId}';
+const FUNDING_ENTITY_USERS_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}/users';
 
 type CreateFundingEntityRequest =
   paths[typeof FUNDING_ENTITIES_LIST_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -24,12 +25,28 @@ type UpdateFundingEntityResponse =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 type DeleteFundingEntityResponse =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
-type UserFundingEntityServerResponse =
+type GetUserFundingEntityResponse =
   paths[typeof USER_FUNDING_ENTITY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type ListFundersResponse =
+  paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type InviteFunderResponse =
+  paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type DeleteFundersResponse =
+  paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
 type UpdateFundingEntityPaylaod = {
   id: number;
   body: UpdateFundingEntityRequest;
+};
+
+type InviteFunderPayload = {
+  email: string;
+  fundingEntityId: number;
+};
+
+type DeleteFundersPayload = {
+  fundingEntityId: number;
+  userIds: number[];
 };
 
 export const fundingEntitiesApi = createApi({
@@ -42,7 +59,6 @@ export const fundingEntitiesApi = createApi({
         ...(results ? results.map((entity) => ({ type: QueryTagTypes.FundingEntities, id: entity.id })) : []),
         { type: QueryTagTypes.FundingEntities, id: 'LIST' },
       ],
-      // This is an optional transformer to extract our response
       transformResponse: (response: listFundingEntitiesResponse): FundingEntity[] => response.fundingEntities,
     }),
     createFundingEntities: build.mutation<CreateFundingEntityResponse, CreateFundingEntityRequest>({
@@ -59,7 +75,6 @@ export const fundingEntitiesApi = createApi({
     getFundingEntity: build.query<FundingEntity, number>({
       query: (id) => FUNDING_ENTITY_ENDPOINT.replace('{fundingEntityId}', id.toString()),
       providesTags: (result) => (result ? [{ type: QueryTagTypes.FundingEntities, id: result.id.toString() }] : []),
-      // This is an optional transformer to extract our response
       transformResponse: (response: GetFundingEntityResponse): FundingEntity => response.fundingEntity,
     }),
     updateFundingEntity: build.mutation<UpdateFundingEntityResponse, UpdateFundingEntityPaylaod>({
@@ -89,8 +104,35 @@ export const fundingEntitiesApi = createApi({
         ...(result ? [{ type: QueryTagTypes.FundingEntities, id: result.id.toString() }] : []),
         { type: QueryTagTypes.UserFundingEntity, userId },
       ],
-      // This is an optional transformer to extract our response
-      transformResponse: (response: UserFundingEntityServerResponse): FundingEntity => response.fundingEntity,
+      transformResponse: (response: GetUserFundingEntityResponse): FundingEntity => response.fundingEntity,
+    }),
+    listFundersForFundingEntity: build.query<Funder[], number>({
+      query: (fundingEntityId) =>
+        FUNDING_ENTITY_USERS_ENDPOINT.replace('{fundingEntityId}', fundingEntityId.toString()),
+      providesTags: (results, error, fundingEntityId) => [
+        { type: QueryTagTypes.Funders, id: fundingEntityId.toString() },
+      ],
+      transformResponse: (response: ListFundersResponse): Funder[] => response.funders,
+    }),
+    inviteFunder: build.mutation<InviteFunderResponse, InviteFunderPayload>({
+      query: (payload) => ({
+        url: FUNDING_ENTITY_ENDPOINT.replace('{fundingEntityId}', payload.fundingEntityId.toString()),
+        method: 'POST',
+        body: { email: payload.email },
+      }),
+      invalidatesTags: (result, error, payload) => [
+        { type: QueryTagTypes.Funders, id: payload.fundingEntityId.toString() },
+      ],
+    }),
+    deleteFunder: build.mutation<DeleteFundersResponse, DeleteFundersPayload>({
+      query: (payload) => ({
+        url: FUNDING_ENTITY_ENDPOINT.replace('{fundingEntityId}', payload.fundingEntityId.toString()),
+        method: 'DELETE',
+        body: { userIds: payload.userIds },
+      }),
+      invalidatesTags: (result, error, payload) => [
+        { type: QueryTagTypes.Funders, id: payload.fundingEntityId.toString() },
+      ],
     }),
   }),
 });
@@ -102,4 +144,8 @@ export const {
   useUpdateFundingEntityMutation,
   useDeleteFundingEntityMutation,
   useGetUserFundingEntityQuery,
+  useLazyGetUserFundingEntityQuery,
+  useListFundersForFundingEntityQuery,
+  useDeleteFunderMutation,
+  useInviteFunderMutation,
 } = fundingEntitiesApi;

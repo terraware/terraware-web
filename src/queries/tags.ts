@@ -1,4 +1,5 @@
 export enum QueryTagTypes {
+  Funders = 'Funders',
   FundingEntities = 'FundingEntities',
   UserFundingEntity = 'UserFundingEntity',
 }

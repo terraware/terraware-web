@@ -29,9 +29,11 @@ const SingleView = () => {
   const [openDeleteConfirm, setOpenDeleteConfirm] = useState<boolean>(false);
   const { goToEditFundingEntity } = useNavigateTo();
 
-  const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: rtkFundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
   const rtkQueryEnabled = isEnabled('Redux RTK Query');
+  const pathParams = useParams<{ fundingEntityId: string }>();
+  const { data: rtkFundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId), {
+    skip: !rtkQueryEnabled,
+  });
   const canManage = isAllowed('MANAGE_FUNDING_ENTITIES');
 
   const onDeleteClick = (optionItem: DropdownItem) => {
