@@ -14,6 +14,7 @@ import { ObservationSpeciesResults, PlotCondition } from 'src/types/Observations
 import { getShortTime } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import PlotActions from '../biomass/PlotActions';
 import SpeciesTotalPlantsChart from '../common/SpeciesMortalityRateChart';
 import SpeciesMortalityRateChart from '../common/SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
@@ -33,6 +34,10 @@ type ObservationDataTabProps = {
   observer?: string;
   plotConditions?: PlotCondition[];
   fieldNotes?: string;
+  type?: string;
+  unrecognizedSpecies?: string[];
+  onExportData?: () => void;
+  onMatchSpecies?: () => void;
 };
 
 const ObservationDataTab = ({
@@ -48,6 +53,10 @@ const ObservationDataTab = ({
   observer,
   plotConditions,
   fieldNotes,
+  type,
+  unrecognizedSpecies,
+  onExportData,
+  onMatchSpecies,
 }: ObservationDataTabProps) => {
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const { plantingSite } = usePlantingSiteData();
@@ -140,6 +149,13 @@ const ObservationDataTab = ({
             </Box>
           </Box>
         ))}
+      {type === 'adHoc' && onExportData && onMatchSpecies && (
+        <PlotActions
+          unrecognizedSpecies={unrecognizedSpecies}
+          onExportData={onExportData}
+          onMatchSpecies={onMatchSpecies}
+        />
+      )}
       <Box paddingY={2}>
         {observer && completedTime && (
           <Typography fontSize={'14px'}>
