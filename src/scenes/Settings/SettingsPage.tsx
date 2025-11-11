@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, useTheme } from '@mui/material';
@@ -10,8 +10,10 @@ import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TitleDescription from 'src/components/common/TitleDescription';
+import isEnabled from 'src/features';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser, useUserFundingEntity } from 'src/providers';
+import { useLazyGetUserFundingEntityQuery } from 'src/queries/funder/fundingEntities';
 import MyAccountForm from 'src/scenes/MyAccountRouter/MyAccountForm';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -22,6 +24,22 @@ const SettingsPage = () => {
   const { user, reloadUser } = useUser();
   const { userFundingEntity } = useUserFundingEntity();
   const { isMobile } = useDeviceInfo();
+
+  const rtkQueryEnabled = isEnabled('Redux RTK Query');
+  const [rtkGetUserFundingEntity, { data: rtkUserFundingEntity }] = useLazyGetUserFundingEntityQuery();
+  useEffect(() => {
+    if (rtkQueryEnabled && user) {
+      void rtkGetUserFundingEntity(user.id);
+    }
+  }, [rtkGetUserFundingEntity, rtkQueryEnabled, user]);
+
+  const fundingEntityToUse = useMemo(() => {
+    if (rtkQueryEnabled) {
+      return rtkUserFundingEntity;
+    } else {
+      return userFundingEntity;
+    }
+  }, [rtkQueryEnabled, rtkUserFundingEntity, userFundingEntity]);
 
   const contentRef = useRef(null);
   const [isEditingAccount, setIsEditingAccount] = useState(false);
@@ -58,12 +76,12 @@ const SettingsPage = () => {
           />
         ),
       },
-      ...(userFundingEntity?.id
+      ...(fundingEntityToUse?.id
         ? [
             {
               id: 'user-access',
               label: strings.USER_ACCESS,
-              children: <FundersTable fundingEntityId={userFundingEntity?.id} />,
+              children: <FundersTable fundingEntityId={fundingEntityToUse?.id} />,
             },
           ]
         : []),
@@ -77,7 +95,7 @@ const SettingsPage = () => {
     strings,
     tabsBackToView,
     user,
-    userFundingEntity?.id,
+    fundingEntityToUse?.id,
   ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({

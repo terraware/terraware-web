@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { matchPath } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization, useUserFundingEntity } from 'src/providers';
+import { useOrganization, useUser, useUserFundingEntity } from 'src/providers';
+import { useLazyGetUserFundingEntityQuery } from 'src/queries/funder/fundingEntities';
 import NoOrgRouter from 'src/scenes/NoOrgRouter';
 import OrgRouter from 'src/scenes/OrgRouter';
 import useStateLocation from 'src/utils/useStateLocation';
@@ -39,18 +41,35 @@ export default function TerrawareRouter(props: TerrawareRouterProps) {
   const navigate = useSyncNavigate();
   const location = useStateLocation();
 
+  const { user } = useUser();
+  const rtkQueryEnabled = isEnabled('Redux RTK Query');
+  const [rtkGetUserFundingEntity, { data: rtkUserFundingEntity }] = useLazyGetUserFundingEntityQuery();
   useEffect(() => {
-    if (userFundingEntity && !MINIMAL_FUNDER_ROUTES.some((path) => !!matchPath(path, location.pathname))) {
+    if (rtkQueryEnabled && user) {
+      void rtkGetUserFundingEntity(user.id);
+    }
+  }, [rtkGetUserFundingEntity, rtkQueryEnabled, user]);
+
+  const fundingEntityToUse = useMemo(() => {
+    if (rtkQueryEnabled) {
+      return rtkUserFundingEntity;
+    } else {
+      return userFundingEntity;
+    }
+  }, [rtkQueryEnabled, rtkUserFundingEntity, userFundingEntity]);
+
+  useEffect(() => {
+    if (fundingEntityToUse && !MINIMAL_FUNDER_ROUTES.some((path) => !!matchPath(path, location.pathname))) {
       navigate(APP_PATHS.FUNDER_HOME);
     }
     if (
       organizations?.length === 0 &&
       !MINIMAL_USER_ROUTES.some((path) => !!matchPath(path, location.pathname)) &&
-      !userFundingEntity
+      !fundingEntityToUse
     ) {
       navigate(APP_PATHS.WELCOME);
     }
-  }, [navigate, location, userFundingEntity, organizations]);
+  }, [navigate, location, fundingEntityToUse, organizations]);
 
   return organizations.length === 0 ? <NoOrgRouter /> : <OrgRouter {...props} />;
 }
