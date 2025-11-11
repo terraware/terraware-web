@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { Typography } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useDeleteFundingEntityMutation } from 'src/queries/funder/fundingEntities';
 import FundingEntityService from 'src/services/funder/FundingEntityService';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
@@ -21,14 +23,31 @@ const DeleteFundingEntityModal = ({ onClose, open, fundingEntity }: DeleteFundin
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
-  const deleteHandler = async () => {
-    const response = await FundingEntityService.deleteFundingEntity(fundingEntity.id);
-    if (response.requestSucceeded) {
-      navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES);
+  const [deleteFundingEntity, result] = useDeleteFundingEntityMutation();
+  const rtkQueryEnabled = isEnabled('Redux RTK Query');
+
+  const deleteHandler = useCallback(async () => {
+    if (rtkQueryEnabled) {
+      await deleteFundingEntity(fundingEntity.id);
     } else {
-      snackbar.toastError();
+      const response = await FundingEntityService.deleteFundingEntity(fundingEntity.id);
+      if (response.requestSucceeded) {
+        navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES);
+      } else {
+        snackbar.toastError();
+      }
     }
-  };
+  }, [deleteFundingEntity, fundingEntity.id, navigate, rtkQueryEnabled, snackbar]);
+
+  useEffect(() => {
+    if (rtkQueryEnabled) {
+      if (result.isSuccess) {
+        navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES);
+      } else if (result.isError) {
+        snackbar.toastError();
+      }
+    }
+  }, [navigate, result.isError, result.isSuccess, rtkQueryEnabled, snackbar]);
 
   return (
     <DialogBox

@@ -116,7 +116,7 @@ export const fundingEntitiesApi = createApi({
     }),
     inviteFunder: build.mutation<InviteFunderResponse, InviteFunderPayload>({
       query: (payload) => ({
-        url: FUNDING_ENTITY_ENDPOINT.replace('{fundingEntityId}', payload.fundingEntityId.toString()),
+        url: FUNDING_ENTITY_USERS_ENDPOINT.replace('{fundingEntityId}', payload.fundingEntityId.toString()),
         method: 'POST',
         body: { email: payload.email },
       }),
@@ -126,7 +126,7 @@ export const fundingEntitiesApi = createApi({
     }),
     deleteFunder: build.mutation<DeleteFundersResponse, DeleteFundersPayload>({
       query: (payload) => ({
-        url: FUNDING_ENTITY_ENDPOINT.replace('{fundingEntityId}', payload.fundingEntityId.toString()),
+        url: FUNDING_ENTITY_USERS_ENDPOINT.replace('{fundingEntityId}', payload.fundingEntityId.toString()),
         method: 'DELETE',
         body: { userIds: payload.userIds },
       }),

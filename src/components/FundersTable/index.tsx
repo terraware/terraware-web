@@ -96,7 +96,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const onRemoveConfirm = useCallback(
     (selectedFunders: TableRowType[]) => {
       if (rtkQueryEnabled) {
-        deleteFunder({
+        void deleteFunder({
           fundingEntityId,
           userIds: selectedFunders.map((funder) => funder.userId),
         });

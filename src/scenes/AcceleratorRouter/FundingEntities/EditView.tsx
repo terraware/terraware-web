@@ -40,7 +40,7 @@ const EditView = () => {
             projects: record.projects.map((project) => project.projectId),
           },
         };
-        update(payload);
+        void update(payload);
       } else {
         updateFundingEntity.update(record);
       }

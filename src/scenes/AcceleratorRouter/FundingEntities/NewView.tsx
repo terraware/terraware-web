@@ -23,7 +23,7 @@ const NewView = () => {
           name: record.name,
           projects: record.projects.map((project) => project.projectId),
         };
-        create(payload);
+        void create(payload);
       } else {
         createFundingEntity.create(record);
       }

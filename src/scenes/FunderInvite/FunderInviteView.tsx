@@ -67,13 +67,13 @@ const FunderInviteView = () => {
     }
 
     if (rtkQueryEnabled) {
-      const request = dispatch(requestFundingEntityInviteFunder({ fundingEntityId, email: record.email }));
-      setRequestId(request.requestId);
-    } else {
-      inviteFunder({
+      void inviteFunder({
         fundingEntityId,
         email: record.email,
       });
+    } else {
+      const request = dispatch(requestFundingEntityInviteFunder({ fundingEntityId, email: record.email }));
+      setRequestId(request.requestId);
     }
   }, [fundingEntityId, record.email, rtkQueryEnabled, snackbar, dispatch, inviteFunder]);
 
