@@ -27,7 +27,7 @@ import {
   ObservationSpeciesResults,
 } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
-import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -326,6 +326,16 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
           <ObservationDataTab
             monitoringPlotSpecies={monitoringPlotSpecies}
             isPermanent={monitoringPlotResult?.isPermanent}
+            totalPlants={monitoringPlotResult?.totalPlants}
+            livePlants={getObservationSpeciesLivePlantsCount(monitoringPlotResult?.species)}
+            deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlotResult?.species)}
+            totalSpecies={monitoringPlotResult?.totalSpecies}
+            plantDensity={monitoringPlotResult?.plantingDensity}
+            survivalRate={monitoringPlotResult?.survivalRate}
+            completedTime={monitoringPlotResult?.completedTime}
+            observer={monitoringPlotResult?.claimedByName}
+            plotConditions={monitoringPlotResult?.conditions}
+            fieldNotes={monitoringPlotResult?.notes}
           />
         ),
       },
