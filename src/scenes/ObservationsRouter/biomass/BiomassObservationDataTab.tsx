@@ -94,7 +94,7 @@ const BiomassObservationDataTab = ({
     },
     {
       label: strings.HERBACIOUS_COVER_PERCENT,
-      value: 0,
+      value: biomassMeasurement?.herbaceousCoverPercent,
     },
     {
       label: strings.WATER_DEPTH_M,
