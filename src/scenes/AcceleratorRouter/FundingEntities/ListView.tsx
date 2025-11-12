@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
@@ -6,15 +6,10 @@ import Page from 'src/components/Page';
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import Button from 'src/components/common/button/Button';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useListFundingEntitiesQuery } from 'src/queries/funder/fundingEntities';
-import { requestFundingEntities } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectFundingEntitiesRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { FundingEntity } from 'src/types/FundingEntity';
 import { SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -32,47 +27,17 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
     : [];
 
 const FundingEntitiesListView = () => {
-  const dispatch = useAppDispatch();
-  const [listRequestId, setListRequestId] = useState('');
-  const listRequest = useAppSelector(selectFundingEntitiesRequest(listRequestId));
-  const [fundingEntities, setFundingEntities] = useState<FundingEntity[]>([]);
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
   const { goToNewFundingEntity } = useNavigateTo();
-  const rtkQueryEnabled = isEnabled('Redux RTK Query');
-  const { data: rtkFundingEntities, error } = useListFundingEntitiesQuery(undefined, { skip: !rtkQueryEnabled });
+  const { data: fundingEntities, error } = useListFundingEntitiesQuery();
 
   const defaultSortOrder: SearchSortOrder = {
     field: 'name',
     direction: 'Ascending',
   };
-
-  useEffect(() => {
-    if (activeLocale && !rtkQueryEnabled) {
-      const request = dispatch(requestFundingEntities());
-      setListRequestId(request.requestId);
-    }
-  }, [activeLocale, dispatch, rtkQueryEnabled]);
-
-  useEffect(() => {
-    if (rtkFundingEntities && rtkQueryEnabled) {
-      setFundingEntities(rtkFundingEntities ?? []);
-    }
-  }, [rtkFundingEntities, rtkQueryEnabled]);
-
-  useEffect(() => {
-    if (!listRequest) {
-      return;
-    }
-
-    if (listRequest.status === 'success' && listRequest.data?.fundingEntities) {
-      setFundingEntities(listRequest.data.fundingEntities);
-    } else if (listRequest.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [listRequest, snackbar]);
 
   useEffect(() => {
     if (error) {
@@ -141,7 +106,7 @@ const FundingEntitiesListView = () => {
         fuzzySearchColumns={fuzzySearchColumns}
         featuredFilters={featuredFilters}
         id='fundingEntitiesTable'
-        rows={fundingEntities}
+        rows={fundingEntities ?? []}
         isClickable={() => false}
         showTopBar
         Renderer={FundingEntitiesCellRenderer}

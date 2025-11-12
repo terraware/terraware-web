@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -13,9 +13,8 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useFundingEntity, useLocalization, useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useGetFundingEntityQuery } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 
@@ -25,38 +24,35 @@ const SingleView = () => {
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
-  const { fundingEntity } = useFundingEntity();
-  const [openDeleteConfirm, setOpenDeleteConfirm] = useState<boolean>(false);
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { goToEditFundingEntity } = useNavigateTo();
 
-  const rtkQueryEnabled = isEnabled('Redux RTK Query');
   const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: rtkFundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId), {
-    skip: !rtkQueryEnabled,
-  });
+  const { data: fundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
   const canManage = isAllowed('MANAGE_FUNDING_ENTITIES');
 
-  const onDeleteClick = (optionItem: DropdownItem) => {
+  const onDeleteClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'delete') {
       setOpenDeleteConfirm(true);
     }
-  };
+  }, []);
 
-  const fundingEntityToUse = useMemo(
-    () => (rtkQueryEnabled ? rtkFundingEntity : fundingEntity),
-    [fundingEntity, rtkFundingEntity, rtkQueryEnabled]
-  );
+  const goToEdit = useCallback(() => {
+    if (fundingEntity) {
+      goToEditFundingEntity(fundingEntity.id);
+    }
+  }, [fundingEntity, goToEditFundingEntity]);
 
   const rightComponent = useMemo(() => {
     return (
       activeLocale &&
       canManage &&
-      fundingEntityToUse && (
+      fundingEntity && (
         <>
           <Button
             label={strings.EDIT_FUNDING_ENTITY}
             icon='iconEdit'
-            onClick={() => goToEditFundingEntity(String(fundingEntityToUse.id))}
+            onClick={goToEdit}
             size='medium'
             id='editFundingEntity'
           />
@@ -67,7 +63,7 @@ const SingleView = () => {
         </>
       )
     );
-  }, [activeLocale, canManage, fundingEntityToUse, goToEditFundingEntity]);
+  }, [activeLocale, canManage, fundingEntity, goToEdit, onDeleteClick]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -81,21 +77,21 @@ const SingleView = () => {
 
   return (
     <>
-      {fundingEntityToUse && (
-        <Page crumbs={crumbs} title={fundingEntityToUse.name} rightComponent={rightComponent}>
+      {fundingEntity && (
+        <Page crumbs={crumbs} title={fundingEntity.name} rightComponent={rightComponent}>
           {openDeleteConfirm && (
             <DeleteFundingEntityModal
               open={openDeleteConfirm}
               onClose={() => setOpenDeleteConfirm(false)}
-              fundingEntity={fundingEntityToUse}
+              fundingEntity={fundingEntity}
             />
           )}
           <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
             <Grid container spacing={3} paddingBottom={theme.spacing(4)}>
               <Grid item xs={4}>
-                <TextField label={strings.NAME} id='name' type='text' value={fundingEntityToUse.name} display={true} />
+                <TextField label={strings.NAME} id='name' type='text' value={fundingEntity.name} display={true} />
               </Grid>
-              {fundingEntityToUse.projects?.map((project, idx) => (
+              {fundingEntity.projects?.map((project, idx) => (
                 <Grid key={idx} item xs={4}>
                   <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
                     {strings.PROJECT}
@@ -114,7 +110,7 @@ const SingleView = () => {
               ))}
             </Grid>
             <Grid container spacing={3}>
-              <FundersTable fundingEntityId={fundingEntityToUse.id} />
+              <FundersTable fundingEntityId={fundingEntity.id} />
             </Grid>
           </Card>
         </Page>

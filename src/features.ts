@@ -7,8 +7,7 @@ export type FeatureName =
   | 'Activity Video Support'
   | 'Activity Log Highlights'
   | 'Activity Log in Funder Portal'
-  | 'Edit Observations'
-  | 'Redux RTK Query';
+  | 'Edit Observations';
 
 export type Feature = {
   name: FeatureName;
@@ -85,15 +84,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for editing observation data'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Redux RTK Query',
-    preferenceName: 'reduxRtkQuery',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Support for RTK Query'],
     disclosure: ['This is a WIP'],
   },
 ];

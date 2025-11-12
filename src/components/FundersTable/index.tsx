@@ -6,22 +6,11 @@ import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import { useDeleteFunderMutation, useListFundersForFundingEntityQuery } from 'src/queries/funder/fundingEntities';
-import {
-  requestDeleteFunders,
-  requestListFunders,
-} from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import {
-  selectDeleteFundersRequest,
-  selectListFundersRequest,
-} from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Funder } from 'src/types/FundingEntity';
 import { SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -60,94 +49,35 @@ type FundersTableProps = {
 };
 
 const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
   const { isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const [listFundersRequestId, setListFundersRequestId] = useState<string>('');
-  const [deleteFundersRequestId, setDeleteFundersRequestId] = useState<string>('');
-  const [funders, setFunders] = useState<Funder[]>([]);
-
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
-
-  const listFundersResponse = useAppSelector(selectListFundersRequest(listFundersRequestId));
-  const deleteFundersResponse = useAppSelector(selectDeleteFundersRequest(deleteFundersRequestId));
-
-  const rtkQueryEnabled = isEnabled('Redux RTK Query');
-  const { data: rtkFunders } = useListFundersForFundingEntityQuery(fundingEntityId, { skip: !rtkQueryEnabled });
+  const { data: funders } = useListFundersForFundingEntityQuery(fundingEntityId);
 
   const [deleteFunder, result] = useDeleteFunderMutation();
 
-  useEffect(() => {
-    if (rtkQueryEnabled) {
-      setFunders(rtkFunders ?? []);
-    }
-  }, [rtkFunders, rtkQueryEnabled]);
-
-  const reload = useCallback(() => {
-    if (!rtkQueryEnabled) {
-      const request = dispatch(requestListFunders(fundingEntityId));
-      setListFundersRequestId(request.requestId);
-    }
-  }, [dispatch, fundingEntityId, rtkQueryEnabled]);
-
   const onRemoveConfirm = useCallback(
     (selectedFunders: TableRowType[]) => {
-      if (rtkQueryEnabled) {
-        void deleteFunder({
-          fundingEntityId,
-          userIds: selectedFunders.map((funder) => funder.userId),
-        });
-      } else {
-        const request = dispatch(
-          requestDeleteFunders({ fundingEntityId, userIds: selectedFunders.map((f) => f.userId) })
-        );
-        setDeleteFundersRequestId(request.requestId);
-      }
+      void deleteFunder({
+        fundingEntityId,
+        userIds: selectedFunders.map((funder) => funder.userId),
+      });
     },
-    [deleteFunder, dispatch, fundingEntityId, rtkQueryEnabled]
+    [deleteFunder, fundingEntityId]
   );
 
   const isClickable = useCallback(() => false, []);
 
   useEffect(() => {
-    if (!rtkQueryEnabled) {
-      reload();
+    if (result.isSuccess) {
+      snackbar.toastError(strings.FUNDERS_DELETED);
+    } else if (result.isError) {
+      snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [dispatch, reload, rtkQueryEnabled]);
-
-  useEffect(() => {
-    if (rtkQueryEnabled) {
-      if (result.isSuccess) {
-        snackbar.toastError(strings.FUNDERS_DELETED);
-      } else if (result.isError) {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      }
-    }
-  }, [result.isError, result.isSuccess, rtkQueryEnabled, snackbar]);
-
-  useEffect(() => {
-    if (deleteFundersResponse) {
-      if (deleteFundersResponse?.status === 'success') {
-        snackbar.toastError(strings.FUNDERS_DELETED);
-        reload();
-      } else if (deleteFundersResponse.status === 'error') {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      }
-    }
-  }, [deleteFundersResponse, reload, snackbar]);
-
-  useEffect(() => {
-    if (listFundersResponse) {
-      if (listFundersResponse.status === 'success') {
-        setFunders(listFundersResponse.data ?? []);
-      } else if (listFundersResponse.status === 'error') {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      }
-    }
-  }, [listFundersResponse, setFunders, snackbar]);
+  }, [result.isError, result.isSuccess, snackbar]);
 
   const goToInvitePage = useCallback(
     () =>
@@ -188,7 +118,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES')}
       showTopBar
       Renderer={FunderCellRenderer}
-      rows={funders}
+      rows={funders ?? []}
       title={strings.FUNDERS}
       rightComponent={rightComponent}
       topBarButtons={[<RemoveFunderTopBarButton key={0} onConfirm={onRemoveConfirm} selectedRows={selectedRows} />]}
