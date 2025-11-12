@@ -318,10 +318,13 @@ export default function useNavigateTo() {
           search: 'tab=participants',
         }),
 
-      goToParticipantProject: (projectId: number, activityId?: number) => {
+      goToParticipantProject: (projectId: number, activityId?: number, tab?: string) => {
         const params = searchParamsWithMapViewState();
         if (activityId !== undefined) {
           params.set('activityId', activityId.toString());
+          if (tab) {
+            params.set('tab', tab);
+          }
         }
         navigate({
           pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
