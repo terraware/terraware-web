@@ -1,3 +1,8 @@
+c88e4c843f3 SW-7708 Saving changes to an activity has the screen flash a different screen for a split second (#4775)
+2c9cd493c67 SW-7714 Only one point should show up on map per activity in Highlights (#4774)
+7140e58ae25 SW-7715 Quarterly Report page isn't showing up in highlights preview (#4773)
+2d8f5a07aeb SW-7713 Project no longer able to edit activities (#4772)
+a82f0acba20 SW-7710 "Preview Highlights" should be available to Read Only users in Console (#4770)
 27464eef603 Update dependency @trivago/prettier-plugin-sort-imports to v6 (#4764)
 ec372e9688a Update JamesIves/github-pages-deploy-action action to v4.7.4 (#4763)
 b212705f238 Only install headless chromium for ci (#4761)

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/132</span>
+                <span class='fraction'>0/133</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/88</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/123</span>
+                <span class='fraction'>0/124</span>
             </div>
         
             
@@ -538,7 +538,13 @@
 <a name='L473'></a><a href='#L473'>473</a>
 <a name='L474'></a><a href='#L474'>474</a>
 <a name='L475'></a><a href='#L475'>475</a>
-<a name='L476'></a><a href='#L476'>476</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -799,8 +805,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1149,7 +1161,7 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
 &nbsp;
     // filter by selectedQuarter
     const quarterReports = <span class="cstat-no" title="statement not covered" >acceleratorReports.filter(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (report.status !== 'Submitted') {</span>
+<span class="cstat-no" title="statement not covered" >      if (report.status !== 'Submitted' &amp;&amp; report.status !== 'Approved') {</span>
 <span class="cstat-no" title="statement not covered" >        return false;</span>
       }
       const year = <span class="cstat-no" title="statement not covered" >report.endDate.split('-')[0];</span>
@@ -1273,10 +1285,16 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
 &nbsp;
   const activitiesVisibleOnMap = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      activities.map(<span class="fstat-no" title="function not covered" >(a</span>ctivity) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-        ...activity,
-        media: activity.payload.media.filter(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.isCoverPhoto &amp;&amp; !item.isHiddenOnMap)</span>,
-      })),
+<span class="cstat-no" title="statement not covered" >      activities.map(<span class="fstat-no" title="function not covered" >(a</span>ctivity) =&gt; {</span>
+        const filteredMedia = <span class="cstat-no" title="statement not covered" >activity.payload.media.filter(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.isCoverPhoto &amp;&amp; !item.isHiddenOnMap)</span>;</span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+          ...activity,
+          payload: {
+            ...activity.payload,
+            media: filteredMedia,
+          },
+        } as TypedActivity;
+      }),
     [activities]
   );
 &nbsp;
@@ -1288,7 +1306,7 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
 &nbsp;
         // zoom the map to show all activities
         const allPoints = <span class="cstat-no" title="statement not covered" >activitiesVisibleOnMap.flatMap(<span class="fstat-no" title="function not covered" >(a</span>ctivity) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >          activity.media</span>
+<span class="cstat-no" title="statement not covered" >          activity.payload.media</span>
             .map(<span class="fstat-no" title="function not covered" >(_</span>media): MapPoint | undefined =&gt; {
 <span class="cstat-no" title="statement not covered" >              if (!_media.isHiddenOnMap &amp;&amp; _media.geolocation) {</span>
 <span class="cstat-no" title="statement not covered" >                return {</span>
@@ -1495,7 +1513,7 @@ export default ActivityHighlightsView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-10T13:27:39.811Z
+                at 2025-11-12T19:53:13.559Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
