@@ -234,7 +234,7 @@ const ProjectPage = () => {
             </>
           )}
 
-          {activeTab === 'activityLog' && isAllowedCreateActivities && !activityId && (
+          {activeTab === 'activityLog' && !activityId && (
             <Box
               alignItems='center'
               display='flex'
@@ -242,16 +242,18 @@ const ProjectPage = () => {
               flexWrap={isMobile ? 'wrap' : 'nowrap'}
               justifyContent={isDesktop ? 'flex-end' : 'flex-start'}
             >
-              <Button
-                icon='plus'
-                id='addActivity'
-                label={strings.ADD_ACTIVITY}
-                onClick={goToProjectActivityCreate}
-                priority='primary'
-                size='medium'
-                sx={{ minWidth: '160px', whiteSpace: 'nowrap' }}
-                type='productive'
-              />
+              {isAllowedCreateActivities && (
+                <Button
+                  icon='plus'
+                  id='addActivity'
+                  label={strings.ADD_ACTIVITY}
+                  onClick={goToProjectActivityCreate}
+                  priority='primary'
+                  size='medium'
+                  sx={{ minWidth: '160px', whiteSpace: 'nowrap' }}
+                  type='productive'
+                />
+              )}
               {isActivityHighlightEnabled && (
                 <Button
                   id='previewHighlights'
