@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -115,23 +115,7 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,18 +161,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -202,23 +174,10 @@ import { NurseryWithdrawalsSearchResponseElement } from 'src/services/NurseryWit
 import { FieldOptionsMap } from 'src/types/Search';
 &nbsp;
 import {
-  SpeciesPlot,
   requestCountNurseryWithdrawals,
   requestListNurseryWithdrawals,
   requestNurseryWithdrawalsFilterOptions,
-  requestPlantingSiteWithdrawnSpecies,
 } from './nurseryWithdrawalsThunks';
-&nbsp;
-const initialStatePlantingSiteWithdrawnSpecies: { [key: string]: StatusT&lt;SpeciesPlot[]&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
-export const plantingSiteWithdrawnSpeciesSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'plantingSiteWithdrawnSpeciesSlice',
-  initialState: initialStatePlantingSiteWithdrawnSpecies,
-  reducers: {},
-  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    buildReducers(requestPlantingSiteWithdrawnSpecies)(builder);</span>
-  },
-});
 &nbsp;
 const initialStateNurseryWithdrawalsList: { [key: string]: StatusT&lt;NurseryWithdrawalsSearchResponseElement[]&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
 &nbsp;
@@ -254,7 +213,6 @@ export const nurseryWithdrawalsCountSlice = <span class="cstat-no" title="statem
 });
 &nbsp;
 const nurseryWithdrawalsReducers = <span class="cstat-no" title="statement not covered" >{</span>
-  plantingSiteWithdrawnSpecies: plantingSiteWithdrawnSpeciesSlice.reducer,
   nurseryWithdrawalsList: nurseryWithdrawalsListSlice.reducer,
   nurseryWithdrawalsFilterOptions: nurseryWithdrawalsFilterOptionsSlice.reducer,
   nurseryWithdrawalsCount: nurseryWithdrawalsCountSlice.reducer,
@@ -268,7 +226,7 @@ export default nurseryWithdrawalsReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-12T19:53:13.559Z
+                at 2025-11-12T20:11:12.249Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

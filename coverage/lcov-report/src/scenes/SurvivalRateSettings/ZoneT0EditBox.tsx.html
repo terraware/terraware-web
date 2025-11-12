@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
@@ -504,7 +504,8 @@
 <a name='L439'></a><a href='#L439'>439</a>
 <a name='L440'></a><a href='#L440'>440</a>
 <a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -527,7 +528,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -826,6 +826,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -953,11 +955,10 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import TextField from 'src/components/common/TextField';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import { AssignSiteT0TempData, ZoneT0Data } from 'src/types/Tracking';
+import { AssignSiteT0TempData, SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
 import { allowOneDecimal, roundToDecimal } from 'src/utils/numbers';
 &nbsp;
 import { AddedSpecies } from './PlotT0EditBox';
@@ -991,7 +992,7 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
 <span class="cstat-no" title="statement not covered" >    if (!withdrawnSpeciesPlot) {</span>
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
-    const speciesMap = <span class="cstat-no" title="statement not covered" >new Map&lt;number, { density: number; speciesId: number }&gt;();</span>
+    const speciesMap = <span class="cstat-no" title="statement not covered" >new Map&lt;number, { density?: number; speciesId: number }&gt;();</span>
 <span class="cstat-no" title="statement not covered" >    withdrawnSpeciesPlot.forEach(<span class="fstat-no" title="function not covered" >(p</span>lot) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      plot.species.forEach(<span class="fstat-no" title="function not covered" >(w</span>dSpecies) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (!speciesMap.has(wdSpecies.speciesId)) {</span>
@@ -1204,7 +1205,7 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
   );
 &nbsp;
   const densityValue = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (w</span>ithdrawnSpecies: { density: number; speciesId: number }) =&gt; {
+<span class="fstat-no" title="function not covered" >    (w</span>ithdrawnSpecies: { density?: number; speciesId: number }) =&gt; {
       const density = <span class="cstat-no" title="statement not covered" >zoneToSave?.densityData.find(</span>
 <span class="fstat-no" title="function not covered" >        (d</span>ensityData) =&gt; <span class="cstat-no" title="statement not covered" >densityData.speciesId === withdrawnSpecies.speciesId</span>
       )?.density;
@@ -1280,13 +1281,15 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
                     /&gt;
                   &lt;/td&gt;
                   &lt;td&gt;
-                    &lt;Checkbox
-                      id={`density-${withdrawnSpecies.speciesId}`}
-                      label={roundToDecimal(withdrawnSpecies.density, 1)}
-                      name={`density-${withdrawnSpecies.speciesId}`}
-                      value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
-                      onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
-                    /&gt;
+                    {withdrawnSpecies.density &amp;&amp; (
+                      &lt;Checkbox
+                        id={`density-${withdrawnSpecies.speciesId}`}
+                        label={roundToDecimal(withdrawnSpecies.density, 1)}
+                        name={`density-${withdrawnSpecies.speciesId}`}
+                        value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
+                        onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
+                      /&gt;
+                    )}
                   &lt;/td&gt;
                 &lt;/tr&gt;
               ))}
@@ -1393,7 +1396,7 @@ export default ZoneT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-12T19:53:13.559Z
+                at 2025-11-12T20:11:12.249Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

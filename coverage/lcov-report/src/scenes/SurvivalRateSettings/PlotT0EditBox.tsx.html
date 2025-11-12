@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/78</span>
             </div>
         
             
@@ -624,7 +624,8 @@
 <a name='L559'></a><a href='#L559'>559</a>
 <a name='L560'></a><a href='#L560'>560</a>
 <a name='L561'></a><a href='#L561'>561</a>
-<a name='L562'></a><a href='#L562'>562</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L562'></a><a href='#L562'>562</a>
+<a name='L563'></a><a href='#L563'>563</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -651,7 +652,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1064,6 +1064,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1194,11 +1196,10 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from 'src/components/common/TextField';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { allowOneDecimal, roundToDecimal } from 'src/utils/numbers';
 &nbsp;
@@ -1479,7 +1480,7 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
   );
 &nbsp;
   const densityValue = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (w</span>ithdrawnSpecies: { density: number; speciesId: number }) =&gt; {
+<span class="fstat-no" title="function not covered" >    (w</span>ithdrawnSpecies: { density?: number; speciesId: number }) =&gt; {
       const found = <span class="cstat-no" title="statement not covered" >plotToSave?.densityData.find(<span class="fstat-no" title="function not covered" >(d</span>ensityData) =&gt; <span class="cstat-no" title="statement not covered" >densityData.speciesId === withdrawnSpecies.speciesId)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (found) {</span>
 <span class="cstat-no" title="statement not covered" >        return roundToDecimal(found.plotDensity, 1);</span>
@@ -1638,13 +1639,15 @@ const PlotT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
                         /&gt;
                       &lt;/td&gt;
                       &lt;td&gt;
-                        &lt;Checkbox
-                          id={`density-${withdrawnSpecies.speciesId}`}
-                          label={roundToDecimal(withdrawnSpecies.density, 1)}
-                          name={`density-${withdrawnSpecies.speciesId}`}
-                          value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
-                          onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
-                        /&gt;
+                        {withdrawnSpecies.density &amp;&amp; (
+                          &lt;Checkbox
+                            id={`density-${withdrawnSpecies.speciesId}`}
+                            label={roundToDecimal(withdrawnSpecies.density, 1)}
+                            name={`density-${withdrawnSpecies.speciesId}`}
+                            value={selectedWithdrawalCheckboxes.has(withdrawnSpecies.speciesId)}
+                            onChange={onWithdrawalValueSelected(withdrawnSpecies.speciesId)}
+                          /&gt;
+                        )}
                       &lt;/td&gt;
                     &lt;/tr&gt;
                   ))}
@@ -1753,7 +1756,7 @@ export default PlotT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-12T19:53:13.559Z
+                at 2025-11-12T20:11:12.249Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
