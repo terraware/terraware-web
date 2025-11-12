@@ -4144,26 +4144,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/tracking/t0/plantingSite/{plantingSiteId}/species": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Lists all the species that have been withdrawn to a planting site or recorded in observations (if not withdrawn).
-         * @description Species with densities are species that were withdrawn, species with null densities are species that were recorded in observations but not withdrawn to the plot's subzone.
-         */
-        get: operations["getT0SpeciesForPlantingSite"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/tracking/t0/site": {
         parameters: {
             query?: never;
@@ -4227,6 +4207,26 @@ export interface paths {
         };
         /** Get whether or not all T0 Data has been set for a planting site */
         get: operations["getAllT0SiteDataSet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/t0/site/{plantingSiteId}/species": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lists all the species that have been withdrawn to a planting site or recorded in observations (if not withdrawn).
+         * @description Species with densities are species that were withdrawn, species with null densities are species that were recorded in observations but not withdrawn to the plot's subzone.
+         */
+        get: operations["getT0SpeciesForPlantingSite"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20126,28 +20126,6 @@ export interface operations {
             };
         };
     };
-    getT0SpeciesForPlantingSite: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                plantingSiteId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetSitePlotSpeciesResponsePayload"];
-                };
-            };
-        };
-    };
     assignT0SiteData: {
         parameters: {
             query?: never;
@@ -20236,6 +20214,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetAllSiteT0DataSetResponsePayload"];
+                };
+            };
+        };
+    };
+    getT0SpeciesForPlantingSite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSiteId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSitePlotSpeciesResponsePayload"];
                 };
             };
         };

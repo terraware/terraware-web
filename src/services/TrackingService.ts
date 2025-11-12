@@ -36,7 +36,7 @@ const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
 const PLANTING_SITE_T0_ALL_SET_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/allSet';
 const PLANTING_SITES_T0_ENDPOINT = '/api/v1/tracking/t0/site';
 const PLANTING_SITES_T0_TEMP_ENDPOINT = '/api/v1/tracking/t0/site/temp';
-const PLANTING_SITE_T0_SPECIES_ENDPOINT = '/api/v1/tracking/t0/plantingSite/{plantingSiteId}/species';
+const PLANTING_SITE_T0_SPECIES_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/species';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
