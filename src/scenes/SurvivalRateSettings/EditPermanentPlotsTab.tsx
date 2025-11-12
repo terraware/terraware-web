@@ -67,7 +67,8 @@ const EditPermanentPlotsTab = ({
   }, [record.plots, withdrawnSpeciesPlots]);
 
   const saveSettings = useCallback(() => {
-    if (!record.plots || record.plots.length === 0) {
+    const filteredPlots = getFilteredPlots();
+    if (!filteredPlots || filteredPlots.length === 0) {
       goToViewSettings();
       return;
     }
@@ -88,8 +89,6 @@ const EditPermanentPlotsTab = ({
         });
       }
     });
-
-    const filteredPlots = getFilteredPlots();
 
     filteredPlots.forEach((plot) => {
       if (!plot.observationId) {
