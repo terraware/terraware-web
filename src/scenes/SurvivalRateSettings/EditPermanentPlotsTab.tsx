@@ -57,6 +57,15 @@ const EditPermanentPlotsTab = ({
     navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));
   }, [navigate, plantingSiteId]);
 
+  const getFilteredPlots = useCallback(() => {
+    return record.plots.filter((plot) => {
+      const isPlotInOb = withdrawnSpeciesPlots?.find(
+        (wp) => wp.monitoringPlotId.toString() === plot.monitoringPlotId.toString()
+      );
+      return isPlotInOb !== undefined;
+    });
+  }, [record.plots, withdrawnSpeciesPlots]);
+
   const saveSettings = useCallback(() => {
     if (!record.plots || record.plots.length === 0) {
       goToViewSettings();
@@ -80,7 +89,9 @@ const EditPermanentPlotsTab = ({
       }
     });
 
-    record.plots.forEach((plot) => {
+    const filteredPlots = getFilteredPlots();
+
+    filteredPlots.forEach((plot) => {
       if (!plot.observationId) {
         plot.densityData.forEach((denData) => {
           if (denData.plotDensity === undefined || denData.plotDensity === null) {
@@ -95,9 +106,9 @@ const EditPermanentPlotsTab = ({
       return;
     }
 
-    const saveRequest = dispatch(requestAssignT0SiteData(record));
+    const saveRequest = dispatch(requestAssignT0SiteData({ ...record, plots: filteredPlots }));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots]);
+  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots, getFilteredPlots]);
 
   useEffect(() => {
     if (saveResponse?.status === 'success') {
@@ -115,9 +126,10 @@ const EditPermanentPlotsTab = ({
   }, []);
 
   const saveWithDefaultDensity = useCallback(() => {
-    const saveRequest = dispatch(requestAssignT0SiteData(record));
+    const filteredPlots = getFilteredPlots();
+    const saveRequest = dispatch(requestAssignT0SiteData({ ...record, plots: filteredPlots }));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record]);
+  }, [dispatch, record, getFilteredPlots]);
 
   return (
     <PageForm
