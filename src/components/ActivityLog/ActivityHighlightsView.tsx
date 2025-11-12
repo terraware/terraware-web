@@ -258,10 +258,16 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
   const activitiesVisibleOnMap = useMemo(
     () =>
-      activities.map((activity) => ({
-        ...activity,
-        media: activity.payload.media.filter((item) => item.isCoverPhoto && !item.isHiddenOnMap),
-      })),
+      activities.map((activity) => {
+        const filteredMedia = activity.payload.media.filter((item) => item.isCoverPhoto && !item.isHiddenOnMap);
+        return {
+          ...activity,
+          payload: {
+            ...activity.payload,
+            media: filteredMedia,
+          },
+        } as TypedActivity;
+      }),
     [activities]
   );
 
@@ -273,7 +279,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
         // zoom the map to show all activities
         const allPoints = activitiesVisibleOnMap.flatMap((activity) =>
-          activity.media
+          activity.payload.media
             .map((_media): MapPoint | undefined => {
               if (!_media.isHiddenOnMap && _media.geolocation) {
                 return {
