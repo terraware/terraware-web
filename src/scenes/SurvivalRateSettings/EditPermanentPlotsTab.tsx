@@ -6,12 +6,11 @@ import { PageForm } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { selectAssignT0SiteData } from 'src/redux/features/tracking/trackingSelectors';
 import { PlotsWithObservationsSearchResult, requestAssignT0SiteData } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 

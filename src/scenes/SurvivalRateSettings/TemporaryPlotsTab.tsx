@@ -3,10 +3,9 @@ import React, { useCallback } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Checkbox, Icon, Tooltip } from '@terraware/web-components';
 
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
-import { SiteT0Data } from 'src/types/Tracking';
+import { SiteT0Data, SpeciesPlot } from 'src/types/Tracking';
 
 import ZoneT0Box from './ZoneT0Box';
 

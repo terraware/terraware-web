@@ -36,6 +36,7 @@ const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
 const PLANTING_SITE_T0_ALL_SET_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/allSet';
 const PLANTING_SITES_T0_ENDPOINT = '/api/v1/tracking/t0/site';
 const PLANTING_SITES_T0_TEMP_ENDPOINT = '/api/v1/tracking/t0/site/temp';
+const PLANTING_SITE_T0_SPECIES_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/species';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -57,6 +58,9 @@ type CreatePlantingSiteResponse =
 
 type PlantingSiteT0ResponsePayload =
   paths[typeof PLANTING_SITE_T0_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type PlantingSiteT0SpeciesResponsePayload =
+  paths[typeof PLANTING_SITE_T0_SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * exported type
@@ -512,6 +516,12 @@ const getT0AllSet = async (plantingSiteId: number): Promise<Response2<GetAllSite
   ).get2<GetAllSiteT0DataSetResponsePayload>();
 };
 
+const getT0Species = async (plantingSiteId: number): Promise<Response2<PlantingSiteT0SpeciesResponsePayload>> => {
+  return HttpService.root(
+    PLANTING_SITE_T0_SPECIES_ENDPOINT.replace('{plantingSiteId}', plantingSiteId.toString())
+  ).get2<PlantingSiteT0SpeciesResponsePayload>();
+};
+
 /**
  * Exported functions
  */
@@ -538,6 +548,7 @@ const TrackingService = {
   assignT0SiteData,
   assignT0TempSiteData,
   getT0AllSet,
+  getT0Species,
 };
 
 export default TrackingService;

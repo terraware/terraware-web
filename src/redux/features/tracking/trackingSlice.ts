@@ -8,6 +8,7 @@ import {
   PlantingSiteReportedPlants,
   PlantingSiteSearchResult,
   SiteT0Data,
+  SpeciesPlot,
 } from 'src/types/Tracking';
 
 import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
@@ -17,6 +18,7 @@ import {
   requestAssignT0TempSiteData,
   requestGetPlantingSiteHistory,
   requestGetPlantingSiteT0AllSet,
+  requestGetPlantingSiteT0Species,
   requestListPlantingSiteHistories,
   requestListPlantingSites,
   requestListProjectPlantingSites,
@@ -286,6 +288,17 @@ export const plantingSiteT0AllSetSlice = createSlice({
   },
 });
 
+const initialPlantingSiteT0SpeciesState: { [key: string]: StatusT<SpeciesPlot[]> } = {};
+
+export const plantingSiteT0SpeciesSlice = createSlice({
+  name: 'plantingSiteT0SpeciesSlice',
+  initialState: initialPlantingSiteT0SpeciesState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetPlantingSiteT0Species, true)(builder);
+  },
+});
+
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
@@ -304,6 +317,7 @@ const trackingReducers = {
   assignT0TempSiteData: assignT0TempSiteData.reducer,
   projectPlantingSites: projectPlantingSiteListSlice.reducer,
   plantingSiteT0AllSet: plantingSiteT0AllSetSlice.reducer,
+  plantingSiteT0Species: plantingSiteT0SpeciesSlice.reducer,
 };
 
 export default trackingReducers;

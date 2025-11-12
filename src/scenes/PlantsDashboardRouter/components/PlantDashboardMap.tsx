@@ -332,8 +332,8 @@ const PlantDashboardMap = ({
           plot.photos.filter(hasGpsCoordinates).map((photo) => {
             return {
               id: `photos/${photo.fileId}`,
-              longitude: photo.gpsCoordinates.coordinates[1],
-              latitude: photo.gpsCoordinates.coordinates[0],
+              longitude: photo.gpsCoordinates?.coordinates[1],
+              latitude: photo.gpsCoordinates?.coordinates[0],
               onClick: selectPhoto(plot.monitoringPlotId, results.observationId, photo),
               selected: selectedPhotos.find((selected) => selected.photo.fileId === photo.fileId) !== undefined,
               properties: {

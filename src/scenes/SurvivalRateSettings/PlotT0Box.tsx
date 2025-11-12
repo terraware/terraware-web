@@ -8,10 +8,9 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
-import { PlotT0Data } from 'src/types/Tracking';
+import { PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { roundToDecimal } from 'src/utils/numbers';
 
