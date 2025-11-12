@@ -11,7 +11,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import {
   requestGetActivityMedia,
   requestGetActivityMediaStream,
@@ -340,11 +340,12 @@ const ActivityDetailView = ({
   const location = useStateLocation();
   const theme = useTheme();
   const { goToAcceleratorActivityEdit, goToActivityEdit } = useNavigateTo();
+  const { selectedOrganization } = useOrganization();
 
   const verifiedByUser = useAppSelector(
     selectUser(activity.type === 'admin' ? activity.payload.verifiedBy : undefined)
   );
-  const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES');
+  const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
 
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
   const [getActivityMediaStreamRequestId, setGetActivityMediaStreamRequestId] = useState<string>('');

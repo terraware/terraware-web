@@ -251,7 +251,7 @@ const isAllowedEditActivities: PermissionCheckFn<EditActivitiesMetadata> = (
   _: GlobalRolePermission,
   metadata?: EditActivitiesMetadata
 ): boolean => {
-  return isTFExpertOrHigher(user) || isAdmin(metadata?.organization);
+  return isTFExpertOrHigher(user) || isMember(metadata?.organization);
 };
 
 /**
