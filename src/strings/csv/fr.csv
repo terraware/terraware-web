@@ -1479,6 +1479,7 @@ PROJECT_SPECIFIC_METRICS,Indicateurs spécifiques au projet,56e54f89
 PROJECT_SUMMARY,Résumé du projet,f7efd6d7
 PROJECT_SUMMARY_INSTRUCTIONS,Fournissez une brève description narrative des progrès réalisés depuis votre rapport précédent. Ce résumé doit être rédigé à l'intention d'un public général et être adapté à la publication. (Maximum 100 mots),809179b4
 PROJECT_SUMMARY_REQUIRED,Résumé du projet *,7225ff45
+PROJECT_UPDATED,Projet mis à jour,ea06b396
 PROJECT_ZONE_FIGURE,Figure de la zone de projet,7b0c1adc
 PROJECT_ZONE_FIGURE_VARIABLE,Variable de figure de la zone du projet,12181fad
 PROJECT_ZONES,Zones du projet,0b21c99c

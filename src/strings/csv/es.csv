@@ -1480,6 +1480,7 @@ PROJECT_SPECIFIC_METRICS,Métricas específicas del proyecto,56e54f89
 PROJECT_SUMMARY,Resumen del proyecto,f7efd6d7
 PROJECT_SUMMARY_INSTRUCTIONS,Presente una breve descripción de los progresos realizados desde su informe anterior. Este resumen debe estar escrito para un público general y ser adecuado para publicación. (Menos de 100 palabras).,809179b4
 PROJECT_SUMMARY_REQUIRED,Resumen del proyecto *,7225ff45
+PROJECT_UPDATED,Proyecto actualizado,ea06b396
 PROJECT_ZONE_FIGURE,Figura de la zona del proyecto,7b0c1adc
 PROJECT_ZONE_FIGURE_VARIABLE,Variable de la cifra de la zona del proyecto,12181fad
 PROJECT_ZONES,Áreas del proyecto,0b21c99c
