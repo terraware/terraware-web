@@ -9,6 +9,7 @@ import 'swiper/css/pagination';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
@@ -126,6 +127,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   const { scrollToTop } = useMapDrawer(mapDrawerRef);
   const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { acceleratorReports } = useProjectReports(projectId);
+  const { isFunderRoute } = useFunderPortal();
 
   const selectedQuarterReport = useMemo(() => {
     if (acceleratorReports.length === 0 || !selectedQuarter) {
@@ -342,7 +344,15 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   );
 
   return (
-    <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>
+    <Box
+      sx={{
+        '& .map-drawer--body': {
+          paddingBottom: 0,
+          paddingTop: 0,
+          ...(isFunderRoute && { paddingLeft: 0, paddingRight: 0 }),
+        },
+      }}
+    >
       <MapSplitView
         activities={activitiesVisibleOnMap}
         activityMarkerHighlighted={activityMarkerHighlighted}
