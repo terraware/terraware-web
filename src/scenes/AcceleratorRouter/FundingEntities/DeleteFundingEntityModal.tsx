@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { Typography } from '@mui/material';
 
@@ -6,7 +6,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import FundingEntityService from 'src/services/funder/FundingEntityService';
+import { useDeleteFundingEntityMutation } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -21,14 +21,19 @@ const DeleteFundingEntityModal = ({ onClose, open, fundingEntity }: DeleteFundin
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
-  const deleteHandler = async () => {
-    const response = await FundingEntityService.deleteFundingEntity(fundingEntity.id);
-    if (response.requestSucceeded) {
+  const [deleteFundingEntity, result] = useDeleteFundingEntityMutation();
+
+  const deleteHandler = useCallback(() => {
+    void deleteFundingEntity(fundingEntity.id);
+  }, [deleteFundingEntity, fundingEntity.id]);
+
+  useEffect(() => {
+    if (result.isSuccess) {
       navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES);
-    } else {
+    } else if (result.isError) {
       snackbar.toastError();
     }
-  };
+  }, [navigate, result.isError, result.isSuccess, snackbar]);
 
   return (
     <DialogBox
@@ -47,7 +52,7 @@ const DeleteFundingEntityModal = ({ onClose, open, fundingEntity }: DeleteFundin
         />,
         <Button
           id='saveDeleteFundingEntity'
-          onClick={() => void deleteHandler()}
+          onClick={deleteHandler}
           type='destructive'
           label={strings.DELETE}
           key='button-2'

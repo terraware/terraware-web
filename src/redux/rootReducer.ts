@@ -1,5 +1,7 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 
+import { rtkReducers } from 'src/queries/reducers';
+
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import accessionsReducers from './features/accessions/accessionsSlice';
 import activityReducers from './features/activities/activitiesSlice';
@@ -97,6 +99,7 @@ export const reducers = {
   ...userInternalInterestsReducers,
   ...usersReducers,
   ...votesReducers,
+  ...rtkReducers,
 };
 const combinedReducers = combineReducers(reducers);
 

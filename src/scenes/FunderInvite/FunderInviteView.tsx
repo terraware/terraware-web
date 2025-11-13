@@ -10,10 +10,7 @@ import PageForm from 'src/components/common/PageForm';
 import { EMAIL_REGEX } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useFundingEntity } from 'src/providers';
-import { requestFundingEntityInviteFunder } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { inviteFunderRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetFundingEntityQuery, useInviteFunderMutation } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import { Funder } from 'src/types/FundingEntity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -22,18 +19,17 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 const FunderInviteView = () => {
   const { goToFundingEntity, goToSettings } = useNavigateTo();
-  const { fundingEntity, reload: reloadFundingEntity } = useFundingEntity();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ fundingEntityId: string }>();
   const fundingEntityId = Number(pathParams.fundingEntityId);
+  const { data: fundingEntity } = useGetFundingEntityQuery(fundingEntityId);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [record, , , onChangeCallback] = useForm<Partial<Funder>>({});
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const inviteFunderResponse = useAppSelector(inviteFunderRequest(requestId));
+
+  const [inviteFunder, inviteResult] = useInviteFunderMutation();
 
   const onCancel = useCallback(() => {
     if (isAcceleratorRoute) {
@@ -61,28 +57,20 @@ const FunderInviteView = () => {
       return;
     }
 
-    const request = dispatch(requestFundingEntityInviteFunder({ fundingEntityId, email: record.email }));
-    setRequestId(request.requestId);
-  }, [dispatch, snackbar, record.email, fundingEntityId]);
+    void inviteFunder({
+      fundingEntityId,
+      email: record.email,
+    });
+  }, [fundingEntityId, record.email, snackbar, inviteFunder]);
 
   useEffect(() => {
-    if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') {
-      return;
-    }
-
-    if (inviteFunderResponse.status === 'error') {
-      setEmailError(inviteFunderResponse.data as string);
-      return;
-    }
-
-    if (inviteFunderResponse.status === 'success') {
+    if (inviteResult.isSuccess) {
       snackbar.toastSuccess(strings.FUNDER_ADDED);
-      reloadFundingEntity();
-    } else {
+      goToFundingEntity(fundingEntityId);
+    } else if (inviteResult.isError) {
       snackbar.toastError();
     }
-    goToFundingEntity(fundingEntityId);
-  }, [fundingEntityId, goToFundingEntity, inviteFunderResponse, reloadFundingEntity, snackbar]);
+  }, [fundingEntityId, goToFundingEntity, inviteResult.isError, inviteResult.isSuccess, snackbar]);
 
   return (
     <Page

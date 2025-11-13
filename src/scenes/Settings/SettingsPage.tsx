@@ -70,13 +70,14 @@ const SettingsPage = () => {
     ];
   }, [
     activeLocale,
-    isDeleteModalOpen,
-    isEditingAccount,
-    onTabsDeleteCancel,
-    reloadUser,
-    strings,
-    tabsBackToView,
     user,
+    strings.MY_ACCOUNT,
+    strings.USER_ACCESS,
+    isEditingAccount,
+    isDeleteModalOpen,
+    onTabsDeleteCancel,
+    tabsBackToView,
+    reloadUser,
     userFundingEntity?.id,
   ]);
 
