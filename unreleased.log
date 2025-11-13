@@ -1,3 +1,4 @@
+1684d756036 SW-7722 Funder Portal: Fix double scroll in highlights (#4786)
 ea4b3bd1c7f SW-7717 Activity Details buttons should be hidden for Read Only users (#4785)
 212d6fdbf44 SW-7724 Funder Portal: update padding around list of activities to 24px all around (#4784)
 417c7f9eb1b SW-7721 Funder portal: remove space below tabs in Highlights tab (#4783)
