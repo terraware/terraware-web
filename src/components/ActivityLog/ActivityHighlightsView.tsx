@@ -372,7 +372,15 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   );
 
   return (
-    <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>
+    <Box
+      sx={{
+        '& .map-drawer--body': {
+          paddingBottom: 0,
+          paddingTop: 0,
+          ...(isFunderRoute && { paddingLeft: 0, paddingRight: 0 }),
+        },
+      }}
+    >
       <MapSplitView
         activities={highlightActivityId && shownActivity ? [shownActivity] : activitiesVisibleOnMap}
         activityMarkerHighlighted={activityMarkerHighlighted}
