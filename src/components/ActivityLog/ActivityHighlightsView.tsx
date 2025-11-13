@@ -9,13 +9,17 @@ import 'swiper/css/pagination';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACCELERATOR_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
-import { AcceleratorReport } from 'src/types/AcceleratorReport';
+import { AcceleratorReport, PublishedReport } from 'src/types/AcceleratorReport';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -111,7 +115,7 @@ type ActivityHighlightSlide = {
   coverPhoto?: ActivityMediaFile;
   coverPhotoURL?: string;
   description?: string;
-  report?: AcceleratorReport;
+  report?: AcceleratorReport | PublishedReport;
   title: string;
 };
 
@@ -126,16 +130,39 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   const { scrollToTop } = useMapDrawer(mapDrawerRef);
   const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { acceleratorReports } = useProjectReports(projectId);
+  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
+  const reportsResponse = useAppSelector(selectListFunderReports(projectId.toString() ?? ''));
+  const { isFunderRoute } = useFunderPortal();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (isFunderRoute && publishedReports === undefined) {
+      void dispatch(requestListFunderReports(projectId));
+    }
+  }, [dispatch, isFunderRoute, projectId, publishedReports]);
+
+  useEffect(() => {
+    if (reportsResponse?.status === 'success') {
+      setPublishedReports(reportsResponse.data || []);
+    }
+  }, [reportsResponse]);
 
   const selectedQuarterReport = useMemo(() => {
-    if (acceleratorReports.length === 0 || !selectedQuarter) {
+    const reports = isFunderRoute ? publishedReports : acceleratorReports;
+
+    if (!reports || reports.length === 0 || !selectedQuarter) {
       return undefined;
     }
 
     // filter by selectedQuarter
-    const quarterReports = acceleratorReports.filter((report) => {
-      if (report.status !== 'Submitted' && report.status !== 'Approved') {
-        return false;
+    const quarterReports = reports.filter((report) => {
+      if (!isFunderRoute) {
+        if (
+          (report as AcceleratorReport).status !== 'Submitted' &&
+          (report as AcceleratorReport).status !== 'Approved'
+        ) {
+          return false;
+        }
       }
       const year = report.endDate.split('-')[0];
       const reportQuarterYear = `${report.quarter} ${year}`;
@@ -148,7 +175,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
     const sorted = [...quarterReports].sort((a, b) => b.endDate.localeCompare(a.endDate, activeLocale || undefined));
     return sorted[0];
-  }, [acceleratorReports, activeLocale, selectedQuarter]);
+  }, [acceleratorReports, isFunderRoute, publishedReports, selectedQuarter, activeLocale]);
 
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
   const [focusedFileId, setFocusedFileId] = useState<number | undefined>(undefined);
@@ -226,10 +253,13 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     const _slides: ActivityHighlightSlide[] = [];
 
     if (selectedQuarterReport) {
+      const reportIdValue = isFunderRoute
+        ? (selectedQuarterReport as PublishedReport).reportId
+        : (selectedQuarterReport as AcceleratorReport).id;
       const firstSlide: ActivityHighlightSlide = {
         coverPhotoURL: selectedQuarterReport.photos.length
           ? ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId?.toString())
-              .replace('{reportId}', selectedQuarterReport.id.toString())
+              .replace('{reportId}', reportIdValue.toString())
               .replace('{fileId}', selectedQuarterReport.photos[0].fileId.toString())
           : undefined,
         description: selectedQuarterReport.highlights,
@@ -254,7 +284,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     }
 
     return _slides;
-  }, [activities, projectId, selectedQuarterReport, strings]);
+  }, [activities, isFunderRoute, projectId, selectedQuarterReport, strings]);
 
   const activitiesVisibleOnMap = useMemo(
     () =>
@@ -450,8 +480,16 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                           }}
                         >
                           {getReportMetrics(strings).map(({ metric, formatter }) => {
-                            const value =
-                              slide.report?.systemMetrics.find((sm) => sm.metric === metric)?.systemValue || 0;
+                            const selMetric = slide.report?.systemMetrics.find((sm) =>
+                              isFunderRoute
+                                ? (sm as PublishedReport['systemMetrics'][0]).name === metric
+                                : (sm as AcceleratorReport['systemMetrics'][0]).metric === metric
+                            );
+                            const value = isFunderRoute
+                              ? (selMetric as PublishedReport['systemMetrics'][0])?.value || 0
+                              : (selMetric as AcceleratorReport['systemMetrics'][0]).overrideValue ||
+                                (selMetric as AcceleratorReport['systemMetrics'][0])?.systemValue ||
+                                0;
 
                             return (
                               <Box key={metric}>
