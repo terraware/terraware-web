@@ -1,3 +1,5 @@
+5682b660233 SW-7677 Add “Project Updated” badge (#4777)
+f4924b0a3ca SW-7718 Replace activity type "Monitoring" french translation to "Surveillance" (#4779)
 093b2069c30 SW-7692 Replace nursery withdrawn species endpoint call with new t0 r… (#4768)
 c88e4c843f3 SW-7708 Saving changes to an activity has the screen flash a different screen for a split second (#4775)
 2c9cd493c67 SW-7714 Only one point should show up on map per activity in Highlights (#4774)
