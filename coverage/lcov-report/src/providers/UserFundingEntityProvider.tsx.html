@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -118,32 +118,7 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,8 +140,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,14 +155,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -211,9 +177,7 @@
 &nbsp;
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { requestFundingEntityForUser } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { selectUserFundingEntityRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLazyGetUserFundingEntityQuery } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import useEnvironment from 'src/utils/useEnvironment';
 &nbsp;
@@ -225,19 +189,11 @@ export type UserFundingEntityProviderProps = {
   children?: React.ReactNode;
 };
 &nbsp;
-enum APIRequestStatus {
-  'AWAITING',
-  'FAILED',
-  'SUCCEEDED',
-}
-&nbsp;
 export default function <span class="fstat-no" title="function not covered" >UserFundingEntityProvider(</span>{ children }: UserFundingEntityProviderProps) {
   const { user, bootstrapped: userBootstrapped } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const [entityAPIRequestStatus, setEntityAPIRequestStatus] = <span class="cstat-no" title="statement not covered" >useState&lt;APIRequestStatus&gt;(APIRequestStatus.AWAITING);</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
   const { isDev, isStaging } = <span class="cstat-no" title="statement not covered" >useEnvironment();</span>
-  const getUserFundingEntityRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUserFundingEntityRequest(user?.id));</span>
+  const [getUserFundingEntity, result] = <span class="cstat-no" title="statement not covered" >useLazyGetUserFundingEntityQuery();</span>
   const [fundingEntityData, setFundingEntityData] = <span class="cstat-no" title="statement not covered" >useState&lt;ProvidedUserFundingEntityData&gt;({</span>
     userFundingEntity: undefined,
     bootstrapped: false,
@@ -245,28 +201,21 @@ export default function <span class="fstat-no" title="function not covered" >Use
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (userBootstrapped &amp;&amp; user &amp;&amp; user.userType === 'Funder') {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestFundingEntityForUser(user.id));</span>
+<span class="cstat-no" title="statement not covered" >      void getUserFundingEntity(user.id);</span>
     }
-  }, [userBootstrapped, user, dispatch]);
+  }, [userBootstrapped, user, getUserFundingEntity]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!getUserFundingEntityRequest) {</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (getUserFundingEntityRequest.status === 'success' &amp;&amp; getUserFundingEntityRequest.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setEntityAPIRequestStatus(APIRequestStatus.SUCCEEDED);</span>
+<span class="cstat-no" title="statement not covered" >    if (result.isSuccess &amp;&amp; result.data) {</span>
 <span class="cstat-no" title="statement not covered" >      setFundingEntityData({</span>
-        userFundingEntity: getUserFundingEntityRequest.data.userFundingEntity,
+        userFundingEntity: result.data,
         bootstrapped: true,
       });
-    } else <span class="cstat-no" title="statement not covered" >if (getUserFundingEntityRequest.status === 'error') {</span>
-<span class="cstat-no" title="statement not covered" >      setEntityAPIRequestStatus(APIRequestStatus.FAILED);</span>
     }
-  }, [getUserFundingEntityRequest]);
+  }, [result]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (entityAPIRequestStatus === APIRequestStatus.FAILED) {</span>
+<span class="cstat-no" title="statement not covered" >    if (result.isError) {</span>
 <span class="cstat-no" title="statement not covered" >      if (isDev || isStaging) {</span>
 <span class="cstat-no" title="statement not covered" >        if (confirm(strings.DEV_SERVER_ERROR)) {</span>
 <span class="cstat-no" title="statement not covered" >          window.location.reload();</span>
@@ -275,7 +224,7 @@ export default function <span class="fstat-no" title="function not covered" >Use
 <span class="cstat-no" title="statement not covered" >        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);</span>
       }
     }
-  }, [entityAPIRequestStatus, isDev, isStaging, navigate]);
+  }, [result, isDev, isStaging, navigate]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return &lt;UserFundingEntityContext.Provider value={fundingEntityData}&gt;{children}&lt;/UserFundingEntityContext.Provider&gt;;</span>
 }
@@ -286,7 +235,7 @@ export default function <span class="fstat-no" title="function not covered" >Use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-13T21:19:45.043Z
+                at 2025-11-13T23:28:39.064Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

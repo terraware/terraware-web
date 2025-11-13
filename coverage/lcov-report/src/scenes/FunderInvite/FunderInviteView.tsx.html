@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -192,22 +192,7 @@
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,8 +222,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -268,26 +252,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -357,10 +333,7 @@ import PageForm from 'src/components/common/PageForm';
 import { EMAIL_REGEX } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useFundingEntity } from 'src/providers';
-import { requestFundingEntityInviteFunder } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
-import { inviteFunderRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetFundingEntityQuery, useInviteFunderMutation } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import { Funder } from 'src/types/FundingEntity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -369,18 +342,17 @@ import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 const FunderInviteView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { goToFundingEntity, goToSettings } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
-  const { fundingEntity, reload: reloadFundingEntity } = <span class="cstat-no" title="statement not covered" >useFundingEntity();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ fundingEntityId: string }&gt;();</span>
   const fundingEntityId = <span class="cstat-no" title="statement not covered" >Number(pathParams.fundingEntityId);</span>
+  const { data: fundingEntity } = <span class="cstat-no" title="statement not covered" >useGetFundingEntityQuery(fundingEntityId);</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const [record, , , onChangeCallback] = <span class="cstat-no" title="statement not covered" >useForm&lt;Partial&lt;Funder&gt;&gt;({});</span>
   const [emailError, setEmailError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const inviteFunderResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(inviteFunderRequest(requestId));</span>
+&nbsp;
+  const [inviteFunder, inviteResult] = <span class="cstat-no" title="statement not covered" >useInviteFunderMutation();</span>
 &nbsp;
   const onCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute) {</span>
@@ -408,28 +380,20 @@ const FunderInviteView = <span class="cstat-no" title="statement not covered" ><
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-    const request = <span class="cstat-no" title="statement not covered" >dispatch(requestFundingEntityInviteFunder({ fundingEntityId, email: record.email }));</span>
-<span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
-  }, [dispatch, snackbar, record.email, fundingEntityId]);
+<span class="cstat-no" title="statement not covered" >    void inviteFunder({</span>
+      fundingEntityId,
+      email: record.email,
+    });
+  }, [fundingEntityId, record.email, snackbar, inviteFunder]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') {</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (inviteFunderResponse.status === 'error') {</span>
-<span class="cstat-no" title="statement not covered" >      setEmailError(inviteFunderResponse.data as string);</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (inviteFunderResponse.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >    if (inviteResult.isSuccess) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.FUNDER_ADDED);</span>
-<span class="cstat-no" title="statement not covered" >      reloadFundingEntity();</span>
-    } else {
+<span class="cstat-no" title="statement not covered" >      goToFundingEntity(fundingEntityId);</span>
+    } else <span class="cstat-no" title="statement not covered" >if (inviteResult.isError) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     }
-<span class="cstat-no" title="statement not covered" >    goToFundingEntity(fundingEntityId);</span>
-  }, [fundingEntityId, goToFundingEntity, inviteFunderResponse, reloadFundingEntity, snackbar]);
+  }, [fundingEntityId, goToFundingEntity, inviteResult.isError, inviteResult.isSuccess, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page
@@ -493,7 +457,7 @@ export default FunderInviteView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-13T21:19:45.043Z
+                at 2025-11-13T23:28:39.064Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

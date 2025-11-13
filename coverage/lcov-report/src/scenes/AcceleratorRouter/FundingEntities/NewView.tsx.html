@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -98,7 +98,11 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,6 +114,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -137,28 +145,32 @@
 &nbsp;
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useCreateFundingEntitiesMutation } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 &nbsp;
 import FundingEntityForm from './FundingEntityForm';
-import useCreateFundingEntity from './useCreateFundingEntity';
 &nbsp;
 const NewView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const createFundingEntity = <span class="cstat-no" title="statement not covered" >useCreateFundingEntity();</span>
+  const [create, createResult] = <span class="cstat-no" title="statement not covered" >useCreateFundingEntitiesMutation();</span>
   const { goToFundingEntities, goToFundingEntity } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
   const handleOnSave = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (r</span>ecord: FundingEntity) =&gt; {
-<span class="cstat-no" title="statement not covered" >      createFundingEntity.create(record);</span>
+      const payload = <span class="cstat-no" title="statement not covered" >{</span>
+        name: record.name,
+        projects: record.projects.map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.projectId)</span>,
+      };
+<span class="cstat-no" title="statement not covered" >      void create(payload);</span>
     },
-    [createFundingEntity]
+    [create]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (createFundingEntity.succeeded &amp;&amp; createFundingEntity.data) {</span>
-<span class="cstat-no" title="statement not covered" >      goToFundingEntity(createFundingEntity.data.id);</span>
+<span class="cstat-no" title="statement not covered" >    if (createResult.isSuccess) {</span>
+<span class="cstat-no" title="statement not covered" >      goToFundingEntity(createResult.data.fundingEntity.id);</span>
     }
-  }, [createFundingEntity, goToFundingEntity]);
+  }, [createResult, goToFundingEntity]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page title={strings.ADD_FUNDING_ENTITY} contentStyle={{ display: 'flex', flexDirection: 'column' }}&gt;
@@ -175,7 +187,7 @@ export default NewView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-13T21:19:45.043Z
+                at 2025-11-13T23:28:39.064Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

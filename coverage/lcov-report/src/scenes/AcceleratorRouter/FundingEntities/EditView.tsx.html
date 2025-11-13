@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -116,7 +116,15 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -129,6 +137,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,6 +147,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,38 +186,46 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect } from 'react';
+import { useParams } from 'react-router';
 &nbsp;
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useFundingEntity } from 'src/providers';
+import { useGetFundingEntityQuery, useUpdateFundingEntityMutation } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 &nbsp;
 import FundingEntityForm from './FundingEntityForm';
-import useUpdateFundingEntity from './useUpdateFundingEntity';
 &nbsp;
 const EditView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { fundingEntity, reload } = <span class="cstat-no" title="statement not covered" >useFundingEntity();</span>
-  const updateFundingEntity = <span class="cstat-no" title="statement not covered" >useUpdateFundingEntity();</span>
   const { goToFundingEntity } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
+  const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ fundingEntityId: string }&gt;();</span>
+  const { data: fundingEntity } = <span class="cstat-no" title="statement not covered" >useGetFundingEntityQuery(Number(pathParams.fundingEntityId));</span>
+&nbsp;
+  const [update, updateResult] = <span class="cstat-no" title="statement not covered" >useUpdateFundingEntityMutation();</span>
   const goToViewFundingEntity = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    reload();</span>
-<span class="cstat-no" title="statement not covered" >    goToFundingEntity(String(fundingEntity?.id));</span>
-  }, [fundingEntity, goToFundingEntity, reload]);
+<span class="cstat-no" title="statement not covered" >    goToFundingEntity(Number(pathParams.fundingEntityId));</span>
+  }, [goToFundingEntity, pathParams.fundingEntityId]);
 &nbsp;
   const handleOnSave = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (r</span>ecord: FundingEntity) =&gt; {
-<span class="cstat-no" title="statement not covered" >      updateFundingEntity.update(record);</span>
+      const payload = <span class="cstat-no" title="statement not covered" >{</span>
+        id: record.id,
+        body: {
+          name: record.name,
+          projects: record.projects.map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.projectId)</span>,
+        },
+      };
+<span class="cstat-no" title="statement not covered" >      void update(payload);</span>
     },
-    [updateFundingEntity]
+    [update]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (updateFundingEntity.succeeded) {</span>
+<span class="cstat-no" title="statement not covered" >    if (updateResult.isSuccess) {</span>
 <span class="cstat-no" title="statement not covered" >      goToViewFundingEntity();</span>
     }
-  }, [updateFundingEntity, goToViewFundingEntity]);
+  }, [goToViewFundingEntity, updateResult]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page
@@ -211,7 +235,7 @@ const EditView = <span class="cstat-no" title="statement not covered" ><span cla
     &gt;
       {fundingEntity &amp;&amp; (
         &lt;FundingEntityForm
-          busy={updateFundingEntity.busy}
+          busy={updateResult.isLoading}
           fundingEntity={fundingEntity}
           onCancel={goToViewFundingEntity}
           onSave={handleOnSave}
@@ -229,7 +253,7 @@ export default EditView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-13T21:19:45.043Z
+                at 2025-11-13T23:28:39.064Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
