@@ -132,6 +132,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [isAllowed, organization]
   );
 
+  const isAllowedDeleteActivitiesPublished = useMemo(() => {
+    return isAllowed('DELETE_ACTIVITIES_PUBLISHED', { organization });
+  }, [isAllowed, organization]);
+
   useEffect(() => {
     const _source = query.get('source');
     if (_source) {
@@ -574,6 +578,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                   onClick={handleDeleteActivity}
                   priority='secondary'
                   type='destructive'
+                  disabled={
+                    activity.type === 'admin' && !!activity.payload.publishedTime && !isAllowedDeleteActivitiesPublished
+                  }
                 />
               )}
             </Grid>
