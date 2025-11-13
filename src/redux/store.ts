@@ -11,11 +11,10 @@ import { rootReducer } from './rootReducer';
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => {
-    const defaultMiddleware = getDefaultMiddleware({
+    return getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: false,
-    });
-    return defaultMiddleware.concat(...rtkMiddleware);
+    }).concat(rtkMiddleware);
   },
 });
 
