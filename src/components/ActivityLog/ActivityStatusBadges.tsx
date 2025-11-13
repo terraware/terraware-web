@@ -12,7 +12,18 @@ type ActivityStatusBadgesProps = {
 const ActivityStatusBadges = ({ activity }: ActivityStatusBadgesProps): JSX.Element => {
   const theme = useTheme();
 
-  const isChanged = useMemo(() => {
+  const isChangedAfterVerified = useMemo(() => {
+    if (activity.type === 'funder' || activity.type === 'base') {
+      return false;
+    }
+    return (
+      activity.payload.modifiedTime &&
+      activity.payload.verifiedTime &&
+      new Date(activity.payload.modifiedTime) > new Date(activity.payload.verifiedTime)
+    );
+  }, [activity]);
+
+  const isChangedAfterPublished = useMemo(() => {
     if (activity.type === 'funder' || activity.type === 'base') {
       return false;
     }
@@ -33,8 +44,9 @@ const ActivityStatusBadges = ({ activity }: ActivityStatusBadgesProps): JSX.Elem
 
   return (
     <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' gap={1} marginY={theme.spacing(1)}>
-      {isChanged && <ActivityStatusBadge status='Unpublished Changes' />}
+      {isChangedAfterPublished && <ActivityStatusBadge status='Unpublished Changes' />}
       {activity.type === 'admin' && <ActivityStatusBadge status={activity.payload.status} />}
+      {isChangedAfterVerified && <ActivityStatusBadge status='Project Updated' />}
       {/* TODO: render badge for 'Do Not Use' when applicable */}
       {isPublished && <ActivityStatusBadge status='Published' />}
     </Box>

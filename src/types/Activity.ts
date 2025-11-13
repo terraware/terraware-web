@@ -63,7 +63,7 @@ export const activityTypeColor = (type: ActivityType): string => {
   }
 };
 
-export type ActivityStatusTag = ActivityStatus | 'Unpublished Changes' | 'Published';
+export type ActivityStatusTag = ActivityStatus | 'Unpublished Changes' | 'Published' | 'Project Updated';
 
 export const activityStatusTagLabel = (
   status: ActivityStatusTag | 'Unpublished Changes' | 'Published',
@@ -80,6 +80,8 @@ export const activityStatusTagLabel = (
       return strings.UNPUBLISHED_CHANGES;
     case 'Published':
       return strings.PUBLISHED;
+    case 'Project Updated':
+      return strings.PROJECT_UPDATED;
   }
 };
 
