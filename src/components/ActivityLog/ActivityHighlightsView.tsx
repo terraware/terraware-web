@@ -374,7 +374,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   return (
     <Box sx={{ '& .map-drawer--body': { paddingBottom: 0, paddingTop: 0 } }}>
       <MapSplitView
-        activities={activitiesVisibleOnMap}
+        activities={highlightActivityId && shownActivity ? [shownActivity] : activitiesVisibleOnMap}
         activityMarkerHighlighted={activityMarkerHighlighted}
         drawerRef={mapDrawerRef}
         heightOffsetPx={HEIGHT_OFFSET_PX}
