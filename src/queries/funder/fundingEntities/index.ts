@@ -34,7 +34,7 @@ type InviteFunderResponse =
 type DeleteFundersResponse =
   paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
-type UpdateFundingEntityPaylaod = {
+type UpdateFundingEntityPayload = {
   id: number;
   body: UpdateFundingEntityRequest;
 };
@@ -77,7 +77,7 @@ export const fundingEntitiesApi = createApi({
       providesTags: (result) => (result ? [{ type: QueryTagTypes.FundingEntities, id: result.id.toString() }] : []),
       transformResponse: (response: GetFundingEntityResponse): FundingEntity => response.fundingEntity,
     }),
-    updateFundingEntity: build.mutation<UpdateFundingEntityResponse, UpdateFundingEntityPaylaod>({
+    updateFundingEntity: build.mutation<UpdateFundingEntityResponse, UpdateFundingEntityPayload>({
       query: (payload) => ({
         url: FUNDING_ENTITY_ENDPOINT.replace('{fundingEntityId}', payload.id.toString()),
         method: 'PUT',
