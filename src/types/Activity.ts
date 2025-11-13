@@ -63,10 +63,10 @@ export const activityTypeColor = (type: ActivityType): string => {
   }
 };
 
-export type ActivityStatusTag = ActivityStatus | 'Unpublished Changes' | 'Published';
+export type ActivityStatusTag = ActivityStatus | 'Unpublished Changes' | 'Published' | 'Project Updated';
 
 export const activityStatusTagLabel = (
-  status: ActivityStatusTag | 'Unpublished Changes' | 'Published' | 'Project Updated',
+  status: ActivityStatusTag | 'Unpublished Changes' | 'Published',
   strings: typeof defaultStrings
 ) => {
   switch (status) {
