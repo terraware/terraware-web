@@ -5,15 +5,14 @@ import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProf
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions, waitFor } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
+test.describe('ProjectProfileTests', () => {
+  test.beforeEach(async ({ context }, testInfo) => {
+    await changeToSuperAdmin(context);
+  });
 
-export default function ProjectProfileTests() {
   test('View Project Profile for project in application', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
+    await waitFor(page, '#acceleratorConsoleButton');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
     await page.getByRole('button', { name: 'Applications' }).click();
     await page.getByText('Pre-screen').click();
@@ -224,4 +223,4 @@ export default function ProjectProfileTests() {
 
     await validateProjectProfilePage(updatedProjectDetails, page);
   });
-}
+});
