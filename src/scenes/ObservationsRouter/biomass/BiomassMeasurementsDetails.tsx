@@ -26,6 +26,7 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
+import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -214,7 +215,21 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
       {
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
-        children: <BiomassObservationDataTab trees={biomassMeasurements?.trees} />,
+        children: (
+          <BiomassObservationDataTab
+            trees={biomassMeasurements?.trees}
+            totalPlants={monitoringPlot?.totalPlants}
+            livePlants={getObservationSpeciesLivePlantsCount(monitoringPlot?.species)}
+            deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlot?.species)}
+            totalSpecies={monitoringPlot?.totalSpecies}
+            completedTime={monitoringPlot?.completedTime}
+            observer={monitoringPlot?.claimedByName}
+            plotConditions={monitoringPlot?.conditions}
+            fieldNotes={monitoringPlot?.notes}
+            biomassMeasurement={biomassMeasurements}
+            plotLocation={`${swCoordinatesLat}, ${swCoordinatesLong}`}
+          />
+        ),
       },
       {
         id: 'invasiveAndThreatenedSpecies',
@@ -227,7 +242,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
         children: <PhotosAndVideos />,
       },
     ];
-  }, [activeLocale, biomassMeasurements?.trees]);
+  }, [activeLocale, biomassMeasurements, monitoringPlot, swCoordinatesLat, swCoordinatesLong]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',

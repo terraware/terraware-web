@@ -27,7 +27,7 @@ import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/use
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
-import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -217,7 +217,20 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
         children: (
-          <ObservationDataTab monitoringPlotSpecies={monitoringPlot.species} isPermanent={monitoringPlot.isPermanent} />
+          <ObservationDataTab
+            monitoringPlotSpecies={monitoringPlot.species}
+            isPermanent={monitoringPlot.isPermanent}
+            totalPlants={monitoringPlot?.totalPlants}
+            livePlants={getObservationSpeciesLivePlantsCount(monitoringPlot?.species)}
+            deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlot?.species)}
+            totalSpecies={monitoringPlot?.totalSpecies}
+            plantDensity={monitoringPlot?.plantingDensity}
+            survivalRate={monitoringPlot?.survivalRate}
+            completedTime={monitoringPlot?.completedTime}
+            observer={monitoringPlot?.claimedByName}
+            plotConditions={monitoringPlot?.conditions}
+            fieldNotes={monitoringPlot?.notes}
+          />
         ),
       },
       {

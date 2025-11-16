@@ -230,6 +230,11 @@ BIOMASS_MEASUREMENT,Mesure de la Biomasse,cf846a13
 BIOMASS_MEASUREMENTS,Mesures de biomasse,fab7d40f
 BIOMASS_MONITORING,Surveillance de la biomasse,c249c88e
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Observation-de-biomasse,15aec1fa
+BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Plantes mortes correspond au nombre d’arbres et d’arbustes observés et enregistrés comme morts. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.,ea814e7f
+BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre d’arbres et d’arbustes observés et enregistrés comme vivants. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.,d69a1ca7
+BIOMASS_PLOT_LOCATION_TOOLTIP,Emplacement de la parcelle indique les coordonnées du coin sud-ouest de la parcelle.,a60d1e6d
+BIOMASS_PLOT_SPECIES_TOOLTIP,Espèces correspond au nombre d’espèces représentées par les arbres et arbustes observés. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.,f520363a
+BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total d’arbres et d’arbustes observés, y compris les arbres et arbustes vivants et morts. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.",d020f12c
 BOOLEAN_FALSE,faux,7a03081c
 BOOLEAN_TRUE,vrai,54415086
 BOUNDARIES,Limites,e40b0600
@@ -776,6 +781,7 @@ HEIGHT_M,Hauteur (m),fe61fc34
 HELP_SUPPORT,Aide et assistance,477f3e22
 HERB,Herbe,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abondance des plantes herbacées (%),d3693b6c
+HERBACIOUS_COVER_PERCENT,Couverture herbacée %,ba8fa5bd
 HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
 HIDE_ON_MAP,Masquer sur la carte,089ea8d7
@@ -1209,6 +1215,7 @@ OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Vous aurez besoin de l’applicat
 
 Scannez les codes QR avec votre appareil pour télécharger sur l’App Store ou Google Play.",13be06be
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations avec l'application Terraware,7536ab13
+OBSERVED_BY_ON,Observé par {0} le {1} à {2},c8b41186
 OBSERVED_DENSITY,Densité observée,c5003c27
 OBSERVED_DENSITY_PER_ZONE,Densité observée par zone,c51faa34
 OBSERVED_DENSITY_TOOLTIP,La densité observée est basée sur le nombre de plantes observées dans les zones qui ont été observées au moins une fois au cours de cette observation.,655e8e55
@@ -1392,12 +1399,23 @@ PLANTS_PER_HECTARE,plantes/ha,606dca50
 PLAY_VIDEO,Lire la vidéo,56432671
 PLEASE_NOTE,Veuillez noter que :,f37ff0f0
 PLOT,Terrain,8d3cefee
+PLOT_ADHOC_DEAD_PLANTS_TOOLTIP,Plantes mortes correspond au nombre de plantes observées enregistrées comme mortes.,7d7e8860
+PLOT_ADHOC_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes observées enregistrées comme vivantes.,b0ec7f7f
+PLOT_ADHOC_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées.,142e44c5
+PLOT_ADHOC_SPECIES_TOOLTIP,Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées.,ed7c35b1
+PLOT_ADHOC_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total de plantes observées, y compris les plantes enregistrées comme vivantes et mortes.",b2fd163f
 PLOT_CONDITIONS,Conditions de la parcelle,2b615357
+PLOT_DEAD_PLANTS_TOOLTIP,Plantes mortes correspond au nombre de plantes observées enregistrées comme mortes.,7d7e8860
 PLOT_DESCRIPTION,Description de la parcelle,67e5afa5
 PLOT_INFO,Informations sur la parcelle,38a9b59d
+PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,f7d2a77f
 PLOT_LOCATION,Emplacement de la placette,59f1374a
 PLOT_PHOTO,Photo de la parcelle,969c0fc9
+PLOT_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,32ced1ba
 PLOT_SELECTION,Sélection de parcelles,ba150031
+PLOT_SPECIES_TOOLTIP,"Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées, y compris les plantes enregistrées comme préexistantes.",fd5ff6d0
+PLOT_SURVIVAL_RATE_TOOLTIP,"Le taux de survie est calculé en fonction de la densité initiale de plantes spécifiée et du nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes, dont l'espèce est inconnue ou qui ne figurent pas dans la liste des espèces, ne sont pas incluses.",4e745c92
+PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total de plantes observées, y compris les plantes enregistrées comme vivantes et mortes. Les plantes enregistrées comme préexistantes ne sont pas incluses.",244fd18c
 PLOT_TYPE,Type de parcelle,4b579233
 PLOTS_AD_HOC,Parcelles ad hoc,104e30b2
 PLOTS_PERMANENT,Placettes permanentes,d06e9f3a
