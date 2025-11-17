@@ -16,7 +16,7 @@ import { useLocalization } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ACCELERATOR_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
+import { ACCELERATOR_REPORT_PHOTO_ENDPOINT, FUNDER_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { AcceleratorReport, PublishedReport } from 'src/types/AcceleratorReport';
@@ -256,9 +256,11 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
       const reportIdValue = isFunderRoute
         ? (selectedQuarterReport as PublishedReport).reportId
         : (selectedQuarterReport as AcceleratorReport).id;
+      const photoEndpointUrl = isFunderRoute ? FUNDER_REPORT_PHOTO_ENDPOINT : ACCELERATOR_REPORT_PHOTO_ENDPOINT;
       const firstSlide: ActivityHighlightSlide = {
         coverPhotoURL: selectedQuarterReport.photos.length
-          ? ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId?.toString())
+          ? photoEndpointUrl
+              .replace('{projectId}', projectId?.toString())
               .replace('{reportId}', reportIdValue.toString())
               .replace('{fileId}', selectedQuarterReport.photos[0].fileId.toString())
           : undefined,
