@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -46,7 +46,7 @@ const ProjectPage = () => {
   const query = useQuery();
   const [openPublishDialog, setOpenPublishDialog] = useState(false);
   const [publishRequestId, setPublishRequestId] = useState('');
-  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>([]);
+  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
   const publishProfileResponse = useAppSelector(selectPublishFunderProject(publishRequestId));
   const snackbar = useSnackbar();
   const { isDesktop, isMobile } = useDeviceInfo();
@@ -93,7 +93,7 @@ const ProjectPage = () => {
             projectApplication={projectApplication}
             projectScore={projectScore}
             phaseVotes={phaseVotes}
-            publishedReports={publishedReports}
+            publishedReports={publishedReports || []}
           />
         ),
       },
@@ -151,6 +151,19 @@ const ProjectPage = () => {
     tabs,
     viewIdentifier: 'project-profile',
   });
+
+  const isDataReady = useMemo(() => {
+    const reportsReady = publishedReports !== undefined;
+
+    let activeTabReady = false;
+    if (activeTab === 'projectProfile') {
+      activeTabReady = reportsReady;
+    } else {
+      activeTabReady = true;
+    }
+
+    return activeTabReady;
+  }, [activeTab, publishedReports]);
 
   const goToProjectEdit = useCallback(
     () => goToParticipantProjectEdit(projectData.projectId),
@@ -320,7 +333,12 @@ const ProjectPage = () => {
       >
         {projectData.status === 'pending' && <BusySpinner />}
 
-        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+        {!isDataReady && (
+          <Box display='flex' justifyContent='center' padding={4}>
+            <CircularProgress />
+          </Box>
+        )}
+        {isDataReady && <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />}
       </Page>
     </>
   );
