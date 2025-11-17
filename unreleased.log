@@ -1,3 +1,7 @@
+efcc65f73d1 SW-7729 "Make Highlight" should be in line with the status dropdown (#4795)
+f74ae42147c SW-7723 Remove white box in Funder Portal Highlights (#4794)
+e96b0599e38 SW-7715 Fix image behind quarterly highlights (#4793)
+c458345a61b SW-7711 Filter plots that are not included in observation before saving (#4771)
 59da6eff62a SW-7688 Remove no longer used service method (#4776)
 017efefd68b Update dependency slate-react to ^0.119.0 (#4790)
 bc8ae4116e5 Update Node.js to v24.11.1 (#4788)

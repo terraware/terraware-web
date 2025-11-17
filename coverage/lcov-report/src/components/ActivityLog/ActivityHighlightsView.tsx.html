@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/147</span>
+                <span class='fraction'>0/148</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/120</span>
+                <span class='fraction'>0/124</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/139</span>
+                <span class='fraction'>0/140</span>
             </div>
         
             
@@ -590,7 +590,12 @@
 <a name='L525'></a><a href='#L525'>525</a>
 <a name='L526'></a><a href='#L526'>526</a>
 <a name='L527'></a><a href='#L527'>527</a>
-<a name='L528'></a><a href='#L528'>528</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -849,6 +854,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -964,6 +971,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1135,7 +1145,7 @@ import { useLocalization } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ACCELERATOR_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
+import { ACCELERATOR_REPORT_PHOTO_ENDPOINT, FUNDER_REPORT_PHOTO_ENDPOINT } from 'src/services/AcceleratorReportService';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { AcceleratorReport, PublishedReport } from 'src/types/AcceleratorReport';
@@ -1375,9 +1385,11 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
       const reportIdValue = <span class="cstat-no" title="statement not covered" >isFunderRoute</span>
         ? (selectedQuarterReport as PublishedReport).reportId
         : (selectedQuarterReport as AcceleratorReport).id;
+      const photoEndpointUrl = <span class="cstat-no" title="statement not covered" >isFunderRoute ? FUNDER_REPORT_PHOTO_ENDPOINT : ACCELERATOR_REPORT_PHOTO_ENDPOINT;</span>
       const firstSlide: ActivityHighlightSlide = <span class="cstat-no" title="statement not covered" >{</span>
         coverPhotoURL: selectedQuarterReport.photos.length
-          ? ACCELERATOR_REPORT_PHOTO_ENDPOINT.replace('{projectId}', projectId?.toString())
+          ? photoEndpointUrl
+              .replace('{projectId}', projectId?.toString())
               .replace('{reportId}', reportIdValue.toString())
               .replace('{fileId}', selectedQuarterReport.photos[0].fileId.toString())
           : undefined,
@@ -1493,10 +1505,13 @@ const ActivityHighlightsView = <span class="cstat-no" title="statement not cover
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box
       sx={{
+        '&amp; .map-drawer': {
+          ...(isFunderRoute &amp;&amp; { background: 'none' }),
+        },
         '&amp; .map-drawer--body': {
           paddingBottom: 0,
           paddingTop: 0,
-          ...(isFunderRoute &amp;&amp; { paddingLeft: 0, paddingRight: 0 }),
+          ...(isFunderRoute &amp;&amp; { paddingRight: 0, background: 'none' }),
         },
       }}
     &gt;
@@ -1651,7 +1666,7 @@ export default ActivityHighlightsView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-17T16:24:03.779Z
+                at 2025-11-17T17:41:45.799Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
