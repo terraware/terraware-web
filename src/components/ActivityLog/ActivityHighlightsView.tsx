@@ -376,10 +376,13 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   return (
     <Box
       sx={{
+        '& .map-drawer': {
+          ...(isFunderRoute && { background: 'none' }),
+        },
         '& .map-drawer--body': {
           paddingBottom: 0,
           paddingTop: 0,
-          ...(isFunderRoute && { paddingLeft: 0, paddingRight: 0 }),
+          ...(isFunderRoute && { paddingRight: 0, background: 'none' }),
         },
       }}
     >
