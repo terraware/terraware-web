@@ -18,6 +18,7 @@ export type PlotT0Observation = {
   observation_startDate: string;
   observation_endDate: string;
   observation_id: string;
+  isPermanent: string;
 };
 
 export type PlotsWithObservationsSearchResult = {
