@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
@@ -10,8 +10,9 @@ import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
-import { ObservationSpeciesResults, PlotCondition } from 'src/types/Observations';
+import { ObservationMonitoringPlotResultsPayload, ObservationSpeciesResults } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
+import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import SpeciesTotalPlantsChart from '../common/SpeciesMortalityRateChart';
@@ -21,44 +22,24 @@ import ExtraData from './ExtraData';
 import ObservationDataNumbers from './ObservationDataNumbers';
 
 type ObservationDataTabProps = {
-  isPermanent?: boolean;
-  monitoringPlotSpecies?: ObservationSpeciesResults[];
-  totalPlants?: number;
-  livePlants?: number;
-  deadPlants?: number;
-  totalSpecies?: number;
-  plantDensity?: number;
-  survivalRate?: number;
-  completedTime?: string;
-  observer?: string;
-  plotConditions?: PlotCondition[];
-  fieldNotes?: string;
+  monitoringPlot: Partial<Omit<ObservationMonitoringPlotResultsPayload, 'species'>>;
+  species?: ObservationSpeciesResults[];
 };
 
-const ObservationDataTab = ({
-  monitoringPlotSpecies,
-  isPermanent,
-  totalPlants,
-  livePlants,
-  deadPlants,
-  totalSpecies,
-  plantDensity,
-  survivalRate,
-  completedTime,
-  observer,
-  plotConditions,
-  fieldNotes,
-}: ObservationDataTabProps) => {
+const ObservationDataTab = ({ monitoringPlot, species }: ObservationDataTabProps) => {
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const { plantingSite } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
 
+  const livePlants = useMemo(() => getObservationSpeciesLivePlantsCount(species), [species]);
+  const deadPlants = useMemo(() => getObservationSpeciesDeadPlantsCount(species), [species]);
+
   const items = [
     {
       label: strings.TOTAL_PLANTS,
       tooltip: strings.PLOT_TOTAL_PLANTS_TOOLTIP,
-      value: totalPlants,
+      value: monitoringPlot?.totalPlants,
     },
     {
       label: strings.LIVE_PLANTS,
@@ -73,19 +54,19 @@ const ObservationDataTab = ({
     {
       label: strings.SPECIES,
       tooltip: strings.PLOT_SPECIES_TOOLTIP,
-      value: totalSpecies,
+      value: monitoringPlot?.totalSpecies,
     },
     {
       label: strings.PLANT_DENSITY,
       tooltip: strings.PLOT_PLANT_DENSITY_TOOLTIP,
-      value: plantDensity,
+      value: monitoringPlot?.plantingDensity,
     },
-    ...(survivalRate !== undefined
+    ...(monitoringPlot?.survivalRate !== undefined
       ? [
           {
             label: strings.SURVIVAL_RATE,
             tooltip: strings.PLOT_SURVIVAL_RATE_TOOLTIP,
-            value: `${survivalRate}%`,
+            value: `${monitoringPlot?.survivalRate}%`,
           },
         ]
       : []),
@@ -94,17 +75,17 @@ const ObservationDataTab = ({
   const extraItems = [
     {
       label: strings.PLOT_CONDITIONS,
-      value: plotConditions?.map((condition) => getConditionString(condition)).join(', ') || '- -',
+      value: monitoringPlot?.conditions?.map((condition) => getConditionString(condition)).join(', ') || '- -',
     },
     {
       label: strings.FIELD_NOTES,
-      value: fieldNotes || '- -',
+      value: monitoringPlot?.notes || '- -',
     },
   ];
   return (
     <Card radius='24px'>
       <ObservationDataNumbers items={items} />
-      {monitoringPlotSpecies && (
+      {species && (
         <Box>
           <Box display='flex' alignContent={'center'}>
             <Typography fontSize={'20px'} fontWeight={600}>
@@ -114,19 +95,19 @@ const ObservationDataTab = ({
           </Box>
 
           <Box height='360px'>
-            <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlotSpecies} />
+            <SpeciesTotalPlantsChart minHeight='360px' species={species} />
           </Box>
         </Box>
       )}
 
-      {isPermanent &&
+      {monitoringPlot?.isPermanent &&
         (isSurvivalRateCalculationEnabled ? (
           <Box>
             <Typography fontSize={'20px'} fontWeight={600}>
               {strings.SURVIVAL_RATE_PER_SPECIES}
             </Typography>
             <Box height='360px'>
-              <SpeciesSurvivalRateChart minHeight='360px' species={monitoringPlotSpecies} />
+              <SpeciesSurvivalRateChart minHeight='360px' species={species} />
             </Box>
           </Box>
         ) : (
@@ -136,18 +117,22 @@ const ObservationDataTab = ({
             </Typography>
 
             <Box height='360px'>
-              <SpeciesMortalityRateChart minHeight='360px' species={monitoringPlotSpecies} />
+              <SpeciesMortalityRateChart minHeight='360px' species={species} />
             </Box>
           </Box>
         ))}
       <Box paddingY={2}>
-        {observer && completedTime && (
+        {monitoringPlot?.claimedByName && monitoringPlot?.completedTime && (
           <Typography fontSize={'14px'}>
             {strings.formatString(
               strings.OBSERVED_BY_ON,
-              observer,
-              getDateDisplayValue(completedTime, plantingSite?.timeZone),
-              getShortTime(completedTime, activeLocale, plantingSite?.timeZone || defaultTimeZone.get().id)
+              monitoringPlot.claimedByName,
+              getDateDisplayValue(monitoringPlot.completedTime, plantingSite?.timeZone),
+              getShortTime(
+                monitoringPlot.completedTime,
+                activeLocale,
+                plantingSite?.timeZone || defaultTimeZone.get().id
+              )
             )}
           </Typography>
         )}
