@@ -338,7 +338,7 @@ const ProjectPage = () => {
             <CircularProgress />
           </Box>
         )}
-        {isDataReady && <Tabs key={activeTab} activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />}
+        {isDataReady && <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />}
       </Page>
     </>
   );
