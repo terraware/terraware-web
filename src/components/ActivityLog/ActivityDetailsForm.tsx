@@ -646,19 +646,30 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             </Grid>
 
             {isAcceleratorRoute && (
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <Dropdown
                   required
                   label={strings.STATUS}
                   onChange={onChangeStatus}
                   selectedValue={record?.status}
                   options={activityStatusOptions}
+                  fullWidth
                 />
               </Grid>
             )}
 
             {isAcceleratorRoute && isActivityHighlightEnabled && (
-              <Grid item xs={12}>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  marginTop: isMobile ? 0 : '8px',
+                }}
+              >
                 <Checkbox
                   id='isHighlight'
                   label={strings.MAKE_HIGHLIGHT}
