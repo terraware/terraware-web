@@ -58,7 +58,6 @@ const ProjectPage = () => {
 
   const [activityId, setActivityId] = useState<number>();
   const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
-  const [isDataReady, setIsDataReady] = useState(false);
 
   useEffect(() => {
     const _activityId = query.get('activityId');
@@ -153,7 +152,7 @@ const ProjectPage = () => {
     viewIdentifier: 'project-profile',
   });
 
-  useEffect(() => {
+  const isDataReady = useMemo(() => {
     const reportsReady = publishedReports !== undefined;
 
     let activeTabReady = false;
@@ -163,7 +162,7 @@ const ProjectPage = () => {
       activeTabReady = true;
     }
 
-    setIsDataReady(activeTabReady);
+    return activeTabReady;
   }, [activeTab, publishedReports]);
 
   const goToProjectEdit = useCallback(
