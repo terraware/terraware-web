@@ -96,7 +96,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
         label: strings.REPORT,
         children: <FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} />,
       },
-      ...(funderPortalEnabled
+      ...(funderPortalEnabled && activities.length > 0
         ? [
             {
               id: 'quarterlyHighlights',
