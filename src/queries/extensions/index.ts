@@ -1,2 +1,2 @@
-import './fundingEntites';
+import './fundingEntities';
 import './observations';
