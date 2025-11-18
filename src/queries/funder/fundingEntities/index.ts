@@ -1,8 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-
 import { paths } from 'src/api/types/generated-schema';
-import baseQuery from 'src/queries/baseQuery';
-import { QUERY_TAGS, QueryTagTypes } from 'src/queries/tags';
+import { baseApi } from 'src/queries/baseApi';
+import { QueryTagTypes } from 'src/queries/tags';
 import { Funder, FundingEntity } from 'src/types/FundingEntity';
 
 const FUNDING_ENTITIES_LIST_ENDPOINT = '/api/v1/funder/entities';
@@ -49,9 +47,7 @@ type DeleteFundersPayload = {
   userIds: number[];
 };
 
-export const fundingEntitiesApi = createApi({
-  baseQuery,
-  tagTypes: QUERY_TAGS,
+export const fundingEntitiesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listFundingEntities: build.query<FundingEntity[], void>({
       query: () => FUNDING_ENTITIES_LIST_ENDPOINT,
