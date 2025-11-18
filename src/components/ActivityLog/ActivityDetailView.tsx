@@ -345,7 +345,9 @@ const ActivityDetailView = ({
   const verifiedByUser = useAppSelector(
     selectUser(activity.type === 'admin' ? activity.payload.verifiedBy : undefined)
   );
-  const isAllowedEditActivities = isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
+  const isAllowedEditActivities = isAcceleratorRoute
+    ? isAllowed('EDIT_ACTIVITIES')
+    : isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
 
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
   const [getActivityMediaStreamRequestId, setGetActivityMediaStreamRequestId] = useState<string>('');
