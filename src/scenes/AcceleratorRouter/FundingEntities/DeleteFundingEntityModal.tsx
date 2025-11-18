@@ -24,7 +24,7 @@ const DeleteFundingEntityModal = ({ onClose, open, fundingEntity }: DeleteFundin
   const [deleteFundingEntity, result] = useDeleteFundingEntityMutation();
 
   const deleteHandler = useCallback(() => {
-    void deleteFundingEntity({ fundingEntityId: fundingEntity.id });
+    void deleteFundingEntity(fundingEntity.id);
   }, [deleteFundingEntity, fundingEntity.id]);
 
   useEffect(() => {

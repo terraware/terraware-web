@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
@@ -23,13 +23,19 @@ const FunderInviteView = () => {
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ fundingEntityId: string }>();
   const fundingEntityId = Number(pathParams.fundingEntityId);
-  const { data: getFundingEntityResponse } = useGetFundingEntityQuery({ fundingEntityId });
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery(fundingEntityId);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [record, , , onChangeCallback] = useForm<Partial<Funder>>({});
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
 
   const [inviteFunder, inviteResult] = useInviteFunderMutation();
+
+  const fundingEntity = useMemo(() => {
+    if (getFundingEntityResponse) {
+      return getFundingEntityResponse.fundingEntity;
+    }
+  }, [getFundingEntityResponse]);
 
   const onCancel = useCallback(() => {
     if (isAcceleratorRoute) {
@@ -99,7 +105,7 @@ const FunderInviteView = () => {
           <Card style={{ width: '800px', margin: 'auto' }}>
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='20px'>
-                {getFundingEntityResponse?.fundingEntity.name}
+                {fundingEntity?.name}
               </Typography>
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>

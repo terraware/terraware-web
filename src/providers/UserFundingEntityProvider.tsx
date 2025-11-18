@@ -26,7 +26,7 @@ export default function UserFundingEntityProvider({ children }: UserFundingEntit
 
   useEffect(() => {
     if (userBootstrapped && user && user.userType === 'Funder') {
-      void getUserFundingEntity({ userId: user.id });
+      void getUserFundingEntity(user.id);
     }
   }, [userBootstrapped, user, getUserFundingEntity]);
 

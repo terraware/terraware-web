@@ -6,32 +6,19 @@ const injectedRtkApi = api.injectEndpoints({
       query: () => ({ url: `/api/v1/funder/entities` }),
     }),
     createFundingEntity: build.mutation<CreateFundingEntityApiResponse, CreateFundingEntityApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/funder/entities`,
-        method: 'POST',
-        body: queryArg.createFundingEntityRequestPayload,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/funder/entities`, method: 'POST', body: queryArg }),
     }),
     getProjectFundingEntities: build.query<GetProjectFundingEntitiesApiResponse, GetProjectFundingEntitiesApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/funder/entities/projects/${queryArg.projectId}`,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/funder/entities/projects/${queryArg}` }),
     }),
     getFundingEntity1: build.query<GetFundingEntity1ApiResponse, GetFundingEntity1ApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/funder/entities/users/${queryArg.userId}`,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/funder/entities/users/${queryArg}` }),
     }),
     deleteFundingEntity: build.mutation<DeleteFundingEntityApiResponse, DeleteFundingEntityApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/funder/entities/${queryArg.fundingEntityId}`,
-        method: 'DELETE',
-      }),
+      query: (queryArg) => ({ url: `/api/v1/funder/entities/${queryArg}`, method: 'DELETE' }),
     }),
     getFundingEntity: build.query<GetFundingEntityApiResponse, GetFundingEntityApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/funder/entities/${queryArg.fundingEntityId}`,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/funder/entities/${queryArg}` }),
     }),
     updateFundingEntity: build.mutation<UpdateFundingEntityApiResponse, UpdateFundingEntityApiArg>({
       query: (queryArg) => ({
@@ -48,9 +35,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     getFunders: build.query<GetFundersApiResponse, GetFundersApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/funder/entities/${queryArg.fundingEntityId}/users`,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/funder/entities/${queryArg}/users` }),
     }),
     inviteFunder: build.mutation<InviteFunderApiResponse, InviteFunderApiArg>({
       query: (queryArg) => ({
@@ -67,27 +52,17 @@ export type ListFundingEntitiesApiResponse =
   /** status 200 The requested operation succeeded. */ ListFundingEntitiesPayload;
 export type ListFundingEntitiesApiArg = void;
 export type CreateFundingEntityApiResponse = /** status 200 OK */ GetFundingEntityResponsePayload;
-export type CreateFundingEntityApiArg = {
-  createFundingEntityRequestPayload: CreateFundingEntityRequestPayload;
-};
+export type CreateFundingEntityApiArg = CreateFundingEntityRequestPayload;
 export type GetProjectFundingEntitiesApiResponse = /** status 200 OK */ ListFundingEntitiesPayload;
-export type GetProjectFundingEntitiesApiArg = {
-  projectId: number;
-};
+export type GetProjectFundingEntitiesApiArg = number;
 export type GetFundingEntity1ApiResponse = /** status 200 OK */ GetFundingEntityResponsePayload;
-export type GetFundingEntity1ApiArg = {
-  userId: number;
-};
+export type GetFundingEntity1ApiArg = number;
 export type DeleteFundingEntityApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type DeleteFundingEntityApiArg = {
-  fundingEntityId: number;
-};
+export type DeleteFundingEntityApiArg = number;
 export type GetFundingEntityApiResponse =
   /** status 200 The requested operation succeeded. */ GetFundingEntityResponsePayload;
-export type GetFundingEntityApiArg = {
-  fundingEntityId: number;
-};
+export type GetFundingEntityApiArg = number;
 export type UpdateFundingEntityApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
 export type UpdateFundingEntityApiArg = {
   fundingEntityId: number;
@@ -99,9 +74,7 @@ export type RemoveFunderApiArg = {
   deleteFundersRequestPayload: DeleteFundersRequestPayload;
 };
 export type GetFundersApiResponse = /** status 200 OK */ GetFundersResponsePayload;
-export type GetFundersApiArg = {
-  fundingEntityId: number;
-};
+export type GetFundersApiArg = number;
 export type InviteFunderApiResponse = /** status 200 OK */ InviteFundingEntityFunderResponsePayload;
 export type InviteFunderApiArg = {
   fundingEntityId: number;

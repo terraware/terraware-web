@@ -15,10 +15,8 @@ const NewView = () => {
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
       const payload: CreateFundingEntityApiArg = {
-        createFundingEntityRequestPayload: {
-          name: record.name,
-          projects: record.projects.map((project) => project.projectId),
-        },
+        name: record.name,
+        projects: record.projects.map((project) => project.projectId),
       };
       void create(payload);
     },

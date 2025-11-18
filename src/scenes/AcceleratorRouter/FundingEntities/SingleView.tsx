@@ -28,9 +28,14 @@ const SingleView = () => {
   const { goToEditFundingEntity } = useNavigateTo();
 
   const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: getFundingEntityResponse } = useGetFundingEntityQuery({
-    fundingEntityId: Number(pathParams.fundingEntityId),
-  });
+  const fundingEntityId = Number(pathParams.fundingEntityId);
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery(fundingEntityId);
+  const fundingEntity = useMemo(() => {
+    if (getFundingEntityResponse) {
+      return getFundingEntityResponse.fundingEntity;
+    }
+  }, [getFundingEntityResponse]);
+
   const canManage = isAllowed('MANAGE_FUNDING_ENTITIES');
 
   const onDeleteClick = useCallback((optionItem: DropdownItem) => {
@@ -40,16 +45,16 @@ const SingleView = () => {
   }, []);
 
   const goToEdit = useCallback(() => {
-    if (getFundingEntityResponse) {
-      goToEditFundingEntity(getFundingEntityResponse.fundingEntity.id);
+    if (fundingEntity) {
+      goToEditFundingEntity(fundingEntity.id);
     }
-  }, [getFundingEntityResponse, goToEditFundingEntity]);
+  }, [fundingEntity, goToEditFundingEntity]);
 
   const rightComponent = useMemo(() => {
     return (
       activeLocale &&
       canManage &&
-      getFundingEntityResponse?.fundingEntity && (
+      fundingEntity && (
         <>
           <Button
             label={strings.EDIT_FUNDING_ENTITY}
@@ -65,7 +70,7 @@ const SingleView = () => {
         </>
       )
     );
-  }, [activeLocale, canManage, getFundingEntityResponse, goToEdit, onDeleteClick]);
+  }, [activeLocale, canManage, fundingEntity, goToEdit, onDeleteClick]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -79,27 +84,21 @@ const SingleView = () => {
 
   return (
     <>
-      {getFundingEntityResponse?.fundingEntity && (
-        <Page crumbs={crumbs} title={getFundingEntityResponse.fundingEntity.name} rightComponent={rightComponent}>
+      {fundingEntity && (
+        <Page crumbs={crumbs} title={fundingEntity.name} rightComponent={rightComponent}>
           {openDeleteConfirm && (
             <DeleteFundingEntityModal
               open={openDeleteConfirm}
               onClose={() => setOpenDeleteConfirm(false)}
-              fundingEntity={getFundingEntityResponse.fundingEntity}
+              fundingEntity={fundingEntity}
             />
           )}
           <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
             <Grid container spacing={3} paddingBottom={theme.spacing(4)}>
               <Grid item xs={4}>
-                <TextField
-                  label={strings.NAME}
-                  id='name'
-                  type='text'
-                  value={getFundingEntityResponse.fundingEntity.name}
-                  display={true}
-                />
+                <TextField label={strings.NAME} id='name' type='text' value={fundingEntity.name} display={true} />
               </Grid>
-              {getFundingEntityResponse.fundingEntity.projects?.map((project, idx) => (
+              {fundingEntity.projects?.map((project, idx) => (
                 <Grid key={idx} item xs={4}>
                   <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
                     {strings.PROJECT}
@@ -118,7 +117,7 @@ const SingleView = () => {
               ))}
             </Grid>
             <Grid container spacing={3}>
-              <FundersTable fundingEntityId={getFundingEntityResponse.fundingEntity.id} />
+              <FundersTable fundingEntityId={fundingEntity.id} />
             </Grid>
           </Card>
         </Page>

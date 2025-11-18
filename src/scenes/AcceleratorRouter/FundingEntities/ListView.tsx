@@ -39,6 +39,14 @@ const FundingEntitiesListView = () => {
     direction: 'Ascending',
   };
 
+  const fundingEntities = useMemo(() => {
+    if (listFundingEntitiesResponse) {
+      return listFundingEntitiesResponse.fundingEntities;
+    } else {
+      return [];
+    }
+  }, [listFundingEntitiesResponse]);
+
   useEffect(() => {
     if (error) {
       snackbar.toastError(strings.GENERIC_ERROR);
@@ -47,7 +55,7 @@ const FundingEntitiesListView = () => {
 
   const allProjects = useMemo<Record<string, string>>(
     () =>
-      (listFundingEntitiesResponse?.fundingEntities || []).reduce(
+      fundingEntities.reduce(
         (record, entity) => {
           entity?.projects?.forEach((project) => {
             if (project.projectId !== undefined) {
@@ -58,7 +66,7 @@ const FundingEntitiesListView = () => {
         },
         {} as Record<string, string>
       ),
-    [listFundingEntitiesResponse]
+    [fundingEntities]
   );
 
   const featuredFilters: FilterConfig[] = useMemo(
@@ -106,7 +114,7 @@ const FundingEntitiesListView = () => {
         fuzzySearchColumns={fuzzySearchColumns}
         featuredFilters={featuredFilters}
         id='fundingEntitiesTable'
-        rows={listFundingEntitiesResponse?.fundingEntities ?? []}
+        rows={fundingEntities}
         isClickable={() => false}
         showTopBar
         Renderer={FundingEntitiesCellRenderer}

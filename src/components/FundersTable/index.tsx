@@ -55,7 +55,15 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
-  const { data: funders } = useGetFundersQuery({ fundingEntityId });
+  const { data: getFundersResponse } = useGetFundersQuery(fundingEntityId);
+
+  const funders = useMemo(() => {
+    if (getFundersResponse) {
+      return getFundersResponse.funders;
+    } else {
+      return [];
+    }
+  }, [getFundersResponse]);
 
   const [deleteFunder, result] = useRemoveFunderMutation();
 
@@ -120,7 +128,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES')}
       showTopBar
       Renderer={FunderCellRenderer}
-      rows={funders?.funders ?? []}
+      rows={funders}
       title={strings.FUNDERS}
       rightComponent={rightComponent}
       topBarButtons={[<RemoveFunderTopBarButton key={0} onConfirm={onRemoveConfirm} selectedRows={selectedRows} />]}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
@@ -17,9 +17,14 @@ const EditView = () => {
   const { goToFundingEntity } = useNavigateTo();
 
   const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: getFundingEntityResponse } = useGetFundingEntityQuery({
-    fundingEntityId: Number(pathParams.fundingEntityId),
-  });
+  const fundingEntityId = Number(pathParams.fundingEntityId);
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery(fundingEntityId);
+
+  const fundingEntity = useMemo(() => {
+    if (getFundingEntityResponse) {
+      return getFundingEntityResponse.fundingEntity;
+    }
+  }, [getFundingEntityResponse]);
 
   const [update, updateResult] = useUpdateFundingEntityMutation();
   const goToViewFundingEntity = useCallback(() => {
@@ -52,10 +57,10 @@ const EditView = () => {
       description={strings.EDIT_FUNDING_ENTITY_DESC}
       contentStyle={{ display: 'flex', flexDirection: 'column' }}
     >
-      {getFundingEntityResponse && (
+      {fundingEntity && (
         <FundingEntityForm
           busy={updateResult.isLoading}
-          fundingEntity={getFundingEntityResponse.fundingEntity}
+          fundingEntity={fundingEntity}
           onCancel={goToViewFundingEntity}
           onSave={handleOnSave}
         />
