@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/106</span>
+                <span class='fraction'>0/108</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/103</span>
             </div>
         
             
@@ -420,7 +420,11 @@
 <a name='L355'></a><a href='#L355'>355</a>
 <a name='L356'></a><a href='#L356'>356</a>
 <a name='L357'></a><a href='#L357'>357</a>
-<a name='L358'></a><a href='#L358'>358</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -482,10 +486,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -838,11 +846,15 @@ const SurvivalRateSettings = <span class="cstat-no" title="statement not covered
   const userCanEdit = <span class="cstat-no" title="statement not covered" >isAllowed('EDIT_SURVIVAL_RATE_SETTINGS', { organization: selectedOrganization });</span>
 &nbsp;
   const permanentPlots = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return plotsWithObservations?.filter(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >!!p.permanentIndex)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return plotsWithObservations?.filter(</span>
+<span class="fstat-no" title="function not covered" >      (p</span>) =&gt; <span class="cstat-no" title="statement not covered" >!!p.permanentIndex &amp;&amp; p.observationPlots.some(<span class="fstat-no" title="function not covered" >(o</span>p) =&gt; <span class="cstat-no" title="statement not covered" >op.isPermanent === 'true')</span></span>
+    );
   }, [plotsWithObservations]);
 &nbsp;
   const temporaryPlots = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return plotsWithObservations?.filter(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >!p.permanentIndex)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return plotsWithObservations?.filter(</span>
+<span class="fstat-no" title="function not covered" >      (p</span>) =&gt; <span class="cstat-no" title="statement not covered" >!p.permanentIndex &amp;&amp; p.observationPlots.some(<span class="fstat-no" title="function not covered" >(o</span>p) =&gt; <span class="cstat-no" title="statement not covered" >op.isPermanent === 'false')</span></span>
+    );
   }, [plotsWithObservations]);
 &nbsp;
   const numberOfSetPermanentPlots = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1141,7 +1153,7 @@ export default SurvivalRateSettings;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-17T19:03:25.847Z
+                at 2025-11-18T16:21:28.144Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
