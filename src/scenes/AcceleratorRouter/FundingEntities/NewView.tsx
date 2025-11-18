@@ -2,21 +2,23 @@ import React, { useCallback, useEffect } from 'react';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useCreateFundingEntitiesMutation } from 'src/queries/funder/fundingEntities';
+import { CreateFundingEntityApiArg, useCreateFundingEntityMutation } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 
 import FundingEntityForm from './FundingEntityForm';
 
 const NewView = () => {
-  const [create, createResult] = useCreateFundingEntitiesMutation();
+  const [create, createResult] = useCreateFundingEntityMutation();
   const { goToFundingEntities, goToFundingEntity } = useNavigateTo();
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
-      const payload = {
-        name: record.name,
-        projects: record.projects.map((project) => project.projectId),
+      const payload: CreateFundingEntityApiArg = {
+        createFundingEntityRequestPayload: {
+          name: record.name,
+          projects: record.projects.map((project) => project.projectId),
+        },
       };
       void create(payload);
     },

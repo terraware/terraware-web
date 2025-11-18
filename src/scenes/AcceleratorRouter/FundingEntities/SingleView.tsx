@@ -15,7 +15,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { useGetFundingEntityQuery } from 'src/queries/funder/fundingEntities';
+import { useGetFundingEntityQuery } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 
 import DeleteFundingEntityModal from './DeleteFundingEntityModal';
@@ -28,7 +28,9 @@ const SingleView = () => {
   const { goToEditFundingEntity } = useNavigateTo();
 
   const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: fundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery({
+    fundingEntityId: Number(pathParams.fundingEntityId),
+  });
   const canManage = isAllowed('MANAGE_FUNDING_ENTITIES');
 
   const onDeleteClick = useCallback((optionItem: DropdownItem) => {
@@ -38,16 +40,16 @@ const SingleView = () => {
   }, []);
 
   const goToEdit = useCallback(() => {
-    if (fundingEntity) {
-      goToEditFundingEntity(fundingEntity.id);
+    if (getFundingEntityResponse) {
+      goToEditFundingEntity(getFundingEntityResponse.fundingEntity.id);
     }
-  }, [fundingEntity, goToEditFundingEntity]);
+  }, [getFundingEntityResponse, goToEditFundingEntity]);
 
   const rightComponent = useMemo(() => {
     return (
       activeLocale &&
       canManage &&
-      fundingEntity && (
+      getFundingEntityResponse?.fundingEntity && (
         <>
           <Button
             label={strings.EDIT_FUNDING_ENTITY}
@@ -63,7 +65,7 @@ const SingleView = () => {
         </>
       )
     );
-  }, [activeLocale, canManage, fundingEntity, goToEdit, onDeleteClick]);
+  }, [activeLocale, canManage, getFundingEntityResponse, goToEdit, onDeleteClick]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -77,21 +79,27 @@ const SingleView = () => {
 
   return (
     <>
-      {fundingEntity && (
-        <Page crumbs={crumbs} title={fundingEntity.name} rightComponent={rightComponent}>
+      {getFundingEntityResponse?.fundingEntity && (
+        <Page crumbs={crumbs} title={getFundingEntityResponse.fundingEntity.name} rightComponent={rightComponent}>
           {openDeleteConfirm && (
             <DeleteFundingEntityModal
               open={openDeleteConfirm}
               onClose={() => setOpenDeleteConfirm(false)}
-              fundingEntity={fundingEntity}
+              fundingEntity={getFundingEntityResponse.fundingEntity}
             />
           )}
           <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
             <Grid container spacing={3} paddingBottom={theme.spacing(4)}>
               <Grid item xs={4}>
-                <TextField label={strings.NAME} id='name' type='text' value={fundingEntity.name} display={true} />
+                <TextField
+                  label={strings.NAME}
+                  id='name'
+                  type='text'
+                  value={getFundingEntityResponse.fundingEntity.name}
+                  display={true}
+                />
               </Grid>
-              {fundingEntity.projects?.map((project, idx) => (
+              {getFundingEntityResponse.fundingEntity.projects?.map((project, idx) => (
                 <Grid key={idx} item xs={4}>
                   <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
                     {strings.PROJECT}
@@ -110,7 +118,7 @@ const SingleView = () => {
               ))}
             </Grid>
             <Grid container spacing={3}>
-              <FundersTable fundingEntityId={fundingEntity.id} />
+              <FundersTable fundingEntityId={getFundingEntityResponse.fundingEntity.id} />
             </Grid>
           </Card>
         </Page>

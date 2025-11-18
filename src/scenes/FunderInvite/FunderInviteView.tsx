@@ -10,7 +10,7 @@ import PageForm from 'src/components/common/PageForm';
 import { EMAIL_REGEX } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useGetFundingEntityQuery, useInviteFunderMutation } from 'src/queries/funder/fundingEntities';
+import { useGetFundingEntityQuery, useInviteFunderMutation } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { Funder } from 'src/types/FundingEntity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -23,7 +23,7 @@ const FunderInviteView = () => {
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ fundingEntityId: string }>();
   const fundingEntityId = Number(pathParams.fundingEntityId);
-  const { data: fundingEntity } = useGetFundingEntityQuery(fundingEntityId);
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery({ fundingEntityId });
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [record, , , onChangeCallback] = useForm<Partial<Funder>>({});
   const [emailError, setEmailError] = useState('');
@@ -59,7 +59,7 @@ const FunderInviteView = () => {
 
     void inviteFunder({
       fundingEntityId,
-      email: record.email,
+      inviteFundingEntityFunderRequestPayload: { email: record.email },
     });
   }, [fundingEntityId, record.email, snackbar, inviteFunder]);
 
@@ -99,7 +99,7 @@ const FunderInviteView = () => {
           <Card style={{ width: '800px', margin: 'auto' }}>
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='20px'>
-                {fundingEntity?.name}
+                {getFundingEntityResponse?.fundingEntity.name}
               </Typography>
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>

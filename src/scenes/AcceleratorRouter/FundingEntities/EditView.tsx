@@ -3,7 +3,11 @@ import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useGetFundingEntityQuery, useUpdateFundingEntityMutation } from 'src/queries/funder/fundingEntities';
+import {
+  UpdateFundingEntityApiArg,
+  useGetFundingEntityQuery,
+  useUpdateFundingEntityMutation,
+} from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 
@@ -13,7 +17,9 @@ const EditView = () => {
   const { goToFundingEntity } = useNavigateTo();
 
   const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: fundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery({
+    fundingEntityId: Number(pathParams.fundingEntityId),
+  });
 
   const [update, updateResult] = useUpdateFundingEntityMutation();
   const goToViewFundingEntity = useCallback(() => {
@@ -22,9 +28,9 @@ const EditView = () => {
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
-      const payload = {
-        id: record.id,
-        body: {
+      const payload: UpdateFundingEntityApiArg = {
+        fundingEntityId: record.id,
+        updateFundingEntityRequestPayload: {
           name: record.name,
           projects: record.projects.map((project) => project.projectId),
         },
@@ -46,10 +52,10 @@ const EditView = () => {
       description={strings.EDIT_FUNDING_ENTITY_DESC}
       contentStyle={{ display: 'flex', flexDirection: 'column' }}
     >
-      {fundingEntity && (
+      {getFundingEntityResponse && (
         <FundingEntityForm
           busy={updateResult.isLoading}
-          fundingEntity={fundingEntity}
+          fundingEntity={getFundingEntityResponse.fundingEntity}
           onCancel={goToViewFundingEntity}
           onSave={handleOnSave}
         />

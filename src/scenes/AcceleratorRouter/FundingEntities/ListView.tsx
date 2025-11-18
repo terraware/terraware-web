@@ -8,7 +8,7 @@ import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { useListFundingEntitiesQuery } from 'src/queries/funder/fundingEntities';
+import { useListFundingEntitiesQuery } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -32,7 +32,7 @@ const FundingEntitiesListView = () => {
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
   const { goToNewFundingEntity } = useNavigateTo();
-  const { data: fundingEntities, error } = useListFundingEntitiesQuery();
+  const { data: listFundingEntitiesResponse, error } = useListFundingEntitiesQuery();
 
   const defaultSortOrder: SearchSortOrder = {
     field: 'name',
@@ -47,7 +47,7 @@ const FundingEntitiesListView = () => {
 
   const allProjects = useMemo<Record<string, string>>(
     () =>
-      (fundingEntities || []).reduce(
+      (listFundingEntitiesResponse?.fundingEntities || []).reduce(
         (record, entity) => {
           entity?.projects?.forEach((project) => {
             if (project.projectId !== undefined) {
@@ -58,7 +58,7 @@ const FundingEntitiesListView = () => {
         },
         {} as Record<string, string>
       ),
-    [fundingEntities]
+    [listFundingEntitiesResponse]
   );
 
   const featuredFilters: FilterConfig[] = useMemo(
@@ -106,7 +106,7 @@ const FundingEntitiesListView = () => {
         fuzzySearchColumns={fuzzySearchColumns}
         featuredFilters={featuredFilters}
         id='fundingEntitiesTable'
-        rows={fundingEntities ?? []}
+        rows={listFundingEntitiesResponse?.fundingEntities ?? []}
         isClickable={() => false}
         showTopBar
         Renderer={FundingEntitiesCellRenderer}

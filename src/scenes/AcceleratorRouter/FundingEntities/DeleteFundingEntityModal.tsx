@@ -6,7 +6,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useDeleteFundingEntityMutation } from 'src/queries/funder/fundingEntities';
+import { useDeleteFundingEntityMutation } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -24,7 +24,7 @@ const DeleteFundingEntityModal = ({ onClose, open, fundingEntity }: DeleteFundin
   const [deleteFundingEntity, result] = useDeleteFundingEntityMutation();
 
   const deleteHandler = useCallback(() => {
-    void deleteFundingEntity(fundingEntity.id);
+    void deleteFundingEntity({ fundingEntityId: fundingEntity.id });
   }, [deleteFundingEntity, fundingEntity.id]);
 
   useEffect(() => {

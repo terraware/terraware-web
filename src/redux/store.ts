@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
+import 'src/queries/extensions';
 import { rtkMiddleware } from 'src/queries/reducers';
 
 import { rootReducer } from './rootReducer';

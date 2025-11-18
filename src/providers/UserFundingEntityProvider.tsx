@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLazyGetUserFundingEntityQuery } from 'src/queries/funder/fundingEntities';
+import { useLazyGetFundingEntity1Query } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import useEnvironment from 'src/utils/useEnvironment';
 
@@ -18,7 +18,7 @@ export default function UserFundingEntityProvider({ children }: UserFundingEntit
   const { user, bootstrapped: userBootstrapped } = useUser();
   const navigate = useSyncNavigate();
   const { isDev, isStaging } = useEnvironment();
-  const [getUserFundingEntity, result] = useLazyGetUserFundingEntityQuery();
+  const [getUserFundingEntity, result] = useLazyGetFundingEntity1Query();
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedUserFundingEntityData>({
     userFundingEntity: undefined,
     bootstrapped: false,
@@ -26,14 +26,14 @@ export default function UserFundingEntityProvider({ children }: UserFundingEntit
 
   useEffect(() => {
     if (userBootstrapped && user && user.userType === 'Funder') {
-      void getUserFundingEntity(user.id);
+      void getUserFundingEntity({ userId: user.id });
     }
   }, [userBootstrapped, user, getUserFundingEntity]);
 
   useEffect(() => {
     if (result.isSuccess && result.data) {
       setFundingEntityData({
-        userFundingEntity: result.data,
+        userFundingEntity: result.data.fundingEntity,
         bootstrapped: true,
       });
     }
