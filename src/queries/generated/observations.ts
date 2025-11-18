@@ -12,11 +12,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     scheduleObservation: build.mutation<ScheduleObservationApiResponse, ScheduleObservationApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations`,
-        method: 'POST',
-        body: queryArg.scheduleObservationRequestPayload,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/tracking/observations`, method: 'POST', body: queryArg }),
     }),
     listAdHocObservations: build.query<ListAdHocObservationsApiResponse, ListAdHocObservationsApiArg>({
       query: (queryArg) => ({
@@ -28,11 +24,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     completeAdHocObservation: build.mutation<CompleteAdHocObservationApiResponse, CompleteAdHocObservationApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations/adHoc`,
-        method: 'POST',
-        body: queryArg.completeAdHocObservationRequestPayload,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/tracking/observations/adHoc`, method: 'POST', body: queryArg }),
     }),
     listAdHocObservationResults: build.query<ListAdHocObservationResultsApiResponse, ListAdHocObservationResultsApiArg>(
       {
@@ -68,9 +60,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     getObservation: build.query<GetObservationApiResponse, GetObservationApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations/${queryArg.observationId}`,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/tracking/observations/${queryArg}` }),
     }),
     rescheduleObservation: build.mutation<RescheduleObservationApiResponse, RescheduleObservationApiArg>({
       query: (queryArg) => ({
@@ -80,10 +70,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     abandonObservation: build.mutation<AbandonObservationApiResponse, AbandonObservationApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations/${queryArg.observationId}/abandon`,
-        method: 'POST',
-      }),
+      query: (queryArg) => ({ url: `/api/v1/tracking/observations/${queryArg}/abandon`, method: 'POST' }),
     }),
     mergeOtherSpecies: build.mutation<MergeOtherSpeciesApiResponse, MergeOtherSpeciesApiArg>({
       query: (queryArg) => ({
@@ -93,9 +80,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     listAssignedPlots: build.query<ListAssignedPlotsApiResponse, ListAssignedPlotsApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations/${queryArg.observationId}/plots`,
-      }),
+      query: (queryArg) => ({ url: `/api/v1/tracking/observations/${queryArg}/plots` }),
     }),
     getOneAssignedPlot: build.query<GetOneAssignedPlotApiResponse, GetOneAssignedPlotApiArg>({
       query: (queryArg) => ({
@@ -196,9 +181,7 @@ export type ListObservationsApiArg = {
   plantingSiteId?: number;
 };
 export type ScheduleObservationApiResponse = /** status 200 OK */ ScheduleObservationResponsePayload;
-export type ScheduleObservationApiArg = {
-  scheduleObservationRequestPayload: ScheduleObservationRequestPayload;
-};
+export type ScheduleObservationApiArg = ScheduleObservationRequestPayload;
 export type ListAdHocObservationsApiResponse = /** status 200 OK */ ListAdHocObservationsResponsePayload;
 export type ListAdHocObservationsApiArg = {
   /** Limit results to observations of planting sites in a specific organization. Ignored if plantingSiteId is specified. */
@@ -207,9 +190,7 @@ export type ListAdHocObservationsApiArg = {
   plantingSiteId?: number;
 };
 export type CompleteAdHocObservationApiResponse = /** status 200 OK */ CompleteAdHocObservationResponsePayload;
-export type CompleteAdHocObservationApiArg = {
-  completeAdHocObservationRequestPayload: CompleteAdHocObservationRequestPayload;
-};
+export type CompleteAdHocObservationApiArg = CompleteAdHocObservationRequestPayload;
 export type ListAdHocObservationResultsApiResponse = /** status 200 OK */ ListAdHocObservationResultsResponsePayload;
 export type ListAdHocObservationResultsApiArg = {
   organizationId?: number;
@@ -235,9 +216,7 @@ export type ListObservationSummariesApiArg = {
   limit?: number;
 };
 export type GetObservationApiResponse = /** status 200 OK */ GetObservationResponsePayload;
-export type GetObservationApiArg = {
-  observationId: number;
-};
+export type GetObservationApiArg = number;
 export type RescheduleObservationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
 export type RescheduleObservationApiArg = {
   observationId: number;
@@ -245,18 +224,14 @@ export type RescheduleObservationApiArg = {
 };
 export type AbandonObservationApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type AbandonObservationApiArg = {
-  observationId: number;
-};
+export type AbandonObservationApiArg = number;
 export type MergeOtherSpeciesApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
 export type MergeOtherSpeciesApiArg = {
   observationId: number;
   mergeOtherSpeciesRequestPayload: MergeOtherSpeciesRequestPayload;
 };
 export type ListAssignedPlotsApiResponse = /** status 200 OK */ Blob;
-export type ListAssignedPlotsApiArg = {
-  observationId: number;
-};
+export type ListAssignedPlotsApiArg = number;
 export type GetOneAssignedPlotApiResponse = /** status 200 OK */ GetOneAssignedPlotResponsePayload;
 export type GetOneAssignedPlotApiArg = {
   observationId: number;

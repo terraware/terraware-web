@@ -13,6 +13,8 @@ const config: ConfigFile = {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/observations'),
     },
   },
+  prettierConfigFile: '.prettierrc',
+  flattenArg: true,
 };
 
 export default config;
