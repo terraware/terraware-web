@@ -476,7 +476,15 @@ const ActivitiesListView = ({
               type: 'multiple_selection',
             },
           ]
-        : [{ name: 'type', label: strings.TYPE, type: 'multiple_selection' }],
+        : [
+            {
+              name: 'type',
+              label: strings.TYPE,
+              pillValueRenderer: (values: (string | number | null)[]) =>
+                values.map((value) => activityTypeLabel(value as ActivityType, strings)).join(', '),
+              type: 'multiple_selection',
+            },
+          ],
     [strings, isAcceleratorRoute]
   );
 
