@@ -1,3 +1,4 @@
+2177f58605c SW-7717 Fix read only users can't edit activities on console (#4800)
 3695bf80b52 SW-7694 Update permanence definition for Plots/Zones in survival rate settings (#4797)
 36b10ab1a3b SW-7708 Render tabs when data is ready (#4796)
 efcc65f73d1 SW-7729 "Make Highlight" should be in line with the status dropdown (#4795)
