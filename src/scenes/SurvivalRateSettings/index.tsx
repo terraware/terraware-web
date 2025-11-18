@@ -59,11 +59,15 @@ const SurvivalRateSettings = () => {
   const userCanEdit = isAllowed('EDIT_SURVIVAL_RATE_SETTINGS', { organization: selectedOrganization });
 
   const permanentPlots = useMemo(() => {
-    return plotsWithObservations?.filter((p) => !!p.permanentIndex);
+    return plotsWithObservations?.filter(
+      (p) => !!p.permanentIndex && p.observationPlots.some((op) => op.isPermanent === 'true')
+    );
   }, [plotsWithObservations]);
 
   const temporaryPlots = useMemo(() => {
-    return plotsWithObservations?.filter((p) => !p.permanentIndex);
+    return plotsWithObservations?.filter(
+      (p) => !p.permanentIndex && p.observationPlots.some((op) => op.isPermanent === 'false')
+    );
   }, [plotsWithObservations]);
 
   const numberOfSetPermanentPlots = useMemo(() => {
