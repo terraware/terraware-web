@@ -167,3 +167,7 @@ export type PlantingZoneObservationSummary = components['schemas']['PlantingZone
 export type ExistingTreePayload = components['schemas']['ExistingTreePayload'];
 
 export type BiomassSpeciesPayload = components['schemas']['BiomassSpeciesPayload'];
+
+export type PlotCondition = components['schemas']['CompleteAdHocObservationRequestPayload']['conditions'][0];
+
+export type BiomassMeasurement = components['schemas']['ExistingBiomassMeasurementPayload'];

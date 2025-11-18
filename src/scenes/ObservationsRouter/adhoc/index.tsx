@@ -322,12 +322,9 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       {
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
-        children: (
-          <ObservationDataTab
-            monitoringPlotSpecies={monitoringPlotSpecies}
-            isPermanent={monitoringPlotResult?.isPermanent}
-          />
-        ),
+        children: monitoringPlotResult ? (
+          <ObservationDataTab monitoringPlot={monitoringPlotResult} species={monitoringPlotSpecies} />
+        ) : null,
       },
       {
         id: 'photosAndVideos',

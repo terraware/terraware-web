@@ -216,9 +216,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       {
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
-        children: (
-          <ObservationDataTab monitoringPlotSpecies={monitoringPlot.species} isPermanent={monitoringPlot.isPermanent} />
-        ),
+        children: <ObservationDataTab monitoringPlot={monitoringPlot} species={monitoringPlot.species} />,
       },
       {
         id: 'photosAndVideos',

@@ -231,6 +231,11 @@ BIOMASS_MEASUREMENT,Medición de biomasa,cf846a13
 BIOMASS_MEASUREMENTS,Mediciones de biomasa,fab7d40f
 BIOMASS_MONITORING,Monitoreo de biomasa,c249c88e
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Observación-de-la-biomasa,15aec1fa
+BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Plantas muertas es el número de árboles y arbustos observados registrados como muertos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,ea814e7f
+BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de árboles y arbustos observados registrados como vivos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,d69a1ca7
+BIOMASS_PLOT_LOCATION_TOOLTIP,Ubicación del lote muestra las coordenadas de la esquina suroeste del lote.,a60d1e6d
+BIOMASS_PLOT_SPECIES_TOOLTIP,Especies es el número de especies representadas por los árboles y arbustos observados. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,f520363a
+BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todos los árboles y arbustos observados, incluyendo árboles y arbustos vivos y muertos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.",d020f12c
 BOOLEAN_FALSE,falso,7a03081c
 BOOLEAN_TRUE,verdadero,54415086
 BOUNDARIES,Límites,e40b0600
@@ -777,6 +782,7 @@ HEIGHT_M,Altura (m),fe61fc34
 HELP_SUPPORT,Ayuda y soporte,477f3e22
 HERB,Hierba,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abundancia herbácea (%),d3693b6c
+HERBACIOUS_COVER_PERCENT,Cobertura herbácea %,ba8fa5bd
 HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
 HIDE_ON_MAP,Ocultar en el mapa,089ea8d7
@@ -1210,6 +1216,7 @@ OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Necesitará la aplicación móvil
 
 Escanee los códigos QR con su dispositivo para descargarla en App Store o Google Play.",13be06be
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware,7536ab13
+OBSERVED_BY_ON,Observado por {0} el {1} a las {2},c8b41186
 OBSERVED_DENSITY,Densidad constatada,c5003c27
 OBSERVED_DENSITY_PER_ZONE,Densidad observada por zona,c51faa34
 OBSERVED_DENSITY_TOOLTIP,La densidad observada se determina con base en el número de plantas detectadas en las zonas que fueron evaluadas al menos una vez en esta observación.,655e8e55
@@ -1393,12 +1400,23 @@ PLANTS_PER_HECTARE,plantas/ha,606dca50
 PLAY_VIDEO,Reproducir video,56432671
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,f37ff0f0
 PLOT,Parcela,8d3cefee
+PLOT_ADHOC_DEAD_PLANTS_TOOLTIP,Plantas muertas es el número de plantas observadas registradas como muertas.,7d7e8860
+PLOT_ADHOC_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observadas registradas como vivas.,b0ec7f7f
+PLOT_ADHOC_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas.,142e44c5
+PLOT_ADHOC_SPECIES_TOOLTIP,Especies es el número de especies representadas por todas las plantas observadas.,ed7c35b1
+PLOT_ADHOC_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas.",b2fd163f
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
+PLOT_DEAD_PLANTS_TOOLTIP,Plantas muertas es el número de plantas observadas registradas como muertas.,7d7e8860
 PLOT_DESCRIPTION,Descripción de la parcela,67e5afa5
 PLOT_INFO,Información de la parcela,38a9b59d
+PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observadas registradas como vivas. No se incluyen las plantas registradas como preexistentes.,f7d2a77f
 PLOT_LOCATION,Ubicación de la parcela,59f1374a
 PLOT_PHOTO,Foto de parcela,969c0fc9
+PLOT_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas registradas como vivas. No se incluyen las plantas registradas como preexistentes.,32ced1ba
 PLOT_SELECTION,Selección de parcela,ba150031
+PLOT_SPECIES_TOOLTIP,"Especies es el número de especies representadas por todas las plantas observadas, incluyendo las registradas como preexistentes.",fd5ff6d0
+PLOT_SURVIVAL_RATE_TOOLTIP,"La tasa de supervivencia se calcula en función de la densidad inicial de plantas especificada y el número de plantas observadas registradas como vivas. No se incluyen las plantas registradas como preexistentes, aquellas cuyo nombre científico es desconocido o que no están en la lista de especies.",4e745c92
+PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas. No se incluyen las plantas registradas como preexistentes.",244fd18c
 PLOT_TYPE,Tipo de parcela,4b579233
 PLOTS_AD_HOC,Parcelas ad hoc,104e30b2
 PLOTS_PERMANENT,Parcelas fijas,d06e9f3a
