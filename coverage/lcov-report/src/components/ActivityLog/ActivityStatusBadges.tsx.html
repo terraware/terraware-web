@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -118,8 +118,9 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,17 +133,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -164,7 +154,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,6 +177,8 @@
 &nbsp;
 import { Box, useTheme } from '@mui/material';
 &nbsp;
+import { ActivityStatusTag } from 'src/types/Activity';
+&nbsp;
 import ActivityStatusBadge from './ActivityStatusBadge';
 import { TypedActivity } from './types';
 &nbsp;
@@ -188,17 +188,6 @@ type ActivityStatusBadgesProps = {
 &nbsp;
 const ActivityStatusBadges = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> activity }: ActivityStatusBadgesProps): JSX.Element =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
-  const isChangedAfterVerified = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (activity.type === 'funder' || activity.type === 'base') {</span>
-<span class="cstat-no" title="statement not covered" >      return false;</span>
-    }
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      activity.payload.modifiedTime &amp;&amp;
-      activity.payload.verifiedTime &amp;&amp;
-      new Date(activity.payload.modifiedTime) &gt; new Date(activity.payload.verifiedTime)
-    );
-  }, [activity]);
 &nbsp;
   const isChangedAfterPublished = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (activity.type === 'funder' || activity.type === 'base') {</span>
@@ -219,11 +208,19 @@ const ActivityStatusBadges = <span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >    return activity.payload.publishedTime;</span>
   }, [activity]);
 &nbsp;
+  const status = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span>: ActivityStatusTag | undefined =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (activity.type === 'admin') {</span>
+<span class="cstat-no" title="statement not covered" >      if (activity.payload.status === 'Not Verified' &amp;&amp; activity.payload.verifiedTime) {</span>
+<span class="cstat-no" title="statement not covered" >        return 'Project Updated';</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return activity.payload.status;</span>
+    }
+  }, [activity]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' gap={1} marginY={theme.spacing(1)}&gt;
       {isChangedAfterPublished &amp;&amp; &lt;ActivityStatusBadge status='Unpublished Changes' /&gt;}
-      {activity.type === 'admin' &amp;&amp; &lt;ActivityStatusBadge status={activity.payload.status} /&gt;}
-      {isChangedAfterVerified &amp;&amp; &lt;ActivityStatusBadge status='Project Updated' /&gt;}
+      {status &amp;&amp; &lt;ActivityStatusBadge status={status} /&gt;}
       {/* TODO: render badge for 'Do Not Use' when applicable */}
       {isPublished &amp;&amp; &lt;ActivityStatusBadge status='Published' /&gt;}
     &lt;/Box&gt;
@@ -238,7 +235,7 @@ export default ActivityStatusBadges;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T00:32:00.254Z
+                at 2025-11-19T00:38:01.356Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

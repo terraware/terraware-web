@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1763512321021" clover="3.2.0">
-  <project timestamp="1763512321021" name="All files">
-    <metrics statements="35662" coveredstatements="1364" conditionals="25048" coveredconditionals="393" methods="10930" coveredmethods="213" elements="71640" coveredelements="1970" complexity="0" loc="35662" ncloc="35662" packages="283" files="1388" classes="1388"/>
+<coverage generated="1763512682129" clover="3.2.0">
+  <project timestamp="1763512682129" name="All files">
+    <metrics statements="35663" coveredstatements="1364" conditionals="25045" coveredconditionals="393" methods="10930" coveredmethods="213" elements="71638" coveredelements="1970" complexity="0" loc="35663" ncloc="35663" packages="283" files="1388" classes="1388"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1766,7 +1766,7 @@
       </file>
     </package>
     <package name="src.components.ActivityLog">
-      <metrics statements="991" coveredstatements="0" conditionals="805" coveredconditionals="0" methods="294" coveredmethods="0"/>
+      <metrics statements="992" coveredstatements="0" conditionals="802" coveredconditionals="0" methods="294" coveredmethods="0"/>
       <file name="ActivitiesEmptyState.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivitiesEmptyState.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -2690,21 +2690,22 @@
         <line num="52" count="0" type="stmt"/>
       </file>
       <file name="ActivityStatusBadges.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityStatusBadges.tsx">
-        <metrics statements="15" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
+        <metrics statements="16" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="16" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="21" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
       </file>
       <file name="DeleteActivityModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/DeleteActivityModal.tsx">
