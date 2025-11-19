@@ -24,7 +24,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type }: PhotosAndVideosTabProps) =
       <MonitoringPlotPhotos
         observationId={Number(observationId)}
         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-        photos={monitoringPlot?.photos.filter((photo) => photo.position !== undefined && photo.type === 'Plot')}
+        photos={monitoringPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot')}
       />
       <Typography fontSize={'20px'} fontWeight={600}>
         {strings.PHOTOS_AND_VIDEOS}
@@ -32,7 +32,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type }: PhotosAndVideosTabProps) =
       <MonitoringPlotPhotos
         observationId={Number(observationId)}
         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-        photos={monitoringPlot?.photos.filter((photo) => photo.position === undefined && photo.type === 'Plot')}
+        photos={monitoringPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot')}
       />
       {type === 'biomass' && (
         <Box>
@@ -42,7 +42,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type }: PhotosAndVideosTabProps) =
           <MonitoringPlotPhotos
             observationId={Number(observationId)}
             monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-            photos={monitoringPlot?.photos.filter((photo) => photo.type === 'Soil')}
+            photos={monitoringPlot?.photos?.filter((photo) => photo.type === 'Soil')}
           />
         </Box>
       )}
