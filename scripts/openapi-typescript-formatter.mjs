@@ -60,13 +60,28 @@ const parseType = (typeString) => {
       }
 
       if (metadata.path.endsWith('/SearchRequestPayload')) {
+        // Prefix type = '"x"|"y"|"z"' if it's an enum in the schema, 'string' otherwise
+        const prefixValues = [];
+        schemaObject.members.forEach((member) => {
+          if (member.name.escapedText === 'prefix') {
+            if (member.type.types) {
+              member.type.types.forEach((type) => {
+                prefixValues.push(type.escapedText);
+              });
+            } else {
+              prefixValues.push('string');
+            }
+          }
+        });
+        const prefixType = prefixValues.join('|');
+
         return parseType(
           '{' +
             ' count?: number;' +
             ' cursor?: string;' +
             ' fields: string[];' +
             ' filters?: components["schemas"]["PrefixedSearch"][];' +
-            ' prefix?: string;' +
+            ` prefix?: ${prefixType};` +
             ' search?: components["schemas"]["SearchNodePayload"];' +
             ' sortOrder?: components["schemas"]["SearchSortOrderElement"][];' +
             '}'
