@@ -17,6 +17,7 @@ import {
 export type PlotT0Observation = {
   observation_startDate: string;
   observation_endDate: string;
+  observation_completedTime: string;
   observation_id: string;
   isPermanent: string;
 };
