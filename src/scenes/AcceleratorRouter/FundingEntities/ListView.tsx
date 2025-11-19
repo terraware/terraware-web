@@ -39,13 +39,10 @@ const FundingEntitiesListView = () => {
     direction: 'Ascending',
   };
 
-  const fundingEntities = useMemo(() => {
-    if (listFundingEntitiesResponse) {
-      return listFundingEntitiesResponse.fundingEntities;
-    } else {
-      return [];
-    }
-  }, [listFundingEntitiesResponse]);
+  const fundingEntities = useMemo(
+    () => listFundingEntitiesResponse?.fundingEntities ?? [],
+    [listFundingEntitiesResponse]
+  );
 
   useEffect(() => {
     if (error) {

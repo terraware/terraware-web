@@ -57,13 +57,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const { data: getFundersResponse } = useGetFundersQuery(fundingEntityId);
 
-  const funders = useMemo(() => {
-    if (getFundersResponse) {
-      return getFundersResponse.funders;
-    } else {
-      return [];
-    }
-  }, [getFundersResponse]);
+  const funders = useMemo(() => getFundersResponse?.funders ?? [], [getFundersResponse]);
 
   const [deleteFunder, result] = useRemoveFunderMutation();
 

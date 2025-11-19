@@ -20,11 +20,7 @@ const EditView = () => {
   const fundingEntityId = Number(pathParams.fundingEntityId);
   const { data: getFundingEntityResponse } = useGetFundingEntityQuery(fundingEntityId);
 
-  const fundingEntity = useMemo(() => {
-    if (getFundingEntityResponse) {
-      return getFundingEntityResponse.fundingEntity;
-    }
-  }, [getFundingEntityResponse]);
+  const fundingEntity = useMemo(() => getFundingEntityResponse?.fundingEntity, [getFundingEntityResponse]);
 
   const [update, updateResult] = useUpdateFundingEntityMutation();
   const goToViewFundingEntity = useCallback(() => {

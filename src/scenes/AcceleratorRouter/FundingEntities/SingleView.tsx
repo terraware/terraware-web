@@ -30,11 +30,7 @@ const SingleView = () => {
   const pathParams = useParams<{ fundingEntityId: string }>();
   const fundingEntityId = Number(pathParams.fundingEntityId);
   const { data: getFundingEntityResponse } = useGetFundingEntityQuery(fundingEntityId);
-  const fundingEntity = useMemo(() => {
-    if (getFundingEntityResponse) {
-      return getFundingEntityResponse.fundingEntity;
-    }
-  }, [getFundingEntityResponse]);
+  const fundingEntity = useMemo(() => getFundingEntityResponse?.fundingEntity, [getFundingEntityResponse]);
 
   const canManage = isAllowed('MANAGE_FUNDING_ENTITIES');
 

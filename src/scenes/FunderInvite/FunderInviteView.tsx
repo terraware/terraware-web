@@ -31,11 +31,7 @@ const FunderInviteView = () => {
 
   const [inviteFunder, inviteResult] = useInviteFunderMutation();
 
-  const fundingEntity = useMemo(() => {
-    if (getFundingEntityResponse) {
-      return getFundingEntityResponse.fundingEntity;
-    }
-  }, [getFundingEntityResponse]);
+  const fundingEntity = useMemo(() => getFundingEntityResponse?.fundingEntity, [getFundingEntityResponse]);
 
   const onCancel = useCallback(() => {
     if (isAcceleratorRoute) {
