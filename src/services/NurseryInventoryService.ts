@@ -173,7 +173,7 @@ const searchInventory = async ({
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
   const params: SearchRequestPayload = {
-    prefix: forSpecificFacilities ? 'inventories.facilityInventories' : 'inventories',
+    prefix: forSpecificFacilities ? 'facilityInventories' : 'inventories',
     fields: forSpecificFacilities ? FACILITY_SPECIFIC_FIELDS : INVENTORY_FIELDS,
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
@@ -281,7 +281,7 @@ const searchInventoryByNursery = async ({
   const fields = isCsvExport ? exportedFields : exportedFields.concat(nonExportedFields);
 
   const params: SearchRequestPayload = {
-    prefix: 'facilities.facilityInventoryTotals',
+    prefix: 'facilityInventoryTotals',
     fields,
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
@@ -356,7 +356,7 @@ const downloadInventory = async ({
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
   const params: SearchRequestPayload = {
-    prefix: forSpecificFacilities ? 'inventories.facilityInventories' : 'inventories',
+    prefix: forSpecificFacilities ? 'facilityInventories' : 'inventories',
     fields: forSpecificFacilities
       ? FACILITY_SPECIFIC_FIELDS.filter((field) => !field.includes('raw'))
       : INVENTORY_FIELDS.filter((field) => !field.includes('raw')),

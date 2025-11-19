@@ -53,7 +53,7 @@ const search = async (
   sortOrder?: SearchSortOrder
 ): Promise<ModuleSearchResult[] | null> => {
   const searchParams: SearchRequestPayload = {
-    prefix: 'projects.participant.cohort.cohortModules.module',
+    prefix: 'modules',
     fields: ['id', 'name', 'cohortModules.cohort_id', 'deliverables.id'],
     search: searchPayload ?? { operation: 'and', children: [] },
     sortOrder: [sortOrder ?? { field: 'name' }],

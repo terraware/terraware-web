@@ -21,7 +21,7 @@ const DELIVERABLES_SEARCH_FIELDS = [
  */
 const searchSpeciesDeliverables = async (projectIds: number[]): Promise<SpeciesDeliverable[] | null> => {
   const searchParams: SearchRequestPayload = {
-    prefix: 'projects.projectDeliverables',
+    prefix: 'projectDeliverables',
     fields: DELIVERABLES_SEARCH_FIELDS,
     search: {
       operation: 'and',

@@ -23,7 +23,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
     }
 
     return await SearchService.searchCsv({
-      prefix: 'facilities.accessions',
+      prefix: 'accessions',
       fields: [...searchColumns],
       sortOrder: [searchSortOrder],
       search: SearchService.convertToSearchNodePayload(searchCriteria, selectedOrganization.id),

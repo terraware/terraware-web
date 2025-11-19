@@ -124,7 +124,7 @@ const searchAccessions = async <T extends SearchResponseElement>({
   sortOrder,
 }: AccessionsSearchParams): Promise<T[] | null> => {
   const params: SearchRequestPayload = {
-    prefix: 'facilities.accessions',
+    prefix: 'accessions',
     fields,
     search: SearchService.convertToSearchNodePayload(searchCriteria ?? {}, organizationId),
     count: 1000,
@@ -150,7 +150,7 @@ const searchFieldValues = async (
 ): Promise<FieldValuesMap | null> => {
   try {
     const params: SearchRequestPayload = {
-      prefix: 'facilities.accessions',
+      prefix: 'accessions',
       fields,
       search: SearchService.convertToSearchNodePayload(searchCriteria ?? {}, organizationId),
       count: 1000,
@@ -192,7 +192,7 @@ const getCollectionSiteNames = async (organizationId: number): Promise<string[] 
  */
 const getPendingAccessions = async (organizationId: number): Promise<SearchResponseElementWithId[] | null> => {
   const searchParams: SearchRequestPayload = {
-    prefix: 'facilities.accessions',
+    prefix: 'accessions',
     fields: ['accessionNumber', 'speciesName', 'collectionSiteName', 'collectedDate', 'receivedDate', 'id'],
     search: SearchService.convertToSearchNodePayload(
       [

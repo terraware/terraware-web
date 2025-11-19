@@ -65,7 +65,7 @@ export const requestListModuleCohorts = createAsyncThunk(
   'module/cohortsAndProjects',
   async (moduleId: string, { rejectWithValue }) => {
     const searchParams: SearchRequestPayload = {
-      prefix: 'projects.participant.cohort.cohortModules.module',
+      prefix: 'modules',
       fields: [
         'cohortModules.title',
         'cohortModules.startDate',

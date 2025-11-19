@@ -40,7 +40,7 @@ export const getTimeZones = async (): Promise<TimeZonesResponse> => {
  */
 const getCountries = async (): Promise<Country[] | null> => {
   const params: RawSearchRequestPayload = {
-    prefix: 'country',
+    prefix: 'countries',
     fields: ['code', 'name', 'region', 'subdivisions.code', 'subdivisions.name'],
     sortOrder: [{ field: 'name' }, { field: 'subdivisions.name' }],
     count: 1000,
