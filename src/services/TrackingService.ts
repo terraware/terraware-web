@@ -454,7 +454,6 @@ const getPlotsWithObservations = async <T extends SearchResponseElement>(
       'plantingSubzone_plantingZone_id',
       'observationPlots.observation_id',
       'observationPlots.observation_startDate',
-      'observationPlots.observation_endDate',
       'observationPlots.observation_completedTime',
       'observationPlots.isPermanent',
       'permanentIndex',
