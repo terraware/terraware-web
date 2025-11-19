@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Divider, FormControlLabel, IconButton, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Icon, IconTooltip, Message, SelectT } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import TextField from 'src/components/common/TextField';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotT0Observation, PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
@@ -13,6 +14,7 @@ import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { allowOneDecimal, roundToDecimal } from 'src/utils/numbers';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export type AddedSpecies = { id: string; speciesId?: number; density: string };
 
@@ -25,13 +27,22 @@ type PlotT0EditBoxProps = {
   withdrawnSpeciesPlot?: SpeciesPlot;
 };
 
-const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }: PlotT0EditBoxProps) => {
+const PlotT0EditBox = ({
+  plantingSiteId,
+  plot,
+  t0Plot,
+  record,
+  setRecord,
+  withdrawnSpeciesPlot,
+}: PlotT0EditBoxProps) => {
   const theme = useTheme();
   const [t0Origin, setT0Origin] = useState<string>('useObservation');
 
   const { species } = useSpeciesData();
   const locale = useLocalization().activeLocale;
   const { isMobile } = useDeviceInfo();
+  const { plantingSite } = usePlantingSite(plantingSiteId);
+  const defaultTimeZone = useDefaultTimeZone().get();
 
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
 
@@ -57,19 +68,31 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
   );
 
   const renderOptionObservation = useCallback(
-    (option: PlotT0Observation) =>
-      option?.observation_startDate
-        ? `${getShortDate(option.observation_startDate, locale)} ${strings.ENDED} ${option.observation_endDate}`
-        : '',
-    [locale]
+    (option: PlotT0Observation) => {
+      if (option) {
+        const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
+        const completedDate = getDateDisplayValue(option.observation_completedTime, timeZone);
+        return option?.observation_startDate
+          ? `${getShortDate(option.observation_startDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+          : '';
+      }
+      return '';
+    },
+    [defaultTimeZone.id, locale, plantingSite?.timeZone]
   );
 
   const displayLabelObservation = useCallback(
-    (option: PlotT0Observation) =>
-      option?.observation_startDate
-        ? `${getShortDate(option.observation_startDate, locale)} ${strings.ENDED} ${option.observation_endDate}`
-        : '',
-    [locale]
+    (option: PlotT0Observation) => {
+      if (option) {
+        const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
+        const completedDate = getDateDisplayValue(option.observation_completedTime, timeZone);
+        return option?.observation_startDate
+          ? `${getShortDate(option.observation_startDate, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+          : '';
+      }
+      return '';
+    },
+    [defaultTimeZone.id, locale, plantingSite?.timeZone]
   );
 
   const toTObservation = useCallback(
@@ -367,7 +390,7 @@ const PlotT0EditBox = ({ plot, t0Plot, record, setRecord, withdrawnSpeciesPlot }
                     toT={toTObservation}
                     fullWidth={true}
                     disabled={t0Origin === 'manual'}
-                    sx={{ width: '325px' }}
+                    sx={{ width: '375px' }}
                   />
                 </Box>
                 <Box display='flex' sx={{ alignItems: 'center' }}>
