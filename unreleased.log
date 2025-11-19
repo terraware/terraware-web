@@ -1,3 +1,4 @@
+749bd28defa SW-7410 Added halo to labels (#4803)
 2f497474089 SW-7691 Add existing data to Observation Data tab (#4767)
 4e9d25d4168 SW-7726 For org users, french translation doesn't update activity types filter options (#4801)
 e9bf7594ad4 SW-7760 Hide "Project Activity" and "Quarterly Highlights" tabs if project has no published Activities (#4802)
