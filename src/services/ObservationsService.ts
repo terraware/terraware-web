@@ -68,7 +68,7 @@ const httpObservationExport = HttpService.root(OBSERVATION_EXPORT_ENDPOINT);
 
 const exportCsv = async (observationId: number): Promise<any> => {
   return SearchService.searchCsv({
-    prefix: 'plantingSites.observations',
+    prefix: 'observations',
     fields: [
       'startDate',
       'plantingSite_name',
@@ -98,7 +98,7 @@ const exportCsv = async (observationId: number): Promise<any> => {
 
 const exportBiomassPlotCsvByField = (fieldName: string, fieldValue: string) =>
   SearchService.searchCsv({
-    prefix: 'plantingSites.observations.observationPlots',
+    prefix: 'observationPlots',
     fields: [
       'monitoringPlot_plotNumber',
       'monitoringPlot_plantingSite_name',
@@ -162,7 +162,7 @@ const exportBiomassPlotCsv = async (observationId: number): Promise<any> => {
 
 const exportBiomassSpeciesCsv = async (observationId: number): Promise<any> => {
   return SearchService.searchCsv({
-    prefix: 'plantingSites.observations.observationPlots.biomassDetails.species',
+    prefix: 'observationBiomassSpecies',
     fields: [
       'monitoringPlot_plotNumber',
       'name',
@@ -182,7 +182,7 @@ const exportBiomassSpeciesCsv = async (observationId: number): Promise<any> => {
 
 const exportBiomassTreesShrubsCsv = async (observationId: number): Promise<any> => {
   return SearchService.searchCsv({
-    prefix: 'plantingSites.observations.observationPlots.recordedTrees',
+    prefix: 'recordedTrees',
     fields: [
       'monitoringPlot_plotNumber',
       'treeNumber',

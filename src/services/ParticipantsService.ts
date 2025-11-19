@@ -24,7 +24,7 @@ export type ParticipantData = ServerData & {
 // utility to map search/sort into search params for participants
 const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder): SearchRequestPayload => {
   const searchParams: SearchRequestPayload = {
-    prefix: 'projects.participant',
+    prefix: 'participants',
     fields: ['cohort_id', 'cohort_name', 'id', 'name', 'projects.id', 'projects.name'],
     search: search ?? { operation: 'and', children: [] },
     sortOrder: [sortOrder ?? { field: 'name' }],

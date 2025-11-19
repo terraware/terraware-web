@@ -76,7 +76,7 @@ export default function PeopleListView(): JSX.Element {
     }
 
     const params: SearchRequestPayload = {
-      prefix: 'projects_internalUsers',
+      prefix: 'projectInternalUsers',
       fields: ['project_name', 'user_id', 'role'],
       search: {
         operation: 'and',
@@ -169,7 +169,7 @@ export default function PeopleListView(): JSX.Element {
         : null;
 
       const params: SearchRequestPayload = {
-        prefix: 'members',
+        prefix: 'organizationUsers',
         fields: ['user_id', 'user_firstName', 'user_lastName', 'user_email', 'roleName', 'createdTime'],
         search: {
           operation: 'and',

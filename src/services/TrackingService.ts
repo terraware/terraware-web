@@ -244,7 +244,7 @@ const getSearchNode = (organizationId: number, siteId: number): SearchNodePayloa
  */
 const getTotalPlantsInZones = async (organizationId: number, siteId: number): Promise<PlantingSiteZone[] | null> => {
   return await SearchService.search({
-    prefix: 'plantingSites.plantingZones',
+    prefix: 'plantingZones',
     fields: [
       'plantingSubzones.id',
       'plantingSubzones.fullName',
@@ -265,7 +265,7 @@ const getTotalPlantsInZones = async (organizationId: number, siteId: number): Pr
  */
 const getTotalPlantsInSite = async (organizationId: number, siteId: number): Promise<Population[] | null> => {
   return (await SearchService.search({
-    prefix: 'plantingSites.populations',
+    prefix: 'plantingSitePopulations',
     fields: ['species_scientificName', 'totalPlants(raw)'],
     search: getSearchNode(organizationId, siteId),
     count: 0,
@@ -375,7 +375,7 @@ async function searchMonitoringPlots(
 
   const params: SearchRequestPayload = {
     fields: ['id', 'plotNumber'],
-    prefix: 'plantingSites.plantingZones.plantingSubzones.monitoringPlots',
+    prefix: 'monitoringPlots',
     sortOrder: [defaultSortOrder],
     search: {
       operation: 'and',
@@ -445,7 +445,7 @@ const getPlotsWithObservations = async <T extends SearchResponseElement>(
   plantingSiteId: number
 ): Promise<T[] | null> => {
   const params: SearchRequestPayloadWithOptionalSearch = {
-    prefix: 'plantingSites.monitoringPlots',
+    prefix: 'monitoringPlots',
     fields: [
       'id',
       'name',
