@@ -15,6 +15,7 @@ import { getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import PlotActions from '../biomass/PlotActions';
 import SpeciesTotalPlantsChart from '../common/SpeciesMortalityRateChart';
 import SpeciesMortalityRateChart from '../common/SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
@@ -24,9 +25,20 @@ import ObservationDataNumbers from './ObservationDataNumbers';
 type ObservationDataTabProps = {
   monitoringPlot: Partial<Omit<ObservationMonitoringPlotResultsPayload, 'species'>>;
   species?: ObservationSpeciesResults[];
+  type?: string;
+  unrecognizedSpecies?: string[];
+  onExportData?: () => void;
+  onMatchSpecies?: () => void;
 };
 
-const ObservationDataTab = ({ monitoringPlot, species }: ObservationDataTabProps) => {
+const ObservationDataTab = ({
+  monitoringPlot,
+  species,
+  type,
+  unrecognizedSpecies,
+  onExportData,
+  onMatchSpecies,
+}: ObservationDataTabProps) => {
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const { plantingSite } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
@@ -121,6 +133,13 @@ const ObservationDataTab = ({ monitoringPlot, species }: ObservationDataTabProps
             </Box>
           </Box>
         ))}
+      {type === 'adHoc' && onExportData && onMatchSpecies && (
+        <PlotActions
+          unrecognizedSpecies={unrecognizedSpecies}
+          onExportData={onExportData}
+          onMatchSpecies={onMatchSpecies}
+        />
+      )}
       <Box paddingY={2}>
         {monitoringPlot?.claimedByName && monitoringPlot?.completedTime && (
           <Typography fontSize={'14px'}>

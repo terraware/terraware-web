@@ -15,6 +15,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import ExtraData from '../adhoc/ExtraData';
 import ObservationDataNumbers from '../adhoc/ObservationDataNumbers';
 import LiveTreesPerSpecies from './LiveTreesPerSpecies';
+import PlotActions from './PlotActions';
 
 type BiomassObservationDataTabProps = {
   trees?: ExistingTreePayload[];
@@ -28,6 +29,9 @@ type BiomassObservationDataTabProps = {
   fieldNotes?: string;
   biomassMeasurement?: BiomassMeasurement;
   plotLocation?: string;
+  unrecognizedSpecies?: string[];
+  onExportData: () => void;
+  onMatchSpecies: () => void;
 };
 
 const BiomassObservationDataTab = ({
@@ -42,6 +46,9 @@ const BiomassObservationDataTab = ({
   plotConditions,
   fieldNotes,
   plotLocation,
+  unrecognizedSpecies,
+  onExportData,
+  onMatchSpecies,
 }: BiomassObservationDataTabProps) => {
   const theme = useTheme();
   const { plantingSite } = usePlantingSiteData();
@@ -144,6 +151,11 @@ const BiomassObservationDataTab = ({
       <Box height='360px'>
         <LiveTreesPerSpecies trees={trees} />
       </Box>
+      <PlotActions
+        unrecognizedSpecies={unrecognizedSpecies}
+        onExportData={onExportData}
+        onMatchSpecies={onMatchSpecies}
+      />
       <Box paddingY={2}>
         {observer && completedTime && (
           <Typography fontSize={'14px'}>
