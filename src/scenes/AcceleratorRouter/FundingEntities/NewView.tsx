@@ -2,28 +2,32 @@ import React, { useCallback, useEffect } from 'react';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useCreateFundingEntitiesMutation } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 
 import FundingEntityForm from './FundingEntityForm';
-import useCreateFundingEntity from './useCreateFundingEntity';
 
 const NewView = () => {
-  const createFundingEntity = useCreateFundingEntity();
+  const [create, createResult] = useCreateFundingEntitiesMutation();
   const { goToFundingEntities, goToFundingEntity } = useNavigateTo();
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
-      createFundingEntity.create(record);
+      const payload = {
+        name: record.name,
+        projects: record.projects.map((project) => project.projectId),
+      };
+      void create(payload);
     },
-    [createFundingEntity]
+    [create]
   );
 
   useEffect(() => {
-    if (createFundingEntity.succeeded && createFundingEntity.data) {
-      goToFundingEntity(createFundingEntity.data.id);
+    if (createResult.isSuccess) {
+      goToFundingEntity(createResult.data.fundingEntity.id);
     }
-  }, [createFundingEntity, goToFundingEntity]);
+  }, [createResult, goToFundingEntity]);
 
   return (
     <Page title={strings.ADD_FUNDING_ENTITY} contentStyle={{ display: 'flex', flexDirection: 'column' }}>

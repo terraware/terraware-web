@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { FundingEntityProvider, useUser } from 'src/providers';
+import { useUser } from 'src/providers';
 import FunderHome from 'src/scenes/FunderHome';
 
 import FunderInviteView from '../FunderInvite/FunderInviteView';
@@ -34,14 +34,7 @@ export default function FunderRouter() {
       <ErrorBoundary>
         <Routes>
           <Route path={APP_PATHS.FUNDER_HOME} element={<FunderHome />} />
-          <Route
-            path={`${APP_PATHS.FUNDER_INVITE}`}
-            element={
-              <FundingEntityProvider>
-                <FunderInviteView />
-              </FundingEntityProvider>
-            }
-          />
+          <Route path={`${APP_PATHS.FUNDER_INVITE}`} element={<FunderInviteView />} />
         </Routes>
       </ErrorBoundary>
     </Box>

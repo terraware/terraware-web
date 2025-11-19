@@ -50,7 +50,7 @@ export default function TerrawareRouter(props: TerrawareRouterProps) {
     ) {
       navigate(APP_PATHS.WELCOME);
     }
-  }, [navigate, location, userFundingEntity, organizations]);
+  }, [navigate, location, organizations, userFundingEntity]);
 
   return organizations.length === 0 ? <NoOrgRouter /> : <OrgRouter {...props} />;
 }

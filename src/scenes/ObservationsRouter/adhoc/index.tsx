@@ -322,22 +322,9 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       {
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
-        children: (
-          <ObservationDataTab
-            monitoringPlotSpecies={monitoringPlotSpecies}
-            isPermanent={monitoringPlotResult?.isPermanent}
-            totalPlants={monitoringPlotResult?.totalPlants}
-            livePlants={getObservationSpeciesLivePlantsCount(monitoringPlotResult?.species)}
-            deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlotResult?.species)}
-            totalSpecies={monitoringPlotResult?.totalSpecies}
-            plantDensity={monitoringPlotResult?.plantingDensity}
-            survivalRate={monitoringPlotResult?.survivalRate}
-            completedTime={monitoringPlotResult?.completedTime}
-            observer={monitoringPlotResult?.claimedByName}
-            plotConditions={monitoringPlotResult?.conditions}
-            fieldNotes={monitoringPlotResult?.notes}
-          />
-        ),
+        children: monitoringPlotResult ? (
+          <ObservationDataTab monitoringPlot={monitoringPlotResult} species={monitoringPlotSpecies} />
+        ) : null,
       },
       {
         id: 'photosAndVideos',

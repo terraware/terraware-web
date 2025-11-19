@@ -12,20 +12,20 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectPlantingSiteWithdrawnSpecies } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
 import {
-  SpeciesPlot,
-  requestPlantingSiteWithdrawnSpecies,
-} from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
-import { selectPlantingSiteT0, selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
+  selectPlantingSiteT0,
+  selectPlantingSiteT0Species,
+  selectPlotsWithObservations,
+} from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
+  requestGetPlantingSiteT0Species,
   requestPermanentPlotsWithObservations,
   requestPlantingSiteT0,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { SiteT0Data } from 'src/types/Tracking';
+import { SiteT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';
@@ -40,7 +40,7 @@ const SurvivalRateSettings = () => {
   const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const [speciesRequestId, setSpeciesRequestId] = useState('');
-  const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteWithdrawnSpecies(speciesRequestId));
+  const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteT0Species(speciesRequestId));
   const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
   const dispatch = useAppDispatch();
   const [t0SiteData, setT0SiteData] = useState<SiteT0Data>();
@@ -59,11 +59,15 @@ const SurvivalRateSettings = () => {
   const userCanEdit = isAllowed('EDIT_SURVIVAL_RATE_SETTINGS', { organization: selectedOrganization });
 
   const permanentPlots = useMemo(() => {
-    return plotsWithObservations?.filter((p) => !!p.permanentIndex);
+    return plotsWithObservations?.filter(
+      (p) => !!p.permanentIndex && p.observationPlots.some((op) => op.isPermanent === 'true')
+    );
   }, [plotsWithObservations]);
 
   const temporaryPlots = useMemo(() => {
-    return plotsWithObservations?.filter((p) => !p.permanentIndex);
+    return plotsWithObservations?.filter(
+      (p) => !p.permanentIndex && p.observationPlots.some((op) => op.isPermanent === 'false')
+    );
   }, [plotsWithObservations]);
 
   const numberOfSetPermanentPlots = useMemo(() => {
@@ -121,7 +125,7 @@ const SurvivalRateSettings = () => {
         plotIds.includes(wsp.monitoringPlotId.toString())
       );
 
-      const speciesMap = new Map<number, { density: number; speciesId: number }>();
+      const speciesMap = new Map<number, { density?: number; speciesId: number }>();
       withdrawnSpeciesOfZone?.forEach((plot) => {
         plot.species.forEach((wdSpecies) => {
           if (!speciesMap.has(wdSpecies.speciesId)) {
@@ -213,7 +217,7 @@ const SurvivalRateSettings = () => {
       setRequestId(request.requestId);
       const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSite.id));
       setPlotsRequestId(requestPlots.requestId);
-      const requestSpeciesPlots = dispatch(requestPlantingSiteWithdrawnSpecies(plantingSite.id));
+      const requestSpeciesPlots = dispatch(requestGetPlantingSiteT0Species(plantingSite.id));
       setSpeciesRequestId(requestSpeciesPlots.requestId);
     }
   }, [dispatch, plantingSite]);

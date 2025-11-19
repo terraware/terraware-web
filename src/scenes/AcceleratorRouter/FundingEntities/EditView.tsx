@@ -1,36 +1,44 @@
 import React, { useCallback, useEffect } from 'react';
+import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useFundingEntity } from 'src/providers';
+import { useGetFundingEntityQuery, useUpdateFundingEntityMutation } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 
 import FundingEntityForm from './FundingEntityForm';
-import useUpdateFundingEntity from './useUpdateFundingEntity';
 
 const EditView = () => {
-  const { fundingEntity, reload } = useFundingEntity();
-  const updateFundingEntity = useUpdateFundingEntity();
   const { goToFundingEntity } = useNavigateTo();
 
+  const pathParams = useParams<{ fundingEntityId: string }>();
+  const { data: fundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
+
+  const [update, updateResult] = useUpdateFundingEntityMutation();
   const goToViewFundingEntity = useCallback(() => {
-    reload();
-    goToFundingEntity(String(fundingEntity?.id));
-  }, [fundingEntity, goToFundingEntity, reload]);
+    goToFundingEntity(Number(pathParams.fundingEntityId));
+  }, [goToFundingEntity, pathParams.fundingEntityId]);
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
-      updateFundingEntity.update(record);
+      const payload = {
+        id: record.id,
+        body: {
+          name: record.name,
+          projects: record.projects.map((project) => project.projectId),
+        },
+      };
+      void update(payload);
     },
-    [updateFundingEntity]
+    [update]
   );
 
   useEffect(() => {
-    if (updateFundingEntity.succeeded) {
+    if (updateResult.isSuccess) {
       goToViewFundingEntity();
     }
-  }, [updateFundingEntity, goToViewFundingEntity]);
+  }, [goToViewFundingEntity, updateResult]);
 
   return (
     <Page
@@ -40,7 +48,7 @@ const EditView = () => {
     >
       {fundingEntity && (
         <FundingEntityForm
-          busy={updateFundingEntity.busy}
+          busy={updateResult.isLoading}
           fundingEntity={fundingEntity}
           onCancel={goToViewFundingEntity}
           onSave={handleOnSave}

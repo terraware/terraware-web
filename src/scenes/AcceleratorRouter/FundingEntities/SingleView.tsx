@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
@@ -13,7 +14,8 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useFundingEntity, useLocalization, useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
+import { useGetFundingEntityQuery } from 'src/queries/funder/fundingEntities';
 import strings from 'src/strings';
 
 import DeleteFundingEntityModal from './DeleteFundingEntityModal';
@@ -22,20 +24,27 @@ const SingleView = () => {
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
-  const { fundingEntity } = useFundingEntity();
-  const [openDeleteConfirm, setOpenDeleteConfirm] = useState<boolean>(false);
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
   const { goToEditFundingEntity } = useNavigateTo();
 
+  const pathParams = useParams<{ fundingEntityId: string }>();
+  const { data: fundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
   const canManage = isAllowed('MANAGE_FUNDING_ENTITIES');
 
-  const onDeleteClick = (optionItem: DropdownItem) => {
+  const onDeleteClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'delete') {
       setOpenDeleteConfirm(true);
     }
-  };
+  }, []);
 
-  const rightComponent = useMemo(
-    () =>
+  const goToEdit = useCallback(() => {
+    if (fundingEntity) {
+      goToEditFundingEntity(fundingEntity.id);
+    }
+  }, [fundingEntity, goToEditFundingEntity]);
+
+  const rightComponent = useMemo(() => {
+    return (
       activeLocale &&
       canManage &&
       fundingEntity && (
@@ -43,7 +52,7 @@ const SingleView = () => {
           <Button
             label={strings.EDIT_FUNDING_ENTITY}
             icon='iconEdit'
-            onClick={() => goToEditFundingEntity(String(fundingEntity?.id))}
+            onClick={goToEdit}
             size='medium'
             id='editFundingEntity'
           />
@@ -52,9 +61,9 @@ const SingleView = () => {
             optionItems={[{ label: strings.DELETE, value: 'delete', type: 'destructive' }]}
           />
         </>
-      ),
-    [fundingEntity, activeLocale, canManage, goToEditFundingEntity]
-  );
+      )
+    );
+  }, [activeLocale, canManage, fundingEntity, goToEdit, onDeleteClick]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -69,7 +78,7 @@ const SingleView = () => {
   return (
     <>
       {fundingEntity && (
-        <Page crumbs={crumbs} title={fundingEntity.name || ''} rightComponent={rightComponent}>
+        <Page crumbs={crumbs} title={fundingEntity.name} rightComponent={rightComponent}>
           {openDeleteConfirm && (
             <DeleteFundingEntityModal
               open={openDeleteConfirm}

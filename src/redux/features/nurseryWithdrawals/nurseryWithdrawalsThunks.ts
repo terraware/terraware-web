@@ -5,27 +5,6 @@ import { NurseryWithdrawalsCountParams, NurseryWithdrawalsSearchParams } from 's
 import strings from 'src/strings';
 import { FieldOptionsMap, SearchResponseElement } from 'src/types/Search';
 
-export type SpeciesPlot = {
-  monitoringPlotId: number;
-  species: {
-    density: number;
-    speciesId: number;
-  }[];
-};
-
-export const requestPlantingSiteWithdrawnSpecies = createAsyncThunk(
-  'plantingSiteWithdrawnSpecies/get',
-  async (plantingSiteId: number, { rejectWithValue }) => {
-    const response = await NurseryWithdrawalService.getPlantingSiteWithdrawnSpecies(plantingSiteId);
-
-    if (response) {
-      return response.data?.plots;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestListNurseryWithdrawals = createAsyncThunk(
   'nurseryWithdrawals/list',
   async (request: NurseryWithdrawalsSearchParams, { rejectWithValue }) => {

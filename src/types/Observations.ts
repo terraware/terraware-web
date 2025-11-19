@@ -105,7 +105,7 @@ export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsP
 };
 
 // monitoring plot photos
-export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotPhotoPayload'];
+export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotMediaPayload'];
 export type ObservationMonitoringPlotPhotoWithGps = Omit<ObservationMonitoringPlotPhoto, 'gpsCoordinates'> &
   Required<Pick<ObservationMonitoringPlotPhoto, 'gpsCoordinates'>>;
 

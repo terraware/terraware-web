@@ -15,6 +15,7 @@ import ProjectView from './ProjectView';
 export default function FunderHome() {
   const dispatch = useAppDispatch();
   const { userFundingEntity } = useUserFundingEntity();
+
   const [fundingEntityProjectIds, setFundingEntityProjectIds] = useState<number[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
   const funderProjects: Record<number, FunderProjectDetails> = useAppSelector(
