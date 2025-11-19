@@ -56,8 +56,8 @@ const QuadratComponent = ({ quadrat, monitoringPlot }: QuadratComponentProps) =>
           observationId={Number(observationId)}
           monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
           photos={monitoringPlot?.photos
-            .filter((photo) => photo.type === 'Quadrat' && photo.position === position)
-            .filter((pic, index) => index === 0)}
+            ?.filter((photo) => photo.type === 'Quadrat' && photo.position === position)
+            ?.filter((pic, index) => index === 0)}
         />
         <Box>
           <Typography fontSize='14px' lineHeight='28px' fontWeight={400} color={theme.palette.TwClrTxt}>
