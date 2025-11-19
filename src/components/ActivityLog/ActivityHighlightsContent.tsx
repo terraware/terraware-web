@@ -122,45 +122,45 @@ const ActivityHighlightsContent = ({
 
   return (
     <>
-      <Box
-        alignItems='flex-start'
-        display='flex'
-        flexDirection='row'
-        justifyContent='space-between'
-        marginBottom='24px'
-        width='100%'
-      >
+      {(title || showDropdownInline || showCloseButton) && (
         <Box
+          alignItems='flex-start'
           display='flex'
-          sx={{
-            flexDirection: { xs: 'column', md: 'row' },
-            // z-index is necessary to ensure dropdown options appear above map components
-            '& .select .options-container': { zIndex: 1000 },
-          }}
+          flexDirection='row'
+          justifyContent='space-between'
+          marginBottom='24px'
+          width='100%'
         >
-          {title && (
-            <Typography fontSize='24px' fontWeight={600} paddingRight='24px' sx={{ whiteSpace: 'nowrap' }}>
-              {title}
-            </Typography>
-          )}
+          <Box
+            display='flex'
+            sx={{
+              flexDirection: { xs: 'column', md: 'row' },
+              // z-index is necessary to ensure dropdown options appear above map components
+              '& .select .options-container': { zIndex: 1000 },
+            }}
+          >
+            {title && (
+              <Typography fontSize='24px' fontWeight={600} paddingRight='24px' sx={{ whiteSpace: 'nowrap' }}>
+                {title}
+              </Typography>
+            )}
 
-          {showDropdownInline && dropdownOptions.length > 0 && (
-            <Dropdown
-              label=''
-              onChange={onChangeActivityQuarter}
-              options={dropdownOptions}
-              selectedValue={selectedQuarter}
-            />
+            {showDropdownInline && dropdownOptions.length > 0 && (
+              <Dropdown
+                label=''
+                onChange={onChangeActivityQuarter}
+                options={dropdownOptions}
+                selectedValue={selectedQuarter}
+              />
+            )}
+          </Box>
+          {showCloseButton && (
+            <IconButton onClick={handleClose}>
+              <Icon name='close' size='medium' />
+            </IconButton>
           )}
         </Box>
-
-        {showCloseButton && (
-          <IconButton onClick={handleClose}>
-            <Icon name='close' size='medium' />
-          </IconButton>
-        )}
-      </Box>
-
+      )}
       {busy || isLoadingReports ? (
         <img alt={strings.LOADING} height='24px' src='/assets/loading.gif' style={{ margin: '24px 0' }} width='24px' />
       ) : (selectedGroup?.activities || []).length === 0 ? (

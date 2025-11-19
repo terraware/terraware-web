@@ -6,7 +6,6 @@ import { Checkbox, Icon, PageForm, Tooltip } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { updatePlantingSite } from 'src/redux/features/plantingSite/plantingSiteThunks';
 import { selectAssignT0TempSiteData } from 'src/redux/features/tracking/trackingSelectors';
 import {
@@ -15,7 +14,7 @@ import {
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AssignSiteT0TempData, ZoneT0Data } from 'src/types/Tracking';
+import { AssignSiteT0TempData, SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -117,7 +116,7 @@ const EditTemporaryPlotsTab = ({
         plotIds.includes(wsp.monitoringPlotId.toString())
       );
 
-      const speciesMap = new Map<number, { density: number; speciesId: number }>();
+      const speciesMap = new Map<number, { density?: number; speciesId: number }>();
       withdrawnSpeciesOfZone?.forEach((plot) => {
         plot.species.forEach((wdSpecies) => {
           if (!speciesMap.has(wdSpecies.speciesId)) {

@@ -132,6 +132,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [isAllowed, organization]
   );
 
+  const isAllowedDeleteActivitiesPublished = useMemo(() => {
+    return isAllowed('DELETE_ACTIVITIES_PUBLISHED', { organization });
+  }, [isAllowed, organization]);
+
   useEffect(() => {
     const _source = query.get('source');
     if (_source) {
@@ -175,7 +179,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       isAcceleratorRoute &&
       source === APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
     ) {
-      goToParticipantProject(projectId, editingActivityId);
+      goToParticipantProject(projectId, editingActivityId, 'activityLog');
     } else if (isAcceleratorRoute) {
       goToAcceleratorActivityLog(editingActivityId);
     } else {
@@ -574,6 +578,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                   onClick={handleDeleteActivity}
                   priority='secondary'
                   type='destructive'
+                  disabled={
+                    activity.type === 'admin' && !!activity.payload.publishedTime && !isAllowedDeleteActivitiesPublished
+                  }
                 />
               )}
             </Grid>
@@ -639,19 +646,30 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             </Grid>
 
             {isAcceleratorRoute && (
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <Dropdown
                   required
                   label={strings.STATUS}
                   onChange={onChangeStatus}
                   selectedValue={record?.status}
                   options={activityStatusOptions}
+                  fullWidth
                 />
               </Grid>
             )}
 
             {isAcceleratorRoute && isActivityHighlightEnabled && (
-              <Grid item xs={12}>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  marginTop: isMobile ? 0 : '8px',
+                }}
+              >
                 <Checkbox
                   id='isHighlight'
                   label={strings.MAKE_HIGHLIGHT}

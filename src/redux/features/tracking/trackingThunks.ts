@@ -18,6 +18,7 @@ export type PlotT0Observation = {
   observation_startDate: string;
   observation_endDate: string;
   observation_id: string;
+  isPermanent: string;
 };
 
 export type PlotsWithObservationsSearchResult = {
@@ -246,6 +247,19 @@ export const requestGetPlantingSiteT0AllSet = createAsyncThunk(
 
     if (response && response.requestSucceeded) {
       return response.data?.allSet;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestGetPlantingSiteT0Species = createAsyncThunk(
+  't0Species',
+  async (plantingSiteId: number, { rejectWithValue }) => {
+    const response = await TrackingService.getT0Species(plantingSiteId);
+
+    if (response && response.requestSucceeded) {
+      return response.data?.plots;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

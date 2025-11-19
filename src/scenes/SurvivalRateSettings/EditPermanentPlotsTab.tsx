@@ -6,12 +6,11 @@ import { PageForm } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { selectAssignT0SiteData } from 'src/redux/features/tracking/trackingSelectors';
 import { PlotsWithObservationsSearchResult, requestAssignT0SiteData } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AssignSiteT0Data, PlotT0Data } from 'src/types/Tracking';
+import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -57,8 +56,18 @@ const EditPermanentPlotsTab = ({
     navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS.replace(':plantingSiteId', plantingSiteId.toString()));
   }, [navigate, plantingSiteId]);
 
+  const getFilteredPlots = useCallback(() => {
+    return record.plots.filter((plot) => {
+      const isPlotInOb = withdrawnSpeciesPlots?.find(
+        (wp) => wp.monitoringPlotId.toString() === plot.monitoringPlotId.toString()
+      );
+      return isPlotInOb !== undefined;
+    });
+  }, [record.plots, withdrawnSpeciesPlots]);
+
   const saveSettings = useCallback(() => {
-    if (!record.plots || record.plots.length === 0) {
+    const filteredPlots = getFilteredPlots();
+    if (!filteredPlots || filteredPlots.length === 0) {
       goToViewSettings();
       return;
     }
@@ -80,7 +89,7 @@ const EditPermanentPlotsTab = ({
       }
     });
 
-    record.plots.forEach((plot) => {
+    filteredPlots.forEach((plot) => {
       if (!plot.observationId) {
         plot.densityData.forEach((denData) => {
           if (denData.plotDensity === undefined || denData.plotDensity === null) {
@@ -95,9 +104,9 @@ const EditPermanentPlotsTab = ({
       return;
     }
 
-    const saveRequest = dispatch(requestAssignT0SiteData(record));
+    const saveRequest = dispatch(requestAssignT0SiteData({ ...record, plots: filteredPlots }));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots]);
+  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots, getFilteredPlots]);
 
   useEffect(() => {
     if (saveResponse?.status === 'success') {
@@ -115,9 +124,10 @@ const EditPermanentPlotsTab = ({
   }, []);
 
   const saveWithDefaultDensity = useCallback(() => {
-    const saveRequest = dispatch(requestAssignT0SiteData(record));
+    const filteredPlots = getFilteredPlots();
+    const saveRequest = dispatch(requestAssignT0SiteData({ ...record, plots: filteredPlots }));
     setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record]);
+  }, [dispatch, record, getFilteredPlots]);
 
   return (
     <PageForm

@@ -2,10 +2,9 @@ import React from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
-import { SpeciesPlot } from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
-import { PlotT0Data } from 'src/types/Tracking';
+import { PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 
 import PlotT0Box from './PlotT0Box';
 

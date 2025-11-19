@@ -59,6 +59,7 @@ const UPDATE_REPORT_TARGET_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/
 const PHOTOS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos';
 export const ACCELERATOR_REPORT_PHOTO_ENDPOINT =
   '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}';
+export const FUNDER_REPORT_PHOTO_ENDPOINT = '/api/v1/funder/reports/{reportId}/photos/{fileId}';
 
 type GetAcceleratorReportResponsePayload =
   paths[typeof ACCELERATOR_REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];

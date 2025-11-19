@@ -236,18 +236,8 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
               />
             )}
             <ObservationDataTab
-              monitoringPlotSpecies={monitoringPlot.species}
-              isPermanent={monitoringPlot.isPermanent}
-              totalPlants={monitoringPlot?.totalPlants}
-              livePlants={getObservationSpeciesLivePlantsCount(monitoringPlot?.species)}
-              deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlot?.species)}
-              totalSpecies={monitoringPlot?.totalSpecies}
-              plantDensity={monitoringPlot?.plantingDensity}
-              survivalRate={monitoringPlot?.survivalRate}
-              completedTime={monitoringPlot?.completedTime}
-              observer={monitoringPlot?.claimedByName}
-              plotConditions={monitoringPlot?.conditions}
-              fieldNotes={monitoringPlot?.notes}
+              monitoringPlot={monitoringPlot}
+              species={monitoringPlot.species}
               type='adHoc'
               unrecognizedSpecies={unrecognizedSpecies}
               onExportData={onExportData}

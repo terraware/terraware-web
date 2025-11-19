@@ -375,6 +375,8 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
           }}
           paint={{
             'text-color': '#ffffff',
+            'text-halo-color': '#000000',
+            'text-halo-width': 1,
           }}
           filter={['all', groupFilter, labelFilter]}
         />
