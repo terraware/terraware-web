@@ -255,7 +255,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
       {
         id: 'invasiveAndThreatenedSpecies',
         label: strings.INVASIVE_AND_THREATENED_SPECIES,
-        children: <InvasiveAndThreatenedSpeciesTab />,
+        children: <InvasiveAndThreatenedSpeciesTab monitoringPlot={monitoringPlot} />,
       },
       {
         id: 'photosAndVideos',

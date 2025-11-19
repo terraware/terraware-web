@@ -27,7 +27,7 @@ import {
   ObservationSpeciesResults,
 } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
-import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';

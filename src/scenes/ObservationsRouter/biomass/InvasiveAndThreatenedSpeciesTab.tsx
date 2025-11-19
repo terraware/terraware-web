@@ -1,17 +1,20 @@
 import React from 'react';
 
-import { Typography, useTheme } from '@mui/material';
-
 import Card from 'src/components/common/Card';
-import strings from 'src/strings';
+import QuadratComponent from 'src/scenes/ObservationsRouter/biomass/QuadratComponent';
+import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 
-const InvasiveAndThreatenedSpeciesTab = () => {
-  const theme = useTheme();
+type InvasiveAndThreatenedSpeciesTabProps = {
+  monitoringPlot: ObservationMonitoringPlotResultsPayload | undefined;
+};
+
+const InvasiveAndThreatenedSpeciesTab = ({ monitoringPlot }: InvasiveAndThreatenedSpeciesTabProps) => {
   return (
     <Card radius='24px'>
-      <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-        {strings.PHOTO_NORTHEAST_QUADRAT}
-      </Typography>
+      <QuadratComponent quadrat='Northwest' monitoringPlot={monitoringPlot} />
+      <QuadratComponent quadrat='Northeast' monitoringPlot={monitoringPlot} />
+      <QuadratComponent quadrat='Southwest' monitoringPlot={monitoringPlot} />
+      <QuadratComponent quadrat='Southeast' monitoringPlot={monitoringPlot} />
     </Card>
   );
 };
