@@ -30,7 +30,7 @@ import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCo
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import PhotosAndVideos from '../adhoc/PhotosAndVideos';
+import PhotosAndVideosTab from '../adhoc/PhotosAndVideosTab';
 import BiomassObservationDataTab from './BiomassObservationDataTab';
 import InvasiveAndThreatenedSpeciesTab from './InvasiveAndThreatenedSpeciesTab';
 
@@ -260,7 +260,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
       {
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
-        children: <PhotosAndVideos />,
+        children: <PhotosAndVideosTab monitoringPlot={monitoringPlot} type='biomass' />,
       },
     ];
   }, [

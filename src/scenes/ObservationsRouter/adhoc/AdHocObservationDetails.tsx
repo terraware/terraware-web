@@ -34,7 +34,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { exportAdHocObservationDetails } from '../exportAdHocObservations';
 import ObservationDataTab from './ObservationDataTab';
-import PhotosAndVideos from './PhotosAndVideos';
+import PhotosAndVideosTab from './PhotosAndVideosTab';
 
 type AdHocObservationDetailsProps = {
   reload: () => void;
@@ -249,12 +249,13 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       {
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
-        children: <PhotosAndVideos />,
+        children: <PhotosAndVideosTab monitoringPlot={observation?.adHocPlot} />,
       },
     ];
   }, [
     activeLocale,
     monitoringPlot,
+    observation,
     onCloseMatchSpeciesModal,
     onExportData,
     onMatchSpecies,
