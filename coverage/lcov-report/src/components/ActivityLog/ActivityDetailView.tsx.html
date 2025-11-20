@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/144</span>
+                <span class='fraction'>0/140</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/106</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/142</span>
+                <span class='fraction'>0/139</span>
             </div>
         
             
@@ -675,13 +675,7 @@
 <a name='L610'></a><a href='#L610'>610</a>
 <a name='L611'></a><a href='#L611'>611</a>
 <a name='L612'></a><a href='#L612'>612</a>
-<a name='L613'></a><a href='#L613'>613</a>
-<a name='L614'></a><a href='#L614'>614</a>
-<a name='L615'></a><a href='#L615'>615</a>
-<a name='L616'></a><a href='#L616'>616</a>
-<a name='L617'></a><a href='#L617'>617</a>
-<a name='L618'></a><a href='#L618'>618</a>
-<a name='L619'></a><a href='#L619'>619</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L613'></a><a href='#L613'>613</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -727,7 +721,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1037,7 +1030,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1060,10 +1052,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1253,8 +1243,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1307,7 +1295,6 @@ import { Button, DialogBox, Icon } from '@terraware/web-components';
 &nbsp;
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -1655,7 +1642,6 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
   const [mediaStream, setMediaStream] = <span class="cstat-no" title="statement not covered" >useState&lt;{ playbackId: string; playbackToken: string } | undefined&gt;();</span>
 &nbsp;
   const getActivityMediaStreamRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectActivityMediaStreamGet(getActivityMediaStreamRequestId));</span>
-  const isActivityHighlightEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Activity Log Highlights');</span>
 &nbsp;
   const [publishActivityModalOpened, setPublishActivityModalOpened] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -1680,8 +1666,6 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     }
   }, [publishActivityResponse, reload, snackbar, strings]);
-&nbsp;
-  const isActivityVideoSupportEnabled = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >isEnabled('Activity Video Support'),</span> []);</span>
 &nbsp;
   const verifiedByLabel = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const verifiedByName = <span class="cstat-no" title="statement not covered" >verifiedByUser</span>
@@ -1855,7 +1839,7 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
           &lt;Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}&gt;
             {isAcceleratorRoute &amp;&amp; &lt;ActivityStatusBadges activity={activity} /&gt;}
           &lt;/Box&gt;
-          {activity.payload.isHighlight &amp;&amp; isActivityHighlightEnabled &amp;&amp; isAcceleratorRoute &amp;&amp; (
+          {activity.payload.isHighlight &amp;&amp; isAcceleratorRoute &amp;&amp; (
             &lt;Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} /&gt;
           )}
         &lt;/Box&gt;
@@ -1871,21 +1855,19 @@ const ActivityDetailView = <span class="cstat-no" title="statement not covered" 
         &lt;Typography&gt;{activity.payload.description}&lt;/Typography&gt;
       &lt;/Grid&gt;
 &nbsp;
-      {activity.payload.media
-        .filter(<span class="fstat-no" title="function not covered" >(m</span>ediaFile) =&gt; <span class="cstat-no" title="statement not covered" >mediaFile.type === 'Photo' || isActivityVideoSupportEnabled)</span>
-        .map(<span class="fstat-no" title="function not covered" >(m</span>ediaFile, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >          &lt;Grid item key={index} lg={6} xs={12}&gt;</span>
-            &lt;ActivityMediaItem
-              activity={activity}
-              focusedFileId={focusedFileId}
-              hoveredFileId={hoveredFileId}
-              mediaFile={mediaFile}
-              onClickMediaItem={onClickMediaItem}
-              setHoverFileCallback={setHoverFileCallback}
-              setLightboxImageId={setLightboxMediaFileId}
-            /&gt;
-          &lt;/Grid&gt;
-        ))}
+      {activity.payload.media.map(<span class="fstat-no" title="function not covered" >(m</span>ediaFile, index) =&gt; (
+<span class="cstat-no" title="statement not covered" >        &lt;Grid item key={index} lg={6} xs={12}&gt;</span>
+          &lt;ActivityMediaItem
+            activity={activity}
+            focusedFileId={focusedFileId}
+            hoveredFileId={hoveredFileId}
+            mediaFile={mediaFile}
+            onClickMediaItem={onClickMediaItem}
+            setHoverFileCallback={setHoverFileCallback}
+            setLightboxImageId={setLightboxMediaFileId}
+          /&gt;
+        &lt;/Grid&gt;
+      ))}
 &nbsp;
       &lt;ImageLightbox
         altComponent={
@@ -1924,7 +1906,7 @@ export default ActivityDetailView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-20T17:41:47.521Z
+                at 2025-11-20T18:09:18.169Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

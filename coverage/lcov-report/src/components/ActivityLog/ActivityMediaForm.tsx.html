@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/136</span>
+                <span class='fraction'>0/134</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/125</span>
+                <span class='fraction'>0/124</span>
             </div>
         
             
@@ -631,14 +631,7 @@
 <a name='L566'></a><a href='#L566'>566</a>
 <a name='L567'></a><a href='#L567'>567</a>
 <a name='L568'></a><a href='#L568'>568</a>
-<a name='L569'></a><a href='#L569'>569</a>
-<a name='L570'></a><a href='#L570'>570</a>
-<a name='L571'></a><a href='#L571'>571</a>
-<a name='L572'></a><a href='#L572'>572</a>
-<a name='L573'></a><a href='#L573'>573</a>
-<a name='L574'></a><a href='#L574'>574</a>
-<a name='L575'></a><a href='#L575'>575</a>
-<a name='L576'></a><a href='#L576'>576</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L569'></a><a href='#L569'>569</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -668,7 +661,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -984,8 +976,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1158,10 +1148,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1219,7 +1205,6 @@ import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/m
 import { Button, Checkbox, FileChooser, Textfield } from '@terraware/web-components';
 &nbsp;
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
@@ -1562,8 +1547,6 @@ export default function <span class="fstat-no" title="function not covered" >Act
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
-  const isActivityVideoSupportEnabled = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >isEnabled('Activity Video Support'),</span> []);</span>
-&nbsp;
   const visibleMediaItems = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >mediaItems.filter(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.type === 'new' || !item.isDeleted)</span>,</span>
     [mediaItems]
@@ -1737,11 +1720,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
       &lt;Grid item xs={12}&gt;
         {!fileLimitReached &amp;&amp; (
           &lt;FileChooser
-            acceptFileType={
-              isActivityVideoSupportEnabled
-                ? 'image/heic, image/jpeg, image/png, video/*'
-                : 'image/heic, image/jpeg, image/png'
-            }
+            acceptFileType={'image/heic, image/jpeg, image/png, video/*'}
             chooseFileText={strings.CHOOSE_FILE}
             maxFiles={maxFiles}
             multipleSelection
@@ -1795,7 +1774,7 @@ export default function <span class="fstat-no" title="function not covered" >Act
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-20T17:41:47.521Z
+                at 2025-11-20T18:09:18.169Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

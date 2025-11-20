@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/223</span>
+                <span class='fraction'>0/221</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/157</span>
+                <span class='fraction'>0/155</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/209</span>
+                <span class='fraction'>0/207</span>
             </div>
         
             
@@ -800,10 +800,7 @@
 <a name='L735'></a><a href='#L735'>735</a>
 <a name='L736'></a><a href='#L736'>736</a>
 <a name='L737'></a><a href='#L737'>737</a>
-<a name='L738'></a><a href='#L738'>738</a>
-<a name='L739'></a><a href='#L739'>739</a>
-<a name='L740'></a><a href='#L740'>740</a>
-<a name='L741'></a><a href='#L741'>741</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L738'></a><a href='#L738'>738</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -869,8 +866,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -965,7 +960,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1564,7 +1558,6 @@ import {
   defaultPillValueRenderer,
 } from 'src/components/common/SearchFiltersWrapperV2';
 import IconFilters from 'src/components/common/SearchFiltersWrapperV2/IconFilters';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useClientSideFilter from 'src/hooks/useClientSideFiltering';
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -1616,7 +1609,6 @@ const ActivityListItem = <span class="cstat-no" title="statement not covered" ><
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const { isFunderRoute } = <span class="cstat-no" title="statement not covered" >useFunderPortal();</span>
-  const isActivityHighlightEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Activity Log Highlights');</span>
 &nbsp;
   const coverPhoto = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >activity.payload.media.find(<span class="fstat-no" title="function not covered" >(f</span>ile) =&gt; <span class="cstat-no" title="statement not covered" >file.isCoverPhoto)</span>,</span> [activity]);</span>
 &nbsp;
@@ -1672,7 +1664,7 @@ const ActivityListItem = <span class="cstat-no" title="statement not covered" ><
         &lt;/Box&gt;
         &lt;Box display='flex' justifyContent={'space-between'} alignItems={'center'}&gt;
           &lt;Box&gt;{isAcceleratorRoute &amp;&amp; &lt;ActivityStatusBadges activity={activity} /&gt;}&lt;/Box&gt;
-          {activity.payload.isHighlight &amp;&amp; (isAcceleratorRoute || isFunderRoute) &amp;&amp; isActivityHighlightEnabled &amp;&amp; (
+          {activity.payload.isHighlight &amp;&amp; (isAcceleratorRoute || isFunderRoute) &amp;&amp; (
             &lt;Tooltip title={strings.HIGHLIGHTED_ACTIVITY}&gt;
               &lt;Box display='inline-flex'&gt;
                 &lt;Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} /&gt;
@@ -1718,7 +1710,6 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const isActivityHighlightEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Activity Log Highlights');</span>
 &nbsp;
   const [initialized, setInitialized] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, SearchNodePayload&gt;&gt;({});</span>
@@ -2167,7 +2158,7 @@ const ActivitiesListView = <span class="cstat-no" title="statement not covered" 
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
-      {isActivityHighlightEnabled &amp;&amp; highlightsModalOpen &amp;&amp; setHighlightsModalOpen &amp;&amp; (
+      {highlightsModalOpen &amp;&amp; setHighlightsModalOpen &amp;&amp; (
         &lt;ActivityHighlightsModal
           activities={activities}
           busy={busy}
@@ -2290,7 +2281,7 @@ export default ActivitiesListView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-20T17:41:47.521Z
+                at 2025-11-20T18:09:18.169Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

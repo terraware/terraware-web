@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -405,12 +405,7 @@
 <a name='L340'></a><a href='#L340'>340</a>
 <a name='L341'></a><a href='#L341'>341</a>
 <a name='L342'></a><a href='#L342'>342</a>
-<a name='L343'></a><a href='#L343'>343</a>
-<a name='L344'></a><a href='#L344'>344</a>
-<a name='L345'></a><a href='#L345'>345</a>
-<a name='L346'></a><a href='#L346'>346</a>
-<a name='L347'></a><a href='#L347'>347</a>
-<a name='L348'></a><a href='#L348'>348</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L343'></a><a href='#L343'>343</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -444,7 +439,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -463,7 +457,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -630,9 +623,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -765,7 +755,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
@@ -810,7 +799,6 @@ const ProjectPage = <span class="cstat-no" title="statement not covered" ><span 
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { isDesktop, isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
-  const isActivityHighlightEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Activity Log Highlights');</span>
   const isAllowedEdit = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_PARTICIPANT_PROJECT');</span>
   const isAllowedPublish = <span class="cstat-no" title="statement not covered" >isAllowed('PUBLISH_PROJECT_DETAILS');</span>
   const isAllowedCreateActivities = <span class="cstat-no" title="statement not covered" >isAllowed('CREATE_ACTIVITIES');</span>
@@ -1026,17 +1014,15 @@ const ProjectPage = <span class="cstat-no" title="statement not covered" ><span 
                   type='productive'
                 /&gt;
               )}
-              {isActivityHighlightEnabled &amp;&amp; (
-                &lt;Button
-                  id='previewHighlights'
-                  label={strings.PREVIEW_HIGHLIGHTS}
-                  onClick={openActivityHighlightsPreview}
-                  priority='secondary'
-                  size='medium'
-                  sx={{ minWidth: '180px', whiteSpace: 'nowrap' }}
-                  type='productive'
-                /&gt;
-              )}
+              &lt;Button
+                id='previewHighlights'
+                label={strings.PREVIEW_HIGHLIGHTS}
+                onClick={openActivityHighlightsPreview}
+                priority='secondary'
+                size='medium'
+                sx={{ minWidth: '180px', whiteSpace: 'nowrap' }}
+                type='productive'
+              /&gt;
             &lt;/Box&gt;
           )}
 &nbsp;
@@ -1061,7 +1047,6 @@ const ProjectPage = <span class="cstat-no" title="statement not covered" ><span 
       goToDocumentNew,
       goToProjectActivityCreate,
       goToProjectEdit,
-      isActivityHighlightEnabled,
       isAllowedCreateActivities,
       isAllowedEdit,
       isAllowedPublish,
@@ -1111,7 +1096,7 @@ export default ProjectPage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-20T17:41:47.521Z
+                at 2025-11-20T18:09:18.169Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
