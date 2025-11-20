@@ -217,7 +217,16 @@ const ActivitiesListView = ({
     }
   }, [filters]);
 
-  const filteredActivities = useClientSideFilter(activities, search);
+  const filteredActivitiesUnsorted = useClientSideFilter(activities, search);
+
+  const filteredActivities = useMemo(() => {
+    // Ensure activities are sorted by date descending before pagination
+    return [...filteredActivitiesUnsorted].sort((a, b) => {
+      const dateA = new Date(a.payload.date).getTime();
+      const dateB = new Date(b.payload.date).getTime();
+      return dateB - dateA;
+    });
+  }, [filteredActivitiesUnsorted]);
 
   const busy = useMemo(() => {
     return (
