@@ -19,7 +19,6 @@ import {
   defaultPillValueRenderer,
 } from 'src/components/common/SearchFiltersWrapperV2';
 import IconFilters from 'src/components/common/SearchFiltersWrapperV2/IconFilters';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useClientSideFilter from 'src/hooks/useClientSideFiltering';
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -71,7 +70,6 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
   const { isDesktop } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isFunderRoute } = useFunderPortal();
-  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   const coverPhoto = useMemo(() => activity.payload.media.find((file) => file.isCoverPhoto), [activity]);
 
@@ -127,7 +125,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
         </Box>
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
           <Box>{isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}</Box>
-          {activity.payload.isHighlight && (isAcceleratorRoute || isFunderRoute) && isActivityHighlightEnabled && (
+          {activity.payload.isHighlight && (isAcceleratorRoute || isFunderRoute) && (
             <Tooltip title={strings.HIGHLIGHTED_ACTIVITY}>
               <Box display='inline-flex'>
                 <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
@@ -173,7 +171,6 @@ const ActivitiesListView = ({
   const location = useStateLocation();
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   const [initialized, setInitialized] = useState(false);
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
@@ -622,7 +619,7 @@ const ActivitiesListView = ({
 
   return (
     <>
-      {isActivityHighlightEnabled && highlightsModalOpen && setHighlightsModalOpen && (
+      {highlightsModalOpen && setHighlightsModalOpen && (
         <ActivityHighlightsModal
           activities={activities}
           busy={busy}

@@ -11,7 +11,6 @@ import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
@@ -120,7 +119,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const { getCurrentViewState, jumpTo } = useMapUtils(mapRef);
   const { scrollToElementById } = useMapDrawer(mapDrawerRef);
-  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   const organization = useMemo(
     () => (isAcceleratorRoute ? undefined : selectedOrganization),
@@ -599,7 +597,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                     <Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}>
                       <ActivityStatusBadges activity={activity} />
                     </Box>
-                    {activity.payload.isHighlight && isActivityHighlightEnabled && (
+                    {activity.payload.isHighlight && (
                       <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
                     )}
                   </Box>
@@ -658,7 +656,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Grid>
             )}
 
-            {isAcceleratorRoute && isActivityHighlightEnabled && (
+            {isAcceleratorRoute && (
               <Grid
                 item
                 xs={12}

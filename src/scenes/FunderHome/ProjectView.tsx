@@ -9,7 +9,6 @@ import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/A
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { requestListFunderActivities } from 'src/redux/features/funder/activities/funderActivitiesAsyncThunks';
@@ -57,7 +56,6 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
     }
   }, [funderListActivitiesRequest]);
 
-  const funderPortalEnabled = isEnabled('Activity Log in Funder Portal');
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
@@ -96,7 +94,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
         label: strings.REPORT,
         children: <FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} />,
       },
-      ...(funderPortalEnabled && activities.length > 0
+      ...(activities.length > 0
         ? [
             {
               id: 'quarterlyHighlights',
@@ -119,7 +117,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
           ]
         : []),
     ];
-  }, [funderPortalEnabled, projectDetails, publishedReports, selectedReport, strings, activities]);
+  }, [projectDetails, publishedReports, selectedReport, strings, activities]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',

@@ -9,7 +9,6 @@ import { TypedActivity } from 'src/components/ActivityLog/types';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantProjects } from 'src/hooks/useParticipantProjects';
@@ -40,7 +39,6 @@ export default function ActivityLogView(): JSX.Element {
     [isAcceleratorRoute, selectedOrganization]
   );
 
-  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES', { organization });
 
   const projectId = useMemo(
@@ -124,7 +122,7 @@ export default function ActivityLogView(): JSX.Element {
             size='medium'
             sx={{ minWidth: '160px', whiteSpace: 'nowrap' }}
           />
-          {isActivityHighlightEnabled && isAcceleratorRoute && (
+          {isAcceleratorRoute && (
             <Button
               disabled={!projectId}
               id='previewHighlights'
@@ -142,7 +140,6 @@ export default function ActivityLogView(): JSX.Element {
       activityId,
       goToProjectActivityCreate,
       isAcceleratorRoute,
-      isActivityHighlightEnabled,
       isAllowedCreateActivities,
       isDesktop,
       isMobile,

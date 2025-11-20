@@ -6,7 +6,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
@@ -51,7 +50,6 @@ const ProjectPage = () => {
   const snackbar = useSnackbar();
   const { isDesktop, isMobile } = useDeviceInfo();
 
-  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
   const isAllowedCreateActivities = isAllowed('CREATE_ACTIVITIES');
@@ -267,17 +265,15 @@ const ProjectPage = () => {
                   type='productive'
                 />
               )}
-              {isActivityHighlightEnabled && (
-                <Button
-                  id='previewHighlights'
-                  label={strings.PREVIEW_HIGHLIGHTS}
-                  onClick={openActivityHighlightsPreview}
-                  priority='secondary'
-                  size='medium'
-                  sx={{ minWidth: '180px', whiteSpace: 'nowrap' }}
-                  type='productive'
-                />
-              )}
+              <Button
+                id='previewHighlights'
+                label={strings.PREVIEW_HIGHLIGHTS}
+                onClick={openActivityHighlightsPreview}
+                priority='secondary'
+                size='medium'
+                sx={{ minWidth: '180px', whiteSpace: 'nowrap' }}
+                type='productive'
+              />
             </Box>
           )}
 
@@ -302,7 +298,6 @@ const ProjectPage = () => {
       goToDocumentNew,
       goToProjectActivityCreate,
       goToProjectEdit,
-      isActivityHighlightEnabled,
       isAllowedCreateActivities,
       isAllowedEdit,
       isAllowedPublish,
