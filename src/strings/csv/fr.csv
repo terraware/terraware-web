@@ -1407,6 +1407,7 @@ PLOT_ADHOC_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) es
 PLOT_ADHOC_SPECIES_TOOLTIP,Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées.,ed7c35b1
 PLOT_ADHOC_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total de plantes observées, y compris les plantes enregistrées comme vivantes et mortes.",b2fd163f
 PLOT_CONDITIONS,Conditions de la parcelle,2b615357
+PLOT_CORNER_PHOTOS,Photos des coins de la parcelle,330ffad8
 PLOT_DEAD_PLANTS_TOOLTIP,Plantes mortes correspond au nombre de plantes observées enregistrées comme mortes.,7d7e8860
 PLOT_DESCRIPTION,Description de la parcelle,67e5afa5
 PLOT_INFO,Informations sur la parcelle,38a9b59d
@@ -1866,6 +1867,7 @@ SOCIAL_IMPACT,Impact social,34c0ea7c
 SOCIAL_IMPACT_INSTRUCTIONS,"Dressez la liste des avantages directs du projet pour la communauté locale. Les avantages spécifiques peuvent inclure l'impact sur les moyens de subsistance, l'éducation et la formation de la communauté, l'accès à l'eau potable, le soutien aux jeunes, aux femmes et/ou aux groupes minoritaires, ainsi que d'autres avantages socio-économiques et communautaires du projet. Veuillez inclure les indicateurs spécifiques que vous utilisez pour mesurer l'impact sur la communauté et les résultats que vous avez suivis dans le temps. (Une demi-page maximum)",08a8aaaa
 SOCIAL_IMPACT_REQUIRED,Impact social et avantages pour la collectivité *,6f21762c
 SOIL,Sol,bba67d3a
+SOIL_ASSESSMENT,Évaluation du sol,803c8f49
 SOIL_PHOTO,Photo du sol,5a089072
 SOMETHING_WENT_WRONG,Une erreur s'est produite.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si vous avez des difficultés à utiliser Terraware, veuillez nous signaler tout problème que vous rencontrez et nous ferons le nécessaire pour y remédier.",c506e77d

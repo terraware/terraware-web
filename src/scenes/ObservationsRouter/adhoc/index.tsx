@@ -34,7 +34,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
 import ObservationDataTab from './ObservationDataTab';
-import PhotosAndVideos from './PhotosAndVideos';
+import PhotosAndVideosTab from './PhotosAndVideosTab';
 
 export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const params = useParams<{
@@ -329,7 +329,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       {
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
-        children: <PhotosAndVideos />,
+        children: <PhotosAndVideosTab monitoringPlot={monitoringPlotResult} />,
       },
     ];
   }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies]);
