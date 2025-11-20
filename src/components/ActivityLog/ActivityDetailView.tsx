@@ -6,7 +6,6 @@ import { Button, DialogBox, Icon } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -354,7 +353,6 @@ const ActivityDetailView = ({
   const [mediaStream, setMediaStream] = useState<{ playbackId: string; playbackToken: string } | undefined>();
 
   const getActivityMediaStreamRequest = useAppSelector(selectActivityMediaStreamGet(getActivityMediaStreamRequestId));
-  const isActivityHighlightEnabled = isEnabled('Activity Log Highlights');
 
   const [publishActivityModalOpened, setPublishActivityModalOpened] = useState(false);
   const [requestId, setRequestId] = useState('');
@@ -379,8 +377,6 @@ const ActivityDetailView = ({
       snackbar.toastError();
     }
   }, [publishActivityResponse, reload, snackbar, strings]);
-
-  const isActivityVideoSupportEnabled = useMemo(() => isEnabled('Activity Video Support'), []);
 
   const verifiedByLabel = useMemo(() => {
     const verifiedByName = verifiedByUser
@@ -554,7 +550,7 @@ const ActivityDetailView = ({
           <Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}>
             {isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}
           </Box>
-          {activity.payload.isHighlight && isActivityHighlightEnabled && isAcceleratorRoute && (
+          {activity.payload.isHighlight && isAcceleratorRoute && (
             <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
           )}
         </Box>
@@ -570,21 +566,19 @@ const ActivityDetailView = ({
         <Typography>{activity.payload.description}</Typography>
       </Grid>
 
-      {activity.payload.media
-        .filter((mediaFile) => mediaFile.type === 'Photo' || isActivityVideoSupportEnabled)
-        .map((mediaFile, index) => (
-          <Grid item key={index} lg={6} xs={12}>
-            <ActivityMediaItem
-              activity={activity}
-              focusedFileId={focusedFileId}
-              hoveredFileId={hoveredFileId}
-              mediaFile={mediaFile}
-              onClickMediaItem={onClickMediaItem}
-              setHoverFileCallback={setHoverFileCallback}
-              setLightboxImageId={setLightboxMediaFileId}
-            />
-          </Grid>
-        ))}
+      {activity.payload.media.map((mediaFile, index) => (
+        <Grid item key={index} lg={6} xs={12}>
+          <ActivityMediaItem
+            activity={activity}
+            focusedFileId={focusedFileId}
+            hoveredFileId={hoveredFileId}
+            mediaFile={mediaFile}
+            onClickMediaItem={onClickMediaItem}
+            setHoverFileCallback={setHoverFileCallback}
+            setLightboxImageId={setLightboxMediaFileId}
+          />
+        </Grid>
+      ))}
 
       <ImageLightbox
         altComponent={

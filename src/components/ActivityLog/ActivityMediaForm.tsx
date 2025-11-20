@@ -4,7 +4,6 @@ import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/m
 import { Button, Checkbox, FileChooser, Textfield } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
@@ -347,8 +346,6 @@ export default function ActivityMediaForm({
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = useLocalization();
 
-  const isActivityVideoSupportEnabled = useMemo(() => isEnabled('Activity Video Support'), []);
-
   const visibleMediaItems = useMemo(
     () => mediaItems.filter((item) => item.type === 'new' || !item.isDeleted),
     [mediaItems]
@@ -522,11 +519,7 @@ export default function ActivityMediaForm({
       <Grid item xs={12}>
         {!fileLimitReached && (
           <FileChooser
-            acceptFileType={
-              isActivityVideoSupportEnabled
-                ? 'image/heic, image/jpeg, image/png, video/*'
-                : 'image/heic, image/jpeg, image/png'
-            }
+            acceptFileType={'image/heic, image/jpeg, image/png, video/*'}
             chooseFileText={strings.CHOOSE_FILE}
             maxFiles={maxFiles}
             multipleSelection
