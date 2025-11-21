@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -192,7 +192,11 @@
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,6 +262,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -332,7 +340,7 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
-import { useDeleteFunderMutation, useListFundersForFundingEntityQuery } from 'src/queries/funder/fundingEntities';
+import { useGetFundersQuery, useRemoveFunderMutation } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -378,15 +386,19 @@ const FundersTable = <span class="cstat-no" title="statement not covered" ><span
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
 &nbsp;
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;TableRowType[]&gt;([]);</span>
-  const { data: funders } = <span class="cstat-no" title="statement not covered" >useListFundersForFundingEntityQuery(fundingEntityId);</span>
+  const { data: getFundersResponse } = <span class="cstat-no" title="statement not covered" >useGetFundersQuery(fundingEntityId);</span>
 &nbsp;
-  const [deleteFunder, result] = <span class="cstat-no" title="statement not covered" >useDeleteFunderMutation();</span>
+  const funders = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >getFundersResponse?.funders ?? [],</span> [getFundersResponse]);</span>
+&nbsp;
+  const [deleteFunder, result] = <span class="cstat-no" title="statement not covered" >useRemoveFunderMutation();</span>
 &nbsp;
   const onRemoveConfirm = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (s</span>electedFunders: TableRowType[]) =&gt; {
 <span class="cstat-no" title="statement not covered" >      void deleteFunder({</span>
         fundingEntityId,
-        userIds: selectedFunders.map(<span class="fstat-no" title="function not covered" >(f</span>under) =&gt; <span class="cstat-no" title="statement not covered" >funder.userId)</span>,
+        deleteFundersRequestPayload: {
+          userIds: selectedFunders.map(<span class="fstat-no" title="function not covered" >(f</span>under) =&gt; <span class="cstat-no" title="statement not covered" >funder.userId)</span>,
+        },
       });
     },
     [deleteFunder, fundingEntityId]
@@ -441,7 +453,7 @@ const FundersTable = <span class="cstat-no" title="statement not covered" ><span
       showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES')}
       showTopBar
       Renderer={FunderCellRenderer}
-      rows={funders ?? []}
+      rows={funders}
       title={strings.FUNDERS}
       rightComponent={rightComponent}
       topBarButtons={[&lt;RemoveFunderTopBarButton key={0} onConfirm={onRemoveConfirm} selectedRows={selectedRows} /&gt;]}
@@ -457,7 +469,7 @@ export default FundersTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-21T20:02:35.589Z
+                at 2025-11-21T20:21:10.856Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

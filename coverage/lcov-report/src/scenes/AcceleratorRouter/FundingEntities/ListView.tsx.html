@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -181,7 +181,12 @@
 <a name='L116'></a><a href='#L116'>116</a>
 <a name='L117'></a><a href='#L117'>117</a>
 <a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -219,6 +224,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -309,7 +319,7 @@ import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { useListFundingEntitiesQuery } from 'src/queries/funder/fundingEntities';
+import { useListFundingEntitiesQuery } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -333,12 +343,17 @@ const FundingEntitiesListView = <span class="cstat-no" title="statement not cove
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { goToNewFundingEntity } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
-  const { data: fundingEntities, error } = <span class="cstat-no" title="statement not covered" >useListFundingEntitiesQuery();</span>
+  const { data: listFundingEntitiesResponse, error } = <span class="cstat-no" title="statement not covered" >useListFundingEntitiesQuery();</span>
 &nbsp;
   const defaultSortOrder: SearchSortOrder = <span class="cstat-no" title="statement not covered" >{</span>
     field: 'name',
     direction: 'Ascending',
   };
+&nbsp;
+  const fundingEntities = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >listFundingEntitiesResponse?.fundingEntities ?? [],</span>
+    [listFundingEntitiesResponse]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (error) {</span>
@@ -348,7 +363,7 @@ const FundingEntitiesListView = <span class="cstat-no" title="statement not cove
 &nbsp;
   const allProjects = <span class="cstat-no" title="statement not covered" >useMemo&lt;Record&lt;string, string&gt;&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      (fundingEntities || []).reduce(</span>
+<span class="cstat-no" title="statement not covered" >      fundingEntities.reduce(</span>
 <span class="fstat-no" title="function not covered" >        (r</span>ecord, entity) =&gt; {
 <span class="cstat-no" title="statement not covered" >          entity?.projects?.forEach(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            if (project.projectId !== undefined) {</span>
@@ -407,7 +422,7 @@ const FundingEntitiesListView = <span class="cstat-no" title="statement not cove
         fuzzySearchColumns={fuzzySearchColumns}
         featuredFilters={featuredFilters}
         id='fundingEntitiesTable'
-        rows={fundingEntities ?? []}
+        rows={fundingEntities}
         isClickable={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >false}</span>
         showTopBar
         Renderer={FundingEntitiesCellRenderer}
@@ -424,7 +439,7 @@ export default FundingEntitiesListView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-21T20:02:35.589Z
+                at 2025-11-21T20:21:10.856Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

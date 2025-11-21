@@ -1,1 +1,2 @@
+b823ad0bf13 Moved funding entities to use generated code (#4799)
 6e9d8431bb1 SW-7731 Added codegen flow and generated observations RTK queries (#4798)
