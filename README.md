@@ -76,6 +76,22 @@ Or you can run autotranslate in "watch mode," which will watch for changes to `s
 yarn translate:start &
 ```
 
+### How to Generate RTK Query code
+
+The file `./rtk-codegen.config.ts` configures the endpoints to be generated, and the desintation files. You will need to update
+this file to generate new sets of API.
+
+1. Update `./rtk-codegen.config.ts`
+2. Generate new queries
+
+   ```shell
+   yarn generate-queries
+   ```
+
+3. Add tags/invalidations
+   This step is neccessary for RTK Query to function correctly. This configures data invalidation behaviors.
+   Add `providedTags`/`invalidateTags` behaviors to endpoints under `src/queries/extensions`
+
 ## How to Contribute
 
 Before putting up a pull request, make sure to run the following commands. The CI will check that these steps are completed.
