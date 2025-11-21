@@ -38,7 +38,7 @@ test.describe('ObservationsTests', () => {
     await page.getByRole('button', { name: 'Save' }).click();
 
     // wait for success toast message
-    await waitFor(page, '#snackbar div:has-text("Observation scheduled!")');
+    await waitFor(page, '#snackbar p:has-text("Observation scheduled!")');
   });
 
   test('Reschedule Observation', async ({ page }, testInfo) => {
@@ -77,7 +77,7 @@ test.describe('ObservationsTests', () => {
     await page.getByRole('button', { name: 'Save' }).click();
 
     // wait for success toast message
-    await waitFor(page, '#snackbar div:has-text("Observation rescheduled!")');
+    await waitFor(page, '#snackbar p:has-text("Observation rescheduled!")');
   });
 
   test('End Observation', async ({ page }, testInfo) => {
@@ -106,6 +106,6 @@ test.describe('ObservationsTests', () => {
     await page.locator('#save').click();
 
     // wait for success toast message
-    await waitFor(page, '#snackbar div:has-text("observation has been ended")');
+    await waitFor(page, '#snackbar p:has-text("observation has been ended")');
   });
 });

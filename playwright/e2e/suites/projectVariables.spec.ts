@@ -48,7 +48,7 @@ test.describe('ProjectVariablesTests', () => {
     await page.locator('#edit-variable-save').click();
 
     // wait for success toast message
-    await waitFor(page, '#snackbar div:has-text("Success")');
+    await waitFor(page, '#snackbar p:has-text("Success")');
 
     // verify variable value is updated
     await expect(
