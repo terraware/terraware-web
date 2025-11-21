@@ -1,9 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useGetFundingEntityQuery, useUpdateFundingEntityMutation } from 'src/queries/funder/fundingEntities';
+import {
+  UpdateFundingEntityApiArg,
+  useGetFundingEntityQuery,
+  useUpdateFundingEntityMutation,
+} from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 
@@ -13,7 +17,10 @@ const EditView = () => {
   const { goToFundingEntity } = useNavigateTo();
 
   const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: fundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
+  const fundingEntityId = Number(pathParams.fundingEntityId);
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery(fundingEntityId);
+
+  const fundingEntity = useMemo(() => getFundingEntityResponse?.fundingEntity, [getFundingEntityResponse]);
 
   const [update, updateResult] = useUpdateFundingEntityMutation();
   const goToViewFundingEntity = useCallback(() => {
@@ -22,9 +29,9 @@ const EditView = () => {
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
-      const payload = {
-        id: record.id,
-        body: {
+      const payload: UpdateFundingEntityApiArg = {
+        fundingEntityId: record.id,
+        updateFundingEntityRequestPayload: {
           name: record.name,
           projects: record.projects.map((project) => project.projectId),
         },

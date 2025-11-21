@@ -15,7 +15,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { useGetFundingEntityQuery } from 'src/queries/funder/fundingEntities';
+import { useGetFundingEntityQuery } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 
 import DeleteFundingEntityModal from './DeleteFundingEntityModal';
@@ -28,7 +28,10 @@ const SingleView = () => {
   const { goToEditFundingEntity } = useNavigateTo();
 
   const pathParams = useParams<{ fundingEntityId: string }>();
-  const { data: fundingEntity } = useGetFundingEntityQuery(Number(pathParams.fundingEntityId));
+  const fundingEntityId = Number(pathParams.fundingEntityId);
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery(fundingEntityId);
+  const fundingEntity = useMemo(() => getFundingEntityResponse?.fundingEntity, [getFundingEntityResponse]);
+
   const canManage = isAllowed('MANAGE_FUNDING_ENTITIES');
 
   const onDeleteClick = useCallback((optionItem: DropdownItem) => {

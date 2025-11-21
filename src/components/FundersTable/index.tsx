@@ -9,7 +9,7 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
-import { useDeleteFunderMutation, useListFundersForFundingEntityQuery } from 'src/queries/funder/fundingEntities';
+import { useGetFundersQuery, useRemoveFunderMutation } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -55,15 +55,19 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
-  const { data: funders } = useListFundersForFundingEntityQuery(fundingEntityId);
+  const { data: getFundersResponse } = useGetFundersQuery(fundingEntityId);
 
-  const [deleteFunder, result] = useDeleteFunderMutation();
+  const funders = useMemo(() => getFundersResponse?.funders ?? [], [getFundersResponse]);
+
+  const [deleteFunder, result] = useRemoveFunderMutation();
 
   const onRemoveConfirm = useCallback(
     (selectedFunders: TableRowType[]) => {
       void deleteFunder({
         fundingEntityId,
-        userIds: selectedFunders.map((funder) => funder.userId),
+        deleteFundersRequestPayload: {
+          userIds: selectedFunders.map((funder) => funder.userId),
+        },
       });
     },
     [deleteFunder, fundingEntityId]
@@ -118,7 +122,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES')}
       showTopBar
       Renderer={FunderCellRenderer}
-      rows={funders ?? []}
+      rows={funders}
       title={strings.FUNDERS}
       rightComponent={rightComponent}
       topBarButtons={[<RemoveFunderTopBarButton key={0} onConfirm={onRemoveConfirm} selectedRows={selectedRows} />]}

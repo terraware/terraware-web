@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
@@ -10,7 +10,7 @@ import PageForm from 'src/components/common/PageForm';
 import { EMAIL_REGEX } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useGetFundingEntityQuery, useInviteFunderMutation } from 'src/queries/funder/fundingEntities';
+import { useGetFundingEntityQuery, useInviteFunderMutation } from 'src/queries/generated/fundingEntities';
 import strings from 'src/strings';
 import { Funder } from 'src/types/FundingEntity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -23,13 +23,15 @@ const FunderInviteView = () => {
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ fundingEntityId: string }>();
   const fundingEntityId = Number(pathParams.fundingEntityId);
-  const { data: fundingEntity } = useGetFundingEntityQuery(fundingEntityId);
+  const { data: getFundingEntityResponse } = useGetFundingEntityQuery(fundingEntityId);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [record, , , onChangeCallback] = useForm<Partial<Funder>>({});
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
 
   const [inviteFunder, inviteResult] = useInviteFunderMutation();
+
+  const fundingEntity = useMemo(() => getFundingEntityResponse?.fundingEntity, [getFundingEntityResponse]);
 
   const onCancel = useCallback(() => {
     if (isAcceleratorRoute) {
@@ -59,7 +61,7 @@ const FunderInviteView = () => {
 
     void inviteFunder({
       fundingEntityId,
-      email: record.email,
+      inviteFundingEntityFunderRequestPayload: { email: record.email },
     });
   }, [fundingEntityId, record.email, snackbar, inviteFunder]);
 
