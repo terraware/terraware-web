@@ -34,13 +34,13 @@ export default fixupConfigRules([
     .map((config) => ({
       ...config,
       files: ['**/*.ts', '**/*.tsx'],
-      ignores: ['**/generated-schema.ts'],
+      ignores: ['**/generated-schema.ts', 'src/queries/generated/*'],
     })),
   reactHooks.configs['recommended-latest'],
   {
     files: ['**/*.ts', '**/*.tsx'],
 
-    ignores: ['**/generated-schema.ts'],
+    ignores: ['**/generated-schema.ts', 'src/queries/generated/*'],
 
     plugins: {
       jsdoc,

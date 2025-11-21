@@ -1,7 +1,7 @@
-import { fundingEntitiesApi } from './funder/fundingEntities';
+import { baseApi } from './baseApi';
 
 export const rtkReducers = {
-  [fundingEntitiesApi.reducerPath]: fundingEntitiesApi.reducer,
+  [baseApi.reducerPath]: baseApi.reducer,
 };
 
-export const rtkMiddleware = [fundingEntitiesApi.middleware];
+export const rtkMiddleware = [baseApi.middleware];
