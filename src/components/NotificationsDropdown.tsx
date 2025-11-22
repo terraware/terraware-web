@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 
 import {
@@ -15,6 +15,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -61,7 +62,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const { strings } = useLocalization();
 
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-  const [unseen, setUnseen] = useState<boolean>();
+  const [lastSeen, setLastSeen] = useState<number>(0);
   const featureNotifications = useFeatureNotifications();
 
   const {
@@ -106,14 +107,16 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     });
   }, [userServerNotificationsResponse, organizationServerNotificationsResponse]);
 
-  useEffect(() => {
+  const lastestUnread = useMemo(() => {
     const allNotifications = [...featureNotifications, ...serverNotifications];
 
-    if (unseen === undefined && allNotifications.length > 0) {
+    if (allNotifications.length > 0) {
       const unread = allNotifications.filter((notification) => !notification.isRead);
-      setUnseen(unread.length > 0);
+      if (unread.length > 0) {
+        return DateTime.fromISO(unread[0].createdTime).toMillis();
+      }
     }
-  }, [featureNotifications, serverNotifications, unseen]);
+  }, [featureNotifications, serverNotifications]);
 
   const markServerNotifcationRead = useCallback(
     (notificationId: number) => (read: boolean) => {
@@ -122,10 +125,20 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     [markOneRead]
   );
 
-  const onIconClick = useCallback((event: React.MouseEvent<any>) => {
-    setAnchorEl(event.currentTarget);
-    setUnseen(false);
-  }, []);
+  const markAllServerNotificationsRead = useCallback(() => {
+    if (organizationId) {
+      void markAllRead({ organizationId, read: true });
+    }
+    void markAllRead({ organizationId: undefined, read: true });
+  }, [markAllRead, organizationId]);
+
+  const onIconClick = useCallback(
+    (event: React.MouseEvent<any>) => {
+      setAnchorEl(event.currentTarget);
+      setLastSeen(lastestUnread ?? 0);
+    },
+    [lastestUnread]
+  );
 
   const onPopoverClose = useCallback(() => {
     setAnchorEl(null);
@@ -141,13 +154,13 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const menuHeaderItems = useMemo(() => {
     if (organizationId) {
       return [
-        { text: strings.MARK_ALL_AS_READ, callback: () => void markAllRead({ organizationId, read: true }) },
+        { text: strings.MARK_ALL_AS_READ, callback: markAllServerNotificationsRead },
         { text: strings.SETTINGS, callback: goToSettings },
       ];
     } else {
-      return [{ text: strings.MARK_ALL_AS_READ, callback: () => void markAllRead({ read: true }) }];
+      return [{ text: strings.MARK_ALL_AS_READ, callback: markAllServerNotificationsRead }];
     }
-  }, [goToSettings, markAllRead, organizationId, strings.MARK_ALL_AS_READ, strings.SETTINGS]);
+  }, [goToSettings, markAllServerNotificationsRead, organizationId, strings.MARK_ALL_AS_READ, strings.SETTINGS]);
 
   return (
     <div>
@@ -155,7 +168,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         <IconButton id='notifications-button' onClick={onIconClick}>
           <Badge id='notifications-badge' color='secondary' sx={{ width: '24px', height: '24px' }}>
             <Icon name='notification' size='medium' style={{ fill: theme.palette.TwClrIcn, margin: 'auto auto' }} />
-            {unseen && (
+            {lastestUnread && lastSeen < lastestUnread && (
               <Box
                 sx={{
                   minWidth: '8px',
