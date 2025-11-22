@@ -1,36 +1,10 @@
-export type NotificationCount = {
-  organizationId?: number;
-  unread: number;
-};
+import { NotificationPayload } from 'src/queries/generated/notifications';
 
-export type MarkNotificationRead = {
-  read: boolean;
-};
+export type Notification = NotificationPayload;
 
-export type MarkNotificationsRead = {
-  read: boolean;
-  organizationId?: number;
-};
-
-export type NotificationCriticality = 'Info' | 'Warning' | 'Error' | 'Success';
-
-export type Notification = {
-  id: number;
-  notificationCriticality: NotificationCriticality;
-  organizationId?: number;
-  title: string;
+export type FeatureNotification = Omit<Notification, 'body'> & {
   body: string | JSX.Element;
-  localUrl: string;
-  createdTime: string;
-  isRead: boolean;
-  hideDate?: boolean;
-  markAsRead?: () => void;
+  markAsRead: (read: boolean) => void;
 };
 
-export type Notifications = {
-  items: Notification[];
-};
-
-export type NotificationsCount = {
-  counts: NotificationCount[];
-};
+export type NotificationCriticality = Notification['notificationCriticality'];
