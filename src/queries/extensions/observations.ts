@@ -84,6 +84,12 @@ api.enhanceEndpoints({
     getOneAssignedPlot: {
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
     },
+    updateCompletedObservationPlot: {
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.Observation, id: 'LIST' },
+      ],
+    },
     completePlotObservation: {
       invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
     },
