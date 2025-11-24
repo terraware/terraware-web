@@ -8,12 +8,12 @@ import { APP_PATHS } from 'src/constants';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { OrganizationService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
-import { FeatureNotification } from 'src/types/Notifications';
+import { ClientNotification } from 'src/types/Notifications';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
-export default function OrganizationNotification(): FeatureNotification | null {
+export default function OrganizationNotification(): ClientNotification | null {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
 
   const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);

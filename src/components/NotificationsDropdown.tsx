@@ -21,12 +21,12 @@ import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useMarkAllReadMutation, useMarkReadMutation, useReadAllQuery } from 'src/queries/generated/notifications';
-import { FeatureNotification, Notification } from 'src/types/Notifications';
+import { ClientNotification, Notification } from 'src/types/Notifications';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import stopPropagation from 'src/utils/stopPropagationEvent';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import useFeatureNotifications from './FeatureNotification';
+import useClientNotifications from './ClientNotification';
 import DivotPopover from './common/DivotPopover';
 import ErrorBox from './common/ErrorBox/ErrorBox';
 import Timestamp from './common/Timestamp';
@@ -63,7 +63,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [lastSeen, setLastSeen] = useState<number>(0);
-  const featureNotifications = useFeatureNotifications();
+  const featureNotifications = useClientNotifications();
 
   const {
     data: userServerNotificationsResponse,
@@ -241,7 +241,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 }
 
 type NotificationItemProps = {
-  notification: Notification | FeatureNotification;
+  notification: Notification | ClientNotification;
   markAsRead: (read: boolean) => void;
   closePopover: () => void;
   reloadOrganizationData: (selectedOrgId?: number) => void;
@@ -399,7 +399,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
 type NotificationItemMenuProps = {
   closePopover: () => void;
   markAsRead: (read: boolean) => void;
-  notification: Notification | FeatureNotification;
+  notification: Notification | ClientNotification;
 };
 
 function NotificationItemMenu(props: NotificationItemMenuProps): JSX.Element {

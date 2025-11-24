@@ -2,7 +2,7 @@ import { NotificationPayload } from 'src/queries/generated/notifications';
 
 export type Notification = NotificationPayload;
 
-export type FeatureNotification = Omit<Notification, 'body'> & {
+export type ClientNotification = Omit<Notification, 'body'> & {
   body: string | JSX.Element;
   markAsRead: (read: boolean) => void;
 };

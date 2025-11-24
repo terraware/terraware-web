@@ -9,14 +9,14 @@ import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { useSupportedLocales } from 'src/strings/locales';
-import { FeatureNotification } from 'src/types/Notifications';
+import { ClientNotification } from 'src/types/Notifications';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { weightSystemsNames } from 'src/units';
 import { InitializedUnits } from 'src/units';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
-export default function UserNotification(): FeatureNotification | null {
+export default function UserNotification(): ClientNotification | null {
   const supportedLocales = useSupportedLocales();
   const [unitNotification, setUnitNotification] = useState(false);
   const [unitNotificationRead, setUnitNotificationRead] = useState(false);
