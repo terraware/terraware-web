@@ -7,7 +7,6 @@ import FacilityService from './FacilityService';
 import HttpService from './HttpService';
 import LocationService from './LocationService';
 import MapService from './MapService';
-import NotificationsService from './NotificationsService';
 import NurseryBatchService from './NurseryBatchService';
 import NurseryInventoryService from './NurseryInventoryService';
 import NurseryWithdrawalService from './NurseryWithdrawalService';
@@ -39,7 +38,6 @@ export {
   HttpService,
   LocationService,
   MapService,
-  NotificationsService,
   NurseryBatchService,
   NurseryInventoryService,
   NurseryWithdrawalService,

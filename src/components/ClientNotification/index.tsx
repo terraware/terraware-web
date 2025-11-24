@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 
-import { Notification } from 'src/types/Notifications';
+import { ClientNotification } from 'src/types/Notifications';
 
 import OrganizationNotification from './OrganizationNotification';
 import UserNotification from './UserNotification';
 
-export default function useFeatureNotifications(): Notification[] {
+export default function useClientNotifications(): ClientNotification[] {
   const userNotification = UserNotification();
   const orgNotification = OrganizationNotification();
 
@@ -15,7 +15,7 @@ export default function useFeatureNotifications(): Notification[] {
         // add all notifications here
         userNotification,
         orgNotification,
-      ].filter((notification) => notification !== null) as Notification[],
+      ].filter((notification) => notification !== null) as ClientNotification[],
     [
       // add all notification dependencies here
       userNotification,

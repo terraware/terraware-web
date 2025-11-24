@@ -8,12 +8,12 @@ import { APP_PATHS } from 'src/constants';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { OrganizationService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
-import { Notification } from 'src/types/Notifications';
+import { ClientNotification } from 'src/types/Notifications';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
-export default function OrganizationNotification(): Notification | null {
+export default function OrganizationNotification(): ClientNotification | null {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
 
   const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);
@@ -93,10 +93,9 @@ export default function OrganizationNotification(): Notification | null {
         localUrl: APP_PATHS.ORGANIZATION,
         createdTime: getTodaysDateFormatted(),
         isRead: timeZoneOrgNotificationRead,
-        hideDate: true,
-        markAsRead: async () => {
+        markAsRead: async (read: boolean) => {
           await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-            timeZoneAcknowledgedOnMs: Date.now(),
+            timeZoneAcknowledgedOnMs: read ? Date.now() : undefined,
           });
 
           // eslint-disable-next-line @typescript-eslint/await-thenable

@@ -1,6 +1,7 @@
 export enum QueryTagTypes {
   Funders = 'Funders',
   FundingEntities = 'FundingEntities',
+  Notifications = 'Notifications',
   Observation = 'Observation',
   ObservationMedia = 'ObservationMedia',
 }

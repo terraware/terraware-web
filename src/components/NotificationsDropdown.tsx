@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 
 import {
@@ -19,15 +19,14 @@ import { DateTime } from 'luxon';
 
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { NotificationsService } from 'src/services';
-import { NotificationsResponse } from 'src/services/NotificationsService';
-import strings from 'src/strings';
-import { Notification } from 'src/types/Notifications';
+import { useLocalization } from 'src/providers';
+import { useMarkAllReadMutation, useMarkReadMutation, useReadAllQuery } from 'src/queries/generated/notifications';
+import { ClientNotification, Notification } from 'src/types/Notifications';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import stopPropagation from 'src/utils/stopPropagationEvent';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import useFeatureNotifications from './FeatureNotification';
+import useClientNotifications from './ClientNotification';
 import DivotPopover from './common/DivotPopover';
 import ErrorBox from './common/ErrorBox/ErrorBox';
 import Timestamp from './common/Timestamp';
@@ -53,132 +52,115 @@ const StyledIcon = styled(Icon)(({ theme }) => ({
 
 type NotificationsDropdownProps = {
   organizationId?: number;
-  reloadOrganizationData: (selectedOrgId?: number) => Promise<void>;
+  reloadOrganizationData: () => Promise<void>;
 };
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const { organizationId, reloadOrganizationData } = props;
-  // notificationsInterval value is only being used when it is set.
+  const { strings } = useLocalization();
+
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [lastSeen, setLastSeen] = useState<number>(0);
-  const [notifications, setNotifications] = useState<NotificationsResponse>();
-  const [serverNotifications, setServerNotifications] = useState<NotificationsResponse>();
+  const featureNotifications = useClientNotifications();
 
-  const featureNotifications = useFeatureNotifications();
+  const {
+    data: userServerNotificationsResponse,
+    isLoading: userServerNotificationLoading,
+    isError: userServerNotificationError,
+  } = useReadAllQuery(undefined, {
+    pollingInterval: !process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS ? API_PULL_INTERVAL : undefined,
+  });
 
-  const fetchNotifications = useCallback(async () => {
-    const notificationsData = await NotificationsService.getNotifications();
-    if (organizationId) {
-      const orgNotifications = await NotificationsService.getNotifications(organizationId);
-      notificationsData.items = notificationsData.items.concat(orgNotifications.items);
-    }
-    notificationsData.items = notificationsData.items.sort((a, b) => {
+  const {
+    data: organizationServerNotificationsResponse,
+    isLoading: organizationServerNotificationLoading,
+    isError: organizationServerNotificationError,
+  } = useReadAllQuery(organizationId, {
+    pollingInterval: !process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS ? API_PULL_INTERVAL : undefined,
+    skip: organizationId === undefined,
+  });
+
+  const [markAllRead] = useMarkAllReadMutation();
+  const [markOneRead] = useMarkReadMutation();
+
+  const isLoading = useMemo(
+    () => userServerNotificationLoading || organizationServerNotificationLoading,
+    [organizationServerNotificationLoading, userServerNotificationLoading]
+  );
+
+  const isError = useMemo(
+    () => userServerNotificationError || organizationServerNotificationError,
+    [organizationServerNotificationError, userServerNotificationError]
+  );
+
+  const serverNotifications = useMemo(() => {
+    const allNotifications = [
+      ...(userServerNotificationsResponse?.notifications ?? []),
+      ...(organizationServerNotificationsResponse?.notifications ?? []),
+    ];
+    return allNotifications.sort((a, b) => {
       const dateA = new Date(a.createdTime);
       const dateB = new Date(b.createdTime);
       return dateB.getTime() - dateA.getTime();
     });
+  }, [userServerNotificationsResponse, organizationServerNotificationsResponse]);
 
-    return notificationsData;
-  }, [organizationId]);
+  const lastestUnread = useMemo(() => {
+    const allNotifications = [...featureNotifications, ...serverNotifications];
 
-  const populateNotifications = useCallback(async () => {
-    const notificationsData = await fetchNotifications();
-
-    setServerNotifications(notificationsData);
-  }, [fetchNotifications]);
-
-  useEffect(() => {
-    // Update notifications now.
-    void populateNotifications();
-
-    // Create interval to fetch future notifications.
-    let interval: ReturnType<typeof setInterval>;
-    if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-      interval = setInterval(() => void populateNotifications(), API_PULL_INTERVAL);
-    }
-
-    // Clean up existing interval.
-    return () => {
-      clearInterval(interval);
-    };
-  }, [populateNotifications, organizationId]);
-
-  useEffect(() => {
-    if (serverNotifications) {
-      const { items, ...data } = serverNotifications;
-      const newNotifications: NotificationsResponse = { ...data, items: [] };
-      newNotifications.items = [...(featureNotifications ?? []), ...(items ?? [])];
-      setNotifications(newNotifications);
+    if (allNotifications.length > 0) {
+      const unread = allNotifications.filter((notification) => !notification.isRead);
+      if (unread.length > 0) {
+        return DateTime.fromISO(unread[0].createdTime).toMillis();
+      }
     }
   }, [featureNotifications, serverNotifications]);
 
-  const getTimeStamp = (notification: Notification) => DateTime.fromISO(notification.createdTime).toMillis();
+  const markServerNotifcationRead = useCallback(
+    (notificationId: number) => (read: boolean) => {
+      void markOneRead({ id: notificationId, updateNotificationRequestPayload: { read } });
+    },
+    [markOneRead]
+  );
 
-  const getRecentUnreadTime = () => {
-    if (notifications) {
-      const unread = notifications.items.filter((item) => !item.isRead);
-      if (unread.length) {
-        return getTimeStamp(unread[0]);
-      }
+  const markAllServerNotificationsRead = useCallback(() => {
+    if (organizationId) {
+      void markAllRead({ organizationId, read: true });
     }
-    return 0;
-  };
+    void markAllRead({ organizationId: undefined, read: true });
+  }, [markAllRead, organizationId]);
 
-  const onIconClick = (event: React.MouseEvent<any>) => {
-    setAnchorEl(event.currentTarget);
-    setLastSeen(getRecentUnreadTime());
-  };
+  const onIconClick = useCallback(
+    (event: React.MouseEvent<any>) => {
+      setAnchorEl(event.currentTarget);
+      setLastSeen(lastestUnread ?? 0);
+    },
+    [lastestUnread]
+  );
 
-  const onPopoverClose = () => {
+  const onPopoverClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
-  const goToSettings = () => {
+  const goToSettings = useCallback(() => {
     navigate({ pathname: APP_PATHS.MY_ACCOUNT });
     onPopoverClose();
-  };
+  }, [navigate, onPopoverClose]);
 
-  const markAllAsRead = async () => {
-    await NotificationsService.markAllNotificationsRead(true);
-    if (organizationId) {
-      await NotificationsService.markAllNotificationsRead(true, organizationId);
-    }
-    await populateNotifications();
-  };
+  const syncReloadOrganizationDate = useCallback(() => void reloadOrganizationData(), [reloadOrganizationData]);
 
-  const markAsRead = async (read: boolean, id: number, close?: boolean, individualMarkAsRead?: () => void) => {
-    if (individualMarkAsRead) {
-      onPopoverClose();
-      individualMarkAsRead();
-      await populateNotifications();
-    } else {
-      if (close) {
-        onPopoverClose();
-      }
-      await NotificationsService.markNotificationRead(read, id);
-      await populateNotifications();
-      if (notifications) {
-        setLastSeen(getTimeStamp(notifications.items[0]));
-      }
-    }
-  };
-
-  const hasUnseen = () => {
-    return lastSeen < getRecentUnreadTime();
-  };
-
-  const getHeaderMenuItems = () => {
+  const menuHeaderItems = useMemo(() => {
     if (organizationId) {
       return [
-        { text: strings.MARK_ALL_AS_READ, callback: markAllAsRead },
+        { text: strings.MARK_ALL_AS_READ, callback: markAllServerNotificationsRead },
         { text: strings.SETTINGS, callback: goToSettings },
       ];
     } else {
-      return [{ text: strings.MARK_ALL_AS_READ, callback: markAllAsRead }];
+      return [{ text: strings.MARK_ALL_AS_READ, callback: markAllServerNotificationsRead }];
     }
-  };
+  }, [goToSettings, markAllServerNotificationsRead, organizationId, strings.MARK_ALL_AS_READ, strings.SETTINGS]);
 
   return (
     <div>
@@ -186,7 +168,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         <IconButton id='notifications-button' onClick={onIconClick}>
           <Badge id='notifications-badge' color='secondary' sx={{ width: '24px', height: '24px' }}>
             <Icon name='notification' size='medium' style={{ fill: theme.palette.TwClrIcn, margin: 'auto auto' }} />
-            {hasUnseen() && (
+            {lastestUnread && lastSeen < lastestUnread && (
               <Box
                 sx={{
                   minWidth: '8px',
@@ -206,11 +188,11 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         anchorEl={anchorEl}
         onClose={onPopoverClose}
         title={strings.NOTIFICATIONS}
-        headerMenuItems={getHeaderMenuItems()}
+        headerMenuItems={menuHeaderItems}
         size='large'
       >
         <List sx={{ padding: 0, overflowY: 'auto' }}>
-          {(notifications === undefined || (notifications.items.length === 0 && notifications.requestSucceeded)) && (
+          {!isLoading && serverNotifications.length === 0 && featureNotifications.length === 0 && (
             <ListItem
               sx={{
                 color: theme.palette.TwClrTxt,
@@ -221,18 +203,25 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
               <ListItemText primary={strings.NO_NOTIFICATIONS} />
             </ListItem>
           )}
-          {notifications &&
-            notifications.items.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                markAsRead={(read, id, close, individualMarkAsRead) =>
-                  void markAsRead(read, id, close, individualMarkAsRead)
-                }
-                reloadOrganizationData={reloadOrganizationData}
-              />
-            ))}
-          {notifications?.requestSucceeded === false && (
+          {featureNotifications.map((notification) => (
+            <NotificationItem
+              key={notification.id}
+              notification={notification}
+              markAsRead={notification.markAsRead}
+              reloadOrganizationData={syncReloadOrganizationDate}
+              closePopover={onPopoverClose}
+            />
+          ))}
+          {serverNotifications.map((notification) => (
+            <NotificationItem
+              key={notification.id}
+              notification={notification}
+              markAsRead={markServerNotifcationRead(notification.id)}
+              reloadOrganizationData={syncReloadOrganizationDate}
+              closePopover={onPopoverClose}
+            />
+          ))}
+          {isError && (
             <ListItem>
               <ErrorBox
                 title={strings.SOMETHING_WENT_WRONG}
@@ -252,57 +241,60 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 }
 
 type NotificationItemProps = {
-  notification: Notification;
-  markAsRead: (read: boolean, id: number, close?: boolean, individualMarkAsRead?: () => void) => void;
-  reloadOrganizationData: (selectedOrgId?: number) => Promise<void>;
+  notification: Notification | ClientNotification;
+  markAsRead: (read: boolean) => void;
+  closePopover: () => void;
+  reloadOrganizationData: (selectedOrgId?: number) => void;
 };
 
 function NotificationItem(props: NotificationItemProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const [inFocus, setInFocus] = useState<boolean>(false);
   const theme = useTheme();
-  const { notification, markAsRead, reloadOrganizationData } = props;
-  const { id, title, body, localUrl, createdTime, isRead, notificationCriticality, hideDate } = notification;
-  const criticality = notificationCriticality.toLowerCase();
+  const { notification, markAsRead, reloadOrganizationData, closePopover } = props;
+  const { id, title, body, localUrl, createdTime, isRead, notificationCriticality } = notification;
 
-  const onNotificationClick = async (read: boolean, close?: boolean) => {
-    if (close && localUrl.startsWith('/home')) {
-      const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
-      await reloadOrganizationData(orgId ? parseInt(orgId, 10) : undefined);
-    }
-    markAsRead(read, id, close, notification.markAsRead);
-  };
+  const hideDate = useMemo(() => id < 0, [id]);
+  const criticality = useMemo(() => notificationCriticality.toLowerCase(), [notificationCriticality]);
 
-  const onMouseEnter = () => {
-    setInFocus(true);
-  };
+  const onNotificationClick = useCallback(
+    (read: boolean) => {
+      if (localUrl.startsWith('/home')) {
+        const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
+        reloadOrganizationData(orgId ? Number(orgId) : undefined);
+      }
+      markAsRead?.(read);
+    },
+    [localUrl, markAsRead, reloadOrganizationData]
+  );
 
-  const onMouseLeave = () => {
-    setInFocus(false);
-  };
+  const onClick = useCallback(() => {
+    onNotificationClick(true);
+    closePopover();
+  }, [closePopover, onNotificationClick]);
 
-  const getTypeIcon = () => {
-    switch (criticality) {
-      case 'success':
+  const typeIcon = useMemo(() => {
+    switch (notificationCriticality) {
+      case 'Success':
         return 'success';
-      case 'warning':
+      case 'Warning':
         return 'warning';
-      case 'error':
+      case 'Error':
         return 'error';
       default:
         return 'info';
     }
-  };
+  }, [notificationCriticality]);
 
   return (
     <ListItemButton
-      id={`notification${id}`}
+      id={`notification-${id}`}
       className={criticality}
-      onClick={() => void onNotificationClick(true, true)}
+      onClick={onClick}
       component={Link}
       to={localUrl}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={() => setInFocus(true)}
+      onMouseLeave={() => setInFocus(false)}
       sx={[
         !(isRead || inFocus) && {
           backgroundColor: theme.palette.TwClrBgBrandTertiary,
@@ -325,7 +317,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
       ]}
     >
       <ListItemIcon sx={{ margin: '12px 0', minWidth: '16px' }}>
-        <StyledIcon name={getTypeIcon()} className={criticality} />
+        <StyledIcon name={typeIcon} className={criticality} />
       </ListItemIcon>
       <ListItemText
         primary={
@@ -397,10 +389,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
           />
         )}
         {(inFocus || (isRead && !isDesktop)) && (
-          <NotificationItemMenu
-            markAsRead={(read, close) => void onNotificationClick(read, close)}
-            notification={notification}
-          />
+          <NotificationItemMenu closePopover={closePopover} markAsRead={markAsRead} notification={notification} />
         )}
       </ListItem>
     </ListItemButton>
@@ -408,62 +397,63 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
 }
 
 type NotificationItemMenuProps = {
-  markAsRead: (read: boolean, close?: boolean) => void;
-  notification: Notification;
+  closePopover: () => void;
+  markAsRead: (read: boolean) => void;
+  notification: Notification | ClientNotification;
 };
 
 function NotificationItemMenu(props: NotificationItemMenuProps): JSX.Element {
   const {
+    closePopover,
     markAsRead,
     notification: { localUrl, isRead },
   } = props;
+  const { strings } = useLocalization();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const disableEventPropagation = (event: React.MouseEvent<HTMLElement>, allowDefault?: boolean) => {
+  const disableEventPropagation = useCallback((event: React.MouseEvent<HTMLElement>, allowDefault?: boolean) => {
     if (!allowDefault) {
       preventDefault(event);
     }
     stopPropagation(event);
-  };
+  }, []);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    disableEventPropagation(event);
-    setAnchorEl(event.currentTarget);
-  };
+  const openMenu = useCallback(
+    (event: React.MouseEvent<HTMLElement> | undefined) => {
+      if (event) {
+        disableEventPropagation(event);
+        setAnchorEl(event.currentTarget);
+      }
+    },
+    [disableEventPropagation]
+  );
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
-  const handleEventAndMarkRead = (
-    event: React.MouseEvent<HTMLElement>,
-    read: boolean,
-    close?: boolean,
-    allowDefault?: boolean
-  ) => {
-    disableEventPropagation(event, allowDefault);
-    handleClose();
-    markAsRead(read, close);
-  };
+  const handleMarkRead = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      markAsRead(!isRead);
+      handleClose();
+      disableEventPropagation(event);
+    },
+    [disableEventPropagation, handleClose, isRead, markAsRead]
+  );
 
-  const handleMarkRead = (event: React.MouseEvent<HTMLElement>) => {
-    handleEventAndMarkRead(event, !isRead);
-  };
-
-  const handleGoToLink = (event: React.MouseEvent<HTMLElement>) => {
-    handleEventAndMarkRead(event, true, true, true);
-  };
+  const handleGoToLink = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      closePopover();
+      markAsRead(true);
+      disableEventPropagation(event, true);
+    },
+    [closePopover, disableEventPropagation, markAsRead]
+  );
 
   return (
     <div>
       <Tooltip title={strings.MORE_OPTIONS}>
-        <Button
-          onClick={(event) => event && handleClick(event)}
-          icon='menuVertical'
-          type='passive'
-          priority='ghost'
-          size='small'
-        />
+        <Button onClick={openMenu} icon='menuVertical' type='passive' priority='ghost' size='small' />
       </Tooltip>
       <Popover
         onClick={disableEventPropagation}

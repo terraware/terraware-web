@@ -9,14 +9,14 @@ import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { useSupportedLocales } from 'src/strings/locales';
-import { Notification } from 'src/types/Notifications';
+import { ClientNotification } from 'src/types/Notifications';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { weightSystemsNames } from 'src/units';
 import { InitializedUnits } from 'src/units';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
-export default function UserNotification(): Notification | null {
+export default function UserNotification(): ClientNotification | null {
   const supportedLocales = useSupportedLocales();
   const [unitNotification, setUnitNotification] = useState(false);
   const [unitNotificationRead, setUnitNotificationRead] = useState(false);
@@ -141,11 +141,10 @@ export default function UserNotification(): Notification | null {
           user?.userType === 'Funder'
             ? timeZoneUserNotificationRead
             : unitNotificationRead || timeZoneUserNotificationRead,
-        hideDate: true,
-        markAsRead: async () => {
+        markAsRead: async (read: boolean) => {
           await PreferencesService.updateUserPreferences({
-            unitsAcknowledgedOnMs: Date.now(),
-            timeZoneAcknowledgedOnMs: Date.now(),
+            unitsAcknowledgedOnMs: read ? Date.now() : undefined,
+            timeZoneAcknowledgedOnMs: read ? Date.now() : undefined,
           });
 
           // eslint-disable-next-line @typescript-eslint/await-thenable

@@ -87,6 +87,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}`,
       }),
     }),
+    updateCompletedObservationPlot: build.mutation<
+      UpdateCompletedObservationPlotApiResponse,
+      UpdateCompletedObservationPlotApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}`,
+        method: 'PATCH',
+        body: queryArg.updateObservationRequestPayload,
+      }),
+    }),
     completePlotObservation: build.mutation<CompletePlotObservationApiResponse, CompletePlotObservationApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}`,
@@ -169,6 +179,13 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    updateRecordedTree: build.mutation<UpdateRecordedTreeApiResponse, UpdateRecordedTreeApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/trees/${queryArg.treeId}`,
+        method: 'PUT',
+        body: queryArg.updateRecordedTreeRequestPayload,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -236,6 +253,13 @@ export type GetOneAssignedPlotApiResponse = /** status 200 OK */ GetOneAssignedP
 export type GetOneAssignedPlotApiArg = {
   observationId: number;
   plotId: number;
+};
+export type UpdateCompletedObservationPlotApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateCompletedObservationPlotApiArg = {
+  observationId: number;
+  plotId: number;
+  updateObservationRequestPayload: UpdateObservationRequestPayload;
 };
 export type CompletePlotObservationApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
@@ -324,6 +348,13 @@ export type GetObservationResultsApiArg = {
   observationId: number;
   /** Whether to include plants in the results. Default to false */
   includePlants?: boolean;
+};
+export type UpdateRecordedTreeApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateRecordedTreeApiArg = {
+  observationId: number;
+  treeId: number;
+  updateRecordedTreeRequestPayload: UpdateRecordedTreeRequestPayload;
 };
 export type ObservationPayload = {
   /** Date this observation is scheduled to end. */
@@ -613,6 +644,7 @@ export type ExistingTreePayload = {
   gpsCoordinates?: Point;
   /** Measured in meters. */
   height?: number;
+  id: number;
   isDead: boolean;
   isInvasive: boolean;
   isThreatened: boolean;
@@ -813,12 +845,6 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: object[];
-    type: 'GeometryCollection';
-  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -842,6 +868,12 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
+  };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
+    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -868,6 +900,19 @@ export type AssignedPlotPayload = {
 export type GetOneAssignedPlotResponsePayload = {
   plot: AssignedPlotPayload;
   status: SuccessOrError;
+};
+export type ObservationUpdateOperationPayloadBase = {
+  type: string;
+};
+export type BiomassUpdateOperationPayload = {
+  type: 'Biomass';
+} & ObservationUpdateOperationPayloadBase & {
+    description?: string;
+    soilAssessment?: string;
+  };
+export type UpdateObservationRequestPayload = {
+  /** List of changes to make to different parts of the observation. Changes are all-or-nothing; if any of them fails, none of them is applied. */
+  updates: BiomassUpdateOperationPayload[];
 };
 export type CompletePlotObservationRequestPayload = {
   conditions: (
@@ -928,6 +973,9 @@ export type GetObservationResultsResponsePayload = {
   observation: ObservationResultsPayload;
   status: SuccessOrError;
 };
+export type UpdateRecordedTreeRequestPayload = {
+  description?: string;
+};
 export const {
   useListObservationsQuery,
   useLazyListObservationsQuery,
@@ -950,6 +998,7 @@ export const {
   useLazyListAssignedPlotsQuery,
   useGetOneAssignedPlotQuery,
   useLazyGetOneAssignedPlotQuery,
+  useUpdateCompletedObservationPlotMutation,
   useCompletePlotObservationMutation,
   useUpdatePlotObservationMutation,
   useClaimMonitoringPlotMutation,
@@ -965,4 +1014,5 @@ export const {
   useReplaceObservationPlotMutation,
   useGetObservationResultsQuery,
   useLazyGetObservationResultsQuery,
+  useUpdateRecordedTreeMutation,
 } = injectedRtkApi;
