@@ -18,9 +18,22 @@ const PhotosAndVideosTab = ({ monitoringPlot, type }: PhotosAndVideosTabProps) =
 
   return (
     <Card radius='24px'>
-      <Typography fontSize={'20px'} fontWeight={600}>
-        {strings.PLOT_CORNER_PHOTOS}
-      </Typography>
+      <Box>
+        <Typography fontSize={'20px'} fontWeight={600}>
+          {strings.PLOT_CORNER_PHOTOS}
+        </Typography>
+        <Button
+          id='edit'
+          label={strings.EDIT}
+          onClick={onEditItem}
+          icon='iconEdit'
+          priority='secondary'
+          className='edit-button'
+          size='small'
+          sx={{ '&.button': { margin: '4px' } }}
+          type='passive'
+        />
+      </Box>
       <MonitoringPlotPhotos
         observationId={Number(observationId)}
         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
