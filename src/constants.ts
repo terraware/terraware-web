@@ -120,6 +120,7 @@ export enum APP_PATHS {
   OBSERVATION_DETAILS = '/observations/:plantingSiteId/results/:observationId',
   OBSERVATION_PLANTING_ZONE_DETAILS = '/observations/:plantingSiteId/results/:observationId/zone/:plantingZoneName',
   OBSERVATION_MONITORING_PLOT_DETAILS = '/observations/:plantingSiteId/results/:observationId/zone/:plantingZoneName/plot/:monitoringPlotId',
+  OBSERVATION_MONITORING_PLOT_EDIT_PHOTOS = '/observations/:plantingSiteId/results/:observationId/zone/:plantingZoneName/plot/:monitoringPlotId/photos',
   OBSERVATION_AD_HOC_PLOT_DETAILS = '/observations/:plantingSiteId/results/:observationId/adHocPlot/:monitoringPlotId',
   OBSERVATION_BIOMASS_MEASUREMENTS_DETAILS = '/observations/:plantingSiteId/results/:observationId/biomassMeasurements/:monitoringPlotId',
   OBSERVATIONS = '/observations',
