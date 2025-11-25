@@ -1,3 +1,5 @@
+a9be2c16657 Update actions/checkout action to v6 (#4816)
+83e961bd454 Update dependency @eslint/compat to v2 (#4813)
 7322e0ed249 SW-7750 Added notifications queries (#4812)
 b823ad0bf13 Moved funding entities to use generated code (#4799)
 6e9d8431bb1 SW-7731 Added codegen flow and generated observations RTK queries (#4798)
