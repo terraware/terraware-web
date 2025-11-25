@@ -439,7 +439,11 @@ const ActivityDetailView = ({
   useEffect(() => {
     if (activity && lightboxMediaFile?.type === 'Video') {
       const request = dispatch(
-        requestGetActivityMediaStream({ activityId: activity.payload.id, fileId: lightboxMediaFile.fileId })
+        requestGetActivityMediaStream({
+          activityId: activity.payload.id,
+          fileId: lightboxMediaFile.fileId,
+          funder: activity.type === 'funder',
+        })
       );
       setGetActivityMediaStreamRequestId(request.requestId);
     }

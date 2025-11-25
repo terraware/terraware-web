@@ -204,10 +204,10 @@ export const requestGetActivityMedia = createAsyncThunk(
 
 export const requestGetActivityMediaStream = createAsyncThunk(
   'activities/getMediaStream',
-  async (request: { activityId: number; fileId: number }, { rejectWithValue }) => {
-    const { activityId, fileId } = request;
+  async (request: { activityId: number; fileId: number; funder: boolean }, { rejectWithValue }) => {
+    const { activityId, fileId, funder } = request;
 
-    const response = await ActivityService.getActivityMediaStream(activityId, fileId);
+    const response = await ActivityService.getActivityMediaStream(activityId, fileId, funder);
 
     if (response?.requestSucceeded && response?.data) {
       return response.data;

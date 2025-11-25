@@ -16,6 +16,7 @@ const ACTIVITY_ENDPOINT = '/api/v1/accelerator/activities/{activityId}';
 const ACTIVITY_MEDIA_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media';
 export const ACTIVITY_MEDIA_FILE_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media/{fileId}';
 const ACTIVITY_MEDIA_STREAM_ENDPOINT = '/api/v1/accelerator/activities/{activityId}/media/{fileId}/stream';
+const FUNDER_ACTIVITY_MEDIA_STREAM_ENDPOINT = '/api/v1/funder/activities/{activityId}/media/{fileId}/stream';
 const PUBLISH_ACTIVITY_ENDPOINT = '/api/v1/accelerator/activities/admin/{id}/publish';
 
 type ListActivitiesResponse = paths[typeof ACTIVITIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -215,9 +216,12 @@ const deleteActivityMedia = async (
  */
 const getActivityMediaStream = async (
   activityId: number,
-  fileId: number
+  fileId: number,
+  funder: boolean
 ): Promise<Response2<GetActivityMediaStreamResponse>> => {
-  return HttpService.root(ACTIVITY_MEDIA_STREAM_ENDPOINT).get2<GetActivityMediaStreamResponse>({
+  return HttpService.root(
+    funder ? FUNDER_ACTIVITY_MEDIA_STREAM_ENDPOINT : ACTIVITY_MEDIA_STREAM_ENDPOINT
+  ).get2<GetActivityMediaStreamResponse>({
     urlReplacements: { '{activityId}': activityId.toString(), '{fileId}': fileId.toString() },
   });
 };
