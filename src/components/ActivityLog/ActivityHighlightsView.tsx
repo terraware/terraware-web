@@ -423,7 +423,11 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
               key={activities.map((a) => a.payload.id).join('-')}
               loop
               modules={[Mousewheel, Navigation, Pagination]}
-              mousewheel
+              mousewheel={{
+                forceToAxis: true,
+                releaseOnEdges: true,
+                thresholdTime: 100,
+              }}
               onSlideChange={onSlideChange}
               onSwiper={setSwiper}
               pagination={{ clickable: true }}
