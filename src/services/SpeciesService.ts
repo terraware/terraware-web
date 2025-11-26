@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
-import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
+import { FieldNodePayload, SearchNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
 import { MergeOtherSpeciesPayload, Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -323,23 +323,14 @@ const getSpeciesNames = async (search: string): Promise<SpeciesNamesResponse> =>
  * Search species for selectors
  */
 const suggestSpecies = async (organizationId: number, query: string): Promise<SuggestedSpecies[] | null> => {
-  const params: SearchRequestPayload = {
-    prefix: 'species',
-    fields: ['scientificName', 'commonName', 'id'],
-    sortOrder: [{ field: 'scientificName', direction: 'Ascending' }],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          type: 'Exact',
-          values: [organizationId],
-        },
-      ],
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'organization_id',
+      type: 'Exact',
+      values: [organizationId.toString()],
     },
-    count: 0,
-  };
+  ];
 
   if (query) {
     const searchValueChildren: FieldNodePayload[] = [];
@@ -361,11 +352,22 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
     };
     searchValueChildren.push(commonNameNode);
 
-    params.search.children.push({
+    children.push({
       operation: 'or',
       children: searchValueChildren,
     });
   }
+
+  const params: SearchRequestPayload = {
+    prefix: 'species',
+    fields: ['scientificName', 'commonName', 'id'],
+    sortOrder: [{ field: 'scientificName', direction: 'Ascending' }],
+    search: {
+      operation: 'and',
+      children,
+    },
+    count: 0,
+  };
 
   return await SearchService.search(params);
 };
@@ -385,7 +387,7 @@ const getSpeciesProjects = (
           operation: 'field',
           field: 'organization_id',
           type: 'Exact',
-          values: [organizationId],
+          values: [organizationId.toString()],
         },
         {
           operation: 'field',

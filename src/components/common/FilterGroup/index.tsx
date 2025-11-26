@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
 import strings from 'src/strings';
-import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+import {
+  AndNodePayload,
+  FieldNodePayload,
+  FieldValuesPayload,
+  OrNodePayload,
+  SearchNodePayload,
+} from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FilterBoolean from './filters/FilterBoolean';
@@ -53,19 +59,32 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
 
   // the filters defined by this filter group
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>(initialFilters);
-  const onFilterChange = (key: string, filter: SearchNodePayload) => {
-    if (filter.values.length) {
-      setFilters({ ...filters, [key]: filter });
-    } else {
-      onDeleteFilter(key);
-    }
-  };
-  const onDeleteFilter = (key: string) => {
-    const newFilters = { ...filters };
-    delete newFilters[key];
-    setFilters(newFilters);
-  };
-  const clearFilters = () => setFilters({});
+
+  const onDeleteFilter = useCallback(
+    (key: string) => {
+      const newFilters = { ...filters };
+      delete newFilters[key];
+      setFilters(newFilters);
+    },
+    [filters]
+  );
+
+  const clearFilters = useCallback(() => setFilters({}), []);
+
+  const onFilterChange = useCallback(
+    (key: string, filter: SearchNodePayload) => {
+      if (filter.operation === 'field') {
+        if (filter.values.length) {
+          setFilters({ ...filters, [key]: filter });
+        } else {
+          onDeleteFilter(key);
+        }
+      } else {
+        setFilters({ ...filters, [key]: filter });
+      }
+    },
+    [filters, onDeleteFilter]
+  );
 
   return (
     <Box display='flex' flexDirection='column' maxHeight='90vh'>
@@ -109,7 +128,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
               {f.type === 'multiple_selection' && (
                 <MultipleSelection
                   field={f.name}
-                  values={filters[f.name]?.values ?? []}
+                  values={(filters[f.name] as FieldNodePayload | undefined)?.values ?? []}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   options={options ?? getOptions(f.name, values || {})}
                   pillValueRenderer={f.pillValueRenderer}
@@ -118,7 +137,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
               {f.type === 'single_selection' && (
                 <SingleSelection
                   field={f.name}
-                  value={filters[f.name]?.values[0]}
+                  value={(filters[f.name] as FieldNodePayload | undefined)?.values[0] ?? null}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   options={getOptions(f.name, values || {})}
                   isBoolean={false}
@@ -130,7 +149,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                   autoFocus={false}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   onDelete={() => onDeleteFilter(f.name)}
-                  value={filters[f.name]?.values[0]}
+                  value={(filters[f.name] as FieldNodePayload | undefined)?.values[0] ?? null}
                 />
               )}
               {f.type === 'date_range' && (
@@ -138,7 +157,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                   field={f.name}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   onDelete={() => onDeleteFilter(f.name)}
-                  values={filters[f.name]?.values ?? []}
+                  values={(filters[f.name] as FieldNodePayload | undefined)?.values ?? []}
                 />
               )}
               {f.type === 'number_range' && (
@@ -146,21 +165,21 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                   field={f.name}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   onDelete={() => onDeleteFilter(f.name)}
-                  values={filters[f.name]?.values ?? []}
+                  values={(filters[f.name] as FieldNodePayload | undefined)?.values ?? []}
                 />
               )}
               {f.type === 'count_weight' && (
                 <FilterCountWeight
                   field={f.name}
                   onChange={(filter) => onFilterChange(f.name, filter)}
-                  payloads={filters[f.name]?.children ?? []}
+                  payloads={(filters[f.name] as OrNodePayload | undefined)?.children ?? []}
                 />
               )}
               {f.type === 'boolean' && (
                 <FilterBoolean
                   field={f.name}
                   label={f.label}
-                  value={filters[f.name]?.values[0] === 'true'}
+                  value={(filters[f.name] as FieldNodePayload | undefined)?.values[0] === 'true'}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                 />
               )}

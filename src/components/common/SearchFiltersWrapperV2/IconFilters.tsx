@@ -5,14 +5,14 @@ import { Button, Tooltip } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
-import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, FieldValuesPayload } from 'src/types/Search';
 
 import { FilterConfig } from './index';
 
 interface IconFiltersProps {
   filters: FilterConfig[];
   setCurrentFilters: (filters: Record<string, any>) => void;
-  currentFilters: Record<string, SearchNodePayload>;
+  currentFilters: Record<string, FieldNodePayload>;
   noScroll?: boolean;
 }
 

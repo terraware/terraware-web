@@ -89,6 +89,25 @@ const searchDraftPlantingSites = async (
   searchField?: SearchNodePayload | SearchNodePayload[],
   sortOrder?: SearchSortOrder
 ): Promise<PlantingSiteSearchResult[] | null> => {
+  const children: SearchNodePayload[] = [
+    {
+      field: 'organization_id',
+      operation: 'field',
+      type: 'Exact',
+      values: [organizationId.toString()],
+    },
+  ];
+
+  if (searchField) {
+    if (isArray(searchField)) {
+      for (const field of searchField) {
+        children.push(field);
+      }
+    } else {
+      children.push(searchField);
+    }
+  }
+
   const params: SearchRequestPayload = {
     prefix: 'draftPlantingSites',
     fields: [
@@ -106,26 +125,10 @@ const searchDraftPlantingSites = async (
     sortOrder: sortOrder ? [sortOrder] : [{ field: 'name', direction: 'Ascending' }],
     search: {
       operation: 'and',
-      children: [
-        {
-          field: 'organization_id',
-          operation: 'field',
-          values: [organizationId],
-        },
-      ],
+      children,
     },
     count: 0,
   };
-
-  if (searchField) {
-    if (isArray(searchField)) {
-      for (const field of searchField) {
-        params.search.children.push(field);
-      }
-    } else {
-      params.search.children.push(searchField);
-    }
-  }
 
   const response = await SearchService.search(params);
 

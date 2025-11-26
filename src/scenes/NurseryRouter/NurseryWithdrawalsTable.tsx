@@ -74,7 +74,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const [exportRequestId, setExportRequestId] = useState<string>('');
   const exportResult = useAppSelector(selectNurseryWithdrawalsList(exportRequestId));
 
-  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [filters, setFilters] = useState<Record<string, FieldNodePayload>>({});
   const [rows, setRows] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
   const [totalRowCount, setTotalRowCount] = useState<number>();

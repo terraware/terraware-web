@@ -7,7 +7,7 @@ import { Option } from '@terraware/web-components/components/table/types';
 import { FilterField } from 'src/components/common/FilterGroup';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import strings from 'src/strings';
-import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ExportTableComponent, { ExportTableProps } from './ExportTableComponent';
@@ -43,7 +43,7 @@ export type SearchInputProps = {
  * type SearchProps = SearchInputProps & {
  *   iconFilters?: IconFilters[];
  *   featuredFilters?: FeaturedFilterConfig[];
- *   currentFilters: Record<string, SearchNodePayload>;
+ *   currentFilters: Record<string, FieldNodePayload>;
  *   setCurrentFilters: (filters: Record<string, any>) => void;
  * };
  *
@@ -55,13 +55,13 @@ export type FeaturedFilterConfig = {
   notPresentFilterShown?: boolean;
   options: (number | string)[];
   renderOption: (id: string | number) => string;
-  searchNodeCreator: (values: (number | string | null)[]) => SearchNodePayload;
+  searchNodeCreator: (values: (number | string | null)[]) => FieldNodePayload;
   pillValuesRenderer: (values: unknown[]) => string | undefined;
 };
 
 export type SearchFiltersProps = {
   // Technically "all filters"
-  filters: Record<string, SearchNodePayload>;
+  filters: Record<string, FieldNodePayload>;
   // Technically "set all filters"
   setFilters: (filters: Record<string, any>) => void;
   // These props are specific to the filters hidden behind the filter icon

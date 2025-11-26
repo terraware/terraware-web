@@ -1259,12 +1259,12 @@ describe('modifySearchNode', () => {
       children: [
         {
           operation: 'and',
-          child: {
+          children: [{
             field: 'status',
             operation: 'field',
             type: 'Exact',
             values: ['Ignore field 1', 'Ignore field 2'],
-          },
+          }],
         },
       ],
     };
@@ -1280,12 +1280,12 @@ describe('modifySearchNode', () => {
       children: [
         {
           operation: 'and',
-          child: {
+          children: [{
             field: 'status',
             operation: 'field',
             type: 'Exact',
             values: ['User Visible Field'],
-          },
+          }],
         },
       ],
     };

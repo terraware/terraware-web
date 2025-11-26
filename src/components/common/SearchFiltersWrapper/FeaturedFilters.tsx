@@ -1,20 +1,42 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Box } from '@mui/material';
 
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import theme from 'src/theme';
-import { SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload } from 'src/types/Search';
 
 import { FeaturedFilterConfig } from './index';
 
 interface FeaturedFiltersProps {
   featuredFilters: FeaturedFilterConfig[];
   setFilters: (filters: Record<string, any>) => void;
-  allFilters: Record<string, SearchNodePayload>;
+  allFilters: Record<string, FieldNodePayload>;
 }
 
 const FeaturedFilters = ({ featuredFilters, setFilters, allFilters }: FeaturedFiltersProps) => {
+  const setFiltersCallback = useCallback(
+    (featuredFilter: FeaturedFilterConfig) => (fs: Record<string, (number | null)[]>) => {
+      // Since the multi select is unaware of our Search API structure, convert the values back
+      // to search nodes
+      const nextFilters: Record<string, FieldNodePayload> = Object.keys(fs).reduce(
+        (acc, curr) => ({
+          ...acc,
+          [curr]: featuredFilter.searchNodeCreator(fs[curr]),
+        }),
+        {}
+      );
+
+      // Since this filter is only aware of featured filters, we need to recombine with the icon
+      // filters when setting the filters in the implementer
+      setFilters({
+        ...allFilters,
+        ...nextFilters,
+      });
+    },
+    [allFilters, setFilters]
+  );
+
   return (
     <>
       {featuredFilters.map((featuredFilter: FeaturedFilterConfig, index: number) => {
@@ -28,7 +50,7 @@ const FeaturedFilters = ({ featuredFilters, setFilters, allFilters }: FeaturedFi
             }
             return {
               ...acc,
-              [curr]: allFilters[curr].values.map((value: string | number) => Number(value)),
+              [curr]: allFilters[curr].values.map((value: string | number | null) => Number(value)),
             };
           },
           {} as Record<string, (number | null)[]>
@@ -45,24 +67,7 @@ const FeaturedFilters = ({ featuredFilters, setFilters, allFilters }: FeaturedFi
               notPresentFilterLabel={featuredFilter.notPresentFilterLabel}
               notPresentFilterShown={featuredFilter.notPresentFilterShown}
               renderOption={featuredFilter.renderOption}
-              setFilters={(fs: Record<string, (number | null)[]>) => {
-                // Since the multi select is unaware of our Search API structure, convert the values back
-                // to search nodes
-                const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce(
-                  (acc, curr) => ({
-                    ...acc,
-                    [curr]: featuredFilter.searchNodeCreator(fs[curr]),
-                  }),
-                  {}
-                );
-
-                // Since this filter is only aware of featured filters, we need to recombine with the icon
-                // filters when setting the filters in the implementer
-                setFilters({
-                  ...allFilters,
-                  ...nextFilters,
-                });
-              }}
+              setFilters={setFiltersCallback(featuredFilter)}
             />
           </Box>
         );

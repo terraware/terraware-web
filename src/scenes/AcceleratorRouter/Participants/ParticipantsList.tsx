@@ -101,7 +101,7 @@ export default function ParticipantList(): JSX.Element {
       }
       setLastSearch(search);
       setLastSort(sortOrder);
-      setHasFilters(search.children.length > 0);
+      setHasFilters((search.operation === 'and' || search.operation === 'or') && search.children.length > 0);
       const request = dispatch(requestListParticipants({ search, sortOrder }));
       setRequestId(request.requestId);
     },

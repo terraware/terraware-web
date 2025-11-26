@@ -984,6 +984,7 @@ const MatrixView = () => {
             search: {
               operation: 'field',
               field: 'role',
+              type: 'Exact',
               values: ['Project Lead'],
             },
           },

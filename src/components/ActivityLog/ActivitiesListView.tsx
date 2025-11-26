@@ -40,7 +40,7 @@ import {
   activityStatusTagLabel,
   activityTypeLabel,
 } from 'src/types/Activity';
-import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
 import { CsvData } from 'src/utils/csv';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -173,7 +173,7 @@ const ActivitiesListView = ({
   const theme = useTheme();
 
   const [initialized, setInitialized] = useState(false);
-  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [filters, setFilters] = useState<Record<string, FieldNodePayload>>({});
   const [requestId, setRequestId] = useState('');
   const [activities, setActivities] = useState<TypedActivity[]>([]);
   const [focusedActivityId, setFocusedActivityId] = useState<number | undefined>(undefined);
@@ -345,7 +345,7 @@ const ActivitiesListView = ({
   );
 
   const onFilterChange = useCallback(
-    (key: string, filter: SearchNodePayload) => {
+    (key: string, filter: FieldNodePayload) => {
       if (filter.values.length) {
         setFilters({ ...filters, [key]: filter });
       } else {
@@ -357,10 +357,7 @@ const ActivitiesListView = ({
 
   // const clearFilters = useCallback(() => setFilters({}), [setFilters]);
 
-  const onChangeDateRange = useCallback(
-    (filter: SearchNodePayload) => onFilterChange('date', filter),
-    [onFilterChange]
-  );
+  const onChangeDateRange = useCallback((filter: FieldNodePayload) => onFilterChange('date', filter), [onFilterChange]);
 
   const onDeleteDateRange = useCallback(() => onDeleteFilter('date'), [onDeleteFilter]);
 

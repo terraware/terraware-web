@@ -18,7 +18,7 @@ import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
-import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, FieldOptionsMap } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import PlantingProgressList from './PlantingProgressList';
@@ -36,7 +36,7 @@ export default function PlantingProgress(): JSX.Element {
 
   const projects = useAppSelector(selectProjects);
 
-  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [filters, setFilters] = useState<Record<string, FieldNodePayload>>({});
   const [search, setSearch] = useState<string>('');
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);

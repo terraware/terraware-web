@@ -32,7 +32,13 @@ import { useAppSelector } from 'src/redux/store';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
-import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
+import {
+  FieldNodePayload,
+  FieldOptionsMap,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchSortOrder,
+} from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { downloadCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
@@ -272,7 +278,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               operation: 'field',
               field: 'organization_id',
               type: 'Exact',
-              values: [selectedOrganization.id],
+              values: [selectedOrganization.id.toString()],
             },
           ],
         },
@@ -325,37 +331,14 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       } as SearchRequestPayload;
     }
 
-    const params: SearchRequestPayload = {
-      prefix: 'species',
-      fields: [
-        ...BE_SORTED_FIELDS,
-        'id',
-        'createdTime',
-        'modifiedTime',
-        'rare',
-        'growthForms.growthForm',
-        'ecosystemTypes.ecosystemType',
-        'organization_id',
-        'participantProjectSpecies.project.id',
-        'participantProjectSpecies.project.name',
-      ],
-      search: {
-        operation: 'and',
-        children: [
-          {
-            operation: 'field',
-            field: 'organization_id',
-            type: 'Exact',
-            values: [selectedOrganization.id],
-          },
-        ],
+    const children: SearchNodePayload[] = [
+      {
+        operation: 'field',
+        field: 'organization_id',
+        type: 'Exact',
+        values: [selectedOrganization.id.toString()],
       },
-      count: 0,
-    };
-
-    if (searchSortOrder) {
-      params.sortOrder = [searchSortOrder];
-    }
+    ];
 
     if (debouncedSearchTerm) {
       const { type, values } = parseSearchTerm(debouncedSearchTerm);
@@ -383,7 +366,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         values,
       };
       searchValueChildren.push(familyNode);
-      params.search.children.push({
+      children.push({
         operation: 'or',
         children: searchValueChildren,
       });
@@ -405,24 +388,46 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         type: 'Exact',
         values: searchValues,
       };
-      params.search.children.push(newNode);
+      children.push(newNode);
     }
 
     if (filters.conservationCategory) {
-      params.search.children.push(filters.conservationCategory);
+      children.push(filters.conservationCategory);
     }
     if (filters.seedStorageBehavior) {
-      params.search.children.push(filters.seedStorageBehavior);
+      children.push(filters.seedStorageBehavior);
     }
     if (filters['ecosystemTypes.ecosystemType']) {
-      params.search.children.push(filters['ecosystemTypes.ecosystemType']);
+      children.push(filters['ecosystemTypes.ecosystemType']);
     }
     if (filters['growthForms.growthForm']) {
-      params.search.children.push(filters['growthForms.growthForm']);
+      children.push(filters['growthForms.growthForm']);
     }
     if (filters['participantProjectSpecies.project.name']) {
-      params.search.children.push(filters['participantProjectSpecies.project.name']);
+      children.push(filters['participantProjectSpecies.project.name']);
     }
+
+    const params: SearchRequestPayload = {
+      prefix: 'species',
+      fields: [
+        ...BE_SORTED_FIELDS,
+        'id',
+        'createdTime',
+        'modifiedTime',
+        'rare',
+        'growthForms.growthForm',
+        'ecosystemTypes.ecosystemType',
+        'organization_id',
+        'participantProjectSpecies.project.id',
+        'participantProjectSpecies.project.name',
+      ],
+      search: {
+        operation: 'and',
+        children,
+      },
+      sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+      count: 0,
+    };
 
     return params;
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);

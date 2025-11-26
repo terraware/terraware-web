@@ -16,7 +16,13 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const getSearchTermFromFilters = (filters: Record<string, SearchNodePayload>): string => {
   const filterValues = filters.searchTermFilter;
-  return filterValues?.children[0]?.values[0] ?? '';
+  if (filterValues?.operation === 'and' || filterValues?.operation === 'or') {
+    const child = filterValues.children[0];
+    if (child.operation === 'field') {
+      return child.values[0] ?? '';
+    }
+  }
+  return '';
 };
 
 interface Props {
@@ -90,24 +96,28 @@ export default function Filters(props: Props): JSX.Element {
 
     preExpFilterColumns.forEach((preExpFilterColumn) => {
       const key = preExpFilterColumn.key;
+      const filter = filters[key];
 
-      if (filters[key]) {
-        let notPresentFilterValue;
-        if (filters[key].values[0] === null && key === 'project_name') {
-          notPresentFilterValue = strings.NO_PROJECT;
+      if (filter && filter.operation === 'field') {
+        if (filter.operation === 'field' && filter.values[0] === null && key === 'project_name') {
+          result.push({
+            id: key,
+            label: preExpFilterColumn.name as string,
+            value: strings.NO_PROJECT,
+          });
+        } else {
+          result.push({
+            id: key,
+            label: preExpFilterColumn.name as string,
+            value: filter.values.join(', '),
+          });
         }
-
-        result.push({
-          id: key,
-          label: preExpFilterColumn.name as string,
-          value: notPresentFilterValue ?? filters[key].values.join(', '),
-        });
       }
     });
 
     for (const col of columns) {
       const filter = filters[col.key];
-      if (filter) {
+      if (filter && filter.operation === 'field') {
         result.push({
           id: col.key,
           label: col.name,
@@ -369,7 +379,12 @@ function getPreExpFilter(col: DatabaseColumn, values: (string | null)[]): Record
 }
 
 function getCurrentPreExpFilterValues(col: DatabaseColumn, filters: Record<string, SearchNodePayload>): string[] {
-  return filters[col.key]?.values ?? [];
+  const filter = filters[col.key];
+  if (filter?.operation === 'field') {
+    return filter.values.filter((value): value is string => value !== null);
+  } else {
+    return [];
+  }
 }
 
 function getOptions(col: DatabaseColumn, availableValues: FieldValuesPayload, allValues: FieldValuesPayload): Option[] {

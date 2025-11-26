@@ -92,7 +92,7 @@ const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => 
         condition: (values) => values.includes('In Review'),
       };
 
-      const modifiedSearch = modifySearchNode(modifyStatus, search);
+      const modifiedSearch = search ? modifySearchNode(modifyStatus, search) : search;
       const firstSort = genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
       if (sortOrderConfig?.sortOrder.field === 'status') {
         const direction = sortOrderConfig?.sortOrder.direction;

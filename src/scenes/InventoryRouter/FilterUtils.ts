@@ -34,10 +34,14 @@ export const isBatchEmpty = (batch: SearchResponseElement): boolean => {
 };
 
 export const convertFilterGroupToMap = (filterGroupFilters: Record<string, SearchNodePayload>): InventoryFiltersType =>
-  Object.keys(filterGroupFilters).reduce(
-    (acc, curr) => ({
-      ...acc,
-      [curr]: filterGroupFilters[curr].values,
-    }),
-    {} as InventoryFiltersType
-  );
+  Object.keys(filterGroupFilters).reduce((acc, curr) => {
+    const searchNode = filterGroupFilters[curr];
+    if (searchNode.operation === 'field') {
+      return {
+        ...acc,
+        [curr]: searchNode.values,
+      };
+    } else {
+      return acc;
+    }
+  }, {} as InventoryFiltersType);

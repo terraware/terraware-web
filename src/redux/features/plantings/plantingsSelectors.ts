@@ -6,7 +6,7 @@ import { PlantingSearchData } from 'src/redux/features/plantings/plantingsSlice'
 import { selectPlantingSites, selectPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
 import strings from 'src/strings';
-import { SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, SearchNodePayload } from 'src/types/Search';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
@@ -101,9 +101,9 @@ export type PlantingProgress = {
 
 export const searchPlantingProgress = createSelector(
   [
-    (state: RootState, query: string, filters: Record<string, SearchNodePayload>) => selectPlantingProgress(state),
-    (state: RootState, query: string, filters: Record<string, SearchNodePayload>) => query,
-    (state: RootState, query: string, filters: Record<string, SearchNodePayload>) => filters,
+    (state: RootState, query: string, filters: Record<string, FieldNodePayload>) => selectPlantingProgress(state),
+    (state: RootState, query: string, filters: Record<string, FieldNodePayload>) => query,
+    (state: RootState, query: string, filters: Record<string, FieldNodePayload>) => filters,
   ],
   (plantingProgress, query, filters) => {
     return plantingProgress?.reduce((acc, curr) => {
@@ -113,9 +113,11 @@ export const searchPlantingProgress = createSelector(
         ? filters.plantingCompleted?.values[0] === strings.YES
         : undefined;
 
-      const siteNameSelected: string | undefined = filters.siteName?.values[0];
+      const siteNameSelected: string | null = filters.siteName?.values[0];
 
-      const projectIdsSelected: number[] | undefined = filters.project_id?.values.map((value: string) => Number(value));
+      const projectIdsSelected: number[] | undefined = filters.project_id?.values.map((value: string | null) =>
+        Number(value)
+      );
       const projectNotPresentSelected = (filters.project_id?.values || [])[0] === null;
 
       if (reported && reported.length > 0) {

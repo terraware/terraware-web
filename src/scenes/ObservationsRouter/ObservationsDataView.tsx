@@ -13,6 +13,7 @@ import {
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -47,6 +48,50 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   const timeZone = selectedPlantingSite?.timeZone || defaultTimeZone.get().id;
   const { activeLocale } = useLocalization();
 
+  const zoneFilterValues = useMemo(() => {
+    if (searchProps.filtersProps?.filters.zone) {
+      const zoneNode = searchProps.filtersProps?.filters.zone;
+      if (zoneNode.operation === 'field') {
+        return zoneNode.values.filter((value): value is string => value !== null);
+      }
+    }
+    return [];
+  }, [searchProps.filtersProps?.filters.zone]);
+
+  const statusFilterValues = useMemo(() => {
+    if (searchProps.filtersProps?.filters.status) {
+      const statusNode = searchProps.filtersProps?.filters.status;
+      if (statusNode.operation === 'field') {
+        return statusNode.values.filter((value): value is string => value !== null);
+      }
+    }
+    return [];
+  }, [searchProps.filtersProps?.filters.status]);
+
+  const observationStateFilterValues = useMemo((): ObservationState[] => {
+    const values = statusFilterValues;
+    const mappedValues = values.reduce((acc: ObservationState[], curr: string) => {
+      let mappedValue;
+      if (curr === strings.COMPLETED) {
+        mappedValue = 'Completed' as ObservationState;
+      } else if (curr === strings.IN_PROGRESS) {
+        mappedValue = 'InProgress' as ObservationState;
+      } else if (curr === strings.OVERDUE) {
+        mappedValue = 'Overdue' as ObservationState;
+      } else if (curr === strings.ABANDONED) {
+        mappedValue = 'Abandoned' as ObservationState;
+      }
+      return mappedValue ? [...acc, mappedValue] : acc;
+    }, [] as ObservationState[]);
+
+    if (mappedValues.length) {
+      return mappedValues;
+    } else {
+      // if user clears filter, get specific statuses, we don't want to see Upcoming
+      return ['Completed', 'InProgress', 'Overdue', 'Abandoned'];
+    }
+  }, [statusFilterValues]);
+
   const observationsResults = useAppSelector((state) =>
     searchObservations(
       state,
@@ -54,8 +99,8 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       selectedOrganization?.id || -1,
       defaultTimeZone.get().id,
       searchProps.search,
-      searchProps.filtersProps?.filters.zone?.values ?? [],
-      searchProps.filtersProps?.filters.status?.values ?? [],
+      zoneFilterValues,
+      observationStateFilterValues,
       activeLocale ?? undefined
     )
   );
@@ -87,7 +132,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
           state,
           selectedPlantingSiteId,
           selectedOrganization.id,
-          searchProps.filtersProps?.filters.status?.values
+          observationStateFilterValues
         )
       : undefined
   );

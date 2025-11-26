@@ -56,6 +56,16 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
     [isSurvivalRateCalculationEnabled]
   );
 
+  const zoneFilterValues = useMemo(() => {
+    if (searchProps.filtersProps?.filters.zone) {
+      const zoneNode = searchProps.filtersProps?.filters.zone;
+      if (zoneNode.operation === 'field') {
+        return zoneNode.values.filter((value): value is string => value !== null);
+      }
+    }
+    return [];
+  }, [searchProps.filtersProps?.filters.zone]);
+
   const details = useAppSelector((state) =>
     searchObservationDetails(
       state,
@@ -64,7 +74,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
         observationId,
         orgId: selectedOrganization?.id || -1,
         search: searchProps.search,
-        zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
+        zoneNames: zoneFilterValues,
       },
       defaultTimeZone.get().id
     )
@@ -90,8 +100,8 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   }, [details, navigate, plantingSiteId]);
 
   useEffect(() => {
-    const initialZones = searchProps.filtersProps?.filters?.zone?.values ?? [];
-    const availableZones = initialZones.filter((name: string) => zoneNames.includes(name));
+    const initialZones = zoneFilterValues;
+    const availableZones = zoneFilterValues.filter((name: string) => zoneNames.includes(name));
 
     if (availableZones.length < initialZones.length) {
       searchProps.filtersProps?.setFilters((previous: Record<string, any>) => ({
@@ -99,7 +109,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
         zone: { ...previous.zone, values: availableZones },
       }));
     }
-  }, [zoneNames, searchProps.filtersProps]);
+  }, [zoneNames, searchProps.filtersProps, zoneFilterValues]);
 
   const has25mPlotsZones = () => {
     const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));

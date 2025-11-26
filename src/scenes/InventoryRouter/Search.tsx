@@ -19,7 +19,7 @@ import InventoryFilters, { InventoryFiltersUnion } from 'src/scenes/InventoryRou
 import strings from 'src/strings';
 import { Facility, SubLocation } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
-import { SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, SearchNodePayload } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
@@ -213,8 +213,9 @@ export default function Search(props: SearchProps): JSX.Element | null {
       if (filterId === 'facilityIds') {
         setFilters({ ...filters, facilityIds: [], subLocationsIds: [] });
       } else if (filterId === 'showEmptyBatches') {
+        const initialShowEmptyBatchesFilter = initialFilters.showEmptyBatches as FieldNodePayload;
         setFilterGroupFilters({
-          showEmptyBatches: { ...initialFilters.showEmptyBatches, values: ['false'] },
+          showEmptyBatches: { ...initialShowEmptyBatchesFilter, values: ['false'] },
         });
         setFilters({ ...filters, showEmptyBatches: ['false'] });
       } else {

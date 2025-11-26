@@ -52,49 +52,31 @@ const parseType = (typeString) => {
   }
 
   const types = await openapiTS(`${root}/v3/api-docs`, {
+    defaultNonNullable: false, // Default values should not be treated as non-null
+
+    // Fix two instances where the oneOf tag in the OpenAPI does not get resolved correctly
     postTransform(schemaObject, metadata) {
-      // We need to override the type of SearchNodePayload because otherwise
-      // typescript complains about a circular type reference.
-      if (metadata.path.endsWith('/SearchNodePayload')) {
-        return parseType('{operation: "and" | "field" | "not" | "or"; [key: string]: any;}');
-      }
-
-      if (metadata.path.endsWith('/SearchRequestPayload')) {
-        // Prefix type = '"x"|"y"|"z"' if it's an enum in the schema, 'string' otherwise
-        const prefixValues = [];
-        schemaObject.members.forEach((member) => {
-          if (member.name.escapedText === 'prefix') {
-            if (member.type.types) {
-              member.type.types.forEach((type) => {
-                prefixValues.push(type.escapedText);
-              });
-            } else {
-              prefixValues.push('string');
-            }
-          }
-        });
-        const prefixType = prefixValues.join('|');
-
+      if (metadata.path.endsWith('/NotNodePayload')) {
         return parseType(
-          '{' +
-            ' count?: number;' +
-            ' cursor?: string;' +
-            ' fields: string[];' +
-            ' filters?: components["schemas"]["PrefixedSearch"][];' +
-            ` prefix?: ${prefixType};` +
-            ' search?: components["schemas"]["SearchNodePayload"];' +
-            ' sortOrder?: components["schemas"]["SearchSortOrderElement"][];' +
-            '}'
+          '{operation: "not"; \
+          child: components["schemas"]["AndNodePayload"]\
+                  | components["schemas"]["FieldNodePayload"]\
+                  | components["schemas"]["NotNodePayload"]\
+                  | components["schemas"]["OrNodePayload"];}'
         );
       }
 
-      // Work around https://github.com/openapi-ts/openapi-typescript/issues/1957
-      if (metadata.path.endsWith('/SearchSortOrderElement')) {
-        return parseType('{field: string; direction?: "Ascending"|"Descending";}');
+      if (metadata.path.endsWith('/OrNodePayload')) {
+        return parseType(
+          '{operation: "or"; \
+          children: (components["schemas"]["AndNodePayload"]\
+                  | components["schemas"]["FieldNodePayload"]\
+                  | components["schemas"]["NotNodePayload"]\
+                  | components["schemas"]["OrNodePayload"])[];}'
+        );
       }
-      if (metadata.path.endsWith('/CreateSavedDocumentVersionRequestPayload')) {
-        return parseType('{isSubmitted?: boolean; name: string;}');
-      }
+
+      // AndNodePayload is omitted because it resolves correctly for some reason
     },
   });
 

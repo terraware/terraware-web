@@ -82,7 +82,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
               operation: 'field',
               field: 'moduleId',
               type: 'Exact',
-              values: [_modules.map((module) => module.id)],
+              values: _modules.map((module) => module.id.toString()),
             },
           ],
         },

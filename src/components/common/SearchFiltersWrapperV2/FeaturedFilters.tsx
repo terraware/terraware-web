@@ -1,29 +1,28 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import theme from 'src/theme';
-import { SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, SearchNodePayload } from 'src/types/Search';
 
 import { FilterConfig } from './index';
 
 interface FeaturedFiltersProps {
   filters: FilterConfig[];
   setCurrentFilters: (filters: Record<string, any>) => void;
-  currentFilters: Record<string, SearchNodePayload>;
+  currentFilters: Record<string, FieldNodePayload>;
   onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
 }
 
 type MultiSelectFilters = Record<string, (string | number | null)[]>;
 
-export const defaultSearchNodeCreator = (field: string, values: (number | string | null)[]) =>
-  ({
-    field,
-    operation: 'field',
-    type: 'Exact',
-    values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
-  }) as SearchNodePayload;
+export const defaultSearchNodeCreator = (field: string, values: (number | string | null)[]): FieldNodePayload => ({
+  field,
+  operation: 'field',
+  type: 'Exact',
+  values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
+});
 
 const defaultRenderOption = (status: string | number) => `${status}`;
 
@@ -41,6 +40,28 @@ const FeaturedFilters = ({ filters, setCurrentFilters, currentFilters, onFilterA
     [currentFilters, filters]
   );
 
+  const setFilters = useCallback(
+    (filter: FilterConfig) => (fs: MultiSelectFilters) => {
+      // Since the multi select should stay unaware of our Search API structure, convert the values back
+      // to search nodes
+      const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce((acc, curr) => {
+        if (filter.field === curr) {
+          return {
+            ...acc,
+            [curr]: filter.searchNodeCreator
+              ? filter.searchNodeCreator(fs[curr])
+              : defaultSearchNodeCreator(curr, fs[curr]),
+          };
+        } else {
+          return acc;
+        }
+      }, {});
+
+      setCurrentFilters(nextFilters);
+    },
+    [setCurrentFilters]
+  );
+
   return (
     <>
       {filters.map((filter: FilterConfig, index: number) => {
@@ -55,24 +76,7 @@ const FeaturedFilters = ({ filters, setCurrentFilters, currentFilters, onFilterA
               notPresentFilterLabel={filter.notPresentFilterLabel}
               notPresentFilterShown={filter.notPresentFilterShown}
               renderOption={filter.renderOption ? filter.renderOption : defaultRenderOption}
-              setFilters={(fs: MultiSelectFilters) => {
-                // Since the multi select should stay unaware of our Search API structure, convert the values back
-                // to search nodes
-                const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce((acc, curr) => {
-                  if (filter.field === curr) {
-                    return {
-                      ...acc,
-                      [curr]: filter.searchNodeCreator
-                        ? filter.searchNodeCreator(fs[curr])
-                        : defaultSearchNodeCreator(curr, fs[curr]),
-                    };
-                  } else {
-                    return acc;
-                  }
-                }, {});
-
-                setCurrentFilters(nextFilters);
-              }}
+              setFilters={setFilters(filter)}
               onFilterApplied={onFilterApplied}
             />
           </Box>
