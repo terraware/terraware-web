@@ -496,7 +496,7 @@ const ActivitiesListView = ({
 
   const iconFilters: FilterConfig[] = useMemo(() => {
     const _filters = filterColumns.map((filter) => ({
-      field: filter.name,
+      field: `payload.${filter.name}`,
       label: filter.label,
       options: activityFilterOptions?.[filter.name]?.values || [],
       pillValueRenderer: filter.pillValueRenderer,
@@ -654,7 +654,7 @@ const ActivitiesListView = ({
           ) : (
             <>
               <DateRange
-                field='date'
+                field='payload.date'
                 iconFilters={
                   <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={filters} noScroll />
                 }
