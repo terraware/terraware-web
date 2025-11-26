@@ -300,6 +300,7 @@ CHECKIN_ACCESSIONS,Vérifier les accessions,3046e6fd
 CHECKING_DATA,"Vérification de la base de données en cours. Veuillez patienter, cela peut prendre quelques minutes...",7a36812b
 CHEMICAL,Chimique,7363e596
 CHOOSE_FILE,Choisissez le fichier...,967c4c38
+CHOOSE_FILES,Choisir des fichiers...,c5167691
 CITATION,Citation,772afe77
 CITY,Ville,27557cbb
 CLAIMED,Réclamé,5813de3e
@@ -556,6 +557,7 @@ EDIT_ORGANIZATION,Modifier l'organisation,56332548
 EDIT_PARTICIPANT,Modifier participant,895b68b3
 EDIT_PERMANENT_PLOTS,Modifier les parcelles permanentes,b78a9922
 EDIT_PERSON,Modifier la personne,5ec719a6
+EDIT_PHOTOS_AND_VIDEOS,Modifier les photos et vidéos,d87a88ba
 EDIT_PLANTING_SITE,Modifier le site de plantation,71f7ea28
 EDIT_PROJECT,Modifier le projet,88eb63cb
 EDIT_QUANTITY,Modifier la quantité,1d60ca38
@@ -2225,7 +2227,9 @@ UPLOAD_DELIVERABLES_MESSAGE,Les livrables doivent faire référence à des ident
 UPLOAD_ELLIPSIS,Télécharger...,0565da25
 UPLOAD_FAILED,Échec du téléchargement,bbacbec8
 UPLOAD_FILE,Envoyer un fichier,248e3ae5
+UPLOAD_FILES,Téléverser des fichiers,b98547be
 UPLOAD_FILES_DESCRIPTION,Parcourir ou glisser-déposer des fichiers.,7c4a7822
+UPLOAD_FILES_DESCRIPTION_FORMATS,"Parcourez ou faites glisser et déposez des photos et/ou des vidéos (JPG, PNG, MP4, MOV)",db3af0c6
 UPLOAD_FILES_TITLE,Télécharger le(s) fichier(s),bd0f5440
 UPLOAD_MODULES_DESCRIPTION,Parcourir ou glisser-déposer un fichier CSV.,0e9c1a46
 UPLOAD_PHOTO,Téléverser la photo...,9a57b4af

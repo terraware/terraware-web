@@ -171,3 +171,23 @@ export type BiomassSpeciesPayload = components['schemas']['BiomassSpeciesPayload
 export type PlotCondition = components['schemas']['CompleteAdHocObservationRequestPayload']['conditions'][0];
 
 export type BiomassMeasurement = components['schemas']['ExistingBiomassMeasurementPayload'];
+
+export type MonitoringPlotFile = components['schemas']['ObservationMonitoringPlotMediaPayload'];
+
+export type NewMonitoringPlotFile = Omit<MonitoringPlotFile, 'fileId'> & {
+  file: File;
+};
+
+export type NewMonitoringPlotMediaItem = {
+  type: 'new';
+  data: NewMonitoringPlotFile;
+};
+
+export type ExistingMonitoringPlotMediaItem = {
+  type: 'existing';
+  data: MonitoringPlotFile;
+  isModified?: boolean;
+  isDeleted?: boolean;
+};
+
+export type MonitoringPlotMediaItem = NewMonitoringPlotMediaItem | ExistingMonitoringPlotMediaItem;

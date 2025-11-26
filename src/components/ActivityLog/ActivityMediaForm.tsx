@@ -28,7 +28,7 @@ export type ExistingActivityMediaItem = {
 
 export type ActivityMediaItem = NewActivityMediaItem | ExistingActivityMediaItem;
 
-const isVideoFile = (file: File): boolean => file.type.startsWith('video/');
+export const isVideoFile = (file: File): boolean => file.type.startsWith('video/');
 
 const MAX_FILES = 100;
 
