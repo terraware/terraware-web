@@ -1411,6 +1411,7 @@ PLOT_ADHOC_SPECIES_TOOLTIP,Especies es el número de especies representadas por 
 PLOT_ADHOC_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas.",b2fd163f
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
 PLOT_CORNER_PHOTOS,Fotos de las esquinas de la parcela,330ffad8
+PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de las esquinas de la parcela,f2f48bb3
 PLOT_DEAD_PLANTS_TOOLTIP,Plantas muertas es el número de plantas observadas registradas como muertas.,7d7e8860
 PLOT_DESCRIPTION,Descripción de la parcela,67e5afa5
 PLOT_INFO,Información de la parcela,38a9b59d

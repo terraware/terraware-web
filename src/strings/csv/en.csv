@@ -1411,6 +1411,7 @@ PLOT_ADHOC_SPECIES_TOOLTIP,Species is the number of species represented by all o
 PLOT_ADHOC_TOTAL_PLANTS_TOOLTIP,"Total Plants is the number of all observed plants, including plants recorded as live and dead.",
 PLOT_CONDITIONS,Plot Conditions,
 PLOT_CORNER_PHOTOS,Plot Corner Photos,
+PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED,Plot corner photos cannot be deleted,
 PLOT_DEAD_PLANTS_TOOLTIP,"Dead Plants is the number of observed plants recorded as dead.",
 PLOT_DESCRIPTION,Plot Description,
 PLOT_INFO,Plot Info,

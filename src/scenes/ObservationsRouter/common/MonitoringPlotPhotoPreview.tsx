@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
-import { Button, Textfield } from '@terraware/web-components';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button, Icon, Textfield } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import { useLocalization } from 'src/providers/hooks';
@@ -100,21 +100,35 @@ const MonitoringPlotPhotoPreview = ({
           </Box>
 
           <Box display='flex' flexDirection='column' flex={1}>
-            <Button
-              icon='iconTrashCan'
-              label={strings.DELETE}
-              onClick={onDelete}
-              priority='ghost'
-              style={{
-                justifyContent: 'flex-start',
-                marginBottom: 0,
-                marginLeft: '-8px',
-                marginTop: 0,
-                maxWidth: '160px',
-                paddingLeft: '8px',
-              }}
-              type='destructive'
-            />
+            {mediaItem.data.type !== 'Plot' ? (
+              <Button
+                icon='iconTrashCan'
+                label={strings.DELETE}
+                onClick={onDelete}
+                priority='ghost'
+                style={{
+                  justifyContent: 'flex-start',
+                  marginBottom: 0,
+                  marginLeft: '-8px',
+                  marginTop: 0,
+                  maxWidth: '160px',
+                  paddingLeft: '8px',
+                }}
+                type='destructive'
+              />
+            ) : (
+              <Box display='flex' alignItems={'center'}>
+                <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} />
+                <Typography
+                  color={theme.palette.TwClrTxtSecondary}
+                  fontSize={'14px'}
+                  fontWeight={400}
+                  paddingLeft={theme.spacing(1)}
+                >
+                  {strings.PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED}
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
 
