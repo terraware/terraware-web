@@ -170,13 +170,13 @@ export const SEARCH_FIELDS_NON_EMPTY_BATCHES: SearchNodePayload[] = [
         operation: 'field',
         field: 'totalQuantity',
         type: 'Range',
-        values: [1, null],
+        values: ['1', null],
       },
       {
         operation: 'field',
         field: 'germinatingQuantity',
         type: 'Range',
-        values: [1, null],
+        values: ['1', null],
       },
     ],
   },
@@ -249,30 +249,17 @@ const getAllBatches = async (
   isCsvExport?: boolean,
   searchFields?: SearchNodePayload[]
 ): Promise<SearchResponseBatches[] | null> => {
-  const params: SearchRequestPayload = {
-    prefix: 'batches',
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'facility_organization_id',
-          type: 'Exact',
-          values: [organizationId.toString()],
-        },
-      ],
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'facility_organization_id',
+      type: 'Exact',
+      values: [organizationId.toString()],
     },
-    fields: isCsvExport ? REPORT_BATCH_FIELDS : NURSERY_BATCHES_FIELDS,
-    sortOrder: [
-      searchSortOrder ?? {
-        field: 'batchNumber',
-      },
-    ],
-    count: 1000,
-  };
+  ];
 
   if (facilityIds && facilityIds.length > 0) {
-    params.search.children.push({
+    children.push({
       operation: 'field',
       field: 'facility_id',
       type: 'Exact',
@@ -281,7 +268,7 @@ const getAllBatches = async (
   }
 
   if (subLocationIds && subLocationIds.length > 0) {
-    params.search.children.push({
+    children.push({
       operation: 'field',
       field: 'subLocations.subLocation_id',
       type: 'Exact',
@@ -291,7 +278,7 @@ const getAllBatches = async (
 
   if (searchFields) {
     for (const field of searchFields) {
-      params.search.children.push(field);
+      children.push(field);
     }
   }
 
@@ -326,11 +313,26 @@ const getAllBatches = async (
       values,
     });
 
-    params.search.children.push({
+    children.push({
       operation: 'or',
       children: searchValueChildren,
     } as SearchNodePayload);
   }
+
+  const params: SearchRequestPayload = {
+    prefix: 'batches',
+    search: {
+      operation: 'and',
+      children,
+    },
+    fields: isCsvExport ? REPORT_BATCH_FIELDS : NURSERY_BATCHES_FIELDS,
+    sortOrder: [
+      searchSortOrder ?? {
+        field: 'batchNumber',
+      },
+    ],
+    count: 1000,
+  };
 
   return isCsvExport ? await SearchService.searchCsv(params) : await SearchService.search(params);
 };
@@ -372,23 +374,33 @@ const getBatchesForSpeciesById = async (
   searchSortOrder?: SearchSortOrder,
   isExport?: boolean
 ): Promise<any> => {
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'species_id',
+      type: 'Exact',
+      values: [speciesId.toString()],
+    },
+    {
+      operation: 'field',
+      field: 'species_organization_id',
+      values: [organizationId.toString()],
+      type: 'Exact',
+    },
+  ];
+
+  if (searchFields.length) {
+    children.push({
+      operation: 'and',
+      children: searchFields,
+    });
+  }
+
   const searchParams: SearchRequestPayload = {
     prefix: 'batches',
     search: {
       operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'species_id',
-          values: [speciesId.toString()],
-        },
-        {
-          operation: 'field',
-          field: 'species_organization_id',
-          values: [organizationId.toString()],
-          type: 'Exact',
-        },
-      ],
+      children,
     },
     fields: isExport ? EXPORT_BATCH_FIELDS : DEFAULT_BATCH_FIELDS,
     sortOrder: [
@@ -398,14 +410,6 @@ const getBatchesForSpeciesById = async (
     ],
     count: 1000,
   };
-
-  if (searchFields.length) {
-    const children: any = searchParams.search.children;
-    children.push({
-      operation: 'and',
-      children: searchFields,
-    });
-  }
 
   return isExport ? await SearchService.searchCsv(searchParams) : await SearchService.search(searchParams);
 };
@@ -601,22 +605,30 @@ const getBatchesForNursery = (
   searchFields?: SearchNodePayload[],
   searchSortOrder?: SearchSortOrder
 ): Promise<SearchResponseElement[] | null> => {
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'facility_id',
+      type: 'Exact',
+      values: [nurseryId.toString()],
+    },
+    {
+      operation: 'field',
+      field: 'species_organization_id',
+      type: 'Exact',
+      values: [organizationId.toString()],
+    },
+  ];
+
+  if (searchFields) {
+    searchFields.forEach((searchField) => children.push(searchField));
+  }
+
   const payload: SearchRequestPayload = {
     prefix: 'batches',
     search: {
       operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'facility_id',
-          values: [nurseryId],
-        },
-        {
-          operation: 'field',
-          field: 'species_organization_id',
-          values: [organizationId],
-        },
-      ],
+      children,
     },
     fields: NURSERY_BATCHES_FIELDS,
     sortOrder: [
@@ -627,10 +639,6 @@ const getBatchesForNursery = (
     // TODO figure out pagination / count / etc...
     count: 1000,
   };
-
-  if (searchFields) {
-    searchFields.forEach((searchField) => payload.search.children.push(searchField));
-  }
 
   return SearchService.search(payload);
 };

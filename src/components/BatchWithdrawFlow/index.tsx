@@ -97,7 +97,11 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           ...batchWithdrawal,
           readyQuantityWithdrawn: isNaN(readyQuantityWithdrawn) ? 0 : readyQuantityWithdrawn,
           activeGrowthQuantityWithdrawn: isNaN(activeGrowthQuantityWithdrawn) ? 0 : activeGrowthQuantityWithdrawn,
-          hardeningOffQuantityWithdrawn: isNaN(hardeningOffQuantityWithdrawn) ? 0 : hardeningOffQuantityWithdrawn,
+          hardeningOffQuantityWithdrawn: hardeningOffQuantityWithdrawn
+            ? isNaN(hardeningOffQuantityWithdrawn)
+              ? 0
+              : hardeningOffQuantityWithdrawn
+            : 0,
           // germinating quantity can be undefined in the payload, hence different handling
           germinatingQuantityWithdrawn:
             germinatingQuantityWithdrawn && isNaN(germinatingQuantityWithdrawn) ? 0 : germinatingQuantityWithdrawn,

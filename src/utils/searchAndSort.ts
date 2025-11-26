@@ -301,7 +301,7 @@ export type SearchNodeModifyConfig = {
   field: string;
   operation: 'APPEND' | 'REPLACE';
   values: string[];
-  condition?: (values: string[]) => boolean;
+  condition?: (values: (string | null)[]) => boolean;
 };
 
 /*
@@ -313,15 +313,11 @@ export type SearchNodeModifyConfig = {
  */
 export const modifySearchNode = (
   modifyConfig: SearchNodeModifyConfig,
-  search?: SearchNodePayload
-): SearchNodePayload | undefined => {
-  if (!search) {
-    return search;
-  }
-
+  search: SearchNodePayload
+): SearchNodePayload => {
   const { field, operation, values, condition } = modifyConfig;
 
-  if (search.field === field) {
+  if (search.operation === 'field' && search.field === field) {
     if (condition && !condition(search.values)) {
       return search;
     }
@@ -337,13 +333,13 @@ export const modifySearchNode = (
         values,
       };
     }
-  } else if (search.child) {
+  } else if (search.operation === 'not' && search.child) {
     const modifiedChild = modifySearchNode(modifyConfig, search.child);
     return {
       ...search,
       child: modifiedChild || search.child,
     };
-  } else if (search.children) {
+  } else if ((search.operation === 'and' || search.operation === 'or') && search.children) {
     return {
       ...search,
       children: search.children.map((child: SearchNodePayload) => modifySearchNode(modifyConfig, child)),

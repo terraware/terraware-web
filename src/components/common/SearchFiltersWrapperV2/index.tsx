@@ -5,7 +5,7 @@ import { PillList, PillListItem, Textfield } from '@terraware/web-components';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
-import { SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload } from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -26,7 +26,7 @@ export type FilterConfig = {
   options: (number | string | null)[];
   pillValueRenderer?: (values: (string | number | null)[]) => string | undefined;
   renderOption?: (id: string | number) => string;
-  searchNodeCreator?: (values: (string | number | null)[]) => SearchNodePayload;
+  searchNodeCreator?: (values: (string | number | null)[]) => FieldNodePayload;
   showLabel?: boolean;
   type?: FilterField['type'];
 };
@@ -38,8 +38,8 @@ export type FilterConfigWithValues = FilterConfig & {
 export type SearchProps = SearchInputProps & {
   iconFilters?: FilterConfig[];
   featuredFilters?: FilterConfig[];
-  currentFilters: Record<string, SearchNodePayload>;
-  setCurrentFilters: (filters: Record<string, SearchNodePayload>) => void;
+  currentFilters: Record<string, FieldNodePayload>;
+  setCurrentFilters: (filters: Record<string, FieldNodePayload>) => void;
   rightComponent?: ReactNode;
   onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
   tableId?: string;
@@ -120,7 +120,7 @@ export default function SearchFiltersWrapperV2({
       Object.keys(sessionFilters).length > 0 &&
       Object.keys(currentFilters).length === 0
     ) {
-      const sessionFiltersToApply: Record<string, SearchNodePayload> = {};
+      const sessionFiltersToApply: Record<string, FieldNodePayload> = {};
       const existingKeys = Object.keys(sessionFilters);
       existingKeys?.forEach((key) => {
         const valuesOfTheExistingKey = Array.isArray(sessionFilters[key])
@@ -147,7 +147,7 @@ export default function SearchFiltersWrapperV2({
 
   // Since we have two different places filters can exist, we need to combine them before setting in the consumer
   const setFilters = useCallback(
-    (incomingFilters: Record<string, SearchNodePayload>) => {
+    (incomingFilters: Record<string, FieldNodePayload>) => {
       setCurrentFilters({
         ...currentFilters,
         ...incomingFilters,

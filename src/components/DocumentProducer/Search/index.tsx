@@ -7,12 +7,12 @@ import { Button, PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
-import { FieldOptionsMap } from 'src/types/Search';
+import { FieldNodePayload, FieldOptionsMap } from 'src/types/Search';
 
 export type SearchFiltersProp = {
   filterColumns: FilterField[];
   filterOptions: FieldOptionsMap;
-  filters: Record<string, any>;
+  filters: Record<string, FieldNodePayload>;
   setFilters: (filters: Record<string, any>) => void;
 };
 

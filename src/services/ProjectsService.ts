@@ -2,7 +2,7 @@ import { components, paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
 import { CreateProjectRequest, Project, ProjectInternalUser, UpdateProjectRequest } from 'src/types/Project';
-import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
+import { OrNodePayload, SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 
 /**
@@ -97,6 +97,19 @@ const searchProjects = async (organizationId: number, query?: string): Promise<P
       })()
     : null;
 
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'organization_id',
+      type: 'Exact',
+      values: [organizationId.toString()],
+    },
+  ];
+
+  if (searchField) {
+    children.push(searchField);
+  }
+
   const searchParams: SearchRequestPayload = {
     prefix: 'projects',
     fields: ['name', 'description', 'id', 'organization_id'],
@@ -107,7 +120,7 @@ const searchProjects = async (organizationId: number, query?: string): Promise<P
           operation: 'field',
           field: 'organization_id',
           type: 'Exact',
-          values: [organizationId],
+          values: [organizationId.toString()],
         },
       ],
     },
@@ -118,10 +131,6 @@ const searchProjects = async (organizationId: number, query?: string): Promise<P
     ],
     count: 0,
   };
-
-  if (searchField) {
-    searchParams.search.children.push(searchField);
-  }
 
   const response = await SearchService.search(searchParams);
   return response ? (response as Project[]) : null;

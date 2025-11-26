@@ -228,11 +228,13 @@ const getSearchNode = (organizationId: number, siteId: number): SearchNodePayloa
     {
       operation: 'field',
       field: 'plantingSite_id',
+      type: 'Exact',
       values: [siteId.toString()],
     },
     {
       operation: 'field',
       field: 'plantingSite_organization_id',
+      type: 'Exact',
       values: [organizationId.toString()],
     },
   ],
@@ -350,7 +352,8 @@ async function searchPlantingSites(
         {
           field: 'organization_id',
           operation: 'field',
-          values: [organizationId],
+          type: 'Exact',
+          values: [organizationId.toString()],
         },
         ...additionalSearchNodes,
       ],
@@ -383,12 +386,14 @@ async function searchMonitoringPlots(
         {
           field: 'plantingSubzone_plantingSite_id',
           operation: 'field',
-          values: [plantingSiteId],
+          type: 'Exact',
+          values: [plantingSiteId.toString()],
         },
         {
           field: 'id',
           operation: 'field',
-          values: monitoringPlotIds,
+          type: 'Exact',
+          values: monitoringPlotIds.map((id) => id.toString()),
         },
       ],
     },
@@ -465,7 +470,7 @@ const getPlotsWithObservations = async <T extends SearchResponseElement>(
           operation: 'field',
           field: 'plantingSite_id',
           type: 'Exact',
-          values: [plantingSiteId],
+          values: [plantingSiteId.toString()],
         },
         {
           operation: 'not',

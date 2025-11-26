@@ -31,7 +31,13 @@ import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'sr
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
-import { SearchCriteria, SearchNodePayload, SearchResponseElementWithId, SearchSortOrder } from 'src/types/Search';
+import {
+  FieldNodePayload,
+  SearchCriteria,
+  SearchNodePayload,
+  SearchResponseElementWithId,
+  SearchSortOrder,
+} from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { isAdmin } from 'src/utils/organization';
@@ -453,9 +459,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
             operation: 'field',
             type: 'Exact',
             values: sessionFilters[sessionFilterKey],
-          },
+          } as SearchNodePayload,
         }),
-        {} as SearchNodePayload
+        {} as SearchCriteria
       ),
     };
 
@@ -487,7 +493,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
     // Since `state` is an obvious "in" filter, add to query and session, we can add other filters later
     // as needed (they include ranges and other things that are not yet supported in the useSessionFilters hook)
     if (newFilters.state) {
-      setSessionFilters({ state: newFilters.state.values });
+      const stateNode = newFilters.state as FieldNodePayload;
+      setSessionFilters({ state: stateNode.values });
     } else {
       setSessionFilters({});
     }
