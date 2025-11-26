@@ -426,7 +426,8 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
               mousewheel={{
                 forceToAxis: true,
                 releaseOnEdges: true,
-                thresholdTime: 100,
+                thresholdDelta: 10,
+                thresholdTime: 500,
               }}
               onSlideChange={onSlideChange}
               onSwiper={setSwiper}
