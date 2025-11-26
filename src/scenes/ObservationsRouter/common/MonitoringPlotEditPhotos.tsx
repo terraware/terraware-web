@@ -2,11 +2,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { FileChooser } from '@terraware/web-components';
+import { FileChooser, PageForm } from '@terraware/web-components';
 
 import { isVideoFile } from 'src/components/ActivityLog/ActivityMediaForm';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import MonitoringPlotPhotoPreview from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotoPreview';
 import strings from 'src/strings';
@@ -23,6 +25,7 @@ const MonitoringPlotEditPhotos = () => {
   const monitoringPlotId = Number(params.monitoringPlotId);
   const [mediaItems, setMediaItems] = useState<MonitoringPlotMediaItem[]>([]);
   const theme = useTheme();
+  const navigate = useSyncNavigate();
 
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
 
@@ -106,6 +109,7 @@ const MonitoringPlotEditPhotos = () => {
           subzone.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
               setMonitoringPlotResult(plot);
+              setMediaItems(plot.media.map((mediaElement) => ({ type: 'existing', data: mediaElement })));
               return;
             }
           })
@@ -114,50 +118,68 @@ const MonitoringPlotEditPhotos = () => {
     }
   }, [result, monitoringPlotId]);
 
+  const goToPhotosTab = useCallback(() => {
+    navigate(APP_PATHS.OBSERVATIONS);
+  }, [navigate]);
+
+  const saveActivity = useCallback(() => {
+    // save media items to backend
+  }, []);
+
   return (
     <Page title={monitoringPlotResult?.monitoringPlotName}>
-      <Card radius={'24px'} style={{ padding: '24px', width: '100%' }}>
-        <Typography fontSize={'20px'} fontWeight={600}>
-          {strings.EDIT_PHOTOS_AND_VIDEOS}
-        </Typography>
-        <Box display='flex' gap={3} paddingTop={theme.spacing(3)}>
-          <Box width='40%'>
-            <FileChooser
-              acceptFileType={'image/heic, image/jpeg, image/png, video/*'}
-              chooseFileText={strings.CHOOSE_FILES}
-              multipleSelection
-              setFiles={onSetFiles}
-              uploadDescription={strings.UPLOAD_FILES_DESCRIPTION_FORMATS}
-              uploadText={strings.UPLOAD_FILES}
-            />
-          </Box>
-          <Box width='60%'>
-            {mediaItems.map((mediaItem, index) => {
-              // skip deleted existing photos
-              if (mediaItem.type === 'existing' && mediaItem.isDeleted) {
-                return null;
-              }
+      <PageForm
+        cancelID='cancelSaveActivity'
+        onCancel={goToPhotosTab}
+        onSave={saveActivity}
+        saveButtonText={strings.SAVE}
+        saveID='saveActivity'
+        cancelButtonText={strings.CANCEL}
+        style={{ width: '100%' }}
+      >
+        <Card radius={'24px'} style={{ padding: '24px', width: '100%' }}>
+          <Typography fontSize={'20px'} fontWeight={600}>
+            {strings.EDIT_PHOTOS_AND_VIDEOS}
+          </Typography>
+          <Box display='flex' gap={3} paddingTop={theme.spacing(3)}>
+            <Box width='40%'>
+              <FileChooser
+                acceptFileType={'image/heic, image/jpeg, image/png, video/*'}
+                chooseFileText={strings.CHOOSE_FILES}
+                multipleSelection
+                setFiles={onSetFiles}
+                uploadDescription={strings.UPLOAD_FILES_DESCRIPTION_FORMATS}
+                uploadText={strings.UPLOAD_FILES}
+              />
+            </Box>
+            <Box width='60%'>
+              {mediaItems.map((mediaItem, index) => {
+                // skip deleted existing photos
+                if (mediaItem.type === 'existing' && mediaItem.isDeleted) {
+                  return null;
+                }
 
-              // Calculate position excluding deleted items (this is the index in visibleMediaItems)
-              const visibleIndex = mediaItems
-                .slice(0, index)
-                .filter((item) => !(item.type === 'existing' && item.isDeleted)).length;
+                // Calculate position excluding deleted items (this is the index in visibleMediaItems)
+                const visibleIndex = mediaItems
+                  .slice(0, index)
+                  .filter((item) => !(item.type === 'existing' && item.isDeleted)).length;
 
-              return (
-                <MonitoringPlotPhotoPreview
-                  isLast={visibleIndex === visibleMediaItems.length - 1}
-                  key={`photo-${index}`}
-                  mediaItem={mediaItem}
-                  monitoringPlotId={monitoringPlotId}
-                  observationId={observationId}
-                  onDelete={getDeletePhoto(index)}
-                  setCaption={getUpdatePhotoCaption(index)}
-                />
-              );
-            })}
+                return (
+                  <MonitoringPlotPhotoPreview
+                    isLast={visibleIndex === visibleMediaItems.length - 1}
+                    key={`photo-${index}`}
+                    mediaItem={mediaItem}
+                    monitoringPlotId={monitoringPlotId}
+                    observationId={observationId}
+                    onDelete={getDeletePhoto(index)}
+                    setCaption={getUpdatePhotoCaption(index)}
+                  />
+                );
+              })}
+            </Box>
           </Box>
-        </Box>
-      </Card>
+        </Card>
+      </PageForm>
     </Page>
   );
 };
