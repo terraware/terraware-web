@@ -5,13 +5,7 @@ import { Button } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
 import strings from 'src/strings';
-import {
-  AndNodePayload,
-  FieldNodePayload,
-  FieldValuesPayload,
-  OrNodePayload,
-  SearchNodePayload,
-} from 'src/types/Search';
+import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FilterBoolean from './filters/FilterBoolean';

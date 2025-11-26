@@ -7,13 +7,7 @@ import Divisor from 'src/components/common/Divisor';
 import Dropdown from 'src/components/common/Dropdown';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import {
-  AndNodePayload,
-  FieldNodePayload,
-  OrNodePayload,
-  SearchNodePayload,
-  isFieldNodePayload,
-} from 'src/types/Search';
+import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/types/Search';
 import { weightUnits } from 'src/units';
 
 export type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity' | 'totalQuantity' | 'withdrawalQuantity';

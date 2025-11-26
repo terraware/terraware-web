@@ -7,7 +7,7 @@ import { Option } from '@terraware/web-components/components/table/types';
 import { FilterField } from 'src/components/common/FilterGroup';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import strings from 'src/strings';
-import { FieldNodePayload, FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ExportTableComponent, { ExportTableProps } from './ExportTableComponent';
