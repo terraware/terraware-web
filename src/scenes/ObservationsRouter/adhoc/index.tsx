@@ -149,7 +149,9 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
     return [
       {
         label: strings.DATE,
-        value: result?.completedTime ? getDateDisplayValue(result.completedTime, plantingSite?.timeZone) : undefined,
+        value: monitoringPlotResult?.completedTime
+          ? getDateDisplayValue(monitoringPlotResult.completedTime, plantingSite?.timeZone)
+          : undefined,
       },
       {
         label: strings.TIME,
