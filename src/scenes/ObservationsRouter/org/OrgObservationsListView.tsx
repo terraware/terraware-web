@@ -123,9 +123,10 @@ export default function OrgObservationsListView({
           type: 'number',
         },
         {
-          key: 'endDate',
-          name: strings.END_DATE,
+          key: 'completedDate',
+          name: strings.DATE_OBSERVED,
           type: 'date',
+          tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
         },
       ] as TableColumnType[],
     [isSurvivalRateCalculationEnabled]

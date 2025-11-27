@@ -410,6 +410,7 @@ DATE_ADDED_REQUIRED,Date Added *,
 DATE_MUST_BE_FUTURE,Date must be in the future,
 DATE_OBSERVATION,{0} Observation,
 DATE_OBSERVED,Date Observed,The date on which an observation was conducted.
+DATE_OBSERVED_TOOLTIP,Date Observed is the date on which the Observation was completed.,
 DATE_OF_LAST_OBSERVATION,Date of Last Observation,
 DATE_RANGE,{0} - {1},"{0} is the start date and {1} is the end date, both in YYYY-MM-DD format."
 DATE_REQUIRED,Date *,
