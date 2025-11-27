@@ -39,7 +39,7 @@ const MonitoringPlotEditPhotos = () => {
   const [mediaItems, setMediaItems] = useState<MonitoringPlotMediaItem[]>([]);
   const theme = useTheme();
   const navigate = useSyncNavigate();
-  const [plantingZoneId, setPlantingZoneId] = useState<number>();
+  const [plantingZoneName, setPlantingZoneName] = useState<string>();
 
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
 
@@ -123,7 +123,7 @@ const MonitoringPlotEditPhotos = () => {
           subzone.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
               setMonitoringPlotResult(plot);
-              setPlantingZoneId(zone.plantingZoneId);
+              setPlantingZoneName(zone.name);
               setMediaItems(plot.media.map((mediaElement) => ({ type: 'existing', data: mediaElement })));
               return;
             }
@@ -153,11 +153,11 @@ const MonitoringPlotEditPhotos = () => {
             .replace(':observationId', `${observationId}`)
             .replace(':monitoringPlotId', `${monitoringPlotId}`)
         );
-      } else {
+      } else if (plantingZoneName) {
         navigate(
           APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`)
             .replace(':observationId', `${observationId}`)
-            .replace(':plantingZoneName', `${plantingZoneId}`)
+            .replace(':plantingZoneName', plantingZoneName)
             .replace(':monitoringPlotId', `${monitoringPlotId}`)
         );
       }
@@ -169,7 +169,7 @@ const MonitoringPlotEditPhotos = () => {
     observationId,
     observationResults,
     plantingSiteId,
-    plantingZoneId,
+    plantingZoneName,
   ]);
 
   const savePhotos = useCallback(() => {
