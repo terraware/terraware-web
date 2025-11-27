@@ -9,7 +9,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import MonitoringPlotPhotoPreview from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotoPreview';
 import strings from 'src/strings';
 import { MonitoringPlotMediaItem, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
@@ -29,7 +29,12 @@ const MonitoringPlotEditPhotos = () => {
 
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
 
-  const { adHocObservationResults, observationResults } = usePlantingSiteData();
+  const { data: GetObservationResultsApiResponse } = useGetObservationResultsQuery({ observationId });
+
+  const observationResults = useMemo(
+    () => GetObservationResultsApiResponse?.observation,
+    [GetObservationResultsApiResponse]
+  );
 
   const visibleMediaItems = useMemo(
     () => mediaItems.filter((item) => item.type === 'new' || !item.isDeleted),
@@ -93,18 +98,9 @@ const MonitoringPlotEditPhotos = () => {
     [mediaItems]
   );
 
-  const result = useMemo(() => {
-    if (!Number.isNaN(observationId)) {
-      return (
-        observationResults?.find((_result) => _result.observationId === observationId) ??
-        adHocObservationResults?.find((_result) => _result.observationId === observationId)
-      );
-    }
-  }, [adHocObservationResults, observationId, observationResults]);
-
   useEffect(() => {
-    if (result) {
-      result.plantingZones.forEach((zone) =>
+    if (observationResults) {
+      observationResults.plantingZones.forEach((zone) =>
         zone.plantingSubzones.forEach((subzone) =>
           subzone.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
@@ -116,7 +112,7 @@ const MonitoringPlotEditPhotos = () => {
         )
       );
     }
-  }, [result, monitoringPlotId]);
+  }, [observationResults, monitoringPlotId]);
 
   const goToPhotosTab = useCallback(() => {
     navigate(APP_PATHS.OBSERVATIONS);
