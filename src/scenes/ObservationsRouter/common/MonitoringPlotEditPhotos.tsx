@@ -9,7 +9,11 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import {
+  UploadOtherPlotMediaApiArg,
+  useGetObservationResultsQuery,
+  useUploadOtherPlotMediaMutation,
+} from 'src/queries/generated/observations';
 import MonitoringPlotPhotoPreview from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotoPreview';
 import strings from 'src/strings';
 import { MonitoringPlotMediaItem, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
@@ -23,6 +27,7 @@ const MonitoringPlotEditPhotos = () => {
 
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
+  const [upload, uploadResult] = useUploadOtherPlotMediaMutation();
   const [mediaItems, setMediaItems] = useState<MonitoringPlotMediaItem[]>([]);
   const theme = useTheme();
   const navigate = useSyncNavigate();
@@ -42,10 +47,12 @@ const MonitoringPlotEditPhotos = () => {
   );
 
   const onSetFiles = useCallback((files: File[]) => {
-    const newPhotos: MonitoringPlotMediaItem[] = files.map((file) => ({
-      data: { file, isOriginal: false, type: 'Plot', mediaKind: isVideoFile(file) ? 'Video' : 'Photo' },
-      type: 'new' as const,
-    }));
+    const newPhotos: MonitoringPlotMediaItem[] = files.map((file) => {
+      return {
+        data: { file, isOriginal: false, type: 'Quadrat', mediaKind: isVideoFile(file) ? 'Video' : 'Photo' },
+        type: 'new' as const,
+      };
+    });
     setMediaItems((prevPhotos) => [...prevPhotos, ...newPhotos]);
   }, []);
 
@@ -118,18 +125,42 @@ const MonitoringPlotEditPhotos = () => {
     navigate(APP_PATHS.OBSERVATIONS);
   }, [navigate]);
 
-  const saveActivity = useCallback(() => {
-    // save media items to backend
-  }, []);
+  useEffect(() => {
+    if (uploadResult.isSuccess) {
+      goToPhotosTab();
+    }
+  }, [uploadResult, goToPhotosTab]);
+
+  const savePhotos = useCallback(() => {
+    mediaItems.forEach((mediaItem) => {
+      if (mediaItem.type === 'new') {
+        const formData = new FormData();
+        formData.append('file', mediaItem.data.file);
+
+        const payloadData = {
+          caption: mediaItem.data.caption,
+          type: undefined,
+        };
+        formData.append('payload', new Blob([JSON.stringify(payloadData)], { type: 'application/json' }));
+
+        const payload: UploadOtherPlotMediaApiArg = {
+          observationId,
+          plotId: monitoringPlotId,
+          body: formData as any,
+        };
+        void upload(payload);
+      }
+    });
+  }, [mediaItems, monitoringPlotId, observationId, upload]);
 
   return (
     <Page title={monitoringPlotResult?.monitoringPlotName}>
       <PageForm
-        cancelID='cancelSaveActivity'
+        cancelID='cancelUploadPhotos'
         onCancel={goToPhotosTab}
-        onSave={saveActivity}
+        onSave={savePhotos}
         saveButtonText={strings.SAVE}
-        saveID='saveActivity'
+        saveID='savePhotos'
         cancelButtonText={strings.CANCEL}
         style={{ width: '100%' }}
       >
