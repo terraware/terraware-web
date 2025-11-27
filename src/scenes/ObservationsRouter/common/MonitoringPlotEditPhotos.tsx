@@ -10,13 +10,18 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
+  DeletePlotPhotoApiArg,
+  UpdatePlotPhotoApiArg,
   UploadOtherPlotMediaApiArg,
+  useDeletePlotPhotoMutation,
   useGetObservationResultsQuery,
+  useUpdatePlotPhotoMutation,
   useUploadOtherPlotMediaMutation,
 } from 'src/queries/generated/observations';
 import MonitoringPlotPhotoPreview from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotoPreview';
 import strings from 'src/strings';
 import { MonitoringPlotMediaItem, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const MonitoringPlotEditPhotos = () => {
   const params = useParams<{
@@ -27,12 +32,16 @@ const MonitoringPlotEditPhotos = () => {
 
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
-  const [upload, uploadResult] = useUploadOtherPlotMediaMutation();
+  const [upload] = useUploadOtherPlotMediaMutation();
+  const [update] = useUpdatePlotPhotoMutation();
+  const [deleteQuery] = useDeletePlotPhotoMutation();
   const [mediaItems, setMediaItems] = useState<MonitoringPlotMediaItem[]>([]);
   const theme = useTheme();
   const navigate = useSyncNavigate();
 
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
+
+  const snackbar = useSnackbar();
 
   const { data: GetObservationResultsApiResponse } = useGetObservationResultsQuery({ observationId });
 
@@ -125,33 +134,52 @@ const MonitoringPlotEditPhotos = () => {
     navigate(APP_PATHS.OBSERVATIONS);
   }, [navigate]);
 
-  useEffect(() => {
-    if (uploadResult.isSuccess) {
-      goToPhotosTab();
-    }
-  }, [uploadResult, goToPhotosTab]);
-
   const savePhotos = useCallback(() => {
-    mediaItems.forEach((mediaItem) => {
-      if (mediaItem.type === 'new') {
-        const formData = new FormData();
-        formData.append('file', mediaItem.data.file);
+    void (async () => {
+      try {
+        const promises = mediaItems.map((mediaItem) => {
+          if (mediaItem.type === 'new') {
+            const formData = new FormData();
+            formData.append('file', mediaItem.data.file);
 
-        const payloadData = {
-          caption: mediaItem.data.caption,
-          type: undefined,
-        };
-        formData.append('payload', new Blob([JSON.stringify(payloadData)], { type: 'application/json' }));
+            const payloadData = {
+              caption: mediaItem.data.caption,
+              type: undefined,
+            };
+            formData.append('payload', new Blob([JSON.stringify(payloadData)], { type: 'application/json' }));
 
-        const payload: UploadOtherPlotMediaApiArg = {
-          observationId,
-          plotId: monitoringPlotId,
-          body: formData as any,
-        };
-        void upload(payload);
+            const payload: UploadOtherPlotMediaApiArg = {
+              observationId,
+              plotId: monitoringPlotId,
+              body: formData as any,
+            };
+            return upload(payload).unwrap();
+          } else if (mediaItem.type === 'existing' && mediaItem.isDeleted) {
+            const payload: DeletePlotPhotoApiArg = {
+              observationId,
+              plotId: monitoringPlotId,
+              fileId: mediaItem.data.fileId,
+            };
+            return deleteQuery(payload).unwrap();
+          } else if (mediaItem.type === 'existing' && mediaItem.isModified) {
+            const payload: UpdatePlotPhotoApiArg = {
+              observationId,
+              plotId: monitoringPlotId,
+              fileId: mediaItem.data.fileId,
+              updatePlotPhotoRequestPayload: { caption: mediaItem.data.caption },
+            };
+            return update(payload).unwrap();
+          }
+          return Promise.resolve();
+        });
+
+        await Promise.all(promises);
+        goToPhotosTab();
+      } catch (error) {
+        snackbar.toastError();
       }
-    });
-  }, [mediaItems, monitoringPlotId, observationId, upload]);
+    })();
+  }, [deleteQuery, mediaItems, monitoringPlotId, observationId, update, upload, goToPhotosTab, snackbar]);
 
   return (
     <Page title={monitoringPlotResult?.monitoringPlotName}>
