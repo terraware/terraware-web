@@ -32,12 +32,14 @@ const MonitoringPlotEditPhotos = () => {
 
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
+  const plantingSiteId = params.plantingSiteId;
   const [upload] = useUploadOtherPlotMediaMutation();
   const [update] = useUpdatePlotPhotoMutation();
   const [deleteQuery] = useDeletePlotPhotoMutation();
   const [mediaItems, setMediaItems] = useState<MonitoringPlotMediaItem[]>([]);
   const theme = useTheme();
   const navigate = useSyncNavigate();
+  const [plantingZoneId, setPlantingZoneId] = useState<number>();
 
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
 
@@ -121,18 +123,54 @@ const MonitoringPlotEditPhotos = () => {
           subzone.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
               setMonitoringPlotResult(plot);
+              setPlantingZoneId(zone.plantingZoneId);
               setMediaItems(plot.media.map((mediaElement) => ({ type: 'existing', data: mediaElement })));
               return;
             }
           })
         )
       );
+      if (observationResults.adHocPlot && observationResults.adHocPlot.monitoringPlotId === monitoringPlotId) {
+        setMonitoringPlotResult(observationResults.adHocPlot);
+        setMediaItems(
+          observationResults.adHocPlot.media.map((mediaElement) => ({ type: 'existing', data: mediaElement }))
+        );
+      }
     }
   }, [observationResults, monitoringPlotId]);
 
   const goToPhotosTab = useCallback(() => {
-    navigate(APP_PATHS.OBSERVATIONS);
-  }, [navigate]);
+    if (observationResults?.type === 'Biomass Measurements') {
+      navigate(
+        APP_PATHS.OBSERVATION_BIOMASS_MEASUREMENTS_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`)
+          .replace(':observationId', `${observationId}`)
+          .replace(':monitoringPlotId', `${monitoringPlotId}`)
+      );
+    } else {
+      if (monitoringPlotResult?.isAdHoc) {
+        navigate(
+          APP_PATHS.OBSERVATION_AD_HOC_PLOT_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`)
+            .replace(':observationId', `${observationId}`)
+            .replace(':monitoringPlotId', `${monitoringPlotId}`)
+        );
+      } else {
+        navigate(
+          APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`)
+            .replace(':observationId', `${observationId}`)
+            .replace(':plantingZoneName', `${plantingZoneId}`)
+            .replace(':monitoringPlotId', `${monitoringPlotId}`)
+        );
+      }
+    }
+  }, [
+    monitoringPlotId,
+    monitoringPlotResult,
+    navigate,
+    observationId,
+    observationResults,
+    plantingSiteId,
+    plantingZoneId,
+  ]);
 
   const savePhotos = useCallback(() => {
     void (async () => {
