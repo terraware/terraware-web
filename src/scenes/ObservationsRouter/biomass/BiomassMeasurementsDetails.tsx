@@ -26,7 +26,6 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
-import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -234,20 +233,13 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
             )}
 
             <BiomassObservationDataTab
-              trees={biomassMeasurements?.trees}
-              totalPlants={monitoringPlot?.totalPlants}
-              livePlants={getObservationSpeciesLivePlantsCount(monitoringPlot?.species)}
-              deadPlants={getObservationSpeciesDeadPlantsCount(monitoringPlot?.species)}
-              totalSpecies={monitoringPlot?.totalSpecies}
-              completedTime={monitoringPlot?.completedTime}
-              observer={monitoringPlot?.claimedByName}
-              plotConditions={monitoringPlot?.conditions}
-              fieldNotes={monitoringPlot?.notes}
+              monitoringPlot={monitoringPlot}
               biomassMeasurement={biomassMeasurements}
               plotLocation={`${swCoordinatesLat}, ${swCoordinatesLong}`}
               unrecognizedSpecies={unrecognizedSpecies}
               onExportData={onExportData}
               onMatchSpecies={onMatchSpecies}
+              observationId={Number(observationId)}
             />
           </>
         ),
@@ -274,6 +266,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     swCoordinatesLong,
     onExportData,
     onMatchSpecies,
+    observationId,
   ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
