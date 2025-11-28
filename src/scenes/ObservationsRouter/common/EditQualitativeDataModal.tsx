@@ -294,7 +294,7 @@ const EditQualitativeDataModal = ({
                 label={strings.SOIL_ASSESSMENT_DESCRIPTION_NOTES}
                 value={record.biomassMeasurement?.soilAssessment}
                 id={'soilAssessment'}
-                onChange={onChangeHandler('biomassMeasurement?.soilAssessment')}
+                onChange={onChangeHandler('biomassMeasurement.soilAssessment')}
                 sx={{ height: '100%', 'flex-flow': 'column !important', '.textfield-value': { flex: 1 } }}
               />
             </Box>

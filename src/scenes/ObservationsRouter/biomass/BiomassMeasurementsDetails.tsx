@@ -266,6 +266,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     swCoordinatesLong,
     onExportData,
     onMatchSpecies,
+    observationId,
   ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
