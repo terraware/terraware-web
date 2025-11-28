@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -8,73 +9,79 @@ import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
-import { BiomassMeasurement, ExistingTreePayload, PlotCondition } from 'src/types/Observations';
+import { BiomassMeasurement, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
+import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import useForm from 'src/utils/useForm';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ExtraData from '../adhoc/ExtraData';
 import ObservationDataNumbers from '../adhoc/ObservationDataNumbers';
+import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataConfirmationModal';
+import EditQualitativeDataModal from '../common/EditQualitativeDataModal';
+import { BiomassPlot } from '../common/EditQualitativeDataModal';
 import LiveTreesPerSpecies from './LiveTreesPerSpecies';
 import PlotActions from './PlotActions';
 
 type BiomassObservationDataTabProps = {
-  trees?: ExistingTreePayload[];
-  totalPlants?: number;
-  livePlants?: number;
-  deadPlants?: number;
-  totalSpecies?: number;
-  completedTime?: string;
-  observer?: string;
-  plotConditions?: PlotCondition[];
-  fieldNotes?: string;
+  monitoringPlot?: ObservationMonitoringPlotResultsPayload;
   biomassMeasurement?: BiomassMeasurement;
   plotLocation?: string;
   unrecognizedSpecies?: string[];
   onExportData: () => void;
   onMatchSpecies: () => void;
+  observationId: number;
 };
 
 const BiomassObservationDataTab = ({
-  trees,
+  monitoringPlot,
   biomassMeasurement,
-  totalPlants,
-  livePlants,
-  deadPlants,
-  totalSpecies,
-  completedTime,
-  observer,
-  plotConditions,
-  fieldNotes,
   plotLocation,
   unrecognizedSpecies,
   onExportData,
   onMatchSpecies,
+  observationId,
 }: BiomassObservationDataTabProps) => {
   const theme = useTheme();
   const { plantingSite } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
+  const [editQualitativeDataModalOpen, setEditQualitativeDataModalOpen] = useState(false);
+  const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
+
+  const createBiomassPlot = useMemo(() => {
+    return {
+      conditions: monitoringPlot?.conditions,
+      notes: monitoringPlot?.notes,
+      monitoringPlotId: monitoringPlot?.monitoringPlotId,
+      biomassMeasurement,
+      media: monitoringPlot?.media,
+    };
+  }, [biomassMeasurement, monitoringPlot]);
+  const [record, setRecord] = useForm<BiomassPlot | Partial<Omit<ObservationMonitoringPlotResultsPayload, 'species'>>>(
+    createBiomassPlot
+  );
 
   const items = [
     {
       label: strings.TOTAL_PLANTS,
       tooltip: strings.BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,
-      value: totalPlants,
+      value: monitoringPlot?.totalPlants,
     },
     {
       label: strings.LIVE_PLANTS,
       tooltip: strings.BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,
-      value: livePlants,
+      value: getObservationSpeciesLivePlantsCount(monitoringPlot?.species),
     },
     {
       label: strings.DEAD_PLANTS,
       tooltip: strings.BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,
-      value: deadPlants,
+      value: getObservationSpeciesDeadPlantsCount(monitoringPlot?.species),
     },
     {
       label: strings.SPECIES,
       tooltip: strings.BIOMASS_PLOT_SPECIES_TOOLTIP,
-      value: totalSpecies,
+      value: monitoringPlot?.totalSpecies,
     },
     {
       label: strings.PLOT_LOCATION,
@@ -127,16 +134,51 @@ const BiomassObservationDataTab = ({
     },
     {
       label: strings.PLOT_CONDITIONS,
-      value: plotConditions?.map((condition) => getConditionString(condition)).join(', ') || '- -',
+      value: monitoringPlot?.conditions?.map((condition) => getConditionString(condition)).join(', ') || '- -',
     },
     {
       label: strings.FIELD_NOTES,
-      value: fieldNotes || '- -',
+      value: monitoringPlot?.notes || '- -',
     },
   ];
 
+  const closeEditQualitativeDataModal = useCallback(() => {
+    setEditQualitativeDataModalOpen(false);
+    setRecord(createBiomassPlot);
+  }, [createBiomassPlot, setRecord]);
+
+  const showConfirmationModal = useCallback(() => {
+    setEditQualitativeDataModalOpen(false);
+    setShowConfirmationModalOpened(true);
+  }, []);
+
+  const closeConfirmationModal = useCallback(() => {
+    setShowConfirmationModalOpened(false);
+    setRecord(createBiomassPlot);
+  }, [createBiomassPlot, setRecord]);
+
+  const saveEditedData = useCallback(() => {
+    // save to backend
+  }, []);
+
+  const onEditQualitativeData = useCallback(() => {
+    setEditQualitativeDataModalOpen(true);
+  }, []);
+
   return (
     <Card radius='24px'>
+      {showConfirmationModalOpened && (
+        <EditQualitativeDataConfirmationModal onClose={closeConfirmationModal} onSubmit={saveEditedData} />
+      )}
+      {editQualitativeDataModalOpen && (
+        <EditQualitativeDataModal
+          record={record}
+          setRecord={setRecord}
+          onClose={closeEditQualitativeDataModal}
+          onSubmit={showConfirmationModal}
+          observationId={observationId}
+        />
+      )}
       <ObservationDataNumbers items={items} />
       <Typography
         fontSize='20px'
@@ -149,24 +191,36 @@ const BiomassObservationDataTab = ({
         {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
       </Typography>
       <Box height='360px'>
-        <LiveTreesPerSpecies trees={trees} />
+        <LiveTreesPerSpecies trees={biomassMeasurement?.trees} />
       </Box>
       <PlotActions
         unrecognizedSpecies={unrecognizedSpecies}
         onExportData={onExportData}
         onMatchSpecies={onMatchSpecies}
       />
-      <Box paddingY={2}>
-        {observer && completedTime && (
+      <Box paddingY={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+        {monitoringPlot?.claimedByName && monitoringPlot?.completedTime && (
           <Typography fontSize={'14px'}>
             {strings.formatString(
               strings.OBSERVED_BY_ON,
-              observer,
-              getDateDisplayValue(completedTime, plantingSite?.timeZone),
-              getShortTime(completedTime, activeLocale, plantingSite?.timeZone || defaultTimeZone.get().id)
+              monitoringPlot?.claimedByName,
+              getDateDisplayValue(monitoringPlot?.completedTime, plantingSite?.timeZone),
+              getShortTime(
+                monitoringPlot?.completedTime,
+                activeLocale,
+                plantingSite?.timeZone || defaultTimeZone.get().id
+              )
             )}
           </Typography>
         )}
+        <Button
+          id='edit'
+          label={strings.EDIT}
+          onClick={onEditQualitativeData}
+          icon='iconEdit'
+          priority='secondary'
+          size='small'
+        />
       </Box>
       <ExtraData items={extraItems} />
     </Card>

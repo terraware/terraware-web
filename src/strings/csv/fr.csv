@@ -785,6 +785,7 @@ HEIGHT_M,Hauteur (m),fe61fc34
 HELP_SUPPORT,Aide et assistance,477f3e22
 HERB,Herbe,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abondance des plantes herbacées (%),d3693b6c
+HERBACEOUS_COVER_PERCENT,Couverture herbacée (%),e04acd60
 HERBACIOUS_COVER_PERCENT,Couverture herbacée %,ba8fa5bd
 HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
@@ -1872,6 +1873,7 @@ SOCIAL_IMPACT_INSTRUCTIONS,"Dressez la liste des avantages directs du projet pou
 SOCIAL_IMPACT_REQUIRED,Impact social et avantages pour la collectivité *,6f21762c
 SOIL,Sol,bba67d3a
 SOIL_ASSESSMENT,Évaluation du sol,803c8f49
+SOIL_ASSESSMENT_DESCRIPTION_NOTES,Description/Notes de l’évaluation du sol,c61b3dbb
 SOIL_PHOTO,Photo du sol,5a089072
 SOMETHING_WENT_WRONG,Une erreur s'est produite.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si vous avez des difficultés à utiliser Terraware, veuillez nous signaler tout problème que vous rencontrez et nous ferons le nécessaire pour y remédier.",c506e77d
@@ -2039,6 +2041,7 @@ TERRAFORMATION_CONTACT,Contact Terraformation,65846c70
 TERRAWARE_IS_SOFTWARE,"Terraware est un logiciel spécialisé, créé par [Terraformation], qui permet aux forestiers d'optimiser toutes les étapes de leurs projets forestiers, de la collecte des semences au calcul du carbone.",ca042b5f
 TERRAWARE_METRIC_MESSAGE,Cette mesure est tirée directement des données de suivi de Terraware.,cd131ec1
 TERRAWARE_MOBILE_APP_IMAGE_ALT,Illustration de l'application mobile Terraware sur un smartphone.,3e805068
+TERRESTRIAL,Terrestre,25e86de2
 TEST,Essai,e888ded7
 TEST_DATE_REQUIRED,Date de l'essai *,f53ff17e
 TEST_METHOD,Méthode du test,078cfc4d
