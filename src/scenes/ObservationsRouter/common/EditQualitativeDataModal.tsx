@@ -37,9 +37,12 @@ const EditQualitativeDataModal = ({
   observationId,
 }: EditQualitativeDataModalProps) => {
   const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
-  const photoUrl = PHOTO_URL.replace('{observationId}', observationId?.toString() || '')
-    .replace('{monitoringPlotId}', record.monitoringPlotId?.toString() || '')
-    .replace('{fileId}', record.media?.find((m) => m.type === 'Soil')?.fileId.toString() || '');
+  const photoUrl =
+    observationId && record.monitoringPlotId && record.media?.find((m) => m.type === 'Soil')?.fileId
+      ? PHOTO_URL.replace('{observationId}', observationId?.toString() || '')
+          .replace('{monitoringPlotId}', record.monitoringPlotId?.toString() || '')
+          .replace('{fileId}', record.media?.find((m) => m.type === 'Soil')?.fileId.toString() || '')
+      : undefined;
   const { activeLocale } = useLocalization();
 
   const plotConditionsMap = React.useMemo(() => {
@@ -275,17 +278,19 @@ const EditQualitativeDataModal = ({
         {'biomassMeasurement' in record && (
           <Box display='flex'>
             <Box paddingRight={'16px'} paddingTop={'16px'}>
-              <img
-                src={`${photoUrl}?maxHeight=120`}
-                alt={'soilAssessmentImage'}
-                style={{
-                  margin: 'auto auto',
-                  objectFit: 'contain',
-                  display: 'flex',
-                  maxWidth: '210',
-                  maxHeight: '210',
-                }}
-              />
+              {photoUrl && (
+                <img
+                  src={`${photoUrl}?maxHeight=120`}
+                  alt={'soilAssessmentImage'}
+                  style={{
+                    margin: 'auto auto',
+                    objectFit: 'contain',
+                    display: 'flex',
+                    maxWidth: '210',
+                    maxHeight: '210',
+                  }}
+                />
+              )}
             </Box>
 
             <Box sx={{ paddingTop: '16px', flex: 1 }}>
