@@ -350,6 +350,7 @@ CONTACT_US_DESCRIPTION,Cuéntenos su experiencia con Terraware y solicite asiste
 CONTACT_US_INSTRUCTIONS,"Sus comentarios son muy importantes para nosotros. Por favor, cuéntenos su experiencia con Terraware y cómo podemos ayudarle a usted y a su organización a sacar el máximo provecho de Terraware.",7560171e
 CONTENT_AND_MATERIALS,Contenidos y materiales,c0cf19c7
 CONTENTS,Contenido,0913f748
+CONTINUE,Continuar,b019a26b
 CONTINUE_AND_RESET_STATUS,Continuar y restablecer estado,5f35516c
 CONTINUE_APPLICATION,Continuar solicitud,bd87b380
 CONTINUE_TO_APPLICATION,Continuar a la Solicitud,bc4ca333
@@ -553,6 +554,7 @@ EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
 EDIT_FUNDING_ENTITY_DESC,Editar la entidad financiadora y los proyectos asociados.,779189ac
 EDIT_LOCATION,Editar ubicación,f120fad8
 EDIT_NURSERY,Editar vivero,8813669e
+EDIT_OBSERVATION_DATA,Editar datos de observación,49681fee
 EDIT_ORGANIZATION,Editar organización,56332548
 EDIT_PARTICIPANT,Editar participante,895b68b3
 EDIT_PERMANENT_PLOTS,Editar Parcelas Permanentes,b78a9922
@@ -1701,6 +1703,8 @@ SAVE,Guardar,526a3e42
 SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_CHANGES,Guardar los cambios,cb5e8c33
+SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
+SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
 SAVE_PLANT_DENSITY,Guardar densidad de plantas,73135113
 SAVE_PROJECT_BOUNDARIES,Guardar límites del proyecto,d206ddd9
 SAVE_VERSION,Guardar versión,5afacff0

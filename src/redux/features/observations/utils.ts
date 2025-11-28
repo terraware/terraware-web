@@ -1,3 +1,4 @@
+import { DropdownItem } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import strings from 'src/strings';
@@ -14,6 +15,7 @@ import {
   ObservationResultsPayload,
   ObservationSpeciesResults,
   ObservationSpeciesResultsPayload,
+  PlotCondition,
 } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
 import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
@@ -338,3 +340,39 @@ export const getConditionString = (
     }
   }
 };
+
+export const getPlotConditionsOptions = (
+  activeLocale: string | null
+): (Omit<DropdownItem, 'value'> & { value: PlotCondition })[] =>
+  activeLocale
+    ? [
+        {
+          label: getConditionString('Fungus'),
+          value: 'Fungus',
+        },
+        {
+          label: getConditionString('AnimalDamage'),
+          value: 'AnimalDamage',
+        },
+        {
+          label: getConditionString('FastGrowth'),
+          value: 'FastGrowth',
+        },
+        {
+          label: getConditionString('FavorableWeather'),
+          value: 'FavorableWeather',
+        },
+        {
+          label: getConditionString('Pests'),
+          value: 'Pests',
+        },
+        {
+          label: getConditionString('SeedProduction'),
+          value: 'SeedProduction',
+        },
+        {
+          label: getConditionString('UnfavorableWeather'),
+          value: 'UnfavorableWeather',
+        },
+      ]
+    : [];

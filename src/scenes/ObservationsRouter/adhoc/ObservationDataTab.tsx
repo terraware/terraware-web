@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
-import { IconTooltip } from '@terraware/web-components';
+import { Button, IconTooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -13,9 +13,12 @@ import strings from 'src/strings';
 import { ObservationMonitoringPlotResultsPayload, ObservationSpeciesResults } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import useForm from 'src/utils/useForm';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlotActions from '../biomass/PlotActions';
+import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataConfirmationModal';
+import EditQualitativeDataModal from '../common/EditQualitativeDataModal';
 import SpeciesTotalPlantsChart from '../common/SpeciesMortalityRateChart';
 import SpeciesMortalityRateChart from '../common/SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
@@ -43,6 +46,10 @@ const ObservationDataTab = ({
   const { plantingSite } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
+  const [editQualitativeDataModalOpen, setEditQualitativeDataModalOpen] = useState(false);
+  const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
+
+  const [record, setRecord] = useForm(monitoringPlot);
 
   const livePlants = useMemo(() => getObservationSpeciesLivePlantsCount(species), [species]);
   const deadPlants = useMemo(() => getObservationSpeciesDeadPlantsCount(species), [species]);
@@ -84,6 +91,10 @@ const ObservationDataTab = ({
       : []),
   ];
 
+  const onEditQualitativeData = useCallback(() => {
+    setEditQualitativeDataModalOpen(true);
+  }, []);
+
   const extraItems = [
     {
       label: strings.PLOT_CONDITIONS,
@@ -94,8 +105,39 @@ const ObservationDataTab = ({
       value: monitoringPlot?.notes || '- -',
     },
   ];
+
+  const closeEditQualitativeDataModal = useCallback(() => {
+    setEditQualitativeDataModalOpen(false);
+    setRecord(monitoringPlot);
+  }, [monitoringPlot, setRecord]);
+
+  const showConfirmationModal = useCallback(() => {
+    setEditQualitativeDataModalOpen(false);
+    setShowConfirmationModalOpened(true);
+  }, []);
+
+  const closeConfirmationModal = useCallback(() => {
+    setShowConfirmationModalOpened(false);
+    setRecord(monitoringPlot);
+  }, [monitoringPlot, setRecord]);
+
+  const saveEditedData = useCallback(() => {
+    // save to backend
+  }, []);
+
   return (
     <Card radius='24px'>
+      {showConfirmationModalOpened && (
+        <EditQualitativeDataConfirmationModal onClose={closeConfirmationModal} onSubmit={saveEditedData} />
+      )}
+      {editQualitativeDataModalOpen && (
+        <EditQualitativeDataModal
+          record={record}
+          setRecord={setRecord}
+          onClose={closeEditQualitativeDataModal}
+          onSubmit={showConfirmationModal}
+        />
+      )}
       <ObservationDataNumbers items={items} />
       {species && (
         <Box>
@@ -140,7 +182,7 @@ const ObservationDataTab = ({
           onMatchSpecies={onMatchSpecies}
         />
       )}
-      <Box paddingY={2}>
+      <Box paddingY={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
         {monitoringPlot?.claimedByName && monitoringPlot?.completedTime && (
           <Typography fontSize={'14px'}>
             {strings.formatString(
@@ -155,6 +197,14 @@ const ObservationDataTab = ({
             )}
           </Typography>
         )}
+        <Button
+          id='edit'
+          label={strings.EDIT}
+          onClick={onEditQualitativeData}
+          icon='iconEdit'
+          priority='secondary'
+          size='small'
+        />
       </Box>
       <ExtraData items={extraItems} />
     </Card>
