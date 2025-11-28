@@ -40,7 +40,9 @@ const EditQualitativeDataModal = ({ onClose, onSubmit, record, setRecord }: Edit
       setRecord((prev) => {
         const newConditions = prev.conditions ? [...prev.conditions] : [];
         const foundIndex = newConditions.findIndex((cId) => cId === conditionId);
-        newConditions.splice(foundIndex, 1);
+        if (foundIndex !== -1) {
+          newConditions.splice(foundIndex, 1);
+        }
         return { ...prev, conditions: newConditions };
       });
     },
@@ -50,6 +52,20 @@ const EditQualitativeDataModal = ({ onClose, onSubmit, record, setRecord }: Edit
   const valueRender = useCallback((option: DropdownItem) => {
     return option.label;
   }, []);
+
+  const onChangeField = useCallback(
+    (value: string, fieldId: string) => {
+      setRecord((prev) => ({ ...prev, [fieldId]: value }));
+    },
+    [setRecord]
+  );
+
+  const onChangeHandler = useCallback(
+    (fieldId: string) => (value: unknown) => {
+      onChangeField(value as string, fieldId);
+    },
+    [onChangeField]
+  );
 
   return (
     <DialogBox
@@ -88,6 +104,7 @@ const EditQualitativeDataModal = ({ onClose, onSubmit, record, setRecord }: Edit
           value={record.notes}
           id={'notes'}
           sx={{ paddingTop: '16px' }}
+          onChange={onChangeHandler('notes')}
         />
       </Box>
     </DialogBox>
