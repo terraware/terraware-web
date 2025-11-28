@@ -180,7 +180,11 @@ const EditQualitativeDataModal = ({
                 <TextField
                   type='text'
                   label={strings.NUMBER_OF_SMALL_TREES}
-                  value={`${record.biomassMeasurement?.smallTreeCountLow}-${record.biomassMeasurement?.smallTreeCountHigh}`}
+                  value={
+                    record.biomassMeasurement?.smallTreeCountLow && record.biomassMeasurement?.smallTreeCountHigh
+                      ? `${record.biomassMeasurement.smallTreeCountLow}-${record.biomassMeasurement.smallTreeCountHigh}`
+                      : ''
+                  }
                   id={'numberOfSmallTrees'}
                   onChange={onChangeNumberOfSmallTrees}
                 />
@@ -286,8 +290,8 @@ const EditQualitativeDataModal = ({
                     margin: 'auto auto',
                     objectFit: 'contain',
                     display: 'flex',
-                    maxWidth: '210',
-                    maxHeight: '210',
+                    maxWidth: '210px',
+                    maxHeight: '210px',
                   }}
                 />
               )}
