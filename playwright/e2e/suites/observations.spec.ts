@@ -1,22 +1,17 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { waitFor } from '../utils/utils';
+import { selectOrg, waitFor } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function ObservationsTests() {
-  test('Schedule Observation', async ({ page }, testInfo) => {
+test.describe('ObservationsTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
+    await selectOrg(page, 'Terraformation (staging)');
+  });
 
-    await page.getByRole('button', { name: 'Empty Organization' }).click();
-    await page.getByRole('menuitem', { name: 'Terraformation (staging)' }).click();
-    await waitFor(page, '#home');
-
+  test('Schedule Observation', async ({ page }, testInfo) => {
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
@@ -43,13 +38,10 @@ export default function ObservationsTests() {
     await page.getByRole('button', { name: 'Save' }).click();
 
     // wait for success toast message
-    await waitFor(page, '#snackbar div:has-text("Observation scheduled!")');
+    await waitFor(page, '#snackbar p:has-text("Observation scheduled!")');
   });
 
   test('Reschedule Observation', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
@@ -85,13 +77,10 @@ export default function ObservationsTests() {
     await page.getByRole('button', { name: 'Save' }).click();
 
     // wait for success toast message
-    await waitFor(page, '#snackbar div:has-text("Observation rescheduled!")');
+    await waitFor(page, '#snackbar p:has-text("Observation rescheduled!")');
   });
 
   test('End Observation', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Observations' }).click();
 
@@ -117,6 +106,6 @@ export default function ObservationsTests() {
     await page.locator('#save').click();
 
     // wait for success toast message
-    await waitFor(page, '#snackbar div:has-text("observation has been ended")');
+    await waitFor(page, '#snackbar p:has-text("observation has been ended")');
   });
-}
+});

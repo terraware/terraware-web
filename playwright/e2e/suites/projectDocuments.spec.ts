@@ -4,16 +4,14 @@ import { APP_PATHS } from '../../../src/constants';
 import { navigateToProjectProfile } from '../utils/navigation';
 import { changeToSuperAdmin } from '../utils/userUtils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function ProjectDocumentsTests() {
-  test('View Project Documents Table', async ({ page }, testInfo) => {
+test.describe('ProjectDocumentsTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await navigateToProjectProfile('Phase 2 Project Deal', page);
     await page.getByRole('tab', { name: 'Documents' }).click();
+  });
 
+  test('View Project Documents Table', async ({ page }, testInfo) => {
     await expect(page.getByRole('heading', { name: 'Documents' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Add Document' })).toBeVisible();
     await expect(page.locator('#search')).toBeVisible();
@@ -28,9 +26,6 @@ export default function ProjectDocumentsTests() {
   });
 
   test('Navigate to New Document Page when Add Document Button is Pressed', async ({ page }, testInfo) => {
-    await navigateToProjectProfile('Phase 2 Project Deal', page);
-    await page.getByRole('tab', { name: 'Documents' }).click();
-
     await expect(page.getByRole('button', { name: 'Add Document' })).toBeVisible();
 
     // click the Add Document button and wait for the new page to load
@@ -39,4 +34,4 @@ export default function ProjectDocumentsTests() {
 
     expect(page.url()).toBe(`http://127.0.0.1:3000${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
   });
-}
+});

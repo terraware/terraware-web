@@ -4,12 +4,11 @@ import { navigateToProjectProfile } from '../utils/navigation';
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { waitFor } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
+test.describe('ProjectVariablesTests', () => {
+  test.beforeEach(async ({ context }, testInfo) => {
+    await changeToSuperAdmin(context);
+  });
 
-export default function ProjectVariablesTests() {
   test('View Project Variables Table', async ({ page }, testInfo) => {
     await navigateToProjectProfile('Phase 2 Project Deal', page);
     await page.getByRole('tab', { name: 'Variables' }).click();
@@ -49,11 +48,11 @@ export default function ProjectVariablesTests() {
     await page.locator('#edit-variable-save').click();
 
     // wait for success toast message
-    await waitFor(page, '#snackbar div:has-text("Success")');
+    await waitFor(page, '#snackbar p:has-text("Success")');
 
     // verify variable value is updated
     await expect(
       page.getByRole('button', { name: 'Planting Density: Sustainable' }).locator('../../..').getByText('1500')
     ).toBeVisible();
   });
-}
+});
