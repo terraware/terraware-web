@@ -409,6 +409,7 @@ DATE_ADDED_REQUIRED,Date Ajouté *,443f82cc
 DATE_MUST_BE_FUTURE,La date doit se situer dans le futur,cf4495be
 DATE_OBSERVATION,{0} observation,62c68b2c
 DATE_OBSERVED,Date de l'observation,7f96dd16
+DATE_OBSERVED_TOOLTIP,La date d'observation correspond à la date à laquelle l'observation a été réalisée.,ccc9b579
 DATE_OF_LAST_OBSERVATION,Date de la dernière observation,8db1d5cb
 DATE_RANGE,{0} - {1},4d9ee337
 DATE_REQUIRED,Date *,9421d984
