@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
+import { useLocalization } from 'src/providers';
 import { ExistingBiomassMeasurementPayload } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
@@ -13,13 +14,6 @@ type QuadratConfig = {
   title: string;
 };
 
-const QUADRAT_CONFIG: Record<string, QuadratConfig> = {
-  Northwest: { position: 'NorthwestCorner', title: strings.PHOTO_NORTHWEST_QUADRAT },
-  Northeast: { position: 'NortheastCorner', title: strings.PHOTO_NORTHEAST_QUADRAT },
-  Southwest: { position: 'SouthwestCorner', title: strings.PHOTO_SOUTHWEST_QUADRAT },
-  Southeast: { position: 'SoutheastCorner', title: strings.PHOTO_SOUTHEAST_QUADRAT },
-};
-
 type QuadratNotesComponentProps = {
   quadrat: string;
   record?: ExistingBiomassMeasurementPayload;
@@ -28,9 +22,24 @@ type QuadratNotesComponentProps = {
 
 const QuadratNotesComponent = ({ quadrat, record, setRecord }: QuadratNotesComponentProps) => {
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
 
-  const config = QUADRAT_CONFIG[quadrat];
-  const { position, title } = config;
+  const QUADRAT_CONFIG: Record<string, QuadratConfig | undefined> = useMemo(
+    () =>
+      activeLocale
+        ? {
+            Northwest: { position: 'NorthwestCorner', title: strings.PHOTO_NORTHWEST_QUADRAT },
+            Northeast: { position: 'NortheastCorner', title: strings.PHOTO_NORTHEAST_QUADRAT },
+            Southwest: { position: 'SouthwestCorner', title: strings.PHOTO_SOUTHWEST_QUADRAT },
+            Southeast: { position: 'SoutheastCorner', title: strings.PHOTO_SOUTHEAST_QUADRAT },
+          }
+        : {},
+    [activeLocale]
+  );
+
+  const { position, title } = useMemo(() => {
+    return QUADRAT_CONFIG[quadrat] || { position: '' as QuadratPosition, title: '' };
+  }, [QUADRAT_CONFIG, quadrat]);
 
   const quadratData = record?.quadrats.find((quad) => quad.position === position);
   const notesValue = quadratData?.description || '';
