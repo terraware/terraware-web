@@ -5,7 +5,6 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 
 import { useLocalization } from 'src/providers';
 import { ExistingBiomassMeasurementPayload } from 'src/queries/generated/observations';
-import strings from 'src/strings';
 
 type QuadratPosition = 'NorthwestCorner' | 'NortheastCorner' | 'SouthwestCorner' | 'SoutheastCorner';
 
@@ -22,19 +21,16 @@ type QuadratNotesComponentProps = {
 
 const QuadratNotesComponent = ({ quadrat, record, setRecord }: QuadratNotesComponentProps) => {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
 
   const QUADRAT_CONFIG: Record<string, QuadratConfig | undefined> = useMemo(
-    () =>
-      activeLocale
-        ? {
-            Northwest: { position: 'NorthwestCorner', title: strings.PHOTO_NORTHWEST_QUADRAT },
-            Northeast: { position: 'NortheastCorner', title: strings.PHOTO_NORTHEAST_QUADRAT },
-            Southwest: { position: 'SouthwestCorner', title: strings.PHOTO_SOUTHWEST_QUADRAT },
-            Southeast: { position: 'SoutheastCorner', title: strings.PHOTO_SOUTHEAST_QUADRAT },
-          }
-        : {},
-    [activeLocale]
+    () => ({
+      Northwest: { position: 'NorthwestCorner', title: strings.PHOTO_NORTHWEST_QUADRAT },
+      Northeast: { position: 'NortheastCorner', title: strings.PHOTO_NORTHEAST_QUADRAT },
+      Southwest: { position: 'SouthwestCorner', title: strings.PHOTO_SOUTHWEST_QUADRAT },
+      Southeast: { position: 'SoutheastCorner', title: strings.PHOTO_SOUTHEAST_QUADRAT },
+    }),
+    [strings]
   );
 
   const { position, title } = useMemo(() => {
