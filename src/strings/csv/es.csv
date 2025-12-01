@@ -350,6 +350,7 @@ CONTACT_US_DESCRIPTION,Cuéntenos su experiencia con Terraware y solicite asiste
 CONTACT_US_INSTRUCTIONS,"Sus comentarios son muy importantes para nosotros. Por favor, cuéntenos su experiencia con Terraware y cómo podemos ayudarle a usted y a su organización a sacar el máximo provecho de Terraware.",7560171e
 CONTENT_AND_MATERIALS,Contenidos y materiales,c0cf19c7
 CONTENTS,Contenido,0913f748
+CONTINUE,Continuar,b019a26b
 CONTINUE_AND_RESET_STATUS,Continuar y restablecer estado,5f35516c
 CONTINUE_APPLICATION,Continuar solicitud,bd87b380
 CONTINUE_TO_APPLICATION,Continuar a la Solicitud,bc4ca333
@@ -554,6 +555,7 @@ EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
 EDIT_FUNDING_ENTITY_DESC,Editar la entidad financiadora y los proyectos asociados.,779189ac
 EDIT_LOCATION,Editar ubicación,f120fad8
 EDIT_NURSERY,Editar vivero,8813669e
+EDIT_OBSERVATION_DATA,Editar datos de observación,49681fee
 EDIT_ORGANIZATION,Editar organización,56332548
 EDIT_PARTICIPANT,Editar participante,895b68b3
 EDIT_PERMANENT_PLOTS,Editar Parcelas Permanentes,b78a9922
@@ -785,6 +787,7 @@ HEIGHT_M,Altura (m),fe61fc34
 HELP_SUPPORT,Ayuda y soporte,477f3e22
 HERB,Hierba,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abundancia herbácea (%),d3693b6c
+HERBACEOUS_COVER_PERCENT,Cobertura Herbácea %,e04acd60
 HERBACIOUS_COVER_PERCENT,Cobertura herbácea %,ba8fa5bd
 HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
@@ -1702,6 +1705,8 @@ SAVE,Guardar,526a3e42
 SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_CHANGES,Guardar los cambios,cb5e8c33
+SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
+SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
 SAVE_PLANT_DENSITY,Guardar densidad de plantas,73135113
 SAVE_PROJECT_BOUNDARIES,Guardar límites del proyecto,d206ddd9
 SAVE_VERSION,Guardar versión,5afacff0
@@ -1870,6 +1875,7 @@ SOCIAL_IMPACT_INSTRUCTIONS,"Indique los beneficios directos del proyecto para la
 SOCIAL_IMPACT_REQUIRED,Impacto social y beneficios para la comunidad *,6f21762c
 SOIL,Tierra,bba67d3a
 SOIL_ASSESSMENT,Evaluación del suelo,803c8f49
+SOIL_ASSESSMENT_DESCRIPTION_NOTES,Descripción/Notas de la Evaluación del Suelo,c61b3dbb
 SOIL_PHOTO,Foto del suelo,5a089072
 SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",c506e77d
@@ -2037,6 +2043,7 @@ TERRAFORMATION_CONTACT,Contacto de Terraformation,65846c70
 TERRAWARE_IS_SOFTWARE,"Terraware es un software especializado, creado por [Terraformation], que permite a los silvicultores optimizar cualquier etapa de sus proyectos forestales, desde la recolección de semillas hasta el cálculo del carbono.",ca042b5f
 TERRAWARE_METRIC_MESSAGE,Esta métrica está tomada directamente de los datos de seguimiento de Terraware.,cd131ec1
 TERRAWARE_MOBILE_APP_IMAGE_ALT,Ilustración de la aplicación móvil de Terraware en un teléfono inteligente.,3e805068
+TERRESTRIAL,Terrestre,25e86de2
 TEST,Prueba,e888ded7
 TEST_DATE_REQUIRED,Fecha de la prueba *,f53ff17e
 TEST_METHOD,Método de prueba,078cfc4d
