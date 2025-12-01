@@ -1,3 +1,5 @@
+d478086955f SW-7786 Observation details view at plot level date shown is incorrect (#4824)
+4ea551cb4b3 SW-7769 Change "End Date" to "Date Observed" (#4823)
 936b4922e20 SW-7770 Highlights scrolling scrolls through two highlights at a time (#4818)
 8f628a9127b SW-7781 Activity log filtering not working (#4820)
 8fe6bf082dc SW-7774 Server error: Activity not found on video when trying to stream in funder portal (#4817)
