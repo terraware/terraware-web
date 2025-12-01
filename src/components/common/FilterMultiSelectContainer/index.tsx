@@ -97,7 +97,13 @@ export default function FilterMultiSelectContainer<T extends Record<string, (str
             onFilterApplied(String(filterKey), selectedValues);
           }
           handleClose();
-          setFilters({ ...filters, [filterKey]: selectedValues });
+          if (selectedValues.length === 0) {
+            const newFilters = { ...filters };
+            delete newFilters[filterKey];
+            setFilters(newFilters);
+          } else {
+            setFilters({ ...filters, [filterKey]: selectedValues });
+          }
         }}
         options={options}
         optionsVisible={optionsVisible}
