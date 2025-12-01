@@ -37,11 +37,12 @@ const EditQualitativeDataModal = ({
   observationId,
 }: EditQualitativeDataModalProps) => {
   const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
+  const soilFileId = record.media?.find((m) => m.type === 'Soil')?.fileId;
   const photoUrl =
-    observationId && record.monitoringPlotId && record.media?.find((m) => m.type === 'Soil')?.fileId
+    observationId && record.monitoringPlotId && soilFileId
       ? PHOTO_URL.replace('{observationId}', observationId?.toString() || '')
           .replace('{monitoringPlotId}', record.monitoringPlotId?.toString() || '')
-          .replace('{fileId}', record.media?.find((m) => m.type === 'Soil')?.fileId.toString() || '')
+          .replace('{fileId}', soilFileId.toString())
       : undefined;
   const { activeLocale } = useLocalization();
 
