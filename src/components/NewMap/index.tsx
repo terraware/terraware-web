@@ -1,4 +1,4 @@
-import React, { CSSProperties, MutableRefObject, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { CSSProperties, MutableRefObject, ReactNode, useCallback, useMemo } from 'react';
 import { MapRef, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 
 import { MapMouseEvent } from 'mapbox-gl';
@@ -6,34 +6,10 @@ import { MapMouseEvent } from 'mapbox-gl';
 import MapBox from './MapBox';
 import MapContainer from './MapContainer';
 import MapDrawer, { MapDrawerSize } from './MapDrawer';
-import MapLegend, { MapHighlightLegendItem, MapLegendGroup } from './MapLegend';
+import MapLegend, { MapLegendGroup } from './MapLegend';
 import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapNameTag, MapViewState } from './types';
 import useStickyMapViewStyle from './useStickyMapViewStyle';
 import { getBoundingBoxFromMultiPolygons, getBoundsZoomLevel } from './utils';
-
-type BaseMapFeatureSection = {
-  sectionDisabled?: boolean;
-  sectionTitle: string;
-  sectionTooltip?: string;
-};
-
-export type MapHighlightFeatureSection = {
-  highlight: MapHighlightGroup;
-  legendItems: MapHighlightLegendItem[];
-  type: 'highlight';
-} & BaseMapFeatureSection;
-
-export type MapLayerFeatureSection = {
-  layers: MapLayer[];
-  type: 'layer';
-} & BaseMapFeatureSection;
-
-export type MapMarkerFeatureSection = {
-  groups: MapMarkerGroup[];
-  type: 'marker';
-} & BaseMapFeatureSection;
-
-export type MapFeatureSection = MapHighlightFeatureSection | MapLayerFeatureSection | MapMarkerFeatureSection;
 
 export type MapComponentProps = {
   clusterMaxZoom?: number;
@@ -53,24 +29,23 @@ export type MapComponentProps = {
   drawerOpen?: boolean;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
   drawerSize?: MapDrawerSize;
-  features?: MapFeatureSection[];
   hideBorder?: boolean;
   hideFullScreenControl?: boolean;
-  hideLegend?: boolean;
   hideMapViewStyleControl?: boolean;
   hideZoomControl?: boolean;
-  initialSelectedLayerId?: string;
   initialViewState?: MapViewState;
+  legends?: MapLegendGroup[];
   mapContainerId?: string;
+  mapHighlights?: MapHighlightGroup[];
   mapId?: string;
+  mapLayers?: MapLayer[];
+  mapMarkers?: MapMarkerGroup[];
   mapRef: MutableRefObject<MapRef | null>;
   nameTags?: MapNameTag[];
   onClickCanvas?: (event: MapMouseEvent) => void;
   onMapMove?: (view: ViewStateChangeEvent) => void;
   onTokenExpired?: () => void;
   setDrawerOpen?: (open: boolean) => void;
-  setHighlightVisible?: (highlightId: string) => (visible: boolean) => void;
-  setMarkerVisible?: (markerGroupId: string) => (visible: boolean) => void;
   token: string;
 };
 
@@ -93,104 +68,33 @@ const MapComponent = (props: MapComponentProps) => {
     drawerOpen,
     drawerRef,
     drawerSize,
-    features,
     hideBorder,
     hideFullScreenControl,
-    hideLegend,
     hideMapViewStyleControl,
     hideZoomControl,
-    initialSelectedLayerId,
     initialViewState,
+    legends,
     mapContainerId,
+    mapHighlights,
     mapId,
+    mapLayers,
+    mapMarkers,
     mapRef,
     nameTags,
     onClickCanvas,
     onMapMove,
     onTokenExpired,
     setDrawerOpen,
-    setHighlightVisible,
-    setMarkerVisible,
     token,
   } = props;
 
   const { mapViewStyle, updateMapViewStyle } = useStickyMapViewStyle({ defaultStyle: 'Outdoors', key: 'map-style' });
-  const [selectedLayer, setSelectedLayer] = useState<string | undefined>(initialSelectedLayerId);
-
-  const legends = useMemo((): MapLegendGroup[] | undefined => {
-    return features?.map((feature): MapLegendGroup => {
-      const baseLegendGroup = {
-        disabled: feature.sectionDisabled,
-        title: feature.sectionTitle,
-        tooltip: feature.sectionTooltip,
-      };
-      switch (feature.type) {
-        case 'highlight':
-          return {
-            ...baseLegendGroup,
-            items: feature.legendItems,
-            type: 'highlight',
-            visible: feature.highlight.visible,
-            setVisible: setHighlightVisible?.(feature.highlight.highlightId),
-          };
-        case 'layer':
-          return {
-            ...baseLegendGroup,
-            items: feature.layers.map((layer) => ({
-              disabled: layer.disabled,
-              id: layer.layerId,
-              label: layer.label,
-              style: layer.style,
-            })),
-            selectedLayer,
-            setSelectedLayer,
-            type: 'layer',
-          };
-        case 'marker':
-          return {
-            ...baseLegendGroup,
-            items: feature.groups.map((group) => ({
-              disabled: group.disabled,
-              id: group.markerGroupId,
-              label: group.label,
-              style: group.style,
-              setVisible: setMarkerVisible?.(group.markerGroupId),
-              visible: group.visible,
-            })),
-            type: 'marker',
-          };
-      }
-    });
-  }, [features, selectedLayer, setHighlightVisible, setMarkerVisible]);
-
-  const layers = useMemo(() => {
-    return features
-      ?.filter((feature): feature is MapLayerFeatureSection => feature.type === 'layer')
-      ?.flatMap((feature) => feature.layers)
-      ?.filter((layer) => layer.layerId === selectedLayer);
-  }, [features, selectedLayer]);
-
-  const highlightGroups = useMemo(() => {
-    return features
-      ?.filter((feature): feature is MapHighlightFeatureSection => feature.type === 'highlight')
-      ?.map((feature) => feature.highlight);
-  }, [features]);
-
-  const markerGroups = useMemo(() => {
-    return features
-      ?.filter((feature): feature is MapMarkerFeatureSection => feature.type === 'marker')
-      ?.flatMap((feature) => feature.groups);
-  }, [features]);
 
   const mapViewState = useMemo(() => {
     if (initialViewState) {
       return initialViewState;
-    } else if (features) {
-      const multipolygons = features
-        .filter((feature): feature is MapLayerFeatureSection => feature.type === 'layer')
-        .flatMap((feature) => feature.layers)
-        .flatMap((layer) => layer.features)
-        .map((geoFeature) => geoFeature.geometry);
+    } else if (mapLayers?.length) {
+      const multipolygons = mapLayers.flatMap((layer) => layer.features).map((geoFeature) => geoFeature.geometry);
 
       const { minLat, minLng, maxLat, maxLng } = getBoundingBoxFromMultiPolygons(multipolygons);
 
@@ -205,29 +109,23 @@ const MapComponent = (props: MapComponentProps) => {
         zoom,
       };
     }
-  }, [features, initialViewState]);
+  }, [initialViewState, mapLayers]);
 
   const mapImageUrls = useMemo(() => {
-    const layerFeatures =
-      features?.filter((feature): feature is MapLayerFeatureSection => feature.type === 'layer') ?? [];
-    const highlightFeatures =
-      features?.filter((feature): feature is MapHighlightFeatureSection => feature.type === 'highlight') ?? [];
-
-    const layerImageUrls = layerFeatures
-      .flatMap((feature) => feature.layers)
-      .map((layer) => layer.style.fillPatternUrl)
+    const layerImageUrls = mapLayers
+      ?.map((layer) => layer.style.fillPatternUrl)
       .filter((url): url is string => url !== undefined);
 
-    const highlightImageUrls = highlightFeatures
-      .flatMap((feature) => feature.highlight.highlights)
+    const highlightImageUrls = mapHighlights
+      ?.flatMap((feature) => feature.highlights)
       .map((highlight) => highlight.style.fillPatternUrl)
       .filter((url): url is string => url !== undefined);
 
     const imageUrls = new Set(layerImageUrls);
-    highlightImageUrls.forEach((url) => imageUrls.add(url));
+    highlightImageUrls?.forEach((url) => imageUrls.add(url));
 
     return Array.from(imageUrls);
-  }, [features]);
+  }, [mapHighlights, mapLayers]);
 
   const closeDrawer = useCallback(() => {
     setDrawerOpen?.(false);
@@ -250,14 +148,14 @@ const MapComponent = (props: MapComponentProps) => {
         hideFullScreenControl={hideFullScreenControl}
         hideMapViewStyleControl={hideMapViewStyleControl}
         hideZoomControl={hideZoomControl}
-        highlightGroups={highlightGroups}
+        highlightGroups={mapHighlights}
         initialViewState={mapViewState}
-        layers={layers}
+        layers={mapLayers}
         mapId={mapId ?? 'mapId'}
         mapImageUrls={mapImageUrls}
         mapRef={mapRef}
         mapViewStyle={mapViewStyle}
-        markerGroups={markerGroups}
+        markerGroups={mapMarkers}
         nameTags={nameTags}
         onClickCanvas={onClickCanvas}
         onMapMove={onMapMove}
@@ -269,9 +167,10 @@ const MapComponent = (props: MapComponentProps) => {
   }, [
     clusterMaxZoom,
     clusterRadius,
+    mapContainerId,
     controlBottomLeft,
-    controlTopLeft,
     controlTopRight,
+    controlTopLeft,
     cursorInteract,
     cursorMap,
     disableDoubleClickZoom,
@@ -280,21 +179,20 @@ const MapComponent = (props: MapComponentProps) => {
     hideFullScreenControl,
     hideMapViewStyleControl,
     hideZoomControl,
-    highlightGroups,
-    layers,
-    mapContainerId,
+    mapHighlights,
+    mapViewState,
+    mapLayers,
     mapId,
     mapImageUrls,
     mapRef,
-    mapViewState,
     mapViewStyle,
-    markerGroups,
+    mapMarkers,
     nameTags,
     onClickCanvas,
     onMapMove,
     onTokenExpired,
-    token,
     updateMapViewStyle,
+    token,
   ]);
 
   return (
@@ -316,7 +214,7 @@ const MapComponent = (props: MapComponentProps) => {
       }
       drawerOpen={drawerOpen}
       hideBorder={hideBorder}
-      legend={!hideLegend && legends && <MapLegend legends={legends} />}
+      legend={legends && <MapLegend legends={legends} />}
       map={map}
       style={containerStyle}
     />

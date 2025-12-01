@@ -57,6 +57,7 @@ export type MapLayer = {
   label: string;
   layerId: string;
   style: MapFillComponentStyle;
+  visible: boolean;
 };
 
 export type MapHighlight = {

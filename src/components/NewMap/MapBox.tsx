@@ -203,25 +203,27 @@ const MapBox = (props: MapBoxProps): JSX.Element => {
   }, [featureGroups]);
 
   const geojson = useMemo((): FeatureCollection | undefined => {
-    const features = featureGroups?.flatMap((group) => {
-      return group.features.map((feature): Feature => {
-        const properties: MapProperties = {
-          id: feature.featureId,
-          clickable: feature.onClick !== undefined,
-          label: feature.label,
-          layerFeatureId: `${group.layerId}/${feature.featureId}`,
-          layerId: group.layerId,
-          priority: feature.priority ?? 0,
-          selected: feature.selected ?? false,
-        };
+    const features = featureGroups
+      ?.filter((group) => group.visible)
+      .flatMap((group) => {
+        return group.features.map((feature): Feature => {
+          const properties: MapProperties = {
+            id: feature.featureId,
+            clickable: feature.onClick !== undefined,
+            label: feature.label,
+            layerFeatureId: `${group.layerId}/${feature.featureId}`,
+            layerId: group.layerId,
+            priority: feature.priority ?? 0,
+            selected: feature.selected ?? false,
+          };
 
-        return {
-          type: 'Feature',
-          geometry: feature.geometry,
-          properties,
-        };
+          return {
+            type: 'Feature',
+            geometry: feature.geometry,
+            properties,
+          };
+        });
       });
-    });
 
     return features
       ? {
