@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1764189272446" clover="3.2.0">
-  <project timestamp="1764189272446" name="All files">
+<coverage generated="1764606834891" clover="3.2.0">
+  <project timestamp="1764606834891" name="All files">
     <metrics statements="35732" coveredstatements="1354" conditionals="25080" coveredconditionals="393" methods="11001" coveredmethods="213" elements="71813" coveredelements="1960" complexity="0" loc="35732" ncloc="35732" packages="284" files="1396" classes="1396"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -2517,11 +2517,11 @@
         <line num="370" count="0" type="stmt"/>
         <line num="376" count="0" type="stmt"/>
         <line num="423" count="0" type="stmt"/>
-        <line num="435" count="0" type="stmt"/>
-        <line num="496" count="0" type="stmt"/>
-        <line num="497" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="501" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="507" count="0" type="stmt"/>
+        <line num="440" count="0" type="stmt"/>
+        <line num="501" count="0" type="stmt"/>
+        <line num="502" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="506" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="512" count="0" type="stmt"/>
       </file>
       <file name="ActivityMediaForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ActivityLog/ActivityMediaForm.tsx">
         <metrics statements="124" coveredstatements="0" conditionals="100" coveredconditionals="0" methods="42" coveredmethods="0"/>

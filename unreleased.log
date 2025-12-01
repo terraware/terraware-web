@@ -1,3 +1,4 @@
+936b4922e20 SW-7770 Highlights scrolling scrolls through two highlights at a time (#4818)
 8f628a9127b SW-7781 Activity log filtering not working (#4820)
 8fe6bf082dc SW-7774 Server error: Activity not found on video when trying to stream in funder portal (#4817)
 a9be2c16657 Update actions/checkout action to v6 (#4816)
