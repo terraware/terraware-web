@@ -242,6 +242,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
               unrecognizedSpecies={unrecognizedSpecies}
               onExportData={onExportData}
               onMatchSpecies={onMatchSpecies}
+              observationId={Number(observationId)}
             />
           </>
         ),
@@ -262,6 +263,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     onSaveMergedSpecies,
     showMatchSpeciesModal,
     unrecognizedSpecies,
+    observationId,
   ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({

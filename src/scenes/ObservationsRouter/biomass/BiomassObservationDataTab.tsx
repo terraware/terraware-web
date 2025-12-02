@@ -7,12 +7,18 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import {
+  BiomassUpdateOperationPayload,
+  ObservationPlotUpdateOperationPayload,
+  useUpdateCompletedObservationPlotMutation,
+} from 'src/queries/generated/observations';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { BiomassMeasurement, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ExtraData from '../adhoc/ExtraData';
@@ -48,17 +54,19 @@ const BiomassObservationDataTab = ({
   const { activeLocale } = useLocalization();
   const [editQualitativeDataModalOpen, setEditQualitativeDataModalOpen] = useState(false);
   const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
+  const [update] = useUpdateCompletedObservationPlotMutation();
+  const snackbar = useSnackbar();
 
   const createBiomassPlot = useMemo(() => {
     return {
       conditions: monitoringPlot?.conditions,
       notes: monitoringPlot?.notes,
-      monitoringPlotId: monitoringPlot?.monitoringPlotId,
+      monitoringPlotId: monitoringPlot?.monitoringPlotId || -1,
       biomassMeasurement,
       media: monitoringPlot?.media,
     };
   }, [biomassMeasurement, monitoringPlot]);
-  const [record, setRecord] = useForm<BiomassPlot | Partial<Omit<ObservationMonitoringPlotResultsPayload, 'species'>>>(
+  const [record, setRecord] = useForm<Partial<Omit<ObservationMonitoringPlotResultsPayload, 'species'>> | BiomassPlot>(
     createBiomassPlot
   );
 
@@ -158,8 +166,37 @@ const BiomassObservationDataTab = ({
   }, [createBiomassPlot, setRecord]);
 
   const saveEditedData = useCallback(() => {
-    // save to backend
-  }, []);
+    void (async () => {
+      const biomassRecord = record as BiomassPlot;
+      const biomassPayload: BiomassUpdateOperationPayload = {
+        type: 'Biomass',
+        description: biomassRecord.biomassMeasurement?.description,
+        soilAssessment: biomassRecord.biomassMeasurement?.soilAssessment,
+      };
+
+      const plotPayload: ObservationPlotUpdateOperationPayload = {
+        type: 'ObservationPlot',
+        conditions: record.conditions,
+        notes: record.notes,
+      };
+
+      if (monitoringPlot?.monitoringPlotId) {
+        const result = await update({
+          observationId,
+          plotId: monitoringPlot?.monitoringPlotId,
+          updateObservationRequestPayload: {
+            updates: [biomassPayload, plotPayload],
+          },
+        });
+
+        if ('error' in result) {
+          snackbar.toastError();
+          return;
+        }
+      }
+    })();
+    setShowConfirmationModalOpened(false);
+  }, [update, snackbar, record, monitoringPlot, observationId]);
 
   const onEditQualitativeData = useCallback(() => {
     setEditQualitativeDataModalOpen(true);
