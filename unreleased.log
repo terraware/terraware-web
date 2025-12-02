@@ -1,3 +1,5 @@
+e8591bb984e Update dependency express to v5.2.0 [SECURITY] (#4831)
+467d4480299 SW-7703 Edit notes modal (invasive and threatened species tab) (#4826)
 580575bd75a SW-7779 Remove ability to apply multi-select filters with no values (#4830)
 be2bb2bb7af SW-7235 Edit Qualitative fields (#4825)
 d478086955f SW-7786 Observation details view at plot level date shown is incorrect (#4824)
