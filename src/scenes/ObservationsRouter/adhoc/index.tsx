@@ -338,7 +338,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
         children: <PhotosAndVideosTab monitoringPlot={monitoringPlotResult} />,
       },
     ];
-  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies]);
+  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',

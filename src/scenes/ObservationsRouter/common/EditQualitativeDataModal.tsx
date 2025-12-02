@@ -236,12 +236,15 @@ const EditQualitativeDataModal = ({
               </Box>
 
               <Box sx={{ flex: 1 }}>
-                <TextField
-                  type='text'
+                <Dropdown
                   label={strings.TIDE}
-                  value={record.biomassMeasurement?.tide}
+                  selectedValue={record.biomassMeasurement?.tide}
                   id={'tide'}
                   onChange={onChangeHandler('biomassMeasurement.tide')}
+                  options={[
+                    { label: strings.LOW, value: 'Low' },
+                    { label: strings.HIGH, value: 'High' },
+                  ]}
                 />
               </Box>
             </Box>

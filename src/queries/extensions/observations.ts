@@ -43,6 +43,8 @@ api.enhanceEndpoints({
       ],
     },
     listObservationResults: {
+      // Temporarily disable caching until update mutations are used.
+      keepUnusedDataFor: 0,
       providesTags: (results) => [
         ...(results
           ? results.observations.map((observation) => ({

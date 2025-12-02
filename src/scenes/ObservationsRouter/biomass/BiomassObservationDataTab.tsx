@@ -37,6 +37,7 @@ type BiomassObservationDataTabProps = {
   onExportData: () => void;
   onMatchSpecies: () => void;
   observationId: number;
+  reload: () => void;
 };
 
 const BiomassObservationDataTab = ({
@@ -47,6 +48,7 @@ const BiomassObservationDataTab = ({
   onExportData,
   onMatchSpecies,
   observationId,
+  reload,
 }: BiomassObservationDataTabProps) => {
   const theme = useTheme();
   const { plantingSite } = usePlantingSiteData();
@@ -172,6 +174,14 @@ const BiomassObservationDataTab = ({
         type: 'Biomass',
         description: biomassRecord.biomassMeasurement?.description,
         soilAssessment: biomassRecord.biomassMeasurement?.soilAssessment,
+        forestType: biomassRecord.biomassMeasurement?.forestType,
+        ph: biomassRecord.biomassMeasurement?.ph,
+        salinity: biomassRecord.biomassMeasurement?.salinity,
+        smallTreeCountHigh: biomassRecord.biomassMeasurement?.smallTreeCountHigh,
+        smallTreeCountLow: biomassRecord.biomassMeasurement?.smallTreeCountLow,
+        tide: biomassRecord.biomassMeasurement?.tide,
+        tideTime: biomassRecord.biomassMeasurement?.tideTime,
+        waterDepth: biomassRecord.biomassMeasurement?.waterDepth,
       };
 
       const plotPayload: ObservationPlotUpdateOperationPayload = {
@@ -193,10 +203,11 @@ const BiomassObservationDataTab = ({
           snackbar.toastError();
           return;
         }
+        reload();
+        setShowConfirmationModalOpened(false);
       }
     })();
-    setShowConfirmationModalOpened(false);
-  }, [update, snackbar, record, monitoringPlot, observationId]);
+  }, [update, snackbar, record, monitoringPlot, observationId, reload]);
 
   const onEditQualitativeData = useCallback(() => {
     setEditQualitativeDataModalOpen(true);
@@ -207,7 +218,7 @@ const BiomassObservationDataTab = ({
       {showConfirmationModalOpened && (
         <EditQualitativeDataConfirmationModal onClose={closeConfirmationModal} onSubmit={saveEditedData} />
       )}
-      {editQualitativeDataModalOpen && (
+      {editQualitativeDataModalOpen && monitoringPlot && (
         <EditQualitativeDataModal
           record={record}
           setRecord={setRecord}
@@ -250,14 +261,16 @@ const BiomassObservationDataTab = ({
             )}
           </Typography>
         )}
-        <Button
-          id='edit'
-          label={strings.EDIT}
-          onClick={onEditQualitativeData}
-          icon='iconEdit'
-          priority='secondary'
-          size='small'
-        />
+        {monitoringPlot && (
+          <Button
+            id='edit'
+            label={strings.EDIT}
+            onClick={onEditQualitativeData}
+            icon='iconEdit'
+            priority='secondary'
+            size='small'
+          />
+        )}
       </Box>
       <ExtraData items={extraItems} />
     </Card>

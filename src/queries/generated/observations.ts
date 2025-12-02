@@ -855,6 +855,12 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: object[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -878,12 +884,6 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -928,7 +928,15 @@ export type BiomassUpdateOperationPayload = {
   type: 'Biomass';
 } & ObservationUpdateOperationPayloadBase & {
     description?: string;
+    forestType?: 'Terrestrial' | 'Mangrove';
+    ph?: number;
+    salinity?: number;
+    smallTreeCountHigh?: number;
+    smallTreeCountLow?: number;
     soilAssessment?: string;
+    tide?: 'Low' | 'High';
+    tideTime?: string;
+    waterDepth?: number;
   };
 export type ObservationPlotUpdateOperationPayload = {
   type: 'ObservationPlot';
@@ -955,6 +963,16 @@ export type ObservationPlotUpdateOperationPayload = {
       | 'WaterBodies'
     )[];
     notes?: string;
+  };
+export type QuadratSpeciesUpdateOperationPayload = {
+  type: 'QuadratSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    abundance?: number;
+    position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+    /** Name of species to update. Either this or speciesId must be present. */
+    scientificName?: string;
+    /** ID of species to update. Either this or scientificName must be present. */
+    speciesId?: number;
   };
 export type QuadratUpdateOperationPayload = {
   type: 'Quadrat';
@@ -984,6 +1002,7 @@ export type UpdateObservationRequestPayload = {
     | BiomassSpeciesUpdateOperationPayload
     | BiomassUpdateOperationPayload
     | ObservationPlotUpdateOperationPayload
+    | QuadratSpeciesUpdateOperationPayload
     | QuadratUpdateOperationPayload
     | RecordedTreeUpdateOperationPayload
   )[];

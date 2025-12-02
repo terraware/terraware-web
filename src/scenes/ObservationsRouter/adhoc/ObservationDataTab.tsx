@@ -51,7 +51,7 @@ const ObservationDataTab = ({
   observationId,
 }: ObservationDataTabProps) => {
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
-  const { plantingSite } = usePlantingSiteData();
+  const { plantingSite, reload } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
   const [editQualitativeDataModalOpen, setEditQualitativeDataModalOpen] = useState(false);
@@ -154,22 +154,24 @@ const ObservationDataTab = ({
           snackbar.toastError();
           return;
         }
+        reload();
         setShowConfirmationModalOpened(false);
       }
     })();
-  }, [monitoringPlot, observationId, record, update, snackbar]);
+  }, [monitoringPlot, observationId, record, update, snackbar, reload]);
 
   return (
     <Card radius='24px'>
       {showConfirmationModalOpened && (
         <EditQualitativeDataConfirmationModal onClose={closeConfirmationModal} onSubmit={saveEditedData} />
       )}
-      {editQualitativeDataModalOpen && (
+      {editQualitativeDataModalOpen && monitoringPlot && (
         <EditQualitativeDataModal
           record={record}
           setRecord={setRecord}
           onClose={closeEditQualitativeDataModal}
           onSubmit={showConfirmationModal}
+          observationId={observationId}
         />
       )}
       <ObservationDataNumbers items={items} />
@@ -231,14 +233,16 @@ const ObservationDataTab = ({
             )}
           </Typography>
         )}
-        <Button
-          id='edit'
-          label={strings.EDIT}
-          onClick={onEditQualitativeData}
-          icon='iconEdit'
-          priority='secondary'
-          size='small'
-        />
+        {monitoringPlot && (
+          <Button
+            id='edit'
+            label={strings.EDIT}
+            onClick={onEditQualitativeData}
+            icon='iconEdit'
+            priority='secondary'
+            size='small'
+          />
+        )}
       </Box>
       <ExtraData items={extraItems} />
     </Card>
