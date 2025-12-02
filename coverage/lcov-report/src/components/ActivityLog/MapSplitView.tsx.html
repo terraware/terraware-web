@@ -303,17 +303,8 @@
 <a name='L238'></a><a href='#L238'>238</a>
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a>
-<a name='L248'></a><a href='#L248'>248</a>
-<a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L241'></a><a href='#L241'>241</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -463,16 +454,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -530,7 +511,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -570,9 +550,10 @@ import { useSearchParams } from 'react-router';
 import { Box, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
-import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
+import MapComponent from 'src/components/NewMap';
 import ColorKeyControl from 'src/components/NewMap/ColorKeyControl';
 import {
+  MapLayer,
   MapLayerFeature,
   MapMarker,
   MapMarkerGroup,
@@ -696,32 +677,22 @@ export default function <span class="fstat-no" title="function not covered" >Map
     );
   }, [plantingSites]);
 &nbsp;
-  const mapFeatures = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span>: MapFeatureSection[] =&gt; {</span>
+  const mapLayers = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span>: MapLayer[] =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return [</span>
       {
-        sectionTitle: strings.PHOTOS,
-        groups: markerGroups,
-        type: 'marker',
-      },
-      {
-        layers: [
-          {
-            features: siteFeatures,
-            label: strings.PLANTING_SITES,
-            layerId: 'sites',
-            style: {
-              borderColor: theme.palette.TwClrBaseGreen300,
-              fillColor: theme.palette.TwClrBaseGreen300,
-              opacity: 0.2,
-              type: 'fill',
-            },
-          },
-        ],
-        sectionTitle: strings.BOUNDARIES,
-        type: 'layer',
+        features: siteFeatures,
+        label: strings.PLANTING_SITES,
+        layerId: 'sites',
+        style: {
+          borderColor: theme.palette.TwClrBaseGreen300,
+          fillColor: theme.palette.TwClrBaseGreen300,
+          opacity: 0.2,
+          type: 'fill',
+        },
+        visible: true,
       },
     ];
-  }, [markerGroups, siteFeatures, strings, theme]);
+  }, [siteFeatures, strings, theme]);
 &nbsp;
   const nameTags = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span>: MapNameTag[] | undefined =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return plantingSites</span>
@@ -797,12 +768,11 @@ export default function <span class="fstat-no" title="function not covered" >Map
         drawerOpen
         drawerRef={drawerRef}
         drawerSize='large'
-        features={mapFeatures}
         hideBorder
-        hideLegend
-        initialSelectedLayerId='sites'
         initialViewState={initialMapViewState}
         mapRef={mapRef}
+        mapMarkers={markerGroups}
+        mapLayers={mapLayers}
         mapId={mapId}
         nameTags={nameTags}
         onMapMove={onMapMoveCallback}
@@ -820,7 +790,7 @@ export default function <span class="fstat-no" title="function not covered" >Map
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-02T13:07:40.669Z
+                at 2025-12-02T18:43:23.872Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
