@@ -45,11 +45,11 @@ const MonitoringPlotEditPhotos = () => {
 
   const snackbar = useSnackbar();
 
-  const { data: GetObservationResultsApiResponse } = useGetObservationResultsQuery({ observationId });
+  const { data: getObservationResultsApiResponse } = useGetObservationResultsQuery({ observationId });
 
   const observationResults = useMemo(
-    () => GetObservationResultsApiResponse?.observation,
-    [GetObservationResultsApiResponse]
+    () => getObservationResultsApiResponse?.observation,
+    [getObservationResultsApiResponse]
   );
 
   const visibleMediaItems = useMemo(
