@@ -349,6 +349,7 @@ CONTACT_TYPE,Tipo de contacto,413b6c0e
 CONTACT_US,Contáctenos,34a1b9ca
 CONTACT_US_DESCRIPTION,Cuéntenos su experiencia con Terraware y solicite asistencia adicional para usted o su organización.,e0205a80
 CONTACT_US_INSTRUCTIONS,"Sus comentarios son muy importantes para nosotros. Por favor, cuéntenos su experiencia con Terraware y cómo podemos ayudarle a usted y a su organización a sacar el máximo provecho de Terraware.",7560171e
+CONTAMINATION,Contaminación,aedb6b5f
 CONTENT_AND_MATERIALS,Contenidos y materiales,c0cf19c7
 CONTENTS,Contenido,0913f748
 CONTINUE,Continuar,b019a26b
@@ -483,6 +484,7 @@ DETAILS,Detalles,c13bd424
 DEV_SERVER_ERROR,Servidor no disponible (se puede reiniciar con nuevos cambios en el código). ¿Volver a cargar?,d3be39f0
 DIAMETER_AT_BREAST_HEIGHT,Diámetro a la altura del pecho (DAP) en la madurez (cm),6b42a16f
 DIAMETER_CM,Diámetro (cm),242d8114
+DIFFICULT_ACCESSIBILITY,Accesibilidad difícil,18c83274
 DISMISS,Cerrar notificación,a56709f4
 DO_NOT_USE,No usar,6950f9e5
 DOC_PRODUCER,Productor de documentos,e40f8aa1
@@ -584,6 +586,7 @@ EDITED_BY,Editado por,d3fc0e0d
 EDITING_ACTIVITY_FOR_PROJECT,Editando actividad para {0},0fa99727
 EDITING_SPECIES_DATA_FOR_ORGANIZATION,Editando datos de la especie para {0},a9817671
 EDITING_SPECIES_DATA_FOR_ORGANIZATION_WARNING,Está editando datos de la especie para {0}. Los cambios que haga aquí se verán reflejados en su base de datos inmediatamente.,2fb0b00d
+ELECTRICAL_LINES,Líneas eléctricas,f89c6623
 ELEVATION,Elevación,776ffeea
 ELEVATION_M,Altitud (m),56b4524a
 ELIGIBLE_AREA,Zona apta,48d6b529
@@ -694,6 +697,7 @@ FINANCE,Finanzas,ae6619da
 FINANCIAL_SUMMARIES,Resúmenes financieros,d26c4f56
 FINANCIAL_VIABILITY,Viabilidad económica,50706753
 FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,Obtenga más información sobre el Acelerador Seed to Forest de Terraformation {0} y postúlese.,e49d8596
+FIRE,Incendio,3daefdd1
 FIRST_ADD_PLANTING_SITE,"Para ver el tablero, usted debe tener un área de plantación.",29adc97e
 FIRST_NAME,Nombre,4728037d
 FIX_HIGHLIGHTED_FIELDS,Corrija los campos resaltados a continuación.,505e80af
@@ -772,6 +776,7 @@ GPS_COORDINATES,Coordenadas GPS,106ca85a
 GPX_FILE,Archivo GPX,16b83a81
 GRAMINOID,Gramínea,3d34e325
 GRAMS,Gramos,3ba23872
+GRAZING,Pastoreo,24e19891
 GREATER_THAN_FIFTY_PERCENT,> 50%,78ecfce0
 GREATER_THAN_SEVENTY_FIVE_PERCENT,> 75%,92f440d4
 GROWTH_FORM,Forma de crecimiento,59ac71af
@@ -834,6 +839,7 @@ IN_STORAGE,En almacenamiento,e17c2135
 INCLUDE_EMPTY_FIELDS,Incluir campos vacíos,a4ba1236
 INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
+INFRASTRUCTURE,Infraestructura,c8fe126f
 INSTANCES,Casos,fcc19322
 INSTRUCTIONS,Instrucciones:,4abbf6f0
 INSUFFICIENT_DATA,Datos insuficientes,8e59cf35
@@ -958,6 +964,7 @@ LOCATIONS,Lugares,dab7bb42
 LOCKED,Bloqueado,70941ed5
 LOG_FRAME_AND_ME_PLAN_URL,URL del marco lógico y del plan de seguimiento y evaluación,5bc48a88
 LOG_OUT,Cerrar sesión,48c18649
+LOGGING,Tala,b34b2e6e
 LONG_TERM_PERMANENT,A largo plazo/permanente,566657d6
 LOSS_RATE,Tasa de pérdidas,544aa2af
 LOWEST,Más baja,b651e8a7
@@ -1018,6 +1025,7 @@ MIN_PROJECT_AREA,Zona mínima de proyecto,9ab0d5c8
 MIN_PROJECT_AREA_DESCRIPTION,"La superficie más pequeña necesaria para la viabilidad económica, basada en el modelo financiero, el potencial de carbono y los costos.",4f08d601
 MIN_PROJECT_AREA_HA,Área mínima del proyecto (ha),a33875fa
 MINIMUM_CARBON_ACCUMULATION,Acumulación mínima de carbono (tCO2/ha/año),831c6683
+MINING,Minería,91d68563
 MISSING_SUBSET_WEIGHT_ERROR_COUNT,Usted debe introducir un peso del subconjunto con el fin de extraer por recuento,00a1e50c
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,"Debe introducir el peso de un subconjunto para poder retirarlo a un vivero. Para ello, edite la cantidad de esta accesión.",abddc79b
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,"Para crear una prueba de viabilidad, debe introducir el peso de un subconjunto. Para ello, edite la cantidad de esta accesión.",5ffd97b6
@@ -1081,6 +1089,7 @@ NATIVE_ECOSYSTEM_TOOLTIP,"Indique el tipo de ecosistema en el cual se encuentra 
 NATIVE_FOREST,Bosque autóctono,bbd2ab56
 NATIVE_NON_NATIVE,Nativo/No nativo,4ce0ad21
 NATIVE_SPECIES_TO_BE_PLANTED,Especies nativas que se plantarán,7a13ce14
+NATURAL_REGENERATION_WOODY,Regeneración natural leñosa,26fe4ab1
 NEEDS_TRANSLATION,Necesita traducción,ce38bfa9
 NEW,Nuevo,b8096e3b
 NEW_ACCESSION,Añadir accesión,6d0d1602
@@ -1881,6 +1890,7 @@ SOCIAL_IMPACT_REQUIRED,Impacto social y beneficios para la comunidad *,6f21762c
 SOIL,Tierra,bba67d3a
 SOIL_ASSESSMENT,Evaluación del suelo,803c8f49
 SOIL_ASSESSMENT_DESCRIPTION_NOTES,Descripción/Notas de la Evaluación del Suelo,c61b3dbb
+SOIL_EROSION,Erosión del suelo,5620daeb
 SOIL_PHOTO,Foto del suelo,5a089072
 SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",c506e77d
@@ -1950,6 +1960,7 @@ STATS_WARNING_DESCRIPTION_1,Las estadísticas de observación se calcularon desp
 STATS_WARNING_DESCRIPTION_2,Deshacer el estado de Plantación completa eliminará dichas estadísticas. ¿Está seguro de que desea deshacerlo?,d75cb848
 STATUS,Estado,213765a6
 STATUS_WITH_STATUS,Estatus:{0},67587035
+STEEP_SLOPE,Pendiente pronunciada,5bde8271
 STORAGE,Almacenamiento,bba4a98a
 STORED,Almacenada,f74eae19
 STORING,Almacenamiento,2e386dbc
@@ -2309,6 +2320,7 @@ VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
 VOTER,Votante: {0},46578e94
 VOTING_DECISION,Decisión de votación,9bb0be97
+WATER_BODIES,Cuerpos de agua,c13f37d6
 WATER_DEPTH_M,Profundidad del agua (m),ca8ca1fb
 WEIGHT,Peso,8d79d02a
 WEIGHT_GRAMS,Peso (g),7f5ac0db
