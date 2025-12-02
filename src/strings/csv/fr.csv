@@ -553,6 +553,7 @@ EDIT_FEEDBACK,Modifier les commentaires,6b52e0e6
 EDIT_FUNDING_ENTITY,Modifier l'organisme de financement,f21be0e0
 EDIT_FUNDING_ENTITY_DESC,Modifier l'entité de financement et les projets associés,779189ac
 EDIT_LOCATION,Modifier l'emplacement,f120fad8
+EDIT_NOTES,Modifier les notes,f02400ad
 EDIT_NURSERY,Modifier la pépinière,8813669e
 EDIT_OBSERVATION_DATA,Modifier les données d'observation,49681fee
 EDIT_ORGANIZATION,Modifier l'organisation,56332548
@@ -846,6 +847,7 @@ INVALID_EDITOR,Ce rapport est en cours d'édition par un autre utilisateur,6c883
 INVALID_VALUE,Valeur invalide,6efa77a5
 INVASIVE,Invasive,6d785c90
 INVASIVE_AND_THREATENED_SPECIES,Espèces envahissantes et menacées,d12cca9f
+INVASIVE_AND_THREATENED_SPECIES_INSTRUCTIONS,Cliquez sur une valeur dans les tableaux pour la modifier. Rendez-vous dans Photos et vidéos pour modifier les légendes des photos.,580915bd
 INVENTORY,Inventaire,001c6bdb
 INVENTORY_IMPORT_COMPLETE,Importation des données d'inventaire achevée !,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Définir les pépinières affectées à l'inventaire des semis,393e62d3

@@ -554,6 +554,7 @@ EDIT_FEEDBACK,Editar retroalimentación,6b52e0e6
 EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
 EDIT_FUNDING_ENTITY_DESC,Editar la entidad financiadora y los proyectos asociados.,779189ac
 EDIT_LOCATION,Editar ubicación,f120fad8
+EDIT_NOTES,Editar notas,f02400ad
 EDIT_NURSERY,Editar vivero,8813669e
 EDIT_OBSERVATION_DATA,Editar datos de observación,49681fee
 EDIT_ORGANIZATION,Editar organización,56332548
@@ -847,6 +848,7 @@ INVALID_EDITOR,Este informe está siendo editado por otro usuario,6c883a63
 INVALID_VALUE,Valor no válido,6efa77a5
 INVASIVE,Invasiva,6d785c90
 INVASIVE_AND_THREATENED_SPECIES,Especies invasoras y amenazadas,d12cca9f
+INVASIVE_AND_THREATENED_SPECIES_INSTRUCTIONS,Haga clic en un valor de las tablas para editarlo. Vaya a Fotos y Videos para editar los pies de foto.,580915bd
 INVENTORY,Inventario,001c6bdb
 INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas,393e62d3
