@@ -5,9 +5,10 @@ import { useSearchParams } from 'react-router';
 import { Box, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
+import MapComponent from 'src/components/NewMap';
 import ColorKeyControl from 'src/components/NewMap/ColorKeyControl';
 import {
+  MapLayer,
   MapLayerFeature,
   MapMarker,
   MapMarkerGroup,
@@ -131,32 +132,22 @@ export default function MapSplitView({
     );
   }, [plantingSites]);
 
-  const mapFeatures = useMemo((): MapFeatureSection[] => {
+  const mapLayers = useMemo((): MapLayer[] => {
     return [
       {
-        sectionTitle: strings.PHOTOS,
-        groups: markerGroups,
-        type: 'marker',
-      },
-      {
-        layers: [
-          {
-            features: siteFeatures,
-            label: strings.PLANTING_SITES,
-            layerId: 'sites',
-            style: {
-              borderColor: theme.palette.TwClrBaseGreen300,
-              fillColor: theme.palette.TwClrBaseGreen300,
-              opacity: 0.2,
-              type: 'fill',
-            },
-          },
-        ],
-        sectionTitle: strings.BOUNDARIES,
-        type: 'layer',
+        features: siteFeatures,
+        label: strings.PLANTING_SITES,
+        layerId: 'sites',
+        style: {
+          borderColor: theme.palette.TwClrBaseGreen300,
+          fillColor: theme.palette.TwClrBaseGreen300,
+          opacity: 0.2,
+          type: 'fill',
+        },
+        visible: true,
       },
     ];
-  }, [markerGroups, siteFeatures, strings, theme]);
+  }, [siteFeatures, strings, theme]);
 
   const nameTags = useMemo((): MapNameTag[] | undefined => {
     return plantingSites
@@ -232,12 +223,11 @@ export default function MapSplitView({
         drawerOpen
         drawerRef={drawerRef}
         drawerSize='large'
-        features={mapFeatures}
         hideBorder
-        hideLegend
-        initialSelectedLayerId='sites'
         initialViewState={initialMapViewState}
         mapRef={mapRef}
+        mapMarkers={markerGroups}
+        mapLayers={mapLayers}
         mapId={mapId}
         nameTags={nameTags}
         onMapMove={onMapMoveCallback}
