@@ -312,6 +312,18 @@ export const getConditionString = (
     | 'Pests'
     | 'SeedProduction'
     | 'UnfavorableWeather'
+    | 'NaturalRegenerationWoody'
+    | 'Logging'
+    | 'Fire'
+    | 'Mining'
+    | 'Grazing'
+    | 'Infrastructure'
+    | 'ElectricalLines'
+    | 'SoilErosion'
+    | 'DifficultAccessibility'
+    | 'Contamination'
+    | 'SteepSlope'
+    | 'WaterBodies'
 ) => {
   switch (condition) {
     case 'AnimalDamage': {
@@ -334,6 +346,47 @@ export const getConditionString = (
     }
     case 'UnfavorableWeather': {
       return strings.UNFAVORABLE_WEATHER;
+    }
+    case 'NaturalRegenerationWoody': {
+      return strings.NATURAL_REGENERATION_WOODY;
+    }
+    case 'Logging': {
+      return strings.LOGGING;
+    }
+    case 'Fire': {
+      return strings.FIRE;
+    }
+    case 'Mining': {
+      return strings.MINING;
+    }
+    case 'Grazing': {
+      return strings.GRAZING;
+    }
+    case 'Infrastructure': {
+      return strings.INFRASTRUCTURE;
+    }
+    case 'ElectricalLines': {
+      return strings.ELECTRICAL_LINES;
+    }
+
+    case 'SoilErosion': {
+      return strings.SOIL_EROSION;
+    }
+
+    case 'DifficultAccessibility': {
+      return strings.DIFFICULT_ACCESSIBILITY;
+    }
+
+    case 'Contamination': {
+      return strings.CONTAMINATION;
+    }
+
+    case 'SteepSlope': {
+      return strings.STEEP_SLOPE;
+    }
+
+    case 'WaterBodies': {
+      return strings.WATER_BODIES;
     }
     default: {
       return '';

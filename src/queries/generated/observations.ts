@@ -179,13 +179,6 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
-    updateRecordedTree: build.mutation<UpdateRecordedTreeApiResponse, UpdateRecordedTreeApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations/${queryArg.observationId}/trees/${queryArg.treeId}`,
-        method: 'PUT',
-        body: queryArg.updateRecordedTreeRequestPayload,
-      }),
-    }),
   }),
   overrideExisting: false,
 });
@@ -348,13 +341,6 @@ export type GetObservationResultsApiArg = {
   observationId: number;
   /** Whether to include plants in the results. Default to false */
   includePlants?: boolean;
-};
-export type UpdateRecordedTreeApiResponse =
-  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type UpdateRecordedTreeApiArg = {
-  observationId: number;
-  treeId: number;
-  updateRecordedTreeRequestPayload: UpdateRecordedTreeRequestPayload;
 };
 export type ObservationPayload = {
   /** Date this observation is scheduled to end. */
@@ -519,6 +505,18 @@ export type CompleteAdHocObservationRequestPayload = {
     | 'Pests'
     | 'SeedProduction'
     | 'UnfavorableWeather'
+    | 'NaturalRegenerationWoody'
+    | 'Logging'
+    | 'Fire'
+    | 'Mining'
+    | 'Grazing'
+    | 'Infrastructure'
+    | 'ElectricalLines'
+    | 'SoilErosion'
+    | 'DifficultAccessibility'
+    | 'Contamination'
+    | 'SteepSlope'
+    | 'WaterBodies'
   )[];
   notes?: string;
   /** Observation type for this observation. */
@@ -588,6 +586,18 @@ export type ObservationMonitoringPlotResultsPayload = {
     | 'Pests'
     | 'SeedProduction'
     | 'UnfavorableWeather'
+    | 'NaturalRegenerationWoody'
+    | 'Logging'
+    | 'Fire'
+    | 'Mining'
+    | 'Grazing'
+    | 'Infrastructure'
+    | 'ElectricalLines'
+    | 'SoilErosion'
+    | 'DifficultAccessibility'
+    | 'Contamination'
+    | 'SteepSlope'
+    | 'WaterBodies'
   )[];
   /** Observed coordinates, if any, up to one per position. */
   coordinates: ObservationMonitoringPlotCoordinatesPayload[];
@@ -888,7 +898,7 @@ export type AssignedPlotPayload = {
   isFirstObservation: boolean;
   isPermanent: boolean;
   observationId: number;
-  plantingSubzoneId: number;
+  plantingSubzoneId?: number;
   plantingSubzoneName: string;
   plantingZoneName: string;
   plotId: number;
@@ -904,15 +914,79 @@ export type GetOneAssignedPlotResponsePayload = {
 export type ObservationUpdateOperationPayloadBase = {
   type: string;
 };
+export type BiomassSpeciesUpdateOperationPayload = {
+  type: 'BiomassSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    isInvasive?: boolean;
+    isThreatened?: boolean;
+    /** Name of species to update. Either this or speciesId must be present. */
+    scientificName?: string;
+    /** ID of species to update. Either this or scientificName must be present. */
+    speciesId?: number;
+  };
 export type BiomassUpdateOperationPayload = {
   type: 'Biomass';
 } & ObservationUpdateOperationPayloadBase & {
     description?: string;
     soilAssessment?: string;
   };
+export type ObservationPlotUpdateOperationPayload = {
+  type: 'ObservationPlot';
+} & ObservationUpdateOperationPayloadBase & {
+    conditions?: (
+      | 'AnimalDamage'
+      | 'FastGrowth'
+      | 'FavorableWeather'
+      | 'Fungus'
+      | 'Pests'
+      | 'SeedProduction'
+      | 'UnfavorableWeather'
+      | 'NaturalRegenerationWoody'
+      | 'Logging'
+      | 'Fire'
+      | 'Mining'
+      | 'Grazing'
+      | 'Infrastructure'
+      | 'ElectricalLines'
+      | 'SoilErosion'
+      | 'DifficultAccessibility'
+      | 'Contamination'
+      | 'SteepSlope'
+      | 'WaterBodies'
+    )[];
+    notes?: string;
+  };
+export type QuadratUpdateOperationPayload = {
+  type: 'Quadrat';
+} & ObservationUpdateOperationPayloadBase & {
+    description?: string;
+    position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+  };
+export type RecordedTreeUpdateOperationPayload = {
+  type: 'RecordedTree';
+} & ObservationUpdateOperationPayloadBase & {
+    description?: string;
+    /** Only valid for Tree and Trunk growth forms. */
+    diameterAtBreastHeight?: number;
+    /** Only valid for Tree and Trunk growth forms. */
+    height?: number;
+    isDead?: boolean;
+    /** Only valid for Tree and Trunk growth forms. */
+    pointOfMeasurement?: number;
+    /** ID of tree to update. */
+    recordedTreeId: number;
+    /** Only valid for Shrub growth form. */
+    shrubDiameter?: number;
+  };
 export type UpdateObservationRequestPayload = {
   /** List of changes to make to different parts of the observation. Changes are all-or-nothing; if any of them fails, none of them is applied. */
-  updates: BiomassUpdateOperationPayload[];
+  updates: (
+    | BiomassSpeciesUpdateOperationPayload
+    | BiomassUpdateOperationPayload
+    | ObservationPlotUpdateOperationPayload
+    | QuadratUpdateOperationPayload
+    | RecordedTreeUpdateOperationPayload
+  )[];
 };
 export type CompletePlotObservationRequestPayload = {
   conditions: (
@@ -923,6 +997,18 @@ export type CompletePlotObservationRequestPayload = {
     | 'Pests'
     | 'SeedProduction'
     | 'UnfavorableWeather'
+    | 'NaturalRegenerationWoody'
+    | 'Logging'
+    | 'Fire'
+    | 'Mining'
+    | 'Grazing'
+    | 'Infrastructure'
+    | 'ElectricalLines'
+    | 'SoilErosion'
+    | 'DifficultAccessibility'
+    | 'Contamination'
+    | 'SteepSlope'
+    | 'WaterBodies'
   )[];
   notes?: string;
   /** Date and time the observation was performed in the field. */
@@ -973,9 +1059,6 @@ export type GetObservationResultsResponsePayload = {
   observation: ObservationResultsPayload;
   status: SuccessOrError;
 };
-export type UpdateRecordedTreeRequestPayload = {
-  description?: string;
-};
 export const {
   useListObservationsQuery,
   useLazyListObservationsQuery,
@@ -1014,5 +1097,4 @@ export const {
   useReplaceObservationPlotMutation,
   useGetObservationResultsQuery,
   useLazyGetObservationResultsQuery,
-  useUpdateRecordedTreeMutation,
 } = injectedRtkApi;

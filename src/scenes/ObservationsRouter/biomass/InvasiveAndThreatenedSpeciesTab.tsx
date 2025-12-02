@@ -29,7 +29,13 @@ const InvasiveAndThreatenedSpeciesTab = ({ monitoringPlot, observationId }: Inva
 
   return (
     <Card radius='24px'>
-      {editNotesModalOpen && <EditNotesModal onClose={onCloseEditNotesModal} observationId={observationId} />}
+      {editNotesModalOpen && (
+        <EditNotesModal
+          onClose={onCloseEditNotesModal}
+          observationId={observationId}
+          monitoringPlotId={monitoringPlot?.monitoringPlotId}
+        />
+      )}
       <Box display='flex' alignItems={'center'} justifyContent={'space-between'} marginBottom={3}>
         <Box display='flex' alignItems={'center'}>
           <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />

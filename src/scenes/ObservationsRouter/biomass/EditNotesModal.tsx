@@ -3,19 +3,27 @@ import React, { useCallback, useMemo } from 'react';
 import { Box } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import {
+  QuadratUpdateOperationPayload,
+  useGetObservationResultsQuery,
+  useUpdateCompletedObservationPlotMutation,
+} from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import QuadratNotesComponent from './QuadratNotesComponent';
 
 type EditNotesModalProps = {
   onClose: () => void;
   observationId: number;
+  monitoringPlotId?: number;
 };
 
-const EditNotesModal = ({ onClose, observationId }: EditNotesModalProps) => {
+const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesModalProps) => {
   const { data: GetObservationResultsApiResponse } = useGetObservationResultsQuery({ observationId });
+  const [update] = useUpdateCompletedObservationPlotMutation();
+  const snackbar = useSnackbar();
 
   const observationResults = useMemo(
     () => GetObservationResultsApiResponse?.observation,
@@ -25,9 +33,53 @@ const EditNotesModal = ({ onClose, observationId }: EditNotesModalProps) => {
   const biomassMeasurements = observationResults?.biomassMeasurements;
   const [record, setRecord] = useForm(biomassMeasurements);
 
-  const onSubmit = useCallback(() => {
-    // save notes to BE
-  }, []);
+  const onSubmit = useCallback(async () => {
+    const notheastQuadratPayload: QuadratUpdateOperationPayload = {
+      type: 'Quadrat',
+      position: 'NortheastCorner',
+      description: record?.quadrats.find((q) => q.position === 'NortheastCorner')?.description,
+    };
+
+    const northwestQuadratPayload: QuadratUpdateOperationPayload = {
+      type: 'Quadrat',
+      position: 'NorthwestCorner',
+      description: record?.quadrats.find((q) => q.position === 'NorthwestCorner')?.description,
+    };
+
+    const southeastQuadratPayload: QuadratUpdateOperationPayload = {
+      type: 'Quadrat',
+      position: 'SoutheastCorner',
+      description: record?.quadrats.find((q) => q.position === 'SoutheastCorner')?.description,
+    };
+
+    const southwestQuadratPayload: QuadratUpdateOperationPayload = {
+      type: 'Quadrat',
+      position: 'SouthwestCorner',
+      description: record?.quadrats.find((q) => q.position === 'SouthwestCorner')?.description,
+    };
+
+    if (monitoringPlotId) {
+      const payloads: QuadratUpdateOperationPayload[] = [
+        notheastQuadratPayload,
+        northwestQuadratPayload,
+        southeastQuadratPayload,
+        southwestQuadratPayload,
+      ];
+
+      const result = await update({
+        observationId,
+        plotId: monitoringPlotId,
+        updateObservationRequestPayload: {
+          updates: payloads,
+        },
+      });
+
+      if ('error' in result) {
+        snackbar.toastError();
+      }
+    }
+    onClose();
+  }, [monitoringPlotId, observationId, onClose, record?.quadrats, update, snackbar]);
 
   return (
     <DialogBox
