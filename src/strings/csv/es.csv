@@ -301,6 +301,7 @@ CHECKIN_ACCESSIONS,Registro de accesiones,3046e6fd
 CHECKING_DATA,"Ejecutando comprobación de base de datos. Por favor espere, esto puede tardar unos minutos...",7a36812b
 CHEMICAL,Química,7363e596
 CHOOSE_FILE,Seleccione archivo...,967c4c38
+CHOOSE_FILES,Seleccionar archivos...,c5167691
 CITATION,Cita,772afe77
 CITY,Ciudad,27557cbb
 CLAIMED,Reclamado,5813de3e
@@ -561,6 +562,7 @@ EDIT_ORGANIZATION,Editar organización,56332548
 EDIT_PARTICIPANT,Editar participante,895b68b3
 EDIT_PERMANENT_PLOTS,Editar Parcelas Permanentes,b78a9922
 EDIT_PERSON,Editar persona,5ec719a6
+EDIT_PHOTOS_AND_VIDEOS,Editar fotos y videos,d87a88ba
 EDIT_PLANTING_SITE,Editar sitio de plantación,71f7ea28
 EDIT_PROJECT,Editar proyecto,88eb63cb
 EDIT_QUANTITY,Editar cantidad,1d60ca38
@@ -1415,6 +1417,7 @@ PLOT_ADHOC_SPECIES_TOOLTIP,Especies es el número de especies representadas por 
 PLOT_ADHOC_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas.",b2fd163f
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
 PLOT_CORNER_PHOTOS,Fotos de las esquinas de la parcela,330ffad8
+PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de las esquinas de la parcela,f2f48bb3
 PLOT_DEAD_PLANTS_TOOLTIP,Plantas muertas es el número de plantas observadas registradas como muertas.,7d7e8860
 PLOT_DESCRIPTION,Descripción de la parcela,67e5afa5
 PLOT_INFO,Información de la parcela,38a9b59d
@@ -2236,7 +2239,9 @@ UPLOAD_DELIVERABLES_MESSAGE,Los entregables deben hacer referencia a ID de módu
 UPLOAD_ELLIPSIS,Subir...,0565da25
 UPLOAD_FAILED,Falló la carga,bbacbec8
 UPLOAD_FILE,Subir archivo,248e3ae5
+UPLOAD_FILES,Subir archivos,b98547be
 UPLOAD_FILES_DESCRIPTION,Buscar o arrastrar y soltar archivos.,7c4a7822
+UPLOAD_FILES_DESCRIPTION_FORMATS,"Busque o arrastre y suelte fotos y/o videos (JPG, PNG, MP4, MOV)",db3af0c6
 UPLOAD_FILES_TITLE,Cargar archivo(s),bd0f5440
 UPLOAD_MODULES_DESCRIPTION,Explore o arrastre y suelte un archivo CSV.,0e9c1a46
 UPLOAD_PHOTO,Cargar foto...,9a57b4af

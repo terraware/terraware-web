@@ -32,6 +32,7 @@ import EditSurvivalRateSettings from '../SurvivalRateSettings/EditSurvivalRateSe
 import ObservationsHome from './ObservationsHome';
 import ObservationMonitoringPlotDetails from './adhoc';
 import AdHocObservationDetails from './adhoc/AdHocObservationDetails';
+import MonitoringPlotEditPhotos from './common/MonitoringPlotEditPhotos';
 import ObservationDetails from './details';
 import { RescheduleObservation, ScheduleObservation } from './schedule';
 import ObservationPlantingZoneDetails from './zone';
@@ -166,6 +167,10 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
       <Route
         path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneName/plot/:monitoringPlotId'}
         element={<ObservationMonitoringPlotDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId/plot/:monitoringPlotId/photos'}
+        element={<MonitoringPlotEditPhotos />}
       />
       <Route
         path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneName'}
