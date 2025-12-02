@@ -800,6 +800,7 @@ HERBACIOUS_COVER_PERCENT,Cobertura herbácea %,ba8fa5bd
 HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
 HIDE_ON_MAP,Ocultar en el mapa,089ea8d7
+HIGH,Alto,cb1efe60
 HIGHEST,Más alta,5c2f89d6
 HIGHLIGHTED_ACTIVITY,Actividad destacada,483c0ed0
 HIGHLIGHTS,Destacados,a76b6c49
@@ -967,6 +968,7 @@ LOG_OUT,Cerrar sesión,48c18649
 LOGGING,Tala,b34b2e6e
 LONG_TERM_PERMANENT,A largo plazo/permanente,566657d6
 LOSS_RATE,Tasa de pérdidas,544aa2af
+LOW,Bajo,ddedeca3
 LOWEST,Más baja,b651e8a7
 MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
