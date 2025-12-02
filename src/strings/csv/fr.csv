@@ -348,6 +348,7 @@ CONTACT_TYPE,Type de contact,413b6c0e
 CONTACT_US,Contactez-nous,34a1b9ca
 CONTACT_US_DESCRIPTION,Faites-nous part de votre expérience avec Terraware et renseignez-vous sur les possibilités d'assistance supplémentaire pour vous ou votre organisation.,e0205a80
 CONTACT_US_INSTRUCTIONS,"Vos impressions sont très importantes pour nous. N'hésitez pas à nous faire part de votre expérience avec Terraware et de la façon dont nous pouvons vous aider, vous et votre organisation, à tirer le meilleur parti de Terraware.",7560171e
+CONTAMINATION,Contamination,aedb6b5f
 CONTENT_AND_MATERIALS,Contenu et matériel,c0cf19c7
 CONTENTS,Contenu,0913f748
 CONTINUE,Continuer,b019a26b
@@ -482,6 +483,7 @@ DETAILS,Détails,c13bd424
 DEV_SERVER_ERROR,Serveur non disponible (possibilité de redémarrage avec mise à jour du code). Redémarrer?,d3be39f0
 DIAMETER_AT_BREAST_HEIGHT,Diamètre à hauteur de poitrine (DHP) à maturité (cm),6b42a16f
 DIAMETER_CM,Diamètre (cm),242d8114
+DIFFICULT_ACCESSIBILITY,Accessibilité difficile,18c83274
 DISMISS,Fermer,a56709f4
 DO_NOT_USE,Ne pas utiliser,6950f9e5
 DOC_PRODUCER,Producteur de docs,e40f8aa1
@@ -583,6 +585,7 @@ EDITED_BY,Modifié par,d3fc0e0d
 EDITING_ACTIVITY_FOR_PROJECT,Modification de l’activité pour {0},0fa99727
 EDITING_SPECIES_DATA_FOR_ORGANIZATION,Modification des données de l'espèce pour {0},a9817671
 EDITING_SPECIES_DATA_FOR_ORGANIZATION_WARNING,Vous êtes en train de modifier les données de l'espèce pour {0}. Toute modification apportée ici sera immédiatement répercutée dans sa base de données.,2fb0b00d
+ELECTRICAL_LINES,Lignes électriques,f89c6623
 ELEVATION,Altitude,776ffeea
 ELEVATION_M,Altitude (m),56b4524a
 ELIGIBLE_AREA,Zone éligible,48d6b529
@@ -693,6 +696,7 @@ FINANCE,Finances,ae6619da
 FINANCIAL_SUMMARIES,Synthèses financières,d26c4f56
 FINANCIAL_VIABILITY,Viabilité financière,50706753
 FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,En savoir plus sur l’Accélérateur De La Semence à la Forêt de Terraformation {0} et postulez !,e49d8596
+FIRE,Incendie,3daefdd1
 FIRST_ADD_PLANTING_SITE,"Pour afficher le tableau de bord, vous devez détenir un site de plantation.",29adc97e
 FIRST_NAME,Prénom,4728037d
 FIX_HIGHLIGHTED_FIELDS,Remplissez les champs surlignés ci-dessous.,505e80af
@@ -771,6 +775,7 @@ GPS_COORDINATES,Coordonnées GPS,106ca85a
 GPX_FILE,Fichier GPX,16b83a81
 GRAMINOID,Graminoïdes,3d34e325
 GRAMS,Grammes,3ba23872
+GRAZING,Pâturage,24e19891
 GREATER_THAN_FIFTY_PERCENT,> 50 %,78ecfce0
 GREATER_THAN_SEVENTY_FIVE_PERCENT,> 75 %,92f440d4
 GROWTH_FORM,Type de plante,59ac71af
@@ -833,6 +838,7 @@ IN_STORAGE,Stocké,e17c2135
 INCLUDE_EMPTY_FIELDS,Inclure des champs vides,a4ba1236
 INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
+INFRASTRUCTURE,Infrastructure,c8fe126f
 INSTANCES,Instances,fcc19322
 INSTRUCTIONS,Instructions :,4abbf6f0
 INSUFFICIENT_DATA,Données insuffisantes,8e59cf35
@@ -957,6 +963,7 @@ LOCATIONS,Lieux,dab7bb42
 LOCKED,Verrouillé,70941ed5
 LOG_FRAME_AND_ME_PLAN_URL,URL du cadre logique et du plan de suivi et évaluation,5bc48a88
 LOG_OUT,Déconnexion,48c18649
+LOGGING,Exploitation forestière,b34b2e6e
 LONG_TERM_PERMANENT,Long terme/Permanent,566657d6
 LOSS_RATE,Taux de perte,544aa2af
 LOWEST,Les plus faibles,b651e8a7
@@ -1017,6 +1024,7 @@ MIN_PROJECT_AREA,Zone minimum du projet,9ab0d5c8
 MIN_PROJECT_AREA_DESCRIPTION,"Superficie minimale nécessaire pour assurer la viabilité financière, selon le modèle financier, le potentiel carbone et les coûts.",4f08d601
 MIN_PROJECT_AREA_HA,Surface minimale du projet (ha),a33875fa
 MINIMUM_CARBON_ACCUMULATION,Accumulation minimale de carbone (tCO2/ha/an),831c6683
+MINING,Exploitation minière,91d68563
 MISSING_SUBSET_WEIGHT_ERROR_COUNT,Vous devez saisir le poids d'un sous-ensemble pour effectuer un prélèvement par comptage.,00a1e50c
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,Vous devez entrer le poids d'un sous-ensemble pour pouvoir le retirer dans une pépinière. Ceci peut être fait en éditant la quantité de cette accession.,abddc79b
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,Vous devez entrer un poids de sous-ensemble pour créer un test de viabilité. Vous pouvez le faire en éditant la quantité de cet accès.,5ffd97b6
@@ -1080,6 +1088,7 @@ NATIVE_ECOSYSTEM_TOOLTIP,"Indiquez le type d'écosystème dans lequel cette esp�
 NATIVE_FOREST,Forêt indigène,bbd2ab56
 NATIVE_NON_NATIVE,Indigène/non-indigène,4ce0ad21
 NATIVE_SPECIES_TO_BE_PLANTED,Espèces indigènes à planter,7a13ce14
+NATURAL_REGENERATION_WOODY,Régénération naturelle ligneuse,26fe4ab1
 NEEDS_TRANSLATION,Nécessite une traduction,ce38bfa9
 NEW,Nouveau,b8096e3b
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
@@ -1880,6 +1889,7 @@ SOCIAL_IMPACT_REQUIRED,Impact social et avantages pour la collectivité *,6f2176
 SOIL,Sol,bba67d3a
 SOIL_ASSESSMENT,Évaluation du sol,803c8f49
 SOIL_ASSESSMENT_DESCRIPTION_NOTES,Description/Notes de l’évaluation du sol,c61b3dbb
+SOIL_EROSION,Érosion des sols,5620daeb
 SOIL_PHOTO,Photo du sol,5a089072
 SOMETHING_WENT_WRONG,Une erreur s'est produite.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si vous avez des difficultés à utiliser Terraware, veuillez nous signaler tout problème que vous rencontrez et nous ferons le nécessaire pour y remédier.",c506e77d
@@ -1949,6 +1959,7 @@ STATS_WARNING_DESCRIPTION_1,Les statistiques d'observation ont été calculées 
 STATS_WARNING_DESCRIPTION_2,L'annulation de l'état « Plantation terminée » supprimera ces statistiques. Êtes-vous sûr de vouloir annuler ?,d75cb848
 STATUS,Statut,213765a6
 STATUS_WITH_STATUS,Statut : {0},67587035
+STEEP_SLOPE,Pente raide,5bde8271
 STORAGE,Stocké,bba4a98a
 STORED,Stocké,f74eae19
 STORING,Mise en stockage,2e386dbc
@@ -2308,6 +2319,7 @@ VIEWING,Visualisation,fb67a07d
 VINE,Vigne,c39d21fb
 VOTER,Électeur : {0},46578e94
 VOTING_DECISION,Décision de vote,9bb0be97
+WATER_BODIES,Plans d'eau,c13f37d6
 WATER_DEPTH_M,Profondeur d'eau (m),ca8ca1fb
 WEIGHT,Poids,8d79d02a
 WEIGHT_GRAMS,Poids (g),7f5ac0db
