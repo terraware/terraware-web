@@ -172,22 +172,14 @@ const searchInventory = async ({
   query,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
-  const params: SearchRequestPayload = {
-    prefix: forSpecificFacilities ? 'facilityInventories' : 'inventories',
-    fields: forSpecificFacilities ? FACILITY_SPECIFIC_FIELDS : INVENTORY_FIELDS,
-    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          values: [organizationId],
-        },
-      ],
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'organization_id',
+      type: 'Exact',
+      values: [organizationId.toString()],
     },
-    count: 0,
-  };
+  ];
 
   const searchValueChildren: FieldNodePayload[] = [];
 
@@ -236,16 +228,27 @@ const searchInventory = async ({
     };
 
     if (nurseryFilter) {
-      params.search.children.push({
+      children.push({
         operation: 'and',
         children: [nurseryFilter, searchValueNodes],
       } as AndNodePayload);
     } else {
-      params.search.children.push(searchValueNodes);
+      children.push(searchValueNodes);
     }
   } else if (nurseryFilter) {
-    params.search.children.push(nurseryFilter);
+    children.push(nurseryFilter);
   }
+
+  const params: SearchRequestPayload = {
+    prefix: forSpecificFacilities ? 'facilityInventories' : 'inventories',
+    fields: forSpecificFacilities ? FACILITY_SPECIFIC_FIELDS : INVENTORY_FIELDS,
+    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+    search: {
+      operation: 'and',
+      children,
+    },
+    count: 0,
+  };
 
   return await SearchService.search(params);
 };
@@ -280,22 +283,15 @@ const searchInventoryByNursery = async ({
   ];
   const fields = isCsvExport ? exportedFields : exportedFields.concat(nonExportedFields);
 
-  const params: SearchRequestPayload = {
-    prefix: 'facilityInventoryTotals',
-    fields,
-    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          values: [organizationId],
-        },
-      ],
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'organization_id',
+      type: 'Exact',
+      values: [organizationId.toString()],
     },
-    count: 0,
-  };
+  ];
+
   const searchValueChildren: FieldNodePayload[] = [];
 
   if (query) {
@@ -323,11 +319,11 @@ const searchInventoryByNursery = async ({
       children: searchValueChildren,
     };
 
-    params.search.children.push(searchValueNodes);
+    children.push(searchValueNodes);
   }
 
   if (facilityIds?.length) {
-    params.search.children.push({
+    children.push({
       operation: 'field',
       field: 'facility_id',
       values: facilityIds.map((f) => f.toString()),
@@ -335,12 +331,23 @@ const searchInventoryByNursery = async ({
   }
 
   if (speciesIds?.length) {
-    params.search.children.push({
+    children.push({
       operation: 'field',
       field: 'facilityInventories.species_id',
       values: speciesIds.map((s) => s.toString()),
     } as SearchNodePayload);
   }
+
+  const params: SearchRequestPayload = {
+    prefix: 'facilityInventoryTotals',
+    fields,
+    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+    search: {
+      operation: 'and',
+      children,
+    },
+    count: 0,
+  };
 
   return isCsvExport ? await SearchService.searchCsv(params) : await SearchService.search(params);
 };
@@ -355,24 +362,14 @@ const downloadInventory = async ({
   query,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
-  const params: SearchRequestPayload = {
-    prefix: forSpecificFacilities ? 'facilityInventories' : 'inventories',
-    fields: forSpecificFacilities
-      ? FACILITY_SPECIFIC_FIELDS.filter((field) => !field.includes('raw'))
-      : INVENTORY_FIELDS.filter((field) => !field.includes('raw')),
-    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          values: [organizationId],
-        },
-      ],
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'organization_id',
+      type: 'Exact',
+      values: [organizationId.toString()],
     },
-    count: 1000,
-  };
+  ];
 
   const searchValueChildren: FieldNodePayload[] = [];
 
@@ -421,16 +418,29 @@ const downloadInventory = async ({
     };
 
     if (nurseryFilter) {
-      params.search.children.push({
+      children.push({
         operation: 'and',
         children: [nurseryFilter, searchValueNodes],
       } as AndNodePayload);
     } else {
-      params.search.children.push(searchValueNodes);
+      children.push(searchValueNodes);
     }
   } else if (nurseryFilter) {
-    params.search.children.push(nurseryFilter);
+    children.push(nurseryFilter);
   }
+
+  const params: SearchRequestPayload = {
+    prefix: forSpecificFacilities ? 'facilityInventories' : 'inventories',
+    fields: forSpecificFacilities
+      ? FACILITY_SPECIFIC_FIELDS.filter((field) => !field.includes('raw'))
+      : INVENTORY_FIELDS.filter((field) => !field.includes('raw')),
+    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+    search: {
+      operation: 'and',
+      children,
+    },
+    count: 1000,
+  };
 
   return await SearchService.searchCsv(params);
 };

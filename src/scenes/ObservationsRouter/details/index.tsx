@@ -67,6 +67,26 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const query = useQuery();
 
+  const zoneFilterValues = useMemo(() => {
+    if (searchProps.filtersProps?.filters.zone) {
+      const zoneNode = searchProps.filtersProps?.filters.zone;
+      if (zoneNode.operation === 'field') {
+        return zoneNode.values.filter((value): value is string => value !== null);
+      }
+    }
+    return [];
+  }, [searchProps.filtersProps?.filters.zone]);
+
+  const statusFilterValues = useMemo(() => {
+    if (searchProps.filtersProps?.filters.status) {
+      const statusNode = searchProps.filtersProps?.filters.status;
+      if (statusNode.operation === 'field') {
+        return statusNode.values.filter((value): value is string => value !== null);
+      }
+    }
+    return [];
+  }, [searchProps.filtersProps?.filters.status]);
+
   useEffect(() => {
     const mapView = query.get('map');
     if (mapView) {
@@ -83,7 +103,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
           selectedOrganization.id,
           defaultTimeZone.get().id,
           searchProps.search,
-          searchProps.filtersProps?.filters?.zone?.values ?? [],
+          zoneFilterValues,
           status
         )
   );
@@ -106,24 +126,24 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
             observationId,
             orgId: selectedOrganization.id,
             search: searchProps.search,
-            zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
+            zoneNames: zoneFilterValues,
           },
           defaultTimeZone.get().id
         )
   );
 
   useEffect(() => {
-    const values = searchProps.filtersProps?.filters.status?.values ?? [];
+    const values = statusFilterValues;
     const mappedValues = values.reduce((acc: ObservationState[], curr: string) => {
       let mappedValue;
       if (curr === strings.COMPLETED) {
-        mappedValue = 'Completed';
+        mappedValue = 'Completed' as ObservationState;
       } else if (curr === strings.IN_PROGRESS) {
-        mappedValue = 'InProgress';
+        mappedValue = 'InProgress' as ObservationState;
       } else if (curr === strings.OVERDUE) {
-        mappedValue = 'Overdue';
+        mappedValue = 'Overdue' as ObservationState;
       } else if (curr === strings.ABANDONED) {
-        mappedValue = 'Abandoned';
+        mappedValue = 'Abandoned' as ObservationState;
       }
       return mappedValue ? [...acc, mappedValue] : acc;
     }, [] as ObservationState[]);
@@ -134,7 +154,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       // if user clears filter, get specific statuses, we don't want to see Upcoming
       setStatus(['Completed', 'InProgress', 'Overdue', 'Abandoned']);
     }
-  }, [searchProps.filtersProps?.filters.status]);
+  }, [statusFilterValues]);
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
@@ -198,7 +218,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [details, navigate, plantingSiteId, selectedOrganization]);
 
   useEffect(() => {
-    const initialZones = searchProps.filtersProps?.filters?.zone?.values ?? [];
+    const initialZones = zoneFilterValues;
     const availableZones = initialZones.filter((name: string) => zoneNames.includes(name));
 
     if (availableZones.length < initialZones.length) {
@@ -207,7 +227,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         zone: { ...previous.zone, values: availableZones },
       }));
     }
-  }, [zoneNames, searchProps.filtersProps]);
+  }, [zoneNames, searchProps.filtersProps, zoneFilterValues]);
 
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 

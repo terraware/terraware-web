@@ -83,7 +83,7 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
-      setHasFilters(search.children.length > 0);
+      setHasFilters((search.operation === 'and' || search.operation === 'or') && search.children.length > 0);
       void dispatch(requestCohorts({ locale, search, searchSortOrder }));
     },
     [dispatch]

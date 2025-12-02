@@ -41,6 +41,7 @@ const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
   child: {
     operation: 'field',
     field: 'participant_cohort_id',
+    type: 'Exact',
     values: [null],
   },
 };

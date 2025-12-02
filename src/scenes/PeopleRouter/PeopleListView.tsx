@@ -20,7 +20,7 @@ import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
 import { OrganizationService, OrganizationUserService, Response } from 'src/services';
 import { SearchService } from 'src/services';
 import { OrganizationRole } from 'src/types/Organization';
-import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
+import { OrNodePayload, SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
 import { isTfContact } from 'src/utils/organization';
 import { isAdmin } from 'src/utils/organization';
@@ -85,7 +85,7 @@ export default function PeopleListView(): JSX.Element {
             operation: 'field',
             field: 'project_organization_id',
             type: 'Exact',
-            values: [selectedOrganization.id],
+            values: [selectedOrganization.id.toString()],
           },
           {
             operation: 'field',
@@ -142,6 +142,7 @@ export default function PeopleListView(): JSX.Element {
         return [];
       }
       const { type, values } = parseSearchTerm(searchTerm);
+
       const searchField: OrNodePayload | null = searchTerm
         ? {
             operation: 'or',
@@ -168,19 +169,25 @@ export default function PeopleListView(): JSX.Element {
           }
         : null;
 
+      const children: SearchNodePayload[] = [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          type: 'Exact',
+          values: [selectedOrganization.id.toString()],
+        },
+      ];
+
+      if (searchField) {
+        children.push(searchField);
+      }
+
       const params: SearchRequestPayload = {
         prefix: 'organizationUsers',
         fields: ['user_id', 'user_firstName', 'user_lastName', 'user_email', 'roleName', 'createdTime'],
         search: {
           operation: 'and',
-          children: [
-            {
-              operation: 'field',
-              field: 'organization_id',
-              type: 'Exact',
-              values: [selectedOrganization.id],
-            },
-          ],
+          children,
         },
         sortOrder: [
           {
@@ -189,11 +196,6 @@ export default function PeopleListView(): JSX.Element {
         ],
         count: 0,
       };
-
-      if (searchField) {
-        params.search.children.push(searchField);
-      }
-
       const searchResults = await SearchService.search(params);
       const usersResults: OrganizationUser[] = [];
       searchResults?.forEach((result) => {

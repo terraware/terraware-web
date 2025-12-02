@@ -63,7 +63,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
 
   const { activeLocale } = useLocalization();
 
-  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [filters, setFilters] = useState<Record<string, FieldNodePayload>>({});
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>(defaultSortOrder);
@@ -105,7 +105,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     // Apply filters to search API payload
     if (Object.keys(filters).length > 0) {
       const filterValueChildren = Object.keys(filters)
-        .filter((field: string) => (filters[field]?.values || []).length > 0)
+        .filter((field: string) => filters[field]?.operation === 'field' && filters[field].values.length > 0)
         .map((field: string): SearchNodePayload => filters[field]);
 
       searchNodeChildren.push({
@@ -158,11 +158,11 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
       const newCurrentFilters = filtersWithValues.reduce(
         (
           acc: {
-            [x: string]: SearchNodePayload;
+            [x: string]: FieldNodePayload;
           },
           filter: FilterConfigWithValues
         ): {
-          [x: string]: SearchNodePayload;
+          [x: string]: FieldNodePayload;
         } => ({
           ...acc,
           [filter.field]: filter.searchNodeCreator
@@ -170,7 +170,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
             : defaultSearchNodeCreator(filter.field, filter.values || []),
         }),
         {} as {
-          [x: string]: SearchNodePayload;
+          [x: string]: FieldNodePayload;
         }
       );
       setFilters(newCurrentFilters);

@@ -121,13 +121,13 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
             {
               operation: 'field',
               field: 'name',
-              searchType,
+              type: searchType,
               values,
             },
             {
               operation: 'field',
               field: 'description',
-              searchType,
+              type: searchType,
               values,
             },
           ],
@@ -159,14 +159,11 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
           type: 'Exact',
           values: [organizationId.toString()],
         },
+        ...(searchField ? [searchField] : []),
       ],
     },
     count: 0,
   };
-
-  if (searchField) {
-    params.search.children.push(searchField);
-  }
 
   const searchResults = await SearchService.search(params);
   const facilities: Facility[] =

@@ -1682,6 +1682,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Lists the entries from the event log that relate to a particular entity. */
+        post: operations["listEventLogEntries"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/facilities": {
         parameters: {
             query?: never;
@@ -2521,26 +2538,6 @@ export interface paths {
         put?: never;
         /** Withdraws seedlings from one or more seedling batches at a nursery. */
         post: operations["createBatchWithdrawal"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nursery/withdrawals/plantingSite/{plantingSiteId}/species": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Lists all the species that have been withdrawn to a planting site.
-         * @deprecated
-         */
-        get: operations["getSpeciesWithdrawnToPlantingSite"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -3811,7 +3808,8 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /** Updates information about a completed plot in an observation. */
+        patch: operations["updateCompletedObservationPlot"];
         trace?: never;
     };
     "/api/v1/tracking/observations/{observationId}/plots/{plotId}/claim": {
@@ -3963,6 +3961,23 @@ export interface paths {
          */
         get: operations["getObservationResults"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/observations/{observationId}/trees/{treeId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Updates information about a recorded tree from a biomass observation. */
+        put: operations["updateRecordedTree"];
         post?: never;
         delete?: never;
         options?: never;
@@ -4921,13 +4936,7 @@ export interface components {
         /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
         AndNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
             /** @description List of criteria all of which must be satisfied */
-            children: components["schemas"]["SearchNodePayload"][];
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            operation: "and";
+            children: (components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"])[];
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -5387,16 +5396,46 @@ export interface components {
              * Format: int32
              * @default 0
              */
-            germinatingQuantityWithdrawn: number;
+            germinatingQuantityWithdrawn?: number;
             /**
              * Format: int32
              * @default 0
              */
-            hardeningOffQuantityWithdrawn: number;
+            hardeningOffQuantityWithdrawn?: number;
             /** Format: int32 */
             notReadyQuantityWithdrawn?: number;
             /** Format: int32 */
             readyQuantityWithdrawn: number;
+        };
+        BiomassDetailsSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "BiomassDetails";
+        };
+        BiomassQuadratSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "BiomassQuadrat";
         };
         /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
         BiomassSpeciesPayload: {
@@ -5406,6 +5445,16 @@ export interface components {
             scientificName?: string;
             /** Format: int64 */
             speciesId?: number;
+        };
+        BiomassUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            description?: string;
+            soilAssessment?: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "Biomass";
         };
         /** @description Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
         CRS: {
@@ -5969,6 +6018,7 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CreateSavedDocumentVersionRequestPayload: {
+            /** @default false */
             isSubmitted?: boolean;
             name: string;
         };
@@ -6054,6 +6104,13 @@ export interface components {
             /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
             withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
         };
+        CreatedActionPayload: Omit<components["schemas"]["EventActionPayload"], "type"> & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "Created";
+        };
         DateVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -6095,6 +6152,13 @@ export interface components {
              * @enum {string}
              */
             operation: "Delete";
+        };
+        DeletedActionPayload: Omit<components["schemas"]["EventActionPayload"], "type"> & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "Deleted";
         };
         DeliverablePayload: {
             /** @enum {string} */
@@ -6368,6 +6432,33 @@ export interface components {
         ErrorDetails: {
             message: string;
         };
+        EventActionPayload: {
+            type: string;
+        };
+        EventLogEntryPayload: {
+            action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            /** Format: date-time */
+            timestamp: string;
+            /** Format: int64 */
+            userId: number;
+            userName: string;
+        };
+        EventSubjectPayload: {
+            /** @description If this is true, the entity referred to by this subject has been deleted. This property will be omitted if the entity still exists, i.e., this property will always be true if it exists. */
+            deleted?: boolean;
+            /**
+             * @description A localized extended human-readable description of the subject of the event, suitable for display in cases where events for many subjects are being shown in the same list.
+             * @example Project Backyard Garden
+             */
+            fullText: string;
+            /**
+             * @description A localized short human-readable name (often a single word) for the subject of the event, suitable for display in cases where only events for a single subject are being shown or where the subject doesn't need to be distinguished from others of the same type.
+             * @example Project
+             */
+            shortText: string;
+            type: string;
+        };
         ExistingAcceleratorReportConfigPayload: {
             /** Format: int64 */
             configId: number;
@@ -6572,6 +6663,8 @@ export interface components {
             gpsCoordinates?: components["schemas"]["Point"];
             /** @description Measured in meters. */
             height?: number;
+            /** Format: int64 */
+            id: number;
             isDead: boolean;
             isInvasive: boolean;
             isThreatened: boolean;
@@ -6665,12 +6758,17 @@ export interface components {
              * @enum {string}
              */
             operation: "field";
+        };
+        FieldUpdatedActionPayload: Omit<components["schemas"]["EventActionPayload"], "type"> & {
+            changedFrom?: string[];
+            changedTo?: string[];
+            fieldName: string;
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            operation: "field";
+            type: "FieldUpdated";
         };
         FieldValuesPayload: {
             /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
@@ -7478,6 +7576,27 @@ export interface components {
             documents: components["schemas"]["DocumentPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        /** @description Specifies which entities' events should be retrieved. Organization ID is mandatory, but other IDs can also be specified here. Entities have to match all the requested IDs. For example, if you specify observationId and monitoringPlotId, you will only get events related to one monitoring plot in one observation, whereas if you specify just observationId, you will get events related to all monitoring plots in that observation. The subjects property may be used to narrow the search further. */
+        ListEventLogEntriesRequestPayload: {
+            /** Format: int64 */
+            fileId?: number;
+            /** Format: int64 */
+            monitoringPlotId?: number;
+            /** Format: int64 */
+            observationId?: number;
+            /** Format: int64 */
+            organizationId: number;
+            /** Format: int64 */
+            plantingSiteId?: number;
+            /** Format: int64 */
+            projectId?: number;
+            /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "ObservationPlotMedia" | "Organization" | "Project" | "RecordedTree")[];
+        };
+        ListEventLogEntriesResponsePayload: {
+            events: components["schemas"]["EventLogEntryPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListEventsResponsePayload: {
             events: components["schemas"]["ModuleEvent"][];
             status: components["schemas"]["SuccessOrError"];
@@ -7492,7 +7611,7 @@ export interface components {
             fields: string[];
             /** Format: int64 */
             organizationId?: number;
-            search?: components["schemas"]["SearchNodePayload"];
+            search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         };
         ListFieldValuesResponsePayload: {
             results: {
@@ -8081,20 +8200,9 @@ export interface components {
             type: string;
         };
         /** @description Search criterion that matches results that do not match a set of search criteria. */
-        NotNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
-            child: components["schemas"]["SearchNodePayload"];
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
+        NotNodePayload: {
             operation: "not";
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            operation: "not";
+            child: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         };
         NotificationCountPayload: {
             /** Format: int64 */
@@ -8427,6 +8535,24 @@ export interface components {
              */
             totalSpecies: number;
         };
+        ObservationPlotMediaSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            fileId: number;
+            /** @enum {string} */
+            mediaKind: "Photo" | "Video";
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ObservationPlotMedia";
+        };
         ObservationResultsPayload: {
             adHocPlot?: components["schemas"]["ObservationMonitoringPlotResultsPayload"];
             areaHa?: number;
@@ -8526,27 +8652,18 @@ export interface components {
              */
             totalPlants: number;
         };
+        ObservationUpdateOperationPayload: {
+            type: string;
+        };
         OptionalSpeciesDensityPayload: {
             density?: number;
             /** Format: int64 */
             speciesId: number;
         };
         /** @description Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
-        OrNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
-            /** @description List of criteria at least one of which must be satisfied */
-            children: components["schemas"]["SearchNodePayload"][];
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
+        OrNodePayload: {
             operation: "or";
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            operation: "or";
+            children: (components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"])[];
         };
         OrganizationFeaturePayload: {
             enabled: boolean;
@@ -8642,6 +8759,16 @@ export interface components {
              * @description Total number of users in the organization with this role.
              */
             totalUsers: number;
+        };
+        OrganizationSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            organizationId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "Organization";
         };
         OrganizationUserPayload: {
             /**
@@ -9080,7 +9207,7 @@ export interface components {
          *         }
          *       },
          *       {
-         *         "prefix": "viabilityTests.viabilityTestResults",
+         *         "prefix": "viabilityTestResults",
          *         "search": {
          *           "operation": "field",
          *           "field": "seedsGerminated",
@@ -9095,7 +9222,7 @@ export interface components {
          */
         PrefixedSearch: {
             prefix: string;
-            search: components["schemas"]["SearchNodePayload"];
+            search: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         };
         ProjectAcceleratorDetailsPayload: {
             accumulationRate?: number;
@@ -9222,6 +9349,16 @@ export interface components {
             isEnabled: boolean;
             /** Format: int64 */
             projectId: number;
+        };
+        ProjectSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            projectId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "Project";
         };
         ProjectVotesPayload: {
             phases: components["schemas"]["PhaseVotes"][];
@@ -9354,6 +9491,17 @@ export interface components {
             selected: boolean;
             workers: components["schemas"]["WorkersPayloadV1"];
         };
+        QuadratUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            description?: string;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "Quadrat";
+        };
         ReassignDeliveryRequestPayload: {
             reassignments: components["schemas"]["ReassignmentPayload"][];
         };
@@ -9395,6 +9543,28 @@ export interface components {
             speciesName?: string;
             /** @enum {string} */
             status: "Live" | "Dead" | "Existing";
+        };
+        RecordedTreeSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: int64 */
+            recordedTreeId: number;
+            /** @enum {string} */
+            treeGrowthForm: "Tree" | "Shrub" | "Trunk";
+            /** Format: int32 */
+            treeNumber: number;
+            /** Format: int32 */
+            trunkNumber: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "RecordedTree";
         };
         ReplaceObservationPlotRequestPayload: {
             /** @enum {string} */
@@ -9640,16 +9810,63 @@ export interface components {
         };
         /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
         SearchNodePayload: {
-            operation: "and" | "field" | "not" | "or";
-            [key: string]: any;
+            operation: string;
         };
         SearchRequestPayload: {
+            /**
+             * Format: int32
+             * @description Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. Use a value of 0 to return the maximum number of allowed results.
+             * @default 25
+             */
             count?: number;
+            /** @description Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
             cursor?: string;
+            /**
+             * @description List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters.
+             * @example [
+             *       "processingStartDate",
+             *       "viabilityTests.seedsTested",
+             *       "facility_name"
+             *     ]
+             */
             fields: string[];
+            /**
+             * @description Search criteria to apply, only to the specified prefix. If the prefix is an empty string, apply the search to all results. If prefix is a sublist (no matter how nested), apply the search to the sublist results without affecting the top level results.
+             * @example [
+             *       {
+             *         "prefix": "species",
+             *         "search": {
+             *           "field": "name",
+             *           "operation": "field",
+             *           "values": [
+             *             "Species Name"
+             *           ]
+             *         }
+             *       },
+             *       {
+             *         "prefix": "viabilityTestResults",
+             *         "search": {
+             *           "field": "seedsGerminated",
+             *           "operation": "field",
+             *           "type": "Range",
+             *           "values": [
+             *             "30",
+             *             "40"
+             *           ]
+             *         }
+             *       }
+             *     ]
+             */
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: string;
-            search?: components["schemas"]["SearchNodePayload"];
+            /**
+             * @description Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. This is the name of a search table.
+             * @default organizations
+             * @example accessions
+             * @enum {string}
+             */
+            prefix?: "accessionCollectors" | "accessions" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "cohortModules" | "cohorts" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "participants" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantingSubzoneHistories" | "plantingSubzonePopulations" | "plantingSubzones" | "plantingZoneHistories" | "plantingZonePopulations" | "plantingZones" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "subLocations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
+            /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
         SearchResponsePayload: {
@@ -9659,8 +9876,12 @@ export interface components {
             }[];
         };
         SearchSortOrderElement: {
-            field: string;
+            /**
+             * @default Ascending
+             * @enum {string}
+             */
             direction?: "Ascending" | "Descending";
+            field: string;
         };
         SearchValuesResponsePayload: {
             results: {
@@ -9966,7 +10187,7 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         SummarizeAccessionSearchRequestPayload: {
-            search?: components["schemas"]["SearchNodePayload"];
+            search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         };
         SummarizeAccessionSearchResponsePayload: {
             /** Format: int32 */
@@ -10399,6 +10620,10 @@ export interface components {
             organizationId?: number;
             read: boolean;
         };
+        UpdateObservationRequestPayload: {
+            /** @description List of changes to make to different parts of the observation. Changes are all-or-nothing; if any of them fails, none of them is applied. */
+            updates: (components["schemas"]["BiomassUpdateOperationPayload"] | components["schemas"]["QuadratUpdateOperationPayload"])[];
+        };
         UpdateOrganizationInternalTagsRequestPayload: {
             tagIds: number[];
         };
@@ -10563,6 +10788,9 @@ export interface components {
         UpdateProjectRequestPayload: {
             description?: string;
             name: string;
+        };
+        UpdateRecordedTreeRequestPayload: {
+            description?: string;
         };
         UpdateReportPhotoRequestPayload: {
             caption?: string;
@@ -10784,7 +11012,7 @@ export interface components {
              * @default Plot
              * @enum {string}
              */
-            type: "Plot" | "Quadrat" | "Soil";
+            type?: "Plot" | "Quadrat" | "Soil";
         };
         UploadPlotPhotoRequestPayload: {
             caption?: string;
@@ -10796,7 +11024,7 @@ export interface components {
              * @default Plot
              * @enum {string}
              */
-            type: "Plot" | "Quadrat" | "Soil";
+            type?: "Plot" | "Quadrat" | "Soil";
         };
         UploadPlotPhotoResponsePayload: {
             /** Format: int64 */
@@ -13124,6 +13352,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                projectId: number;
                 configId: number;
             };
             cookie?: never;
@@ -13283,6 +13512,7 @@ export interface operations {
             };
             header?: never;
             path: {
+                projectId: number;
                 reportId: number;
             };
             cookie?: never;
@@ -13305,6 +13535,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                projectId: number;
                 reportId: number;
             };
             cookie?: never;
@@ -13437,6 +13668,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                projectId: number;
                 reportId: number;
             };
             cookie?: never;
@@ -13472,6 +13704,7 @@ export interface operations {
             };
             header?: never;
             path: {
+                projectId: number;
                 reportId: number;
                 fileId: number;
             };
@@ -13505,6 +13738,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                projectId: number;
                 reportId: number;
                 fileId: number;
             };
@@ -13532,6 +13766,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                projectId: number;
                 reportId: number;
                 fileId: number;
             };
@@ -14936,6 +15171,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListVariablesResponsePayload"];
+                };
+            };
+        };
+    };
+    listEventLogEntries: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListEventLogEntriesRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListEventLogEntriesResponsePayload"];
                 };
             };
         };
@@ -16659,28 +16918,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetNurseryWithdrawalResponsePayload"];
-                };
-            };
-        };
-    };
-    getSpeciesWithdrawnToPlantingSite: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                plantingSiteId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetSitePlotSpeciesResponsePayload"];
                 };
             };
         };
@@ -19499,6 +19736,51 @@ export interface operations {
             };
         };
     };
+    updateCompletedObservationPlot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                plotId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateObservationRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The plot or observation can't be found, or the plot isn't part of the observation. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The plot's observation has not been completed yet. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     claimMonitoringPlot: {
         parameters: {
             query?: never;
@@ -19837,6 +20119,33 @@ export interface operations {
             };
         };
     };
+    updateRecordedTree: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                treeId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRecordedTreeRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
     listPlantingSites: {
         parameters: {
             query?: {
@@ -19888,8 +20197,9 @@ export interface operations {
     };
     listPlantingSiteReportedPlants: {
         parameters: {
-            query: {
-                organizationId: number;
+            query?: {
+                organizationId?: number;
+                projectId?: number;
             };
             header?: never;
             path?: never;
