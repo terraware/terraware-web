@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1764701004688" clover="3.2.0">
-  <project timestamp="1764701004688" name="All files">
-    <metrics statements="35934" coveredstatements="1354" conditionals="25195" coveredconditionals="393" methods="11061" coveredmethods="213" elements="72190" coveredelements="1960" complexity="0" loc="35934" ncloc="35934" packages="284" files="1402" classes="1402"/>
+<coverage generated="1764707405065" clover="3.2.0">
+  <project timestamp="1764707405065" name="All files">
+    <metrics statements="35963" coveredstatements="1354" conditionals="25211" coveredconditionals="393" methods="11065" coveredmethods="213" elements="72239" coveredelements="1960" complexity="0" loc="35963" ncloc="35963" packages="284" files="1402" classes="1402"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13896,7 +13896,7 @@
       </file>
     </package>
     <package name="src.queries.generated">
-      <metrics statements="51" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="45" coveredmethods="0"/>
+      <metrics statements="50" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="44" coveredmethods="0"/>
       <file name="fundingEntities.ts" path="/home/runner/work/terraware-web/terraware-web/src/queries/generated/fundingEntities.ts">
         <metrics statements="13" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
@@ -13925,7 +13925,7 @@
         <line num="99" count="0" type="stmt"/>
       </file>
       <file name="observations.ts" path="/home/runner/work/terraware-web/terraware-web/src/queries/generated/observations.ts">
-        <metrics statements="30" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="28" coveredmethods="0"/>
+        <metrics statements="29" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="27" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -13954,8 +13954,7 @@
         <line num="162" count="0" type="stmt"/>
         <line num="168" count="0" type="stmt"/>
         <line num="175" count="0" type="stmt"/>
-        <line num="183" count="0" type="stmt"/>
-        <line num="1018" count="0" type="stmt"/>
+        <line num="1100" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux">
@@ -15790,7 +15789,7 @@
       </file>
     </package>
     <package name="src.redux.features.observations">
-      <metrics statements="418" coveredstatements="0" conditionals="218" coveredconditionals="0" methods="202" coveredmethods="0"/>
+      <metrics statements="430" coveredstatements="0" conditionals="230" coveredconditionals="0" methods="202" coveredmethods="0"/>
       <file name="observationDetailsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/observations/observationDetailsSelectors.ts">
         <metrics statements="13" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="28" count="0" type="stmt"/>
@@ -16129,7 +16128,7 @@
         <line num="228" count="0" type="stmt"/>
       </file>
       <file name="utils.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/observations/utils.ts">
-        <metrics statements="102" coveredstatements="0" conditionals="81" coveredconditionals="0" methods="49" coveredmethods="0"/>
+        <metrics statements="114" coveredstatements="0" conditionals="93" coveredconditionals="0" methods="49" coveredmethods="0"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="30" count="0" type="stmt"/>
@@ -16221,17 +16220,29 @@
         <line num="291" count="0" type="stmt"/>
         <line num="301" count="0" type="stmt"/>
         <line num="306" count="0" type="stmt"/>
-        <line num="316" count="0" type="cond" truecount="0" falsecount="8"/>
-        <line num="318" count="0" type="stmt"/>
-        <line num="321" count="0" type="stmt"/>
-        <line num="324" count="0" type="stmt"/>
-        <line num="327" count="0" type="stmt"/>
+        <line num="328" count="0" type="cond" truecount="0" falsecount="20"/>
         <line num="330" count="0" type="stmt"/>
         <line num="333" count="0" type="stmt"/>
         <line num="336" count="0" type="stmt"/>
         <line num="339" count="0" type="stmt"/>
-        <line num="344" count="0" type="stmt"/>
-        <line num="347" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="342" count="0" type="stmt"/>
+        <line num="345" count="0" type="stmt"/>
+        <line num="348" count="0" type="stmt"/>
+        <line num="351" count="0" type="stmt"/>
+        <line num="354" count="0" type="stmt"/>
+        <line num="357" count="0" type="stmt"/>
+        <line num="360" count="0" type="stmt"/>
+        <line num="363" count="0" type="stmt"/>
+        <line num="366" count="0" type="stmt"/>
+        <line num="369" count="0" type="stmt"/>
+        <line num="373" count="0" type="stmt"/>
+        <line num="377" count="0" type="stmt"/>
+        <line num="381" count="0" type="stmt"/>
+        <line num="385" count="0" type="stmt"/>
+        <line num="389" count="0" type="stmt"/>
+        <line num="392" count="0" type="stmt"/>
+        <line num="397" count="0" type="stmt"/>
+        <line num="400" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
     <package name="src.redux.features.organizationUser">
@@ -29744,7 +29755,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.biomass">
-      <metrics statements="344" coveredstatements="0" conditionals="262" coveredconditionals="0" methods="133" coveredmethods="0"/>
+      <metrics statements="362" coveredstatements="0" conditionals="266" coveredconditionals="0" methods="138" coveredmethods="0"/>
       <file name="BiomassMeasurement.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/BiomassMeasurement.tsx">
         <metrics statements="31" coveredstatements="0" conditionals="35" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
@@ -29993,15 +30004,33 @@
         <line num="16" count="0" type="stmt"/>
       </file>
       <file name="EditNotesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/EditNotesModal.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <metrics statements="26" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="62" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
       </file>
       <file name="InvasiveAndThreatenedSpeciesTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/InvasiveAndThreatenedSpeciesTab.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
