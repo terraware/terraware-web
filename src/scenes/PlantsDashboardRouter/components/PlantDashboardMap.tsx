@@ -83,7 +83,7 @@ const PlantDashboardMap = ({
   const [selectedPhotos, setSelectedPhotos] = useState<PlotPhoto[]>([]);
   const [selectedPlants, setSelectedPlants] = useState<PlotPlant[]>([]);
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
-  const [selectedLayer, setSelectedLayer] = useState<string | undefined>('sites');
+  const [selectedLayer, setSelectedLayer] = useState<string | undefined>('zones');
 
   const sitesLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
