@@ -8,20 +8,21 @@ import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectC
 import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { SortOrder } from 'src/components/common/table/sort';
+import { SearchSortOrderElement } from 'src/queries/generated/search';
+import { PlantingSiteSummary } from 'src/queries/search/plantingSites';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSitesFilters } from 'src/types/PlantingSite';
 import { Project } from 'src/types/Project';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 
 interface PlantingSitesTableProps {
-  results: SearchResponseElement[];
+  results: PlantingSiteSummary[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
-  setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
+  setSearchSortOrder: (sortOrder: SearchSortOrderElement) => void;
   filters: PlantingSitesFilters;
   setFilters: (filters: PlantingSitesFilters) => void;
 }

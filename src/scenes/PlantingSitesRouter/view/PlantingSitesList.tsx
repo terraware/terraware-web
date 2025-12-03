@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
@@ -9,33 +9,24 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
-import { useLocalization } from 'src/providers';
-import { useOrganization, useTimeZones } from 'src/providers/hooks';
+import { useOrganization } from 'src/providers/hooks';
+import { SearchSortOrderElement } from 'src/queries/generated/search';
+import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
 import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
-import { DraftPlantingSiteService, TrackingService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSitesFilters } from 'src/types/PlantingSite';
-import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { PlantingSiteSearchResult } from 'src/types/Tracking';
-import { sortResults } from 'src/utils/searchAndSort';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import useQuery from 'src/utils/useQuery';
-import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantingSitesTable from './PlantingSitesTable';
 
 export default function PlantingSitesList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const timeZones = useTimeZones();
-  const defaultTimeZone = useDefaultTimeZone().get();
   const contentRef = useRef(null);
   const query = useQuery();
-  const { activeLocale } = useLocalization();
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrderElement>({
     field: 'name',
     direction: 'Ascending',
   });
@@ -49,97 +40,23 @@ export default function PlantingSitesList(): JSX.Element {
       setPlantingSiteTypeSelectOpen(true);
     }
   }, [query]);
-  const filtersEmpty = useCallback(() => !filters.projectIds || filters.projectIds.length === 0, [filters]);
 
-  /**
-   * Search planting sites and draft planting sites.
-   * Return merged/sorted results.
-   */
-  const searchData = useCallback(
-    async (searchFields: SearchNodePayload[]) => {
-      if (selectedOrganization) {
-        const searchRequests = [
-          TrackingService.searchPlantingSites(selectedOrganization?.id, searchFields, searchSortOrder),
-        ];
-
-        searchRequests.push(
-          DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization?.id, searchFields, searchSortOrder)
-        );
-
-        // batch the search requests
-        const results = await Promise.allSettled(searchRequests);
-
-        const sites: PlantingSiteSearchResult[] = results.reduce((acc, result) => {
-          if (result.status === 'rejected') {
-            return acc;
-          }
-          const { value } = result;
-
-          return [
-            ...acc,
-            ...(value ?? []).map(
-              (site) =>
-                ({
-                  ...setTimeZone(site, timeZones, defaultTimeZone),
-                  numPlantingSubzones: site.numPlantingSubzones ?? '0',
-                  numPlantingZones: site.numPlantingZones ?? '0',
-                }) as PlantingSiteSearchResult
-            ),
-          ];
-        }, [] as PlantingSiteSearchResult[]);
-
-        if (sites.some((site) => site.isDraft)) {
-          // sort merged results by sort order
-          return sortResults(sites, activeLocale, searchSortOrder, [
-            'id',
-            'numPlantingSubzones',
-            'numPlantingZones',
-            'project_id',
-            'totalPlants',
-          ]);
-        }
-
-        return sites;
-      }
-    },
-    [activeLocale, defaultTimeZone, searchSortOrder, selectedOrganization, timeZones]
-  );
-
-  const onSearch = useCallback(async () => {
-    const searchFields: SearchNodePayload[] = [];
-
-    if (debouncedSearchTerm) {
-      searchFields.push({
-        operation: 'or',
-        children: [
-          { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
-          { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
-        ],
-      });
-    }
-
-    if (filters.projectIds && filters.projectIds.length > 0) {
-      searchFields.push({
-        field: 'project_id',
-        operation: 'field',
-        type: 'Exact',
-        values: filters.projectIds.map((projectId: number) => `${projectId}`),
-      });
-    }
-
-    const transformedResults = await searchData(searchFields);
-
-    if (!debouncedSearchTerm) {
-      setPlantingSites(transformedResults);
-    }
-    setSearchResults(transformedResults);
-  }, [debouncedSearchTerm, filters.projectIds, searchData]);
+  const [search, { data: plantingSites }] = useLazySearchPlantingSitesQuery();
 
   useEffect(() => {
-    void onSearch();
-  }, [selectedOrganization, onSearch]);
+    if (selectedOrganization) {
+      void search({
+        organizationId: selectedOrganization?.id,
+        projectIds: filters.projectIds,
+        searchTerm: debouncedSearchTerm,
+        searchOrder: [searchSortOrder],
+      });
+    }
+  }, [debouncedSearchTerm, filters.projectIds, search, searchSortOrder, selectedOrganization]);
 
-  if (plantingSites && filtersEmpty() && !plantingSites.length) {
+  const filtersEmpty = useMemo(() => !filters.projectIds || filters.projectIds.length === 0, [filters]);
+
+  if (plantingSites && filtersEmpty && !plantingSites.length) {
     return <EmptyStatePage pageName={'PlantingSites'} />;
   }
 
@@ -181,10 +98,10 @@ export default function PlantingSitesList(): JSX.Element {
       {plantingSites ? (
         <Box display='flex' flexDirection='column'>
           <PlantingSitesTable
-            results={searchResults || []}
+            results={plantingSites}
             temporalSearchValue={temporalSearchValue}
             setTemporalSearchValue={setTemporalSearchValue}
-            setSearchSortOrder={(order: SearchSortOrder) => setSearchSortOrder(order)}
+            setSearchSortOrder={(order: SearchSortOrderElement) => setSearchSortOrder(order)}
             filters={filters}
             setFilters={setFilters}
           />

@@ -32,7 +32,7 @@ const injectedRtkApi = api.injectEndpoints({
               ...(queryArgs.projectIds
                 ? [{ operation: 'field', field: 'project_id', type: 'Exact', values: queryArgs.projectIds }]
                 : []),
-              ...(queryArgs.searchTerm
+              ...(queryArgs.searchTerm && queryArgs.searchTerm.length
                 ? [
                     {
                       operation: 'or',
@@ -62,7 +62,7 @@ const injectedRtkApi = api.injectEndpoints({
           numPlantingZones: Number(result.numPlantingZones),
           projectId: Number(result.project_id),
           projectName: result.project_name,
-          timezoneId: result.timeZone,
+          timeZoneId: result.timeZone,
         })),
     }),
   }),
@@ -100,7 +100,7 @@ export type PlantingSiteSummary = {
   numPlantingZones: number;
   projectId: number;
   projectName: string;
-  timezoneId: string;
+  timeZoneId: string;
 };
 
 export { injectedRtkApi as api };
