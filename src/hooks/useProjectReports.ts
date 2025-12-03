@@ -29,6 +29,8 @@ const useProjectReports = (
         })
       );
       setRequestId(request.requestId);
+    } else {
+      setBusy(false);
     }
   }, [dispatch, projectId, includeFuture, includeMetrics, year]);
 
