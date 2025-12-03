@@ -58,12 +58,12 @@ const EditPermanentPlotsTab = ({
 
   const getFilteredPlots = useCallback(() => {
     return record.plots.filter((plot) => {
-      const isPlotInOb = withdrawnSpeciesPlots?.find(
-        (wp) => wp.monitoringPlotId.toString() === plot.monitoringPlotId.toString()
-      );
+      const isPlotInOb =
+        withdrawnSpeciesPlots?.find((wp) => wp.monitoringPlotId.toString() === plot.monitoringPlotId.toString()) &&
+        plotsWithObservations?.find((pl) => pl.id.toString() === plot.monitoringPlotId.toString());
       return isPlotInOb !== undefined;
     });
-  }, [record.plots, withdrawnSpeciesPlots]);
+  }, [plotsWithObservations, record.plots, withdrawnSpeciesPlots]);
 
   const saveSettings = useCallback(() => {
     const filteredPlots = getFilteredPlots();
