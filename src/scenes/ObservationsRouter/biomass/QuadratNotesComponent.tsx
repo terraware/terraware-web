@@ -6,7 +6,7 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { useLocalization } from 'src/providers';
 import { ExistingBiomassMeasurementPayload } from 'src/queries/generated/observations';
 
-type QuadratPosition = 'NorthwestCorner' | 'NortheastCorner' | 'SouthwestCorner' | 'SoutheastCorner';
+export type QuadratPosition = 'NorthwestCorner' | 'NortheastCorner' | 'SouthwestCorner' | 'SoutheastCorner';
 
 type QuadratConfig = {
   position: QuadratPosition;

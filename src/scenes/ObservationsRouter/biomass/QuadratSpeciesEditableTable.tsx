@@ -7,8 +7,11 @@ import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   BiomassSpeciesUpdateOperationPayload,
+  QuadratSpeciesUpdateOperationPayload,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
+
+import { QuadratPosition } from './QuadratNotesComponent';
 
 type SpeciesRow = {
   abundancePercent?: number;
@@ -32,6 +35,7 @@ export default function QuadratSpeciesEditableTable({
   observationId,
   plotId,
   reload,
+  quadrat,
 }: QuadratSpeciesEditableTableProps): JSX.Element {
   const { species: availableSpecies } = useSpeciesData();
   const theme = useTheme();
@@ -47,11 +51,12 @@ export default function QuadratSpeciesEditableTable({
     (fieldId: string, speciesId?: number, scientificName?: string) => (event: { currentTarget: { value: any } }) => {
       const value = event.currentTarget.value;
       if (value !== undefined && (speciesId || scientificName)) {
-        const uploadPayload: BiomassSpeciesUpdateOperationPayload = {
-          type: 'BiomassSpecies',
+        const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
+          type: 'QuadratSpecies',
+          position: quadrat as QuadratPosition,
           speciesId,
           scientificName,
-          [fieldId]: value,
+          abundance: value,
         };
         const mainPayload = {
           observationId,
@@ -61,7 +66,7 @@ export default function QuadratSpeciesEditableTable({
         void update(mainPayload);
       }
     },
-    [update, observationId, plotId]
+    [quadrat, observationId, plotId, update]
   );
 
   const columns = useMemo<MRT_ColumnDef<SpeciesRow>[]>(
