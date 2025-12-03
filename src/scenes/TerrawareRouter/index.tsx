@@ -23,6 +23,8 @@ const MINIMAL_USER_ROUTES: string[] = [
   APP_PATHS.OPT_IN,
   APP_PATHS.HELP_SUPPORT,
   APP_PATHS.HELP_SUPPORT_FORM,
+  // this is to help the tests because they often navigate away from the accelerator console after clicking
+  APP_PATHS.ACCELERATOR,
 ];
 
 const MINIMAL_FUNDER_ROUTES: string[] = [
