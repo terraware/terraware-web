@@ -3,9 +3,7 @@ import { test } from '@playwright/test';
 import { ProjectDetails, publishProjectProfile, validateProjectProfilePage } from '../utils/projectProfile';
 import { changeToFunderUser, changeToSuperAdmin } from '../utils/userUtils';
 
-test.setTimeout(20000);
-
-export default function FunderProjectProfileTests() {
+test.describe('FunderProjectProfileTests', () => {
   test('Publish Project and then View Published Project', async ({ page, context }, testInfo) => {
     // publish project
     await changeToSuperAdmin(context);
@@ -52,4 +50,4 @@ export default function FunderProjectProfileTests() {
 
     await validateProjectProfilePage(projectDetails, page);
   });
-}
+});

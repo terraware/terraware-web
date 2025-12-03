@@ -6,11 +6,6 @@ import { publishProjectProfile } from '../utils/projectProfile';
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions } from '../utils/utils';
 
-test.setTimeout(20000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
 type Funder = {
   name: string;
   email: string;
@@ -23,10 +18,13 @@ type FundingEntity = {
   funders?: Funder[];
 };
 
-export default function FundingEntitiesTests() {
-  test('Add a Funding Entity', async ({ page }, testInfo) => {
+test.describe('FundingEntitiesTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await navigateToFundingEntities(page);
+  });
 
+  test('Add a Funding Entity', async ({ page }, testInfo) => {
     const newEntityName = `New Funding Entity-${new Date().getTime()}`;
 
     // unpublished projects are not in projects list
@@ -69,8 +67,6 @@ export default function FundingEntitiesTests() {
   });
 
   test('Edit a Funding Entity', async ({ page }, testInfo) => {
-    await navigateToFundingEntities(page);
-
     const updatedEntityName = `Existing Funding Entity-Updated`;
 
     await page.getByText('Existing Funding Entity', exactOptions).click();
@@ -107,8 +103,6 @@ export default function FundingEntitiesTests() {
   });
 
   test('Delete a Funding Entity', async ({ page }, testInfo) => {
-    await navigateToFundingEntities(page);
-
     await page.getByText('Funding Entity to Delete', exactOptions).click();
     await page.locator('#more-options').click();
     await page
@@ -121,7 +115,7 @@ export default function FundingEntitiesTests() {
     await page.waitForTimeout(1000); //Wait for funding entities list to load
     await expect(page.getByText('Funding Entity to Delete', exactOptions)).toBeHidden();
   });
-}
+});
 
 async function validateFundingEntityPage(fundingEntity: FundingEntity, page: Page) {
   await expect(page.getByText(`Name${fundingEntity.name}`, exactOptions)).toBeVisible();

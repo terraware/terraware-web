@@ -106,7 +106,7 @@ export async function validateProjectProfilePage(projectDetails: ProjectDetails,
 
 export async function publishProjectProfile(dealName: string, page: Page) {
   await navigateToProjectProfile(dealName, page);
-  await page.locator('#more-options').click();
+  await page.locator('#more-options').click({ timeout: 1000 });
   await page
     .locator('li')
     .filter({ hasText: /^Publish$/ })

@@ -1,20 +1,18 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, waitFor } from '../utils/utils';
+import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
-test.setTimeout(60000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function MatrixViewTests() {
-  test('Matrix view render', async ({ page }, testInfo) => {
+test.describe('MatrixViewTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-    await page.getByRole('link', { name: 'Accelerator Console' }).click();
-    await page.getByRole('button', { name: 'Matrix View' }).click();
+    await waitFor(page, '#acceleratorConsoleButton');
+  });
 
+  test('Matrix view render', async ({ page }, testInfo) => {
+    await page.getByRole('link', { name: 'Accelerator Console' }).click({ delay: 50 });
+    await page.getByRole('button', { name: 'Matrix View' }).click();
     await page.waitForTimeout(1000); //Wait for table to load
 
     await expect(page.getByLabel('Show/Hide search')).toBeVisible();
@@ -55,11 +53,8 @@ export default function MatrixViewTests() {
   });
 
   test('Add column to matrix view', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
     await page.getByRole('button', { name: 'Matrix View' }).click();
-
     await page.waitForTimeout(1000); //Wait for table to load
 
     await page.locator('#manageColumns').click();
@@ -72,11 +67,10 @@ export default function MatrixViewTests() {
   });
 
   test('Column reordering and reset in matrix view', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
     await page.getByRole('button', { name: 'Matrix View' }).click();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1000); //Wait for table to load
+
     // Get initial column order
     const initialHeaders = await page.getByRole('columnheader').allTextContents();
 
@@ -106,11 +100,10 @@ export default function MatrixViewTests() {
   });
 
   test('Add multiple columns and reset columns in matrix view', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
     await page.getByRole('button', { name: 'Matrix View' }).click();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1000); //Wait for table to load
+
     await page.locator('#manageColumns').click();
     await expect(page.locator('.dialog-box')).toBeVisible();
 
@@ -140,4 +133,4 @@ export default function MatrixViewTests() {
     await expect(page.getByRole('columnheader', { name: 'Country' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Project Lead' })).toBeVisible();
   });
-}
+});
