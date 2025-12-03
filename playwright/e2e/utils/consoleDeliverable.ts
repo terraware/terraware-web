@@ -62,7 +62,7 @@ export async function validateQuestionnaireQuestionUpdateComments(question: stri
 }
 
 export async function approveQuestionnaireDeliverable(page: Page) {
-  await page.getByRole('button', { name: 'Approve' }).click();
+  await page.getByRole('button', { name: 'Approve' }).click({ timeout: 1000 });
   await page.locator('#confirmApprove').click();
 }
 

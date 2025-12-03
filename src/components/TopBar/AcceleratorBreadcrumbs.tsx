@@ -64,6 +64,7 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
         <Grid container>
           <Grid item>
             <Link
+              id={'acceleratorConsoleButton'}
               fontSize={16}
               lineHeight='32px'
               to={APP_PATHS.ACCELERATOR}

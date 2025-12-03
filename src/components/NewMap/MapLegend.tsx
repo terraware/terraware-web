@@ -7,55 +7,55 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { MapFillComponentStyle, MapIconComponentStyle } from './types';
 
-export type MapLayerLegendItem = {
-  disabled?: boolean;
-  id: string;
-  label: string;
-  style: MapIconComponentStyle | MapFillComponentStyle;
-};
-
 type BaseMapLegendGroup = {
   disabled?: boolean;
   title: string;
   tooltip?: string;
 };
 
-export type MapLayerLegendGroup = {
-  type: 'layer';
-  items: MapLayerLegendItem[];
+export type MapSingleSelectLegendItem = {
+  disabled?: boolean;
+  id: string;
+  label: string;
+  style: MapIconComponentStyle | MapFillComponentStyle;
+};
+
+export type MapSingleSelectLegendGroup = {
+  type: 'single-select';
+  items: MapSingleSelectLegendItem[];
   selectedLayer?: string;
   setSelectedLayer: (id: string | undefined) => void;
 } & BaseMapLegendGroup;
 
-export type MapMarkerLegendItem = {
+export type MapMultiSelectLegendItem = {
   disabled?: boolean;
   id: string;
   label: string;
   setVisible?: (visible: boolean) => void;
-  style: MapIconComponentStyle;
+  style: MapIconComponentStyle | MapFillComponentStyle;
   visible: boolean;
 };
 
-export type MapMarkerLegendGroup = {
-  items: MapMarkerLegendItem[];
-  type: 'marker';
+export type MapMultiSelectLegendGroup = {
+  items: MapMultiSelectLegendItem[];
+  type: 'multi-select';
 } & BaseMapLegendGroup;
 
-export type MapHighlightLegendItem = {
+export type MapGroupToggleLegendItem = {
   label: string;
-  style: MapFillComponentStyle;
+  style: MapIconComponentStyle | MapFillComponentStyle;
 };
 
-export type MapHighlightLegendGroup = {
-  items: MapHighlightLegendItem[];
+export type MapGroupToggleLegendGroup = {
+  items: MapGroupToggleLegendItem[];
   setVisible?: (visible: boolean) => void;
-  type: 'highlight';
+  type: 'group-toggle';
   visible: boolean;
 } & BaseMapLegendGroup;
 
-export type MapLegendGroup = MapMarkerLegendGroup | MapLayerLegendGroup | MapHighlightLegendGroup;
+export type MapLegendGroup = MapMultiSelectLegendGroup | MapSingleSelectLegendGroup | MapGroupToggleLegendGroup;
 
-export type MapLegendItem = MapMarkerLegendItem | MapLayerLegendItem | MapHighlightLegendItem;
+export type MapLegendItem = MapMultiSelectLegendItem | MapSingleSelectLegendItem | MapGroupToggleLegendItem;
 
 export type MapLegendProps = {
   legends: MapLegendGroup[];
@@ -68,14 +68,14 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
   const onClick = useCallback((legend: MapLegendGroup, item: MapLegendItem) => {
     return legend.disabled
       ? undefined
-      : legend.type === 'layer'
-        ? (item as MapLayerLegendItem).disabled
+      : legend.type === 'single-select'
+        ? (item as MapSingleSelectLegendItem).disabled
           ? undefined
-          : () => legend.setSelectedLayer((item as MapLayerLegendItem).id)
-        : legend.type === 'marker'
-          ? (item as MapMarkerLegendItem).disabled
+          : () => legend.setSelectedLayer((item as MapSingleSelectLegendItem).id)
+        : legend.type === 'multi-select'
+          ? (item as MapMultiSelectLegendItem).disabled
             ? undefined
-            : () => (item as MapMarkerLegendItem).setVisible?.(!(item as MapMarkerLegendItem).visible)
+            : () => (item as MapMultiSelectLegendItem).setVisible?.(!(item as MapMultiSelectLegendItem).visible)
           : undefined;
   }, []);
 
@@ -85,7 +85,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
         const isFirst = index === 0;
         const isLast = index === legends.length - 1;
         const switchComponent =
-          legend.type === 'highlight' ? (
+          legend.type === 'group-toggle' ? (
             <AntSwitch disabled={legend.disabled} checked={legend.visible} onChange={legend.setVisible} />
           ) : undefined;
 
@@ -120,18 +120,18 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
 
           const disabled =
             legend.disabled ||
-            (legend.type === 'layer'
-              ? (item as MapLayerLegendItem).disabled
-              : legend.type === 'marker'
-                ? (item as MapMarkerLegendItem).disabled
+            (legend.type === 'single-select'
+              ? (item as MapSingleSelectLegendItem).disabled
+              : legend.type === 'multi-select'
+                ? (item as MapMultiSelectLegendItem).disabled
                 : false) ||
             false;
 
           const selected =
-            legend.type === 'layer'
-              ? (item as MapLayerLegendItem).id === legend.selectedLayer
-              : legend.type === 'marker'
-                ? (item as MapMarkerLegendItem).visible
+            legend.type === 'single-select'
+              ? (item as MapSingleSelectLegendItem).id === legend.selectedLayer
+              : legend.type === 'multi-select'
+                ? (item as MapMultiSelectLegendItem).visible
                 : false;
 
           const logoComponent = () => {
@@ -175,15 +175,15 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
 
           const visibleComponent = () => {
             switch (legend.type) {
-              case 'marker': {
-                const featureItem = item as MapMarkerLegendItem;
+              case 'multi-select': {
+                const featureItem = item as MapMultiSelectLegendItem;
 
                 const visibleIcon = featureItem.visible ? <Icon name='iconEye' /> : <Icon name='iconEyeOff' />;
 
                 return <Box display='flex'>{visibleIcon}</Box>;
               }
-              case 'layer': {
-                const layerItem = item as MapLayerLegendItem;
+              case 'single-select': {
+                const layerItem = item as MapSingleSelectLegendItem;
 
                 return (
                   <Box display='flex' sx={{ visibility: layerItem.id === legend.selectedLayer ? 'visible' : 'hidden' }}>
@@ -192,7 +192,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
                 );
               }
 
-              case 'highlight':
+              case 'group-toggle':
                 return undefined;
             }
           };

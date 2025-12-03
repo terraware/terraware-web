@@ -4,7 +4,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import './styles.scss';
 
-type MapContainerProps = {
+export type MapContainerProps = {
   containerId?: string;
   drawer?: ReactNode;
   drawerOpen?: boolean;

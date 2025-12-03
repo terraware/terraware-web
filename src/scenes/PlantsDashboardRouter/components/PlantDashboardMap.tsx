@@ -3,15 +3,19 @@ import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, useTheme } from '@mui/material';
 
-import MapComponent, { MapFeatureSection } from 'src/components/NewMap';
+import MapComponent from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
 import MapDrawerPagination from 'src/components/NewMap/MapDrawerPagination';
+import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import {
   MapFillComponentStyle,
+  MapHighlightGroup,
+  MapIconComponentStyle,
   MapLayer,
   MapLayerFeature,
   MapLayerFeatureId,
   MapMarker,
+  MapMarkerGroup,
   MapNameTag,
   MapPoint,
 } from 'src/components/NewMap/types';
@@ -79,6 +83,7 @@ const PlantDashboardMap = ({
   const [selectedPhotos, setSelectedPhotos] = useState<PlotPhoto[]>([]);
   const [selectedPlants, setSelectedPlants] = useState<PlotPlant[]>([]);
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
+  const [selectedLayer, setSelectedLayer] = useState<string | undefined>('zones');
 
   const sitesLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
@@ -110,6 +115,33 @@ const PlantDashboardMap = ({
     [theme]
   );
 
+  const plotPhotoStyle = useMemo(
+    (): MapIconComponentStyle => ({
+      iconColor: '#CC79A7',
+      iconName: 'iconPhoto',
+      type: 'icon',
+    }),
+    []
+  );
+
+  const livePlantStyle = useMemo(
+    (): MapIconComponentStyle => ({
+      iconColor: '#40B0A6',
+      iconName: 'iconLivePlant',
+      type: 'icon',
+    }),
+    []
+  );
+
+  const deadPlantStyle = useMemo(
+    (): MapIconComponentStyle => ({
+      iconColor: '#E1BE6A',
+      iconName: 'iconLivePlant',
+      type: 'icon',
+    }),
+    []
+  );
+
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [drawerSize, setDrawerSize] = useState<MapDrawerSize>('small');
 
@@ -136,8 +168,8 @@ const PlantDashboardMap = ({
     []
   );
 
-  const selectPhotosFromMarkers = useCallback((markers: MapMarker[]) => {
-    const photos = markers
+  const selectPhotosFromMarkers = useCallback((selectedMarkers: MapMarker[]) => {
+    const photos = selectedMarkers
       .map((marker): PlotPhoto | undefined => {
         if (marker.properties) {
           const observationId = marker.properties.observationId as number;
@@ -167,8 +199,8 @@ const PlantDashboardMap = ({
     []
   );
 
-  const selectPlantsFromMarkers = useCallback((markers: MapMarker[]) => {
-    const plants = markers
+  const selectPlantsFromMarkers = useCallback((selectedMarkers: MapMarker[]) => {
+    const plants = selectedMarkers
       .map((marker): PlotPlant | undefined => {
         if (marker.properties) {
           const observationId = marker.properties.observationId as number;
@@ -300,21 +332,32 @@ const PlantDashboardMap = ({
         label: strings.SITE,
         layerId: 'sites',
         style: sitesLayerStyle,
+        visible: selectedLayer === 'sites',
       },
       {
         features: features.flatMap(({ zoneFeatures }) => zoneFeatures),
         label: strings.ZONES,
         layerId: 'zones',
         style: zonesLayerStyle,
+        visible: selectedLayer === 'zones',
       },
       {
         features: features.flatMap(({ subzoneFeatures }) => subzoneFeatures),
         label: strings.SUBZONES,
         layerId: 'subzones',
         style: subzonesLayerStyle,
+        visible: selectedLayer === 'subzones',
       },
     ];
-  }, [extractFeaturesFromSite, plantingSites, sitesLayerStyle, strings, subzonesLayerStyle, zonesLayerStyle]);
+  }, [
+    extractFeaturesFromSite,
+    plantingSites,
+    selectedLayer,
+    sitesLayerStyle,
+    strings,
+    subzonesLayerStyle,
+    zonesLayerStyle,
+  ]);
 
   const photoMarkers = useMemo((): MapMarker[] => {
     if (observationResults.length === 0) {
@@ -518,109 +561,211 @@ const PlantDashboardMap = ({
   const [mortalityRateVisible, setMortalityRateVisible] = useState<boolean>(false);
   const [observationEventsVisible, setObservationEventsVisible] = useState<boolean>(false);
 
-  const mapFeatures = useMemo((): MapFeatureSection[] => {
+  const markers = useMemo((): MapMarkerGroup[] => {
     return [
       {
-        layers,
-        type: 'layer',
-        sectionTitle: strings.BOUNDARIES,
+        label: strings.MONITORING_PLOTS,
+        markers: photoMarkers,
+        markerGroupId: 'plot-photos',
+        onClusterClick: selectPhotosFromMarkers,
+        style: {
+          iconColor: '#CC79A7',
+          iconName: 'iconPhoto',
+          type: 'icon',
+        },
+        visible: plotPhotoVisible,
       },
       {
-        groups: [
+        label: strings.LIVE_PLANTS,
+        markers: plantsMarkers('Live'),
+        markerGroupId: 'live-plants',
+        onClusterClick: selectPlantsFromMarkers,
+        style: {
+          iconColor: '#40B0A6',
+          iconName: 'iconLivePlant',
+          type: 'icon',
+        },
+        visible: livePlantsVisible,
+      },
+      {
+        label: strings.DEAD_PLANTS,
+        markers: plantsMarkers('Dead'),
+        markerGroupId: 'dead-plants',
+        onClusterClick: selectPlantsFromMarkers,
+        style: {
+          iconColor: '#E1BE6A',
+          iconName: 'iconLivePlant',
+          type: 'icon',
+        },
+        visible: deadPlantsVisible,
+      },
+    ];
+  }, [
+    deadPlantsVisible,
+    livePlantsVisible,
+    photoMarkers,
+    plantsMarkers,
+    plotPhotoVisible,
+    selectPhotosFromMarkers,
+    selectPlantsFromMarkers,
+    strings.DEAD_PLANTS,
+    strings.LIVE_PLANTS,
+    strings.MONITORING_PLOTS,
+  ]);
+
+  const highlights = useMemo((): MapHighlightGroup[] => {
+    return [
+      {
+        highlightId: 'observationEvents',
+        highlights: [
           {
-            label: strings.MONITORING_PLOTS,
-            markers: photoMarkers,
-            markerGroupId: 'plot-photos',
-            onClusterClick: selectPhotosFromMarkers,
+            featureIds: observationEventsHighlights[0],
             style: {
-              iconColor: '#CC79A7',
-              iconName: 'iconPhoto',
-              type: 'icon',
+              ...baseObservationEventStyle,
+              opacity: 0.9,
             },
+          },
+          {
+            featureIds: observationEventsHighlights[1],
+            style: {
+              ...baseObservationEventStyle,
+              opacity: 0.7,
+            },
+          },
+          {
+            featureIds: observationEventsHighlights[2],
+            style: {
+              ...baseObservationEventStyle,
+              opacity: 0.5,
+            },
+          },
+          {
+            featureIds: observationEventsHighlights[3],
+            style: {
+              ...baseObservationEventStyle,
+              opacity: 0.3,
+            },
+          },
+          {
+            featureIds: observationEventsHighlights[4],
+            style: {
+              ...baseObservationEventStyle,
+              opacity: 0.1,
+            },
+          },
+        ],
+        visible: observationEventsVisible,
+      },
+      {
+        highlightId: 'mortalityRate',
+        highlights: [
+          {
+            featureIds: (isSurvivalRateCalculationEnabled
+              ? mortalityRateHighlights.lessThanFifty
+              : mortalityRateHighlights.lessThanTwentyFive)!,
+            style: {
+              fillPatternUrl: isSurvivalRateCalculationEnabled
+                ? '/assets/mortality-rate-more-50.png'
+                : '/assets/mortality-rate-less-25.png',
+              type: 'fill',
+            },
+          },
+          {
+            featureIds: (isSurvivalRateCalculationEnabled
+              ? mortalityRateHighlights.lessThanSeventyFive
+              : mortalityRateHighlights.lessThanFifty)!,
+            style: {
+              fillPatternUrl: '/assets/mortality-rate-less-50.png',
+              type: 'fill',
+            },
+          },
+          {
+            featureIds: (isSurvivalRateCalculationEnabled
+              ? mortalityRateHighlights.greaterThanSeventyFive
+              : mortalityRateHighlights.greaterThanFifty)!,
+            style: {
+              fillPatternUrl: isSurvivalRateCalculationEnabled
+                ? '/assets/mortality-rate-less-25.png'
+                : '/assets/mortality-rate-more-50.png',
+              type: 'fill',
+            },
+          },
+        ],
+        visible: mortalityRateVisible,
+      },
+    ];
+  }, [
+    baseObservationEventStyle,
+    isSurvivalRateCalculationEnabled,
+    mortalityRateHighlights,
+    mortalityRateVisible,
+    observationEventsHighlights,
+    observationEventsVisible,
+  ]);
+
+  const legends = useMemo((): MapLegendGroup[] => {
+    return [
+      {
+        items: [
+          {
+            id: 'sites',
+            label: strings.SITE,
+            style: sitesLayerStyle,
+          },
+          {
+            id: 'zones',
+            label: strings.ZONES,
+            style: zonesLayerStyle,
+          },
+          {
+            id: 'subzones',
+            label: strings.SUBZONES,
+            style: subzonesLayerStyle,
+          },
+        ],
+        title: strings.BOUNDARIES,
+        type: 'single-select',
+        selectedLayer,
+        setSelectedLayer,
+      },
+      {
+        disabled: disablePhotoMarkers,
+        items: [
+          {
+            id: 'plot-photos',
+            label: strings.MONITORING_PLOTS,
+            setVisible: setPlotPhotoVisible,
+            style: plotPhotoStyle,
             visible: plotPhotoVisible,
           },
         ],
-        sectionDisabled: disablePhotoMarkers,
-        sectionTitle: strings.PHOTOS,
-        type: 'marker',
+        title: strings.PHOTOS,
+        type: 'multi-select',
       },
       {
-        groups: [
+        disabled: disablePlantMarkers,
+        items: [
           {
+            id: 'live-plants',
             label: strings.LIVE_PLANTS,
-            markers: plantsMarkers('Live'),
-            markerGroupId: 'live-plants',
-            onClusterClick: selectPlantsFromMarkers,
-            style: {
-              iconColor: '#40B0A6',
-              iconName: 'iconLivePlant',
-              type: 'icon',
-            },
+            setVisible: setLivePlantsVisible,
+            style: livePlantStyle,
             visible: livePlantsVisible,
           },
           {
+            id: 'dead-plants',
             label: strings.DEAD_PLANTS,
-            markers: plantsMarkers('Dead'),
-            markerGroupId: 'dead-plants',
-            onClusterClick: selectPlantsFromMarkers,
-            style: {
-              iconColor: '#E1BE6A',
-              iconName: 'iconLivePlant',
-              type: 'icon',
-            },
+            setVisible: setDeadPlantsVisible,
+            style: deadPlantStyle,
             visible: deadPlantsVisible,
           },
         ],
-        sectionDisabled: disablePlantMarkers,
-        sectionTitle: strings.PLANTS,
-        type: 'marker',
+        title: strings.PLANTS,
+        type: 'multi-select',
       },
       {
-        highlight: {
-          highlightId: 'observationEvents',
-          highlights: [
-            {
-              featureIds: observationEventsHighlights[0],
-              style: {
-                ...baseObservationEventStyle,
-                opacity: 0.9,
-              },
-            },
-            {
-              featureIds: observationEventsHighlights[1],
-              style: {
-                ...baseObservationEventStyle,
-                opacity: 0.7,
-              },
-            },
-            {
-              featureIds: observationEventsHighlights[2],
-              style: {
-                ...baseObservationEventStyle,
-                opacity: 0.5,
-              },
-            },
-            {
-              featureIds: observationEventsHighlights[3],
-              style: {
-                ...baseObservationEventStyle,
-                opacity: 0.3,
-              },
-            },
-            {
-              featureIds: observationEventsHighlights[4],
-              style: {
-                ...baseObservationEventStyle,
-                opacity: 0.1,
-              },
-            },
-          ],
-          visible: observationEventsVisible,
-        },
-        sectionDisabled: disableObserationEvents || observationResults.length === 0,
-        sectionTitle: strings.OBSERVATION_EVENTS,
-        sectionTooltip: strings.OBSERVATION_EVENTS_TOOLTIP,
-        legendItems: [
+        disabled: disableObserationEvents || observationResults.length === 0,
+        items: [
           {
             label: strings.LATEST_OBSERVATION,
             style: {
@@ -629,49 +774,15 @@ const PlantDashboardMap = ({
             },
           },
         ],
-        type: 'highlight',
+        title: strings.OBSERVATION_EVENTS,
+        tooltip: strings.OBSERVATION_EVENTS_TOOLTIP,
+        type: 'group-toggle',
+        setVisible: setObservationEventsVisible,
+        visible: observationEventsVisible,
       },
       {
-        highlight: {
-          highlightId: 'mortalityRate',
-          highlights: [
-            {
-              featureIds: (isSurvivalRateCalculationEnabled
-                ? mortalityRateHighlights.lessThanFifty
-                : mortalityRateHighlights.lessThanTwentyFive)!,
-              style: {
-                fillPatternUrl: isSurvivalRateCalculationEnabled
-                  ? '/assets/mortality-rate-more-50.png'
-                  : '/assets/mortality-rate-less-25.png',
-                type: 'fill',
-              },
-            },
-            {
-              featureIds: (isSurvivalRateCalculationEnabled
-                ? mortalityRateHighlights.lessThanSeventyFive
-                : mortalityRateHighlights.lessThanFifty)!,
-              style: {
-                fillPatternUrl: '/assets/mortality-rate-less-50.png',
-                type: 'fill',
-              },
-            },
-            {
-              featureIds: (isSurvivalRateCalculationEnabled
-                ? mortalityRateHighlights.greaterThanSeventyFive
-                : mortalityRateHighlights.greaterThanFifty)!,
-              style: {
-                fillPatternUrl: isSurvivalRateCalculationEnabled
-                  ? '/assets/mortality-rate-less-25.png'
-                  : '/assets/mortality-rate-more-50.png',
-                type: 'fill',
-              },
-            },
-          ],
-          visible: mortalityRateVisible,
-        },
-        sectionDisabled: disableMortalityRate || observationResults.length === 0,
-        sectionTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
-        legendItems: [
+        disabled: disableMortalityRate || observationResults.length === 0,
+        items: [
           {
             label: isSurvivalRateCalculationEnabled
               ? strings.LESS_THAN_FIFTY_PERCENT
@@ -707,30 +818,33 @@ const PlantDashboardMap = ({
             },
           },
         ],
-        type: 'highlight',
+        title: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+        type: 'group-toggle',
+        setVisible: setMortalityRateVisible,
+        visible: mortalityRateVisible,
       },
     ];
   }, [
     baseObservationEventStyle,
+    deadPlantStyle,
     deadPlantsVisible,
     disableMortalityRate,
     disableObserationEvents,
     disablePhotoMarkers,
     disablePlantMarkers,
     isSurvivalRateCalculationEnabled,
-    layers,
+    livePlantStyle,
     livePlantsVisible,
-    mortalityRateHighlights,
     mortalityRateVisible,
-    observationEventsHighlights,
     observationEventsVisible,
-    observationResults,
-    photoMarkers,
-    plantsMarkers,
+    observationResults.length,
+    plotPhotoStyle,
     plotPhotoVisible,
-    selectPhotosFromMarkers,
-    selectPlantsFromMarkers,
+    selectedLayer,
+    sitesLayerStyle,
     strings,
+    subzonesLayerStyle,
+    zonesLayerStyle,
   ]);
 
   const nameTags = useMemo((): MapNameTag[] | undefined => {
@@ -762,30 +876,6 @@ const PlantDashboardMap = ({
       .filter((nameTag): nameTag is MapNameTag => nameTag !== undefined);
   }, [fitBounds, plantingSites]);
 
-  const setHighlightVisible = useCallback(
-    (highlightId: string) => (visible: boolean) => {
-      if (highlightId === 'mortalityRate') {
-        setMortalityRateVisible(visible);
-      } else if (highlightId === 'observationEvents') {
-        setObservationEventsVisible(visible);
-      }
-    },
-    []
-  );
-
-  const setMarkerVisible = useCallback(
-    (markerGroupId: string) => (visible: boolean) => {
-      if (markerGroupId === 'plot-photos') {
-        setPlotPhotoVisible(visible);
-      } else if (markerGroupId === 'live-plants') {
-        setLivePlantsVisible(visible);
-      } else if (markerGroupId === 'dead-plants') {
-        setDeadPlantsVisible(visible);
-      }
-    },
-    []
-  );
-
   return token ? (
     <MapComponent
       clusterMaxZoom={20}
@@ -793,16 +883,16 @@ const PlantDashboardMap = ({
       drawerHeader={drawerHeader}
       drawerOpen={drawerOpen}
       drawerSize={drawerSize}
-      features={mapFeatures}
-      initialSelectedLayerId={'zones'}
+      legends={legends}
+      mapHighlights={highlights}
       mapId={mapId}
+      mapLayers={layers}
+      mapMarkers={markers}
       mapRef={mapRef}
       nameTags={nameTags}
       onTokenExpired={refreshToken}
       token={token}
       setDrawerOpen={setDrawerOpenCallback}
-      setHighlightVisible={setHighlightVisible}
-      setMarkerVisible={setMarkerVisible}
     />
   ) : (
     <Box />

@@ -2,18 +2,17 @@ import { Locator, expect, test } from '@playwright/test';
 import { Page } from 'playwright-core';
 
 import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, waitFor } from '../utils/utils';
+import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
-test.setTimeout(60000);
-test.beforeEach(async ({ context }, testInfo) => {
-  await changeToSuperAdmin(context);
-});
-
-export default function InventoryTests() {
-  test('Add A Batch (no accession)', async ({ page }, testInfo) => {
+test.describe('InventoryTests', () => {
+  test.beforeEach(async ({ page, context }, testInfo) => {
+    await changeToSuperAdmin(context);
     await page.goto('http://127.0.0.1:3000');
-
     await waitFor(page, '#home');
+    await selectOrg(page, 'Terraformation (staging)');
+  });
+
+  test('Add A Batch (no accession)', async ({ page }, testInfo) => {
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.locator('#new-inventory').click();
@@ -61,9 +60,6 @@ export default function InventoryTests() {
   });
 
   test('Add A Batch from an Accession', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-
-    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.locator('#new-inventory').click();
@@ -104,9 +100,6 @@ export default function InventoryTests() {
   });
 
   test('Transition Status and Withdraw Dead', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-
-    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
@@ -155,9 +148,6 @@ export default function InventoryTests() {
   });
 
   test('Transfer Nurseries', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-
-    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
@@ -237,9 +227,6 @@ export default function InventoryTests() {
       console.log(message.text());
     });
 
-    await page.goto('http://127.0.0.1:3000');
-
-    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
     await page.getByRole('tab', { name: 'By Batch' }).click();
@@ -280,8 +267,6 @@ export default function InventoryTests() {
   });
 
   test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
     await expect(page.getByText('60')).toBeVisible();
@@ -291,9 +276,6 @@ export default function InventoryTests() {
   });
 
   test('Withdrawals after outplanting', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
-    await waitFor(page, '#home');
-
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     const mapTab = page.locator('p.MuiTypography-root').filter({ hasText: 'Map', hasNotText: 'show for this' });
@@ -323,7 +305,7 @@ export default function InventoryTests() {
     await expect(page.getByText('Destination:Planting Site')).toBeVisible();
     await expect(page.getByText('Subzone:East-North')).toBeVisible();
   });
-}
+});
 
 const getBatchNumberBySpeciesAndNursery = async (page: Page, species: string, nursery: string) => {
   const rowNumber = (
