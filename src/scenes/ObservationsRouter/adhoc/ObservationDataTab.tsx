@@ -8,12 +8,18 @@ import Card from 'src/components/common/Card';
 import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import {
+  ObservationPlotUpdateOperationPayload,
+  UpdateCompletedObservationPlotApiArg,
+  useUpdateCompletedObservationPlotMutation,
+} from 'src/queries/generated/observations';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { ObservationMonitoringPlotResultsPayload, ObservationSpeciesResults } from 'src/types/Observations';
 import { getShortTime } from 'src/utils/dateFormatter';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlotActions from '../biomass/PlotActions';
@@ -27,6 +33,7 @@ import ObservationDataNumbers from './ObservationDataNumbers';
 
 type ObservationDataTabProps = {
   monitoringPlot: Partial<Omit<ObservationMonitoringPlotResultsPayload, 'species'>>;
+  observationId: number;
   species?: ObservationSpeciesResults[];
   type?: string;
   unrecognizedSpecies?: string[];
@@ -41,13 +48,16 @@ const ObservationDataTab = ({
   unrecognizedSpecies,
   onExportData,
   onMatchSpecies,
+  observationId,
 }: ObservationDataTabProps) => {
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
-  const { plantingSite } = usePlantingSiteData();
+  const { plantingSite, reload } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
   const [editQualitativeDataModalOpen, setEditQualitativeDataModalOpen] = useState(false);
   const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
+  const [update] = useUpdateCompletedObservationPlotMutation();
+  const snackbar = useSnackbar();
 
   const [record, setRecord] = useForm(monitoringPlot);
 
@@ -122,20 +132,46 @@ const ObservationDataTab = ({
   }, [monitoringPlot, setRecord]);
 
   const saveEditedData = useCallback(() => {
-    // save to backend
-  }, []);
+    void (async () => {
+      if (monitoringPlot.monitoringPlotId) {
+        const updatePayload: UpdateCompletedObservationPlotApiArg = {
+          observationId,
+          plotId: monitoringPlot.monitoringPlotId,
+          updateObservationRequestPayload: {
+            updates: [
+              {
+                type: 'ObservationPlot',
+                conditions: record.conditions,
+                notes: record.notes,
+              } as ObservationPlotUpdateOperationPayload,
+            ],
+          },
+        };
+
+        const result = await update(updatePayload);
+
+        if ('error' in result) {
+          snackbar.toastError();
+          return;
+        }
+        reload();
+        setShowConfirmationModalOpened(false);
+      }
+    })();
+  }, [monitoringPlot, observationId, record, update, snackbar, reload]);
 
   return (
     <Card radius='24px'>
       {showConfirmationModalOpened && (
         <EditQualitativeDataConfirmationModal onClose={closeConfirmationModal} onSubmit={saveEditedData} />
       )}
-      {editQualitativeDataModalOpen && (
+      {editQualitativeDataModalOpen && monitoringPlot && (
         <EditQualitativeDataModal
           record={record}
           setRecord={setRecord}
           onClose={closeEditQualitativeDataModal}
           onSubmit={showConfirmationModal}
+          observationId={observationId}
         />
       )}
       <ObservationDataNumbers items={items} />
@@ -197,14 +233,16 @@ const ObservationDataTab = ({
             )}
           </Typography>
         )}
-        <Button
-          id='edit'
-          label={strings.EDIT}
-          onClick={onEditQualitativeData}
-          icon='iconEdit'
-          priority='secondary'
-          size='small'
-        />
+        {monitoringPlot && (
+          <Button
+            id='edit'
+            label={strings.EDIT}
+            onClick={onEditQualitativeData}
+            icon='iconEdit'
+            priority='secondary'
+            size='small'
+          />
+        )}
       </Box>
       <ExtraData items={extraItems} />
     </Card>

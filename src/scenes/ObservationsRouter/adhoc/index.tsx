@@ -325,7 +325,11 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
         id: 'observationData',
         label: strings.OBSERVATION_DATA,
         children: monitoringPlotResult ? (
-          <ObservationDataTab monitoringPlot={monitoringPlotResult} species={monitoringPlotSpecies} />
+          <ObservationDataTab
+            monitoringPlot={monitoringPlotResult}
+            species={monitoringPlotSpecies}
+            observationId={observationId}
+          />
         ) : null,
       },
       {
@@ -334,7 +338,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
         children: <PhotosAndVideosTab monitoringPlot={monitoringPlotResult} />,
       },
     ];
-  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies]);
+  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',

@@ -799,6 +799,7 @@ HERBACIOUS_COVER_PERCENT,Couverture herbacée %,ba8fa5bd
 HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
 HIDE_ON_MAP,Masquer sur la carte,089ea8d7
+HIGH,Élevé,cb1efe60
 HIGHEST,Le plus élevé,5c2f89d6
 HIGHLIGHTED_ACTIVITY,Activité mise en avant,483c0ed0
 HIGHLIGHTS,Points forts,a76b6c49
@@ -966,6 +967,7 @@ LOG_OUT,Déconnexion,48c18649
 LOGGING,Exploitation forestière,b34b2e6e
 LONG_TERM_PERMANENT,Long terme/Permanent,566657d6
 LOSS_RATE,Taux de perte,544aa2af
+LOW,Faible,ddedeca3
 LOWEST,Les plus faibles,b651e8a7
 MAKE_HIGHLIGHT,Créer une mise en avant,c3fda88f
 MANAGE_COLUMNS,Gérer les colonnes,1dba3733

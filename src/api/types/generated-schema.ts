@@ -5410,6 +5410,25 @@ export interface components {
              */
             type: "BiomassDetails";
         };
+        BiomassQuadratSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "BiomassQuadratSpecies";
+        };
         BiomassQuadratSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
             monitoringPlotId: number;
@@ -5471,7 +5490,23 @@ export interface components {
         };
         BiomassUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
             description?: string;
+            /** @enum {string} */
+            forestType?: "Terrestrial" | "Mangrove";
+            /** Format: int32 */
+            herbaceousCoverPercent?: number;
+            ph?: number;
+            salinity?: number;
+            /** Format: int32 */
+            smallTreeCountHigh?: number;
+            /** Format: int32 */
+            smallTreeCountLow?: number;
             soilAssessment?: string;
+            /** @enum {string} */
+            tide?: "Low" | "High";
+            /** Format: date-time */
+            tideTime?: string;
+            /** Format: int32 */
+            waterDepth?: number;
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -6459,7 +6494,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -7622,7 +7657,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "Project" | "RecordedTree")[];
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "Project" | "RecordedTree")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -9569,6 +9604,25 @@ export interface components {
             selected: boolean;
             workers: components["schemas"]["WorkersPayloadV1"];
         };
+        QuadratSpeciesUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            /** Format: int32 */
+            abundance?: number;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /** @description Name of species to update. Either this or speciesId must be present. */
+            scientificName?: string;
+            /**
+             * Format: int64
+             * @description ID of species to update. Either this or scientificName must be present.
+             */
+            speciesId?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "QuadratSpecies";
+        };
         QuadratUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
             description?: string;
             /** @enum {string} */
@@ -10675,7 +10729,7 @@ export interface components {
         };
         UpdateObservationRequestPayload: {
             /** @description List of changes to make to different parts of the observation. Changes are all-or-nothing; if any of them fails, none of them is applied. */
-            updates: (components["schemas"]["BiomassSpeciesUpdateOperationPayload"] | components["schemas"]["BiomassUpdateOperationPayload"] | components["schemas"]["ObservationPlotUpdateOperationPayload"] | components["schemas"]["QuadratUpdateOperationPayload"] | components["schemas"]["RecordedTreeUpdateOperationPayload"])[];
+            updates: (components["schemas"]["BiomassSpeciesUpdateOperationPayload"] | components["schemas"]["BiomassUpdateOperationPayload"] | components["schemas"]["ObservationPlotUpdateOperationPayload"] | components["schemas"]["QuadratSpeciesUpdateOperationPayload"] | components["schemas"]["QuadratUpdateOperationPayload"] | components["schemas"]["RecordedTreeUpdateOperationPayload"])[];
         };
         UpdateOrganizationInternalTagsRequestPayload: {
             tagIds: number[];
