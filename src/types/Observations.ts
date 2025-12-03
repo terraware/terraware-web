@@ -174,8 +174,9 @@ export type BiomassMeasurement = components['schemas']['ExistingBiomassMeasureme
 
 export type MonitoringPlotFile = components['schemas']['ObservationMonitoringPlotMediaPayload'];
 
-export type NewMonitoringPlotFile = Omit<MonitoringPlotFile, 'fileId'> & {
+export type NewMonitoringPlotFile = Omit<MonitoringPlotFile, 'fileId' | 'type'> & {
   file: File;
+  type?: 'Plot' | 'Quadrat' | 'Soil';
 };
 
 export type NewMonitoringPlotMediaItem = {

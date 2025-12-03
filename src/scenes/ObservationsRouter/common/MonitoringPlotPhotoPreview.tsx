@@ -67,6 +67,10 @@ const MonitoringPlotPhotoPreview = ({
     [setCaption]
   );
 
+  const canBeDeleted = useMemo(() => {
+    return (mediaItem.data.type === 'Plot' && !mediaItem.data.position) || !mediaItem.data.type;
+  }, [mediaItem]);
+
   return (
     <Box
       borderBottom={isLast ? 'none' : `1px solid ${theme.palette.TwClrBgSecondary}`}
@@ -100,7 +104,7 @@ const MonitoringPlotPhotoPreview = ({
           </Box>
 
           <Box display='flex' flexDirection='column' flex={1}>
-            {mediaItem.data.type !== 'Plot' ? (
+            {canBeDeleted ? (
               <Button
                 icon='iconTrashCan'
                 label={strings.DELETE}
@@ -125,7 +129,11 @@ const MonitoringPlotPhotoPreview = ({
                   fontWeight={400}
                   paddingLeft={theme.spacing(1)}
                 >
-                  {strings.PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED}
+                  {mediaItem.data.type === 'Plot'
+                    ? strings.PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED
+                    : mediaItem.data.type === 'Soil'
+                      ? strings.SOIL_PHOTO_CANNOT_BE_DELETED
+                      : strings.QUADRAT_PHOTOS_CANNOT_BE_DELETED}
                 </Typography>
               </Box>
             )}

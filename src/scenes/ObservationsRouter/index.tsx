@@ -170,7 +170,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
       />
       <Route
         path={'/:plantingSiteId/results/:observationId/plot/:monitoringPlotId/photos'}
-        element={<MonitoringPlotEditPhotos />}
+        element={<MonitoringPlotEditPhotos reload={reload} />}
       />
       <Route
         path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneName'}

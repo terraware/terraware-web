@@ -1545,6 +1545,7 @@ Q2_TARGET,Objetivo Q2,5275b4cd
 Q3_TARGET,Objetivo Q3,e1a31913
 Q4_TARGET,Objetivo Q4,11f9f81f
 QUADRAT,Cuadrante,ff115cb6
+QUADRAT_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de cuadrantes,24cf5aff
 QUANTITY,Cantidad,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La cantidad debe ser mayor o igual a 0,5a55f459
 QUARTER_YEAR,T{0} {1},637ce0a5
@@ -1894,6 +1895,7 @@ SOIL_ASSESSMENT,Evaluación del suelo,803c8f49
 SOIL_ASSESSMENT_DESCRIPTION_NOTES,Descripción/Notas de la Evaluación del Suelo,c61b3dbb
 SOIL_EROSION,Erosión del suelo,5620daeb
 SOIL_PHOTO,Foto del suelo,5a089072
+SOIL_PHOTO_CANNOT_BE_DELETED,No se puede eliminar la foto del suelo,5b7af46a
 SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...,bf2e66a4
