@@ -13,9 +13,14 @@ import EditNotesModal from './EditNotesModal';
 type InvasiveAndThreatenedSpeciesTabProps = {
   monitoringPlot: ObservationMonitoringPlotResultsPayload | undefined;
   observationId: number;
+  reload: () => void;
 };
 
-const InvasiveAndThreatenedSpeciesTab = ({ monitoringPlot, observationId }: InvasiveAndThreatenedSpeciesTabProps) => {
+const InvasiveAndThreatenedSpeciesTab = ({
+  monitoringPlot,
+  observationId,
+  reload,
+}: InvasiveAndThreatenedSpeciesTabProps) => {
   const theme = useTheme();
   const [editNotesModalOpen, setEditNotesModalOpen] = useState(false);
 
@@ -52,10 +57,10 @@ const InvasiveAndThreatenedSpeciesTab = ({ monitoringPlot, observationId }: Inva
           size='small'
         />
       </Box>
-      <QuadratComponent quadrat='Northwest' monitoringPlot={monitoringPlot} />
-      <QuadratComponent quadrat='Northeast' monitoringPlot={monitoringPlot} />
-      <QuadratComponent quadrat='Southwest' monitoringPlot={monitoringPlot} />
-      <QuadratComponent quadrat='Southeast' monitoringPlot={monitoringPlot} />
+      <QuadratComponent quadrat='Northwest' monitoringPlot={monitoringPlot} reload={reload} />
+      <QuadratComponent quadrat='Northeast' monitoringPlot={monitoringPlot} reload={reload} />
+      <QuadratComponent quadrat='Southwest' monitoringPlot={monitoringPlot} reload={reload} />
+      <QuadratComponent quadrat='Southeast' monitoringPlot={monitoringPlot} reload={reload} />
     </Card>
   );
 };

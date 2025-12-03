@@ -5,10 +5,11 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import { selectAdHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
-import QuadratSpeciesTable from 'src/scenes/ObservationsRouter/biomass/QuadratSpeciesTable';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
 import strings from 'src/strings';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
+
+import QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';
 
 type QuadratPosition = 'NorthwestCorner' | 'NortheastCorner' | 'SouthwestCorner' | 'SoutheastCorner';
 
@@ -27,9 +28,10 @@ const QUADRAT_CONFIG: Record<string, QuadratConfig> = {
 type QuadratComponentProps = {
   quadrat: string;
   monitoringPlot?: ObservationMonitoringPlotResultsPayload;
+  reload: () => void;
 };
 
-const QuadratComponent = ({ quadrat, monitoringPlot }: QuadratComponentProps) => {
+const QuadratComponent = ({ quadrat, monitoringPlot, reload }: QuadratComponentProps) => {
   const theme = useTheme();
   const { observationId } = useParams<{ observationId: string }>();
   const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
@@ -68,9 +70,12 @@ const QuadratComponent = ({ quadrat, monitoringPlot }: QuadratComponentProps) =>
           </Typography>
         </Box>
       </Box>
-      <QuadratSpeciesTable
+      <QuadratSpeciesEditableTable
         species={biomassMeasurements?.quadrats.find((quad) => quad.position === position)?.species}
         quadrat={position}
+        observationId={Number(observationId)}
+        plotId={Number(monitoringPlot?.monitoringPlotId)}
+        reload={reload}
       />
     </Box>
   );
