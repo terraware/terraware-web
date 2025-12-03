@@ -1,3 +1,4 @@
+7ce794953a0 SW-7711 Filter plots that are not included in the search response when saving (#4836)
 4a8b4f656a7 SW-7749 Generated search API types (#4838)
 a6a7abd81f2 SW-7641 Make playwright tests run in parallel (#4752)
 b33c8aaf32e Save biomass quadrat notes to BE (#4835)
