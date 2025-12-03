@@ -27,39 +27,38 @@ export type SearchResponsePayload = {
     [key: string]: any;
   }[];
 };
-export type AndNodePayload = SearchNodePayload & {
-  /** List of criteria all of which must be satisfied */
-  children: SearchNodePayload[];
+export type SearchNodePayloadBase = {
+  operation: string;
 };
-export type FieldNodePayload = SearchNodePayload & {
-  field: string;
-  type: 'Exact' | 'ExactOrFuzzy' | 'Fuzzy' | 'PhraseMatch' | 'Range';
-  /** List of values to match. For exact, fuzzy and phrase match searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
-  values: (string | null)[];
-};
-export type NotNodePayload = SearchNodePayload & {
-  child: SearchNodePayload;
-};
-export type OrNodePayload = SearchNodePayload & {
-  /** List of criteria at least one of which must be satisfied */
-  children: SearchNodePayload[];
-};
-export type SearchNodePayload =
-  | ({
-      operation: 'and';
-    } & AndNodePayload)
-  | ({
-      operation: 'field';
-    } & FieldNodePayload)
-  | ({
-      operation: 'not';
-    } & NotNodePayload)
-  | ({
-      operation: 'or';
-    } & OrNodePayload);
+export type FieldNodePayload = {
+  operation: 'field';
+} & SearchNodePayloadBase & {
+    field: string;
+    type?: 'Exact' | 'ExactOrFuzzy' | 'Fuzzy' | 'PhraseMatch' | 'Range';
+    /** List of values to match. For exact, fuzzy and phrase match searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
+    values: (string | null)[];
+  };
+export type OrNodePayload = {
+  operation: 'or';
+} & SearchNodePayloadBase & {
+    /** List of criteria at least one of which must be satisfied */
+    children: SearchNodePayload[];
+  };
+export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
+export type NotNodePayload = {
+  operation: 'not';
+} & SearchNodePayloadBase & {
+    child: SearchNodePayload;
+  };
+export type AndNodePayload = {
+  operation: 'and';
+} & SearchNodePayloadBase & {
+    /** List of criteria all of which must be satisfied */
+    children: (AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload)[];
+  };
 export type PrefixedSearch = {
   prefix: string;
-  search: SearchNodePayload;
+  search: AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
 };
 export type SearchSortOrderElement = {
   direction?: 'Ascending' | 'Descending';
@@ -146,8 +145,7 @@ export type SearchRequestPayload = {
     | 'viabilityTestResults'
     | 'viabilityTests'
     | 'withdrawals';
-  /** Search criteria to apply. Determines which prefix-level results are returned. If you search on a field in a child object, you will get the prefix-level objects that have at least one child matching your filter, but you will get the full list of children (both matching the filter and not) for each of those prefix-level objects. */
-  search?: SearchNodePayload;
+  search?: AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
   /** How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
   sortOrder?: SearchSortOrderElement[];
 };

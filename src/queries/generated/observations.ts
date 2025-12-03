@@ -928,7 +928,16 @@ export type BiomassUpdateOperationPayload = {
   type: 'Biomass';
 } & ObservationUpdateOperationPayloadBase & {
     description?: string;
+    forestType?: 'Terrestrial' | 'Mangrove';
+    herbaceousCoverPercent?: number;
+    ph?: number;
+    salinity?: number;
+    smallTreeCountHigh?: number;
+    smallTreeCountLow?: number;
     soilAssessment?: string;
+    tide?: 'Low' | 'High';
+    tideTime?: string;
+    waterDepth?: number;
   };
 export type ObservationPlotUpdateOperationPayload = {
   type: 'ObservationPlot';
@@ -955,6 +964,16 @@ export type ObservationPlotUpdateOperationPayload = {
       | 'WaterBodies'
     )[];
     notes?: string;
+  };
+export type QuadratSpeciesUpdateOperationPayload = {
+  type: 'QuadratSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    abundance?: number;
+    position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+    /** Name of species to update. Either this or speciesId must be present. */
+    scientificName?: string;
+    /** ID of species to update. Either this or scientificName must be present. */
+    speciesId?: number;
   };
 export type QuadratUpdateOperationPayload = {
   type: 'Quadrat';
@@ -984,6 +1003,7 @@ export type UpdateObservationRequestPayload = {
     | BiomassSpeciesUpdateOperationPayload
     | BiomassUpdateOperationPayload
     | ObservationPlotUpdateOperationPayload
+    | QuadratSpeciesUpdateOperationPayload
     | QuadratUpdateOperationPayload
     | RecordedTreeUpdateOperationPayload
   )[];

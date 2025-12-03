@@ -18,9 +18,10 @@ const config: ConfigFile = {
     './src/queries/generated/observations.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/observations'),
     },
-    './src/queries/generated/search.ts': {
-      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),
-    },
+    // Disalbe regenerating Search API until OpenAPI annotation fix is completed.
+    // './src/queries/generated/search.ts': {
+    //   filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),
+    // },
   },
   prettierConfigFile: '.prettierrc',
   flattenArg: true,
