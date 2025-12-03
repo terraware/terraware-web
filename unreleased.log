@@ -1,3 +1,4 @@
+a6a7abd81f2 SW-7641 Make playwright tests run in parallel (#4752)
 b33c8aaf32e Save biomass quadrat notes to BE (#4835)
 386fa704365 Refactored Map Legend props (#4832)
 7a96268700d SW-7705 FE Edit photos and videos page (#4821)

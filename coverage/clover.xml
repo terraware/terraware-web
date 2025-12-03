@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1764707405065" clover="3.2.0">
-  <project timestamp="1764707405065" name="All files">
+<coverage generated="1764721612936" clover="3.2.0">
+  <project timestamp="1764721612937" name="All files">
     <metrics statements="35963" coveredstatements="1354" conditionals="25211" coveredconditionals="393" methods="11065" coveredmethods="213" elements="72239" coveredelements="1960" complexity="0" loc="35963" ncloc="35963" packages="284" files="1402" classes="1402"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -9336,7 +9336,7 @@
         <line num="28" count="0" type="stmt"/>
         <line num="61" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="62" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
       </file>
       <file name="FunderBreadcrumbs.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/TopBar/FunderBreadcrumbs.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
