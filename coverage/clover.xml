@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1764789855937" clover="3.2.0">
-  <project timestamp="1764789855937" name="All files">
+<coverage generated="1764797193739" clover="3.2.0">
+  <project timestamp="1764797193739" name="All files">
     <metrics statements="36112" coveredstatements="1354" conditionals="25294" coveredconditionals="393" methods="11115" coveredmethods="213" elements="72521" coveredelements="1960" complexity="0" loc="36112" ncloc="36112" packages="284" files="1406" classes="1406"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -36728,18 +36728,18 @@
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/TerrawareRouter/index.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
     <package name="src.services">
