@@ -21,7 +21,7 @@ const injectedRtkApi = api.injectEndpoints({
             'project_name',
           ],
           search: {
-            opertaion: 'and',
+            operation: 'and',
             children: [
               {
                 operation: 'field',
