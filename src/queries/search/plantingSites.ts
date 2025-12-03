@@ -19,6 +19,7 @@ const injectedRtkApi = api.injectEndpoints({
             'numPlantingSubzones',
             'project_id',
             'project_name',
+            'timeZone',
           ],
           search: {
             operation: 'and',
@@ -61,6 +62,7 @@ const injectedRtkApi = api.injectEndpoints({
           numPlantingZones: Number(result.numPlantingZones),
           projectId: Number(result.project_id),
           projectName: result.project_name,
+          timezoneId: result.timeZone,
         })),
     }),
   }),
@@ -75,6 +77,7 @@ type PlantingSiteSummaryApiResult = {
   numPlantingZones: string;
   project_id: string;
   project_name: string;
+  timeZone: string;
 };
 
 type ListPlantingSiteSummariesApiResponse = {
@@ -97,6 +100,7 @@ export type PlantingSiteSummary = {
   numPlantingZones: number;
   projectId: number;
   projectName: string;
+  timezoneId: string;
 };
 
 export { injectedRtkApi as api };
