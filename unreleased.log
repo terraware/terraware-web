@@ -1,3 +1,4 @@
+35e70000a77 SW-7705 Allow downloading and previewing photos (#4839)
 7a615f2cba0 SW-7682 Reports-Targets tab hangs indefinitely with no ability to leave (#4840)
 5a5068e4437 SW-7701 Save qualitative data to BE (#4837)
 7ce794953a0 SW-7711 Filter plots that are not included in the search response when saving (#4836)
