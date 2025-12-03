@@ -107,6 +107,5 @@ test.describe('ObservationsTests', () => {
 
     // wait for success toast message
     await waitFor(page, '#snackbar p:has-text("observation has been ended")');
-    console.log('just for testing');
   });
 });
