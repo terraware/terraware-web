@@ -182,6 +182,7 @@ const BiomassObservationDataTab = ({
         tide: biomassRecord.biomassMeasurement?.tide,
         tideTime: biomassRecord.biomassMeasurement?.tideTime,
         waterDepth: biomassRecord.biomassMeasurement?.waterDepth,
+        herbaceousCoverPercent: biomassRecord.biomassMeasurement?.herbaceousCoverPercent,
       };
 
       const plotPayload: ObservationPlotUpdateOperationPayload = {
