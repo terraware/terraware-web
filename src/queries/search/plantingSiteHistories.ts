@@ -1,15 +1,6 @@
 import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
-type PlantingSiteHistoryIdResult = {
-  createdTime: string;
-  id: string;
-};
-
-type ListPlantingSiteHistoryIdsApiResponse = {
-  results: PlantingSiteHistoryIdResult[];
-};
-
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     listPlantingSiteHistoryIds: build.query<PlantingSiteHistoryIds[], number>({
@@ -42,6 +33,15 @@ const injectedRtkApi = api.injectEndpoints({
     }),
   }),
 });
+
+type PlantingSiteHistoryIdResult = {
+  createdTime: string;
+  id: string;
+};
+
+type ListPlantingSiteHistoryIdsApiResponse = {
+  results: PlantingSiteHistoryIdResult[];
+};
 
 export type PlantingSiteHistoryIds = {
   createdTime: string;
