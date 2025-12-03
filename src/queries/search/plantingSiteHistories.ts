@@ -34,13 +34,13 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-type PlantingSiteHistoryIdResult = {
+type PlantingSiteHistoryApiIdResult = {
   createdTime: string;
   id: string;
 };
 
 type ListPlantingSiteHistoryIdsApiResponse = {
-  results: PlantingSiteHistoryIdResult[];
+  results: PlantingSiteHistoryApiIdResult[];
 };
 
 export type PlantingSiteHistoryIds = {
