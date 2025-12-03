@@ -60,7 +60,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
   const onSetFiles = useCallback((files: File[]) => {
     const newPhotos: MonitoringPlotMediaItem[] = files.map((file) => {
       return {
-        data: { file, isOriginal: false, type: 'Quadrat', mediaKind: isVideoFile(file) ? 'Video' : 'Photo' },
+        data: { file, isOriginal: false, type: undefined, mediaKind: isVideoFile(file) ? 'Video' : 'Photo' },
         type: 'new' as const,
       };
     });
