@@ -202,6 +202,7 @@ export default function NavBar({
       ) : null,
     [
       activeLocale,
+      allParticipantProjects.length,
       closeAndNavigateTo,
       isAllowed,
       isReportsRoute,
