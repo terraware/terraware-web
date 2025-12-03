@@ -53,7 +53,8 @@ export default function NavBar({
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
-  const { currentParticipantProject, setCurrentParticipantProject, projectsWithModules } = useParticipantData();
+  const { currentParticipantProject, setCurrentParticipantProject, projectsWithModules, allParticipantProjects } =
+    useParticipantData();
 
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
@@ -187,6 +188,7 @@ export default function NavBar({
     () =>
       isAllowed('READ_REPORTS', { organization: selectedOrganization }) &&
       !!orgFeatures?.data?.reports?.enabled &&
+      allParticipantProjects.length > 0 &&
       activeLocale ? (
         <NavItem
           icon='iconGraphReport'
