@@ -23,7 +23,7 @@ import strings from 'src/strings';
 import { MonitoringPlotMediaItem, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
 
-const MonitoringPlotEditPhotos = () => {
+const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -212,12 +212,13 @@ const MonitoringPlotEditPhotos = () => {
         });
 
         await Promise.all(promises);
+        reload();
         goToPhotosTab();
       } catch (error) {
         snackbar.toastError();
       }
     })();
-  }, [deleteQuery, mediaItems, monitoringPlotId, observationId, update, upload, goToPhotosTab, snackbar]);
+  }, [deleteQuery, mediaItems, monitoringPlotId, observationId, update, upload, goToPhotosTab, snackbar, reload]);
 
   return (
     <Page title={monitoringPlotResult?.monitoringPlotName}>
