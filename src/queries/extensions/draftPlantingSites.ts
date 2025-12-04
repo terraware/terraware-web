@@ -5,23 +5,25 @@ api.enhanceEndpoints({
   endpoints: {
     createDraftPlantingSite: {
       invalidatesTags: (result) => [
-        ...(result ? [{ type: QueryTagTypes.draftPlantingSites, id: result.id }] : []),
-        { type: QueryTagTypes.draftPlantingSites, id: 'LIST' },
+        ...(result ? [{ type: QueryTagTypes.DraftPlantingSites, id: result.id }] : []),
+        { type: QueryTagTypes.DraftPlantingSites, id: 'LIST' },
       ],
     },
     deleteDraftPlantingSite: {
       invalidatesTags: (_result, _error, draftSiteId) => [
-        { type: QueryTagTypes.draftPlantingSites, id: draftSiteId },
-        { type: QueryTagTypes.draftPlantingSites, id: 'LIST' },
+        { type: QueryTagTypes.DraftPlantingSites, id: draftSiteId },
+        { type: QueryTagTypes.DraftPlantingSites, id: 'LIST' },
       ],
     },
     getDraftPlantingSite: {
-      providesTags: (_result, _error, plantingSiteId) => [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],
+      providesTags: (_result, _error, plantingSiteId) => [
+        { type: QueryTagTypes.DraftPlantingSites, id: plantingSiteId },
+      ],
     },
     updateDraftPlantingSite: {
       invalidatesTags: (_result, _error, plantingSiteId) => [
-        { type: QueryTagTypes.PlantingSites, id: plantingSiteId.id },
-        { type: QueryTagTypes.PlantingSites, id: 'LIST' },
+        { type: QueryTagTypes.DraftPlantingSites, id: plantingSiteId.id },
+        { type: QueryTagTypes.DraftPlantingSites, id: 'LIST' },
       ],
     },
   },

@@ -49,8 +49,8 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
       providesTags: (results) => [
-        ...(results?.map((result) => ({ type: QueryTagTypes.PlantingSites, id: result.id })) ?? []),
-        { type: QueryTagTypes.PlantingSites, id: 'LIST' },
+        ...(results?.map((result) => ({ type: QueryTagTypes.DraftPlantingSites, id: result.id })) ?? []),
+        { type: QueryTagTypes.DraftPlantingSites, id: 'LIST' },
       ],
       transformResponse: (results: ListDraftPlantingSiteSummariesApiResponse) =>
         results.results.map((result) => ({

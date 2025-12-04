@@ -1,5 +1,5 @@
 export enum QueryTagTypes {
-  draftPlantingSites = 'DraftPlantingSites',
+  DraftPlantingSites = 'DraftPlantingSites',
   Funders = 'Funders',
   FundingEntities = 'FundingEntities',
   Notifications = 'Notifications',
