@@ -44,11 +44,7 @@ export default function BoundariesAndZones({ search, setSearch, setView, view }:
   const plantingSiteId = Number(params.plantingSiteId);
   const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
 
-  const plantingSite = useMemo(() => {
-    if (plantingSiteData) {
-      return plantingSiteData.site;
-    }
-  }, [plantingSiteData]);
+  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -138,17 +134,9 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
 
   const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
 
-  const plantingSite = useMemo(() => {
-    if (plantingSiteData) {
-      return plantingSiteData.site;
-    }
-  }, [plantingSiteData]);
+  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
 
-  const selectedHistory = useMemo(() => {
-    if (plantingSiteHistoryData) {
-      return plantingSiteHistoryData.site;
-    }
-  }, [plantingSiteHistoryData]);
+  const selectedHistory = useMemo(() => plantingSiteHistoryData?.site, [plantingSiteHistoryData]);
 
   useEffect(() => {
     if (plantingSiteId && selectedHistoryId) {
