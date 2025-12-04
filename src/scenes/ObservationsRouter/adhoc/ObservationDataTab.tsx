@@ -25,6 +25,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import PlotActions from '../biomass/PlotActions';
 import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataConfirmationModal';
 import EditQualitativeDataModal from '../common/EditQualitativeDataModal';
+import EventLog from '../common/EventLog';
 import SpeciesTotalPlantsChart from '../common/SpeciesMortalityRateChart';
 import SpeciesMortalityRateChart from '../common/SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
@@ -245,6 +246,9 @@ const ObservationDataTab = ({
         )}
       </Box>
       <ExtraData items={extraItems} />
+      {monitoringPlot.monitoringPlotId && (
+        <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} />
+      )}
     </Card>
   );
 };
