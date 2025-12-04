@@ -9,6 +9,9 @@ const config: ConfigFile = {
   exportName: 'api',
   hooks: { queries: true, lazyQueries: true, mutations: true },
   outputFiles: {
+    './src/queries/generated/draftPlantingSites.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/draftSites'),
+    },
     './src/queries/generated/fundingEntities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/entities'),
     },
