@@ -41,8 +41,8 @@ export default function TreesAndShrubsEditableTable({
   }, [reload, updateResult]);
 
   const saveValue = useCallback(
-    (fieldId: string, recordedTreeId: number) => (event: { currentTarget: { value: any } }) => {
-      const value = event.currentTarget.value;
+    (fieldId: string, recordedTreeId: number) => (event: { currentTarget: { value: any }; target: { value: any } }) => {
+      const value = event.currentTarget.value || event.target.value;
       if (value !== undefined) {
         const uploadPayload: RecordedTreeUpdateOperationPayload = {
           type: 'RecordedTree',
@@ -176,20 +176,7 @@ export default function TreesAndShrubsEditableTable({
         ],
         muiEditTextFieldProps: ({ row }) => ({
           select: true,
-          onBlur: (event: React.FocusEvent<HTMLInputElement>) => {
-            const value = event.target.value === 'true';
-            const uploadPayload: BiomassSpeciesUpdateOperationPayload = {
-              type: 'BiomassSpecies',
-              speciesId: row.original.speciesId,
-              isThreatened: value,
-            };
-            const mainPayload = {
-              observationId,
-              plotId,
-              updateObservationRequestPayload: { updates: [uploadPayload] },
-            };
-            void update(mainPayload);
-          },
+          onBlur: saveValue('isDead', row.original.id),
         }),
       },
     ],
