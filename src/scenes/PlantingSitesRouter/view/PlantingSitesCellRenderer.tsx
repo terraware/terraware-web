@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
+import { useTimeZones } from 'src/providers';
+import { getTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export default function PlantingSitesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;
@@ -18,6 +17,9 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
       fontSize: '16px',
     },
   };
+
+  const timeZones = useTimeZones();
+  const defaultTimeZone = useDefaultTimeZone().get();
 
   const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) => {
     const plantingSiteViewUrl = isDraft ? APP_PATHS.PLANTING_SITES_DRAFT_VIEW : APP_PATHS.PLANTING_SITES_VIEW;
@@ -44,36 +46,11 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
     );
   }
 
-  if (column.key === 'draft') {
-    return (
-      <CellRenderer index={index} column={column} value={isDraft ? <DraftBadge /> : null} row={row} sx={textStyles} />
-    );
+  if (column.key === 'timeZoneId') {
+    const timeZoneId = row.timeZoneId;
+    const timeZone = (timeZoneId ? getTimeZone(timeZones, timeZoneId) : undefined) ?? defaultTimeZone;
+    return <CellRenderer index={index} column={column} value={timeZone.longName} row={row} sx={textStyles} />;
   }
 
   return <CellRenderer {...props} sx={textStyles} />;
 }
-
-/**
- * Internal component that renders a Draft badge
- * TODO: extract out as a common web-component since we have a concept
- * of badges in other places.
- */
-const DraftBadge = (): JSX.Element => {
-  const theme = useTheme();
-
-  return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBgSecondary,
-        border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(0.5, 1),
-        width: 'fit-content',
-      }}
-    >
-      <Typography color={theme.palette.TwClrBrdrSecondary} fontSize='14px' fontWeight={500}>
-        {strings.DRAFT}
-      </Typography>
-    </Box>
-  );
-};

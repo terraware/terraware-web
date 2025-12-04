@@ -1,10 +1,29 @@
 import { baseApi as api } from '../baseApi';
-import { SearchSortOrderElement } from '../generated/search';
+import { SearchCountApiResponse, SearchSortOrderElement } from '../generated/search';
 import { QueryTagTypes } from '../tags';
+import { PlantingSiteSummary } from './plantingSites';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    searchPlantingSites: build.query<DraftPlantingSiteSummary[], SearchDraftPlantingSiteSummariesApiArgs>({
+    countDraftPlantingSites: build.query<number, number>({
+      query: (organizationId) => ({
+        url: '/api/v1/search/count',
+        method: 'POST',
+        body: {
+          prefix: 'draftPlantingSites',
+          fields: [],
+          search: {
+            operation: 'field',
+            field: 'organization.id',
+            values: [`${organizationId}`],
+          },
+        },
+      }),
+      providesTags: () => [{ type: QueryTagTypes.DraftPlantingSites, id: 'LIST' }],
+      transformResponse: (results: SearchCountApiResponse) => results.count,
+    }),
+
+    searchDraftPlantingSites: build.query<PlantingSiteSummary[], SearchDraftPlantingSiteSummariesApiArgs>({
       query: (queryArgs) => ({
         url: '/api/v1/search',
         method: 'POST',
@@ -19,7 +38,7 @@ const injectedRtkApi = api.injectEndpoints({
             'numPlantingSubzones',
             'project_id',
             'project_name',
-            'timezone',
+            'timeZone',
           ],
           search: {
             operation: 'and',
@@ -58,11 +77,12 @@ const injectedRtkApi = api.injectEndpoints({
           description: result.description,
           id: Number(result.id),
           name: result.name,
-          numPlantingSubzones: Number(result.numPlantingSubzones),
-          numPlantingZones: Number(result.numPlantingZones),
+          numPlantingSubzones: result.numPlantingSubzones ? Number(result.numPlantingSubzones) : 0,
+          numPlantingZones: result.numPlantingZones ? Number(result.numPlantingZones) : 0,
           projectId: Number(result.project_id),
           projectName: result.project_name,
-          timezoneId: result.timeZone,
+          timeZoneId: result.timeZone,
+          isDraft: true,
         })),
     }),
   }),
@@ -91,18 +111,11 @@ export type SearchDraftPlantingSiteSummariesApiArgs = {
   searchTerm?: string;
 };
 
-export type DraftPlantingSiteSummary = {
-  createdTime: string;
-  description: string;
-  id: number;
-  name: string;
-  numPlantingSubzones: number;
-  numPlantingZones: number;
-  projectId: number;
-  projectName: string;
-  timezoneId: string;
-};
-
 export { injectedRtkApi as api };
 
-export const { useSearchPlantingSitesQuery, useLazySearchPlantingSitesQuery } = injectedRtkApi;
+export const {
+  useCountDraftPlantingSitesQuery,
+  useLazyCountDraftPlantingSitesQuery,
+  useSearchDraftPlantingSitesQuery,
+  useLazySearchDraftPlantingSitesQuery,
+} = injectedRtkApi;

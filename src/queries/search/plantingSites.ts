@@ -1,9 +1,27 @@
 import { baseApi as api } from '../baseApi';
-import { SearchSortOrderElement } from '../generated/search';
+import { SearchCountApiResponse, SearchSortOrderElement } from '../generated/search';
 import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
+    countPlantingSites: build.query<number, number>({
+      query: (organizationId) => ({
+        url: '/api/v1/search/count',
+        method: 'POST',
+        body: {
+          prefix: 'plantingSites',
+          fields: [],
+          search: {
+            operation: 'field',
+            field: 'organization.id',
+            values: [`${organizationId}`],
+          },
+        },
+      }),
+      providesTags: () => [{ type: QueryTagTypes.PlantingSites, id: 'LIST' }],
+      transformResponse: (results: SearchCountApiResponse) => results.count,
+    }),
+
     searchPlantingSites: build.query<PlantingSiteSummary[], SearchPlantingSiteSummariesApiArgs>({
       query: (queryArgs) => ({
         url: '/api/v1/search',
@@ -101,8 +119,14 @@ export type PlantingSiteSummary = {
   projectId: number;
   projectName: string;
   timeZoneId: string;
+  isDraft?: boolean;
 };
 
 export { injectedRtkApi as api };
 
-export const { useSearchPlantingSitesQuery, useLazySearchPlantingSitesQuery } = injectedRtkApi;
+export const {
+  useCountPlantingSitesQuery,
+  useLazyCountPlantingSitesQuery,
+  useSearchPlantingSitesQuery,
+  useLazySearchPlantingSitesQuery,
+} = injectedRtkApi;

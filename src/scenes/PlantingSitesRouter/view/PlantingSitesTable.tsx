@@ -44,15 +44,13 @@ const columns = (): TableColumnType[] => [
     type: 'string',
   },
   {
-    key: 'project_name',
+    key: 'projectName',
     name: strings.PROJECT,
     type: 'string',
   },
   { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'number' },
   { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'number' },
-  { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
-  // TODO: update with BE prop
-  { key: 'draft', name: '', type: 'string' }, // don't show column header name
+  { key: 'timeZoneId', name: strings.TIME_ZONE, type: 'string' },
 ];
 
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
@@ -65,16 +63,19 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   const [isPresorted, setIsPresorted] = useState<boolean>(true);
   const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
-  const onSortChange = (order: SortOrder, orderBy: string) => {
-    const isTimeZone = orderBy === 'timeZone';
-    if (!isTimeZone) {
-      setSearchSortOrder({
-        field: orderBy,
-        direction: order === 'asc' ? 'Ascending' : 'Descending',
-      });
-    }
-    setIsPresorted(!isTimeZone);
-  };
+  const onSortChange = useCallback(
+    (order: SortOrder, orderBy: string) => {
+      const isTimeZone = orderBy === 'timeZoneId';
+      if (!isTimeZone) {
+        setSearchSortOrder({
+          field: orderBy,
+          direction: order === 'asc' ? 'Ascending' : 'Descending',
+        });
+      }
+      setIsPresorted(!isTimeZone);
+    },
+    [setSearchSortOrder]
+  );
 
   useEffect(() => {
     const data: PillListItemWithEmptyValue[] = [];
