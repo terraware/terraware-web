@@ -13,8 +13,8 @@ import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useLocalization } from 'src/providers';
-import { useLazyGetPlantingSiteHistoryQuery, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
-import { useLazyListPlantingSiteHistoryIdsQuery } from 'src/queries/search/plantingSiteHistories';
+import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import { useListPlantingSiteHistoryIdsQuery } from 'src/queries/search/plantingSiteHistories';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
@@ -40,24 +40,15 @@ export default function BoundariesAndZones({ search, setSearch, setView, view }:
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter(activeLocale);
 
-  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-
-  const [getPlantingSite, { data: plantingSiteData }] = useLazyGetPlantingSiteQuery();
+  const params = useParams<{ plantingSiteId: string }>();
+  const plantingSiteId = Number(params.plantingSiteId);
+  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
 
   const plantingSite = useMemo(() => {
     if (plantingSiteData) {
       return plantingSiteData.site;
     }
   }, [plantingSiteData]);
-
-  useEffect(() => {
-    if (plantingSiteId) {
-      const siteId = Number(plantingSiteId);
-      if (siteId > 0) {
-        void getPlantingSite(siteId);
-      }
-    }
-  }, [getPlantingSite, plantingSiteId]);
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -138,12 +129,14 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
   const defaultTimeZone = useDefaultTimeZone();
 
-  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-
   const [selectedHistoryId, setSelectedHistoryId] = useState<number>();
-  const [getPlantingSite, { data: plantingSiteData }] = useLazyGetPlantingSiteQuery();
+
+  const params = useParams<{ plantingSiteId: string }>();
+  const plantingSiteId = Number(params.plantingSiteId);
+  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteHistoryIds } = useListPlantingSiteHistoryIdsQuery(plantingSiteId);
+
   const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
-  const [listPlantingSiteHistoryIds, { data: plantingSiteHistoryIds }] = useLazyListPlantingSiteHistoryIdsQuery();
 
   const plantingSite = useMemo(() => {
     if (plantingSiteData) {
@@ -158,22 +151,15 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
   }, [plantingSiteHistoryData]);
 
   useEffect(() => {
-    if (plantingSiteId) {
-      const siteId = Number(plantingSiteId);
-      if (siteId > 0) {
-        void getPlantingSite(siteId);
-        void listPlantingSiteHistoryIds(siteId);
-      }
-    }
-  }, [getPlantingSite, listPlantingSiteHistoryIds, plantingSiteId]);
-
-  useEffect(() => {
     if (plantingSiteId && selectedHistoryId) {
       const siteId = Number(plantingSiteId);
-      void getPlantingSiteHistory({
-        id: siteId,
-        historyId: selectedHistoryId,
-      });
+      void getPlantingSiteHistory(
+        {
+          id: siteId,
+          historyId: selectedHistoryId,
+        },
+        true
+      );
     }
   }, [getPlantingSiteHistory, plantingSiteId, selectedHistoryId]);
 

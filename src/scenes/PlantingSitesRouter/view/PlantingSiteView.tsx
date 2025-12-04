@@ -4,23 +4,15 @@ import { useParams } from 'react-router';
 import { BusySpinner } from '@terraware/web-components';
 
 import TfMain from 'src/components/common/TfMain';
-import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
 import GenericSiteView from './GenericSiteView';
 
 export default function PlantingSiteView(): JSX.Element {
-  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
+  const params = useParams<{ plantingSiteId: string }>();
+  const plantingSiteId = Number(params.plantingSiteId);
 
-  const [getPlantingSite, { data: plantingSite, isLoading }] = useLazyGetPlantingSiteQuery();
-
-  useEffect(() => {
-    if (plantingSiteId) {
-      const siteId = Number(plantingSiteId);
-      if (siteId > 0) {
-        void getPlantingSite(siteId);
-      }
-    }
-  }, [getPlantingSite, plantingSiteId]);
+  const { data: plantingSite, isLoading } = useGetPlantingSiteQuery(plantingSiteId);
 
   // Use a delay effect for loading to handle quick updates of data
   const [delayedLoading, setDelayedLoading] = useState(isLoading);
