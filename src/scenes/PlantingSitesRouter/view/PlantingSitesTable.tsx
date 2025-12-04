@@ -68,7 +68,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
       const isTimeZone = orderBy === 'timeZoneId';
       if (!isTimeZone) {
         setSearchSortOrder({
-          field: orderBy,
+          field: orderBy === 'projectName' ? 'project_name' : orderBy,
           direction: order === 'asc' ? 'Ascending' : 'Descending',
         });
       }
