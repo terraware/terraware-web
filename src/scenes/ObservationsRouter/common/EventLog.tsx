@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { DateTime } from 'luxon';
 
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -8,6 +9,7 @@ import {
   ListEventLogEntriesRequestPayload,
   useListEventLogEntriesMutation,
 } from 'src/queries/generated/events';
+import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 
 type EventLogProps = {
   observationId: number;
@@ -41,17 +43,19 @@ const EventLog = ({ observationId, plotId }: EventLogProps) => {
 
   return (
     <Box>
-      <Box display='grid' gap={2} gridTemplateColumns='repeat(2, 1fr)' justifyItems='start'>
-        {events?.map((event) => {
+      <Box display='grid' gap={'32px'} gridTemplateColumns='minmax(150px, 1fr) 3fr' justifyItems='start'>
+        {events?.map((event, index) => {
+          const dateModified = DateTime.fromMillis(new Date(event.timestamp).getTime()).toFormat('yyyy-MM-dd');
           return (
-            <>
+            <React.Fragment key={index}>
               <Box>
-                {event.timestamp}
-                {strings.BY}
-                {event.userName}
+                <Typography>{dateModified}</Typography>
+                <Typography>
+                  {strings.BY} {event.userName}
+                </Typography>
               </Box>
               <Box>{event.subject.fullText}</Box>
-            </>
+            </React.Fragment>
           );
         })}
       </Box>
