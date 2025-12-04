@@ -4,6 +4,7 @@ export enum QueryTagTypes {
   Notifications = 'Notifications',
   Observation = 'Observation',
   ObservationMedia = 'ObservationMedia',
+  PlantingSites = 'PlantingSites',
 }
 
 export const QUERY_TAGS = Object.values(QueryTagTypes);
