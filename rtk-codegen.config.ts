@@ -22,6 +22,9 @@ const config: ConfigFile = {
     // './src/queries/generated/search.ts': {
     //   filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),
     // },
+    './src/queries/generated/events.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/events/'),
+    },
   },
   prettierConfigFile: '.prettierrc',
   flattenArg: true,
