@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Button, Icon, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -26,8 +26,10 @@ import ObservationDataNumbers from '../adhoc/ObservationDataNumbers';
 import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataConfirmationModal';
 import EditQualitativeDataModal from '../common/EditQualitativeDataModal';
 import { BiomassPlot } from '../common/EditQualitativeDataModal';
+import MonitoringPlotPhotosWithActions from '../common/MonitoringPlotPhotosWithActions';
 import LiveTreesPerSpecies from './LiveTreesPerSpecies';
 import PlotActions from './PlotActions';
+import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 type BiomassObservationDataTabProps = {
   monitoringPlot?: ObservationMonitoringPlotResultsPayload;
@@ -58,6 +60,7 @@ const BiomassObservationDataTab = ({
   const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
   const [update] = useUpdateCompletedObservationPlotMutation();
   const snackbar = useSnackbar();
+  const soilPhoto = monitoringPlot?.media.find((m) => m.type === 'Soil');
 
   const createBiomassPlot = useMemo(() => {
     return {
@@ -274,6 +277,47 @@ const BiomassObservationDataTab = ({
         )}
       </Box>
       <ExtraData items={extraItems} />
+      <Box paddingTop={2}>
+        <Typography fontSize={'20px'} fontWeight={600}>
+          {strings.SOIL_ASSESSMENT}
+        </Typography>
+        <Box display='grid' gap='16px' gridTemplateColumns={'repeat(3,1fr)'} justifyItems={'start'}>
+          {soilPhoto && (
+            <MonitoringPlotPhotosWithActions
+              observationId={Number(observationId)}
+              monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+              photos={[soilPhoto]}
+            />
+          )}
+          <Box>
+            <Textfield
+              id='soilDescription'
+              label={strings.DESCRIPTION_NOTES}
+              value={biomassMeasurement?.soilAssessment}
+              preserveNewlines={true}
+              type='text'
+              display={true}
+            />
+          </Box>
+        </Box>
+      </Box>
+      <Box paddingTop={2}>
+        <Typography fontSize={'20px'} fontWeight={600}>
+          {strings.TREES_AND_SHRUBS}
+        </Typography>
+        <Box display='flex' alignItems={'center'} paddingTop={3}>
+          <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
+          <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
+            {strings.TREES_AND_SHRUBS_TABLE_INSTRUCTIONS}
+          </Typography>
+        </Box>
+        <TreesAndShrubsEditableTable
+          trees={biomassMeasurement?.trees}
+          observationId={Number(observationId)}
+          plotId={Number(monitoringPlot?.monitoringPlotId)}
+          reload={reload}
+        />
+      </Box>
     </Card>
   );
 };
