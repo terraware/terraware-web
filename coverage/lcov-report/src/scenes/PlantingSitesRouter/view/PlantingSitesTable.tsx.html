@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -215,7 +215,9 @@
 <a name='L150'></a><a href='#L150'>150</a>
 <a name='L151'></a><a href='#L151'>151</a>
 <a name='L152'></a><a href='#L152'>152</a>
-<a name='L153'></a><a href='#L153'>153</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,29 +228,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -274,6 +253,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -282,6 +283,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -290,6 +292,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -377,20 +381,21 @@ import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectC
 import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { SortOrder } from 'src/components/common/table/sort';
+import { SearchSortOrderElement } from 'src/queries/generated/search';
+import { PlantingSiteSummary } from 'src/queries/search/plantingSites';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSitesFilters } from 'src/types/PlantingSite';
 import { Project } from 'src/types/Project';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 &nbsp;
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 &nbsp;
 interface PlantingSitesTableProps {
-  results: SearchResponseElement[];
+  results: PlantingSiteSummary[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch&lt;React.SetStateAction&lt;string&gt;&gt;;
-  setSearchSortOrder: (sortOrder: SearchSortOrder) =&gt; void;
+  setSearchSortOrder: (sortOrder: SearchSortOrderElement) =&gt; void;
   filters: PlantingSitesFilters;
   setFilters: (filters: PlantingSitesFilters) =&gt; void;
 }
@@ -412,15 +417,13 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
     type: 'string',
   },
   {
-    key: 'project_name',
+    key: 'projectName',
     name: strings.PROJECT,
     type: 'string',
   },
   { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'number' },
   { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'number' },
-  { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
-  // TODO: update with BE prop
-  { key: 'draft', name: '', type: 'string' }, // don't show column header name
+  { key: 'timeZoneId', name: strings.TIME_ZONE, type: 'string' },
 ];
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >PlantingSitesTable(</span>props: PlantingSitesTableProps): JSX.Element {
@@ -433,16 +436,19 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const [isPresorted, setIsPresorted] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(true);</span>
   const [filterPillData, setFilterPillData] = <span class="cstat-no" title="statement not covered" >useState&lt;PillListItemWithEmptyValue[]&gt;([]);</span>
 &nbsp;
-  const onSortChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rder: SortOrder, orderBy: string) =&gt; {</span>
-    const isTimeZone = <span class="cstat-no" title="statement not covered" >orderBy === 'timeZone';</span>
-<span class="cstat-no" title="statement not covered" >    if (!isTimeZone) {</span>
-<span class="cstat-no" title="statement not covered" >      setSearchSortOrder({</span>
-        field: orderBy,
-        direction: order === 'asc' ? 'Ascending' : 'Descending',
-      });
-    }
-<span class="cstat-no" title="statement not covered" >    setIsPresorted(!isTimeZone);</span>
-  };
+  const onSortChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (o</span>rder: SortOrder, orderBy: string) =&gt; {
+      const isTimeZone = <span class="cstat-no" title="statement not covered" >orderBy === 'timeZoneId';</span>
+<span class="cstat-no" title="statement not covered" >      if (!isTimeZone) {</span>
+<span class="cstat-no" title="statement not covered" >        setSearchSortOrder({</span>
+          field: orderBy === 'projectName' ? 'project_name' : orderBy,
+          direction: order === 'asc' ? 'Ascending' : 'Descending',
+        });
+      }
+<span class="cstat-no" title="statement not covered" >      setIsPresorted(!isTimeZone);</span>
+    },
+    [setSearchSortOrder]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const data: PillListItemWithEmptyValue[] = <span class="cstat-no" title="statement not covered" >[];</span>
@@ -526,7 +532,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-04T22:09:10.024Z
+                at 2025-12-04T22:26:10.187Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
