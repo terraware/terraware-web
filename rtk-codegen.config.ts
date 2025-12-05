@@ -9,6 +9,9 @@ const config: ConfigFile = {
   exportName: 'api',
   hooks: { queries: true, lazyQueries: true, mutations: true },
   outputFiles: {
+    './src/queries/generated/draftPlantingSites.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/draftSites'),
+    },
     './src/queries/generated/events.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/events/'),
     },
@@ -20,6 +23,9 @@ const config: ConfigFile = {
     },
     './src/queries/generated/observations.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/observations'),
+    },
+    './src/queries/generated/plantingSites.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/sites'),
     },
     // Disable regenerating Search API until OpenAPI annotation fix is completed.
     // './src/queries/generated/search.ts': {
