@@ -3,9 +3,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { Dropdown, Icon } from '@terraware/web-components';
 
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { PublishedReport } from 'src/types/AcceleratorReport';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
 import useQuery from 'src/utils/useQuery';
 import { getLocation } from 'src/utils/useStateLocation';
@@ -46,8 +51,18 @@ const ActivityHighlightsContent = ({
   const location = useStateLocation();
   const navigate = useSyncNavigate();
   const { acceleratorReports, busy: isLoadingReports } = useProjectReports(projectId);
+  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
+  const reportsResponse = useAppSelector(selectListFunderReports(projectId.toString() ?? ''));
+  const { isFunderRoute } = useFunderPortal();
+  const dispatch = useAppDispatch();
 
   const [selectedQuarter, setSelectedQuarter] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (isFunderRoute && publishedReports === undefined) {
+      void dispatch(requestListFunderReports(projectId));
+    }
+  }, [dispatch, isFunderRoute, projectId, publishedReports]);
 
   const highlightedActivities = useMemo(
     () => activities.filter((activity) => activity.payload.isHighlight),
@@ -82,6 +97,12 @@ const ActivityHighlightsContent = ({
     setSelectedQuarter(value);
   }, []);
 
+  useEffect(() => {
+    if (reportsResponse?.status === 'success') {
+      setPublishedReports(reportsResponse.data || []);
+    }
+  }, [reportsResponse]);
+
   // set initial selected quarter when data has loaded
   useEffect(() => {
     if (dropdownOptions.length > 0 && !selectedQuarter && !busy && !isLoadingReports) {
@@ -103,11 +124,25 @@ const ActivityHighlightsContent = ({
             defaultQuarter = latestReportQuarter;
           }
         }
+      } else {
+        if (publishedReports && (publishedReports?.length || 0) > 0) {
+          const sorted = [...publishedReports].sort((a, b) =>
+            b.endDate.localeCompare(a.endDate, activeLocale || undefined)
+          );
+          const latestReport = sorted[0];
+          const year = latestReport.endDate.split('-')[0];
+          const latestReportQuarter = `${latestReport.quarter} ${year}`;
+
+          // only use it if it exists in the dropdown options
+          if (dropdownOptions.some((option) => option.value === latestReportQuarter)) {
+            defaultQuarter = latestReportQuarter;
+          }
+        }
       }
 
       setSelectedQuarter(defaultQuarter);
     }
-  }, [acceleratorReports, activeLocale, busy, dropdownOptions, isLoadingReports, selectedQuarter]);
+  }, [acceleratorReports, activeLocale, busy, dropdownOptions, isLoadingReports, publishedReports, selectedQuarter]);
 
   // Notify parent component with dropdown data when it's ready
   useEffect(() => {
