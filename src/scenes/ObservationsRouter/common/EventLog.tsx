@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { DateTime } from 'luxon';
 
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  EventLogEntryPayload,
-  ListEventLogEntriesRequestPayload,
-  useListEventLogEntriesMutation,
-} from 'src/queries/generated/events';
+import { ListEventLogEntriesRequestPayload, useListEventLogEntriesMutation } from 'src/queries/generated/events';
 
 type EventLogProps = {
   observationId: number;
@@ -19,15 +15,10 @@ const EventLog = ({ observationId, plotId }: EventLogProps) => {
   const { strings } = useLocalization();
 
   const [list, listResult] = useListEventLogEntriesMutation();
-  const [events, setEvents] = useState<EventLogEntryPayload[]>();
 
   const theme = useTheme();
 
-  useEffect(() => {
-    if (listResult.isSuccess) {
-      setEvents(listResult.data.events);
-    }
-  }, [listResult]);
+  const events = useMemo(() => (listResult.isSuccess ? listResult.data.events : undefined), [listResult]);
 
   useEffect(() => {
     const listEventLogPayload: ListEventLogEntriesRequestPayload = {
