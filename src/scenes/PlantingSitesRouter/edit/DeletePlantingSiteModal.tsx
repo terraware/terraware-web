@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
@@ -6,9 +6,8 @@ import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { useAppSelector } from 'src/redux/store';
-import { TrackingService } from 'src/services';
+import { useDeletePlantingSiteMutation } from 'src/queries/generated/plantingSites';
+import { useSearchPlantingsForSiteQuery } from 'src/queries/search/plantings';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -20,26 +19,32 @@ export type DeletePlantingSiteModalProps = {
 
 export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalProps): JSX.Element {
   const { onClose, plantingSite } = props;
-  const [busy, setBusy] = useState<boolean>(false);
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
-  const hasPlantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSite.id)).length > 0;
 
-  const deleteHandler = async () => {
-    setBusy(true);
-    const response = await TrackingService.deletePlantingSite(plantingSite.id);
-    setBusy(false);
-    if (response.requestSucceeded) {
+  const [deleteSite, deleteResult] = useDeletePlantingSiteMutation();
+  const { data: plantings } = useSearchPlantingsForSiteQuery(plantingSite.id);
+
+  const hasPlantings = useMemo(() => {
+    return plantings && plantings?.length > 0;
+  }, [plantings]);
+
+  const deleteHandler = useCallback(() => {
+    void deleteSite(plantingSite.id);
+  }, [deleteSite, plantingSite.id]);
+
+  useEffect(() => {
+    if (deleteResult.isSuccess) {
       snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
       navigate(APP_PATHS.PLANTING_SITES);
-    } else {
+    } else if (deleteResult.isError) {
       snackbar.toastError();
     }
-  };
+  }, [deleteResult, navigate, snackbar]);
 
   return (
     <>
-      {busy && <BusySpinner withSkrim={true} />}
+      {deleteResult.isLoading && <BusySpinner withSkrim={true} />}
       <DialogBox
         onClose={onClose}
         open={true}
@@ -56,11 +61,11 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
           />,
           <Button
             id='saveDeletePlantingSite'
-            onClick={() => void deleteHandler()}
+            onClick={deleteHandler}
             type='destructive'
             label={strings.DELETE}
             key='button-2'
-            disabled={hasPlantings}
+            disabled={hasPlantings || deleteResult.isLoading}
           />,
         ]}
         message={strings.formatString(
