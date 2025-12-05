@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 
@@ -7,16 +7,19 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
-import { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
+import {
+  CreatePlantingSiteApiArg,
+  UpdatePlantingSiteApiArg,
+  useCreatePlantingSiteMutation,
+  useLazyGetPlantingSiteQuery,
+  useUpdatePlantingSiteMutation,
+} from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import usePlantingSiteCreate from '../hooks/usePlantingSiteCreate';
-import usePlantingSiteUpdate from '../hooks/usePlantingSiteUpdate';
 import DetailsInputForm from './DetailsInputForm';
 
 type CreatePlantingSiteProps = {
@@ -31,10 +34,18 @@ export default function CreatePlantingSite({ plantingSiteId }: CreatePlantingSit
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
 
   const [hasErrors, setHasErrors] = useState<boolean>();
-  const { create, result: createResult } = usePlantingSiteCreate();
-  const { update, result: updateResult } = usePlantingSiteUpdate();
 
-  const { isLoading, reload, setSelectedPlantingSite, plantingSite } = usePlantingSiteData();
+  const [create, createResult] = useCreatePlantingSiteMutation();
+  const [update, updateResult] = useUpdatePlantingSiteMutation();
+  const [getPlantingSite, { data: plantingSiteData, isLoading }] = useLazyGetPlantingSiteQuery();
+
+  useEffect(() => {
+    if (plantingSiteId && plantingSiteId > 0) {
+      void getPlantingSite(plantingSiteId);
+    }
+  }, [getPlantingSite, plantingSiteId]);
+
+  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData?.site]);
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: plantingSiteId ?? -1,
@@ -72,7 +83,7 @@ export default function CreatePlantingSite({ plantingSiteId }: CreatePlantingSit
   const savePlantingSite = useCallback(() => {
     if (!hasErrors) {
       if (record.id === -1) {
-        const newPlantingSite: PlantingSitePostRequestBody = {
+        const payload: CreatePlantingSiteApiArg = {
           boundary: record.boundary,
           description: record.description,
           name: record.name,
@@ -81,44 +92,45 @@ export default function CreatePlantingSite({ plantingSiteId }: CreatePlantingSit
           projectId: record.projectId,
           timeZone: record.timeZone,
         };
-        create(newPlantingSite);
+        void create(payload);
       } else {
-        const updatedPlantingSite: PlantingSitePutRequestBody = {
-          boundary: record.boundary,
-          description: record.description,
-          name: record.name,
-          plantingSeasons,
-          projectId: record.projectId,
-          timeZone: record.timeZone,
+        const payload: UpdatePlantingSiteApiArg = {
+          id: record.id,
+          updatePlantingSiteRequestPayload: {
+            boundary: record.boundary,
+            description: record.description,
+            name: record.name,
+            plantingSeasons,
+            projectId: record.projectId,
+            timeZone: record.timeZone,
+          },
         };
-        update(record.id, updatedPlantingSite);
+        void update(payload);
       }
     }
   }, [create, hasErrors, plantingSeasons, record, update]);
 
   useEffect(() => {
     if (updateResult) {
-      if (updateResult.status === 'success' && updateResult.data) {
-        reload();
+      if (updateResult.isSuccess) {
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         goBack();
       }
     }
-  }, [goBack, plantingSiteId, reload, setSelectedPlantingSite, snackbar, updateResult]);
+  }, [goBack, plantingSiteId, snackbar, updateResult]);
 
   useEffect(() => {
     if (createResult) {
-      if (createResult.status === 'success') {
-        reload();
+      if (createResult.isSuccess) {
         snackbar.toastSuccess(strings.PLANTING_SITE_CREATED);
         if (createResult.data) {
-          goToPlantingSiteView(createResult.data);
+          goToPlantingSiteView(createResult.data.id);
         } else {
           goBack();
         }
       }
     }
-  }, [createResult, goBack, goToPlantingSiteView, reload, snackbar, updateResult]);
+  }, [createResult, goBack, goToPlantingSiteView, snackbar, updateResult]);
 
   return (
     <TfMain>
