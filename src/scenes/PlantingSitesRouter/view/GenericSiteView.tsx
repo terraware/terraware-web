@@ -43,7 +43,9 @@ export default function GenericSiteView({ plantingSite }: GenericSiteViewProps):
 
   return (
     <>
-      {deleteModalOpen && plantingSite && <DeletePlantingSiteModal plantingSite={plantingSite} onClose={closeModal} />}
+      {deleteModalOpen && plantingSite && (
+        <DeletePlantingSiteModal plantingSiteId={plantingSite.id} onClose={closeModal} />
+      )}
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: isMapView ? 1 : 0 }}>
         <PlantingSiteDetailsHeader onEdit={goToEditPlantingSite} onDelete={openModal} plantingSite={plantingSite} />
         <Grid item xs={12}>
