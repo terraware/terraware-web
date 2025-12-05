@@ -1,36 +1,86 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
+import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
-import TfMain from 'src/components/common/TfMain';
+import PageSnackbar from 'src/components/PageSnackbar';
+import Card from 'src/components/common/Card';
+import { View } from 'src/components/common/ListMapSelector';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
-import GenericSiteView from './GenericSiteView';
+import DeletePlantingSiteModal from '../edit/DeletePlantingSiteModal';
+import BoundariesAndZones from './BoundariesAndZones';
+import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
+import PlantingSiteDetailsHeader from './PlantingSiteDetailsHeader';
+import SimplePlantingSite from './SimplePlantingSite';
 
 export default function PlantingSiteView(): JSX.Element {
+  const theme = useTheme();
+  const navigate = useSyncNavigate();
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>('');
+  const [view, setView] = useState<View>('map');
+
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
+  const { data: plantingSiteData, isLoading } = useGetPlantingSiteQuery(plantingSiteId);
+  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData?.site]);
 
-  const { data: plantingSite, isLoading } = useGetPlantingSiteQuery(plantingSiteId);
-
-  // Use a delay effect for loading to handle quick updates of data
-  const [delayedLoading, setDelayedLoading] = useState(isLoading);
-  useEffect(() => {
-    if (isLoading) {
-      setDelayedLoading(true); // immediately true when loading starts
-    } else {
-      const timeout = setTimeout(() => {
-        setDelayedLoading(false); // delay turning false
-      }, 500);
-      return () => clearTimeout(timeout); // cleanup if loading toggles back quickly
+  const goToEditPlantingSite = useCallback(() => {
+    if (plantingSite) {
+      navigate({
+        pathname: APP_PATHS.PLANTING_SITES_EDIT.replace(':plantingSiteId', `${plantingSite.id}`),
+      });
     }
-  }, [isLoading]);
+  }, [plantingSite, navigate]);
+
+  const isMapView = useMemo<boolean>(
+    () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.plantingZones === undefined),
+    [plantingSite?.boundary, plantingSite?.plantingZones, view]
+  );
+
+  const openModal = useCallback(() => setDeleteModalOpen(true), []);
+  const closeModal = useCallback(() => setDeleteModalOpen(false), []);
+
+  if (isLoading || !plantingSite) {
+    return <BusySpinner withSkrim={true} />;
+  }
 
   return (
-    <TfMain>
-      {(delayedLoading || plantingSite === undefined) && <BusySpinner withSkrim={true} />}
-      {!delayedLoading && plantingSite !== undefined && <GenericSiteView plantingSite={plantingSite.site} />}
-    </TfMain>
+    <>
+      {deleteModalOpen && plantingSite && (
+        <DeletePlantingSiteModal plantingSiteId={plantingSite.id} onClose={closeModal} />
+      )}
+      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: isMapView ? 1 : 0 }}>
+        <PlantingSiteDetailsHeader onEdit={goToEditPlantingSite} onDelete={openModal} plantingSite={plantingSite} />
+        <Grid item xs={12}>
+          <PageSnackbar />
+        </Grid>
+        <Card
+          flushMobile
+          style={{
+            flexGrow: plantingSite?.boundary ? 1 : 0,
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: theme.spacing(4),
+          }}
+        >
+          <PlantingSiteDetailsCard plantingSite={plantingSite} />
+          {plantingSite.boundary && plantingSite.plantingZones && (
+            <BoundariesAndZones search={search} setSearch={setSearch} setView={setView} view={view} />
+          )}
+          {plantingSite.boundary && !plantingSite.plantingZones && (
+            <Grid container flexGrow={1}>
+              <Grid item xs={12} display='flex'>
+                <SimplePlantingSite plantingSite={plantingSite} />
+              </Grid>
+            </Grid>
+          )}
+        </Card>
+      </Box>
+    </>
   );
 }
