@@ -1,12 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Routes, useParams } from 'react-router';
-
-import { CircularProgress } from '@mui/material';
-
-import { useOrganization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { useAppDispatch } from 'src/redux/store';
 
 import PlantingSiteCreate from './edit/PlantingSiteCreate';
 import PlantingSiteDraftCreate from './edit/PlantingSiteDraftCreate';
@@ -32,32 +25,7 @@ export default function PlantingSites(): JSX.Element {
 }
 
 export function PlantingSitesRouter(): JSX.Element {
-  const { selectedOrganization } = useOrganization();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-
-  const { allPlantingSites, setSelectedPlantingSite } = usePlantingSiteData();
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const siteId = Number(plantingSiteId);
-    if (!isNaN(siteId)) {
-      setSelectedPlantingSite(siteId);
-    }
-  }, [plantingSiteId, setSelectedPlantingSite]);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      // This dispatch is required for a hasPlantings attribute for deleting a site
-      // TODO: move plantings into usePlantingSite hook
-      void dispatch(requestPlantings(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization]);
-
-  // show spinner while initializing data
-  if (allPlantingSites === undefined) {
-    return <CircularProgress sx={{ margin: 'auto' }} />;
-  }
 
   return (
     <Routes>
