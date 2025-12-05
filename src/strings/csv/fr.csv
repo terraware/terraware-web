@@ -629,6 +629,8 @@ EVENT_CALL_DESCRIPTION_2,"Pour ce {0}, il vous faudra :",89f84f4b
 EVENT_CALL_REQUIREMENTS_INTERNET,Une connexion internet sur votre appareil - haut débit avec ou sans fil (3G ou 4G/LTE),0f7a1688
 EVENT_CALL_REQUIREMENTS_SPEAKERS_MIC,"Des haut-parleurs et un microphone - intégrés, avec prise USB ou sans fil Bluetooth",5beb673f
 EVENT_CALL_REQUIREMENTS_WEBCAM,"Une webcam ou une webcam HD - intégrée, prise USB",a75f4bbb
+EVENT_CREATED,{0} créé,6f31465a
+EVENT_DELETED,{0} supprimé,aebbee31
 EVENT_DETAILS,Détails de l'événement,069ed4ac
 EVENT_NAME_RECORDING,{0} Enregistrement,6c589671
 EVENT_NAME_SLIDES,{0} Diapositives,a06fe761
@@ -2281,6 +2283,7 @@ USING_ENTERED_PLANT_DENSITY,Utilisation de la densité de plants saisie par esp�
 USING_OBSERVATION_DATA_FROM,Utilisation des données d'observation de {0},c489a0dd
 VALUE,Valeur,b8e67ab1
 VALUE_CANT_EXCEED_100,La valeur ne peut pas dépasser 100 %,e78b7737
+VALUE_CHANGED_FROM_TO,La valeur de {0} est passée de {1} à {2},566b2a1f
 VARIABLE_DETAILS,Détails de la variable,48294b19
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,La valeur a dépassé le nombre maximum de décimales de {0},3a248e96
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,La valeur est supérieure à la valeur maximale de {0},4bb003ef
