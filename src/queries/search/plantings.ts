@@ -39,7 +39,7 @@ const injectedRtkApi = api.injectEndpoints({
           deliveryId: Number(result.delivery_id),
           numPlants: Number(result['numPlants(raw)']),
           plantingSiteId: Number(result.plantingSite_id),
-          plantingSubzoneId: Number(result.plantingSite_id),
+          plantingSubzoneId: Number(result.plantingSubzone_id),
           type: result.type,
           species: result.species.map((speciesResult) => ({
             conservationCategory: speciesResult.conservationCategory,
