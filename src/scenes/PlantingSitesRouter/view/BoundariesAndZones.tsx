@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
@@ -12,11 +13,11 @@ import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useLocalization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetPlantingSiteQuery, useLazyGetPlantingSiteHistoryQuery } from 'src/queries/generated/plantingSites';
+import { useListPlantingSiteHistoryIdsQuery } from 'src/queries/search/plantingSiteHistories';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
-import { PlantingSiteHistory } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -38,7 +39,12 @@ export default function BoundariesAndZones({ search, setSearch, setView, view }:
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter(activeLocale);
-  const { plantingSite } = usePlantingSiteData();
+
+  const params = useParams<{ plantingSiteId: string }>();
+  const plantingSiteId = Number(params.plantingSiteId);
+  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
+
+  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -118,26 +124,54 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
   const defaultTimeZone = useDefaultTimeZone();
-  const { plantingSite, plantingSiteHistories } = usePlantingSiteData();
-  const [selectedHistory, setSelectedHistory] = useState<PlantingSiteHistory>();
 
-  const dates = useMemo(() => {
-    return plantingSiteHistories?.map((history) => history.createdTime);
-  }, [plantingSiteHistories]);
+  const [selectedHistoryId, setSelectedHistoryId] = useState<number>();
+
+  const params = useParams<{ plantingSiteId: string }>();
+  const plantingSiteId = Number(params.plantingSiteId);
+  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
+  const { data: plantingSiteHistoryIds } = useListPlantingSiteHistoryIdsQuery(plantingSiteId);
+
+  const [getPlantingSiteHistory, { data: plantingSiteHistoryData }] = useLazyGetPlantingSiteHistoryQuery();
+
+  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
+
+  const selectedHistory = useMemo(() => plantingSiteHistoryData?.site, [plantingSiteHistoryData]);
 
   useEffect(() => {
-    if (!plantingSiteHistories?.length) {
-      setSelectedHistory(undefined);
-    } else if (plantingSiteHistories.find((history) => history.id === selectedHistory?.id) === undefined) {
-      setSelectedHistory(plantingSiteHistories[0]);
+    if (plantingSiteId && selectedHistoryId) {
+      const siteId = Number(plantingSiteId);
+      void getPlantingSiteHistory(
+        {
+          id: siteId,
+          historyId: selectedHistoryId,
+        },
+        true
+      );
     }
-  }, [plantingSiteHistories, selectedHistory]);
+  }, [getPlantingSiteHistory, plantingSiteId, selectedHistoryId]);
+
+  const dates = useMemo(() => {
+    return plantingSiteHistoryIds?.map((history) => history.createdTime);
+  }, [plantingSiteHistoryIds]);
+
+  useEffect(() => {
+    if (!plantingSiteHistoryIds?.length) {
+      setSelectedHistoryId(undefined);
+    } else if (
+      plantingSiteHistoryIds.find((history) => history.plantingSiteHistoryId === selectedHistoryId) === undefined
+    ) {
+      setSelectedHistoryId(plantingSiteHistoryIds[0].plantingSiteHistoryId);
+    }
+  }, [plantingSiteHistoryIds, selectedHistoryId]);
 
   const selectDate = useCallback(
     (date?: string) => {
-      setSelectedHistory(plantingSiteHistories?.find((_history) => _history.createdTime === date));
+      setSelectedHistoryId(
+        plantingSiteHistoryIds?.find((history) => history.createdTime === date)?.plantingSiteHistoryId
+      );
     },
-    [plantingSiteHistories]
+    [plantingSiteHistoryIds]
   );
 
   const timeZone = useMemo(() => plantingSite?.timeZone ?? defaultTimeZone.get().id, [plantingSite, defaultTimeZone]);

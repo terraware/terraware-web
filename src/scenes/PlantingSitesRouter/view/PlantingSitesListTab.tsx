@@ -34,19 +34,25 @@ export default function PlantingSitesListTab({ isDraft }: PlantingSitesListTabPr
   useEffect(() => {
     if (selectedOrganization) {
       if (isDraft) {
-        void searchDraft({
-          organizationId: selectedOrganization?.id,
-          projectIds: filters.projectIds,
-          searchTerm: debouncedSearchTerm,
-          searchOrder: [searchSortOrder],
-        });
+        void searchDraft(
+          {
+            organizationId: selectedOrganization?.id,
+            projectIds: filters.projectIds,
+            searchTerm: debouncedSearchTerm,
+            searchOrder: [searchSortOrder],
+          },
+          true
+        );
       } else {
-        void search({
-          organizationId: selectedOrganization?.id,
-          projectIds: filters.projectIds,
-          searchTerm: debouncedSearchTerm,
-          searchOrder: [searchSortOrder],
-        });
+        void search(
+          {
+            organizationId: selectedOrganization?.id,
+            projectIds: filters.projectIds,
+            searchTerm: debouncedSearchTerm,
+            searchOrder: [searchSortOrder],
+          },
+          true
+        );
       }
     }
   }, [debouncedSearchTerm, filters.projectIds, isDraft, search, searchDraft, searchSortOrder, selectedOrganization]);

@@ -28,8 +28,8 @@ const ApplicationListView = () => {
 
   useEffect(() => {
     if (selectedOrganization) {
-      void countSites(selectedOrganization.id);
-      void countDraftSites(selectedOrganization.id);
+      void countSites(selectedOrganization.id, true);
+      void countDraftSites(selectedOrganization.id, true);
     }
   }, [countDraftSites, countSites, selectedOrganization]);
 

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';
 
 import TfMain from 'src/components/common/TfMain';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
 import GenericSiteView from './GenericSiteView';
 
 export default function PlantingSiteView(): JSX.Element {
-  const { isLoading, plantingSite } = usePlantingSiteData();
+  const params = useParams<{ plantingSiteId: string }>();
+  const plantingSiteId = Number(params.plantingSiteId);
+
+  const { data: plantingSite, isLoading } = useGetPlantingSiteQuery(plantingSiteId);
 
   // Use a delay effect for loading to handle quick updates of data
   const [delayedLoading, setDelayedLoading] = useState(isLoading);
@@ -26,7 +30,7 @@ export default function PlantingSiteView(): JSX.Element {
   return (
     <TfMain>
       {(delayedLoading || plantingSite === undefined) && <BusySpinner withSkrim={true} />}
-      {!delayedLoading && plantingSite !== undefined && <GenericSiteView plantingSite={plantingSite} />}
+      {!delayedLoading && plantingSite !== undefined && <GenericSiteView plantingSite={plantingSite.site} />}
     </TfMain>
   );
 }
