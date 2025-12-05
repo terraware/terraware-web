@@ -5,6 +5,8 @@ import { requestListAcceleratorReports } from 'src/redux/features/reports/report
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
 
+import useFunderPortal from './useFunderPortal';
+
 const useProjectReports = (
   projectId?: number | string,
   includeFuture: boolean = false,
@@ -16,9 +18,10 @@ const useProjectReports = (
   const [requestId, setRequestId] = useState('');
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReport[]>([]);
   const listAcceleratorReportsRequest = useAppSelector(selectListAcceleratorReports(requestId));
+  const { isFunderRoute } = useFunderPortal();
 
   const reload = useCallback(() => {
-    if (projectId) {
+    if (projectId && !isFunderRoute) {
       setBusy(true);
       const request = dispatch(
         requestListAcceleratorReports({
@@ -32,7 +35,7 @@ const useProjectReports = (
     } else {
       setBusy(false);
     }
-  }, [dispatch, projectId, includeFuture, includeMetrics, year]);
+  }, [projectId, isFunderRoute, dispatch, includeFuture, includeMetrics, year]);
 
   useEffect(() => {
     reload();
