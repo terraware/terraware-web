@@ -120,7 +120,7 @@ const BiomassObservationDataTab = ({
           : '0',
     },
     {
-      label: strings.HERBACIOUS_COVER_PERCENT,
+      label: strings.HERBACEOUS_COVER_PERCENT,
       value: biomassMeasurement?.herbaceousCoverPercent,
     },
     {

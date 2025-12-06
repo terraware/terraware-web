@@ -24,7 +24,7 @@ type SpeciesRow = {
 
 type QuadratSpeciesEditableTableProps = {
   species?: SpeciesRow[];
-  quadrat?: string;
+  position: QuadratPosition;
   observationId: number;
   plotId: number;
   reload: () => void;
@@ -35,7 +35,7 @@ export default function QuadratSpeciesEditableTable({
   observationId,
   plotId,
   reload,
-  quadrat,
+  position,
 }: QuadratSpeciesEditableTableProps): JSX.Element {
   const { species: availableSpecies } = useSpeciesData();
   const theme = useTheme();
@@ -47,26 +47,30 @@ export default function QuadratSpeciesEditableTable({
       reload();
     }
   }, [reload, updateResult]);
+
   const saveValue = useCallback(
     (fieldId: string, speciesId?: number, scientificName?: string) => (event: { currentTarget: { value: any } }) => {
       const value = event.currentTarget.value;
+
       if (value !== undefined && (speciesId || scientificName)) {
         const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
           type: 'QuadratSpecies',
-          position: quadrat as QuadratPosition,
+          position,
           speciesId,
           scientificName,
           abundance: value,
         };
+
         const mainPayload = {
           observationId,
           plotId,
           updateObservationRequestPayload: { updates: [uploadPayload] },
         };
+
         void update(mainPayload);
       }
     },
-    [quadrat, observationId, plotId, update]
+    [position, observationId, plotId, update]
   );
 
   const columns = useMemo<MRT_ColumnDef<SpeciesRow>[]>(
@@ -78,9 +82,37 @@ export default function QuadratSpeciesEditableTable({
       },
       {
         accessorKey: 'abundancePercent',
-        header: strings.HERBACEOUS_ABUNDANCE_PERCENT,
+        header: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT,
         muiEditTextFieldProps: ({ row }) => ({
           onBlur: saveValue('abundancePercent', row.original.speciesId, row.original.scientificName),
+        }),
+      },
+      {
+        accessorKey: 'abundancePercentCalculated',
+        header: strings.HERBACEOUS_ABUNDANCE_PERCENT,
+        muiEditTextFieldProps: ({ row }) => ({
+          onBlur: (event: React.FocusEvent<HTMLInputElement>) => {
+            const value = event.currentTarget.value;
+            const squareCount = value !== undefined ? Number(value) / 4 : undefined;
+
+            if (squareCount !== undefined && (row.original.speciesId || row.original.scientificName)) {
+              const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
+                abundance: squareCount,
+                position,
+                scientificName: row.original.scientificName,
+                speciesId: row.original.speciesId,
+                type: 'QuadratSpecies',
+              };
+
+              const mainPayload = {
+                observationId,
+                plotId,
+                updateObservationRequestPayload: { updates: [uploadPayload] },
+              };
+
+              void update(mainPayload);
+            }
+          },
         }),
       },
       {
@@ -140,7 +172,7 @@ export default function QuadratSpeciesEditableTable({
         }),
       },
     ],
-    [saveValue, strings, observationId, plotId, update]
+    [saveValue, strings, observationId, plotId, update, position]
   );
 
   const speciesWithData = useMemo(() => {
@@ -148,6 +180,7 @@ export default function QuadratSpeciesEditableTable({
       const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === sp.speciesId);
       return {
         ...sp,
+        abundancePercentCalculated: sp.abundancePercent ? sp.abundancePercent * 4 : undefined,
         speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
       };
     });
