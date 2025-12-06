@@ -795,6 +795,7 @@ HEIGHT_M,Hauteur (m),fe61fc34
 HELP_SUPPORT,Aide et assistance,477f3e22
 HERB,Herbe,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abondance des plantes herbacées (%),d3693b6c
+HERBACEOUS_ABUNDANCE_SQUARE_COUNT,Abondance herbacée (nombre de carrés),a075fce2
 HERBACEOUS_COVER_PERCENT,Couverture herbacée (%),e04acd60
 HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6

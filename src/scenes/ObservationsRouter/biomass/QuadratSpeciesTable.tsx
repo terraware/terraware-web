@@ -24,7 +24,10 @@ export default function QuadratSpeciesTable({ species, quadrat }: QuadratSpecies
     (): TableColumnType[] => [
       { key: 'speciesName', name: strings.SPECIES, type: 'string' },
       ...(quadrat
-        ? [{ key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' as const }]
+        ? [
+            { key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT, type: 'string' as const },
+            { key: 'abundancePercentCalculated', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' as const },
+          ]
         : []),
       {
         key: 'isInvasive',
@@ -45,6 +48,7 @@ export default function QuadratSpeciesTable({ species, quadrat }: QuadratSpecies
       const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === sp.speciesId);
       return {
         ...sp,
+        abundancePercentCalculated: sp.abundancePercent ? `${sp.abundancePercent * 4}` : undefined,
         speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
       };
     });

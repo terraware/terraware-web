@@ -796,6 +796,7 @@ HEIGHT_M,Height (m),
 HELP_SUPPORT,Help & Support,
 HERB,Herb,A growth form of a plant
 HERBACEOUS_ABUNDANCE_PERCENT,Herbaceous Abundance (%),
+HERBACEOUS_ABUNDANCE_SQUARE_COUNT,Herbaceous Abundance (square count),
 HERBACEOUS_COVER_PERCENT,Herbaceous Cover %,
 HERE,here,
 HIDE_ALL,Hide All,
