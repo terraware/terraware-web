@@ -29,6 +29,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      #        with:
+      #          fetch-depth: 0
 
       - name: Use Node.js 24
         uses: actions/setup-node@v6
@@ -74,7 +76,7 @@ jobs:
 
       - name: Check that changed code is formatted
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn format:checkChanged
+        run: git diff -z --name-only --diff-filter=ACMR origin/${{ github.base_ref }} -- '**.js' '**.ts' '**.tsx' '**.json' '**.css' '**.scss' '**.md' | xargs -0r prettier --check
 
       - name: Check that all code is formatted
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
