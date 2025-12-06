@@ -19,35 +19,26 @@ type QuadratSpeciesTableProps = {
 
 export default function QuadratSpeciesTable({ species, quadrat }: QuadratSpeciesTableProps): JSX.Element {
   const { species: availableSpecies } = useSpeciesData();
-  const columns = (): TableColumnType[] =>
-    quadrat
-      ? [
-          { key: 'speciesName', name: strings.SPECIES, type: 'string' },
-          { key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' },
-          {
-            key: 'isInvasive',
-            name: strings.INVASIVE,
-            type: 'boolean',
-          },
-          {
-            key: 'isThreatened',
-            name: strings.THREATENED,
-            type: 'boolean',
-          },
-        ]
-      : [
-          { key: 'speciesName', name: strings.SPECIES, type: 'string' },
-          {
-            key: 'isInvasive',
-            name: strings.INVASIVE,
-            type: 'boolean',
-          },
-          {
-            key: 'isThreatened',
-            name: strings.THREATENED,
-            type: 'boolean',
-          },
-        ];
+
+  const columns = useMemo(
+    (): TableColumnType[] => [
+      { key: 'speciesName', name: strings.SPECIES, type: 'string' },
+      ...(quadrat
+        ? [{ key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' as const }]
+        : []),
+      {
+        key: 'isInvasive',
+        name: strings.INVASIVE,
+        type: 'boolean',
+      },
+      {
+        key: 'isThreatened',
+        name: strings.THREATENED,
+        type: 'boolean',
+      },
+    ],
+    [quadrat]
+  );
 
   const speciesWithData = useMemo(() => {
     return species?.map((sp) => {
