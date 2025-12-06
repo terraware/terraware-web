@@ -24,7 +24,7 @@ type SpeciesRow = {
 
 type QuadratSpeciesEditableTableProps = {
   species?: SpeciesRow[];
-  quadrat?: string;
+  position: QuadratPosition;
   observationId: number;
   plotId: number;
   reload: () => void;
@@ -35,7 +35,7 @@ export default function QuadratSpeciesEditableTable({
   observationId,
   plotId,
   reload,
-  quadrat,
+  position,
 }: QuadratSpeciesEditableTableProps): JSX.Element {
   const { species: availableSpecies } = useSpeciesData();
   const theme = useTheme();
@@ -55,7 +55,7 @@ export default function QuadratSpeciesEditableTable({
       if (value !== undefined && (speciesId || scientificName)) {
         const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
           type: 'QuadratSpecies',
-          position: quadrat as QuadratPosition,
+          position,
           speciesId,
           scientificName,
           abundance: value,
@@ -70,7 +70,7 @@ export default function QuadratSpeciesEditableTable({
         void update(mainPayload);
       }
     },
-    [quadrat, observationId, plotId, update]
+    [position, observationId, plotId, update]
   );
 
   const columns = useMemo<MRT_ColumnDef<SpeciesRow>[]>(
@@ -98,7 +98,7 @@ export default function QuadratSpeciesEditableTable({
             if (squareCount !== undefined && (row.original.speciesId || row.original.scientificName)) {
               const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
                 abundance: squareCount,
-                position: quadrat as QuadratPosition,
+                position,
                 scientificName: row.original.scientificName,
                 speciesId: row.original.speciesId,
                 type: 'QuadratSpecies',
@@ -172,7 +172,7 @@ export default function QuadratSpeciesEditableTable({
         }),
       },
     ],
-    [saveValue, strings, observationId, plotId, update, quadrat]
+    [saveValue, strings, observationId, plotId, update, position]
   );
 
   const speciesWithData = useMemo(() => {

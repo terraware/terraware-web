@@ -72,7 +72,7 @@ const QuadratComponent = ({ quadrat, monitoringPlot, reload }: QuadratComponentP
       </Box>
       <QuadratSpeciesEditableTable
         species={biomassMeasurements?.quadrats.find((quad) => quad.position === position)?.species}
-        quadrat={position}
+        position={position}
         observationId={Number(observationId)}
         plotId={Number(monitoringPlot?.monitoringPlotId)}
         reload={reload}
