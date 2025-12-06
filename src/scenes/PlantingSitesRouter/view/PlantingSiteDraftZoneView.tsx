@@ -12,8 +12,9 @@ import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import useDraftPlantingSiteGet from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteGet';
+import { useGetDraftPlantingSiteQuery } from 'src/queries/generated/draftPlantingSites';
 import strings from 'src/strings';
+import { toDraft } from 'src/utils/draftPlantingSiteUtils';
 
 const columns = (): TableColumnType[] => [
   {
@@ -28,7 +29,9 @@ export default function PlantingSiteDraftZoneView(): JSX.Element | undefined {
   const [search, setSearch] = useState<string>('');
 
   const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
-  const { site, status } = useDraftPlantingSiteGet({ draftId: Number(plantingSiteId) });
+
+  const { data: result, isLoading } = useGetDraftPlantingSiteQuery(Number(plantingSiteId));
+  const site = useMemo(() => (result?.site ? toDraft(result.site) : undefined), [result?.site]);
 
   const plantingZone = useMemo(() => {
     return site?.plantingZones?.find((zone) => zone.id === Number(zoneId));
@@ -59,7 +62,7 @@ export default function PlantingSiteDraftZoneView(): JSX.Element | undefined {
   );
 
   useEffect(() => {
-    if (status === 'pending') {
+    if (isLoading) {
       return;
     }
 
@@ -68,9 +71,9 @@ export default function PlantingSiteDraftZoneView(): JSX.Element | undefined {
     } else if (!plantingZone) {
       navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', plantingSiteId));
     }
-  }, [status, site, plantingSiteId, plantingZone, navigate]);
+  }, [isLoading, site, plantingSiteId, plantingZone, navigate]);
 
-  if (status === 'pending' || !site || !plantingZone) {
+  if (isLoading || !site || !plantingZone) {
     return <BusySpinner />;
   }
 

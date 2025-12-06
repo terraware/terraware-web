@@ -12,8 +12,9 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
+import { useGetDraftPlantingSiteQuery } from 'src/queries/generated/draftPlantingSites';
 import DeleteDraftPlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeleteDraftPlantingSiteModal';
-import useDraftPlantingSite from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteGet';
+import { toDraft } from 'src/utils/draftPlantingSiteUtils';
 
 import DraftPlantingSiteListMapView from './DraftPlantingSiteListMapView';
 import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
@@ -25,12 +26,13 @@ export default function PlantingSiteDraftView(): JSX.Element {
   const { user } = useUser();
   const navigate = useSyncNavigate();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const result = useDraftPlantingSite({ draftId: Number(plantingSiteId) });
+
+  const { data: result } = useGetDraftPlantingSiteQuery(Number(plantingSiteId));
+  const plantingSite = useMemo(() => (result?.site ? toDraft(result.site) : undefined), [result?.site]);
+
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
   const [view, setView] = useState<View>('map');
-
-  const plantingSite = useMemo(() => result.site, [result]);
 
   const isMapView = useMemo<boolean>(
     () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.plantingZones === undefined),
@@ -46,16 +48,16 @@ export default function PlantingSiteDraftView(): JSX.Element {
     }
   }, [plantingSiteId, navigate]);
 
-  if (result.site !== undefined) {
+  if (plantingSite !== undefined) {
     return (
       <TfMain>
         {deleteModalOpen && (
-          <DeleteDraftPlantingSiteModal plantingSite={result.site} onClose={() => setDeleteModalOpen(false)} />
+          <DeleteDraftPlantingSiteModal plantingSite={plantingSite} onClose={() => setDeleteModalOpen(false)} />
         )}
         {plantingSite && (
           <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: isMapView ? 1 : 0 }}>
             <PlantingSiteDetailsHeader
-              editDisabled={!user || result.site.createdBy !== user.id}
+              editDisabled={!user || plantingSite.createdBy !== user.id}
               onEdit={goToEditDraftPlantingSite}
               onDelete={() => setDeleteModalOpen(true)}
               plantingSite={plantingSite}
