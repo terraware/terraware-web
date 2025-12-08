@@ -1,3 +1,4 @@
+2ad72654743 SW-6719: Biomass Observations: In Quadrats, change Herbaceous Abundance Percentage to Count (#4857)
 34afb01f9df Simplify yarn caching (#4859)
 acb516032cf SW-7240 History Log of Changes to Observation Data (Ad Hoc Plant Monitoring) (#4858)
 1e6e09deed1 Only format changed files in PRs (#4852)

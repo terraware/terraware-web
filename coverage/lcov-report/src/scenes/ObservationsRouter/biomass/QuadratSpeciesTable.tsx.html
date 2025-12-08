@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -130,12 +130,7 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,15 +151,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,6 +179,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -228,41 +218,36 @@ type QuadratSpeciesTableProps = {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >QuadratSpeciesTable(</span>{ species, quadrat }: QuadratSpeciesTableProps): JSX.Element {
   const { species: availableSpecies } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
-  const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    quadrat</span>
-      ? [
-          { key: 'speciesName', name: strings.SPECIES, type: 'string' },
-          { key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' },
-          {
-            key: 'isInvasive',
-            name: strings.INVASIVE,
-            type: 'boolean',
-          },
-          {
-            key: 'isThreatened',
-            name: strings.THREATENED,
-            type: 'boolean',
-          },
-        ]
-      : [
-          { key: 'speciesName', name: strings.SPECIES, type: 'string' },
-          {
-            key: 'isInvasive',
-            name: strings.INVASIVE,
-            type: 'boolean',
-          },
-          {
-            key: 'isThreatened',
-            name: strings.THREATENED,
-            type: 'boolean',
-          },
-        ];
+&nbsp;
+  const columns = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+      { key: 'speciesName', name: strings.SPECIES, type: 'string' },
+      ...(quadrat
+        ? [
+            { key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT, type: 'string' as const },
+            { key: 'abundancePercentCalculated', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' as const },
+          ]
+        : []),
+      {
+        key: 'isInvasive',
+        name: strings.INVASIVE,
+        type: 'boolean',
+      },
+      {
+        key: 'isThreatened',
+        name: strings.THREATENED,
+        type: 'boolean',
+      },
+    ],
+    [quadrat]
+  );
 &nbsp;
   const speciesWithData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return species?.map(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; {</span>
       const foundSpecies = <span class="cstat-no" title="statement not covered" >availableSpecies.find(<span class="fstat-no" title="function not covered" >(a</span>vSpecies) =&gt; <span class="cstat-no" title="statement not covered" >avSpecies.id === sp.speciesId)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         ...sp,
+        abundancePercentCalculated: sp.abundancePercent ? `${sp.abundancePercent * 4}` : undefined,
         speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
       };
     });
@@ -286,7 +271,7 @@ export default function <span class="fstat-no" title="function not covered" >Qua
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-08T18:13:36.735Z
+                at 2025-12-08T19:37:13.780Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
