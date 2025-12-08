@@ -283,6 +283,7 @@ CHANGE_ACTIVE_GROWTH_STATUS,Cambiar estado de crecimiento activo,969b83ab
 CHANGE_DEFAULT_WEIGHT_SYSTEM,Puede cambiar el sistema de peso por defecto de {0},e1257e91
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Cambiar estado de germinación/establecimiento,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Cambiar estado de aclimatación,b734dbd7
+CHANGE_HISTORY,Historial de cambios,3aa8d940
 CHANGE_TO,Cambiar a {0},8423817d
 CHANGED,Cambiado,f88927ec
 CHANGES,Cambios,47809a57
@@ -904,6 +905,7 @@ LAST_EDITED,Última edición,df1e9e1d
 LAST_EDITED_BY,Última edición por,0b49c0a8
 LAST_MODIFIED_BY,Modificado por última vez por,ee9c449a
 LAST_MODIFIED_ON,Modificado por última vez el,93d681f9
+LAST_MODIFIED_ON_BY,Última modificación el {0} por {1},afd4b34c
 LAST_NAME,Apellido,84595f78
 LAST_OBSERVATION,Última observación: {0},f2de6421
 LAST_OBSERVED,Última observación,3dad61de
