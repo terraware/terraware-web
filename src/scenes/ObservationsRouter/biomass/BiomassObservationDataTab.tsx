@@ -26,6 +26,7 @@ import ObservationDataNumbers from '../adhoc/ObservationDataNumbers';
 import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataConfirmationModal';
 import EditQualitativeDataModal from '../common/EditQualitativeDataModal';
 import { BiomassPlot } from '../common/EditQualitativeDataModal';
+import EventLog from '../common/EventLog';
 import MonitoringPlotPhotosWithActions from '../common/MonitoringPlotPhotosWithActions';
 import LiveTreesPerSpecies from './LiveTreesPerSpecies';
 import PlotActions from './PlotActions';
@@ -317,6 +318,9 @@ const BiomassObservationDataTab = ({
           plotId={Number(monitoringPlot?.monitoringPlotId)}
           reload={reload}
         />
+        {monitoringPlot?.monitoringPlotId && (
+          <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} />
+        )}
       </Box>
     </Card>
   );
