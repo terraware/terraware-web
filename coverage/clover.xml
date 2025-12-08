@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765222634577" clover="3.2.0">
-  <project timestamp="1765222634577" name="All files">
-    <metrics statements="36271" coveredstatements="1354" conditionals="25404" coveredconditionals="393" methods="11208" coveredmethods="213" elements="72883" coveredelements="1960" complexity="0" loc="36271" ncloc="36271" packages="285" files="1416" classes="1416"/>
+<coverage generated="1765224376265" clover="3.2.0">
+  <project timestamp="1765224376265" name="All files">
+    <metrics statements="36271" coveredstatements="1354" conditionals="25406" coveredconditionals="393" methods="11208" coveredmethods="213" elements="72885" coveredelements="1960" complexity="0" loc="36271" ncloc="36271" packages="285" files="1416" classes="1416"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -29962,7 +29962,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.biomass">
-      <metrics statements="461" coveredstatements="0" conditionals="322" coveredconditionals="0" methods="178" coveredmethods="0"/>
+      <metrics statements="461" coveredstatements="0" conditionals="324" coveredconditionals="0" methods="178" coveredmethods="0"/>
       <file name="BiomassMeasurement.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/BiomassMeasurement.tsx">
         <metrics statements="31" coveredstatements="0" conditionals="35" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
@@ -30176,9 +30176,8 @@
         <line num="535" count="0" type="stmt"/>
       </file>
       <file name="BiomassObservationDataTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/BiomassObservationDataTab.tsx">
-        <metrics statements="40" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="10" coveredmethods="0"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <metrics statements="40" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="46" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
@@ -30187,36 +30186,37 @@
         <line num="61" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="106" count="0" type="stmt"/>
-        <line num="150" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="158" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="151" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="159" count="0" type="stmt"/>
         <line num="160" count="0" type="stmt"/>
-        <line num="163" count="0" type="stmt"/>
+        <line num="161" count="0" type="stmt"/>
         <line num="164" count="0" type="stmt"/>
         <line num="165" count="0" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
+        <line num="166" count="0" type="stmt"/>
         <line num="169" count="0" type="stmt"/>
         <line num="170" count="0" type="stmt"/>
-        <line num="173" count="0" type="stmt"/>
+        <line num="171" count="0" type="stmt"/>
         <line num="174" count="0" type="stmt"/>
         <line num="175" count="0" type="stmt"/>
         <line num="176" count="0" type="stmt"/>
-        <line num="191" count="0" type="stmt"/>
-        <line num="197" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="198" count="0" type="stmt"/>
-        <line num="206" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="207" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="192" count="0" type="stmt"/>
+        <line num="198" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="207" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="208" count="0" type="stmt"/>
-        <line num="210" count="0" type="stmt"/>
+        <line num="209" count="0" type="stmt"/>
         <line num="211" count="0" type="stmt"/>
-        <line num="216" count="0" type="stmt"/>
+        <line num="212" count="0" type="stmt"/>
         <line num="217" count="0" type="stmt"/>
-        <line num="220" count="0" type="stmt"/>
+        <line num="218" count="0" type="stmt"/>
+        <line num="221" count="0" type="stmt"/>
       </file>
       <file name="DescriptionModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/DescriptionModal.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
