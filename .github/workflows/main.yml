@@ -43,16 +43,6 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      #      - uses: actions/cache@v4
-      #        id: yarn-cache
-      #        with:
-      #          path: |
-      #            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #            node_modules
-      #          key: ${{ runner.os }}-yarn-2-${{ hashFiles('**/yarn.lock') }}
-      #          restore-keys: |
-      #            ${{ runner.os }}-yarn-
-
       - name: Get installed Playwright version
         id: playwright-version
         run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test --depth=0 | grep @playwright/test | cut -d @ -f 3)" >> $GITHUB_ENV

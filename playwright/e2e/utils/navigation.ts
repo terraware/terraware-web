@@ -23,5 +23,4 @@ export const navigateHome = async (page: Page) => {
 
 export const navigateConsoleToParticipant = async (page: Page) => {
   await page.getByRole('link', { name: 'Terraware' }).click();
-  console.log('random change');
 };
