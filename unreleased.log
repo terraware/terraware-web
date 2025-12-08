@@ -1,3 +1,4 @@
+b1414a28540 Update dependency slate to ^0.120.0 (#4853)
 e40b7747713 Update dependency slate-react to ^0.120.0 (#4854)
 6e87767e29f SW-7239 Generated events endpoints (#4849)
 5ea1ad0e79a Used RTK query in planting site edit (#4851)
