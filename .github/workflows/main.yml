@@ -34,6 +34,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '24'
+          cache: yarn
 
       - name: Set Environment
         run: ./.github/scripts/set-environment.sh
@@ -42,15 +43,15 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            node_modules
-          key: ${{ runner.os }}-yarn-2-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      #      - uses: actions/cache@v4
+      #        id: yarn-cache
+      #        with:
+      #          path: |
+      #            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #            node_modules
+      #          key: ${{ runner.os }}-yarn-2-${{ hashFiles('**/yarn.lock') }}
+      #          restore-keys: |
+      #            ${{ runner.os }}-yarn-
 
       - name: Get installed Playwright version
         id: playwright-version
