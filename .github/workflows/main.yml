@@ -39,10 +39,6 @@ jobs:
       - name: Set Environment
         run: ./.github/scripts/set-environment.sh
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
       - name: Get installed Playwright version
         id: playwright-version
         run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test --depth=0 | grep @playwright/test | cut -d @ -f 3)" >> $GITHUB_ENV
