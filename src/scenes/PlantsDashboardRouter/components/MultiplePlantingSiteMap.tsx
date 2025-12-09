@@ -61,6 +61,7 @@ export default function MultiplePlantingSiteMap({
           disableObserationEvents
           plantingSites={plantingSites}
           observationResults={[]}
+          observationSummaries={[]}
         />
       </Box>
     );

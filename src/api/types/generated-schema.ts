@@ -9033,6 +9033,8 @@ export interface components {
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
+            /** Format: int64 */
+            plantingSiteId: number;
             plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
             /** @description Combined list of observed species and their statuses from the latest observation of each subzone within each zone. */
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];

@@ -279,13 +279,22 @@ export default function PlantsDashboardView({
               </Typography>
               <PlantDashboardMap
                 observationResults={observationResults ? [observationResults] : []}
+                observationSummaries={observationSummaries || []}
                 plantingSites={plantingSite ? [plantingSite] : []}
               />
             </Box>
           </Grid>
         </>
       ) : undefined,
-    [hasObservations, isMobile, observationResults, plantingSite, renderLatestObservationLink, theme]
+    [
+      hasObservations,
+      isMobile,
+      observationResults,
+      observationSummaries,
+      plantingSite,
+      renderLatestObservationLink,
+      theme,
+    ]
   );
 
   const renderSimpleSiteMap = useCallback(
