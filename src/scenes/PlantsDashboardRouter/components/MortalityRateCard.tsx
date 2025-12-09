@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -18,7 +18,7 @@ import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
 export default function MortalityRateCard(): JSX.Element {
   const theme = useTheme();
-  const { latestResult, plantingSite } = usePlantingSiteData();
+  const { latestResult, observationSummaries, plantingSite } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
@@ -29,6 +29,11 @@ export default function MortalityRateCard(): JSX.Element {
     marginRight: '24px',
     marginLeft: '24px',
   };
+
+  const latestSummary = useMemo(
+    () => (observationSummaries && observationSummaries.length > 0 ? observationSummaries[0] : undefined),
+    [observationSummaries]
+  );
 
   return (
     <Card
@@ -50,9 +55,9 @@ export default function MortalityRateCard(): JSX.Element {
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           {isSurvivalRateCalculationEnabled ? (
-            latestResult?.survivalRate !== undefined ? (
+            latestSummary?.survivalRate !== undefined ? (
               <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-                <FormattedNumber value={latestResult.survivalRate} />
+                <FormattedNumber value={latestSummary.survivalRate} />
               </Typography>
             ) : (
               <Typography fontSize='20px' fontWeight={500}>
@@ -65,7 +70,7 @@ export default function MortalityRateCard(): JSX.Element {
             </Typography>
           )}
           {isSurvivalRateCalculationEnabled
-            ? latestResult?.survivalRate !== undefined && (
+            ? latestSummary?.survivalRate !== undefined && (
                 <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
                   %
                 </Typography>
@@ -77,7 +82,7 @@ export default function MortalityRateCard(): JSX.Element {
               )}
         </Box>
 
-        {isSurvivalRateCalculationEnabled && latestResult?.survivalRate === undefined && (
+        {isSurvivalRateCalculationEnabled && latestSummary?.survivalRate === undefined && (
           <Box>
             {plantingSite?.id && (
               <Typography>
