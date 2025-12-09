@@ -94,9 +94,19 @@ export default function PlantsDashboardView({
     setAcceleratorOrganizationId,
   ]);
 
+  const latestSummary = useMemo(
+    () => (observationSummaries && observationSummaries.length > 0 ? observationSummaries[0] : undefined),
+    [observationSummaries]
+  );
+
   const showSurvivalRateMessage = useMemo(() => {
-    return isSurvivalRateCalculationEnabled && hasObservations && latestResult?.survivalRate === undefined;
-  }, [hasObservations, isSurvivalRateCalculationEnabled, latestResult]);
+    return (
+      isSurvivalRateCalculationEnabled &&
+      hasObservations &&
+      latestResult?.survivalRate === undefined &&
+      latestSummary?.survivalRate === undefined
+    );
+  }, [hasObservations, isSurvivalRateCalculationEnabled, latestResult, latestSummary]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
