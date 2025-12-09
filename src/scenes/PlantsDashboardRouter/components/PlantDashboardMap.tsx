@@ -63,7 +63,7 @@ type PlantDashboardMapProps = {
   disableObserationEvents?: boolean;
   plantingSites: PlantingSite[];
   observationResults: ObservationResultsPayload[];
-  latestSummary: ObservationSummary;
+  latestSummary?: ObservationSummary;
 };
 
 const PlantDashboardMap = ({
@@ -469,10 +469,10 @@ const PlantDashboardMap = ({
     };
 
     if (isSurvivalRateCalculationEnabled) {
-      const siteId = { layerId: 'sites', featureId: `${latestSummary.plantingSiteId}` };
-      sortFeatureBySurvivalRate(siteId, latestSummary.survivalRate);
+      const siteId = { layerId: 'sites', featureId: `${latestSummary?.plantingSiteId}` };
+      sortFeatureBySurvivalRate(siteId, latestSummary?.survivalRate);
 
-      latestSummary.plantingZones.forEach((zone) => {
+      latestSummary?.plantingZones.forEach((zone) => {
         const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
         sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
 

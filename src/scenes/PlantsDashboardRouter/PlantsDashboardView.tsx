@@ -16,7 +16,6 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import { useAppDispatch } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
-import { ObservationSummary } from 'src/types/Observations';
 import { isAfter } from 'src/utils/dateUtils';
 
 import MortalityRateCard from './components/MortalityRateCard';
@@ -280,11 +279,7 @@ export default function PlantsDashboardView({
               </Typography>
               <PlantDashboardMap
                 observationResults={observationResults ? [observationResults] : []}
-                latestSummary={
-                  observationSummaries && observationSummaries.length > 0
-                    ? observationSummaries[0]
-                    : ({} as ObservationSummary)
-                }
+                latestSummary={latestSummary}
                 plantingSites={plantingSite ? [plantingSite] : []}
               />
             </Box>
