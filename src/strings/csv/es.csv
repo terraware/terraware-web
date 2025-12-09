@@ -1945,6 +1945,8 @@ SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra el porcentaje de plantas por especie que siguen vivas desde la plantación inicial.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,"La Supervivencia de Especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las zonas que fueron observadas.",dfaff418
+SPECIES_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo.,7f5a3f3e
+SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian los números, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, cambie los números con discreción.",3d4cd792
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
 STAFF,Personal,6b242686

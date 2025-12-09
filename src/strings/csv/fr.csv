@@ -1944,6 +1944,8 @@ SPECIES_SURVIVAL,Survie des espèces,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Répartition de la survie des espèces,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,La répartition de la survie indique le pourcentage de plants par espèce qui sont encore vivants depuis la plantation initiale.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,La survie des espèces affiche les espèces ayant les taux de survie les plus élevés et les plus faibles parmi les zones observées.,dfaff418
+SPECIES_TABLE_INSTRUCTIONS,Cliquez sur un nombre dans le tableau pour le modifier.,7f5a3f3e
+SPECIES_TABLE_INSTRUCTIONS_NOTE,"REMARQUE : Lorsque les nombres sont modifiés, les nombres et emplacements d'origine des plantes observées ne seront pas mis à jour sur les cartes. Veuillez modifier les nombres avec discernement.",3d4cd792
 SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour calculer les taux de survie des parcelles et des espèces.,6e5f03ec
 SPECIES_USAGE,Utilisation des espèces,0669cb85
 STAFF,Personnel,6b242686

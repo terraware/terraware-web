@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Box, Typography } from '@mui/material';
-import { Button, IconTooltip } from '@terraware/web-components';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -31,6 +31,7 @@ import SpeciesMortalityRateChart from '../common/SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
 import ExtraData from './ExtraData';
 import ObservationDataNumbers from './ObservationDataNumbers';
+import SpeciesEditableTable from './SpeciesEditableTable';
 
 type ObservationDataTabProps = {
   monitoringPlot: Partial<Omit<ObservationMonitoringPlotResultsPayload, 'species'>>;
@@ -59,6 +60,7 @@ const ObservationDataTab = ({
   const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
   const [update] = useUpdateCompletedObservationPlotMutation();
   const snackbar = useSnackbar();
+  const theme = useTheme();
 
   const [record, setRecord] = useForm(monitoringPlot);
 
@@ -246,6 +248,25 @@ const ObservationDataTab = ({
         )}
       </Box>
       <ExtraData items={extraItems} />
+      <Box paddingTop={2}>
+        <Box display='flex' alignItems={'self-start'} paddingTop={3}>
+          <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
+          <Box>
+            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
+              {strings.SPECIES_TABLE_INSTRUCTIONS}
+            </Typography>
+            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
+              {strings.SPECIES_TABLE_INSTRUCTIONS_NOTE}
+            </Typography>
+          </Box>
+        </Box>
+        <SpeciesEditableTable
+          species={species}
+          observationId={Number(observationId)}
+          plotId={Number(monitoringPlot?.monitoringPlotId)}
+          reload={reload}
+        />
+      </Box>
       {monitoringPlot.monitoringPlotId && (
         <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} />
       )}
