@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765224376265" clover="3.2.0">
-  <project timestamp="1765224376265" name="All files">
-    <metrics statements="36271" coveredstatements="1354" conditionals="25406" coveredconditionals="393" methods="11208" coveredmethods="213" elements="72885" coveredelements="1960" complexity="0" loc="36271" ncloc="36271" packages="285" files="1416" classes="1416"/>
+<coverage generated="1765302119056" clover="3.2.0">
+  <project timestamp="1765302119056" name="All files">
+    <metrics statements="36278" coveredstatements="1354" conditionals="25408" coveredconditionals="393" methods="11210" coveredmethods="213" elements="72896" coveredelements="1960" complexity="0" loc="36278" ncloc="36278" packages="285" files="1417" classes="1417"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -29706,7 +29706,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.adhoc">
-      <metrics statements="232" coveredstatements="0" conditionals="224" coveredconditionals="0" methods="76" coveredmethods="0"/>
+      <metrics statements="239" coveredstatements="0" conditionals="226" coveredconditionals="0" methods="78" coveredmethods="0"/>
       <file name="AdHocObservationDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/AdHocObservationDetails.tsx">
         <metrics statements="67" coveredstatements="0" conditionals="76" coveredconditionals="0" methods="21" coveredmethods="0"/>
         <line num="44" count="0" type="stmt"/>
@@ -29811,9 +29811,8 @@
         <line num="15" count="0" type="stmt"/>
       </file>
       <file name="ObservationDataTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/ObservationDataTab.tsx">
-        <metrics statements="37" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="10" coveredmethods="0"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
+        <metrics statements="38" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="46" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
@@ -29821,34 +29820,36 @@
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
-        <line num="106" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="120" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="122" count="0" type="stmt"/>
-        <line num="125" count="0" type="stmt"/>
-        <line num="126" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
         <line num="127" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
         <line num="132" count="0" type="stmt"/>
-        <line num="135" count="0" type="stmt"/>
-        <line num="136" count="0" type="stmt"/>
-        <line num="137" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
         <line num="138" count="0" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="154" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="155" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
+        <line num="139" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="156" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="157" count="0" type="stmt"/>
         <line num="158" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
-        <line num="164" count="0" type="stmt"/>
+        <line num="160" count="0" type="stmt"/>
+        <line num="161" count="0" type="stmt"/>
+        <line num="166" count="0" type="stmt"/>
       </file>
       <file name="PhotosAndVideosTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/PhotosAndVideosTab.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="5" coveredmethods="0"/>
@@ -29865,6 +29866,15 @@
         <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="76" count="0" type="stmt"/>
+      </file>
+      <file name="SpeciesEditableTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/SpeciesEditableTable.tsx">
+        <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/index.tsx">
         <metrics statements="91" coveredstatements="0" conditionals="91" coveredconditionals="0" methods="33" coveredmethods="0"/>
