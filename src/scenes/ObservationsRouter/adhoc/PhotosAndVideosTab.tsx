@@ -53,6 +53,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type }: PhotosAndVideosTabProps) =
           observationId={Number(observationId)}
           monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
           photos={monitoringPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot')}
+          plotName={monitoringPlot?.monitoringPlotName}
         />
       </Box>
       <Typography fontSize={'20px'} fontWeight={600} marginBottom={2}>

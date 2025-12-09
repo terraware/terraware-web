@@ -5,7 +5,7 @@ import { Button, Icon, Textfield } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import { useLocalization } from 'src/providers/hooks';
-import { MonitoringPlotMediaItem } from 'src/types/Observations';
+import { MonitoringPlotMediaItem, getPositionLabel } from 'src/types/Observations';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
 
 type MonitoringPlotPhotoPreviewProps = {
@@ -15,6 +15,7 @@ type MonitoringPlotPhotoPreviewProps = {
   observationId?: number;
   onDelete: () => void;
   setCaption: (caption: string) => void;
+  monitoringPlotName?: string;
 };
 
 const MonitoringPlotPhotoPreview = ({
@@ -24,6 +25,7 @@ const MonitoringPlotPhotoPreview = ({
   observationId,
   onDelete,
   setCaption,
+  monitoringPlotName,
 }: MonitoringPlotPhotoPreviewProps) => {
   const { strings } = useLocalization();
   const theme = useTheme();
@@ -79,6 +81,11 @@ const MonitoringPlotPhotoPreview = ({
       paddingBottom='24px'
       width='100%'
     >
+      {mediaItem.data.type === 'Plot' && mediaItem.data.position && (
+        <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
+          {monitoringPlotName} {getPositionLabel(mediaItem.data.position)}
+        </Typography>
+      )}
       <Box display='flex' flexDirection='column' gap={2}>
         <Box display='flex' gap={2}>
           <Box flexShrink={0} position='relative'>

@@ -1155,8 +1155,10 @@ NO_WITHDRAWABLE_QUANTITIES_FOUND,No se encontraron cantidades retirables,ab95517
 NON_NATIVE,No nativo,572d9365
 NONE,Ninguno,8cff1f65
 NONE_SELECTED,Ninguno seleccionado,61621b35
+NORTHEAST_CORNER,Esquina noreste,da4ddbf6
 NORTHEAST_CORNER_LATITUDE,Latitud de la esquina noreste,b20d2d02
 NORTHEAST_CORNER_LONGITUDE,Longitud de la esquina noreste,36173800
+NORTHWEST_CORNER,Esquina noroeste,2c0842da
 NORTHWEST_CORNER_LATITUDE,Latitud de la esquina noroeste,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitud de la esquina noroeste,355e9d22
 NOT_ACCEPTED,No aceptado(a),c3102621
@@ -1906,8 +1908,10 @@ SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...,bf2e66a4
 SOURCING,Contratación,dc1a071d
+SOUTHEAST_CORNER,Esquina sureste,cdf375aa
 SOUTHEAST_CORNER_LATITUDE,Latitud de la esquina sureste,25510ec5
 SOUTHEAST_CORNER_LONGITUDE,Longitud de la esquina sureste,a15c5f33
+SOUTHWEST_CORNER,Esquina suroeste,4d23e84b
 SOUTHWEST_CORNER_LATITUDE,Latitud de la esquina suroeste,11768ce8
 SOUTHWEST_CORNER_LONGITUDE,Longitud de la esquina suroeste,170c539d
 SPECIES,Especies,bb344d18

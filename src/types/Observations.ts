@@ -1,4 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
+import { ObservationMonitoringPlotMediaPayload } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
 import { MultiPolygon } from './Tracking';
@@ -108,6 +109,7 @@ export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsP
 export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotMediaPayload'];
 export type ObservationMonitoringPlotPhotoWithGps = Omit<ObservationMonitoringPlotPhoto, 'gpsCoordinates'> &
   Required<Pick<ObservationMonitoringPlotPhoto, 'gpsCoordinates'>>;
+export type ObservationMonitoringPlotPosition = ObservationMonitoringPlotMediaPayload['position'];
 
 // species related observation statistics
 export type ObservationSpeciesResultsPayload = components['schemas']['ObservationSpeciesResultsPayload'];
@@ -192,3 +194,18 @@ export type ExistingMonitoringPlotMediaItem = {
 };
 
 export type MonitoringPlotMediaItem = NewMonitoringPlotMediaItem | ExistingMonitoringPlotMediaItem;
+
+export const getPositionLabel = (position: ObservationMonitoringPlotPosition): string => {
+  switch (position) {
+    case 'NortheastCorner':
+      return strings.NORTHEAST_CORNER;
+    case 'NorthwestCorner':
+      return strings.NORTHWEST_CORNER;
+    case 'SoutheastCorner':
+      return strings.SOUTHEAST_CORNER;
+    case 'SouthwestCorner':
+      return strings.SOUTHWEST_CORNER;
+    default:
+      return '';
+  }
+};
