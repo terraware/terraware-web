@@ -7,6 +7,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useOrgTracking } from 'src/hooks/useOrgTracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
@@ -30,6 +31,7 @@ import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import NurseriesRouter from 'src/scenes/NurseriesRouter';
 import NurseryRouter from 'src/scenes/NurseryRouter';
 import ObservationsRouter from 'src/scenes/ObservationsRouter';
+import ObservationRouterV2 from 'src/scenes/ObservationsRouterV2';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import NavBar from 'src/scenes/OrgRouter/NavBar';
 import OrganizationRouter from 'src/scenes/OrganizationRouter';
@@ -63,6 +65,8 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+
+  const newObservationViewEnabled = isEnabled('New Observation View');
 
   const { species } = useSpeciesData();
   const { plantingSites, observationResults } = useOrgTracking();
@@ -228,7 +232,10 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
             <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />
             <Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={<SeedFundReportsRouter />} />
-            <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
+            <Route
+              path={APP_PATHS.OBSERVATIONS + '/*'}
+              element={newObservationViewEnabled ? <ObservationRouterV2 /> : <ObservationsRouter />}
+            />
             <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
             <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
             <Route path={APP_PATHS.ACTIVITY_LOG + '/*'} element={<ActivityLogRouter />} />
