@@ -100,13 +100,8 @@ export default function PlantsDashboardView({
   );
 
   const showSurvivalRateMessage = useMemo(() => {
-    return (
-      isSurvivalRateCalculationEnabled &&
-      hasObservations &&
-      latestResult?.survivalRate === undefined &&
-      latestSummary?.survivalRate === undefined
-    );
-  }, [hasObservations, isSurvivalRateCalculationEnabled, latestResult, latestSummary]);
+    return isSurvivalRateCalculationEnabled && hasObservations && latestSummary?.survivalRate === undefined;
+  }, [hasObservations, isSurvivalRateCalculationEnabled, latestSummary]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
