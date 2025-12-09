@@ -63,7 +63,7 @@ type PlantDashboardMapProps = {
   disableObserationEvents?: boolean;
   plantingSites: PlantingSite[];
   observationResults: ObservationResultsPayload[];
-  observationSummaries: ObservationSummary[];
+  latestSummary: ObservationSummary;
 };
 
 const PlantDashboardMap = ({
@@ -73,7 +73,7 @@ const PlantDashboardMap = ({
   disableObserationEvents,
   plantingSites,
   observationResults,
-  observationSummaries,
+  latestSummary,
 }: PlantDashboardMapProps): JSX.Element => {
   const { mapId, refreshToken, token } = useMapboxToken();
   const mapRef = useRef<MapRef | null>(null);
@@ -469,18 +469,16 @@ const PlantDashboardMap = ({
     };
 
     if (isSurvivalRateCalculationEnabled) {
-      observationSummaries.forEach((summary) => {
-        const siteId = { layerId: 'sites', featureId: `${summary.plantingSiteId}` };
-        sortFeatureBySurvivalRate(siteId, summary.survivalRate);
+      const siteId = { layerId: 'sites', featureId: `${latestSummary.plantingSiteId}` };
+      sortFeatureBySurvivalRate(siteId, latestSummary.survivalRate);
 
-        summary.plantingZones.forEach((zone) => {
-          const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
-          sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
+      latestSummary.plantingZones.forEach((zone) => {
+        const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
+        sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
 
-          zone.plantingSubzones.forEach((subzone) => {
-            const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
-            sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
-          });
+        zone.plantingSubzones.forEach((subzone) => {
+          const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
+          sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
         });
       });
 
@@ -511,7 +509,7 @@ const PlantDashboardMap = ({
         greaterThanFifty,
       };
     }
-  }, [isSurvivalRateCalculationEnabled, observationResults, observationSummaries]);
+  }, [isSurvivalRateCalculationEnabled, observationResults, latestSummary]);
 
   const setDrawerOpenCallback = useCallback((open: boolean) => {
     if (open) {
@@ -790,9 +788,8 @@ const PlantDashboardMap = ({
       },
       {
         disabled:
-          disableMortalityRate || isSurvivalRateCalculationEnabled
-            ? observationSummaries.length === 0
-            : observationResults.length === 0,
+          disableMortalityRate ||
+          (isSurvivalRateCalculationEnabled ? latestSummary !== undefined : observationResults.length === 0),
         items: [
           {
             label: isSurvivalRateCalculationEnabled
@@ -849,7 +846,7 @@ const PlantDashboardMap = ({
     mortalityRateVisible,
     observationEventsVisible,
     observationResults.length,
-    observationSummaries.length,
+    latestSummary,
     plotPhotoStyle,
     plotPhotoVisible,
     selectedLayer,

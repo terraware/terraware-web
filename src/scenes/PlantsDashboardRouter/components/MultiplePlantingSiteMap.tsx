@@ -5,6 +5,7 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
+import { ObservationSummary } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 
 import PlantDashboardMap from './PlantDashboardMap';
@@ -61,7 +62,7 @@ export default function MultiplePlantingSiteMap({
           disableObserationEvents
           plantingSites={plantingSites}
           observationResults={[]}
-          observationSummaries={[]}
+          latestSummary={{} as ObservationSummary}
         />
       </Box>
     );
