@@ -286,15 +286,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [
-      hasObservations,
-      isMobile,
-      observationResults,
-      observationSummaries,
-      plantingSite,
-      renderLatestObservationLink,
-      theme,
-    ]
+    [hasObservations, isMobile, observationResults, latestSummary, plantingSite, renderLatestObservationLink, theme]
   );
 
   const renderSimpleSiteMap = useCallback(

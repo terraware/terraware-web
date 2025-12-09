@@ -789,7 +789,7 @@ const PlantDashboardMap = ({
       {
         disabled:
           disableMortalityRate ||
-          (isSurvivalRateCalculationEnabled ? latestSummary !== undefined : observationResults.length === 0),
+          (isSurvivalRateCalculationEnabled ? latestSummary === undefined : observationResults.length === 0),
         items: [
           {
             label: isSurvivalRateCalculationEnabled
