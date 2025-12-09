@@ -115,7 +115,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
             maxWidth: '228px',
           },
         }}
-        disabled={!allSpecies || allSpecies.length === 0 || allSpeciesNoValues}
+        disabled={!allSpecies || allSpecies.length === 0 || (isSurvivalRateCalculationEnabled && allSpeciesNoValues)}
         placeholder={strings.SELECT}
       />
       {(showChart || isSurvivalRateCalculationEnabled) && (
