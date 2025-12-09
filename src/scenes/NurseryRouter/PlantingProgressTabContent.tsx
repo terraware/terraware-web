@@ -55,7 +55,7 @@ export default function PlantingProgress(): JSX.Element {
         ? [
             {
               field: 'project_id',
-              options: (projects || [])?.map((project: Project) => `${project.id}`),
+              options: (projects || [])?.map((project: Project) => project.id),
               searchNodeCreator: (values: (number | string | null)[]) => ({
                 field: 'project_id',
                 operation: 'field',

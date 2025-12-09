@@ -171,7 +171,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     () => [
       {
         field: 'project_id',
-        options: (projects || [])?.map((project: Project) => `${project.id}`),
+        options: (projects || [])?.map((project: Project) => project.id),
         searchNodeCreator: (values: (number | string | null)[]) => ({
           field: 'batchWithdrawals.batch_project_id',
           operation: 'field',
