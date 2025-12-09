@@ -4,9 +4,12 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Separator } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
+import Card from 'src/components/common/Card';
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
+
+import ObservationMap from './ObservationMap';
 
 const ObservationListView = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
@@ -51,7 +54,9 @@ const ObservationListView = (): JSX.Element => {
 
   return (
     <Page title={strings.OBSERVATIONS} leftComponent={PageHeaderPlantingSiteDropdown}>
-      Test
+      <Card radius={'8px'} style={{ width: '100%' }}>
+        <ObservationMap />
+      </Card>
     </Page>
   );
 };
