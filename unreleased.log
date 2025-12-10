@@ -1,3 +1,8 @@
+ed1cfc5b542 SW-7814 Number of Small Trees field can't seem to be edited (#4872)
+249ff8c98e6 SW-7813 Plot Description field can't seem to be edited (#4871)
+2017935bb0d SW-7803 Plot Conditions value "Fungus" should be "Fungus/disease" (#4870)
+4ea74288aac SW-7796 Reload planting site data when reloading (#4869)
+1bbac3fc692 Fix outplant withdrawal (#4866)
 404e08b11f5 SW-7817 Use Observation Summaries for map survival rates (#4868)
 feed8fb1561 SW-7817 Use Observation Summaries for site survival rate (#4865)
 7d39fa95e90 Only disable selector for survival rate calculations (#4864)
