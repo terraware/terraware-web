@@ -103,10 +103,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             // Only show projects that are represented within the available batches
             Number(batch.project_id) === project.id &&
             // And apply to the selected facility
-            (selectedNursery ? Number(batch.facility_id) === selectedNursery.id : true)
+            (selectedNursery ? Number(batch.facility_id) === selectedNursery.id : true) &&
+            (isOutplant ? batch['readyQuantity(raw)'] && Number(batch['readyQuantity(raw)']) > 0 : true)
         )
       ),
-    [projects, batches, selectedNursery]
+    [projects, batches, selectedNursery, isOutplant]
   );
 
   useEffect(() => {
