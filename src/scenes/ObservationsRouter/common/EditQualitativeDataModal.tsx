@@ -136,6 +136,10 @@ const EditQualitativeDataModal = ({
     []
   );
 
+  const isMangrove = useMemo(() => {
+    return 'biomassMeasurement' in record && record.biomassMeasurement?.forestType === 'Mangrove';
+  }, [record]);
+
   return (
     <DialogBox
       onClose={onClose}
@@ -201,65 +205,70 @@ const EditQualitativeDataModal = ({
                 />
               </Box>
             </Box>
+            {isMangrove && (
+              <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
+                <Box sx={{ flex: 1 }}>
+                  <TextField
+                    type='text'
+                    label={strings.WATER_DEPTH_M}
+                    value={record.biomassMeasurement?.waterDepth}
+                    id={'waterDepth'}
+                    onChange={onChangeHandler('biomassMeasurement.waterDepth')}
+                  />
+                </Box>
 
-            <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
-              <Box sx={{ flex: 1 }}>
-                <TextField
-                  type='text'
-                  label={strings.WATER_DEPTH_M}
-                  value={record.biomassMeasurement?.waterDepth}
-                  id={'waterDepth'}
-                  onChange={onChangeHandler('biomassMeasurement.waterDepth')}
-                />
+                <Box sx={{ flex: 1 }}>
+                  <TextField
+                    type='text'
+                    label={strings.SALINITY_PPT}
+                    value={record.biomassMeasurement?.salinity}
+                    id={'salinity'}
+                    onChange={onChangeHandler('biomassMeasurement.salinity')}
+                  />
+                </Box>
               </Box>
+            )}
 
-              <Box sx={{ flex: 1 }}>
-                <TextField
-                  type='text'
-                  label={strings.SALINITY_PPT}
-                  value={record.biomassMeasurement?.salinity}
-                  id={'salinity'}
-                  onChange={onChangeHandler('biomassMeasurement.salinity')}
-                />
+            {isMangrove && (
+              <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
+                <Box sx={{ flex: 1 }}>
+                  <TextField
+                    type='text'
+                    label={strings.PH}
+                    value={record.biomassMeasurement?.ph}
+                    id={'ph'}
+                    onChange={onChangeHandler('biomassMeasurement.ph')}
+                  />
+                </Box>
+
+                <Box sx={{ flex: 1 }}>
+                  <Dropdown
+                    label={strings.TIDE}
+                    selectedValue={record.biomassMeasurement?.tide}
+                    id={'tide'}
+                    onChange={onChangeHandler('biomassMeasurement.tide')}
+                    options={[
+                      { label: strings.LOW, value: 'Low' },
+                      { label: strings.HIGH, value: 'High' },
+                    ]}
+                  />
+                </Box>
               </Box>
-            </Box>
+            )}
 
-            <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
-              <Box sx={{ flex: 1 }}>
-                <TextField
-                  type='text'
-                  label={strings.PH}
-                  value={record.biomassMeasurement?.ph}
-                  id={'ph'}
-                  onChange={onChangeHandler('biomassMeasurement.ph')}
-                />
-              </Box>
-
-              <Box sx={{ flex: 1 }}>
-                <Dropdown
-                  label={strings.TIDE}
-                  selectedValue={record.biomassMeasurement?.tide}
-                  id={'tide'}
-                  onChange={onChangeHandler('biomassMeasurement.tide')}
-                  options={[
-                    { label: strings.LOW, value: 'Low' },
-                    { label: strings.HIGH, value: 'High' },
-                  ]}
-                />
-              </Box>
-            </Box>
-
-            <DatePicker
-              id='startTime'
-              label={strings.MEASUREMENT_TIME}
-              value={record.biomassMeasurement?.tideTime}
-              onDateChange={(value?: DateTime) => {
-                onChangeHandler('biomassMeasurement.tideTime')(value?.toISO());
-              }}
-              aria-label='date-picker'
-              showTime={true}
-              sx={{ paddingTop: '16px' }}
-            />
+            {isMangrove && (
+              <DatePicker
+                id='startTime'
+                label={strings.MEASUREMENT_TIME}
+                value={record.biomassMeasurement?.tideTime}
+                onDateChange={(value?: DateTime) => {
+                  onChangeHandler('biomassMeasurement.tideTime')(value?.toISO());
+                }}
+                aria-label='date-picker'
+                showTime={true}
+                sx={{ paddingTop: '16px' }}
+              />
+            )}
           </>
         )}
 
