@@ -76,7 +76,7 @@ export default function MonitoringPlotPhotosWithActions({
       <Box display='grid' gridTemplateColumns='repeat(auto-fill, minmax(213px, 1fr))' gap={2}>
         {mediaFiles.map((mediaFile) => (
           <Box key={mediaFile.fileId} position='relative'>
-            {!!plotName && (
+            {!!plotName && mediaFile.position && (
               <Typography color={theme.palette.TwClrBaseBlack}>
                 {plotName} {getPositionLabel(mediaFile.position)}
               </Typography>
