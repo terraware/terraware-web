@@ -164,8 +164,8 @@ const EditQualitativeDataModal = ({
               type='textarea'
               label={strings.PLOT_DESCRIPTION}
               value={record.biomassMeasurement?.description}
-              id={'notes'}
-              onChange={onChangeHandler('biomassMeasurement.plotDescription')}
+              id={'description'}
+              onChange={onChangeHandler('biomassMeasurement.description')}
             />
 
             <Dropdown
