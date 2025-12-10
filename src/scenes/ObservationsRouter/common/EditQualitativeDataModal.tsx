@@ -182,9 +182,9 @@ const EditQualitativeDataModal = ({
                   type='text'
                   label={strings.NUMBER_OF_SMALL_TREES}
                   value={
-                    record.biomassMeasurement?.smallTreeCountLow && record.biomassMeasurement?.smallTreeCountHigh
-                      ? `${record.biomassMeasurement.smallTreeCountLow}-${record.biomassMeasurement.smallTreeCountHigh}`
-                      : ''
+                    record.biomassMeasurement?.smallTreeCountLow || record.biomassMeasurement?.smallTreeCountHigh
+                      ? `${record.biomassMeasurement.smallTreeCountLow || ''}-${record.biomassMeasurement.smallTreeCountHigh || ''}`
+                      : '-'
                   }
                   id={'numberOfSmallTrees'}
                   onChange={onChangeNumberOfSmallTrees}
