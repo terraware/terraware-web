@@ -17,7 +17,6 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import { getConditionString } from 'src/redux/features/observations/utils';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
-import SpeciesMortalityRateChart from 'src/scenes/ObservationsRouter/common/SpeciesMortalityRateChart';
 import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
 import strings from 'src/strings';
 import {
@@ -60,7 +59,6 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const [plantingZoneResult, setPlantingZoneResult] = useState<ObservationPlantingZoneResultsPayload>();
   const [plantingSubzoneResult, setPlantingSubzoneResult] = useState<ObservationPlantingSubzoneResultsPayload>();
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const isEditObservationsEnabled = isEnabled('Edit Observations');
 
   const result = useMemo(() => {
@@ -182,14 +180,12 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       { label: strings.SPECIES, value: handleMissingData(monitoringPlotResult?.totalSpecies) },
       { label: strings.PLANT_DENSITY, value: handleMissingData(monitoringPlotResult?.plantingDensity) },
       ...(monitoringPlotResult?.isPermanent
-        ? isSurvivalRateCalculationEnabled
-          ? [
-              {
-                label: strings.SURVIVAL_RATE,
-                value: monitoringPlotResult?.survivalRate ? `${monitoringPlotResult?.survivalRate}%` : '',
-              },
-            ]
-          : [{ label: strings.MORTALITY_RATE, value: handleMissingData(monitoringPlotResult?.mortalityRate) }]
+        ? [
+            {
+              label: strings.SURVIVAL_RATE,
+              value: monitoringPlotResult?.survivalRate ? `${monitoringPlotResult?.survivalRate}%` : '',
+            },
+          ]
         : []),
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlotResult?.photos.length) },
       {
@@ -204,7 +200,6 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       },
     ];
   }, [
-    isSurvivalRateCalculationEnabled,
     monitoringPlotResult,
     result?.completedTime,
     plantingSite?.timeZone,
@@ -368,17 +363,15 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
       observationId={Number(observationId)}
       plantingZoneName={plantingZoneName}
       rightComponent={
-        isSurvivalRateCalculationEnabled ? (
-          <OptionsMenu
-            onOptionItemClick={goToSurvivalRateSettings}
-            optionItems={[
-              {
-                label: strings.SURVIVAL_RATE_SETTINGS,
-                value: 'survivalRate',
-              },
-            ]}
-          />
-        ) : undefined
+        <OptionsMenu
+          onOptionItemClick={goToSurvivalRateSettings}
+          optionItems={[
+            {
+              label: strings.SURVIVAL_RATE_SETTINGS,
+              value: 'survivalRate',
+            },
+          ]}
+        />
       }
     >
       <Grid container>
@@ -433,22 +426,14 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlotSpecies} />
             </Box>
-            {monitoringPlotResult?.isPermanent &&
-              (isSurvivalRateCalculationEnabled ? (
-                <>
-                  {title(strings.SURVIVAL_RATE_PER_SPECIES)}
-                  <Box height='360px'>
-                    <SpeciesSurvivalRateChart minHeight='360px' species={monitoringPlotSpecies} />
-                  </Box>
-                </>
-              ) : (
-                <>
-                  {title(strings.MORTALITY_RATE_PER_SPECIES)}
-                  <Box height='360px'>
-                    <SpeciesMortalityRateChart minHeight='360px' species={monitoringPlotSpecies} />
-                  </Box>
-                </>
-              ))}
+            {monitoringPlotResult?.isPermanent && (
+              <>
+                {title(strings.SURVIVAL_RATE_PER_SPECIES)}
+                <Box height='360px'>
+                  <SpeciesSurvivalRateChart minHeight='360px' species={monitoringPlotSpecies} />
+                </Box>
+              </>
+            )}
             {title(strings.PHOTOS)}
             <MonitoringPlotPhotos
               observationId={Number(observationId)}

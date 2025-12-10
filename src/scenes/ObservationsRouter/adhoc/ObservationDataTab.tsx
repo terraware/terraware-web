@@ -5,7 +5,6 @@ import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import {
@@ -27,7 +26,6 @@ import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataC
 import EditQualitativeDataModal from '../common/EditQualitativeDataModal';
 import EventLog from '../common/EventLog';
 import SpeciesTotalPlantsChart from '../common/SpeciesMortalityRateChart';
-import SpeciesMortalityRateChart from '../common/SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
 import ExtraData from './ExtraData';
 import ObservationDataNumbers from './ObservationDataNumbers';
@@ -52,7 +50,6 @@ const ObservationDataTab = ({
   onMatchSpecies,
   observationId,
 }: ObservationDataTabProps) => {
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const { plantingSite, reload } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
@@ -193,27 +190,16 @@ const ObservationDataTab = ({
         </Box>
       )}
 
-      {monitoringPlot?.isPermanent &&
-        (isSurvivalRateCalculationEnabled ? (
-          <Box>
-            <Typography fontSize={'20px'} fontWeight={600}>
-              {strings.SURVIVAL_RATE_PER_SPECIES}
-            </Typography>
-            <Box height='360px'>
-              <SpeciesSurvivalRateChart minHeight='360px' species={species} />
-            </Box>
+      {monitoringPlot?.isPermanent && (
+        <Box>
+          <Typography fontSize={'20px'} fontWeight={600}>
+            {strings.SURVIVAL_RATE_PER_SPECIES}
+          </Typography>
+          <Box height='360px'>
+            <SpeciesSurvivalRateChart minHeight='360px' species={species} />
           </Box>
-        ) : (
-          <Box>
-            <Typography fontSize={'20px'} fontWeight={600}>
-              {strings.MORTALITY_RATE_PER_SPECIES}
-            </Typography>
-
-            <Box height='360px'>
-              <SpeciesMortalityRateChart minHeight='360px' species={species} />
-            </Box>
-          </Box>
-        ))}
+        </Box>
+      )}
       {type === 'adHoc' && onExportData && onMatchSpecies && (
         <PlotActions
           unrecognizedSpecies={unrecognizedSpecies}

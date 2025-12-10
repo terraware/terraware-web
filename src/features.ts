@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Survival Rate Calculation' | 'Edit Observations';
+export type FeatureName = 'Show Production View' | 'Edit Observations';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Survival Rate Calculation',
-    preferenceName: 'survivalRateCalculation',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['New survival rate calculation for Plant Monitoring Observations'],
-    disclosure: ['This is a WIP'],
   },
   {
     name: 'Edit Observations',
