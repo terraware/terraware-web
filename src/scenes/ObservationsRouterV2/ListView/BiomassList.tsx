@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 
+import { Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -16,6 +17,7 @@ export type BiomassListProps = {
 
 export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
   const { strings } = useLocalization();
+  const theme = useTheme();
 
   const columns: TableColumnType[] = useMemo(
     () => [
@@ -111,6 +113,17 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
+      <Typography
+        sx={{
+          fontSize: '20px',
+          fontWeight: 600,
+          color: theme.palette.TwClrTxt,
+          paddingTop: '5px',
+          paddingBottom: '5px',
+        }}
+      >
+        {strings.BIOMASS_MONITORING}
+      </Typography>
       <Table
         id='biomass-measurement-table'
         columns={columns}
