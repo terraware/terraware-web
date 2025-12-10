@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -219,7 +219,14 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,6 +237,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -239,14 +256,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -293,6 +302,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -382,7 +396,7 @@ import { Button, Icon, Textfield } from '@terraware/web-components';
 &nbsp;
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import { useLocalization } from 'src/providers/hooks';
-import { MonitoringPlotMediaItem } from 'src/types/Observations';
+import { MonitoringPlotMediaItem, getPositionLabel } from 'src/types/Observations';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
 &nbsp;
 type MonitoringPlotPhotoPreviewProps = {
@@ -392,6 +406,7 @@ type MonitoringPlotPhotoPreviewProps = {
   observationId?: number;
   onDelete: () =&gt; void;
   setCaption: (caption: string) =&gt; void;
+  monitoringPlotName?: string;
 };
 &nbsp;
 const MonitoringPlotPhotoPreview = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
@@ -401,6 +416,7 @@ const MonitoringPlotPhotoPreview = <span class="cstat-no" title="statement not c
   observationId,
   onDelete,
   setCaption,
+  monitoringPlotName,
 }: MonitoringPlotPhotoPreviewProps) =&gt; {
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -456,6 +472,11 @@ const MonitoringPlotPhotoPreview = <span class="cstat-no" title="statement not c
       paddingBottom='24px'
       width='100%'
     &gt;
+      {mediaItem.data.type === 'Plot' &amp;&amp; mediaItem.data.position &amp;&amp; (
+        &lt;Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}&gt;
+          {monitoringPlotName} {getPositionLabel(mediaItem.data.position)}
+        &lt;/Typography&gt;
+      )}
       &lt;Box display='flex' flexDirection='column' gap={2}&gt;
         &lt;Box display='flex' gap={2}&gt;
           &lt;Box flexShrink={0} position='relative'&gt;
@@ -538,7 +559,7 @@ export default MonitoringPlotPhotoPreview;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-10T18:03:52.245Z
+                at 2025-12-10T19:16:48.475Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
