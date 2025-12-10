@@ -1,24 +1,27 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
-import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
+import { ObservationMonitoringPlotPhoto, getPositionLabel } from 'src/types/Observations';
 
 const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
 
 export type MonitoringPlotPhotosWithActionsProps = {
   observationId: number;
   monitoringPlotId: number;
+  monitoringPlotName?: string;
   photos?: ObservationMonitoringPlotPhoto[];
 };
 
 export default function MonitoringPlotPhotosWithActions({
   observationId,
   monitoringPlotId,
+  monitoringPlotName,
   photos,
 }: MonitoringPlotPhotosWithActionsProps): JSX.Element {
+  const theme = useTheme();
   const [lightboxFileId, setLightboxFileId] = useState<number | undefined>(undefined);
 
   const rootUrl = useMemo(
@@ -37,6 +40,7 @@ export default function MonitoringPlotPhotosWithActions({
         fileName: photo.fileId.toString(),
         caption: photo.caption,
         type: photo.mediaKind,
+        position: photo.position,
       })),
     [photos]
   );
@@ -72,6 +76,11 @@ export default function MonitoringPlotPhotosWithActions({
       <Box display='grid' gridTemplateColumns='repeat(auto-fill, minmax(213px, 1fr))' gap={2}>
         {mediaFiles.map((mediaFile) => (
           <Box key={mediaFile.fileId} position='relative'>
+            {!!monitoringPlotName && mediaFile.position && (
+              <Typography color={theme.palette.TwClrBaseBlack}>
+                {monitoringPlotName} {getPositionLabel(mediaFile.position)}
+              </Typography>
+            )}
             <MediaItem
               mediaFile={mediaFile}
               imageSrc={getMediaUrl(mediaFile.fileId)}
