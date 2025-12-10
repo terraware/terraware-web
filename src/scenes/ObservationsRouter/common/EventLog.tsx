@@ -85,7 +85,7 @@ const EventLog = ({ observationId, plotId }: EventLogProps) => {
                     <Box>
                       {strings.formatString(
                         strings.VALUE_CHANGED_FROM_TO,
-                        <Typography display={'inline'}>
+                        <Typography display={'inline'} textTransform={'capitalize'}>
                           {event.subject.type === 'ObservationPlotMedia'
                             ? `${event.subject.fileId} ${event.action.fieldName}`
                             : event.action.fieldName}
