@@ -336,7 +336,7 @@ export const getConditionString = (
       return strings.FAVORABLE_WEATHER;
     }
     case 'Fungus': {
-      return strings.FUNGUS;
+      return strings.FUNGUS_DISEASE;
     }
     case 'Pests': {
       return strings.PESTS;
