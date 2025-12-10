@@ -11,14 +11,14 @@ const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitori
 export type MonitoringPlotPhotosWithActionsProps = {
   observationId: number;
   monitoringPlotId: number;
-  plotName?: string;
+  monitoringPlotName?: string;
   photos?: ObservationMonitoringPlotPhoto[];
 };
 
 export default function MonitoringPlotPhotosWithActions({
   observationId,
   monitoringPlotId,
-  plotName,
+  monitoringPlotName,
   photos,
 }: MonitoringPlotPhotosWithActionsProps): JSX.Element {
   const theme = useTheme();
@@ -76,9 +76,9 @@ export default function MonitoringPlotPhotosWithActions({
       <Box display='grid' gridTemplateColumns='repeat(auto-fill, minmax(213px, 1fr))' gap={2}>
         {mediaFiles.map((mediaFile) => (
           <Box key={mediaFile.fileId} position='relative'>
-            {!!plotName && mediaFile.position && (
+            {!!monitoringPlotName && mediaFile.position && (
               <Typography color={theme.palette.TwClrBaseBlack}>
-                {plotName} {getPositionLabel(mediaFile.position)}
+                {monitoringPlotName} {getPositionLabel(mediaFile.position)}
               </Typography>
             )}
             <MediaItem
