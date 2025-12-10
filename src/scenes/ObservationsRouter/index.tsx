@@ -9,6 +9,7 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import {
   selectObservationsResults,
   selectObservationsResultsError,
@@ -50,6 +51,7 @@ export default function ObservationsRouter(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const { reload: reloadSpecies } = useSpeciesData();
+  const { reload: reloadPlantingSiteData } = usePlantingSiteData();
 
   // listen for error
   const observationsResultsError = useAppSelector(selectObservationsResultsError);
@@ -76,7 +78,8 @@ export default function ObservationsRouter(): JSX.Element {
   const reload = useCallback(() => {
     reloadSpecies();
     setDispatched(false);
-  }, [reloadSpecies]);
+    reloadPlantingSiteData();
+  }, [reloadSpecies, reloadPlantingSiteData]);
 
   // show spinner while initializing data
   if (observationsResults === undefined && !observationsResultsError) {
