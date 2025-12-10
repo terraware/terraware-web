@@ -736,6 +736,7 @@ FUNDING_ENTITIES,Organismes de financement,6ba1d5ee
 FUNDING_ENTITY,Entité de financement,5a49d100
 FUNDING_ENTITY_NAME,Nom de l'organisme de financement,853fdfb9
 FUNGUS,Champignons,80af26d0
+FUNGUS_DISEASE,Champignon/Maladie,c4888a3c
 G,g,a2cb10b4
 G_GRAMS,g (grammes),cd0798a9
 GDRIVE,GDrive,05b07904
