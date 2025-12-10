@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -233,7 +233,12 @@
 <a name='L168'></a><a href='#L168'>168</a>
 <a name='L169'></a><a href='#L169'>169</a>
 <a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -266,9 +271,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -403,7 +410,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -423,7 +433,7 @@ import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >MortalityRateCard(</span>): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { latestResult, plantingSite } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
+  const { latestResult, observationSummaries, plantingSite } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const isSurvivalRateCalculationEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Survival Rate Calculation');</span>
 &nbsp;
@@ -434,6 +444,11 @@ export default function <span class="fstat-no" title="function not covered" >Mor
     marginRight: '24px',
     marginLeft: '24px',
   };
+&nbsp;
+  const latestSummary = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >observationSummaries &amp;&amp; observationSummaries.length &gt; 0 ? observationSummaries[0] : undefined)</span>,
+    [observationSummaries]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Card
@@ -455,9 +470,9 @@ export default function <span class="fstat-no" title="function not covered" >Mor
         &lt;/Box&gt;
         &lt;Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}&gt;
           {isSurvivalRateCalculationEnabled ? (
-            latestResult?.survivalRate !== undefined ? (
+            latestSummary?.survivalRate !== undefined ? (
               &lt;Typography fontSize='48px' fontWeight={600} lineHeight={1}&gt;
-                &lt;FormattedNumber value={latestResult.survivalRate} /&gt;
+                &lt;FormattedNumber value={latestSummary.survivalRate} /&gt;
               &lt;/Typography&gt;
             ) : (
               &lt;Typography fontSize='20px' fontWeight={500}&gt;
@@ -470,7 +485,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
             &lt;/Typography&gt;
           )}
           {isSurvivalRateCalculationEnabled
-            ? latestResult?.survivalRate !== undefined &amp;&amp; (
+            ? latestSummary?.survivalRate !== undefined &amp;&amp; (
                 &lt;Typography fontSize='48px' fontWeight={600} lineHeight={1}&gt;
                   %
                 &lt;/Typography&gt;
@@ -482,7 +497,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
               )}
         &lt;/Box&gt;
 &nbsp;
-        {isSurvivalRateCalculationEnabled &amp;&amp; latestResult?.survivalRate === undefined &amp;&amp; (
+        {isSurvivalRateCalculationEnabled &amp;&amp; latestSummary?.survivalRate === undefined &amp;&amp; (
           &lt;Box&gt;
             {plantingSite?.id &amp;&amp; (
               &lt;Typography&gt;
@@ -580,7 +595,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-09T19:32:51.487Z
+                at 2025-12-10T17:05:09.471Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
