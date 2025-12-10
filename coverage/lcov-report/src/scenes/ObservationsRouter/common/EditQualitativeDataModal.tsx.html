@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -384,7 +384,14 @@
 <a name='L319'></a><a href='#L319'>319</a>
 <a name='L320'></a><a href='#L320'>320</a>
 <a name='L321'></a><a href='#L321'>321</a>
-<a name='L322'></a><a href='#L322'>322</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -523,6 +530,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -641,6 +653,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -843,6 +857,10 @@ const EditQualitativeDataModal = <span class="cstat-no" title="statement not cov
     []
   );
 &nbsp;
+  const isMangrove = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return 'biomassMeasurement' in record &amp;&amp; record.biomassMeasurement?.forestType === 'Mangrove';</span>
+  }, [record]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;DialogBox
       onClose={onClose}
@@ -908,65 +926,68 @@ const EditQualitativeDataModal = <span class="cstat-no" title="statement not cov
                 /&gt;
               &lt;/Box&gt;
             &lt;/Box&gt;
+            {isMangrove &amp;&amp; (
+              &lt;&gt;
+                &lt;Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}&gt;
+                  &lt;Box sx={{ flex: 1 }}&gt;
+                    &lt;TextField
+                      type='text'
+                      label={strings.WATER_DEPTH_M}
+                      value={record.biomassMeasurement?.waterDepth}
+                      id={'waterDepth'}
+                      onChange={onChangeHandler('biomassMeasurement.waterDepth')}
+                    /&gt;
+                  &lt;/Box&gt;
 &nbsp;
-            &lt;Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}&gt;
-              &lt;Box sx={{ flex: 1 }}&gt;
-                &lt;TextField
-                  type='text'
-                  label={strings.WATER_DEPTH_M}
-                  value={record.biomassMeasurement?.waterDepth}
-                  id={'waterDepth'}
-                  onChange={onChangeHandler('biomassMeasurement.waterDepth')}
+                  &lt;Box sx={{ flex: 1 }}&gt;
+                    &lt;TextField
+                      type='text'
+                      label={strings.SALINITY_PPT}
+                      value={record.biomassMeasurement?.salinity}
+                      id={'salinity'}
+                      onChange={onChangeHandler('biomassMeasurement.salinity')}
+                    /&gt;
+                  &lt;/Box&gt;
+                &lt;/Box&gt;
+&nbsp;
+                &lt;Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}&gt;
+                  &lt;Box sx={{ flex: 1 }}&gt;
+                    &lt;TextField
+                      type='text'
+                      label={strings.PH}
+                      value={record.biomassMeasurement?.ph}
+                      id={'ph'}
+                      onChange={onChangeHandler('biomassMeasurement.ph')}
+                    /&gt;
+                  &lt;/Box&gt;
+&nbsp;
+                  &lt;Box sx={{ flex: 1 }}&gt;
+                    &lt;Dropdown
+                      label={strings.TIDE}
+                      selectedValue={record.biomassMeasurement?.tide}
+                      id={'tide'}
+                      onChange={onChangeHandler('biomassMeasurement.tide')}
+                      options={[
+                        { label: strings.LOW, value: 'Low' },
+                        { label: strings.HIGH, value: 'High' },
+                      ]}
+                    /&gt;
+                  &lt;/Box&gt;
+                &lt;/Box&gt;
+&nbsp;
+                &lt;DatePicker
+                  id='startTime'
+                  label={strings.MEASUREMENT_TIME}
+                  value={record.biomassMeasurement?.tideTime}
+                  onDateChange={<span class="fstat-no" title="function not covered" >(v</span>alue?: DateTime) =&gt; {
+<span class="cstat-no" title="statement not covered" >                    onChangeHandler('biomassMeasurement.tideTime')(value?.toISO());</span>
+                  }}
+                  aria-label='date-picker'
+                  showTime={true}
+                  sx={{ paddingTop: '16px' }}
                 /&gt;
-              &lt;/Box&gt;
-&nbsp;
-              &lt;Box sx={{ flex: 1 }}&gt;
-                &lt;TextField
-                  type='text'
-                  label={strings.SALINITY_PPT}
-                  value={record.biomassMeasurement?.salinity}
-                  id={'salinity'}
-                  onChange={onChangeHandler('biomassMeasurement.salinity')}
-                /&gt;
-              &lt;/Box&gt;
-            &lt;/Box&gt;
-&nbsp;
-            &lt;Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}&gt;
-              &lt;Box sx={{ flex: 1 }}&gt;
-                &lt;TextField
-                  type='text'
-                  label={strings.PH}
-                  value={record.biomassMeasurement?.ph}
-                  id={'ph'}
-                  onChange={onChangeHandler('biomassMeasurement.ph')}
-                /&gt;
-              &lt;/Box&gt;
-&nbsp;
-              &lt;Box sx={{ flex: 1 }}&gt;
-                &lt;Dropdown
-                  label={strings.TIDE}
-                  selectedValue={record.biomassMeasurement?.tide}
-                  id={'tide'}
-                  onChange={onChangeHandler('biomassMeasurement.tide')}
-                  options={[
-                    { label: strings.LOW, value: 'Low' },
-                    { label: strings.HIGH, value: 'High' },
-                  ]}
-                /&gt;
-              &lt;/Box&gt;
-            &lt;/Box&gt;
-&nbsp;
-            &lt;DatePicker
-              id='startTime'
-              label={strings.MEASUREMENT_TIME}
-              value={record.biomassMeasurement?.tideTime}
-              onDateChange={<span class="fstat-no" title="function not covered" >(v</span>alue?: DateTime) =&gt; {
-<span class="cstat-no" title="statement not covered" >                onChangeHandler('biomassMeasurement.tideTime')(value?.toISO());</span>
-              }}
-              aria-label='date-picker'
-              showTime={true}
-              sx={{ paddingTop: '16px' }}
-            /&gt;
+              &lt;/&gt;
+            )}
           &lt;/&gt;
         )}
 &nbsp;
@@ -1033,7 +1054,7 @@ export default EditQualitativeDataModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-10T19:16:48.475Z
+                at 2025-12-10T20:37:46.119Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

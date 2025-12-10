@@ -1,3 +1,5 @@
+b50cb0095c4 SW-7821 Change History: Field names are missing capitalization (#4874)
+1e7c3cd4fd8 SW-7815 When Terrestrial is selected for the Type of Forest, the Mangrove fields should not appear for editing (#4873)
 1af1b15b179 SW-7795 Photos and Videos: Plot Corner photo titles are missing (#4867)
 ed1cfc5b542 SW-7814 Number of Small Trees field can't seem to be edited (#4872)
 249ff8c98e6 SW-7813 Plot Description field can't seem to be edited (#4871)
