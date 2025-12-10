@@ -32,7 +32,7 @@ const injectedRtkApi = api.injectEndpoints({
           organizationId: queryArgs.organizationId,
         },
       }),
-      providesTags: () => [{ type: QueryTagTypes.Events, id: 'LIST' }],
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.PlantingSites, id: payload.observationId }],
       transformResponse: (results: ListEventLogEntriesApiResponse) =>
         results.events.map((event) => ({
           ...event,

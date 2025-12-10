@@ -319,7 +319,7 @@ const BiomassObservationDataTab = ({
           reload={reload}
         />
         {monitoringPlot?.monitoringPlotId && (
-          <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} />
+          <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} isBiommas />
         )}
       </Box>
     </Card>
