@@ -28,6 +28,7 @@ import {
   ObservationMonitoringPlotPhoto,
   ObservationMonitoringPlotPhotoWithGps,
   ObservationResultsPayload,
+  ObservationSummary,
   RecordedPlant,
   RecordedPlantStatus,
 } from 'src/types/Observations';
@@ -62,6 +63,7 @@ type PlantDashboardMapProps = {
   disableObserationEvents?: boolean;
   plantingSites: PlantingSite[];
   observationResults: ObservationResultsPayload[];
+  latestSummary?: ObservationSummary;
 };
 
 const PlantDashboardMap = ({
@@ -71,6 +73,7 @@ const PlantDashboardMap = ({
   disableObserationEvents,
   plantingSites,
   observationResults,
+  latestSummary,
 }: PlantDashboardMapProps): JSX.Element => {
   const { mapId, refreshToken, token } = useMapboxToken();
   const mapRef = useRef<MapRef | null>(null);
@@ -465,45 +468,48 @@ const PlantDashboardMap = ({
       }
     };
 
-    observationResults.forEach((results) => {
-      const siteId = { layerId: 'sites', featureId: `${results.plantingSiteId}` };
-      if (isSurvivalRateCalculationEnabled) {
-        sortFeatureBySurvivalRate(siteId, results.survivalRate);
-      } else {
-        sortFeatureByMortalityRate(siteId, results.mortalityRate);
-      }
+    if (isSurvivalRateCalculationEnabled) {
+      const siteId = { layerId: 'sites', featureId: `${latestSummary?.plantingSiteId}` };
+      sortFeatureBySurvivalRate(siteId, latestSummary?.survivalRate);
 
-      results.plantingZones.forEach((zone) => {
+      latestSummary?.plantingZones.forEach((zone) => {
         const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
-        if (isSurvivalRateCalculationEnabled) {
-          sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
-        } else {
-          sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
-        }
+        sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
 
         zone.plantingSubzones.forEach((subzone) => {
           const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
-          if (isSurvivalRateCalculationEnabled) {
-            sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
-          } else {
-            sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
-          }
+          sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
         });
       });
-    });
 
-    return isSurvivalRateCalculationEnabled
-      ? {
-          lessThanFifty,
-          lessThanSeventyFive,
-          greaterThanSeventyFive,
-        }
-      : {
-          lessThanTwentyFive,
-          lessThanFifty,
-          greaterThanFifty,
-        };
-  }, [isSurvivalRateCalculationEnabled, observationResults]);
+      return {
+        lessThanFifty,
+        lessThanSeventyFive,
+        greaterThanSeventyFive,
+      };
+    } else {
+      observationResults.forEach((results) => {
+        const siteId = { layerId: 'sites', featureId: `${results.plantingSiteId}` };
+        sortFeatureByMortalityRate(siteId, results.mortalityRate);
+
+        results.plantingZones.forEach((zone) => {
+          const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
+          sortFeatureByMortalityRate(zoneId, zone.mortalityRate);
+
+          zone.plantingSubzones.forEach((subzone) => {
+            const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
+            sortFeatureByMortalityRate(subzoneId, subzone.mortalityRate);
+          });
+        });
+      });
+
+      return {
+        lessThanTwentyFive,
+        lessThanFifty,
+        greaterThanFifty,
+      };
+    }
+  }, [isSurvivalRateCalculationEnabled, observationResults, latestSummary]);
 
   const setDrawerOpenCallback = useCallback((open: boolean) => {
     if (open) {
@@ -781,7 +787,9 @@ const PlantDashboardMap = ({
         visible: observationEventsVisible,
       },
       {
-        disabled: disableMortalityRate || observationResults.length === 0,
+        disabled:
+          disableMortalityRate ||
+          (isSurvivalRateCalculationEnabled ? latestSummary === undefined : observationResults.length === 0),
         items: [
           {
             label: isSurvivalRateCalculationEnabled
@@ -838,6 +846,7 @@ const PlantDashboardMap = ({
     mortalityRateVisible,
     observationEventsVisible,
     observationResults.length,
+    latestSummary,
     plotPhotoStyle,
     plotPhotoVisible,
     selectedLayer,

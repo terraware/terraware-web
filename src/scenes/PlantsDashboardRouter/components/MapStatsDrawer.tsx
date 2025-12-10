@@ -7,6 +7,7 @@ import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import isEnabled from 'src/features';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 
 type MapStatsProperties = {
   areaHa: number | undefined;
@@ -30,7 +31,8 @@ type MapStatsDrawerProps = {
 
 const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
-  const { isLoading, latestResult, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
+  const { isLoading, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
+  const { observationSummaries } = usePlantingSiteData();
   const [delayedLoading, setDelayedLoading] = useState(isLoading);
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
@@ -50,24 +52,29 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
     return () => clearTimeout(timeout);
   }, [isLoading]);
 
+  const latestSummary = useMemo(
+    () => (observationSummaries && observationSummaries.length > 0 ? observationSummaries[0] : undefined),
+    [observationSummaries]
+  );
+
   const properties = useMemo((): MapStatsProperties | undefined => {
     if (layerFeatureId.layerId === 'sites') {
       return {
         type: strings.SITE,
         areaHa: plantingSite?.areaHa,
-        mortalityRate: latestResult?.mortalityRate,
-        survivalRate: latestResult?.survivalRate,
+        mortalityRate: latestSummary?.mortalityRate,
+        survivalRate: latestSummary?.survivalRate,
         name: plantingSite?.name,
-        observed: latestResult !== undefined,
-        observedPlants: latestResult?.totalPlants,
-        observedSpecies: latestResult?.totalSpecies,
+        observed: latestSummary !== undefined,
+        observedPlants: latestSummary?.totalPlants,
+        observedSpecies: latestSummary?.totalSpecies,
         plantedPlants: plantingSiteReportedPlants?.totalPlants,
         plantedSpecies: plantingSiteReportedPlants?.species.length,
-        plantingDensity: latestResult?.plantingDensity,
+        plantingDensity: latestSummary?.plantingDensity,
       };
     } else if (layerFeatureId.layerId === 'zones') {
       const zone = plantingSite?.plantingZones?.find((_zone) => `${_zone.id}` === layerFeatureId.featureId);
-      const zoneResult = latestResult?.plantingZones.find(
+      const zoneSummary = latestSummary?.plantingZones.find(
         (_zone) => `${_zone.plantingZoneId}` === layerFeatureId.featureId
       );
       const zoneStats = plantingSiteReportedPlants?.plantingZones.find(
@@ -77,22 +84,22 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
       return {
         type: strings.ZONE,
         areaHa: zone?.areaHa,
-        mortalityRate: zoneResult?.mortalityRate,
-        survivalRate: zoneResult?.survivalRate,
+        mortalityRate: zoneSummary?.mortalityRate,
+        survivalRate: zoneSummary?.survivalRate,
         name: zone?.name,
-        observed: zoneResult !== undefined,
-        observedPlants: zoneResult?.totalPlants,
-        observedSpecies: zoneResult?.totalSpecies,
+        observed: zoneSummary !== undefined,
+        observedPlants: zoneSummary?.totalPlants,
+        observedSpecies: zoneSummary?.totalSpecies,
         plantedPlants: zoneStats?.totalPlants,
         plantedSpecies: zoneStats?.species.length,
-        plantingDensity: zoneResult?.plantingDensity,
+        plantingDensity: zoneSummary?.plantingDensity,
       };
     } else if (layerFeatureId.layerId === 'subzones') {
       const zone = plantingSite?.plantingZones?.find((_zone) =>
         _zone.plantingSubzones.some((_subzone) => `${_subzone.id}` === layerFeatureId.featureId)
       );
       const subzone = zone?.plantingSubzones.find((_subzone) => `${_subzone.id}` === layerFeatureId.featureId);
-      const subzoneResult = latestResult?.plantingZones
+      const subzoneSummary = latestSummary?.plantingZones
         .flatMap((_zone) => _zone.plantingSubzones)
         .find((_subzone) => `${_subzone.plantingSubzoneId}` === layerFeatureId.featureId);
       const subzoneStats = plantingSiteReportedPlants?.plantingZones
@@ -102,21 +109,21 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
       return {
         type: strings.SUBZONE,
         areaHa: subzone?.areaHa,
-        mortalityRate: subzoneResult?.mortalityRate,
-        survivalRate: subzoneResult?.survivalRate,
+        mortalityRate: subzoneSummary?.mortalityRate,
+        survivalRate: subzoneSummary?.survivalRate,
         name: subzone?.name,
-        observed: subzoneResult !== undefined,
-        observedPlants: subzoneResult?.totalPlants,
-        observedSpecies: subzoneResult?.totalSpecies,
+        observed: subzoneSummary !== undefined,
+        observedPlants: subzoneSummary?.totalPlants,
+        observedSpecies: subzoneSummary?.totalSpecies,
         plantedPlants: subzoneStats?.totalPlants,
         plantedSpecies: subzoneStats?.species.length,
-        plantingDensity: subzoneResult?.plantingDensity,
+        plantingDensity: subzoneSummary?.plantingDensity,
         zoneName: zone?.name,
       };
     } else {
       return undefined;
     }
-  }, [latestResult, layerFeatureId, plantingSite, plantingSiteReportedPlants, strings]);
+  }, [latestSummary, layerFeatureId, plantingSite, plantingSiteReportedPlants, strings]);
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     const results: MapDrawerTableRow[] = [];
