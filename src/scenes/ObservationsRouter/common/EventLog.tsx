@@ -5,37 +5,35 @@ import { Button } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import { useLocalization, useOrganization } from 'src/providers';
-import { ListEventLogEntriesRequestPayload, useListEventLogEntriesMutation } from 'src/queries/generated/events';
+import { ListEventsForObservationArgs, useLazyListEventsForObservationQuery } from 'src/queries/events/events';
 
 type EventLogProps = {
   observationId: number;
   plotId: number;
+  isBiommas?: boolean;
 };
-const EventLog = ({ observationId, plotId }: EventLogProps) => {
+const EventLog = ({ observationId, plotId, isBiommas }: EventLogProps) => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
 
-  const [list, listResult] = useListEventLogEntriesMutation();
+  const [list, { data: events, isLoading }] = useLazyListEventsForObservationQuery();
   const [showEventLog, setShowEventLog] = useState(true);
 
   const theme = useTheme();
-
-  const events = useMemo(() => (listResult.isSuccess ? listResult.data.events : undefined), [listResult]);
-
   const lastEvent = useMemo(() => (events ? events[events.length - 1] : undefined), [events]);
 
   useEffect(() => {
-    const listEventLogPayload: ListEventLogEntriesRequestPayload = {
+    const listEventLogPayload: ListEventsForObservationArgs = {
       monitoringPlotId: plotId,
       observationId,
-      subjects: ['ObservationPlot', 'ObservationPlotMedia'],
+      isBiomass: !!isBiommas,
       organizationId: selectedOrganization?.id || -1,
     };
 
     if (selectedOrganization) {
       void list(listEventLogPayload);
     }
-  }, [list, observationId, plotId, selectedOrganization]);
+  }, [isBiommas, list, observationId, plotId, selectedOrganization]);
 
   const toggleEventLog = useCallback(() => {
     setShowEventLog((prev) => !prev);
@@ -60,7 +58,7 @@ const EventLog = ({ observationId, plotId }: EventLogProps) => {
           />
         </Box>
       )}
-      {showEventLog && (
+      {showEventLog && !isLoading && (
         <Box>
           {events?.map((event, index) => {
             const dateModified = DateTime.fromMillis(new Date(event.timestamp).getTime()).toFormat('yyyy-MM-dd');
