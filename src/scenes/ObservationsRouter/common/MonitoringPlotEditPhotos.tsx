@@ -213,6 +213,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
 
         await Promise.all(promises);
         reload();
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
         goToPhotosTab();
       } catch (error) {
         snackbar.toastError();
