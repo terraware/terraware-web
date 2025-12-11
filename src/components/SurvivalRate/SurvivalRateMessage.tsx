@@ -30,7 +30,7 @@ const SurvivalRateMessage = ({ selectedPlantingSiteId }: SurvivalRateMessageProp
               >
                 {strings.SURVIVAL_RATE_SETTINGS}
               </Link>,
-              <Link to={knowledgeBaseLinks['/home']} fontSize={'16px'} target='_blank'>
+              <Link to={knowledgeBaseLinks['/observations.*/survival-rate-settings']} fontSize={'16px'} target='_blank'>
                 {strings.KNOWLEDGE_BASE}
               </Link>
             )}

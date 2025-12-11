@@ -26,6 +26,7 @@ export type TerrawarePath =
   | '/observations'
   | '/observations.*tab=biomassMeasurements'
   | '/observations.*/biomassMeasurements'
+  | '/observations.*/survival-rate-settings'
   | '/planting-sites'
   | '/seedbanks'
   | '/nurseries'
@@ -70,6 +71,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
     '/observations.*/biomassMeasurements':
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
+    '/observations.*/survival-rate-settings':
+      'https://knowledge.terraformation.com/hc/en-us/articles/42721719640980-Survival-Rate-Calculations',
     '/planting-sites':
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
     '/seedbanks':
@@ -114,6 +117,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
     '/observations.*/biomassMeasurements':
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
+    '/observations.*/survival-rate-settings':
+      'https://knowledge.terraformation.com/hc/en-us/articles/42721719640980-Survival-Rate-Calculations',
     '/planting-sites':
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
     '/seedbanks':
@@ -158,6 +163,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
     '/observations.*/biomassMeasurements':
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
+    '/observations.*/survival-rate-settings':
+      'https://knowledge.terraformation.com/hc/en-us/articles/42721719640980-Survival-Rate-Calculations',
     '/planting-sites':
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
     '/seedbanks':
