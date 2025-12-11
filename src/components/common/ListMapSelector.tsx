@@ -70,6 +70,7 @@ export default function ListMapSelector({ defaultView, view, onView }: ListMapSe
       minWidth={isMobile ? '76px' : '152px'}
       borderRadius={theme.spacing(1)}
       padding={theme.spacing(0.5)}
+      marginTop={isMobile ? 1 : 0}
       gap={theme.spacing(0.5)}
       style={{ backgroundColor: theme.palette.TwClrBgSecondary }}
       sx={boxStyles}

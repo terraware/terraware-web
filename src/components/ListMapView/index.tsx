@@ -79,7 +79,12 @@ export default function ListMapView({
       }}
       flushMobile
     >
-      <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center'>
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        justifyContent='space-between'
+        alignItems={isMobile ? 'start' : 'center'}
+      >
         <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='start' alignItems='center'>
           <Box>{search}</Box>
           {data && siteAreaHa > 0 && view === 'map' && (
