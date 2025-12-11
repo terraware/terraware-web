@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -179,9 +179,8 @@
 <a name='L114'></a><a href='#L114'>114</a>
 <a name='L115'></a><a href='#L115'>115</a>
 <a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L117'></a><a href='#L117'>117</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -195,16 +194,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -306,37 +302,35 @@ import { Button } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 &nbsp;
 import { useLocalization, useOrganization } from 'src/providers';
-import { ListEventLogEntriesRequestPayload, useListEventLogEntriesMutation } from 'src/queries/generated/events';
+import { ListObservationEventsArgs, useLazyListObservationEventsQuery } from 'src/queries/observations/observations';
 &nbsp;
 type EventLogProps = {
   observationId: number;
   plotId: number;
+  isBiomass?: boolean;
 };
-const EventLog = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> observationId, plotId }: EventLogProps) =&gt; {</span>
+const EventLog = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> observationId, plotId, isBiomass }: EventLogProps) =&gt; {</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
-  const [list, listResult] = <span class="cstat-no" title="statement not covered" >useListEventLogEntriesMutation();</span>
+  const [list, { data: events, isLoading }] = <span class="cstat-no" title="statement not covered" >useLazyListObservationEventsQuery();</span>
   const [showEventLog, setShowEventLog] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
 &nbsp;
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
-  const events = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >listResult.isSuccess ? listResult.data.events : undefined)</span>, [listResult]);</span>
-&nbsp;
   const lastEvent = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >events ? events[events.length - 1] : undefined)</span>, [events]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const listEventLogPayload: ListEventLogEntriesRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
+    const listEventLogPayload: ListObservationEventsArgs = <span class="cstat-no" title="statement not covered" >{</span>
       monitoringPlotId: plotId,
       observationId,
-      subjects: ['ObservationPlot', 'ObservationPlotMedia'],
+      isBiomass: !!isBiomass,
       organizationId: selectedOrganization?.id || -1,
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >      void list(listEventLogPayload);</span>
     }
-  }, [list, observationId, plotId, selectedOrganization]);
+  }, [isBiomass, list, observationId, plotId, selectedOrganization]);
 &nbsp;
   const toggleEventLog = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setShowEventLog(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >!prev)</span>;</span>
@@ -361,7 +355,7 @@ const EventLog = <span class="cstat-no" title="statement not covered" ><span cla
           /&gt;
         &lt;/Box&gt;
       )}
-      {showEventLog &amp;&amp; (
+      {showEventLog &amp;&amp; !isLoading &amp;&amp; (
         &lt;Box&gt;
           {events?.map(<span class="fstat-no" title="function not covered" >(e</span>vent, index) =&gt; {
             const dateModified = <span class="cstat-no" title="statement not covered" >DateTime.fromMillis(new Date(event.timestamp).getTime()).toFormat('yyyy-MM-dd');</span>
@@ -424,7 +418,7 @@ export default EventLog;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-10T20:37:46.119Z
+                at 2025-12-11T13:49:33.761Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
