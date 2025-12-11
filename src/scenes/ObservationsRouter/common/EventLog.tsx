@@ -5,35 +5,35 @@ import { Button } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import { useLocalization, useOrganization } from 'src/providers';
-import { ListEventsForObservationArgs, useLazyListEventsForObservationQuery } from 'src/queries/events/events';
+import { ListObservationEventsArgs, useLazyListObservationEventsQuery } from 'src/queries/observations/observations';
 
 type EventLogProps = {
   observationId: number;
   plotId: number;
-  isBiommas?: boolean;
+  isBiomass?: boolean;
 };
-const EventLog = ({ observationId, plotId, isBiommas }: EventLogProps) => {
+const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
 
-  const [list, { data: events, isLoading }] = useLazyListEventsForObservationQuery();
+  const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
   const [showEventLog, setShowEventLog] = useState(true);
 
   const theme = useTheme();
   const lastEvent = useMemo(() => (events ? events[events.length - 1] : undefined), [events]);
 
   useEffect(() => {
-    const listEventLogPayload: ListEventsForObservationArgs = {
+    const listEventLogPayload: ListObservationEventsArgs = {
       monitoringPlotId: plotId,
       observationId,
-      isBiomass: !!isBiommas,
+      isBiomass: !!isBiomass,
       organizationId: selectedOrganization?.id || -1,
     };
 
     if (selectedOrganization) {
       void list(listEventLogPayload);
     }
-  }, [isBiommas, list, observationId, plotId, selectedOrganization]);
+  }, [isBiomass, list, observationId, plotId, selectedOrganization]);
 
   const toggleEventLog = useCallback(() => {
     setShowEventLog((prev) => !prev);

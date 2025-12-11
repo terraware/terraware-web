@@ -2,7 +2,7 @@ import { baseApi as api } from '../baseApi';
 import { EventLogEntryPayload, ListEventLogEntriesApiResponse } from '../generated/events';
 import { QueryTagTypes } from '../tags';
 
-export type ListEventsForObservationArgs = {
+export type ListObservationEventsArgs = {
   monitoringPlotId: number;
   observationId: number;
   isBiomass: boolean;
@@ -11,7 +11,7 @@ export type ListEventsForObservationArgs = {
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    listEventsForObservation: build.query<EventLogEntryPayload[], ListEventsForObservationArgs>({
+    listObservationEvents: build.query<EventLogEntryPayload[], ListObservationEventsArgs>({
       query: (queryArgs) => ({
         url: '/api/v1/events/list',
         method: 'POST',
@@ -32,7 +32,7 @@ const injectedRtkApi = api.injectEndpoints({
           organizationId: queryArgs.organizationId,
         },
       }),
-      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.PlantingSites, id: payload.observationId }],
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
       transformResponse: (results: ListEventLogEntriesApiResponse) =>
         results.events.map((event) => ({
           ...event,
@@ -43,4 +43,4 @@ const injectedRtkApi = api.injectEndpoints({
 
 export { injectedRtkApi as api };
 
-export const { useListEventsForObservationQuery, useLazyListEventsForObservationQuery } = injectedRtkApi;
+export const { useListObservationEventsQuery, useLazyListObservationEventsQuery } = injectedRtkApi;
