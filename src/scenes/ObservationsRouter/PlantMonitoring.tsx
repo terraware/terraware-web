@@ -159,9 +159,10 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
           </>
         )}
         {selectedPlantingSite &&
+          selectedPlantingSite?.id !== -1 &&
           isSurvivalRateCalculationEnabled &&
           selectedPlotSelection === 'assigned' &&
-          (plotsWithObservations?.length || 0) > 0 && (
+          (observationsResults?.length || 0) > 0 && (
             <Box display={'flex'} alignItems={'center'} flexBasis={isMobile ? '100%' : 'content'}>
               <Link
                 onClick={navigateToSurvivalRateSettings}
@@ -171,7 +172,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
                   paddingRight: theme.spacing(0.5),
                   paddingTop: isMobile ? theme.spacing(1) : 0,
                 }}
-                disabled={selectedPlantingSite?.id === -1 || (observationsResults?.length || 0) === 0}
+                disabled={(plotsWithObservations?.length || 0) === 0}
               >
                 {strings.SURVIVAL_RATE_SETTINGS}
               </Link>
