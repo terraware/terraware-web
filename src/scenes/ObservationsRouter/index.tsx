@@ -190,10 +190,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
       {isSurvivalRateCalculationEnabled && (
         <>
           <Route path={'/:plantingSiteId/survival-rate-settings'} element={<SurvivalRateSettings />} />
-          <Route
-            path={'/:plantingSiteId/survival-rate-settings/edit'}
-            element={<EditSurvivalRateSettings reloadObservations={reload} />}
-          />
+          <Route path={'/:plantingSiteId/survival-rate-settings/edit'} element={<EditSurvivalRateSettings />} />
         </>
       )}
       <Route

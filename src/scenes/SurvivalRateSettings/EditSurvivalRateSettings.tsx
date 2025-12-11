@@ -31,11 +31,7 @@ import EditPermanentPlotsTab from './EditPermanentPlotsTab';
 import EditTemporaryPlotsTab from './EditTemporaryPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
 
-type EditSurvivalRateSettingsProps = {
-  reloadObservations: () => void;
-};
-
-const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettingsProps) => {
+const EditSurvivalRateSettings = () => {
   const { plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
   const [requestId, setRequestId] = useState('');
   const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
@@ -62,7 +58,6 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
 
   const reload = useCallback(() => {
     if (plantingSite && plantingSite.id !== -1) {
-      reloadObservations();
       const request = dispatch(requestPlantingSiteT0(plantingSite.id));
       setRequestId(request.requestId);
       const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSite.id));
@@ -70,7 +65,7 @@ const EditSurvivalRateSettings = ({ reloadObservations }: EditSurvivalRateSettin
       const requestSpeciesPlots = dispatch(requestGetPlantingSiteT0Species(plantingSite.id));
       setSpeciesRequestId(requestSpeciesPlots.requestId);
     }
-  }, [dispatch, plantingSite, reloadObservations]);
+  }, [dispatch, plantingSite]);
 
   useEffect(() => {
     if (plantingSite) {
