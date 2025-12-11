@@ -64,7 +64,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
         type: 'new' as const,
       };
     });
-    setMediaItems((prevPhotos) => [...prevPhotos, ...newPhotos]);
+    setMediaItems((prevPhotos) => [...newPhotos, ...prevPhotos]);
   }, []);
 
   const getUpdatePhotoCaption = useCallback(
