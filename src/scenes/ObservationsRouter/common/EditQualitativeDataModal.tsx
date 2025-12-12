@@ -109,13 +109,25 @@ const EditQualitativeDataModal = ({
   const onChangeNumberOfSmallTrees = useCallback(
     (value: unknown) => {
       const stringValue = value as string;
-      const parts = stringValue.split('-');
+      let low = '';
+      let high = '';
+
+      if (stringValue === '0') {
+        low = '0';
+        high = '0';
+      } else if (stringValue === '+1000') {
+        low = '1001';
+        high = '1001';
+      } else {
+        [low, high] = stringValue.split('-');
+      }
+
       setRecord((prev) => ({
         ...prev,
         biomassMeasurement: {
           ...(prev as BiomassPlot).biomassMeasurement,
-          smallTreeCountLow: parts[0]?.trim() || '',
-          smallTreeCountHigh: parts[1]?.trim() || '',
+          smallTreeCountLow: low,
+          smallTreeCountHigh: high,
         },
       }));
     },
@@ -136,8 +148,38 @@ const EditQualitativeDataModal = ({
     []
   );
 
+  const smallTreeCountOptions = useMemo(
+    () => [
+      { label: '0', value: '0' },
+      { label: '1-10', value: '1-10' },
+      { label: '11-50', value: '11-50' },
+      { label: '51-100', value: '51-100' },
+      { label: '101-500', value: '101-500' },
+      { label: '501-1000', value: '501-1000' },
+      { label: '+1000', value: '+1000' },
+    ],
+    []
+  );
+
   const isMangrove = useMemo(() => {
     return 'biomassMeasurement' in record && record.biomassMeasurement?.forestType === 'Mangrove';
+  }, [record]);
+
+  const smallTreeCountValue = useMemo(() => {
+    if (!('biomassMeasurement' in record)) {
+      return undefined;
+    }
+    const low = record.biomassMeasurement?.smallTreeCountLow.toString();
+    const high = record.biomassMeasurement?.smallTreeCountHigh.toString();
+
+    if (low === '0' && high === '0') {
+      return '0';
+    }
+    if (low === '1001' && high === '1001') {
+      return '+1000';
+    } else {
+      return `${low}-${high}`;
+    }
   }, [record]);
 
   return (
@@ -182,16 +224,12 @@ const EditQualitativeDataModal = ({
 
             <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
               <Box sx={{ flex: 1 }}>
-                <TextField
-                  type='text'
+                <Dropdown
                   label={strings.NUMBER_OF_SMALL_TREES}
-                  value={
-                    record.biomassMeasurement?.smallTreeCountLow || record.biomassMeasurement?.smallTreeCountHigh
-                      ? `${record.biomassMeasurement.smallTreeCountLow || ''}-${record.biomassMeasurement.smallTreeCountHigh || ''}`
-                      : '-'
-                  }
-                  id={'numberOfSmallTrees'}
+                  selectedValue={smallTreeCountValue}
+                  options={smallTreeCountOptions}
                   onChange={onChangeNumberOfSmallTrees}
+                  id={'numberOfSmallTrees'}
                 />
               </Box>
 
