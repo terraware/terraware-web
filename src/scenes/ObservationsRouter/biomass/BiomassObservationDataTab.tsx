@@ -117,7 +117,9 @@ const BiomassObservationDataTab = ({
       label: strings.NUMBER_OF_SMALL_TREES,
       value:
         biomassMeasurement?.smallTreeCountLow || biomassMeasurement?.smallTreeCountHigh
-          ? `${biomassMeasurement?.smallTreeCountLow}-${biomassMeasurement?.smallTreeCountHigh}`
+          ? biomassMeasurement?.smallTreeCountLow === 1001
+            ? '+1000'
+            : `${biomassMeasurement?.smallTreeCountLow}-${biomassMeasurement?.smallTreeCountHigh}`
           : '0',
     },
     {

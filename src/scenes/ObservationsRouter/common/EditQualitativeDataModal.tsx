@@ -115,24 +115,11 @@ const EditQualitativeDataModal = ({
       if (stringValue === '0') {
         low = '0';
         high = '0';
-      } else if (stringValue === '1-10') {
-        low = '1';
-        high = '10';
-      } else if (stringValue === '11-50') {
-        low = '11';
-        high = '50';
-      } else if (stringValue === '51-100') {
-        low = '51';
-        high = '100';
-      } else if (stringValue === '101-500') {
-        low = '101';
-        high = '500';
-      } else if (stringValue === '501-1000') {
-        low = '501';
-        high = '1000';
       } else if (stringValue === '+1000') {
         low = '1001';
-        high = '';
+        high = '1001';
+      } else {
+        [low, high] = stringValue.split('-');
       }
 
       setRecord((prev) => ({
@@ -188,27 +175,11 @@ const EditQualitativeDataModal = ({
     if (low === '0' && high === '0') {
       return '0';
     }
-    if (low === '1' && high === '10') {
-      return '1-10';
-    }
-
-    if (low === '11' && high === '50') {
-      return '11-50';
-    }
-    if (low === '51' && high === '100') {
-      return '51-100';
-    }
-    if (low === '101' && high === '500') {
-      return '101-500';
-    }
-    if (low === '501' && high === '1000') {
-      return '501-1000';
-    }
-    if (low === '1001' && !high) {
+    if (low === '1001' && high === '1001') {
       return '+1000';
+    } else {
+      return `${low}-${high}`;
     }
-
-    return undefined;
   }, [record]);
 
   return (
