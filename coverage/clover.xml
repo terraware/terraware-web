@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765478867448" clover="3.2.0">
-  <project timestamp="1765478867448" name="All files">
-    <metrics statements="36305" coveredstatements="1354" conditionals="25441" coveredconditionals="393" methods="11221" coveredmethods="213" elements="72967" coveredelements="1960" complexity="0" loc="36305" ncloc="36305" packages="286" files="1418" classes="1418"/>
+<coverage generated="1765543401611" clover="3.2.0">
+  <project timestamp="1765543401611" name="All files">
+    <metrics statements="36306" coveredstatements="1354" conditionals="25447" coveredconditionals="393" methods="11221" coveredmethods="213" elements="72974" coveredelements="1960" complexity="0" loc="36306" ncloc="36306" packages="286" files="1418" classes="1418"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5608,9 +5608,9 @@
       </file>
     </package>
     <package name="src.components.ListMapView">
-      <metrics statements="22" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="8" coveredmethods="0"/>
+      <metrics statements="22" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ListMapView/index.tsx">
-        <metrics statements="22" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="22" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
@@ -9582,7 +9582,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="522" coveredstatements="0" conditionals="477" coveredconditionals="0" methods="147" coveredmethods="0"/>
+      <metrics statements="522" coveredstatements="0" conditionals="479" coveredconditionals="0" methods="147" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -9919,7 +9919,7 @@
         <line num="48" count="0" type="stmt"/>
       </file>
       <file name="ListMapSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/ListMapSelector.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
@@ -30507,7 +30507,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.common">
-      <metrics statements="331" coveredstatements="0" conditionals="244" coveredconditionals="0" methods="119" coveredmethods="0"/>
+      <metrics statements="332" coveredstatements="0" conditionals="244" coveredconditionals="0" methods="119" coveredmethods="0"/>
       <file name="AggregatedPlantsStats.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/common/AggregatedPlantsStats.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
@@ -30654,7 +30654,7 @@
         <line num="10" count="0" type="stmt"/>
       </file>
       <file name="MonitoringPlotEditPhotos.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/common/MonitoringPlotEditPhotos.tsx">
-        <metrics statements="92" coveredstatements="0" conditionals="42" coveredconditionals="0" methods="26" coveredmethods="0"/>
+        <metrics statements="93" coveredstatements="0" conditionals="42" coveredconditionals="0" methods="26" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
@@ -30740,13 +30740,14 @@
         <line num="214" count="0" type="stmt"/>
         <line num="215" count="0" type="stmt"/>
         <line num="216" count="0" type="stmt"/>
-        <line num="218" count="0" type="stmt"/>
-        <line num="223" count="0" type="stmt"/>
-        <line num="252" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="253" count="0" type="stmt"/>
-        <line num="257" count="0" type="stmt"/>
-        <line num="259" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="261" count="0" type="stmt"/>
+        <line num="217" count="0" type="stmt"/>
+        <line num="219" count="0" type="stmt"/>
+        <line num="224" count="0" type="stmt"/>
+        <line num="253" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="254" count="0" type="stmt"/>
+        <line num="258" count="0" type="stmt"/>
+        <line num="260" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="262" count="0" type="stmt"/>
       </file>
       <file name="MonitoringPlotPhotoPreview.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/common/MonitoringPlotPhotoPreview.tsx">
         <metrics statements="24" coveredstatements="0" conditionals="35" coveredconditionals="0" methods="7" coveredmethods="0"/>
