@@ -1,3 +1,5 @@
+1a6251b948f SW-7849 Add expand/collapse arrows (#4885)
+7ee6ec33e0a SW-7843 Events related to the creation of the Observation should not be shown (#4884)
 1d1e9de568a SW-7796 Add uploaded files at the top and show toast message (#4883)
 eccab24ef0b SW-7667 Wrap list/map control below search box (#4881)
 c28fdf63fda SW-7818 Update Instructions to clarify t0 data as "t0 planting data" (#4880)
