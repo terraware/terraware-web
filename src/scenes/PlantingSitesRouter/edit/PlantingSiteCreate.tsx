@@ -60,16 +60,12 @@ export default function CreatePlantingSite({ plantingSiteId }: CreatePlantingSit
   useEffect(() => {
     if (plantingSiteId) {
       setRecord({
+        ...plantingSite,
         adHocPlots: plantingSite?.adHocPlots || [],
-        boundary: plantingSite?.boundary,
-        description: plantingSite?.description,
         id: plantingSite?.id || -1,
         name: plantingSite?.name || '',
         organizationId: selectedOrganization?.id || -1,
         plantingSeasons: plantingSite?.plantingSeasons || [],
-        plantingZones: plantingSite?.plantingZones,
-        projectId: plantingSite?.projectId,
-        timeZone: plantingSite?.timeZone,
       });
     }
   }, [plantingSite, plantingSiteId, setRecord, selectedOrganization]);
@@ -97,12 +93,8 @@ export default function CreatePlantingSite({ plantingSiteId }: CreatePlantingSit
         const payload: UpdatePlantingSiteApiArg = {
           id: record.id,
           updatePlantingSiteRequestPayload: {
-            boundary: record.boundary,
-            description: record.description,
-            name: record.name,
+            ...record,
             plantingSeasons,
-            projectId: record.projectId,
-            timeZone: record.timeZone,
           },
         };
         void update(payload);

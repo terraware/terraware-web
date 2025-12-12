@@ -5,8 +5,11 @@ import { Checkbox, Icon, PageForm, Tooltip } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { updatePlantingSite } from 'src/redux/features/plantingSite/plantingSiteThunks';
+import {
+  UpdatePlantingSiteApiArg,
+  useGetPlantingSiteQuery,
+  useUpdatePlantingSiteMutation,
+} from 'src/queries/generated/plantingSites';
 import { selectAssignT0TempSiteData } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
@@ -46,7 +49,9 @@ const EditTemporaryPlotsTab = ({
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const { plantingSite, reload: reloadPlantingSiteData } = usePlantingSiteData();
+  const [updatePlantingSite] = useUpdatePlantingSiteMutation();
+  const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
+  const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
 
   const [record, setRecord] = useForm<AssignSiteT0TempData>({
     plantingSiteId,
@@ -71,17 +76,17 @@ const EditTemporaryPlotsTab = ({
 
   const updatePlantingSiteSetting = useCallback(() => {
     if (alreadyIncluding !== isTemporaryPlotsChecked) {
-      void dispatch(
-        updatePlantingSite({
-          id: plantingSiteId,
-          plantingSite: {
-            survivalRateIncludesTempPlots: isTemporaryPlotsChecked,
-            name: plantingSite?.name || '',
-          },
-        })
-      );
+      const payload: UpdatePlantingSiteApiArg = {
+        id: plantingSiteId,
+        updatePlantingSiteRequestPayload: {
+          ...plantingSite,
+          name: plantingSite?.name || '',
+          survivalRateIncludesTempPlots: isTemporaryPlotsChecked,
+        },
+      };
+      void updatePlantingSite(payload);
     }
-  }, [alreadyIncluding, dispatch, isTemporaryPlotsChecked, plantingSite?.name, plantingSiteId]);
+  }, [alreadyIncluding, isTemporaryPlotsChecked, plantingSite, plantingSiteId, updatePlantingSite]);
 
   const zonesWithObservations = useMemo(() => {
     if (!temporaryPlotsWithObservations) {
@@ -156,7 +161,6 @@ const EditTemporaryPlotsTab = ({
       setAssignRequestId(saveRequest.requestId);
     } else {
       reload();
-      reloadPlantingSiteData();
       goToViewSettings();
     }
   }, [
@@ -165,7 +169,6 @@ const EditTemporaryPlotsTab = ({
     isTemporaryPlotsChecked,
     record,
     reload,
-    reloadPlantingSiteData,
     updatePlantingSiteSetting,
     withdrawnSpeciesPlots,
     zonesWithObservations,
@@ -181,13 +184,12 @@ const EditTemporaryPlotsTab = ({
   useEffect(() => {
     if (saveResponse?.status === 'success') {
       reload();
-      reloadPlantingSiteData();
       goToViewSettings();
     }
     if (saveResponse?.status === 'error') {
       snackbar.toastError();
     }
-  }, [goToViewSettings, reload, reloadPlantingSiteData, saveResponse, snackbar]);
+  }, [goToViewSettings, reload, saveResponse, snackbar]);
 
   const cancelWarningHandler = useCallback(() => {
     setShowSpeciesDensityWarningMessage(false);
@@ -200,10 +202,9 @@ const EditTemporaryPlotsTab = ({
       setAssignRequestId(saveRequest.requestId);
     } else {
       reload();
-      reloadPlantingSiteData();
       goToViewSettings();
     }
-  }, [dispatch, goToViewSettings, record, reload, reloadPlantingSiteData, updatePlantingSiteSetting]);
+  }, [dispatch, goToViewSettings, record, reload, updatePlantingSiteSetting]);
 
   if (Object.entries(zonesWithObservations).length === 0) {
     return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}</Box>;
