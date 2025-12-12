@@ -59,6 +59,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
             label={strings.CHANGE_HISTORY}
             onClick={toggleEventLog}
             sx={{ fontWeight: '400 !important' }}
+            rightIcon={showEventLog ? 'chevronUp' : 'chevronDown'}
           />
         </Box>
       )}
