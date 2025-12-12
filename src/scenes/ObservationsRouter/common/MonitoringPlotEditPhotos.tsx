@@ -64,7 +64,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
         type: 'new' as const,
       };
     });
-    setMediaItems((prevPhotos) => [...prevPhotos, ...newPhotos]);
+    setMediaItems((prevPhotos) => [...newPhotos, ...prevPhotos]);
   }, []);
 
   const getUpdatePhotoCaption = useCallback(
@@ -213,6 +213,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
 
         await Promise.all(promises);
         reload();
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
         goToPhotosTab();
       } catch (error) {
         snackbar.toastError();
