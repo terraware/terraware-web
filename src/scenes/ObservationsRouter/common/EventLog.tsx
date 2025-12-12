@@ -21,6 +21,10 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
 
   const theme = useTheme();
   const lastEvent = useMemo(() => (events ? events[events.length - 1] : undefined), [events]);
+  const filteredEvents = useMemo(
+    () => events?.filter((ev) => !(ev.action.type === 'Created' && ev.subject.type !== 'ObservationPlotMedia')),
+    [events]
+  );
 
   useEffect(() => {
     const listEventLogPayload: ListObservationEventsArgs = {
@@ -60,7 +64,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
       )}
       {showEventLog && !isLoading && (
         <Box>
-          {events?.map((event, index) => {
+          {filteredEvents?.map((event, index) => {
             const dateModified = DateTime.fromMillis(new Date(event.timestamp).getTime()).toFormat('yyyy-MM-dd');
             return (
               <Box
