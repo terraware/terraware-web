@@ -104,7 +104,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const setSelectedPlantingSite = useCallback(
     (plantingSiteId?: number) => {
       let foundSite = plantingSites?.find((site) => site.id === plantingSiteId);
-      if (plantingSiteId === -1) {
+      if (plantingSiteId === -1 && (plantingSites?.length || 0) > 0) {
         foundSite = allSitesOption;
       }
       if (plantingSite !== foundSite) {
