@@ -9077,6 +9077,7 @@ export interface components {
             plantingZones?: components["schemas"]["PlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
+            survivalRateIncludesTempPlots?: boolean;
             /**
              * @description Time zone name in IANA tz database format
              * @example America/New_York

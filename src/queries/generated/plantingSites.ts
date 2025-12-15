@@ -181,6 +181,7 @@ export type PlantingSitePayload = {
   plantingSeasons: PlantingSeasonPayload[];
   plantingZones?: PlantingZonePayload[];
   projectId?: number;
+  survivalRateIncludesTempPlots?: boolean;
   /** Time zone name in IANA tz database format */
   timeZone?: string;
 };
