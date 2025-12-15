@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/98</span>
+                <span class='fraction'>0/99</span>
             </div>
         
             
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -335,7 +335,8 @@
 <a name='L270'></a><a href='#L270'>270</a>
 <a name='L271'></a><a href='#L271'>271</a>
 <a name='L272'></a><a href='#L272'>272</a>
-<a name='L273'></a><a href='#L273'>273</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -367,6 +368,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -375,6 +379,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -416,7 +422,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -492,7 +498,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -507,7 +512,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -519,7 +523,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -536,7 +539,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -614,8 +616,11 @@ import { Checkbox, Icon, PageForm, Tooltip } from '@terraware/web-components';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { updatePlantingSite } from 'src/redux/features/plantingSite/plantingSiteThunks';
+import {
+  UpdatePlantingSiteApiArg,
+  useGetPlantingSiteQuery,
+  useUpdatePlantingSiteMutation,
+} from 'src/queries/generated/plantingSites';
 import { selectAssignT0TempSiteData } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
@@ -655,7 +660,9 @@ const EditTemporaryPlotsTab = <span class="cstat-no" title="statement not covere
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { plantingSite, reload: reloadPlantingSiteData } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
+  const [updatePlantingSite] = <span class="cstat-no" title="statement not covered" >useUpdatePlantingSiteMutation();</span>
+  const { data: plantingSiteData } = <span class="cstat-no" title="statement not covered" >useGetPlantingSiteQuery(plantingSiteId);</span>
+  const plantingSite = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >plantingSiteData?.site,</span> [plantingSiteData]);</span>
 &nbsp;
   const [record, setRecord] = <span class="cstat-no" title="statement not covered" >useForm&lt;AssignSiteT0TempData&gt;({</span>
     plantingSiteId,
@@ -680,17 +687,17 @@ const EditTemporaryPlotsTab = <span class="cstat-no" title="statement not covere
 &nbsp;
   const updatePlantingSiteSetting = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (alreadyIncluding !== isTemporaryPlotsChecked) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(</span>
-        updatePlantingSite({
-          id: plantingSiteId,
-          plantingSite: {
-            survivalRateIncludesTempPlots: isTemporaryPlotsChecked,
-            name: plantingSite?.name || '',
-          },
-        })
-      );
+      const payload: UpdatePlantingSiteApiArg = <span class="cstat-no" title="statement not covered" >{</span>
+        id: plantingSiteId,
+        updatePlantingSiteRequestPayload: {
+          ...plantingSite,
+          name: plantingSite?.name || '',
+          survivalRateIncludesTempPlots: isTemporaryPlotsChecked,
+        },
+      };
+<span class="cstat-no" title="statement not covered" >      void updatePlantingSite(payload);</span>
     }
-  }, [alreadyIncluding, dispatch, isTemporaryPlotsChecked, plantingSite?.name, plantingSiteId]);
+  }, [alreadyIncluding, isTemporaryPlotsChecked, plantingSite, plantingSiteId, updatePlantingSite]);
 &nbsp;
   const zonesWithObservations = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!temporaryPlotsWithObservations) {</span>
@@ -765,7 +772,6 @@ const EditTemporaryPlotsTab = <span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" >      setAssignRequestId(saveRequest.requestId);</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      reload();</span>
-<span class="cstat-no" title="statement not covered" >      reloadPlantingSiteData();</span>
 <span class="cstat-no" title="statement not covered" >      goToViewSettings();</span>
     }
   }, [
@@ -774,7 +780,6 @@ const EditTemporaryPlotsTab = <span class="cstat-no" title="statement not covere
     isTemporaryPlotsChecked,
     record,
     reload,
-    reloadPlantingSiteData,
     updatePlantingSiteSetting,
     withdrawnSpeciesPlots,
     zonesWithObservations,
@@ -790,13 +795,12 @@ const EditTemporaryPlotsTab = <span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (saveResponse?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      reload();</span>
-<span class="cstat-no" title="statement not covered" >      reloadPlantingSiteData();</span>
 <span class="cstat-no" title="statement not covered" >      goToViewSettings();</span>
     }
 <span class="cstat-no" title="statement not covered" >    if (saveResponse?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     }
-  }, [goToViewSettings, reload, reloadPlantingSiteData, saveResponse, snackbar]);
+  }, [goToViewSettings, reload, saveResponse, snackbar]);
 &nbsp;
   const cancelWarningHandler = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setShowSpeciesDensityWarningMessage(false);</span>
@@ -809,10 +813,9 @@ const EditTemporaryPlotsTab = <span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" >      setAssignRequestId(saveRequest.requestId);</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      reload();</span>
-<span class="cstat-no" title="statement not covered" >      reloadPlantingSiteData();</span>
 <span class="cstat-no" title="statement not covered" >      goToViewSettings();</span>
     }
-  }, [dispatch, goToViewSettings, record, reload, reloadPlantingSiteData, updatePlantingSiteSetting]);
+  }, [dispatch, goToViewSettings, record, reload, updatePlantingSiteSetting]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (Object.entries(zonesWithObservations).length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return &lt;Box padding={theme.spacing(2)}&gt;{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}&lt;/Box&gt;;</span>
@@ -886,7 +889,7 @@ export default EditTemporaryPlotsTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-15T12:34:50.960Z
+                at 2025-12-15T17:05:31.732Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
