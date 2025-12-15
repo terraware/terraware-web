@@ -1,3 +1,5 @@
+8caf1cf8e60 SW-7678 Plants dashboard sometimes hangs forever for an empty org (#4893)
+a727cda060a SW-7844 Reload user table after deleting a user (#4892)
 a0c2dcb1214 SW-7850 Fix planting site update calls (#4887)
 07461898864 Update Node.js to v24.12.0 (#4889)
 d683f7e819b Update JamesIves/github-pages-deploy-action action to v4.7.6 (#4888)

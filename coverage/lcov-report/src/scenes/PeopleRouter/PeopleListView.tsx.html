@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/166</span>
+                <span class='fraction'>0/167</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/158</span>
+                <span class='fraction'>0/159</span>
             </div>
         
             
@@ -568,7 +568,8 @@
 <a name='L503'></a><a href='#L503'>503</a>
 <a name='L504'></a><a href='#L504'>504</a>
 <a name='L505'></a><a href='#L505'>505</a>
-<a name='L506'></a><a href='#L506'>506</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -790,12 +791,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -883,6 +884,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1289,20 +1291,20 @@ export default function <span class="fstat-no" title="function not covered" >Peo
     [selectedOrganization]
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const refreshSearch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-      const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
-<span class="cstat-no" title="statement not covered" >      setRequestId('searchUsers', requestId);</span>
-      const usersResults = <span class="cstat-no" title="statement not covered" >await search(debouncedSearchTerm);</span>
-<span class="cstat-no" title="statement not covered" >      if (getRequestId('searchUsers') === requestId) {</span>
-<span class="cstat-no" title="statement not covered" >        setResults(usersResults);</span>
-      }
-    };
+  const refreshSearch = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+    const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
+<span class="cstat-no" title="statement not covered" >    setRequestId('searchUsers', requestId);</span>
+    const usersResults = <span class="cstat-no" title="statement not covered" >await search(debouncedSearchTerm);</span>
+<span class="cstat-no" title="statement not covered" >    if (getRequestId('searchUsers') === requestId) {</span>
+<span class="cstat-no" title="statement not covered" >      setResults(usersResults);</span>
+    }
+  }, [debouncedSearchTerm, search]);
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (activeLocale) {</span>
 <span class="cstat-no" title="statement not covered" >      void refreshSearch();</span>
     }
-  }, [debouncedSearchTerm, search, activeLocale]);
+  }, [activeLocale, refreshSearch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const findTotalUsers = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -1389,6 +1391,7 @@ export default function <span class="fstat-no" title="function not covered" >Peo
       });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (allRemoved) {</span>
+<span class="cstat-no" title="statement not covered" >        void refreshSearch();</span>
 <span class="cstat-no" title="statement not covered" >        setRemovePeopleModalOpened(false);</span>
 <span class="cstat-no" title="statement not covered" >        setSelectedPeopleRows([]);</span>
 <span class="cstat-no" title="statement not covered" >        if (reloadOrganizations) {</span>
@@ -1585,7 +1588,7 @@ export default function <span class="fstat-no" title="function not covered" >Peo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-15T17:05:31.732Z
+                at 2025-12-15T18:11:17.962Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
