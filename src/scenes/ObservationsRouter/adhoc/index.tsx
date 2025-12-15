@@ -36,7 +36,7 @@ import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
 import ObservationDataTab from './ObservationDataTab';
 import PhotosAndVideosTab from './PhotosAndVideosTab';
 
-export default function ObservationMonitoringPlot(): JSX.Element | undefined {
+export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: () => void }): JSX.Element | undefined {
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -329,6 +329,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
             monitoringPlot={monitoringPlotResult}
             species={monitoringPlotSpecies}
             observationId={observationId}
+            reloadAll={reloadAll}
           />
         ) : null,
       },
@@ -338,7 +339,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
         children: <PhotosAndVideosTab monitoringPlot={monitoringPlotResult} />,
       },
     ];
-  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId]);
+  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId, reloadAll]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',

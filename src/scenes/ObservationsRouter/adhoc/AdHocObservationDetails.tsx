@@ -243,6 +243,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
               onExportData={onExportData}
               onMatchSpecies={onMatchSpecies}
               observationId={Number(observationId)}
+              reloadAll={reload}
             />
           </>
         ),
