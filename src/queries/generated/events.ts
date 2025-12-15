@@ -74,6 +74,8 @@ export type ObservationPlotMediaSubjectPayload = {
   type: 'ObservationPlotMedia';
 } & EventSubjectPayloadBase & {
     fileId: number;
+    /** True if this file was uploaded as part of the original submission of observation data; false if it was uploaded later. */
+    isOriginal: boolean;
     mediaKind: 'Photo' | 'Video';
     monitoringPlotId: number;
     observationId: number;

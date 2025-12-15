@@ -34,7 +34,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
             ev.action.type === 'FieldUpdated' &&
             MangroveFields.includes(ev.action.fieldName) &&
             !ev.action.changedTo
-          ) && !(ev.action.type === 'Created' && ev.subject.type !== 'ObservationPlotMedia')
+          ) && !(ev.action.type === 'Created' && (ev.subject.type !== 'ObservationPlotMedia' || ev.subject.isOriginal))
       ),
     [MangroveFields, events]
   );
