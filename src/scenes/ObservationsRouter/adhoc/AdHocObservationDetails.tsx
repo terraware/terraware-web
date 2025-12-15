@@ -265,6 +265,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     showMatchSpeciesModal,
     unrecognizedSpecies,
     observationId,
+    reload,
   ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
