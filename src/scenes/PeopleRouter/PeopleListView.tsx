@@ -214,20 +214,20 @@ export default function PeopleListView(): JSX.Element {
     [selectedOrganization]
   );
 
-  useEffect(() => {
-    const refreshSearch = async () => {
-      const requestId = Math.random().toString();
-      setRequestId('searchUsers', requestId);
-      const usersResults = await search(debouncedSearchTerm);
-      if (getRequestId('searchUsers') === requestId) {
-        setResults(usersResults);
-      }
-    };
+  const refreshSearch = useCallback(async () => {
+    const requestId = Math.random().toString();
+    setRequestId('searchUsers', requestId);
+    const usersResults = await search(debouncedSearchTerm);
+    if (getRequestId('searchUsers') === requestId) {
+      setResults(usersResults);
+    }
+  }, [debouncedSearchTerm, search]);
 
+  useEffect(() => {
     if (activeLocale) {
       void refreshSearch();
     }
-  }, [debouncedSearchTerm, search, activeLocale]);
+  }, [activeLocale, refreshSearch]);
 
   useEffect(() => {
     const findTotalUsers = async () => {
@@ -314,6 +314,7 @@ export default function PeopleListView(): JSX.Element {
       });
 
       if (allRemoved) {
+        void refreshSearch();
         setRemovePeopleModalOpened(false);
         setSelectedPeopleRows([]);
         if (reloadOrganizations) {
