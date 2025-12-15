@@ -37,13 +37,13 @@ export default function SpeciesEditableTable({
     (fieldId: string, certainty: 'Other' | 'Unknown' | 'Known', speciesId?: number, speciesName?: string) =>
       (event: { currentTarget: { value: any }; target: { value: any } }) => {
         const value = event.currentTarget.value || event.target.value;
-        if (value !== undefined) {
+        if (value !== undefined && !isNaN(value)) {
           const uploadPayload: MonitoringSpeciesUpdateOperationPayload = {
             type: 'MonitoringSpecies',
             speciesId,
             certainty,
             speciesName,
-            [fieldId]: value,
+            [fieldId]: Number(value),
           };
           const mainPayload = {
             observationId,
