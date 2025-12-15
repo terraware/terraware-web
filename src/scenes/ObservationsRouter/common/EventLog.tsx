@@ -19,11 +19,24 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
   const [showEventLog, setShowEventLog] = useState(true);
 
+  const MangroveFields = useMemo(
+    () => ['pH', 'salinity (ppt)', 'tide', 'tide measurement time', 'water depth (cm)'],
+    []
+  );
+
   const theme = useTheme();
   const lastEvent = useMemo(() => (events ? events[events.length - 1] : undefined), [events]);
   const filteredEvents = useMemo(
-    () => events?.filter((ev) => !(ev.action.type === 'Created' && ev.subject.type !== 'ObservationPlotMedia')),
-    [events]
+    () =>
+      events?.filter(
+        (ev) =>
+          !(
+            ev.action.type === 'FieldUpdated' &&
+            MangroveFields.includes(ev.action.fieldName) &&
+            !ev.action.changedTo
+          ) && !(ev.action.type === 'Created' && ev.subject.type !== 'ObservationPlotMedia')
+      ),
+    [MangroveFields, events]
   );
 
   useEffect(() => {
