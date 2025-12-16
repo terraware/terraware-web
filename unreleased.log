@@ -1,3 +1,6 @@
+d552a11f370 Save quantitative values to BE (#4895)
+6817a8e3958 See warning when saving edits to photos and videos (#4896)
+8766694b2ec SW-7843 Remove original photos created event (#4894)
 8caf1cf8e60 SW-7678 Plants dashboard sometimes hangs forever for an empty org (#4893)
 a727cda060a SW-7844 Reload user table after deleting a user (#4892)
 a0c2dcb1214 SW-7850 Fix planting site update calls (#4887)
