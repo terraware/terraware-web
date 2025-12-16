@@ -31,10 +31,7 @@ const PLANTING_SITE_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/repo
 const PLANTING_SITE_HISTORY_ENDPOINT = '/api/v1/tracking/sites/{id}/history/{historyId}';
 const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
-const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
 const PLANTING_SITE_T0_ALL_SET_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/allSet';
-const PLANTING_SITES_T0_ENDPOINT = '/api/v1/tracking/t0/site';
-const PLANTING_SITE_T0_SPECIES_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/species';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -54,12 +51,6 @@ type ListOrganizationReportedPlantsPayload =
 type CreatePlantingSiteResponse =
   paths[typeof PLANTING_SITES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
-type PlantingSiteT0ResponsePayload =
-  paths[typeof PLANTING_SITE_T0_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-type PlantingSiteT0SpeciesResponsePayload =
-  paths[typeof PLANTING_SITE_T0_SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
 /**
  * exported type
  */
@@ -70,19 +61,10 @@ export type PlantingSitesData = {
 export type PlantingSiteData = {
   site?: PlantingSite;
 };
-export type PlantingSitePostRequestBody =
-  paths[typeof PLANTING_SITES_ENDPOINT]['post']['requestBody']['content']['application/json'];
-
-export type PlantingSiteId = {
-  id: number;
-};
 
 export type DeliveryData = {
   delivery?: Delivery;
 };
-
-export type PlantingSitePutRequestBody =
-  paths[typeof PLANTING_SITE_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
 export type ReassignPostRequestBody =
   paths[typeof REASSIGN_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -92,9 +74,6 @@ export type GetPlantingSiteHistoryPayload =
 
 export type ListPlantingSiteHistoriesPayload =
   paths[typeof PLANTING_SITE_HISTORIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-export type AssignT0SiteDataResponsePayload =
-  paths[typeof PLANTING_SITES_T0_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type GetAllSiteT0DataSetResponsePayload =
   paths[typeof PLANTING_SITE_T0_ALL_SET_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -410,12 +389,6 @@ const listPlantingSiteHistories = async (
   ).get2<ListPlantingSiteHistoriesPayload>();
 };
 
-const getPlantingSiteT0 = async (plantingSiteId: number): Promise<Response2<PlantingSiteT0ResponsePayload>> => {
-  return await HttpService.root(
-    PLANTING_SITE_T0_ENDPOINT.replace('{plantingSiteId}', plantingSiteId.toString())
-  ).get2<PlantingSiteT0ResponsePayload>({});
-};
-
 const getPlotsWithObservations = async <T extends SearchResponseElement>(
   plantingSiteId: number
 ): Promise<T[] | null> => {
@@ -482,12 +455,6 @@ const getT0AllSet = async (plantingSiteId: number): Promise<Response2<GetAllSite
   ).get2<GetAllSiteT0DataSetResponsePayload>();
 };
 
-const getT0Species = async (plantingSiteId: number): Promise<Response2<PlantingSiteT0SpeciesResponsePayload>> => {
-  return HttpService.root(
-    PLANTING_SITE_T0_SPECIES_ENDPOINT.replace('{plantingSiteId}', plantingSiteId.toString())
-  ).get2<PlantingSiteT0SpeciesResponsePayload>();
-};
-
 /**
  * Exported functions
  */
@@ -497,7 +464,6 @@ const TrackingService = {
   validatePlantingSite,
   getDelivery,
   getPlantingSite,
-  getPlantingSiteT0,
   getReportedPlants,
   getTotalPlantsInSite,
   getTotalPlantsInZones,
@@ -510,7 +476,6 @@ const TrackingService = {
   listOrganizationReportedPlants,
   getPlotsWithObservations,
   getT0AllSet,
-  getT0Species,
 };
 
 export default TrackingService;

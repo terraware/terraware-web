@@ -7,8 +7,6 @@ import {
   PlantingSiteHistory,
   PlantingSiteReportedPlants,
   PlantingSiteSearchResult,
-  SiteT0Data,
-  SpeciesPlot,
 } from 'src/types/Tracking';
 
 import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
@@ -16,14 +14,12 @@ import {
   PlotsWithObservationsSearchResult,
   requestGetPlantingSiteHistory,
   requestGetPlantingSiteT0AllSet,
-  requestGetPlantingSiteT0Species,
   requestListPlantingSiteHistories,
   requestListPlantingSites,
   requestListProjectPlantingSites,
   requestOnePlantingSite,
   requestOrganizationReportedPlants,
   requestPlantingSiteReportedPlants,
-  requestPlantingSiteT0,
   requestPermanentPlotsWithObservations as requestPlotsWithObservations,
 } from './trackingThunks';
 
@@ -231,17 +227,6 @@ export const organizationReportedPlantsSlice = createSlice({
   },
 });
 
-const initialPlantingSiteT0: { [key: string]: StatusT<SiteT0Data> } = {};
-
-export const plantingSiteT0Slice = createSlice({
-  name: 'plantingSiteT0Slice',
-  initialState: initialPlantingSiteT0,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestPlantingSiteT0)(builder);
-  },
-});
-
 const initialPlotsWithObservationsState: { [key: string]: StatusT<PlotsWithObservationsSearchResult[]> } = {};
 
 export const plotsWithObservations = createSlice({
@@ -264,17 +249,6 @@ export const plantingSiteT0AllSetSlice = createSlice({
   },
 });
 
-const initialPlantingSiteT0SpeciesState: { [key: string]: StatusT<SpeciesPlot[]> } = {};
-
-export const plantingSiteT0SpeciesSlice = createSlice({
-  name: 'plantingSiteT0SpeciesSlice',
-  initialState: initialPlantingSiteT0SpeciesState,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestGetPlantingSiteT0Species, true)(builder);
-  },
-});
-
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
@@ -287,11 +261,9 @@ const trackingReducers = {
   plantingSiteHistories: plantingSiteHistoriesSlice.reducer,
   plantingSiteReportedPlants: plantingSiteReportedPlantsSlice.reducer,
   organizationReportedPlants: organizationReportedPlantsSlice.reducer,
-  plantingSiteT0: plantingSiteT0Slice.reducer,
   plotsWithObservations: plotsWithObservations.reducer,
   projectPlantingSites: projectPlantingSiteListSlice.reducer,
   plantingSiteT0AllSet: plantingSiteT0AllSetSlice.reducer,
-  plantingSiteT0Species: plantingSiteT0SpeciesSlice.reducer,
 };
 
 export default trackingReducers;

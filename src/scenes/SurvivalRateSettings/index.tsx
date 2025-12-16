@@ -11,21 +11,15 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import {
-  selectPlantingSiteT0,
-  selectPlantingSiteT0Species,
-  selectPlotsWithObservations,
-} from 'src/redux/features/tracking/trackingSelectors';
+import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';
+import { selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
-  requestGetPlantingSiteT0Species,
   requestPermanentPlotsWithObservations,
-  requestPlantingSiteT0,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { SiteT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';
@@ -33,28 +27,27 @@ import SurvivalRateInstructions from './SurvivalRateInstructions';
 import TemporaryPlotsTab from './TemporaryPlotsTab';
 
 const SurvivalRateSettings = () => {
-  const { plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
-  const [requestId, setRequestId] = useState('');
-  const plantingSiteT0Response = useAppSelector(selectPlantingSiteT0(requestId));
   const [plotsRequestId, setPlotsRequestId] = useState('');
   const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
-  const [speciesRequestId, setSpeciesRequestId] = useState('');
-  const withdrawnSpeciesResponse = useAppSelector(selectPlantingSiteT0Species(speciesRequestId));
-  const [withdrawnSpeciesPlots, setWithdrawnSpeciesPlots] = useState<SpeciesPlot[]>();
   const dispatch = useAppDispatch();
-  const [t0SiteData, setT0SiteData] = useState<SiteT0Data>();
   const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
-  const params = useParams<{
-    plantingSiteId: string;
-  }>();
+  const params = useParams<{ plantingSiteId: string }>();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
-
   const plantingSiteId = Number(params.plantingSiteId);
+  const skipPlantingSite = useMemo(
+    () => plantingSiteId === undefined || isNaN(plantingSiteId) || plantingSiteId === -1,
+    [plantingSiteId]
+  );
+  const { data: plantingSite } = useGetPlantingSiteQuery(plantingSiteId, { skip: skipPlantingSite });
+  const { data: t0SiteDataResponse } = useGetT0SiteDataQuery(plantingSiteId, { skip: skipPlantingSite });
+  const t0SiteData = useMemo(() => t0SiteDataResponse?.data, [t0SiteDataResponse]);
+  const { data: t0Species } = useGetT0SpeciesForPlantingSiteQuery(plantingSiteId, { skip: skipPlantingSite });
+  const withdrawnSpeciesPlots = useMemo(() => t0Species?.plots, [t0Species]);
 
   const userCanEdit = isAllowed('EDIT_SURVIVAL_RATE_SETTINGS', { organization: selectedOrganization });
 
@@ -156,47 +149,37 @@ const SurvivalRateSettings = () => {
       return [];
     }
 
-    return (temporaryPlots?.length || 0) > 0
-      ? [
-          {
-            id: 'permanent',
-            label: strings.PERMANENT_PLOTS,
-            children: (
-              <PermanentPlotsTab
-                plantingSiteId={plantingSiteId}
-                plotsWithObservations={permanentPlots}
-                t0Plots={t0SiteData?.plots}
-                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
-              />
-            ),
-          },
-          {
-            id: 'temporary',
-            label: strings.TEMPORARY_PLOTS,
-            children: (
-              <TemporaryPlotsTab
-                t0SiteData={t0SiteData}
-                zonesWithObservations={zonesWithObservations}
-                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
-                including={t0SiteData?.survivalRateIncludesTempPlots}
-              />
-            ),
-          },
-        ]
-      : [
-          {
-            id: 'permanent',
-            label: strings.PERMANENT_PLOTS,
-            children: (
-              <PermanentPlotsTab
-                plantingSiteId={plantingSiteId}
-                plotsWithObservations={permanentPlots}
-                t0Plots={t0SiteData?.plots}
-                withdrawnSpeciesPlots={withdrawnSpeciesPlots}
-              />
-            ),
-          },
-        ];
+    const _tabs = [
+      {
+        id: 'permanent',
+        label: strings.PERMANENT_PLOTS,
+        children: (
+          <PermanentPlotsTab
+            plantingSiteId={plantingSiteId}
+            plotsWithObservations={permanentPlots}
+            t0Plots={t0SiteData?.plots}
+            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+          />
+        ),
+      },
+    ];
+
+    if ((temporaryPlots?.length || 0) > 0) {
+      _tabs.push({
+        id: 'temporary',
+        label: strings.TEMPORARY_PLOTS,
+        children: (
+          <TemporaryPlotsTab
+            t0SiteData={t0SiteData}
+            zonesWithObservations={zonesWithObservations}
+            withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+            including={t0SiteData?.survivalRateIncludesTempPlots}
+          />
+        ),
+      });
+    }
+
+    return _tabs;
   }, [
     activeLocale,
     permanentPlots,
@@ -208,37 +191,18 @@ const SurvivalRateSettings = () => {
   ]);
 
   useEffect(() => {
-    setSelectedPlantingSite(plantingSiteId);
-  }, [plantingSiteId, setSelectedPlantingSite]);
-
-  useEffect(() => {
-    if (plantingSite && plantingSite.id !== -1) {
-      const request = dispatch(requestPlantingSiteT0(plantingSite.id));
-      setRequestId(request.requestId);
-      const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSite.id));
+    if (plantingSiteId !== -1) {
+      // change to rtk eventually
+      const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSiteId));
       setPlotsRequestId(requestPlots.requestId);
-      const requestSpeciesPlots = dispatch(requestGetPlantingSiteT0Species(plantingSite.id));
-      setSpeciesRequestId(requestSpeciesPlots.requestId);
     }
-  }, [dispatch, plantingSite]);
-
-  useEffect(() => {
-    if (plantingSiteT0Response?.status === 'success') {
-      setT0SiteData(plantingSiteT0Response.data);
-    }
-  }, [plantingSiteT0Response]);
+  }, [dispatch, plantingSiteId]);
 
   useEffect(() => {
     if (plotsWithObservationsResponse?.status === 'success') {
       setPlotsWithObservations(plotsWithObservationsResponse.data);
     }
   }, [plotsWithObservationsResponse]);
-
-  useEffect(() => {
-    if (withdrawnSpeciesResponse?.status === 'success') {
-      setWithdrawnSpeciesPlots(withdrawnSpeciesResponse.data);
-    }
-  }, [withdrawnSpeciesResponse]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'permanent',
@@ -264,7 +228,10 @@ const SurvivalRateSettings = () => {
   );
 
   return (
-    <Page crumbs={crumbs} title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
+    <Page
+      crumbs={crumbs}
+      title={strings.formatString(strings.SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.site?.name || '')}
+    >
       <Card radius='8px' flushMobile>
         <SurvivalRateInstructions />
         <Box width={'100%'} display='flex' justifyContent={'space-between'} alignItems={'center'}>

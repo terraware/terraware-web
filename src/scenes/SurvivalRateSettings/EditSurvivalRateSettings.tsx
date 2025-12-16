@@ -9,7 +9,7 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';
 import { selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
 import {
@@ -26,7 +26,6 @@ import EditTemporaryPlotsTab from './EditTemporaryPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
 
 const EditSurvivalRateSettings = () => {
-  const { plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
   const [plotsRequestId, setPlotsRequestId] = useState('');
   const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
   const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
@@ -34,9 +33,16 @@ const EditSurvivalRateSettings = () => {
   const dispatch = useAppDispatch();
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
-  const { data: t0SiteResponse } = useGetT0SiteDataQuery(plantingSiteId);
+  const skipPlantingSite = useMemo(
+    () => plantingSiteId === undefined || isNaN(plantingSiteId) || plantingSiteId === -1,
+    [plantingSiteId]
+  );
+  const { data: plantingSite } = useGetPlantingSiteQuery(plantingSiteId, { skip: skipPlantingSite });
+  const { data: t0SiteResponse } = useGetT0SiteDataQuery(plantingSiteId, { skip: skipPlantingSite });
   const t0SiteData = useMemo(() => t0SiteResponse?.data, [t0SiteResponse]);
-  const { data: withdrawnSpeciesResponse } = useGetT0SpeciesForPlantingSiteQuery(plantingSiteId);
+  const { data: withdrawnSpeciesResponse } = useGetT0SpeciesForPlantingSiteQuery(plantingSiteId, {
+    skip: skipPlantingSite,
+  });
   const withdrawnSpeciesPlots = useMemo(() => withdrawnSpeciesResponse?.plots, [withdrawnSpeciesResponse]);
 
   const { activeLocale } = useLocalization();
@@ -44,22 +50,11 @@ const EditSurvivalRateSettings = () => {
   const navigate = useSyncNavigate();
 
   useEffect(() => {
-    setSelectedPlantingSite(plantingSiteId);
-  }, [plantingSiteId, setSelectedPlantingSite]);
-
-  const reload = useCallback(() => {
-    if (plantingSite && plantingSite.id !== -1) {
-      // change to rtk eventually
-      const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSite.id));
+    if (plantingSiteId !== -1) {
+      const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSiteId));
       setPlotsRequestId(requestPlots.requestId);
     }
-  }, [dispatch, plantingSite]);
-
-  useEffect(() => {
-    if (plantingSite) {
-      reload();
-    }
-  }, [dispatch, plantingSite, reload]);
+  }, [plantingSiteId, dispatch]);
 
   useEffect(() => {
     if (plotsWithObservationsResponse?.status === 'success') {
@@ -98,6 +93,7 @@ const EditSurvivalRateSettings = () => {
         ),
       },
     ];
+
     if ((temporaryPlots?.length || 0) > 0) {
       _tabs.push({
         id: 'temporary',
@@ -113,6 +109,7 @@ const EditSurvivalRateSettings = () => {
         ),
       });
     }
+
     return _tabs;
   }, [activeLocale, permanentPlots, plantingSiteId, t0SiteData, temporaryPlots, withdrawnSpeciesPlots]);
 
@@ -145,7 +142,7 @@ const EditSurvivalRateSettings = () => {
   }, []);
 
   return (
-    <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
+    <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.site?.name || '')}>
       {showChangeTabWarning && (
         <ChangeTabWarningModal
           onClose={closeChangeTabWarning}
