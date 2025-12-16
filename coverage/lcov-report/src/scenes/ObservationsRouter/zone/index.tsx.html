@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -280,10 +280,7 @@
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
 <a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a>
-<a name='L220'></a><a href='#L220'>220</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -342,7 +339,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -513,7 +509,6 @@ import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useObservation from 'src/hooks/useObservation';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -562,7 +557,6 @@ export default function <span class="fstat-no" title="function not covered" >Obs
     ObservationMonitoringPlotResultsPayload | undefined
   &gt;();
   const replaceObservationPlotEnabled = <span class="cstat-no" title="statement not covered" >isManagerOrHigher(selectedOrganization);</span>
-  const isSurvivalRateCalculationEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Survival Rate Calculation');</span>
 &nbsp;
   const defaultColumns = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
@@ -577,13 +571,13 @@ export default function <span class="fstat-no" title="function not covered" >Obs
         { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
         { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
         {
-          key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
-          name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+          key: 'survivalRate',
+          name: strings.SURVIVAL_RATE,
           type: 'number',
-          tooltipTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : '',
+          tooltipTitle: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
         },
       ] as TableColumnType[],
-    [isSurvivalRateCalculationEnabled]
+    []
   );
 &nbsp;
   const columns = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; {</span>
@@ -666,8 +660,8 @@ export default function <span class="fstat-no" title="function not covered" >Obs
   );
 &nbsp;
   const showSurvivalRateMessage = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return isSurvivalRateCalculationEnabled &amp;&amp; plantingZone?.survivalRate === undefined;</span>
-  }, [isSurvivalRateCalculationEnabled, plantingZone]);
+<span class="cstat-no" title="statement not covered" >    return plantingZone?.survivalRate === undefined;</span>
+  }, [plantingZone]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
@@ -727,7 +721,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-16T18:34:37.462Z
+                at 2025-12-16T22:36:05.395Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
