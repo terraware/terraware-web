@@ -5,13 +5,7 @@ import {
   Population,
   ValidatePlantingSiteResponsePayload,
 } from 'src/types/PlantingSite';
-import {
-  SearchNodePayload,
-  SearchRequestPayload,
-  SearchRequestPayloadWithOptionalSearch,
-  SearchResponseElement,
-  SearchSortOrder,
-} from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import { Delivery, MonitoringPlotSearchResult, PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { isArray } from '../types/utils';
@@ -385,66 +379,6 @@ const listPlantingSiteHistories = async (
   ).get2<ListPlantingSiteHistoriesPayload>();
 };
 
-const getPlotsWithObservations = async <T extends SearchResponseElement>(
-  plantingSiteId: number
-): Promise<T[] | null> => {
-  const params: SearchRequestPayloadWithOptionalSearch = {
-    prefix: 'monitoringPlots',
-    fields: [
-      'id',
-      'name',
-      'plantingSubzone_name',
-      'plantingSubzone_plantingZone_name',
-      'plantingSubzone_plantingZone_id',
-      'observationPlots.observation_id',
-      'observationPlots.observation_startDate',
-      'observationPlots.observation_completedTime',
-      'observationPlots.isPermanent',
-      'permanentIndex',
-    ],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'plantingSite_id',
-          type: 'Exact',
-          values: [plantingSiteId],
-        },
-        {
-          operation: 'not',
-          child: {
-            operation: 'field',
-            field: 'plantingSubzone_id',
-            type: 'Exact',
-            values: [null],
-          },
-        },
-        {
-          operation: 'field',
-          field: 'observationPlots.observation_state',
-          type: 'Exact',
-          values: ['Completed', 'Abandoned'],
-        },
-      ],
-    },
-    filters: [
-      {
-        prefix: 'observationPlots',
-        search: {
-          operation: 'field',
-          field: 'observation_state',
-          type: 'Exact',
-          values: ['Completed', 'Abandoned'],
-        },
-      },
-    ],
-    count: 1000,
-  };
-
-  return SearchService.search<T>(params);
-};
-
 /**
  * Exported functions
  */
@@ -464,7 +398,6 @@ const TrackingService = {
   getPlantingSiteHistory,
   listPlantingSiteHistories,
   listOrganizationReportedPlants,
-  getPlotsWithObservations,
 };
 
 export default TrackingService;

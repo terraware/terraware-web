@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon } from '@terraware/web-components';
@@ -12,16 +12,12 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
+import { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import {
   selectAdHocObservationResults,
   selectObservationsResults,
 } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
-import {
-  PlotsWithObservationsSearchResult,
-  requestPermanentPlotsWithObservations,
-} from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import ObservationsDataView from 'src/scenes/ObservationsRouter/ObservationsDataView';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -42,16 +38,15 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const navigate = useSyncNavigate();
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
-  const [plotsRequestId, setPlotsRequestId] = useState('');
-  const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
-  const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
-  const dispatch = useAppDispatch();
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
   const plantingSiteId = useMemo(() => selectedPlantingSite?.id || -1, [selectedPlantingSite]);
+  const { isMobile } = useDeviceInfo();
   const { data: t0AllSet } = useGetAllT0SiteDataSetQuery(plantingSiteId, { skip: plantingSiteId === -1 });
   const survivalRateSet = useMemo(() => t0AllSet?.allSet, [t0AllSet]);
-  const { isMobile } = useDeviceInfo();
+  const { data: plotsWithObservations } = useGetPlotsWithObservationsQuery(plantingSiteId, {
+    skip: plantingSiteId === -1,
+  });
 
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
@@ -77,19 +72,6 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
         observationResult.type === 'Monitoring'
     );
   }, [allAdHocObservationResults, selectedPlantingSite]);
-
-  useEffect(() => {
-    if (selectedPlantingSite && selectedPlantingSite.id !== -1) {
-      const requestPlots = dispatch(requestPermanentPlotsWithObservations(selectedPlantingSite.id));
-      setPlotsRequestId(requestPlots.requestId);
-    }
-  }, [dispatch, selectedPlantingSite]);
-
-  useEffect(() => {
-    if (plotsWithObservationsResponse?.status === 'success') {
-      setPlotsWithObservations(plotsWithObservationsResponse.data);
-    }
-  }, [plotsWithObservationsResponse]);
 
   const navigateToSurvivalRateSettings = useCallback(
     () =>

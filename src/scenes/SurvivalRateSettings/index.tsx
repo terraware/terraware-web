@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -13,12 +13,8 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';
-import { selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
-import {
-  PlotsWithObservationsSearchResult,
-  requestPermanentPlotsWithObservations,
-} from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
+import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -27,10 +23,6 @@ import SurvivalRateInstructions from './SurvivalRateInstructions';
 import TemporaryPlotsTab from './TemporaryPlotsTab';
 
 const SurvivalRateSettings = () => {
-  const [plotsRequestId, setPlotsRequestId] = useState('');
-  const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
-  const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
-  const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
@@ -48,6 +40,9 @@ const SurvivalRateSettings = () => {
   const t0SiteData = useMemo(() => t0SiteDataResponse?.data, [t0SiteDataResponse]);
   const { data: t0Species } = useGetT0SpeciesForPlantingSiteQuery(plantingSiteId, { skip: skipPlantingSite });
   const withdrawnSpeciesPlots = useMemo(() => t0Species?.plots, [t0Species]);
+  const { data: plotsWithObservations } = useGetPlotsWithObservationsQuery(plantingSiteId, {
+    skip: skipPlantingSite,
+  });
 
   const userCanEdit = isAllowed('EDIT_SURVIVAL_RATE_SETTINGS', { organization: selectedOrganization });
 
@@ -189,20 +184,6 @@ const SurvivalRateSettings = () => {
     withdrawnSpeciesPlots,
     zonesWithObservations,
   ]);
-
-  useEffect(() => {
-    if (plantingSiteId !== -1) {
-      // change to rtk eventually
-      const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSiteId));
-      setPlotsRequestId(requestPlots.requestId);
-    }
-  }, [dispatch, plantingSiteId]);
-
-  useEffect(() => {
-    if (plotsWithObservationsResponse?.status === 'success') {
-      setPlotsWithObservations(plotsWithObservationsResponse.data);
-    }
-  }, [plotsWithObservationsResponse]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'permanent',
