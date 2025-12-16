@@ -41,6 +41,7 @@ type ObservationDataTabProps = {
   unrecognizedSpecies?: string[];
   onExportData?: () => void;
   onMatchSpecies?: () => void;
+  reloadAll: () => void;
 };
 
 const ObservationDataTab = ({
@@ -51,6 +52,7 @@ const ObservationDataTab = ({
   onExportData,
   onMatchSpecies,
   observationId,
+  reloadAll,
 }: ObservationDataTabProps) => {
   const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const { plantingSite, reload } = usePlantingSiteData();
@@ -264,7 +266,7 @@ const ObservationDataTab = ({
           species={species}
           observationId={Number(observationId)}
           plotId={Number(monitoringPlot?.monitoringPlotId)}
-          reload={reload}
+          reload={reloadAll}
         />
       </Box>
       {monitoringPlot.monitoringPlotId && (

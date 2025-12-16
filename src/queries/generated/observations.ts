@@ -813,6 +813,7 @@ export type PlantingSiteObservationSummaryPayload = {
   /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
   plantingDensity: number;
   plantingDensityStdDev?: number;
+  plantingSiteId: number;
   plantingZones: PlantingZoneObservationSummaryPayload[];
   /** Combined list of observed species and their statuses from the latest observation of each subzone within each zone. */
   species: ObservationSpeciesResultsPayload[];
@@ -939,6 +940,18 @@ export type BiomassUpdateOperationPayload = {
     tideTime?: string;
     waterDepth?: number;
   };
+export type MonitoringSpeciesUpdateOperationPayload = {
+  type: 'MonitoringSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    certainty: 'Known' | 'Other' | 'Unknown';
+    /** Required if certainty is Known. Ignored if certainty is Other or Unknown. */
+    speciesId?: number;
+    /** Required if certainty is Other. Ignored if certainty is Known or Unknown. */
+    speciesName?: string;
+    totalDead?: number;
+    totalExisting?: number;
+    totalLive?: number;
+  };
 export type ObservationPlotUpdateOperationPayload = {
   type: 'ObservationPlot';
 } & ObservationUpdateOperationPayloadBase & {
@@ -1002,6 +1015,7 @@ export type UpdateObservationRequestPayload = {
   updates: (
     | BiomassSpeciesUpdateOperationPayload
     | BiomassUpdateOperationPayload
+    | MonitoringSpeciesUpdateOperationPayload
     | ObservationPlotUpdateOperationPayload
     | QuadratSpeciesUpdateOperationPayload
     | QuadratUpdateOperationPayload
