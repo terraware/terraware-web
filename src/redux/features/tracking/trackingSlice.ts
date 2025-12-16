@@ -14,8 +14,6 @@ import {
 import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
 import {
   PlotsWithObservationsSearchResult,
-  requestAssignT0SiteData,
-  requestAssignT0TempSiteData,
   requestGetPlantingSiteHistory,
   requestGetPlantingSiteT0AllSet,
   requestGetPlantingSiteT0Species,
@@ -255,28 +253,6 @@ export const plotsWithObservations = createSlice({
   },
 });
 
-const initialAssignT0SiteDataState: { [key: string]: StatusT<number> } = {};
-
-export const assignT0SiteData = createSlice({
-  name: 'assignT0SiteDataSlice',
-  initialState: initialAssignT0SiteDataState,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestAssignT0SiteData)(builder);
-  },
-});
-
-const initialAssignT0TempSiteDataState: { [key: string]: StatusT<number> } = {};
-
-export const assignT0TempSiteData = createSlice({
-  name: 'assignT0TempSiteDataSlice',
-  initialState: initialAssignT0TempSiteDataState,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestAssignT0TempSiteData)(builder);
-  },
-});
-
 const initialPlantingSiteT0AllSetState: { [key: string]: StatusT<boolean> } = {};
 
 export const plantingSiteT0AllSetSlice = createSlice({
@@ -313,8 +289,6 @@ const trackingReducers = {
   organizationReportedPlants: organizationReportedPlantsSlice.reducer,
   plantingSiteT0: plantingSiteT0Slice.reducer,
   plotsWithObservations: plotsWithObservations.reducer,
-  assignT0SiteData: assignT0SiteData.reducer,
-  assignT0TempSiteData: assignT0TempSiteData.reducer,
   projectPlantingSites: projectPlantingSiteListSlice.reducer,
   plantingSiteT0AllSet: plantingSiteT0AllSetSlice.reducer,
   plantingSiteT0Species: plantingSiteT0SpeciesSlice.reducer,

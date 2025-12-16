@@ -813,6 +813,7 @@ export type PlantingSiteObservationSummaryPayload = {
   /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
   plantingDensity: number;
   plantingDensityStdDev?: number;
+  plantingSiteId: number;
   plantingZones: PlantingZoneObservationSummaryPayload[];
   /** Combined list of observed species and their statuses from the latest observation of each subzone within each zone. */
   species: ObservationSpeciesResultsPayload[];
@@ -855,6 +856,12 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: object[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -878,12 +885,6 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -938,6 +939,18 @@ export type BiomassUpdateOperationPayload = {
     tide?: 'Low' | 'High';
     tideTime?: string;
     waterDepth?: number;
+  };
+export type MonitoringSpeciesUpdateOperationPayload = {
+  type: 'MonitoringSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    certainty: 'Known' | 'Other' | 'Unknown';
+    /** Required if certainty is Known. Ignored if certainty is Other or Unknown. */
+    speciesId?: number;
+    /** Required if certainty is Other. Ignored if certainty is Known or Unknown. */
+    speciesName?: string;
+    totalDead?: number;
+    totalExisting?: number;
+    totalLive?: number;
   };
 export type ObservationPlotUpdateOperationPayload = {
   type: 'ObservationPlot';
@@ -1002,6 +1015,7 @@ export type UpdateObservationRequestPayload = {
   updates: (
     | BiomassSpeciesUpdateOperationPayload
     | BiomassUpdateOperationPayload
+    | MonitoringSpeciesUpdateOperationPayload
     | ObservationPlotUpdateOperationPayload
     | QuadratSpeciesUpdateOperationPayload
     | QuadratUpdateOperationPayload

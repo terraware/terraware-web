@@ -12,8 +12,7 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { AssignSiteT0Data, AssignSiteT0TempData, Delivery, PlantingSite } from 'src/types/Tracking';
-import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
+import { Delivery, MonitoringPlotSearchResult, PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { isArray } from '../types/utils';
 import HttpService, { Response, Response2 } from './HttpService';
@@ -35,7 +34,6 @@ const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
 const PLANTING_SITE_T0_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}';
 const PLANTING_SITE_T0_ALL_SET_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/allSet';
 const PLANTING_SITES_T0_ENDPOINT = '/api/v1/tracking/t0/site';
-const PLANTING_SITES_T0_TEMP_ENDPOINT = '/api/v1/tracking/t0/site/temp';
 const PLANTING_SITE_T0_SPECIES_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/species';
 
 type ListPlantingSitesResponsePayload =
@@ -166,29 +164,6 @@ const getPlantingSite = async (siteId: number): Promise<PlantingSiteData & Respo
   );
 
   return response;
-};
-
-/**
- * Update a planting site
- */
-const updatePlantingSite = async (siteId: number, plantingSite: PlantingSitePutRequestBody): Promise<Response> => {
-  return await httpPlantingSite.put({
-    urlReplacements: {
-      '{id}': siteId.toString(),
-    },
-    entity: plantingSite,
-  });
-};
-
-/**
- * Delete a planting site by id
- */
-const deletePlantingSite = async (siteId: number): Promise<Response> => {
-  return await httpPlantingSite.delete({
-    urlReplacements: {
-      '{id}': siteId.toString(),
-    },
-  });
 };
 
 /**
@@ -501,16 +476,6 @@ const getPlotsWithObservations = async <T extends SearchResponseElement>(
   return SearchService.search<T>(params);
 };
 
-const assignT0SiteData = (payload: AssignSiteT0Data): Promise<Response2<AssignT0SiteDataResponsePayload>> =>
-  HttpService.root(PLANTING_SITES_T0_ENDPOINT).post({
-    entity: payload,
-  });
-
-const assignT0TempSiteData = (payload: AssignSiteT0TempData): Promise<Response2<AssignT0SiteDataResponsePayload>> =>
-  HttpService.root(PLANTING_SITES_T0_TEMP_ENDPOINT).post({
-    entity: payload,
-  });
-
 const getT0AllSet = async (plantingSiteId: number): Promise<Response2<GetAllSiteT0DataSetResponsePayload>> => {
   return HttpService.root(
     PLANTING_SITE_T0_ALL_SET_ENDPOINT.replace('{plantingSiteId}', plantingSiteId.toString())
@@ -530,7 +495,6 @@ const TrackingService = {
   createPlantingSite,
   fetchPlantingSiteList,
   validatePlantingSite,
-  deletePlantingSite,
   getDelivery,
   getPlantingSite,
   getPlantingSiteT0,
@@ -541,13 +505,10 @@ const TrackingService = {
   reassignPlantings,
   searchMonitoringPlots,
   searchPlantingSites,
-  updatePlantingSite,
   getPlantingSiteHistory,
   listPlantingSiteHistories,
   listOrganizationReportedPlants,
   getPlotsWithObservations,
-  assignT0SiteData,
-  assignT0TempSiteData,
   getT0AllSet,
   getT0Species,
 };

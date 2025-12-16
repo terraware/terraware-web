@@ -43,11 +43,6 @@ export const selectPlantingSiteT0 = (requestId: string) => (state: RootState) =>
 export const selectPlotsWithObservations = (requestId: string) => (state: RootState) =>
   state.plotsWithObservations[requestId];
 
-export const selectAssignT0SiteData = (requestId: string) => (state: RootState) => state.assignT0SiteData[requestId];
-
-export const selectAssignT0TempSiteData = (requestId: string) => (state: RootState) =>
-  state.assignT0TempSiteData[requestId];
-
 export const selectProjectPlantingSiteList = (requestId: string) => (state: RootState) =>
   state.projectPlantingSites[requestId];
 

@@ -10,12 +10,8 @@ import {
   useGetPlantingSiteQuery,
   useUpdatePlantingSiteMutation,
 } from 'src/queries/generated/plantingSites';
-import { selectAssignT0TempSiteData } from 'src/redux/features/tracking/trackingSelectors';
-import {
-  PlotsWithObservationsSearchResult,
-  requestAssignT0TempSiteData,
-} from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAssignT0TempSiteDataMutation } from 'src/queries/generated/t0';
+import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { AssignSiteT0TempData, SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
@@ -26,7 +22,6 @@ import ZoneT0EditBox from './ZoneT0EditBox';
 
 type EditTemporaryPlotsTabProps = {
   plantingSiteId: number;
-  reload: () => void;
   temporaryPlotsWithObservations?: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlots?: SpeciesPlot[];
   zones?: ZoneT0Data[];
@@ -38,18 +33,15 @@ const EditTemporaryPlotsTab = ({
   temporaryPlotsWithObservations,
   withdrawnSpeciesPlots,
   zones,
-  reload,
   alreadyIncluding,
 }: EditTemporaryPlotsTabProps) => {
   const [isTemporaryPlotsChecked, setIsTemporaryPlotsChecked] = useState(false);
   const [showSpeciesDensityWarningMessage, setShowSpeciesDensityWarningMessage] = useState(false);
-  const [assignRequestId, setAssignRequestId] = useState('');
-  const saveResponse = useAppSelector(selectAssignT0TempSiteData(assignRequestId));
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
   const [updatePlantingSite] = useUpdatePlantingSiteMutation();
+  const [updateT0, updateT0Result] = useAssignT0TempSiteDataMutation();
   const { data: plantingSiteData } = useGetPlantingSiteQuery(plantingSiteId);
   const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData]);
 
@@ -157,18 +149,15 @@ const EditTemporaryPlotsTab = ({
 
     updatePlantingSiteSetting();
     if (record.zones && record.zones.length > 0) {
-      const saveRequest = dispatch(requestAssignT0TempSiteData(record));
-      setAssignRequestId(saveRequest.requestId);
+      void updateT0(record);
     } else {
-      reload();
       goToViewSettings();
     }
   }, [
-    dispatch,
+    updateT0,
     goToViewSettings,
     isTemporaryPlotsChecked,
     record,
-    reload,
     updatePlantingSiteSetting,
     withdrawnSpeciesPlots,
     zonesWithObservations,
@@ -182,14 +171,13 @@ const EditTemporaryPlotsTab = ({
   );
 
   useEffect(() => {
-    if (saveResponse?.status === 'success') {
-      reload();
+    if (updateT0Result.isSuccess) {
       goToViewSettings();
     }
-    if (saveResponse?.status === 'error') {
+    if (updateT0Result.isError) {
       snackbar.toastError();
     }
-  }, [goToViewSettings, reload, saveResponse, snackbar]);
+  }, [goToViewSettings, updateT0Result, snackbar]);
 
   const cancelWarningHandler = useCallback(() => {
     setShowSpeciesDensityWarningMessage(false);
@@ -198,13 +186,11 @@ const EditTemporaryPlotsTab = ({
   const saveWithDefaultDensity = useCallback(() => {
     updatePlantingSiteSetting();
     if (record.zones && record.zones.length > 0) {
-      const saveRequest = dispatch(requestAssignT0TempSiteData(record));
-      setAssignRequestId(saveRequest.requestId);
+      void updateT0(record);
     } else {
-      reload();
       goToViewSettings();
     }
-  }, [dispatch, goToViewSettings, record, reload, updatePlantingSiteSetting]);
+  }, [updateT0, goToViewSettings, record, updatePlantingSiteSetting]);
 
   if (Object.entries(zonesWithObservations).length === 0) {
     return <Box padding={theme.spacing(2)}>{strings.NO_TEMPORARY_PLOTS_WITHIN_ZONES}</Box>;

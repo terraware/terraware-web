@@ -214,32 +214,6 @@ export const requestPermanentPlotsWithObservations = createAsyncThunk(
   }
 );
 
-export const requestAssignT0SiteData = createAsyncThunk(
-  'assignT0SiteData',
-  async (request: AssignSiteT0Data, { rejectWithValue }) => {
-    const response = await TrackingService.assignT0SiteData(request);
-
-    if (response && response.requestSucceeded) {
-      return response.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestAssignT0TempSiteData = createAsyncThunk(
-  'assignT0TempSiteData',
-  async (request: AssignSiteT0TempData, { rejectWithValue }) => {
-    const response = await TrackingService.assignT0TempSiteData(request);
-
-    if (response && response.requestSucceeded) {
-      return response.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestGetPlantingSiteT0AllSet = createAsyncThunk(
   't0AllSet',
   async (plantingSiteId: number, { rejectWithValue }) => {
