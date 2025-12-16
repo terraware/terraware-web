@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { FileChooser, PageForm } from '@terraware/web-components';
+import { Button, DialogBox, FileChooser, PageForm } from '@terraware/web-components';
 
 import { isVideoFile } from 'src/components/ActivityLog/ActivityMediaForm';
 import Page from 'src/components/Page';
@@ -40,6 +40,7 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const [plantingZoneName, setPlantingZoneName] = useState<string>();
+  const [showWarning, setShowWarning] = useState(false);
 
   const [monitoringPlotResult, setMonitoringPlotResult] = useState<ObservationMonitoringPlotResultsPayload>();
 
@@ -221,12 +222,50 @@ const MonitoringPlotEditPhotos = ({ reload }: { reload: () => void }) => {
     })();
   }, [deleteQuery, mediaItems, monitoringPlotId, observationId, update, upload, goToPhotosTab, snackbar, reload]);
 
+  const showModal = useCallback(() => {
+    setShowWarning(true);
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    setShowWarning(false);
+  }, []);
+
+  const onConfirmSave = useCallback(() => {
+    savePhotos();
+  }, [savePhotos]);
+
   return (
     <Page title={monitoringPlotResult?.monitoringPlotName}>
+      {showWarning && (
+        <DialogBox
+          onClose={onCloseModal}
+          open={true}
+          title={strings.SAVE_PHOTOS_AND_VIDEOS}
+          size='medium'
+          middleButtons={[
+            <Button
+              id='cancelSave'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={onCloseModal}
+              key='button-1'
+            />,
+            <Button
+              id='confirmSave'
+              label={strings.CONTINUE}
+              onClick={onConfirmSave}
+              key='button-2'
+              type='destructive'
+            />,
+          ]}
+          message={strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION}
+        />
+      )}
       <PageForm
         cancelID='cancelUploadPhotos'
         onCancel={goToPhotosTab}
-        onSave={savePhotos}
+        onSave={showModal}
         saveButtonText={strings.SAVE}
         saveID='savePhotos'
         cancelButtonText={strings.CANCEL}

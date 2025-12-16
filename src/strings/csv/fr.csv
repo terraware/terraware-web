@@ -1732,6 +1732,8 @@ SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_CHANGES,Sauvegarder les modifications,cb5e8c33
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
+SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
+SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Vous apportez des modifications aux photos et vidéos associées à cette parcelle d’observation. Êtes-vous sûr de vouloir effectuer ces modifications ?,8cfdcf97
 SAVE_PLANT_DENSITY,Enregistrer la densité de plantation,73135113
 SAVE_PROJECT_BOUNDARIES,Sauvegarder les limites du projet,d206ddd9
 SAVE_VERSION,Enregistrer la version,5afacff0
