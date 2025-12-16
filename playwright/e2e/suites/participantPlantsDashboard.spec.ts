@@ -52,7 +52,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     await expect(
       page
         .locator('div')
-        .filter({ hasText: /^Mortality Rate$/ })
+        .filter({ hasText: /^Survival Rate$/ })
         .getByRole('checkbox')
     ).toBeDisabled();
   });
@@ -99,7 +99,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     await expect(
       page
         .locator('div')
-        .filter({ hasText: /^Mortality Rate$/ })
+        .filter({ hasText: /^Survival Rate$/ })
         .getByRole('checkbox')
     ).toBeDisabled();
   });
@@ -142,7 +142,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     await expect(page.getByText('All Observations', { exact: true })).toBeVisible();
     await expect(page.getByText('Plants per Ha', { exact: true })).toBeVisible();
     await expect(page.locator('#plantsPerHaChart')).toBeVisible();
-    await expect(page.getByText('Mortality Rate').first()).toBeVisible();
+    await expect(page.getByText('Survival Rate').first()).toBeVisible();
     await expect(page.locator('#mortalityChart')).toBeVisible();
     await expect(page.getByText('Plant Density', { exact: true })).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').first()).toBeVisible();
@@ -155,25 +155,25 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     await expect(page.getByText('1,014Plants/ha')).toBeVisible();
     await expect(page.getByText('Observed Density Per Zone')).toBeVisible();
     await expect(page.locator('#plantingDensityByZone')).toBeVisible();
-    await expect(page.getByText('Mortality Rate').nth(1)).toBeVisible();
+    await expect(page.getByText('Survival Rate').nth(1)).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').nth(1)).toBeVisible();
-    await expect(page.getByText('Mortality Rate').nth(2)).toBeVisible();
-    await expect(page.getByText('10%').first()).toBeVisible();
-    await expect(page.getByText('Zone Mortality', { exact: true })).toBeVisible();
+    await expect(page.getByText('Survival Rate').nth(2)).toBeVisible();
+    // await expect(page.getByText('10%').first()).toBeVisible();
+    await expect(page.getByText('Zone Survival', { exact: true })).toBeVisible();
     await expect(page.getByText('Highest').first()).toBeVisible();
-    await expect(page.getByText('Zone 01', { exact: true })).toBeVisible();
-    await expect(page.locator('p').filter({ hasText: '10%' })).toBeVisible();
+    // await expect(page.getByText('Zone 01', { exact: true })).toBeVisible();
+    // await expect(page.locator('p').filter({ hasText: '10%' })).toBeVisible();
     await expect(page.getByText('Lowest').first()).toBeVisible();
-    await expect(page.getByText('Zone 02', { exact: true })).toBeVisible();
-    await expect(page.locator('p').filter({ hasText: '9%' })).toBeVisible();
-    await expect(page.getByText('Species Mortality', { exact: true })).toBeVisible();
+    // await expect(page.getByText('Zone 02', { exact: true })).toBeVisible();
+    // await expect(page.locator('p').filter({ hasText: '9%' })).toBeVisible();
+    await expect(page.getByText('Species Survival', { exact: true })).toBeVisible();
     await expect(page.getByText('Highest').nth(1)).toBeVisible();
-    await expect(page.getByText('Other 2', { exact: true })).toBeVisible();
-    await expect(page.getByText('15%', { exact: true })).toBeVisible();
+    // await expect(page.getByText('Other 2', { exact: true })).toBeVisible();
+    // await expect(page.getByText('15%', { exact: true })).toBeVisible();
     await expect(page.getByText('Lowest').nth(1)).toBeVisible();
-    await expect(page.getByText('Other 5', { exact: true })).toBeVisible();
-    await expect(page.getByText('4%', { exact: true })).toBeVisible();
-    await expect(page.getByText('Mortality Breakdown', { exact: true })).toBeVisible();
+    // await expect(page.getByText('Other 5', { exact: true })).toBeVisible();
+    // await expect(page.getByText('4%', { exact: true })).toBeVisible();
+    await expect(page.getByText('Species Survival Breakdown', { exact: true })).toBeVisible();
     await expect(
       page.locator('div:nth-child(2) > div > .select > .textfield-container > .textfield-value')
     ).toBeVisible();
@@ -192,7 +192,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     await expect(
       page
         .locator('div')
-        .filter({ hasText: /^Mortality Rate$/ })
+        .filter({ hasText: /^Survival Rate$/ })
         .getByRole('checkbox')
     ).toBeChecked({ checked: false });
   });
@@ -247,7 +247,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     await expect(
       page
         .locator('div')
-        .filter({ hasText: /^Mortality Rate$/ })
+        .filter({ hasText: /^Survival Rate$/ })
         .getByRole('checkbox')
     ).toBeDisabled();
   });

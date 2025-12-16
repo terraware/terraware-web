@@ -6,7 +6,6 @@ import sanitize from 'sanitize-filename';
 
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestAbandonObservation } from 'src/redux/features/observations/observationsAsyncThunks';
@@ -69,7 +68,6 @@ export default function OrgObservationsListView({
   const [requestId, setRequestId] = useState('');
   const abandonObservationResponse = useAppSelector((state) => selectAbandonObservation(state, requestId));
   const snackbar = useSnackbar();
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const defaultColumns = useMemo(
     () =>
@@ -117,9 +115,9 @@ export default function OrgObservationsListView({
           type: 'number',
         },
         {
-          key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
-          name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
-          tooltipTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : '',
+          key: 'survivalRate',
+          name: strings.SURVIVAL_RATE,
+          tooltipTitle: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
           type: 'number',
         },
         {
@@ -129,7 +127,7 @@ export default function OrgObservationsListView({
           tooltipTitle: strings.DATE_OBSERVED_TOOLTIP,
         },
       ] as TableColumnType[],
-    [isSurvivalRateCalculationEnabled]
+    []
   );
 
   useEffect(() => {

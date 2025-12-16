@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import isEnabled from 'src/features';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
@@ -19,8 +18,6 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
   const [highestSpeciesName, setHighestSpeciesName] = useState<string>();
   const [lowestSpeciesName, setLowestSpeciesName] = useState<string>();
 
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
-
   const getSpeciesName = useCallback(
     (observationSpecies: ObservationSpeciesResultsPayload) => {
       if (observationSpecies.speciesId) {
@@ -35,32 +32,19 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
 
   useEffect(() => {
     let _highestMortalityRate = 0;
-    let _lowestMortalityRate = isSurvivalRateCalculationEnabled ? Infinity : 100;
+    let _lowestMortalityRate = Infinity;
     let _highestSpeciesName: string | undefined;
     let _lowestSpeciesName: string | undefined;
     observationSummaries?.[0]?.species.forEach((observationSpecies: ObservationSpeciesResultsPayload) => {
       const speciesName = getSpeciesName(observationSpecies);
-      if (isSurvivalRateCalculationEnabled) {
-        if (observationSpecies.survivalRate !== undefined && speciesName !== undefined) {
-          if (observationSpecies.survivalRate >= _highestMortalityRate) {
-            _highestMortalityRate = observationSpecies.survivalRate;
-            _highestSpeciesName = speciesName;
-          }
-          if (observationSpecies.survivalRate < _lowestMortalityRate) {
-            _lowestMortalityRate = observationSpecies.survivalRate;
-            _lowestSpeciesName = speciesName;
-          }
+      if (observationSpecies.survivalRate !== undefined && speciesName !== undefined) {
+        if (observationSpecies.survivalRate >= _highestMortalityRate) {
+          _highestMortalityRate = observationSpecies.survivalRate;
+          _highestSpeciesName = speciesName;
         }
-      } else {
-        if (observationSpecies.mortalityRate !== undefined && speciesName !== undefined) {
-          if (observationSpecies.mortalityRate >= _highestMortalityRate) {
-            _highestMortalityRate = observationSpecies.mortalityRate;
-            _highestSpeciesName = speciesName;
-          }
-          if (observationSpecies.mortalityRate < _lowestMortalityRate) {
-            _lowestMortalityRate = observationSpecies.mortalityRate;
-            _lowestSpeciesName = speciesName;
-          }
+        if (observationSpecies.survivalRate < _lowestMortalityRate) {
+          _lowestMortalityRate = observationSpecies.survivalRate;
+          _lowestSpeciesName = speciesName;
         }
       }
     });
@@ -70,7 +54,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
 
     setHighestMortalityRate(_highestSpeciesName ? _highestMortalityRate : undefined);
     setHighestSpeciesName(_highestSpeciesName);
-  }, [observationSummaries, getSpeciesName, isSurvivalRateCalculationEnabled]);
+  }, [observationSummaries, getSpeciesName]);
 
   return (
     <Box>
@@ -78,7 +62,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
         <>
           <Box
             sx={{
-              backgroundColor: isSurvivalRateCalculationEnabled ? '#5D822B33' : '#CB4D4533',
+              backgroundColor: '#5D822B33',
               padding: 1,
               borderRadius: 1,
               marginBottom: 1,
@@ -96,9 +80,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
           </Box>
           {(!lowestSpeciesName || lowestSpeciesName === highestSpeciesName) && (
             <Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}>
-              {isSurvivalRateCalculationEnabled
-                ? strings.SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE
-                : strings.SINGLE_SPECIES_MORTALITY_RATE_MESSAGE}
+              {strings.SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE}
             </Typography>
           )}
         </>
@@ -106,7 +88,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
       {lowestSpeciesName && lowestSpeciesName !== highestSpeciesName && (
         <Box
           sx={{
-            backgroundColor: isSurvivalRateCalculationEnabled ? '#CB4D4533' : ' #5D822B33',
+            backgroundColor: '#CB4D4533',
             padding: 1,
             borderRadius: 1,
           }}
@@ -122,20 +104,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
           </Typography>
         </Box>
       )}
-      {highestMortalityRate === undefined && !isSurvivalRateCalculationEnabled && (
-        <Box sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: 1, borderRadius: 1, marginBottom: 1 }}>
-          <Typography fontSize='16px' fontWeight={400}>
-            {strings.INSUFFICIENT_DATA}
-          </Typography>
-          <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
-            {strings.NO_SPECIES}
-          </Typography>
-          <Typography fontSize='24px' fontWeight={600}>
-            -
-          </Typography>
-        </Box>
-      )}
-      {highestMortalityRate === undefined && lowestMortalityRate === undefined && isSurvivalRateCalculationEnabled && (
+      {highestMortalityRate === undefined && lowestMortalityRate === undefined && (
         <>
           <Box
             sx={{

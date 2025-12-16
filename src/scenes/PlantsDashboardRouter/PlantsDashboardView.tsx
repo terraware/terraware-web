@@ -8,7 +8,6 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useObservation from 'src/hooks/useObservation';
 import { useOrganization } from 'src/providers';
@@ -41,7 +40,6 @@ export default function PlantsDashboardView({
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const [projectId, setProjectId] = useState<number | undefined>(acceleratorProjectId);
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const {
     setAcceleratorOrganizationId,
@@ -100,8 +98,8 @@ export default function PlantsDashboardView({
   );
 
   const showSurvivalRateMessage = useMemo(() => {
-    return isSurvivalRateCalculationEnabled && hasObservations && latestSummary?.survivalRate === undefined;
-  }, [hasObservations, isSurvivalRateCalculationEnabled, latestSummary]);
+    return hasObservations && latestSummary?.survivalRate === undefined;
+  }, [hasObservations, latestSummary]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -152,7 +150,7 @@ export default function PlantsDashboardView({
               }}
             >
               <Typography fontWeight={600} fontSize={'20px'} paddingRight={1} paddingLeft={3}>
-                {isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE}
+                {strings.SURVIVAL_RATE}
               </Typography>
               {hasObservations && (
                 <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
@@ -164,7 +162,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, isSurvivalRateCalculationEnabled, hasObservations, renderLatestObservationLink]
+    [plantingSite, isMobile, hasObservations, renderLatestObservationLink]
   );
 
   const renderTotalPlantsAndSpecies = () => (
