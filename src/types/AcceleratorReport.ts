@@ -46,6 +46,10 @@ export type CreateProjectMetricRequest = CreateProjectMetricRequestPayload & { p
 
 export type UpdateProjectMetricRequest = UpdateProjectMetricRequestPayload & { projectId: number; metricId: number };
 
+export type CreateStandardMetricRequestPayload = components['schemas']['CreateStandardMetricRequestPayload'];
+
+export type UpdateStandardMetricRequestPayload = components['schemas']['UpdateStandardMetricRequestPayload'];
+
 export type ReviewAcceleratorReportMetricsRequestPayload =
   components['schemas']['ReviewAcceleratorReportMetricsRequestPayload'];
 
