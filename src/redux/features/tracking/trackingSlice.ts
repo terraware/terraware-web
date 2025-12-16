@@ -13,7 +13,6 @@ import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsync
 import {
   PlotsWithObservationsSearchResult,
   requestGetPlantingSiteHistory,
-  requestGetPlantingSiteT0AllSet,
   requestListPlantingSiteHistories,
   requestListPlantingSites,
   requestListProjectPlantingSites,
@@ -238,17 +237,6 @@ export const plotsWithObservations = createSlice({
   },
 });
 
-const initialPlantingSiteT0AllSetState: { [key: string]: StatusT<boolean> } = {};
-
-export const plantingSiteT0AllSetSlice = createSlice({
-  name: 'plantingSiteT0AllSetSlice',
-  initialState: initialPlantingSiteT0AllSetState,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestGetPlantingSiteT0AllSet, true)(builder);
-  },
-});
-
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
@@ -263,7 +251,6 @@ const trackingReducers = {
   organizationReportedPlants: organizationReportedPlantsSlice.reducer,
   plotsWithObservations: plotsWithObservations.reducer,
   projectPlantingSites: projectPlantingSiteListSlice.reducer,
-  plantingSiteT0AllSet: plantingSiteT0AllSetSlice.reducer,
 };
 
 export default trackingReducers;

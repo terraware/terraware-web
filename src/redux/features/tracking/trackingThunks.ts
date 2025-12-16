@@ -200,16 +200,3 @@ export const requestPermanentPlotsWithObservations = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
-
-export const requestGetPlantingSiteT0AllSet = createAsyncThunk(
-  't0AllSet',
-  async (plantingSiteId: number, { rejectWithValue }) => {
-    const response = await TrackingService.getT0AllSet(plantingSiteId);
-
-    if (response && response.requestSucceeded) {
-      return response.data?.allSet;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
