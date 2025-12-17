@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766004696694" clover="3.2.0">
-  <project timestamp="1766004696694" name="All files">
-    <metrics statements="36295" coveredstatements="1354" conditionals="25310" coveredconditionals="393" methods="11234" coveredmethods="213" elements="72839" coveredelements="1960" complexity="0" loc="36295" ncloc="36295" packages="286" files="1418" classes="1418"/>
+<coverage generated="1766005756238" clover="3.2.0">
+  <project timestamp="1766005756238" name="All files">
+    <metrics statements="36295" coveredstatements="1354" conditionals="25313" coveredconditionals="393" methods="11234" coveredmethods="213" elements="72842" coveredelements="1960" complexity="0" loc="36295" ncloc="36295" packages="286" files="1418" classes="1418"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -29469,7 +29469,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter">
-      <metrics statements="222" coveredstatements="0" conditionals="197" coveredconditionals="0" methods="65" coveredmethods="0"/>
+      <metrics statements="222" coveredstatements="0" conditionals="200" coveredconditionals="0" methods="65" coveredmethods="0"/>
       <file name="ObservationsDataView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/ObservationsDataView.tsx">
         <metrics statements="26" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="43" count="0" type="stmt"/>
@@ -29566,7 +29566,7 @@
         <line num="130" count="0" type="stmt"/>
       </file>
       <file name="PlantMonitoring.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/PlantMonitoring.tsx">
-        <metrics statements="43" coveredstatements="0" conditionals="66" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="43" coveredstatements="0" conditionals="69" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
