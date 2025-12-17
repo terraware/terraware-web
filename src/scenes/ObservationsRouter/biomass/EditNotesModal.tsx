@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
@@ -32,6 +32,10 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesM
 
   const biomassMeasurements = observationResults?.biomassMeasurements;
   const [record, setRecord] = useForm(biomassMeasurements);
+
+  useEffect(() => {
+    setRecord(biomassMeasurements);
+  }, [biomassMeasurements, setRecord]);
 
   const onSubmit = useCallback(() => {
     void (async () => {
@@ -104,12 +108,14 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesM
         <Button id='saveData' label={strings.SAVE} onClick={onSubmit} size='medium' key='button-2' />,
       ]}
     >
-      <Box sx={{ textAlign: 'left' }}>
-        <QuadratNotesComponent quadrat='Northwest' record={record} setRecord={setRecord} />
-        <QuadratNotesComponent quadrat='Northeast' record={record} setRecord={setRecord} />
-        <QuadratNotesComponent quadrat='Southwest' record={record} setRecord={setRecord} />
-        <QuadratNotesComponent quadrat='Southeast' record={record} setRecord={setRecord} />
-      </Box>
+      {biomassMeasurements && (
+        <Box sx={{ textAlign: 'left' }}>
+          <QuadratNotesComponent quadrat='Northwest' record={record} setRecord={setRecord} />
+          <QuadratNotesComponent quadrat='Northeast' record={record} setRecord={setRecord} />
+          <QuadratNotesComponent quadrat='Southwest' record={record} setRecord={setRecord} />
+          <QuadratNotesComponent quadrat='Southeast' record={record} setRecord={setRecord} />
+        </Box>
+      )}
     </DialogBox>
   );
 };
