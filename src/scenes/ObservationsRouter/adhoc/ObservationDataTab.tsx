@@ -183,7 +183,13 @@ const ObservationDataTab = ({
             <Typography fontSize={'20px'} fontWeight={600}>
               {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
             </Typography>
-            <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
+            <IconTooltip
+              title={
+                type === 'adHoc'
+                  ? strings.AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
+                  : strings.ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
+              }
+            />
           </Box>
 
           <Box height='360px'>

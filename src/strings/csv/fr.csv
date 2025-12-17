@@ -44,6 +44,7 @@ ACTIVITY_PUBLISHED,Activité publiée,6ce064cc
 ACTIVITY_TYPE,Type d’activité,5f057b66
 ACTUAL,Réel,1235cf68
 AD_HOC,Ad Hoc,2acaf742
+AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants dont l'espèce est inconnue ne sont pas inclus.,15817386
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Il n’y a actuellement aucune observation de parcelle ad hoc.,9ae089fc
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Les observations utilisant des parcelles ad hoc pour le suivi des plantes peuvent être enregistrées via les Observations de parcelles ad hoc dans l’application mobile.,f0775160
 AD_HOC_PLANT_MONITORING,Surveillance ad hoc des installations,589a6d6c
@@ -191,6 +192,7 @@ ASSIGN_NEW_OWNER_DESC,"Pour supprimer le propriétaire actuel, vous devez lui at
 ASSIGN_OWNER,Attribuer un propriétaire,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Attribuer un propriétaire...,8053cd0e
 ASSIGNED,Désigné,29aa3dd8
+ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
 ATTACH_IMAGES_OR_VIDEOS,Joindre une (des) image(s) ou une (des) vidéo(s),c229aa87
 ATTACHMENT_DESCRIPTION,Joindre jusqu'à {0} fichiers. Chaque fichier a une taille maximale de {1}MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
