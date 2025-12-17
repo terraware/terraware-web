@@ -48,6 +48,10 @@ AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Actualmente no hay observaciones ad hoc de parcelas.,9ae089fc
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Las observaciones utilizando parcelas ad hoc para el Monitoreo de Plantas pueden registrarse a través de Observaciones de Parcelas Ad Hoc en la aplicación móvil.,f0775160
 AD_HOC_PLANT_MONITORING,Monitoreo de plantas ad hoc,589a6d6c
+AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observadas registradas como vivas.,b0ec7f7f
+AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas.,142e44c5
+AD_HOC_PLOT_SPECIES_TOOLTIP,Especies es el número de especies representadas por todas las plantas observadas.,ed7c35b1
+AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas.",b2fd163f
 ADD,Añadir,2ffae546
 ADD_A_NURSERY,Añadir un vivero,758726df
 ADD_A_PLANTING_SITE,Añadir un sitio de plantación,edbe08ae
