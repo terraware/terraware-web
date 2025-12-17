@@ -230,6 +230,7 @@ BIOMASS_EMPTY_STATE_MESSAGE_2,Las observaciones para el Monitoreo de Biomasa pue
 BIOMASS_MEASUREMENT,Medición de biomasa,cf846a13
 BIOMASS_MEASUREMENTS,Mediciones de biomasa,fab7d40f
 BIOMASS_MONITORING,Monitoreo de biomasa,c249c88e
+BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de especies observadas de árboles y arbustos registradas como vivas.,cb7c376f
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Observación-de-la-biomasa,15aec1fa
 BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Plantas muertas es el número de árboles y arbustos observados registrados como muertos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,ea814e7f
 BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de árboles y arbustos observados registrados como vivos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,d69a1ca7

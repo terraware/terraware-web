@@ -230,6 +230,7 @@ BIOMASS_EMPTY_STATE_MESSAGE_2,Observations for Biomass Monitoring can be recorde
 BIOMASS_MEASUREMENT,Biomass Measurement,
 BIOMASS_MEASUREMENTS,Biomass Measurements,
 BIOMASS_MONITORING,Biomass Monitoring,
+BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Number of Live Plants per Species shows the number of observed species of trees and shrubs recorded as live.,
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Biomass-Observation,Included as part of the filename for data files with biomass observation data. Should not include whitespace.
 BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Dead Plants is the number of observed trees and shrubs recorded as dead. It does not include plants recorded in the quadrats or other additional invasive or threatened species.,
 BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Live Plants is the number of observed trees and shrubs recorded as live. It does not include plants recorded in the quadrats or other additional invasive or threatened species.,
