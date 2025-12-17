@@ -71,12 +71,12 @@ const ObservationDataTab = ({
   const items = [
     {
       label: strings.TOTAL_PLANTS,
-      tooltip: strings.PLOT_TOTAL_PLANTS_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP : strings.PLOT_TOTAL_PLANTS_TOOLTIP,
       value: monitoringPlot?.totalPlants,
     },
     {
       label: strings.LIVE_PLANTS,
-      tooltip: strings.PLOT_LIVE_PLANTS_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP : strings.PLOT_LIVE_PLANTS_TOOLTIP,
       value: livePlants,
     },
     {
@@ -86,12 +86,12 @@ const ObservationDataTab = ({
     },
     {
       label: strings.SPECIES,
-      tooltip: strings.PLOT_SPECIES_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_SPECIES_TOOLTIP : strings.PLOT_SPECIES_TOOLTIP,
       value: monitoringPlot?.totalSpecies,
     },
     {
       label: strings.PLANT_DENSITY,
-      tooltip: strings.PLOT_PLANT_DENSITY_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP : strings.PLOT_PLANT_DENSITY_TOOLTIP,
       value: monitoringPlot?.plantingDensity,
     },
     ...(monitoringPlot?.survivalRate !== undefined
@@ -185,7 +185,13 @@ const ObservationDataTab = ({
             <Typography fontSize={'20px'} fontWeight={600}>
               {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
             </Typography>
-            <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
+            <IconTooltip
+              title={
+                type === 'adHoc'
+                  ? strings.AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
+                  : strings.ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
+              }
+            />
           </Box>
 
           <Box height='360px'>
