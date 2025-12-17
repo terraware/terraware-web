@@ -40,6 +40,7 @@ type ObservationDataTabProps = {
   onExportData?: () => void;
   onMatchSpecies?: () => void;
   reloadAll: () => void;
+  isCompleted: boolean;
 };
 
 const ObservationDataTab = ({
@@ -51,6 +52,7 @@ const ObservationDataTab = ({
   onMatchSpecies,
   observationId,
   reloadAll,
+  isCompleted,
 }: ObservationDataTabProps) => {
   const { plantingSite, reload } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
@@ -176,7 +178,7 @@ const ObservationDataTab = ({
           observationId={observationId}
         />
       )}
-      <ObservationDataNumbers items={items} />
+      <ObservationDataNumbers items={items} isCompleted={isCompleted} />
       {species && (
         <Box>
           <Box display='flex' alignContent={'center'}>
@@ -187,7 +189,7 @@ const ObservationDataTab = ({
           </Box>
 
           <Box height='360px'>
-            <SpeciesTotalPlantsChart minHeight='360px' species={species} />
+            <SpeciesTotalPlantsChart minHeight='360px' species={species} isCompleted={isCompleted} />
           </Box>
         </Box>
       )}
@@ -198,7 +200,7 @@ const ObservationDataTab = ({
             {strings.SURVIVAL_RATE_PER_SPECIES}
           </Typography>
           <Box height='360px'>
-            <SpeciesSurvivalRateChart minHeight='360px' species={species} />
+            <SpeciesSurvivalRateChart minHeight='360px' species={species} isCompleted={isCompleted} />
           </Box>
         </Box>
       )}
@@ -253,6 +255,7 @@ const ObservationDataTab = ({
           observationId={Number(observationId)}
           plotId={Number(monitoringPlot?.monitoringPlotId)}
           reload={reloadAll}
+          isCompleted={isCompleted}
         />
       </Box>
       {monitoringPlot.monitoringPlotId && (

@@ -84,7 +84,11 @@ export default function AggregatedPlantsStats({
         </Grid>
         <Grid item xs={chartGridSize}>
           <ChartWrapper title={strings.SURVIVAL_RATE_PER_SPECIES}>
-            <SpeciesSurvivalRateChart species={hasObservedPermanentPlots ? species : []} minHeight='170px' />
+            <SpeciesSurvivalRateChart
+              species={hasObservedPermanentPlots ? species : []}
+              minHeight='170px'
+              isCompleted={!!completedTime}
+            />
           </ChartWrapper>
         </Grid>
       </Grid>

@@ -15,6 +15,7 @@ type SpeciesEditableTableProps = {
   observationId: number;
   plotId: number;
   reload: () => void;
+  isCompleted: boolean;
 };
 
 export default function SpeciesEditableTable({
@@ -22,6 +23,7 @@ export default function SpeciesEditableTable({
   reload,
   observationId,
   plotId,
+  isCompleted,
 }: SpeciesEditableTableProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -90,7 +92,7 @@ export default function SpeciesEditableTable({
 
   const table = useMaterialReactTable({
     columns,
-    data: species || [],
+    data: isCompleted ? species || [] : [],
     editDisplayMode: 'cell',
     enableColumnOrdering: false,
     enableColumnPinning: false,
