@@ -15,6 +15,7 @@ export type MediaFile = {
   caption?: string;
   type: 'Photo' | 'Video';
   position?: ObservationMonitoringPlotPosition;
+  isQuadrat: boolean;
 };
 
 export type MediaItemProps = {

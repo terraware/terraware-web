@@ -59,6 +59,30 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
           monitoringPlotName={monitoringPlot?.monitoringPlotName}
         />
       </Box>
+      {type === 'biomass' && (
+        <>
+          <Box>
+            <Typography fontSize={'20px'} fontWeight={600} marginBottom={2}>
+              {strings.QUADRAT_PHOTOS}
+            </Typography>
+            <MonitoringPlotPhotosWithActions
+              observationId={Number(observationId)}
+              monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+              photos={monitoringPlot?.photos?.filter((photo) => photo.type === 'Quadrat')}
+            />
+          </Box>
+          <Box>
+            <Typography fontSize={'20px'} fontWeight={600} marginBottom={2}>
+              {strings.SOIL_ASSESSMENT}
+            </Typography>
+            <MonitoringPlotPhotosWithActions
+              observationId={Number(observationId)}
+              monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+              photos={monitoringPlot?.photos?.filter((photo) => photo.type === 'Soil')}
+            />
+          </Box>
+        </>
+      )}
       <Typography fontSize={'20px'} fontWeight={600} marginBottom={2}>
         {strings.PHOTOS_AND_VIDEOS}
       </Typography>
@@ -69,18 +93,6 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
           photos={monitoringPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot')}
         />
       </Box>
-      {type === 'biomass' && (
-        <Box>
-          <Typography fontSize={'20px'} fontWeight={600} marginBottom={2}>
-            {strings.SOIL_ASSESSMENT}
-          </Typography>
-          <MonitoringPlotPhotosWithActions
-            observationId={Number(observationId)}
-            monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-            photos={monitoringPlot?.photos?.filter((photo) => photo.type === 'Soil')}
-          />
-        </Box>
-      )}
     </Card>
   );
 };

@@ -4,7 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
-import { ObservationMonitoringPlotPhoto, getPositionLabel } from 'src/types/Observations';
+import { ObservationMonitoringPlotPhoto, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 
 const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
 
@@ -41,6 +41,7 @@ export default function MonitoringPlotPhotosWithActions({
         caption: photo.caption,
         type: photo.mediaKind,
         position: photo.position,
+        isQuadrat: photo.type === 'Quadrat',
       })),
     [photos]
   );
@@ -80,6 +81,9 @@ export default function MonitoringPlotPhotosWithActions({
               <Typography color={theme.palette.TwClrBaseBlack}>
                 {monitoringPlotName} {getPositionLabel(mediaFile.position)}
               </Typography>
+            )}
+            {mediaFile.isQuadrat && (
+              <Typography color={theme.palette.TwClrBaseBlack}>{getQuadratLabel(mediaFile.position)}</Typography>
             )}
             <MediaItem
               mediaFile={mediaFile}
