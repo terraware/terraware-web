@@ -90,7 +90,7 @@ export default function NewStandardMetric(): JSX.Element {
             <Card style={{ width: '568px', margin: 'auto' }}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <Typography fontSize={'20px'} fontWeight={600}>
+                  <Typography fontSize='20px' fontWeight={600}>
                     {strings.STANDARD_METRICS}
                   </Typography>
                 </Grid>
@@ -159,8 +159,8 @@ export default function NewStandardMetric(): JSX.Element {
                 <Grid item xs={12}>
                   <Checkbox
                     disabled={false}
-                    id={'isPublishable'}
-                    name={'isPublishable'}
+                    id='isPublishable'
+                    name='isPublishable'
                     label={strings.PUBLISH_TO_FUNDER_PORTAL}
                     value={newMetric.isPublishable}
                     onChange={onChangeCallback('isPublishable')}

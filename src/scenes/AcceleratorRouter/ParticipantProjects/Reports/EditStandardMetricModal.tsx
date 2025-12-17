@@ -89,7 +89,7 @@ export default function EditStandardMetricModal({
         size='medium'
         title={strings.STANDARD_METRIC}
       >
-        <Grid container spacing={2} textAlign={'left'}>
+        <Grid container spacing={2} textAlign='left'>
           <Grid item xs={12}>
             <TextField
               errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
@@ -145,9 +145,9 @@ export default function EditStandardMetricModal({
           <Grid item xs={12}>
             <Checkbox
               disabled={false}
-              id={'isPublishable'}
+              id='isPublishable'
               label={strings.PUBLISH_TO_FUNDER_PORTAL}
-              name={'isPublishable'}
+              name='isPublishable'
               onChange={onChangeCallback('isPublishable')}
               value={record.isPublishable}
             />
