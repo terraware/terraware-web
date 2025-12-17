@@ -2298,7 +2298,7 @@ USING_ENTERED_PLANT_DENSITY,Utilisation de la densité de plants saisie par esp�
 USING_OBSERVATION_DATA_FROM,Utilisation des données d'observation de {0},c489a0dd
 VALUE,Valeur,b8e67ab1
 VALUE_CANT_EXCEED_100,La valeur ne peut pas dépasser 100 %,e78b7737
-VALUE_CHANGED_FROM_TO,La valeur de {0} est passée de {1} à {2},566b2a1f
+VALUE_CHANGED_FROM_TO,{0} a été modifié de {1} à {2},205532d3
 VARIABLE_DETAILS,Détails de la variable,48294b19
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,La valeur a dépassé le nombre maximum de décimales de {0},3a248e96
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,La valeur est supérieure à la valeur maximale de {0},4bb003ef
