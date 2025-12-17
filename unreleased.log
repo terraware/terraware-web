@@ -1,3 +1,8 @@
+a7c86fbeb4e SW-7848 Plant Monitoring Observations: Ad Hoc Observation tooltips are not correct, reference "pre-existing" (#4904)
+b43f9264c2f SW-7834 Change History: Event for value change from null say "from to" with missing word (#4903)
+0dd55400788 SW-7833 Events should appear in Descending order by date (most recent at top) (#4902)
+b9fe28b0049 SW-7847 Plant Monitoring Observations: Number of Live Plants per Species chart tooltip not updated (#4901)
+da7136f337a SW-7812 Biomass Observations: Tooltip missing for Number of Live Plants Per Species (#4900)
 ebd169c25a1 SW-7835 Remove survival rate feature flag (#4876)
 d552a11f370 Save quantitative values to BE (#4895)
 6817a8e3958 See warning when saving edits to photos and videos (#4896)

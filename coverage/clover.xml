@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765924566162" clover="3.2.0">
-  <project timestamp="1765924566162" name="All files">
-    <metrics statements="36280" coveredstatements="1354" conditionals="25275" coveredconditionals="393" methods="11227" coveredmethods="213" elements="72782" coveredelements="1960" complexity="0" loc="36280" ncloc="36280" packages="286" files="1418" classes="1418"/>
+<coverage generated="1765989170668" clover="3.2.0">
+  <project timestamp="1765989170668" name="All files">
+    <metrics statements="36281" coveredstatements="1354" conditionals="25285" coveredconditionals="393" methods="11227" coveredmethods="213" elements="72793" coveredelements="1960" complexity="0" loc="36281" ncloc="36281" packages="286" files="1418" classes="1418"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -14103,15 +14103,16 @@
       </file>
     </package>
     <package name="src.queries.observations">
-      <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
+      <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <file name="observations.ts" path="/home/runner/work/terraware-web/terraware-web/src/queries/observations/observations.ts">
-        <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.queries.search">
@@ -29711,7 +29712,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.adhoc">
-      <metrics statements="251" coveredstatements="0" conditionals="226" coveredconditionals="0" methods="84" coveredmethods="0"/>
+      <metrics statements="251" coveredstatements="0" conditionals="236" coveredconditionals="0" methods="84" coveredmethods="0"/>
       <file name="AdHocObservationDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/AdHocObservationDetails.tsx">
         <metrics statements="67" coveredstatements="0" conditionals="76" coveredconditionals="0" methods="21" coveredmethods="0"/>
         <line num="44" count="0" type="stmt"/>
@@ -29816,7 +29817,7 @@
         <line num="15" count="0" type="stmt"/>
       </file>
       <file name="ObservationDataTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/ObservationDataTab.tsx">
-        <metrics statements="37" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="37" coveredstatements="0" conditionals="42" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="45" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
