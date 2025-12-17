@@ -1,3 +1,4 @@
+f91a314b37f SW-7851 Observations: Monitoring Plot that has not been completed should not show any data (#4905)
 6b109ff6bff SW-7870  "Pre-existing" column appearing in Species table for ad hoc Plant Monitoring Observations (#4907)
 80ec483d43f SW-7860 Biomass Observations: Quadrat Description/Notes fields not showing values or editable (#4906)
 a7c86fbeb4e SW-7848 Plant Monitoring Observations: Ad Hoc Observation tooltips are not correct, reference "pre-existing" (#4904)
