@@ -1560,6 +1560,7 @@ Q2_TARGET,Objectif Q2,5275b4cd
 Q3_TARGET,Objectif Q3,e1a31913
 Q4_TARGET,Objectif Q4,11f9f81f
 QUADRAT,Carré d’échantillonnage,ff115cb6
+QUADRAT_PHOTOS,Photos de quadrat,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,Les photos de quadrats ne peuvent pas être supprimées.,24cf5aff
 QUANTITY,Quantité,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La quantité doit être supérieure ou égale à 0,5a55f459

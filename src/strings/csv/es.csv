@@ -1561,6 +1561,7 @@ Q2_TARGET,Objetivo Q2,5275b4cd
 Q3_TARGET,Objetivo Q3,e1a31913
 Q4_TARGET,Objetivo Q4,11f9f81f
 QUADRAT,Cuadrante,ff115cb6
+QUADRAT_PHOTOS,Fotos de cuadrantes,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de cuadrantes,24cf5aff
 QUANTITY,Cantidad,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La cantidad debe ser mayor o igual a 0,5a55f459
