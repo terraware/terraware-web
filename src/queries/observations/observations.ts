@@ -34,9 +34,11 @@ const injectedRtkApi = api.injectEndpoints({
       }),
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
       transformResponse: (results: ListEventLogEntriesApiResponse) =>
-        results.events.map((event) => ({
-          ...event,
-        })),
+        results.events
+          .map((event) => ({
+            ...event,
+          }))
+          .reverse(),
     }),
   }),
 });

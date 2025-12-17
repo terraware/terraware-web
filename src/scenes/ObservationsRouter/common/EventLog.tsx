@@ -25,7 +25,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   );
 
   const theme = useTheme();
-  const lastEvent = useMemo(() => (events ? events[events.length - 1] : undefined), [events]);
+  const lastEvent = useMemo(() => (events ? events[0] : undefined), [events]);
   const filteredEvents = useMemo(
     () =>
       events?.filter(
