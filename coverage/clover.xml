@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765996880341" clover="3.2.0">
-  <project timestamp="1765996880341" name="All files">
-    <metrics statements="36284" coveredstatements="1354" conditionals="25299" coveredconditionals="393" methods="11228" coveredmethods="213" elements="72811" coveredelements="1960" complexity="0" loc="36284" ncloc="36284" packages="286" files="1418" classes="1418"/>
+<coverage generated="1766002993102" clover="3.2.0">
+  <project timestamp="1766002993102" name="All files">
+    <metrics statements="36285" coveredstatements="1354" conditionals="25301" coveredconditionals="393" methods="11229" coveredmethods="213" elements="72815" coveredelements="1960" complexity="0" loc="36285" ncloc="36285" packages="286" files="1418" classes="1418"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -29990,7 +29990,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.biomass">
-      <metrics statements="464" coveredstatements="0" conditionals="328" coveredconditionals="0" methods="179" coveredmethods="0"/>
+      <metrics statements="465" coveredstatements="0" conditionals="330" coveredconditionals="0" methods="180" coveredmethods="0"/>
       <file name="BiomassMeasurement.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/BiomassMeasurement.tsx">
         <metrics statements="31" coveredstatements="0" conditionals="35" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
@@ -30419,7 +30419,7 @@
         <line num="57" count="0" type="stmt"/>
       </file>
       <file name="TreesAndShrubsEditableTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/TreesAndShrubsEditableTable.tsx">
-        <metrics statements="43" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="21" coveredmethods="0"/>
+        <metrics statements="44" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="22" coveredmethods="0"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
@@ -30439,30 +30439,31 @@
         <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="71" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="116" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="123" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="119" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="126" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
-        <line num="132" count="0" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="144" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="150" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="147" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="153" count="0" type="stmt"/>
-        <line num="154" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
-        <line num="164" count="0" type="stmt"/>
-        <line num="171" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="177" count="0" type="stmt"/>
-        <line num="186" count="0" type="stmt"/>
-        <line num="187" count="0" type="stmt"/>
-        <line num="188" count="0" type="stmt"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="162" count="0" type="stmt"/>
+        <line num="167" count="0" type="stmt"/>
+        <line num="174" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="180" count="0" type="stmt"/>
         <line num="189" count="0" type="stmt"/>
-        <line num="196" count="0" type="stmt"/>
-        <line num="230" count="0" type="stmt"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="192" count="0" type="stmt"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="233" count="0" type="stmt"/>
       </file>
       <file name="TreesAndShrubsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/biomass/TreesAndShrubsRenderer.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="3" coveredmethods="0"/>
