@@ -29,6 +29,7 @@ import {
   requestUpdateManyAcceleratorReportPhotos,
   requestUpdateProjectMetric,
   requestUpdateReportConfig,
+  requestUpdateStandardMetric,
   requestUploadManyAcceleratorReportPhotos,
 } from './reportsThunks';
 
@@ -178,6 +179,20 @@ const projectMetricUpdateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestUpdateProjectMetric)(builder);
+  },
+});
+
+/**
+ * Update Standard Metric
+ */
+const initialStandardMetricUpdateState: { [key: string]: StatusT<number> } = {};
+
+const standardMetricUpdateSlice = createSlice({
+  name: 'standardMetricUpdateSlice',
+  initialState: initialStandardMetricUpdateState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateStandardMetric)(builder);
   },
 });
 
@@ -332,6 +347,7 @@ const reportsReducers = {
   reviewAcceleratorReportMetric: reviewAcceleratorReportMetricSlice.reducer,
   refreshAcceleratorReportSystemMetrics: refreshAcceleratorReportSystemMetricsSlice.reducer,
   standardMetricCreate: standardMetricCreateSlice.reducer,
+  standardMetricUpdate: standardMetricUpdateSlice.reducer,
   submitAcceleratorReport: submitAcceleratorReportSlice.reducer,
   updateAcceleratorReport: updateAcceleratorReportSlice.reducer,
   updateAcceleratorReportTargets: updateAcceleratorReportTargetsSlice.reducer,

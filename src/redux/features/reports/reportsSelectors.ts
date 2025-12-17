@@ -48,6 +48,9 @@ export const selectUpdateAcceleratorReportTargets = (requestId: string) => (stat
 export const selectUpdateProjectMetric = (requestId: string) => (state: RootState) =>
   state.projectMetricUpdate[requestId];
 
+export const selectUpdateStandardMetric = (requestId: string) => (state: RootState) =>
+  state.standardMetricUpdate[requestId];
+
 export const selectUpdateReportConfig = (requestId: string) => (state: RootState) =>
   state.projectReportConfigUpdate[requestId];
 
