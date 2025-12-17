@@ -2296,7 +2296,7 @@ USING_ENTERED_PLANT_DENSITY,Usando la densidad de plantas ingresada por especie,
 USING_OBSERVATION_DATA_FROM,Usando datos de observación de {0},c489a0dd
 VALUE,Valor,b8e67ab1
 VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%,e78b7737
-VALUE_CHANGED_FROM_TO,El valor de {0} cambió de {1} a {2},566b2a1f
+VALUE_CHANGED_FROM_TO,{0} cambió de {1} a {2},205532d3
 VARIABLE_DETAILS,Detalles de las variables,48294b19
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,El valor ha excedido los decimales máximos de {0},3a248e96
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,El valor es superior al valor máximo de {0},4bb003ef
