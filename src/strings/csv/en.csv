@@ -1561,6 +1561,7 @@ Q2_TARGET,Q2 Target,
 Q3_TARGET,Q3 Target,
 Q4_TARGET,Q4 Target,
 QUADRAT,Quadrat,"Not a misspelling of ""quadrant."" A quadrat is a 1-meter-square area used for ecological surveys."
+QUADRAT_PHOTOS,Quadrat Photos,
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,Quadrat photos cannot be deleted,
 QUANTITY,Quantity,
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,Quantity must be greater than or equal to 0,
