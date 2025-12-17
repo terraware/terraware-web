@@ -262,6 +262,7 @@ const ObservationDataTab = ({
           plotId={Number(monitoringPlot?.monitoringPlotId)}
           reload={reloadAll}
           isCompleted={isCompleted}
+          type={type}
         />
       </Box>
       {monitoringPlot.monitoringPlotId && (
