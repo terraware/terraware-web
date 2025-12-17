@@ -15,9 +15,10 @@ import MonitoringPlotPhotosWithActions from '../common/MonitoringPlotPhotosWithA
 type PhotosAndVideosTabProps = {
   monitoringPlot?: ObservationMonitoringPlotResultsPayload;
   type?: string;
+  isCompleted: boolean;
 };
 
-const PhotosAndVideosTab = ({ monitoringPlot, type }: PhotosAndVideosTabProps) => {
+const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVideosTabProps) => {
   const navigate = useSyncNavigate();
 
   const params = useParams<{
@@ -46,7 +47,9 @@ const PhotosAndVideosTab = ({ monitoringPlot, type }: PhotosAndVideosTabProps) =
         <Typography fontSize={'20px'} fontWeight={600}>
           {strings.PLOT_CORNER_PHOTOS}
         </Typography>
-        <Button id='edit' label={strings.EDIT} onClick={onEdit} icon='iconEdit' priority='secondary' size='small' />
+        {isCompleted && (
+          <Button id='edit' label={strings.EDIT} onClick={onEdit} icon='iconEdit' priority='secondary' size='small' />
+        )}
       </Box>
       <Box marginBottom={4}>
         <MonitoringPlotPhotosWithActions

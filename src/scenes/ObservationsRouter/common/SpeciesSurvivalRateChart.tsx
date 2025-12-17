@@ -6,9 +6,14 @@ import { ObservationSpeciesResults } from 'src/types/Observations';
 export type SpeciesSurvivalRateChartProps = {
   minHeight?: string;
   species?: ObservationSpeciesResults[];
+  isCompleted: boolean;
 };
 
-export default function SpeciesSurvivalRateChart({ minHeight, species }: SpeciesSurvivalRateChartProps): JSX.Element {
+export default function SpeciesSurvivalRateChart({
+  minHeight,
+  species,
+  isCompleted,
+}: SpeciesSurvivalRateChartProps): JSX.Element {
   type Data = {
     labels: string[];
     values: number[];
@@ -32,11 +37,11 @@ export default function SpeciesSurvivalRateChart({ minHeight, species }: Species
       labels: data.labels,
       datasets: [
         {
-          values: data.values,
+          values: isCompleted ? data.values : [],
         },
       ],
     };
-  }, [species]);
+  }, [species, isCompleted]);
 
   return (
     <BarChart chartId='observationsSurvivalRateBySpecies' chartData={chartData} barWidth={0} minHeight={minHeight} />

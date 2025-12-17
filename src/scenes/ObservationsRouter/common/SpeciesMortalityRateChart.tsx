@@ -6,9 +6,14 @@ import { ObservationSpeciesResults } from 'src/types/Observations';
 export type SpeciesTotalPlantsChartProps = {
   minHeight?: string;
   species?: ObservationSpeciesResults[];
+  isCompleted: boolean;
 };
 
-export default function SpeciesTotalPlantsChart({ minHeight, species }: SpeciesTotalPlantsChartProps): JSX.Element {
+export default function SpeciesTotalPlantsChart({
+  minHeight,
+  species,
+  isCompleted,
+}: SpeciesTotalPlantsChartProps): JSX.Element {
   type Data = {
     labels: string[];
     values: number[];
@@ -36,11 +41,11 @@ export default function SpeciesTotalPlantsChart({ minHeight, species }: SpeciesT
       labels: mortalityRates.labels,
       datasets: [
         {
-          values: mortalityRates.values,
+          values: isCompleted ? mortalityRates.values : [],
         },
       ],
     }),
-    [mortalityRates]
+    [mortalityRates, isCompleted]
   );
 
   return (

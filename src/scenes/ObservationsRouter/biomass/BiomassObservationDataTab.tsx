@@ -41,6 +41,7 @@ type BiomassObservationDataTabProps = {
   onMatchSpecies: () => void;
   observationId: number;
   reload: () => void;
+  isCompleted: boolean;
 };
 
 const BiomassObservationDataTab = ({
@@ -52,6 +53,7 @@ const BiomassObservationDataTab = ({
   onMatchSpecies,
   observationId,
   reload,
+  isCompleted,
 }: BiomassObservationDataTabProps) => {
   const theme = useTheme();
   const { plantingSite } = usePlantingSiteData();
@@ -234,7 +236,7 @@ const BiomassObservationDataTab = ({
           observationId={observationId}
         />
       )}
-      <ObservationDataNumbers items={items} />
+      <ObservationDataNumbers items={items} isCompleted={isCompleted} />
       <Box display='flex' sx={{ paddingBottom: 2, paddingTop: 3, alignItems: 'center' }}>
         <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingRight={1}>
           {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
