@@ -39,7 +39,7 @@ export default function ReportsSettings(): JSX.Element {
   const projectId = String(pathParams.projectId);
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
   const dispatch = useAppDispatch();
-  const { goToAcceleratorEditReportSettings, goToNewProjectMetric } = useNavigateTo();
+  const { goToAcceleratorEditReportSettings, goToNewProjectMetric, goToNewStandardMetric } = useNavigateTo();
   const [requestId, setRequestId] = useState<string>('');
   const [standardRequestId, setStandardRequestId] = useState<string>('');
   const [systemRequestId, setSystemRequestId] = useState<string>('');
@@ -172,9 +172,13 @@ export default function ReportsSettings(): JSX.Element {
     [openEditMetricModal]
   );
 
-  const goToAddMetric = useCallback(() => {
+  const goToAddProjectMetric = useCallback(() => {
     goToNewProjectMetric(projectId);
   }, [goToNewProjectMetric, projectId]);
+
+  const goToAddStandardMetric = useCallback(() => {
+    goToNewStandardMetric();
+  }, [goToNewStandardMetric]);
 
   const clickable = useCallback(() => false, []);
 
@@ -234,7 +238,7 @@ export default function ReportsSettings(): JSX.Element {
             {title(strings.PROJECT_SPECIFIC_METRICS)}
             {isAllowed('UPDATE_REPORTS_SETTINGS') && (
               <Box>
-                <Button label={strings.ADD_METRIC} icon='plus' onClick={goToAddMetric} priority='secondary' />
+                <Button label={strings.ADD_METRIC} icon='plus' onClick={goToAddProjectMetric} priority='secondary' />
               </Box>
             )}
           </Grid>
@@ -279,10 +283,15 @@ export default function ReportsSettings(): JSX.Element {
           </Grid>
         </Grid>
         <Grid container sx={gridStyle}>
-          <Grid item xs={12}>
+          <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
             {title(strings.STANDARD_METRICS)}
+            {isAllowed('UPDATE_REPORTS_SETTINGS') && (
+              <Box>
+                <Button label={strings.ADD_METRIC} icon='plus' onClick={goToAddStandardMetric} priority='secondary' />
+              </Box>
+            )}
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} textAlign={'center'}>
             <Table
               id='standard-metrics-table'
               columns={columns}

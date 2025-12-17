@@ -13,6 +13,7 @@ import {
   requestAcceleratorReport,
   requestCreateProjectMetric,
   requestCreateReportConfig,
+  requestCreateStandardMetric,
   requestDeleteManyAcceleratorReportPhotos,
   requestListAcceleratorReports,
   requestListProjectMetrics,
@@ -135,6 +136,20 @@ const projectMetricCreateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestCreateProjectMetric)(builder);
+  },
+});
+
+/**
+ * Create Standard Metric
+ */
+const initialStandardMetricCreateState: { [key: string]: StatusT<number> } = {};
+
+const standardMetricCreateSlice = createSlice({
+  name: 'standardMetricCreateSlice',
+  initialState: initialStandardMetricCreateState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestCreateStandardMetric)(builder);
   },
 });
 
@@ -316,6 +331,7 @@ const reportsReducers = {
   reviewAcceleratorReport: reviewAcceleratorReportSlice.reducer,
   reviewAcceleratorReportMetric: reviewAcceleratorReportMetricSlice.reducer,
   refreshAcceleratorReportSystemMetrics: refreshAcceleratorReportSystemMetricsSlice.reducer,
+  standardMetricCreate: standardMetricCreateSlice.reducer,
   submitAcceleratorReport: submitAcceleratorReportSlice.reducer,
   updateAcceleratorReport: updateAcceleratorReportSlice.reducer,
   updateAcceleratorReportTargets: updateAcceleratorReportTargetsSlice.reducer,

@@ -8,6 +8,7 @@ import {
   AcceleratorReportPhoto,
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
+  CreateStandardMetricRequestPayload,
   NewAcceleratorReportPhoto,
   PublishAcceleratorReportRequest,
   RefreshAcceleratorReportSystemMetricsRequest,
@@ -139,6 +140,19 @@ export const requestCreateProjectMetric = createAsyncThunk(
   'createProjectMetric',
   async (request: CreateProjectMetricRequest, { rejectWithValue }) => {
     const response = await AcceleratorReportService.createProjectMetric(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestCreateStandardMetric = createAsyncThunk(
+  'createStandardMetric',
+  async (request: CreateStandardMetricRequestPayload, { rejectWithValue }) => {
+    const response = await AcceleratorReportService.createStandardMetric(request);
 
     if (response && response.requestSucceeded) {
       return response.data;

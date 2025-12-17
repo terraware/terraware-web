@@ -373,6 +373,8 @@ export default function useNavigateTo() {
 
       goToNewProjectMetric: (projectId: string) =>
         navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_METRICS_NEW.replace(':projectId', projectId)),
+
+      goToNewStandardMetric: () => navigate(APP_PATHS.ACCELERATOR_STANDARD_METRICS_NEW),
     }),
     [navigate]
   );
