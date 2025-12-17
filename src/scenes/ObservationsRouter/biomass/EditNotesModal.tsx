@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
@@ -12,6 +12,7 @@ import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataConfirmationModal';
 import QuadratNotesComponent from './QuadratNotesComponent';
 
 type EditNotesModalProps = {
@@ -33,6 +34,7 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId, reload }: Ed
 
   const biomassMeasurements = observationResults?.biomassMeasurements;
   const [record, setRecord] = useForm(biomassMeasurements);
+  const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
     setRecord(biomassMeasurements);
@@ -91,6 +93,18 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId, reload }: Ed
     })();
   }, [monitoringPlotId, observationId, onClose, record?.quadrats, update, snackbar, reload]);
 
+  const showModal = useCallback(() => {
+    setShowWarning(true);
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    setShowWarning(false);
+  }, []);
+
+  const onConfirmSave = useCallback(() => {
+    onSubmit();
+  }, [onSubmit]);
+
   return (
     <DialogBox
       onClose={onClose}
@@ -108,9 +122,10 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId, reload }: Ed
           size='medium'
           key='button-1'
         />,
-        <Button id='saveData' label={strings.SAVE} onClick={onSubmit} size='medium' key='button-2' />,
+        <Button id='saveData' label={strings.SAVE} onClick={showModal} size='medium' key='button-2' />,
       ]}
     >
+      {showWarning && <EditQualitativeDataConfirmationModal onClose={onCloseModal} onSubmit={onConfirmSave} />}
       {biomassMeasurements && (
         <Box sx={{ textAlign: 'left' }}>
           <QuadratNotesComponent quadrat='Northwest' record={record} setRecord={setRecord} />
