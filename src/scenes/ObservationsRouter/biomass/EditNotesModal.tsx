@@ -18,9 +18,10 @@ type EditNotesModalProps = {
   onClose: () => void;
   observationId: number;
   monitoringPlotId?: number;
+  reload: () => void;
 };
 
-const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesModalProps) => {
+const EditNotesModal = ({ onClose, observationId, monitoringPlotId, reload }: EditNotesModalProps) => {
   const { data: GetObservationResultsApiResponse } = useGetObservationResultsQuery({ observationId });
   const [update] = useUpdateCompletedObservationPlotMutation();
   const snackbar = useSnackbar();
@@ -82,11 +83,13 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesM
         if ('error' in result) {
           snackbar.toastError();
           return;
+        } else {
+          reload();
         }
       }
       onClose();
     })();
-  }, [monitoringPlotId, observationId, onClose, record?.quadrats, update, snackbar]);
+  }, [monitoringPlotId, observationId, onClose, record?.quadrats, update, snackbar, reload]);
 
   return (
     <DialogBox
