@@ -25,17 +25,18 @@ export default function NewStandardMetric(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const createStandardMetricResponse = useAppSelector(selectCreateStandardMetric(requestId));
-  const [validate, setValidate] = useState(false);
+  const { isMobile } = useDeviceInfo();
+
   const [confirmDialogOpen, , openConfirmDialog, closeConfirmDialog] = useBoolean(false);
+  const [validate, setValidate] = useState(false);
+  const [requestId, setRequestId] = useState<string>('');
+
+  const createStandardMetricResponse = useAppSelector(selectCreateStandardMetric(requestId));
 
   const goToReports = useCallback(() => {
     // Go back to the previous page (which should be the ReportsSettings page)
     navigate(-1);
   }, [navigate]);
-
-  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     if (createStandardMetricResponse?.status === 'success') {
@@ -45,10 +46,10 @@ export default function NewStandardMetric(): JSX.Element {
 
   const [newMetric, , , onChangeCallback] = useForm<CreateStandardMetricRequestPayload['metric']>({
     component: 'Biodiversity',
+    isPublishable: true,
     name: '',
     reference: '',
     type: 'Activity',
-    isPublishable: true,
   });
 
   const saveNewMetric = useCallback(() => {
@@ -74,8 +75,8 @@ export default function NewStandardMetric(): JSX.Element {
         open={confirmDialogOpen}
         title={strings.ADD_STANDARD_METRIC}
       />
-      <Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
-        <PageForm cancelID='cancelNewMetric' saveID='saveNewMetric' onCancel={goToReports} onSave={saveNewMetric}>
+      <Page contentStyle={{ display: 'flex', flexDirection: 'column' }} title={strings.REPORTS}>
+        <PageForm cancelID='cancelNewMetric' onCancel={goToReports} onSave={saveNewMetric} saveID='saveNewMetric'>
           <Container
             maxWidth={false}
             sx={{
@@ -96,74 +97,74 @@ export default function NewStandardMetric(): JSX.Element {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    errorText={validate && !newMetric.name ? strings.REQUIRED_FIELD : ''}
                     id='name'
                     label={strings.NAME}
-                    type='text'
                     onChange={onChangeCallback('name')}
-                    value={newMetric.name}
                     required
-                    errorText={validate && !newMetric.name ? strings.REQUIRED_FIELD : ''}
+                    type='text'
+                    value={newMetric.name}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
                     id='description'
                     label={strings.DESCRIPTION}
-                    type='textarea'
                     onChange={onChangeCallback('description')}
+                    type='textarea'
                     value={newMetric.description}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <Dropdown
+                    fullWidth
                     id='type'
                     label={strings.TYPE}
                     onChange={onChangeCallback('type')}
                     options={metricTypeOptions()}
                     selectedValue={newMetric.type}
-                    fullWidth
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    errorText={validate && !newMetric.reference ? strings.REQUIRED_FIELD : ''}
                     id='reference'
                     label={strings.REFERENCE}
-                    type='text'
                     onChange={onChangeCallback('reference')}
-                    value={newMetric.reference}
                     required
-                    errorText={validate && !newMetric.reference ? strings.REQUIRED_FIELD : ''}
+                    type='text'
+                    value={newMetric.reference}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
                     id='unit'
                     label={strings.UNIT}
-                    type='text'
                     maxLength={25}
                     onChange={onChangeCallback('unit')}
+                    type='text'
                     value={newMetric.unit}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <Dropdown
+                    fullWidth
                     id='component'
                     label={strings.COMPONENT}
                     onChange={onChangeCallback('component')}
                     options={metricComponentOptions()}
-                    selectedValue={newMetric.component}
-                    fullWidth
                     required
+                    selectedValue={newMetric.component}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <Checkbox
                     disabled={false}
                     id='isPublishable'
-                    name='isPublishable'
                     label={strings.PUBLISH_TO_FUNDER_PORTAL}
-                    value={newMetric.isPublishable}
+                    name='isPublishable'
                     onChange={onChangeCallback('isPublishable')}
+                    value={newMetric.isPublishable}
                   />
                 </Grid>
               </Grid>
