@@ -1,3 +1,4 @@
+6b109ff6bff SW-7870  "Pre-existing" column appearing in Species table for ad hoc Plant Monitoring Observations (#4907)
 80ec483d43f SW-7860 Biomass Observations: Quadrat Description/Notes fields not showing values or editable (#4906)
 a7c86fbeb4e SW-7848 Plant Monitoring Observations: Ad Hoc Observation tooltips are not correct, reference "pre-existing" (#4904)
 b43f9264c2f SW-7834 Change History: Event for value change from null say "from to" with missing word (#4903)
