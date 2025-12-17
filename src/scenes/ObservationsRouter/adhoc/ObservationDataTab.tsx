@@ -5,7 +5,6 @@ import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import {
@@ -27,7 +26,6 @@ import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataC
 import EditQualitativeDataModal from '../common/EditQualitativeDataModal';
 import EventLog from '../common/EventLog';
 import SpeciesTotalPlantsChart from '../common/SpeciesMortalityRateChart';
-import SpeciesMortalityRateChart from '../common/SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
 import ExtraData from './ExtraData';
 import ObservationDataNumbers from './ObservationDataNumbers';
@@ -42,6 +40,7 @@ type ObservationDataTabProps = {
   onExportData?: () => void;
   onMatchSpecies?: () => void;
   reloadAll: () => void;
+  isCompleted: boolean;
 };
 
 const ObservationDataTab = ({
@@ -53,8 +52,8 @@ const ObservationDataTab = ({
   onMatchSpecies,
   observationId,
   reloadAll,
+  isCompleted,
 }: ObservationDataTabProps) => {
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const { plantingSite, reload } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
@@ -72,12 +71,12 @@ const ObservationDataTab = ({
   const items = [
     {
       label: strings.TOTAL_PLANTS,
-      tooltip: strings.PLOT_TOTAL_PLANTS_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP : strings.PLOT_TOTAL_PLANTS_TOOLTIP,
       value: monitoringPlot?.totalPlants,
     },
     {
       label: strings.LIVE_PLANTS,
-      tooltip: strings.PLOT_LIVE_PLANTS_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP : strings.PLOT_LIVE_PLANTS_TOOLTIP,
       value: livePlants,
     },
     {
@@ -87,12 +86,12 @@ const ObservationDataTab = ({
     },
     {
       label: strings.SPECIES,
-      tooltip: strings.PLOT_SPECIES_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_SPECIES_TOOLTIP : strings.PLOT_SPECIES_TOOLTIP,
       value: monitoringPlot?.totalSpecies,
     },
     {
       label: strings.PLANT_DENSITY,
-      tooltip: strings.PLOT_PLANT_DENSITY_TOOLTIP,
+      tooltip: type === 'adHoc' ? strings.AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP : strings.PLOT_PLANT_DENSITY_TOOLTIP,
       value: monitoringPlot?.plantingDensity,
     },
     ...(monitoringPlot?.survivalRate !== undefined
@@ -179,43 +178,38 @@ const ObservationDataTab = ({
           observationId={observationId}
         />
       )}
-      <ObservationDataNumbers items={items} />
+      <ObservationDataNumbers items={items} isCompleted={isCompleted} />
       {species && (
         <Box>
           <Box display='flex' alignContent={'center'}>
             <Typography fontSize={'20px'} fontWeight={600}>
               {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
             </Typography>
-            <IconTooltip title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP} />
+            <IconTooltip
+              title={
+                type === 'adHoc'
+                  ? strings.AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
+                  : strings.ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
+              }
+            />
           </Box>
 
           <Box height='360px'>
-            <SpeciesTotalPlantsChart minHeight='360px' species={species} />
+            <SpeciesTotalPlantsChart minHeight='360px' species={species} isCompleted={isCompleted} />
           </Box>
         </Box>
       )}
 
-      {monitoringPlot?.isPermanent &&
-        (isSurvivalRateCalculationEnabled ? (
-          <Box>
-            <Typography fontSize={'20px'} fontWeight={600}>
-              {strings.SURVIVAL_RATE_PER_SPECIES}
-            </Typography>
-            <Box height='360px'>
-              <SpeciesSurvivalRateChart minHeight='360px' species={species} />
-            </Box>
+      {monitoringPlot?.isPermanent && (
+        <Box>
+          <Typography fontSize={'20px'} fontWeight={600}>
+            {strings.SURVIVAL_RATE_PER_SPECIES}
+          </Typography>
+          <Box height='360px'>
+            <SpeciesSurvivalRateChart minHeight='360px' species={species} isCompleted={isCompleted} />
           </Box>
-        ) : (
-          <Box>
-            <Typography fontSize={'20px'} fontWeight={600}>
-              {strings.MORTALITY_RATE_PER_SPECIES}
-            </Typography>
-
-            <Box height='360px'>
-              <SpeciesMortalityRateChart minHeight='360px' species={species} />
-            </Box>
-          </Box>
-        ))}
+        </Box>
+      )}
       {type === 'adHoc' && onExportData && onMatchSpecies && (
         <PlotActions
           unrecognizedSpecies={unrecognizedSpecies}
@@ -267,6 +261,8 @@ const ObservationDataTab = ({
           observationId={Number(observationId)}
           plotId={Number(monitoringPlot?.monitoringPlotId)}
           reload={reloadAll}
+          isCompleted={isCompleted}
+          type={type}
         />
       </Box>
       {monitoringPlot.monitoringPlotId && (

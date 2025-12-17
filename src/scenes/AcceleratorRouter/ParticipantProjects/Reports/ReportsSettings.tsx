@@ -8,7 +8,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import Table from 'src/components/common/table';
-import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
@@ -56,7 +55,6 @@ export default function ReportsSettings(): JSX.Element {
   const [editStandardMetricModalOpened, , openEditStandardMetricModal, closeEditStandardMetricModal] =
     useBoolean(false);
   const { isAllowed } = useUser();
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   useEffect(() => {
     const dispatched = dispatch(requestListStandardMetrics());
@@ -201,11 +199,11 @@ export default function ReportsSettings(): JSX.Element {
 
   const filteredSystemMetrics: SystemMetric[] = useMemo(() => {
     if (systemMetrics) {
-      return isSurvivalRateCalculationEnabled ? systemMetrics : systemMetrics.filter((m) => m.name !== 'Survival Rate');
+      return systemMetrics;
     } else {
       return [];
     }
-  }, [isSurvivalRateCalculationEnabled, systemMetrics]);
+  }, [systemMetrics]);
 
   return (
     <>

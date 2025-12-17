@@ -82,6 +82,9 @@ export default function TreesAndShrubsEditableTable({
         accessorKey: 'treeGrowthForm',
         header: strings.GROWTH_FORM,
         enableEditing: false,
+        Cell: ({ row }) => {
+          return row.original.treeGrowthForm === 'Trunk' ? 'Tree' : row.original.treeGrowthForm;
+        },
       },
       {
         accessorKey: 'diameterAtBreastHeight',

@@ -6,7 +6,6 @@ import { TableColumnType } from '@terraware/web-components';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import {
@@ -34,7 +33,6 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
 
   const plantingSiteId = Number(params.plantingSiteId || -1);
   const observationId = Number(params.observationId || -1);
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const columns = useCallback(
     () =>
@@ -47,13 +45,13 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
         { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
         { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
         {
-          key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
-          name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+          key: 'survivalRate',
+          name: strings.SURVIVAL_RATE,
           type: 'number',
-          tooltipTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : '',
+          tooltipTitle: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
         },
       ] as TableColumnType[],
-    [isSurvivalRateCalculationEnabled]
+    []
   );
 
   const details = useAppSelector((state) =>

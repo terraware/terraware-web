@@ -44,9 +44,14 @@ ACTIVITY_PUBLISHED,Actividad publicada,6ce064cc
 ACTIVITY_TYPE,Tipo de actividad,5f057b66
 ACTUAL,Real,1235cf68
 AD_HOC,Ad hoc,2acaf742
+AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de plantas observadas por especie registradas como vivas. No se incluyen las plantas registradas cuya especie es desconocida.,15817386
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Actualmente no hay observaciones ad hoc de parcelas.,9ae089fc
 AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Las observaciones utilizando parcelas ad hoc para el Monitoreo de Plantas pueden registrarse a través de Observaciones de Parcelas Ad Hoc en la aplicación móvil.,f0775160
 AD_HOC_PLANT_MONITORING,Monitoreo de plantas ad hoc,589a6d6c
+AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observadas registradas como vivas.,b0ec7f7f
+AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas.,142e44c5
+AD_HOC_PLOT_SPECIES_TOOLTIP,Especies es el número de especies representadas por todas las plantas observadas.,ed7c35b1
+AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas.",b2fd163f
 ADD,Añadir,2ffae546
 ADD_A_NURSERY,Añadir un vivero,758726df
 ADD_A_PLANTING_SITE,Añadir un sitio de plantación,edbe08ae
@@ -192,6 +197,7 @@ ASSIGN_NEW_OWNER_DESC,Debe asignar un dueño nuevo para retirar el dueño actual
 ASSIGN_OWNER,Asignar propietario,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Asignar propietario...,8053cd0e
 ASSIGNED,Asignada,29aa3dd8
+ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de plantas observadas por especie registradas como vivas. No se incluyen las plantas registradas como preexistentes o cuya especie es desconocida.,526a70bc
 ATTACH_IMAGES_OR_VIDEOS,Adjunte imágenes o videos,c229aa87
 ATTACHMENT_DESCRIPTION,Adjunte hasta {0} archivos. Cada archivo tiene un tamaño máximo de {1} MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Se alcanzó el límite de archivos adjuntos,9f9323bc
@@ -230,6 +236,7 @@ BIOMASS_EMPTY_STATE_MESSAGE_2,Las observaciones para el Monitoreo de Biomasa pue
 BIOMASS_MEASUREMENT,Medición de biomasa,cf846a13
 BIOMASS_MEASUREMENTS,Mediciones de biomasa,fab7d40f
 BIOMASS_MONITORING,Monitoreo de biomasa,c249c88e
+BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de especies observadas de árboles y arbustos registradas como vivas.,cb7c376f
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Observación-de-la-biomasa,15aec1fa
 BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Plantas muertas es el número de árboles y arbustos observados registrados como muertos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,ea814e7f
 BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de árboles y arbustos observados registrados como vivos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,d69a1ca7
@@ -2296,7 +2303,7 @@ USING_ENTERED_PLANT_DENSITY,Usando la densidad de plantas ingresada por especie,
 USING_OBSERVATION_DATA_FROM,Usando datos de observación de {0},c489a0dd
 VALUE,Valor,b8e67ab1
 VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%,e78b7737
-VALUE_CHANGED_FROM_TO,El valor de {0} cambió de {1} a {2},566b2a1f
+VALUE_CHANGED_FROM_TO,{0} cambió de {1} a {2},205532d3
 VARIABLE_DETAILS,Detalles de las variables,48294b19
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,El valor ha excedido los decimales máximos de {0},3a248e96
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,El valor es superior al valor máximo de {0},4bb003ef

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { MRT_ColumnDef, MRT_Row, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 
 import { useLocalization } from 'src/providers';
 import {
@@ -15,6 +15,8 @@ type SpeciesEditableTableProps = {
   observationId: number;
   plotId: number;
   reload: () => void;
+  isCompleted: boolean;
+  type?: string;
 };
 
 export default function SpeciesEditableTable({
@@ -22,6 +24,8 @@ export default function SpeciesEditableTable({
   reload,
   observationId,
   plotId,
+  isCompleted,
+  type,
 }: SpeciesEditableTableProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -63,13 +67,22 @@ export default function SpeciesEditableTable({
         header: strings.SPECIES,
         enableEditing: false,
       },
-      {
-        accessorKey: 'totalExisting',
-        header: strings.PREEXISTING,
-        muiEditTextFieldProps: ({ row }) => ({
-          onBlur: saveValue('totalExisting', row.original.certainty, row.original.speciesId, row.original.speciesName),
-        }),
-      },
+      ...(type !== 'adHoc'
+        ? [
+            {
+              accessorKey: 'totalExisting',
+              header: strings.PREEXISTING,
+              muiEditTextFieldProps: ({ row }: { row: MRT_Row<ObservationSpeciesResults> }) => ({
+                onBlur: saveValue(
+                  'totalExisting',
+                  row.original.certainty,
+                  row.original.speciesId,
+                  row.original.speciesName
+                ),
+              }),
+            },
+          ]
+        : []),
       {
         accessorKey: 'totalLive',
         header: strings.LIVE_PLANTS,
@@ -85,12 +98,12 @@ export default function SpeciesEditableTable({
         }),
       },
     ],
-    [strings, saveValue]
+    [strings, saveValue, type]
   );
 
   const table = useMaterialReactTable({
     columns,
-    data: species || [],
+    data: isCompleted ? species || [] : [],
     editDisplayMode: 'cell',
     enableColumnOrdering: false,
     enableColumnPinning: false,

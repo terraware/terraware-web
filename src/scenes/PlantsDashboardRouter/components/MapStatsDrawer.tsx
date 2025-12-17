@@ -4,7 +4,6 @@ import { Box, CircularProgress } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
-import isEnabled from 'src/features';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
@@ -34,7 +33,6 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
   const { isLoading, plantingSite, plantingSiteReportedPlants } = usePlantingSite(plantingSiteId);
   const { observationSummaries } = usePlantingSiteData();
   const [delayedLoading, setDelayedLoading] = useState(isLoading);
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -149,14 +147,8 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
       if (properties.observed) {
         results.push(
           {
-            key: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
-            value: isSurvivalRateCalculationEnabled
-              ? properties.survivalRate
-                ? `${properties.survivalRate}%`
-                : strings.NO_DATA_YET
-              : properties.mortalityRate
-                ? `${properties.mortalityRate}%`
-                : strings.NO_DATA_YET,
+            key: strings.SURVIVAL_RATE,
+            value: properties.survivalRate ? `${properties.survivalRate}%` : strings.NO_DATA_YET,
           },
           {
             key: strings.PLANTING_DENSITY,
@@ -193,7 +185,7 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
     }
 
     return results;
-  }, [properties, strings, isSurvivalRateCalculationEnabled]);
+  }, [properties, strings]);
 
   if (delayedLoading) {
     return (

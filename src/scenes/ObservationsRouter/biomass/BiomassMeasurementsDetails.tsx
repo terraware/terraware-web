@@ -241,6 +241,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
               onMatchSpecies={onMatchSpecies}
               observationId={Number(observationId)}
               reload={reload}
+              isCompleted={!!observation?.completedTime}
             />
           </>
         ),
@@ -259,7 +260,13 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
       {
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
-        children: <PhotosAndVideosTab monitoringPlot={monitoringPlot} type='biomass' />,
+        children: (
+          <PhotosAndVideosTab
+            monitoringPlot={monitoringPlot}
+            type='biomass'
+            isCompleted={!!observation?.completedTime}
+          />
+        ),
       },
     ];
   }, [
@@ -275,6 +282,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     onMatchSpecies,
     observationId,
     reload,
+    observation,
   ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({

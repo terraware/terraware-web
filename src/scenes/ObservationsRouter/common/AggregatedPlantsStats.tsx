@@ -5,13 +5,11 @@ import { IconTooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers/hooks';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import SpeciesMortalityRateChart from './SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from './SpeciesSurvivalRateChart';
 import SpeciesTotalPlantsChart from './SpeciesTotalPlantsChart';
 
@@ -20,7 +18,6 @@ export type AggregatedPlantsStatsProps = {
   totalPlants?: number;
   totalSpecies?: number;
   plantingDensity?: number;
-  mortalityRate?: number;
   survivalRate?: number;
   species?: ObservationSpeciesResults[];
   hasObservedPermanentPlots?: boolean;
@@ -30,7 +27,6 @@ export default function AggregatedPlantsStats({
   completedTime,
   totalSpecies,
   plantingDensity,
-  mortalityRate,
   survivalRate,
   species,
   hasObservedPermanentPlots,
@@ -44,8 +40,6 @@ export default function AggregatedPlantsStats({
 
   const handleMissingData = (num?: number) => (!completedTime && !num ? '' : num);
 
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
-
   const getData = () => [
     { label: strings.LIVE_PLANTS, tooltip: strings.TOOLTIP_LIVE_PLANTS, value: handleMissingData(livePlants) },
     { label: strings.SPECIES, value: handleMissingData(totalSpecies) },
@@ -55,16 +49,9 @@ export default function AggregatedPlantsStats({
       value: plantingDensity,
     },
     {
-      label: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
-      value: hasObservedPermanentPlots
-        ? isSurvivalRateCalculationEnabled
-          ? survivalRate
-            ? `${survivalRate}%`
-            : ''
-          : handleMissingData(mortalityRate)
-        : '',
-      tooltip:
-        hasObservedPermanentPlots && isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : '',
+      label: strings.SURVIVAL_RATE,
+      value: hasObservedPermanentPlots ? (survivalRate ? `${survivalRate}%` : '') : '',
+      tooltip: hasObservedPermanentPlots && strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
     },
   ];
 
@@ -96,15 +83,13 @@ export default function AggregatedPlantsStats({
           </ChartWrapper>
         </Grid>
         <Grid item xs={chartGridSize}>
-          {isSurvivalRateCalculationEnabled ? (
-            <ChartWrapper title={strings.SURVIVAL_RATE_PER_SPECIES}>
-              <SpeciesSurvivalRateChart species={hasObservedPermanentPlots ? species : []} minHeight='170px' />
-            </ChartWrapper>
-          ) : (
-            <ChartWrapper title={strings.MORTALITY_RATE_PER_SPECIES}>
-              <SpeciesMortalityRateChart species={hasObservedPermanentPlots ? species : []} minHeight='170px' />
-            </ChartWrapper>
-          )}
+          <ChartWrapper title={strings.SURVIVAL_RATE_PER_SPECIES}>
+            <SpeciesSurvivalRateChart
+              species={hasObservedPermanentPlots ? species : []}
+              minHeight='170px'
+              isCompleted={!!completedTime}
+            />
+          </ChartWrapper>
         </Grid>
       </Grid>
     </Box>

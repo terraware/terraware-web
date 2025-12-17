@@ -6,7 +6,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
-import isEnabled from 'src/features';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
@@ -16,7 +15,6 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
   const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<number>();
   const [selectedMortalityZone, setSelectedMortalityZone] = useState<number>();
   const { plantingSite, observationSummaries } = usePlantingSiteData();
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {
@@ -82,14 +80,14 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
   const mortalityChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
       const zone = sc.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
-      if ((isSurvivalRateCalculationEnabled ? zone?.survivalRate : zone?.mortalityRate) !== undefined) {
+      if (zone?.survivalRate !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
       const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedMortalityZone);
-      return (isSurvivalRateCalculationEnabled ? zone?.survivalRate : zone?.mortalityRate) || 0;
+      return zone?.survivalRate || 0;
     });
 
     return {
@@ -103,7 +101,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
         },
       ],
     };
-  }, [isSurvivalRateCalculationEnabled, observationSummaries, selectedMortalityZone, selectedPlantsPerHaZone]);
+  }, [observationSummaries, selectedMortalityZone, selectedPlantsPerHaZone]);
 
   return (
     <Card
@@ -166,15 +164,9 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
         >
           <Box display={'flex'} alignItems={'center'}>
             <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-              {isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE}
+              {strings.SURVIVAL_RATE}
             </Typography>
-            <Tooltip
-              title={
-                isSurvivalRateCalculationEnabled
-                  ? strings.SURVIVAL_RATE_TREND_TOOLTIP
-                  : strings.MORTALITY_RATE_TREND_TOOLTIP
-              }
-            >
+            <Tooltip title={strings.SURVIVAL_RATE_TREND_TOOLTIP}>
               <Box display='flex' marginRight={1}>
                 <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
               </Box>
@@ -197,11 +189,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
             minHeight='100px'
             yLimits={{
               min: 0,
-              max:
-                !isSurvivalRateCalculationEnabled ||
-                mortalityChartData.datasets[0]?.values.every((value) => (value as number) <= 100)
-                  ? 100
-                  : undefined,
+              max: mortalityChartData.datasets[0]?.values.every((value) => (value as number) <= 100) ? 100 : undefined,
             }}
             type={'line'}
             xAxisType='time'

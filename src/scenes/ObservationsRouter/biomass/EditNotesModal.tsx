@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
@@ -18,9 +18,10 @@ type EditNotesModalProps = {
   onClose: () => void;
   observationId: number;
   monitoringPlotId?: number;
+  reload: () => void;
 };
 
-const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesModalProps) => {
+const EditNotesModal = ({ onClose, observationId, monitoringPlotId, reload }: EditNotesModalProps) => {
   const { data: GetObservationResultsApiResponse } = useGetObservationResultsQuery({ observationId });
   const [update] = useUpdateCompletedObservationPlotMutation();
   const snackbar = useSnackbar();
@@ -32,6 +33,10 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesM
 
   const biomassMeasurements = observationResults?.biomassMeasurements;
   const [record, setRecord] = useForm(biomassMeasurements);
+
+  useEffect(() => {
+    setRecord(biomassMeasurements);
+  }, [biomassMeasurements, setRecord]);
 
   const onSubmit = useCallback(() => {
     void (async () => {
@@ -78,11 +83,13 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesM
         if ('error' in result) {
           snackbar.toastError();
           return;
+        } else {
+          reload();
         }
       }
       onClose();
     })();
-  }, [monitoringPlotId, observationId, onClose, record?.quadrats, update, snackbar]);
+  }, [monitoringPlotId, observationId, onClose, record?.quadrats, update, snackbar, reload]);
 
   return (
     <DialogBox
@@ -104,12 +111,14 @@ const EditNotesModal = ({ onClose, observationId, monitoringPlotId }: EditNotesM
         <Button id='saveData' label={strings.SAVE} onClick={onSubmit} size='medium' key='button-2' />,
       ]}
     >
-      <Box sx={{ textAlign: 'left' }}>
-        <QuadratNotesComponent quadrat='Northwest' record={record} setRecord={setRecord} />
-        <QuadratNotesComponent quadrat='Northeast' record={record} setRecord={setRecord} />
-        <QuadratNotesComponent quadrat='Southwest' record={record} setRecord={setRecord} />
-        <QuadratNotesComponent quadrat='Southeast' record={record} setRecord={setRecord} />
-      </Box>
+      {biomassMeasurements && (
+        <Box sx={{ textAlign: 'left' }}>
+          <QuadratNotesComponent quadrat='Northwest' record={record} setRecord={setRecord} />
+          <QuadratNotesComponent quadrat='Northeast' record={record} setRecord={setRecord} />
+          <QuadratNotesComponent quadrat='Southwest' record={record} setRecord={setRecord} />
+          <QuadratNotesComponent quadrat='Southeast' record={record} setRecord={setRecord} />
+        </Box>
+      )}
     </DialogBox>
   );
 };

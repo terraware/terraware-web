@@ -39,6 +39,7 @@ const InvasiveAndThreatenedSpeciesTab = ({
           onClose={onCloseEditNotesModal}
           observationId={observationId}
           monitoringPlotId={monitoringPlot?.monitoringPlotId}
+          reload={reload}
         />
       )}
       <Box display='flex' alignItems={'center'} justifyContent={'space-between'} marginBottom={3}>

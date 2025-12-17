@@ -25,7 +25,7 @@ const MetricBox = ({ metric, index, year, quarter, length }: MetricBoxProps) => 
   const { user } = useUser();
   const numberFormatter = useNumberFormatter(user?.locale);
   const addPercentSign = useMemo(() => {
-    return metric.name === 'Mortality Rate' ? '%' : '';
+    return ['Mortality Rate', 'Survival Rate'].includes(metric.name) ? '%' : '';
   }, [metric]);
 
   const showRow = useMemo(() => {

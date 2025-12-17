@@ -25,7 +25,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   );
 
   const theme = useTheme();
-  const lastEvent = useMemo(() => (events ? events[events.length - 1] : undefined), [events]);
+  const lastEvent = useMemo(() => (events ? events[0] : undefined), [events]);
   const filteredEvents = useMemo(
     () =>
       events?.filter(
@@ -107,10 +107,10 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
                             : event.action.fieldName}
                         </Typography>,
                         <Typography display={'inline'} color={theme.palette.TwClrTxtWarning} fontWeight={600}>
-                          {event.action.changedFrom?.toString() || ''}
+                          {event.action.changedFrom?.toString() || strings.NONE}
                         </Typography>,
                         <Typography display={'inline'} color={theme.palette.TwClrTxtSuccess} fontWeight={600}>
-                          {event.action.changedTo?.toString() || ''}
+                          {event.action.changedTo?.toString() || strings.NONE}
                         </Typography>
                       )}
                     </Box>

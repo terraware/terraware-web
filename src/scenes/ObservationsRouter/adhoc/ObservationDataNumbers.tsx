@@ -5,9 +5,10 @@ import { Icon, Tooltip } from '@terraware/web-components';
 
 type ObservationDataNumbersProps = {
   items: { label: string; tooltip: string; value?: string | number }[];
+  isCompleted: boolean;
 };
 
-const ObservationDataNumbers = ({ items }: ObservationDataNumbersProps) => {
+const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersProps) => {
   const theme = useTheme();
   return (
     <Box display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}>
@@ -29,7 +30,7 @@ const ObservationDataNumbers = ({ items }: ObservationDataNumbersProps) => {
             </Box>
             <Box>
               <Typography fontWeight={600} fontSize={'24px'}>
-                {item.value}
+                {isCompleted ? item.value : ''}
               </Typography>
             </Box>
           </Box>

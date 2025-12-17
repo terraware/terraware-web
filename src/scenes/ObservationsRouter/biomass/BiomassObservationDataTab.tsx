@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, Icon, Textfield } from '@terraware/web-components';
+import { Button, Icon, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -41,6 +41,7 @@ type BiomassObservationDataTabProps = {
   onMatchSpecies: () => void;
   observationId: number;
   reload: () => void;
+  isCompleted: boolean;
 };
 
 const BiomassObservationDataTab = ({
@@ -52,6 +53,7 @@ const BiomassObservationDataTab = ({
   onMatchSpecies,
   observationId,
   reload,
+  isCompleted,
 }: BiomassObservationDataTabProps) => {
   const theme = useTheme();
   const { plantingSite } = usePlantingSiteData();
@@ -234,17 +236,17 @@ const BiomassObservationDataTab = ({
           observationId={observationId}
         />
       )}
-      <ObservationDataNumbers items={items} />
-      <Typography
-        fontSize='20px'
-        lineHeight='28px'
-        fontWeight={600}
-        color={theme.palette.TwClrTxt}
-        paddingBottom={2}
-        paddingTop={3}
-      >
-        {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
-      </Typography>
+      <ObservationDataNumbers items={items} isCompleted={isCompleted} />
+      <Box display='flex' sx={{ paddingBottom: 2, paddingTop: 3, alignItems: 'center' }}>
+        <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingRight={1}>
+          {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+        </Typography>
+        <Tooltip title={strings.BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
+          <Box display='flex'>
+            <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} />
+          </Box>
+        </Tooltip>
+      </Box>
       <Box height='360px'>
         <LiveTreesPerSpecies trees={biomassMeasurement?.trees} />
       </Box>

@@ -10,7 +10,6 @@ import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useObservation from 'src/hooks/useObservation';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -59,7 +58,6 @@ export default function ObservationPlantingZone(): JSX.Element {
     ObservationMonitoringPlotResultsPayload | undefined
   >();
   const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const defaultColumns = useCallback(
     () =>
@@ -74,13 +72,13 @@ export default function ObservationPlantingZone(): JSX.Element {
         { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
         { key: 'plantingDensity', name: strings.PLANT_DENSITY, type: 'number' },
         {
-          key: isSurvivalRateCalculationEnabled ? 'survivalRate' : 'mortalityRate',
-          name: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE : strings.MORTALITY_RATE,
+          key: 'survivalRate',
+          name: strings.SURVIVAL_RATE,
           type: 'number',
-          tooltipTitle: isSurvivalRateCalculationEnabled ? strings.SURVIVAL_RATE_COLUMN_TOOLTIP : '',
+          tooltipTitle: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
         },
       ] as TableColumnType[],
-    [isSurvivalRateCalculationEnabled]
+    []
   );
 
   const columns = useCallback((): TableColumnType[] => {
@@ -163,8 +161,8 @@ export default function ObservationPlantingZone(): JSX.Element {
   );
 
   const showSurvivalRateMessage = useMemo(() => {
-    return isSurvivalRateCalculationEnabled && plantingZone?.survivalRate === undefined;
-  }, [isSurvivalRateCalculationEnabled, plantingZone]);
+    return plantingZone?.survivalRate === undefined;
+  }, [plantingZone]);
 
   return (
     <>

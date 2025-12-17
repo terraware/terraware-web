@@ -6,7 +6,6 @@ import { Select, TableColumnType, TableRowType } from '@terraware/web-components
 import { DateTime } from 'luxon';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
 import useProjectReports from 'src/hooks/useProjectReports';
@@ -108,7 +107,6 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const [selectedMetric, setSelectedMetric] = useState<RowMetric>();
   const currentYear = DateTime.now().year;
   const [yearFilter, setYearFilter] = useState<string>();
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const { busy, reload, acceleratorReports: reports } = useProjectReports(projectId, true, true, yearFilter);
   const { acceleratorReports: allReports } = useProjectReports(projectId, true, true);
@@ -153,9 +151,6 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     const metrics: Map<string, RowMetric> = new Map();
     reports?.forEach((report) => {
       report.systemMetrics.forEach((sm) => {
-        if (!isSurvivalRateCalculationEnabled && sm.metric === 'Survival Rate') {
-          return;
-        }
         metrics.set(sm.metric, {
           name: sm.metric,
           type: sm.type,
@@ -228,7 +223,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     });
 
     setMetricsToUse(Array.from(metrics.values()));
-  }, [isSurvivalRateCalculationEnabled, reports]);
+  }, [reports]);
 
   const defaultSearchOrder: SearchSortOrder = {
     field: 'metric',

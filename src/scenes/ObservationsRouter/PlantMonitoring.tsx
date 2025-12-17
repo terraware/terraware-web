@@ -10,7 +10,6 @@ import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   selectAdHocObservationResults,
@@ -43,7 +42,6 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const navigate = useSyncNavigate();
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const [plotsRequestId, setPlotsRequestId] = useState('');
   const [allSetRequestId, setAllSetRequestId] = useState('');
   const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
@@ -160,7 +158,6 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
         )}
         {selectedPlantingSite &&
           selectedPlantingSite?.id !== -1 &&
-          isSurvivalRateCalculationEnabled &&
           selectedPlotSelection === 'assigned' &&
           (observationsResults?.length || 0) > 0 && (
             <Box display={'flex'} alignItems={'center'} flexBasis={isMobile ? '100%' : 'content'}>

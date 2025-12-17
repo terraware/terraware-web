@@ -13,7 +13,6 @@ import MetricBox, { isReportSystemMetric } from 'src/components/AcceleratorRepor
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
@@ -73,7 +72,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const [deletePhotosRequestId, setDeletePhotosRequestId] = useState<string>('');
   const [updatePhotosRequestId, setUpdatePhotosRequestId] = useState<string>('');
   const [uploadPhotosRequestId, setUploadPhotosRequestId] = useState<string>('');
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
 
   const deletePhotosResult = useAppSelector(selectDeleteManyAcceleratorReportPhotos(deletePhotosRequestId));
   const updatePhotosResult = useAppSelector(selectUpdateManyAcceleratorReportPhotos(updatePhotosRequestId));
@@ -260,7 +258,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
-                ? record.systemMetrics?.filter((m) => isSurvivalRateCalculationEnabled || m.metric !== 'Survival Rate')
+                ? record.systemMetrics
                 : type === 'project'
                   ? record.projectMetrics
                   : record.standardMetrics;

@@ -10,7 +10,6 @@ import { View } from 'src/components/common/ListMapSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -64,7 +63,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [status, setStatus] = useState<ObservationState[]>([]);
-  const isSurvivalRateCalculationEnabled = isEnabled('Survival Rate Calculation');
   const query = useQuery();
 
   useEffect(() => {
@@ -218,8 +216,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [selectedObservationResults]);
 
   const showSurvivalRateMessage = useMemo(() => {
-    return isSurvivalRateCalculationEnabled && details?.survivalRate === undefined;
-  }, [details, isSurvivalRateCalculationEnabled]);
+    return details?.survivalRate === undefined;
+  }, [details]);
 
   return (
     <DetailsPage
