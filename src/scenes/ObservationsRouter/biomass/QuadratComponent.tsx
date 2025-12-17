@@ -16,12 +16,12 @@ import {
 import QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';
 
 type QuadratComponentProps = {
-  quadrat: ObservationMonitoringPlotPosition;
+  position: ObservationMonitoringPlotPosition;
   monitoringPlot?: ObservationMonitoringPlotResultsPayload;
   reload: () => void;
 };
 
-const QuadratComponent = ({ quadrat, monitoringPlot, reload }: QuadratComponentProps) => {
+const QuadratComponent = ({ position, monitoringPlot, reload }: QuadratComponentProps) => {
   const theme = useTheme();
   const { observationId } = useParams<{ observationId: string }>();
   const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
@@ -34,14 +34,14 @@ const QuadratComponent = ({ quadrat, monitoringPlot, reload }: QuadratComponentP
   return (
     <Box>
       <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={2}>
-        {getQuadratLabel(quadrat)}
+        {getQuadratLabel(position)}
       </Typography>
       <Box display={'flex'}>
         <MonitoringPlotPhotos
           observationId={Number(observationId)}
           monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
           photos={monitoringPlot?.photos
-            ?.filter((photo) => photo.type === 'Quadrat' && photo.position === quadrat)
+            ?.filter((photo) => photo.type === 'Quadrat' && photo.position === position)
             ?.filter((pic, index) => index === 0)}
         />
         <Box>
@@ -49,14 +49,14 @@ const QuadratComponent = ({ quadrat, monitoringPlot, reload }: QuadratComponentP
             {strings.DESCRIPTION_NOTES}
           </Typography>
           <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
-            {biomassMeasurements?.quadrats.find((quad) => quad.position === quadrat)?.description}
+            {biomassMeasurements?.quadrats.find((quad) => quad.position === position)?.description}
           </Typography>
         </Box>
       </Box>
-      {quadrat && (
+      {position && (
         <QuadratSpeciesEditableTable
-          species={biomassMeasurements?.quadrats.find((quad) => quad.position === quadrat)?.species}
-          position={quadrat}
+          species={biomassMeasurements?.quadrats.find((quad) => quad.position === position)?.species}
+          position={position}
           observationId={Number(observationId)}
           plotId={Number(monitoringPlot?.monitoringPlotId)}
           reload={reload}

@@ -41,7 +41,7 @@ export default function MonitoringPlotPhotosWithActions({
         caption: photo.caption,
         type: photo.mediaKind,
         position: photo.position,
-        quadrat: photo.type === 'Quadrat',
+        isQuadrat: photo.type === 'Quadrat',
       })),
     [photos]
   );
@@ -82,7 +82,7 @@ export default function MonitoringPlotPhotosWithActions({
                 {monitoringPlotName} {getPositionLabel(mediaFile.position)}
               </Typography>
             )}
-            {mediaFile.quadrat && (
+            {mediaFile.isQuadrat && (
               <Typography color={theme.palette.TwClrBaseBlack}>{getQuadratLabel(mediaFile.position)}</Typography>
             )}
             <MediaItem

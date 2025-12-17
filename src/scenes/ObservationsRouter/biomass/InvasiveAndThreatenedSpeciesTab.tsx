@@ -58,10 +58,10 @@ const InvasiveAndThreatenedSpeciesTab = ({
           size='small'
         />
       </Box>
-      <QuadratComponent quadrat='NorthwestCorner' monitoringPlot={monitoringPlot} reload={reload} />
-      <QuadratComponent quadrat='NortheastCorner' monitoringPlot={monitoringPlot} reload={reload} />
-      <QuadratComponent quadrat='SouthwestCorner' monitoringPlot={monitoringPlot} reload={reload} />
-      <QuadratComponent quadrat='SoutheastCorner' monitoringPlot={monitoringPlot} reload={reload} />
+      <QuadratComponent position='NorthwestCorner' monitoringPlot={monitoringPlot} reload={reload} />
+      <QuadratComponent position='NortheastCorner' monitoringPlot={monitoringPlot} reload={reload} />
+      <QuadratComponent position='SouthwestCorner' monitoringPlot={monitoringPlot} reload={reload} />
+      <QuadratComponent position='SoutheastCorner' monitoringPlot={monitoringPlot} reload={reload} />
     </Card>
   );
 };
