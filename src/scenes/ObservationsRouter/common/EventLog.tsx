@@ -5,6 +5,7 @@ import { Button } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import { useLocalization, useOrganization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { ListObservationEventsArgs, useLazyListObservationEventsQuery } from 'src/queries/observations/observations';
 
 type EventLogProps = {
@@ -15,6 +16,7 @@ type EventLogProps = {
 const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
+  const { species } = useSpeciesData();
 
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
   const [showEventLog, setShowEventLog] = useState(true);
@@ -38,6 +40,13 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
       ),
     [MangroveFields, events]
   );
+
+  const getSpeciesName = (speciesId?: number) => {
+    if (speciesId) {
+      const found = species.find((sp) => sp.id.toString() === speciesId.toString());
+      return found?.scientificName || '';
+    }
+  };
 
   useEffect(() => {
     const listEventLogPayload: ListObservationEventsArgs = {
@@ -99,20 +108,36 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
                 <Box>
                   {event.action.type === 'FieldUpdated' && (
                     <Box>
-                      {strings.formatString(
-                        strings.VALUE_CHANGED_FROM_TO,
-                        <Typography display={'inline'} textTransform={'capitalize'}>
-                          {event.subject.type === 'ObservationPlotMedia'
-                            ? `${event.subject.fileId} ${event.action.fieldName}`
-                            : event.action.fieldName}
-                        </Typography>,
-                        <Typography display={'inline'} color={theme.palette.TwClrTxtWarning} fontWeight={600}>
-                          {event.action.changedFrom?.toString() || strings.NONE}
-                        </Typography>,
-                        <Typography display={'inline'} color={theme.palette.TwClrTxtSuccess} fontWeight={600}>
-                          {event.action.changedTo?.toString() || strings.NONE}
-                        </Typography>
-                      )}
+                      {event.subject.type === 'BiomassSpecies' || event.subject.type === 'BiomassQuadratSpecies'
+                        ? strings.formatString(
+                            strings.SPECIES_VALUE_CHANGED_FROM_TO,
+                            <Typography display={'inline'} textTransform={'capitalize'}>
+                              {event.subject.scientificName || getSpeciesName(event.subject.speciesId)}
+                            </Typography>,
+                            <Typography display={'inline'} textTransform={'capitalize'}>
+                              {event.action.fieldName}
+                            </Typography>,
+                            <Typography display={'inline'} color={theme.palette.TwClrTxtWarning} fontWeight={600}>
+                              {event.action.changedFrom?.toString() || strings.NONE}
+                            </Typography>,
+                            <Typography display={'inline'} color={theme.palette.TwClrTxtSuccess} fontWeight={600}>
+                              {event.action.changedTo?.toString() || strings.NONE}
+                            </Typography>
+                          )
+                        : strings.formatString(
+                            strings.VALUE_CHANGED_FROM_TO,
+                            <Typography display={'inline'} textTransform={'capitalize'}>
+                              {event.subject.type === 'ObservationPlotMedia'
+                                ? `${event.subject.fileId} ${event.action.fieldName}`
+                                : event.action.fieldName}
+                            </Typography>,
+                            <Typography display={'inline'} color={theme.palette.TwClrTxtWarning} fontWeight={600}>
+                              {event.action.changedFrom?.toString() || strings.NONE}
+                            </Typography>,
+                            <Typography display={'inline'} color={theme.palette.TwClrTxtSuccess} fontWeight={600}>
+                              {event.action.changedTo?.toString() || strings.NONE}
+                            </Typography>
+                          )}
                     </Box>
                   )}
                   {event.action.type === 'Created' && (

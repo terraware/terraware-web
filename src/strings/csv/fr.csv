@@ -1963,6 +1963,7 @@ SPECIES_TABLE_INSTRUCTIONS,Cliquez sur un nombre dans le tableau pour le modifie
 SPECIES_TABLE_INSTRUCTIONS_NOTE,"REMARQUE : Lorsque les nombres sont modifiés, les nombres et emplacements d'origine des plantes observées ne seront pas mis à jour sur les cartes. Veuillez modifier les nombres avec discernement.",3d4cd792
 SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour calculer les taux de survie des parcelles et des espèces.,6e5f03ec
 SPECIES_USAGE,Utilisation des espèces,0669cb85
+SPECIES_VALUE_CHANGED_FROM_TO,La valeur {1} de l'espèce {0} a été modifiée de {2} à {3},e3330648
 STAFF,Personnel,6b242686
 STAKEHOLDER_ENGAGEMENT,Engagement des parties prenantes,2c5cfa82
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Parties prenantes et impact communautaire,a0af66ae
