@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -132,22 +132,10 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -168,32 +156,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -220,7 +188,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -240,31 +210,21 @@ import { selectAdHocObservationResults } from 'src/redux/features/observations/o
 import { useAppSelector } from 'src/redux/store';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
 import strings from 'src/strings';
-import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
+import {
+  ObservationMonitoringPlotPosition,
+  ObservationMonitoringPlotResultsPayload,
+  getQuadratLabel,
+} from 'src/types/Observations';
 &nbsp;
 import QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';
 &nbsp;
-type QuadratPosition = 'NorthwestCorner' | 'NortheastCorner' | 'SouthwestCorner' | 'SoutheastCorner';
-&nbsp;
-type QuadratConfig = {
-  position: QuadratPosition;
-  title: string;
-};
-&nbsp;
-const QUADRAT_CONFIG: Record&lt;string, QuadratConfig&gt; = <span class="cstat-no" title="statement not covered" >{</span>
-  Northwest: { position: 'NorthwestCorner', title: strings.PHOTO_NORTHWEST_QUADRAT },
-  Northeast: { position: 'NortheastCorner', title: strings.PHOTO_NORTHEAST_QUADRAT },
-  Southwest: { position: 'SouthwestCorner', title: strings.PHOTO_SOUTHWEST_QUADRAT },
-  Southeast: { position: 'SoutheastCorner', title: strings.PHOTO_SOUTHEAST_QUADRAT },
-};
-&nbsp;
 type QuadratComponentProps = {
-  quadrat: string;
+  position: ObservationMonitoringPlotPosition;
   monitoringPlot?: ObservationMonitoringPlotResultsPayload;
   reload: () =&gt; void;
 };
 &nbsp;
-const QuadratComponent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> quadrat, monitoringPlot, reload }: QuadratComponentProps) =&gt; {</span>
+const QuadratComponent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> position, monitoringPlot, reload }: QuadratComponentProps) =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { observationId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ observationId: string }&gt;();</span>
   const allAdHocObservationResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdHocObservationResults);</span>
@@ -274,17 +234,10 @@ const QuadratComponent = <span class="cstat-no" title="statement not covered" ><
   );
   const biomassMeasurements = <span class="cstat-no" title="statement not covered" >observation?.biomassMeasurements;</span>
 &nbsp;
-  const config = <span class="cstat-no" title="statement not covered" >QUADRAT_CONFIG[quadrat];</span>
-<span class="cstat-no" title="statement not covered" >  if (!config) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
-  }
-&nbsp;
-  const { position, title } = <span class="cstat-no" title="statement not covered" >config;</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box&gt;
-      &lt;Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}&gt;
-        {title}
+      &lt;Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={2}&gt;
+        {getQuadratLabel(position)}
       &lt;/Typography&gt;
       &lt;Box display={'flex'}&gt;
         &lt;MonitoringPlotPhotos
@@ -303,13 +256,15 @@ const QuadratComponent = <span class="cstat-no" title="statement not covered" ><
           &lt;/Typography&gt;
         &lt;/Box&gt;
       &lt;/Box&gt;
-      &lt;QuadratSpeciesEditableTable
-        species={biomassMeasurements?.quadrats.find(<span class="fstat-no" title="function not covered" >(q</span>uad) =&gt; <span class="cstat-no" title="statement not covered" >quad.position === position)</span>?.species}
-        position={position}
-        observationId={Number(observationId)}
-        plotId={Number(monitoringPlot?.monitoringPlotId)}
-        reload={reload}
-      /&gt;
+      {position &amp;&amp; (
+        &lt;QuadratSpeciesEditableTable
+          species={biomassMeasurements?.quadrats.find(<span class="fstat-no" title="function not covered" >(q</span>uad) =&gt; <span class="cstat-no" title="statement not covered" >quad.position === position)</span>?.species}
+          position={position}
+          observationId={Number(observationId)}
+          plotId={Number(monitoringPlot?.monitoringPlotId)}
+          reload={reload}
+        /&gt;
+      )}
     &lt;/Box&gt;
   );
 };
@@ -322,7 +277,7 @@ export default QuadratComponent;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-17T20:23:12.319Z
+                at 2025-12-17T20:51:36.051Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
