@@ -108,6 +108,8 @@ ADD_SPECIES,Ajouter des espèces,70fa0cc0
 ADD_SPECIES_MANUALLY_DESCRIPTION,"Saisir manuellement le nom scientifique, ainsi que les autres champs facultatifs, une espèce à la fois.",8fbef04a
 ADD_SPECIES_ONBOARDING_DESCRIPTION,Gérer les espèces que votre organisation collecte et plante.,623f0854
 ADD_SPECIES_TO_PROJECT,Ajouter une espèce au projet,b3eef36e
+ADD_STANDARD_METRIC,Ajouter un indicateur standard,b072c692
+ADD_STANDARD_METRIC_CONFIRMATION,Vous êtes sur le point d’ajouter un indicateur standard qui sera ajouté à TOUS les projets. Êtes-vous sûr de vouloir ajouter cet indicateur à tous les projets ?,9eb37ed2
 ADD_SUB_LOCATION,Ajouter un sous-emplacement,d0ad4ffd
 ADD_SUBSET_WEIGHT_AND_COUNT,Ajouter le poids et le nombre de sous-ensembles,e1b6fdf2
 ADD_TEST,Ajouter un test,2a608b3f
@@ -581,6 +583,8 @@ EDIT_SCORES,Modifier les scores,95db2e9b
 EDIT_SEED_BANK,Modifier la banque de semences,e2400ded
 EDIT_SETTINGS,Modifier les paramètres,f9c91817
 EDIT_SPECIES,Modifier les espèces,0893d9a0
+EDIT_STANDARD_METRIC,Modifier l’indicateur standard,f67c5fd1
+EDIT_STANDARD_METRIC_CONFIRMATION,Les modifications apportées à cet indicateur standard seront appliquées à TOUS les projets. Êtes-vous sûr de vouloir appliquer ces mises à jour à tous les projets ?,6b4ab5e6
 EDIT_STATUS,Modifier le statut,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Modifier les paramètres du taux de survie pour {0},669ad74c
 EDIT_TEMPORARY_PLOTS,Modifier les parcelles temporaires,3df84c06
@@ -1968,6 +1972,8 @@ STAKEHOLDER_ENGAGEMENT,Engagement des parties prenantes,2c5cfa82
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Parties prenantes et impact communautaire,a0af66ae
 STANDARD,Norme,88d7d08c
 STANDARD_DEVIATION,Écart type,f2864fab
+STANDARD_METRIC,Indicateur standard,2704b8e6
+STANDARD_METRIC_SAVED,Indicateur standard enregistré,85edf50b
 STANDARD_METRICS,Indicateurs standards,426fe201
 START,Début,85c0e4d4
 START_DATE,Date de début,892f6912

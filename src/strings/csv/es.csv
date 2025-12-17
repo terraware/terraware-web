@@ -108,6 +108,8 @@ ADD_SPECIES,Añadir Especie,70fa0cc0
 ADD_SPECIES_MANUALLY_DESCRIPTION,"Ingrese el nombre científico y otros campos opcionales manualmente, una especie a la vez.",8fbef04a
 ADD_SPECIES_ONBOARDING_DESCRIPTION,Administre las especies que su organización recolecta y planta.,623f0854
 ADD_SPECIES_TO_PROJECT,Agregar especies al proyecto,b3eef36e
+ADD_STANDARD_METRIC,Agregar Métrica Estándar,b072c692
+ADD_STANDARD_METRIC_CONFIRMATION,Está a punto de agregar una métrica estándar que se añadirá a TODOS los proyectos. ¿Está seguro de que desea agregar esta métrica a todos los proyectos?,9eb37ed2
 ADD_SUB_LOCATION,Añadir Sub-Lugar,d0ad4ffd
 ADD_SUBSET_WEIGHT_AND_COUNT,Agregar peso y recuento del subconjunto,e1b6fdf2
 ADD_TEST,Añadir Prueba,2a608b3f
@@ -582,6 +584,8 @@ EDIT_SCORES,Editar las puntuaciones,95db2e9b
 EDIT_SEED_BANK,Editar banco de semillas,e2400ded
 EDIT_SETTINGS,Editar configuración,f9c91817
 EDIT_SPECIES,Editar especie,0893d9a0
+EDIT_STANDARD_METRIC,Editar Métrica Estándar,f67c5fd1
+EDIT_STANDARD_METRIC_CONFIRMATION,Las ediciones a esta métrica estándar se aplicarán en TODOS los proyectos. ¿Está seguro de que desea que estas actualizaciones se apliquen a todos los proyectos?,6b4ab5e6
 EDIT_STATUS,Editar estado,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Editar configuración de la tasa de supervivencia para {0},669ad74c
 EDIT_TEMPORARY_PLOTS,Editar Parcelas Temporales,3df84c06
@@ -1969,6 +1973,8 @@ STAKEHOLDER_ENGAGEMENT,Participación de partes interesadas,2c5cfa82
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Grupos de interés e impacto en la comunidad,a0af66ae
 STANDARD,Estándar,88d7d08c
 STANDARD_DEVIATION,Desviación estándar,f2864fab
+STANDARD_METRIC,Métrica Estándar,2704b8e6
+STANDARD_METRIC_SAVED,Métrica Estándar Guardada,85edf50b
 STANDARD_METRICS,Métricas estándar,426fe201
 START,Iniciar,85c0e4d4
 START_DATE,Fecha de inicio,892f6912
