@@ -215,7 +215,7 @@
     "react-test-renderer": "18.3.1",
     "sass": "^1.38.0",
     "start-server-and-test": "^2.0.8",
-    "storybook": "^7.0.12",
+    "storybook": "^7.6.21",
     "typescript": "^5.0.0",
     "typescript-eslint": "^7.15.0",
     "webpack-dev-middleware": "^7.0.0"
