@@ -64,7 +64,23 @@ export default function EditStandardMetricModal({
   }, [dispatch, record, closeConfirmDialog]);
 
   return (
-    <>
+    <DialogBox
+      middleButtons={[
+        <Button
+          id='cancel'
+          key='button-1'
+          label={strings.CANCEL}
+          onClick={onClose}
+          priority='secondary'
+          type='passive'
+        />,
+        <Button id='save' key='button-2' label={strings.SAVE} onClick={save} />,
+      ]}
+      onClose={onClose}
+      open={true}
+      size='medium'
+      title={strings.STANDARD_METRIC}
+    >
       <ConfirmModal
         body={strings.EDIT_STANDARD_METRIC_CONFIRMATION}
         onClose={closeConfirmDialog}
@@ -72,88 +88,70 @@ export default function EditStandardMetricModal({
         open={confirmDialogOpen}
         title={strings.EDIT_STANDARD_METRIC}
       />
-      <DialogBox
-        middleButtons={[
-          <Button
-            id='cancel'
-            key='button-1'
-            label={strings.CANCEL}
-            onClick={onClose}
-            priority='secondary'
-            type='passive'
-          />,
-          <Button id='save' key='button-2' label={strings.SAVE} onClick={save} />,
-        ]}
-        onClose={onClose}
-        open={true}
-        size='medium'
-        title={strings.STANDARD_METRIC}
-      >
-        <Grid container spacing={2} textAlign='left'>
-          <Grid item xs={12}>
-            <TextField
-              errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
-              id='name'
-              label={strings.NAME}
-              onChange={onChangeCallback('name')}
-              required
-              type='text'
-              value={record.name}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id='description'
-              label={strings.DESCRIPTION}
-              onChange={onChangeCallback('description')}
-              type='textarea'
-              value={record.description}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Dropdown
-              fullWidth
-              id='type'
-              label={strings.TYPE}
-              onChange={onChangeCallback('type')}
-              options={metricTypeOptions()}
-              selectedValue={record.type}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              errorText={validate && !record.reference ? strings.REQUIRED_FIELD : ''}
-              id='reference'
-              label={strings.REFERENCE}
-              onChange={onChangeCallback('reference')}
-              required
-              type='text'
-              value={record.reference}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Dropdown
-              fullWidth
-              id='component'
-              label={strings.COMPONENT}
-              onChange={onChangeCallback('component')}
-              options={metricComponentOptions()}
-              required
-              selectedValue={record.component}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Checkbox
-              disabled={false}
-              id='isPublishable'
-              label={strings.PUBLISH_TO_FUNDER_PORTAL}
-              name='isPublishable'
-              onChange={onChangeCallback('isPublishable')}
-              value={record.isPublishable}
-            />
-          </Grid>
+      <Grid container spacing={2} textAlign='left'>
+        <Grid item xs={12}>
+          <TextField
+            errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
+            id='name'
+            label={strings.NAME}
+            onChange={onChangeCallback('name')}
+            required
+            type='text'
+            value={record.name}
+          />
         </Grid>
-      </DialogBox>
-    </>
+        <Grid item xs={12}>
+          <TextField
+            id='description'
+            label={strings.DESCRIPTION}
+            onChange={onChangeCallback('description')}
+            type='textarea'
+            value={record.description}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Dropdown
+            fullWidth
+            id='type'
+            label={strings.TYPE}
+            onChange={onChangeCallback('type')}
+            options={metricTypeOptions()}
+            selectedValue={record.type}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            errorText={validate && !record.reference ? strings.REQUIRED_FIELD : ''}
+            id='reference'
+            label={strings.REFERENCE}
+            onChange={onChangeCallback('reference')}
+            required
+            type='text'
+            value={record.reference}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Dropdown
+            fullWidth
+            id='component'
+            label={strings.COMPONENT}
+            onChange={onChangeCallback('component')}
+            options={metricComponentOptions()}
+            required
+            selectedValue={record.component}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Checkbox
+            disabled={false}
+            id='isPublishable'
+            label={strings.PUBLISH_TO_FUNDER_PORTAL}
+            name='isPublishable'
+            onChange={onChangeCallback('isPublishable')}
+            value={record.isPublishable}
+          />
+        </Grid>
+      </Grid>
+    </DialogBox>
   );
 }
