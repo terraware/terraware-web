@@ -26,9 +26,9 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
 
+import DefaultMetricsRenderer from './DefaultMetricsRenderer';
 import EditMetricModal from './EditMetricModal';
 import EditStandardMetricModal from './EditStandardMetricModal';
-import SpecificMetricsRenderer from './SpecificMetricsRenderer';
 import SystemMetricsRenderer from './SystemMetricsRenderer';
 
 export default function ReportsSettings(): JSX.Element {
@@ -283,7 +283,7 @@ export default function ReportsSettings(): JSX.Element {
                     icon: 'iconTrashCan',
                   },
                 ]}
-                Renderer={SpecificMetricsRenderer}
+                Renderer={DefaultMetricsRenderer}
                 onSelect={onClickProjectMetricRow}
                 controlledOnSelect={true}
                 isClickable={clickable}
@@ -326,6 +326,7 @@ export default function ReportsSettings(): JSX.Element {
               rows={standardMetrics || []}
               orderBy='name'
               onSelect={onClickStandardMetricRow}
+              Renderer={DefaultMetricsRenderer}
               showCheckbox={false}
             />
           </Grid>
