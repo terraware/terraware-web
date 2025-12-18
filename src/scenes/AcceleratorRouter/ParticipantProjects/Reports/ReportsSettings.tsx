@@ -192,8 +192,8 @@ export default function ReportsSettings(): JSX.Element {
   }, [goToNewProjectMetric, projectId]);
 
   const goToAddStandardMetric = useCallback(() => {
-    goToNewStandardMetric();
-  }, [goToNewStandardMetric]);
+    goToNewStandardMetric(projectId);
+  }, [goToNewStandardMetric, projectId]);
 
   const clickable = useCallback(() => false, []);
 

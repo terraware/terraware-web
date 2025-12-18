@@ -26,7 +26,6 @@ import NavBar from './NavBar';
 import Organizations from './Organizations';
 import Overview from './Overview';
 import ParticipantProjects from './ParticipantProjects';
-import NewStandardMetric from './ParticipantProjects/Reports/NewStandardMetric';
 import Participants from './Participants';
 import People from './People';
 
@@ -103,7 +102,6 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
                 <Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={<Organizations />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_FUNDING_ENTITIES}/*`} element={<FundingEntities />} />
                 <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
-                <Route path={APP_PATHS.ACCELERATOR_STANDARD_METRICS_NEW} element={<NewStandardMetric />} />
                 <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
               </Routes>
             </ErrorBoundary>

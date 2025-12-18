@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Confirm, Dropdown } from '@terraware/web-components';
@@ -9,6 +10,7 @@ import Card from 'src/components/common/Card';
 import Checkbox from 'src/components/common/Checkbox';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
+import { APP_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { selectCreateStandardMetric } from 'src/redux/features/reports/reportsSelectors';
@@ -27,6 +29,8 @@ export default function NewStandardMetric(): JSX.Element {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
+  const pathParams = useParams<{ projectId: string }>();
+  const projectId = String(pathParams.projectId);
 
   const [confirmDialogOpen, , openConfirmDialog, closeConfirmDialog] = useBoolean(false);
   const [validate, setValidate] = useState(false);
@@ -34,18 +38,18 @@ export default function NewStandardMetric(): JSX.Element {
 
   const createStandardMetricResponse = useAppSelector(selectCreateStandardMetric(requestId));
 
-  const goToReports = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
+  const goToProjectReports = useCallback(() => {
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
+  }, [navigate, projectId]);
 
   useEffect(() => {
     if (createStandardMetricResponse?.status === 'error') {
       snackbar.toastError();
     } else if (createStandardMetricResponse?.status === 'success') {
       snackbar.toastSuccess(strings.STANDARD_METRIC_SAVED);
-      goToReports();
+      goToProjectReports();
     }
-  }, [createStandardMetricResponse, snackbar, goToReports]);
+  }, [createStandardMetricResponse, snackbar, goToProjectReports]);
 
   const [newMetric, , , onChangeCallback] = useForm<CreateStandardMetricRequestPayload['metric']>({
     component: 'Biodiversity',
@@ -82,7 +86,12 @@ export default function NewStandardMetric(): JSX.Element {
         title={strings.ADD_STANDARD_METRIC}
       />
       <Page contentStyle={{ display: 'flex', flexDirection: 'column' }} title={strings.REPORTS}>
-        <PageForm cancelID='cancelNewMetric' onCancel={goToReports} onSave={saveNewMetric} saveID='saveNewMetric'>
+        <PageForm
+          cancelID='cancelNewMetric'
+          onCancel={goToProjectReports}
+          onSave={saveNewMetric}
+          saveID='saveNewMetric'
+        >
           <Container
             maxWidth={false}
             sx={{
