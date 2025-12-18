@@ -92,6 +92,7 @@ export default function TreesAndShrubsEditableTable({
         muiEditTextFieldProps: ({ row }) => ({
           onBlur: saveValue('diameterAtBreastHeight', row.original.id),
         }),
+        enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub',
       },
       {
         accessorKey: 'pointOfMeasurement',
@@ -99,6 +100,7 @@ export default function TreesAndShrubsEditableTable({
         muiEditTextFieldProps: ({ row }) => ({
           onBlur: saveValue('pointOfMeasurement', row.original.id),
         }),
+        enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub',
       },
       {
         accessorKey: 'height',
@@ -106,6 +108,7 @@ export default function TreesAndShrubsEditableTable({
         muiEditTextFieldProps: ({ row }) => ({
           onBlur: saveValue('height', row.original.id),
         }),
+        enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub',
       },
       {
         accessorKey: 'shrubDiameter',
