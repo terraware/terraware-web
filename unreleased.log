@@ -1,3 +1,6 @@
+41c679ad253 SW-7876 Biomass Observations: "Herbaceous Abundance (%)" field not updated when "Herbaceous Abundance (square count)" is changed (#4917)
+8ed5fa455b9 SW-7873 Biomass Observations: Update ordering of quadrat data in Invasive & Threatened Species tab (#4916)
+d38235abcfd SW-7871 Biomass Observations: Trees and Shrubs table - DBH, POM, and Height fields should not be editable for Shrubs (#4915)
 91e3a41a735 SW-7863 Biomass Observations: Change History - copy for events for species' Invasive/Threatened designation changes is missing info (#4910)
 c393f5c9b33 SW-7851 Edit button should not appear for no completed observations (#4914)
 78646c2df29 SW-7661 Completed icon should not appear when Survival Rate Settings link is grayed out (#4912)
