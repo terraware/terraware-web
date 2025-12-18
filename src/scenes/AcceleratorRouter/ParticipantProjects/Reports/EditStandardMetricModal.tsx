@@ -82,6 +82,7 @@ export default function EditStandardMetricModal({
     >
       <Confirm
         closeButtonText={strings.CANCEL}
+        confirmButtonDisabled={requestId !== '' && updateStandardMetricResponse?.status === 'pending'}
         confirmButtonText={strings.CONFIRM}
         message={strings.EDIT_STANDARD_METRIC_CONFIRMATION}
         onClose={closeConfirmDialog}

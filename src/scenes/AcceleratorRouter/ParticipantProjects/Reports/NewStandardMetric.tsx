@@ -68,6 +68,7 @@ export default function NewStandardMetric(): JSX.Element {
     <>
       <Confirm
         closeButtonText={strings.CANCEL}
+        confirmButtonDisabled={requestId !== '' && createStandardMetricResponse?.status === 'pending'}
         confirmButtonText={strings.CONFIRM}
         message={strings.ADD_STANDARD_METRIC_CONFIRMATION}
         onClose={closeConfirmDialog}
