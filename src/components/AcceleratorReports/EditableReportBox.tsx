@@ -132,7 +132,8 @@ const EditableReportBox = ({
                 fontSize: '14px',
                 fontStyle: 'italic',
                 lineHeight: '20px',
-                marginY: '16px',
+                marginBottom: '16px',
+                marginTop: '-16px',
               }}
             >
               {description}
