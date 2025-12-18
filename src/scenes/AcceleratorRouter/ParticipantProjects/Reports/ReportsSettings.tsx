@@ -268,7 +268,7 @@ export default function ReportsSettings(): JSX.Element {
               </Box>
             )}
           </Grid>
-          <Grid item xs={12} textAlign={'center'}>
+          <Grid item textAlign='center' xs={12}>
             {projectMetrics && projectMetrics.length > 0 ? (
               <Table
                 id='project-specific-metrics-table'
