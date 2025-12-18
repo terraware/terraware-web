@@ -260,7 +260,7 @@ export default function ReportsSettings(): JSX.Element {
           </Grid>
         </Grid>
         <Grid container sx={gridStyle}>
-          <Grid item alignItems='center' display='flex' justifyContent='space-between' xs={12}>
+          <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
             {title(strings.PROJECT_SPECIFIC_METRICS)}
             {isAllowed('UPDATE_REPORTS_SETTINGS') && (
               <Box>
@@ -268,7 +268,7 @@ export default function ReportsSettings(): JSX.Element {
               </Box>
             )}
           </Grid>
-          <Grid item textAlign='center' xs={12}>
+          <Grid item xs={12} textAlign={'center'}>
             {projectMetrics && projectMetrics.length > 0 ? (
               <Table
                 id='project-specific-metrics-table'
@@ -309,7 +309,7 @@ export default function ReportsSettings(): JSX.Element {
           </Grid>
         </Grid>
         <Grid container sx={gridStyle}>
-          <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+          <Grid item alignItems='center' display='flex' justifyContent='space-between' xs={12}>
             {title(strings.STANDARD_METRICS)}
             {isAllowed('UPDATE_REPORTS_SETTINGS') && (
               <Box>
@@ -317,7 +317,7 @@ export default function ReportsSettings(): JSX.Element {
               </Box>
             )}
           </Grid>
-          <Grid item xs={12} textAlign={'center'}>
+          <Grid item textAlign='center' xs={12}>
             <Table
               id='standard-metrics-table'
               columns={columns}
