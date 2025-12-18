@@ -260,7 +260,7 @@ export default function ReportsSettings(): JSX.Element {
           </Grid>
         </Grid>
         <Grid container sx={gridStyle}>
-          <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+          <Grid item alignItems='center' display='flex' justifyContent='space-between' xs={12}>
             {title(strings.PROJECT_SPECIFIC_METRICS)}
             {isAllowed('UPDATE_REPORTS_SETTINGS') && (
               <Box>
