@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { CreateStandardMetricRequestPayload } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import { metricComponentOptions, metricTypeOptions } from './NewProjectSpecificMetric';
 
@@ -24,6 +25,7 @@ export default function NewStandardMetric(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
 
   const [confirmDialogOpen, , openConfirmDialog, closeConfirmDialog] = useBoolean(false);
@@ -37,10 +39,13 @@ export default function NewStandardMetric(): JSX.Element {
   }, [navigate]);
 
   useEffect(() => {
-    if (createStandardMetricResponse?.status === 'success') {
+    if (createStandardMetricResponse?.status === 'error') {
+      snackbar.toastError();
+    } else if (createStandardMetricResponse?.status === 'success') {
+      snackbar.toastSuccess(strings.STANDARD_METRIC_SAVED);
       goToReports();
     }
-  }, [createStandardMetricResponse, goToReports]);
+  }, [createStandardMetricResponse, snackbar, goToReports]);
 
   const [newMetric, , , onChangeCallback] = useForm<CreateStandardMetricRequestPayload['metric']>({
     component: 'Biodiversity',
