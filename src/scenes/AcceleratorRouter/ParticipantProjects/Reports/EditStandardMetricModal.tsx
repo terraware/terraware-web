@@ -123,6 +123,16 @@ export default function EditStandardMetricModal({
         </Grid>
         <Grid item xs={12}>
           <TextField
+            id='unit'
+            label={strings.UNIT}
+            maxLength={25}
+            onChange={onChangeCallback('unit')}
+            type='text'
+            value={record.unit}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
             errorText={validate && !record.reference ? strings.REQUIRED_FIELD : ''}
             id='reference'
             label={strings.REFERENCE}
