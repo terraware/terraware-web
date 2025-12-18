@@ -34,7 +34,6 @@ export default function NewStandardMetric(): JSX.Element {
   const createStandardMetricResponse = useAppSelector(selectCreateStandardMetric(requestId));
 
   const goToReports = useCallback(() => {
-    // Go back to the previous page (which should be the ReportsSettings page)
     navigate(-1);
   }, [navigate]);
 
