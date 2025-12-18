@@ -232,7 +232,7 @@ const ObservationDataTab = ({
             )}
           </Typography>
         )}
-        {monitoringPlot && (
+        {monitoringPlot && isCompleted && (
           <Button
             id='edit'
             label={strings.EDIT}
