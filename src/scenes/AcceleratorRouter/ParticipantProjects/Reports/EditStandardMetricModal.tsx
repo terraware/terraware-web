@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { Checkbox, Dropdown } from '@terraware/web-components';
+import { Checkbox, Confirm, Dropdown } from '@terraware/web-components';
 
-import ConfirmModal from 'src/components/Application/ConfirmModal';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
@@ -81,8 +80,10 @@ export default function EditStandardMetricModal({
       size='medium'
       title={strings.STANDARD_METRIC}
     >
-      <ConfirmModal
-        body={strings.EDIT_STANDARD_METRIC_CONFIRMATION}
+      <Confirm
+        closeButtonText={strings.CANCEL}
+        confirmButtonText={strings.CONFIRM}
+        message={strings.EDIT_STANDARD_METRIC_CONFIRMATION}
         onClose={closeConfirmDialog}
         onConfirm={confirmSave}
         open={confirmDialogOpen}

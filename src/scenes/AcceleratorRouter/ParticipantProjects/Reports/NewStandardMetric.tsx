@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
-import { Dropdown } from '@terraware/web-components';
+import { Confirm, Dropdown } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import ConfirmModal from 'src/components/Application/ConfirmModal';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Checkbox from 'src/components/common/Checkbox';
@@ -67,8 +66,10 @@ export default function NewStandardMetric(): JSX.Element {
 
   return (
     <>
-      <ConfirmModal
-        body={strings.ADD_STANDARD_METRIC_CONFIRMATION}
+      <Confirm
+        closeButtonText={strings.CANCEL}
+        confirmButtonText={strings.CONFIRM}
+        message={strings.ADD_STANDARD_METRIC_CONFIRMATION}
         onClose={closeConfirmDialog}
         onConfirm={confirmSave}
         open={confirmDialogOpen}
