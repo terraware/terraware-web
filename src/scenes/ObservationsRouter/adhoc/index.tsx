@@ -325,17 +325,21 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
             species={monitoringPlotSpecies}
             observationId={observationId}
             reloadAll={reloadAll}
-            isCompleted={!!result?.completedTime}
           />
         ) : null,
       },
       {
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
-        children: <PhotosAndVideosTab monitoringPlot={monitoringPlotResult} isCompleted={!!result?.completedTime} />,
+        children: (
+          <PhotosAndVideosTab
+            monitoringPlot={monitoringPlotResult}
+            isCompleted={!!monitoringPlotResult?.completedTime}
+          />
+        ),
       },
     ];
-  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId, reloadAll, result]);
+  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId, reloadAll]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',
@@ -435,7 +439,7 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
                   <SpeciesSurvivalRateChart
                     minHeight='360px'
                     species={monitoringPlotSpecies}
-                    isCompleted={!!result?.completedTime}
+                    isCompleted={!!monitoringPlotResult?.completedTime}
                   />
                 </Box>
               </>

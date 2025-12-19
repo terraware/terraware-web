@@ -244,7 +244,6 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
               onMatchSpecies={onMatchSpecies}
               observationId={Number(observationId)}
               reloadAll={reload}
-              isCompleted={!!observation?.completedTime}
             />
           </>
         ),
@@ -253,7 +252,10 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
         id: 'photosAndVideos',
         label: strings.PHOTOS_AND_VIDEOS,
         children: (
-          <PhotosAndVideosTab monitoringPlot={observation?.adHocPlot} isCompleted={!!observation?.completedTime} />
+          <PhotosAndVideosTab
+            monitoringPlot={observation?.adHocPlot}
+            isCompleted={!!observation?.adHocPlot?.completedTime}
+          />
         ),
       },
     ];
@@ -357,7 +359,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
                   <SpeciesMortalityRateChart
                     minHeight='360px'
                     species={monitoringPlot?.species}
-                    isCompleted={!!observation?.completedTime}
+                    isCompleted={!!monitoringPlot?.completedTime}
                   />
                 </Box>
               </>
