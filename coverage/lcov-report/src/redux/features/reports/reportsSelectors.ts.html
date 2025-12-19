@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -121,7 +121,13 @@
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -136,12 +142,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -187,6 +199,9 @@ export const selectAcceleratorReport = <span class="cstat-no" title="statement n
 export const selectCreateProjectMetric = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  state.projectMetricCreate[requestId];</span>
 &nbsp;
+export const selectCreateStandardMetric = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.standardMetricCreate[requestId];</span>
+&nbsp;
 export const selectCreateReportConfig = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  state.projectReportConfigCreate[requestId];</span>
 &nbsp;
@@ -226,6 +241,9 @@ export const selectUpdateAcceleratorReportTargets = <span class="cstat-no" title
 export const selectUpdateProjectMetric = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  state.projectMetricUpdate[requestId];</span>
 &nbsp;
+export const selectUpdateStandardMetric = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.standardMetricUpdate[requestId];</span>
+&nbsp;
 export const selectUpdateReportConfig = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  state.projectReportConfigUpdate[requestId];</span>
 &nbsp;
@@ -244,7 +262,7 @@ export const selectUploadManyAcceleratorReportPhotos = <span class="cstat-no" ti
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-19T19:33:06.505Z
+                at 2025-12-19T19:50:15.149Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

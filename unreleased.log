@@ -1,3 +1,5 @@
+48ff62ea58d SW-7852: Add Standard Metrics to Terraware Reporting (#4913)
+6f433b077c2 SW-7727: Species: Unable to access "Learn more" links in tooltips (#4923)
 f5edc96deb8 SW-7880: Remove extra spacing between metric name and description in reports (#4921)
 ec664e36d36 SW-7882 Biomass Observations: Numbers greater than 25 are able to be input for "Herbaceous Abundance (square count)" field (#4924)
 a6ea1a4658a SW-7567: Inventory: Withdrawal History Filter for Purpose still includes "Out Plant" instead of "Planting" (#4922)
