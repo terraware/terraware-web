@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { MRT_ColumnDef, MRT_TableInstance, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   BiomassSpeciesUpdateOperationPayload,
   QuadratSpeciesUpdateOperationPayload,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
+import { requestAdHocObservationResults } from 'src/redux/features/observations/observationsThunks';
+import { useAppDispatch } from 'src/redux/store';
 
 import { QuadratPosition } from './QuadratNotesComponent';
 
@@ -41,35 +43,38 @@ export default function QuadratSpeciesEditableTable({
   const theme = useTheme();
   const { strings } = useLocalization();
   const [update, updateResult] = useUpdateCompletedObservationPlotMutation();
+  const { selectedOrganization } = useOrganization();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (updateResult.isSuccess) {
-      reload();
+    if (updateResult.isSuccess && selectedOrganization) {
+      void dispatch(requestAdHocObservationResults(selectedOrganization.id));
     }
-  }, [reload, updateResult]);
+  }, [dispatch, reload, selectedOrganization, updateResult]);
 
   const saveValue = useCallback(
-    (fieldId: string, speciesId?: number, scientificName?: string) => (event: { currentTarget: { value: any } }) => {
-      const value = event.currentTarget.value;
+    (iTable: MRT_TableInstance<SpeciesRow>, speciesId?: number, scientificName?: string) =>
+      (event: { currentTarget: { value: any } }) => {
+        const value = event.currentTarget.value;
 
-      if (value !== undefined && (speciesId || scientificName)) {
-        const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
-          type: 'QuadratSpecies',
-          position,
-          speciesId,
-          scientificName,
-          abundance: value,
-        };
+        if (value !== undefined && value <= 25 && (speciesId || scientificName)) {
+          const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
+            type: 'QuadratSpecies',
+            position,
+            speciesId,
+            scientificName: speciesId ? undefined : scientificName,
+            abundance: value,
+          };
 
-        const mainPayload = {
-          observationId,
-          plotId,
-          updateObservationRequestPayload: { updates: [uploadPayload] },
-        };
+          const mainPayload = {
+            observationId,
+            plotId,
+            updateObservationRequestPayload: { updates: [uploadPayload] },
+          };
 
-        void update(mainPayload);
-      }
-    },
+          void update(mainPayload);
+        }
+      },
     [position, observationId, plotId, update]
   );
 
@@ -83,13 +88,28 @@ export default function QuadratSpeciesEditableTable({
       {
         accessorKey: 'abundancePercent',
         header: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT,
-        muiEditTextFieldProps: ({ row }) => ({
-          onBlur: saveValue(
-            'abundancePercent',
-            row.original.speciesId,
-            row.original.scientificName || row.original.speciesName
-          ),
-        }),
+        muiEditTextFieldProps: ({ row, table: iTable }) => {
+          return {
+            type: 'number',
+            inputProps: {
+              min: 0,
+              max: 25,
+              maxLength: 2,
+            },
+            onBlur: saveValue(iTable, row.original.speciesId, row.original.scientificName || row.original.speciesName),
+
+            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+              const val = event.target.value;
+              if (val.length > 2) {
+                event.target.value = val.slice(0, 2);
+              }
+              const numVal = Number(event.target.value);
+              if (numVal > 25) {
+                event.target.value = String(Math.min(numVal, 25));
+              }
+            },
+          };
+        },
       },
       {
         accessorKey: 'abundancePercentCalculated',
