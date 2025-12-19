@@ -26,8 +26,9 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
 
+import DefaultMetricsRenderer from './DefaultMetricsRenderer';
 import EditMetricModal from './EditMetricModal';
-import SpecificMetricsRenderer from './SpecificMetricsRenderer';
+import EditStandardMetricModal from './EditStandardMetricModal';
 import SystemMetricsRenderer from './SystemMetricsRenderer';
 
 export default function ReportsSettings(): JSX.Element {
@@ -38,18 +39,21 @@ export default function ReportsSettings(): JSX.Element {
   const projectId = String(pathParams.projectId);
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
   const dispatch = useAppDispatch();
-  const { goToAcceleratorEditReportSettings, goToNewProjectMetric } = useNavigateTo();
+  const { goToAcceleratorEditReportSettings, goToNewProjectMetric, goToNewStandardMetric } = useNavigateTo();
   const [requestId, setRequestId] = useState<string>('');
   const [standardRequestId, setStandardRequestId] = useState<string>('');
   const [systemRequestId, setSystemRequestId] = useState<string>('');
   const specificMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
   const standardMetricsResponse = useAppSelector(selectListStandardMetrics(standardRequestId));
   const systemMetricsResponse = useAppSelector(selectListSystemMetrics(systemRequestId));
-  const [metrics, setMetrics] = useState<ProjectMetric[]>();
+  const [projectMetrics, setProjectMetrics] = useState<ProjectMetric[]>();
   const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
-  const [selectedMetric, setSelectedMetric] = useState<ProjectMetric>();
-  const [editMetricModalOpened, , openEditMetricModal, closeEditMetricModal] = useBoolean(false);
+  const [selectedProjectMetric, setSelectedProjectMetric] = useState<ProjectMetric>();
+  const [selectedStandardMetric, setSelectedStandardMetric] = useState<StandardMetric>();
+  const [editProjectMetricModalOpened, , openEditProjectMetricModal, closeEditProjectMetricModal] = useBoolean(false);
+  const [editStandardMetricModalOpened, , openEditStandardMetricModal, closeEditStandardMetricModal] =
+    useBoolean(false);
   const { isAllowed } = useUser();
 
   useEffect(() => {
@@ -67,6 +71,11 @@ export default function ReportsSettings(): JSX.Element {
     setRequestId(dispatched.requestId);
   }, [dispatch, projectId]);
 
+  const reloadStandardMetrics = useCallback(() => {
+    const dispatched = dispatch(requestListStandardMetrics());
+    setStandardRequestId(dispatched.requestId);
+  }, [dispatch]);
+
   useEffect(() => {
     reloadSpecificMetrics();
   }, [projectId, reloadSpecificMetrics]);
@@ -79,7 +88,7 @@ export default function ReportsSettings(): JSX.Element {
 
   useEffect(() => {
     if (specificMetricsResponse && specificMetricsResponse.status === 'success') {
-      setMetrics(specificMetricsResponse.data);
+      setProjectMetrics(specificMetricsResponse.data);
     }
   }, [specificMetricsResponse]);
 
@@ -162,17 +171,29 @@ export default function ReportsSettings(): JSX.Element {
     [strings]
   );
 
-  const onRowClick = useCallback(
+  const onClickProjectMetricRow = useCallback(
     (metric: ProjectMetric) => {
-      setSelectedMetric(metric);
-      openEditMetricModal();
+      setSelectedProjectMetric(metric);
+      openEditProjectMetricModal();
     },
-    [openEditMetricModal]
+    [openEditProjectMetricModal]
   );
 
-  const goToAddMetric = useCallback(() => {
+  const onClickStandardMetricRow = useCallback(
+    (metric: StandardMetric) => {
+      setSelectedStandardMetric(metric);
+      openEditStandardMetricModal();
+    },
+    [openEditStandardMetricModal]
+  );
+
+  const goToAddProjectMetric = useCallback(() => {
     goToNewProjectMetric(projectId);
   }, [goToNewProjectMetric, projectId]);
+
+  const goToAddStandardMetric = useCallback(() => {
+    goToNewStandardMetric(projectId);
+  }, [goToNewStandardMetric, projectId]);
 
   const clickable = useCallback(() => false, []);
 
@@ -186,8 +207,19 @@ export default function ReportsSettings(): JSX.Element {
 
   return (
     <>
-      {editMetricModalOpened && selectedMetric && (
-        <EditMetricModal onClose={closeEditMetricModal} projectMetric={selectedMetric} reload={reloadSpecificMetrics} />
+      {editProjectMetricModalOpened && selectedProjectMetric && (
+        <EditMetricModal
+          onClose={closeEditProjectMetricModal}
+          projectMetric={selectedProjectMetric}
+          reload={reloadSpecificMetrics}
+        />
+      )}
+      {editStandardMetricModalOpened && selectedStandardMetric && (
+        <EditStandardMetricModal
+          onClose={closeEditStandardMetricModal}
+          reload={reloadStandardMetrics}
+          standardMetric={selectedStandardMetric}
+        />
       )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
@@ -232,16 +264,16 @@ export default function ReportsSettings(): JSX.Element {
             {title(strings.PROJECT_SPECIFIC_METRICS)}
             {isAllowed('UPDATE_REPORTS_SETTINGS') && (
               <Box>
-                <Button label={strings.ADD_METRIC} icon='plus' onClick={goToAddMetric} priority='secondary' />
+                <Button label={strings.ADD_METRIC} icon='plus' onClick={goToAddProjectMetric} priority='secondary' />
               </Box>
             )}
           </Grid>
           <Grid item xs={12} textAlign={'center'}>
-            {metrics && metrics.length > 0 ? (
+            {projectMetrics && projectMetrics.length > 0 ? (
               <Table
                 id='project-specific-metrics-table'
                 columns={columns}
-                rows={metrics}
+                rows={projectMetrics}
                 orderBy='name'
                 topBarButtons={[
                   {
@@ -251,8 +283,8 @@ export default function ReportsSettings(): JSX.Element {
                     icon: 'iconTrashCan',
                   },
                 ]}
-                Renderer={SpecificMetricsRenderer}
-                onSelect={onRowClick}
+                Renderer={DefaultMetricsRenderer}
+                onSelect={onClickProjectMetricRow}
                 controlledOnSelect={true}
                 isClickable={clickable}
               />
@@ -277,15 +309,24 @@ export default function ReportsSettings(): JSX.Element {
           </Grid>
         </Grid>
         <Grid container sx={gridStyle}>
-          <Grid item xs={12}>
+          <Grid item alignItems='center' display='flex' justifyContent='space-between' xs={12}>
             {title(strings.STANDARD_METRICS)}
+            {isAllowed('UPDATE_REPORTS_SETTINGS') && (
+              <Box>
+                <Button label={strings.ADD_METRIC} icon='plus' onClick={goToAddStandardMetric} priority='secondary' />
+              </Box>
+            )}
           </Grid>
-          <Grid item xs={12}>
+          <Grid item textAlign='center' xs={12}>
             <Table
               id='standard-metrics-table'
               columns={columns}
+              controlledOnSelect
+              isClickable={clickable}
               rows={standardMetrics || []}
               orderBy='name'
+              onSelect={onClickStandardMetricRow}
+              Renderer={DefaultMetricsRenderer}
               showCheckbox={false}
             />
           </Grid>

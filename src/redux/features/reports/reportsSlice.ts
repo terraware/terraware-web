@@ -13,6 +13,7 @@ import {
   requestAcceleratorReport,
   requestCreateProjectMetric,
   requestCreateReportConfig,
+  requestCreateStandardMetric,
   requestDeleteManyAcceleratorReportPhotos,
   requestListAcceleratorReports,
   requestListProjectMetrics,
@@ -28,6 +29,7 @@ import {
   requestUpdateManyAcceleratorReportPhotos,
   requestUpdateProjectMetric,
   requestUpdateReportConfig,
+  requestUpdateStandardMetric,
   requestUploadManyAcceleratorReportPhotos,
 } from './reportsThunks';
 
@@ -139,6 +141,20 @@ const projectMetricCreateSlice = createSlice({
 });
 
 /**
+ * Create Standard Metric
+ */
+const initialStandardMetricCreateState: { [key: string]: StatusT<number> } = {};
+
+const standardMetricCreateSlice = createSlice({
+  name: 'standardMetricCreateSlice',
+  initialState: initialStandardMetricCreateState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestCreateStandardMetric)(builder);
+  },
+});
+
+/**
  * Targets list
  */
 const initialStateListAcceleratorReports: { [key: string]: StatusT<AcceleratorReport[]> } = {};
@@ -163,6 +179,20 @@ const projectMetricUpdateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestUpdateProjectMetric)(builder);
+  },
+});
+
+/**
+ * Update Standard Metric
+ */
+const initialStandardMetricUpdateState: { [key: string]: StatusT<number> } = {};
+
+const standardMetricUpdateSlice = createSlice({
+  name: 'standardMetricUpdateSlice',
+  initialState: initialStandardMetricUpdateState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateStandardMetric)(builder);
   },
 });
 
@@ -316,6 +346,8 @@ const reportsReducers = {
   reviewAcceleratorReport: reviewAcceleratorReportSlice.reducer,
   reviewAcceleratorReportMetric: reviewAcceleratorReportMetricSlice.reducer,
   refreshAcceleratorReportSystemMetrics: refreshAcceleratorReportSystemMetricsSlice.reducer,
+  standardMetricCreate: standardMetricCreateSlice.reducer,
+  standardMetricUpdate: standardMetricUpdateSlice.reducer,
   submitAcceleratorReport: submitAcceleratorReportSlice.reducer,
   updateAcceleratorReport: updateAcceleratorReportSlice.reducer,
   updateAcceleratorReportTargets: updateAcceleratorReportTargetsSlice.reducer,
