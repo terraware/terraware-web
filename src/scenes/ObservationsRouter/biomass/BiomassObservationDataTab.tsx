@@ -320,7 +320,6 @@ const BiomassObservationDataTab = ({
           trees={biomassMeasurement?.trees}
           observationId={Number(observationId)}
           plotId={Number(monitoringPlot?.monitoringPlotId)}
-          reload={reload}
         />
         {monitoringPlot?.monitoringPlotId && (
           <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} isBiomass />

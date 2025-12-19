@@ -3,13 +3,15 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   BiomassSpeciesUpdateOperationPayload,
   RecordedTreeUpdateOperationPayload,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
+import { requestAdHocObservationResults } from 'src/redux/features/observations/observationsThunks';
+import { useAppDispatch } from 'src/redux/store';
 import { ExistingTreePayload } from 'src/types/Observations';
 
 type TreeRow = ExistingTreePayload & {
@@ -20,25 +22,25 @@ type TreesAndShrubsEditableTableProps = {
   trees?: ExistingTreePayload[];
   observationId: number;
   plotId: number;
-  reload: () => void;
 };
 
 export default function TreesAndShrubsEditableTable({
   trees,
   observationId,
   plotId,
-  reload,
 }: TreesAndShrubsEditableTableProps): JSX.Element {
   const { species: availableSpecies } = useSpeciesData();
   const theme = useTheme();
   const { strings } = useLocalization();
   const [update, updateResult] = useUpdateCompletedObservationPlotMutation();
+  const dispatch = useAppDispatch();
+  const { selectedOrganization } = useOrganization();
 
   useEffect(() => {
-    if (updateResult.isSuccess) {
-      reload();
+    if (updateResult.isSuccess && selectedOrganization) {
+      void dispatch(requestAdHocObservationResults(selectedOrganization.id));
     }
-  }, [reload, updateResult]);
+  }, [updateResult, selectedOrganization, dispatch]);
 
   const saveValue = useCallback(
     (fieldId: string, recordedTreeId: number) => (event: { currentTarget: { value: any }; target: { value: any } }) => {
@@ -119,7 +121,10 @@ export default function TreesAndShrubsEditableTable({
       },
       {
         accessorKey: 'isInvasive',
-        Cell: ({ cell }) => (cell.getValue() ? strings.YES : strings.NO),
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          return value === true || value === 'true' ? strings.YES : strings.NO;
+        },
         header: strings.INVASIVE,
         editVariant: 'select',
         editSelectOptions: [
@@ -147,7 +152,10 @@ export default function TreesAndShrubsEditableTable({
       {
         accessorKey: 'isThreatened',
         header: strings.THREATENED,
-        Cell: ({ cell }) => (cell.getValue() ? strings.YES : strings.NO),
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          return value === true || value === 'true' ? strings.YES : strings.NO;
+        },
         editVariant: 'select',
         editSelectOptions: [
           { label: strings.YES, value: 'true' },
@@ -174,7 +182,10 @@ export default function TreesAndShrubsEditableTable({
       {
         accessorKey: 'isDead',
         header: strings.DEAD,
-        Cell: ({ cell }) => (cell.getValue() ? strings.YES : strings.NO),
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          return value === true || value === 'true' ? strings.YES : strings.NO;
+        },
         editVariant: 'select',
         editSelectOptions: [
           { label: strings.YES, value: 'true' },
