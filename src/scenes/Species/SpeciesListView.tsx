@@ -150,19 +150,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         key: 'growthForms',
         name: strings.GROWTH_FORM,
         type: 'string',
-        tooltipTitle: (
-          <>
-            {strings.TOOLTIP_SPECIES_GROWTH_FORM}
-            <LearnMoreLink
-              onClick={() =>
-                openTooltipLearnMoreModal({
-                  title: strings.GROWTH_FORM,
-                  content: <LearnMoreModalContentGrowthForm />,
-                })
-              }
-            />
-          </>
-        ),
+        tooltipTitle: strings.TOOLTIP_SPECIES_GROWTH_FORM,
       },
       {
         key: 'seedStorageBehavior',

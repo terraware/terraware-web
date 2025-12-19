@@ -6,7 +6,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import TooltipLearnMoreModal, {
   LearnMoreLink,
-  LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
@@ -238,19 +237,7 @@ export default function SpeciesDetailsForm({
             valueRenderer={(gfVal: string) => gfVal}
             selectedOptions={record.growthForms ?? []}
             placeHolder={strings.SELECT}
-            tooltipTitle={
-              <>
-                {strings.TOOLTIP_SPECIES_GROWTH_FORM}
-                <LearnMoreLink
-                  onClick={() =>
-                    openTooltipLearnMoreModal({
-                      title: strings.GROWTH_FORM,
-                      content: <LearnMoreModalContentGrowthForm />,
-                    })
-                  }
-                />
-              </>
-            }
+            tooltipTitle={strings.TOOLTIP_SPECIES_GROWTH_FORM}
           />
         </Grid>
         <Grid item xs={gridSize} sx={{ 'align-self': 'center' }}>

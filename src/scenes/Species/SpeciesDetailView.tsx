@@ -196,6 +196,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id={'growthForms'}
               label={strings.GROWTH_FORM}
               value={getGrowthFormsString(species)}
+              tooltipTitle={strings.TOOLTIP_SPECIES_GROWTH_FORM}
               type='text'
               aria-label='date-picker'
               display={true}

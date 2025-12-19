@@ -2143,7 +2143,7 @@ TOOLTIP_READY_TO_PLANT_QUANTITY,Les critères qui déterminent qu'une plante est
 TOOLTIP_SCIENTIFIC_NAME,Le nom latin binomial (genre + espèce) actuellement accepté dans la littérature botanique.,be7a8ced
 TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"Il s'agit de la catégorie de la Liste rouge de l'UICN à laquelle appartient l'espèce. Pour en savoir plus sur les catégories et abréviations de la Liste rouge de l'UICN, rendez-vous sur iucnredlist.org.",15d491fd
 TOOLTIP_SPECIES_FAMILY,Le nom scientifique de la famille de plantes actuellement accepté dans la littérature botanique.,53f8846c
-TOOLTIP_SPECIES_GROWTH_FORM,"Catégorie structurelle composée d'individus ou d'espèces ayant le même mode de croissance général, mais pas nécessairement apparentés.",4ec8ae3e
+TOOLTIP_SPECIES_GROWTH_FORM,Ce sont les formes qui décrivent la morphologie ou la structure générale et fondamentale de l'espèce.,b8ee5839
 TOOLTIP_SPECIES_RARE,"Espèces dont la taille des populations sauvages est limitée et qui se trouvent souvent dans des lieux géographiques isolés ; elles peuvent répondre aux critères d'un statut d'espèce en danger ou menacée, mais n'ont pas encore été légalement répertoriées ou évaluées.",c6526253
 TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,La capacité des graines à survivre à la dessiccation et aux températures jusqu'aux niveaux nécessaires pour la conservation hors site.,dc34da25
 TOOLTIP_TIME_ZONE_MY_ACCOUNT,Nous utilisons les fuseaux horaires pour afficher les notifications à l'heure locale. Sélectionnez le fuseau horaire qui vous concerne.,b02ac37d

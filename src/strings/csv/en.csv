@@ -2144,7 +2144,7 @@ TOOLTIP_READY_TO_PLANT_QUANTITY,What determines a plant is in â€œReady to Plantâ
 TOOLTIP_SCIENTIFIC_NAME,The binomial Latin name (genus + species) currently accepted in the botanical literature.,
 TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"This is the category in the IUCN Red List that the species falls under. To learn more about IUCN Red List categories and abbreviations, go to iucnredlist.org.",
 TOOLTIP_SPECIES_FAMILY,The scientific name of the plant family currently accepted in the botanical literature.,
-TOOLTIP_SPECIES_GROWTH_FORM,A structural category consisting of individuals or species of the same general habit of growth but not necessarily related.,
+TOOLTIP_SPECIES_GROWTH_FORM,"These are the forms that describe the overall, basic morphology or structure of the species.",
 TOOLTIP_SPECIES_RARE,"Species with limited wild population sizes, often found in isolated geographical locations; may meet criteria for endangered or threatened status but have not yet been legally listed or assessed.",
 TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.,
 TOOLTIP_TIME_ZONE_MY_ACCOUNT,We use time zones to display notifications in your local time. Select the time zone that applies to you.,
