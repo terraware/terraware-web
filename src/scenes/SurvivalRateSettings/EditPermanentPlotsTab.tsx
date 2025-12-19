@@ -6,9 +6,8 @@ import { PageForm } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectAssignT0SiteData } from 'src/redux/features/tracking/trackingSelectors';
-import { PlotsWithObservationsSearchResult, requestAssignT0SiteData } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAssignT0SiteDataMutation } from 'src/queries/generated/t0';
+import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
@@ -19,7 +18,6 @@ import SpeciesDensityWarningMessage from './SpeciesDensityWarningMessage';
 
 type EditPermanentPlotsTabProps = {
   plantingSiteId: number;
-  reload: () => void;
   plotsWithObservations?: PlotsWithObservationsSearchResult[];
   t0Plots?: PlotT0Data[];
   withdrawnSpeciesPlots?: SpeciesPlot[];
@@ -30,15 +28,12 @@ const EditPermanentPlotsTab = ({
   plotsWithObservations,
   t0Plots,
   withdrawnSpeciesPlots,
-  reload,
 }: EditPermanentPlotsTabProps) => {
   const snackbar = useSnackbar();
   const [showSpeciesDensityWarningMessage, setShowSpeciesDensityWarningMessage] = useState(false);
-  const [assignRequestId, setAssignRequestId] = useState('');
-  const saveResponse = useAppSelector(selectAssignT0SiteData(assignRequestId));
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
   const { reload: reloadPlantingSiteData } = usePlantingSiteData();
+  const [updateT0, updateT0Result] = useAssignT0SiteDataMutation();
   const theme = useTheme();
 
   const [record, setRecord] = useForm<AssignSiteT0Data>({
@@ -104,20 +99,19 @@ const EditPermanentPlotsTab = ({
       return;
     }
 
-    const saveRequest = dispatch(requestAssignT0SiteData({ ...record, plots: filteredPlots }));
-    setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots, getFilteredPlots]);
+    const payload = { ...record, plots: filteredPlots };
+    void updateT0(payload);
+  }, [getFilteredPlots, withdrawnSpeciesPlots, record, updateT0, goToViewSettings]);
 
   useEffect(() => {
-    if (saveResponse?.status === 'success') {
-      reload();
+    if (updateT0Result.isSuccess) {
       reloadPlantingSiteData();
       goToViewSettings();
     }
-    if (saveResponse?.status === 'error') {
+    if (updateT0Result.isError) {
       snackbar.toastError();
     }
-  }, [goToViewSettings, reload, saveResponse, snackbar, reloadPlantingSiteData]);
+  }, [goToViewSettings, updateT0Result, snackbar, reloadPlantingSiteData]);
 
   const cancelWarningHandler = useCallback(() => {
     setShowSpeciesDensityWarningMessage(false);
@@ -125,9 +119,9 @@ const EditPermanentPlotsTab = ({
 
   const saveWithDefaultDensity = useCallback(() => {
     const filteredPlots = getFilteredPlots();
-    const saveRequest = dispatch(requestAssignT0SiteData({ ...record, plots: filteredPlots }));
-    setAssignRequestId(saveRequest.requestId);
-  }, [dispatch, record, getFilteredPlots]);
+    const payload = { ...record, plots: filteredPlots };
+    void updateT0(payload);
+  }, [getFilteredPlots, record, updateT0]);
 
   return (
     <PageForm

@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import { TrackingService } from 'src/services';
 import strings from 'src/strings';
-import { AssignSiteT0Data, AssignSiteT0TempData, PlantingSiteSearchResult } from 'src/types/Tracking';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import {
   setPlantingSiteAction,
@@ -188,19 +188,6 @@ export const requestOrganizationReportedPlants = createAsyncThunk(
   }
 );
 
-export const requestPlantingSiteT0 = createAsyncThunk(
-  'tracking/t0',
-  async (plantingSiteId: number, { rejectWithValue }) => {
-    const response = await TrackingService.getPlantingSiteT0(plantingSiteId);
-
-    if (response !== null && response.requestSucceeded && response.data?.data) {
-      return response.data.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestPermanentPlotsWithObservations = createAsyncThunk(
   'permanentPlotsWithObservations',
   async (plantingSiteId: number, { rejectWithValue }) => {
@@ -214,32 +201,6 @@ export const requestPermanentPlotsWithObservations = createAsyncThunk(
   }
 );
 
-export const requestAssignT0SiteData = createAsyncThunk(
-  'assignT0SiteData',
-  async (request: AssignSiteT0Data, { rejectWithValue }) => {
-    const response = await TrackingService.assignT0SiteData(request);
-
-    if (response && response.requestSucceeded) {
-      return response.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestAssignT0TempSiteData = createAsyncThunk(
-  'assignT0TempSiteData',
-  async (request: AssignSiteT0TempData, { rejectWithValue }) => {
-    const response = await TrackingService.assignT0TempSiteData(request);
-
-    if (response && response.requestSucceeded) {
-      return response.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestGetPlantingSiteT0AllSet = createAsyncThunk(
   't0AllSet',
   async (plantingSiteId: number, { rejectWithValue }) => {
@@ -247,19 +208,6 @@ export const requestGetPlantingSiteT0AllSet = createAsyncThunk(
 
     if (response && response.requestSucceeded) {
       return response.data?.allSet;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestGetPlantingSiteT0Species = createAsyncThunk(
-  't0Species',
-  async (plantingSiteId: number, { rejectWithValue }) => {
-    const response = await TrackingService.getT0Species(plantingSiteId);
-
-    if (response && response.requestSucceeded) {
-      return response.data?.plots;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
