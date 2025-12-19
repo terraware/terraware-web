@@ -105,7 +105,7 @@ export default function QuadratSpeciesEditableTable({
               }
               const numVal = Number(event.target.value);
               if (numVal > 25) {
-                event.target.value = String(Math.min(numVal, 25));
+                event.target.value = '25';
               }
             },
           };
