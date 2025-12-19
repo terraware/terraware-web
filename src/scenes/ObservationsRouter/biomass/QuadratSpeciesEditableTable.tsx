@@ -56,8 +56,8 @@ export default function QuadratSpeciesEditableTable({
     (iTable: MRT_TableInstance<SpeciesRow>, speciesId?: number, scientificName?: string) =>
       (event: { currentTarget: { value: any } }) => {
         const value = event.currentTarget.value;
-
-        if (value !== undefined && value <= 25 && (speciesId || scientificName)) {
+        const numValue = Number(value);
+        if (!isNaN(numValue) && numValue >= 0 && numValue <= 25 && (speciesId || scientificName)) {
           const uploadPayload: QuadratSpeciesUpdateOperationPayload = {
             type: 'QuadratSpecies',
             position,
