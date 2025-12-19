@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
@@ -226,15 +226,7 @@
 <a name='L161'></a><a href='#L161'>161</a>
 <a name='L162'></a><a href='#L162'>162</a>
 <a name='L163'></a><a href='#L163'>163</a>
-<a name='L164'></a><a href='#L164'>164</a>
-<a name='L165'></a><a href='#L165'>165</a>
-<a name='L166'></a><a href='#L166'>166</a>
-<a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L164'></a><a href='#L164'>164</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,9 +257,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -342,7 +331,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -409,9 +397,8 @@ import { PageForm } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectAssignT0SiteData } from 'src/redux/features/tracking/trackingSelectors';
-import { PlotsWithObservationsSearchResult, requestAssignT0SiteData } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAssignT0SiteDataMutation } from 'src/queries/generated/t0';
+import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
@@ -422,7 +409,6 @@ import SpeciesDensityWarningMessage from './SpeciesDensityWarningMessage';
 &nbsp;
 type EditPermanentPlotsTabProps = {
   plantingSiteId: number;
-  reload: () =&gt; void;
   plotsWithObservations?: PlotsWithObservationsSearchResult[];
   t0Plots?: PlotT0Data[];
   withdrawnSpeciesPlots?: SpeciesPlot[];
@@ -433,15 +419,12 @@ const EditPermanentPlotsTab = <span class="cstat-no" title="statement not covere
   plotsWithObservations,
   t0Plots,
   withdrawnSpeciesPlots,
-  reload,
 }: EditPermanentPlotsTabProps) =&gt; {
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const [showSpeciesDensityWarningMessage, setShowSpeciesDensityWarningMessage] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const [assignRequestId, setAssignRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const saveResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAssignT0SiteData(assignRequestId));</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { reload: reloadPlantingSiteData } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
+  const [updateT0, updateT0Result] = <span class="cstat-no" title="statement not covered" >useAssignT0SiteDataMutation();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const [record, setRecord] = <span class="cstat-no" title="statement not covered" >useForm&lt;AssignSiteT0Data&gt;({</span>
@@ -507,20 +490,19 @@ const EditPermanentPlotsTab = <span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-    const saveRequest = <span class="cstat-no" title="statement not covered" >dispatch(requestAssignT0SiteData({ ...record, plots: filteredPlots }));</span>
-<span class="cstat-no" title="statement not covered" >    setAssignRequestId(saveRequest.requestId);</span>
-  }, [dispatch, goToViewSettings, record, withdrawnSpeciesPlots, getFilteredPlots]);
+    const payload = <span class="cstat-no" title="statement not covered" >{ ...record, plots: filteredPlots };</span>
+<span class="cstat-no" title="statement not covered" >    void updateT0(payload);</span>
+  }, [getFilteredPlots, withdrawnSpeciesPlots, record, updateT0, goToViewSettings]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (saveResponse?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      reload();</span>
+<span class="cstat-no" title="statement not covered" >    if (updateT0Result.isSuccess) {</span>
 <span class="cstat-no" title="statement not covered" >      reloadPlantingSiteData();</span>
 <span class="cstat-no" title="statement not covered" >      goToViewSettings();</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (saveResponse?.status === 'error') {</span>
+<span class="cstat-no" title="statement not covered" >    if (updateT0Result.isError) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     }
-  }, [goToViewSettings, reload, saveResponse, snackbar, reloadPlantingSiteData]);
+  }, [goToViewSettings, updateT0Result, snackbar, reloadPlantingSiteData]);
 &nbsp;
   const cancelWarningHandler = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setShowSpeciesDensityWarningMessage(false);</span>
@@ -528,9 +510,9 @@ const EditPermanentPlotsTab = <span class="cstat-no" title="statement not covere
 &nbsp;
   const saveWithDefaultDensity = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const filteredPlots = <span class="cstat-no" title="statement not covered" >getFilteredPlots();</span>
-    const saveRequest = <span class="cstat-no" title="statement not covered" >dispatch(requestAssignT0SiteData({ ...record, plots: filteredPlots }));</span>
-<span class="cstat-no" title="statement not covered" >    setAssignRequestId(saveRequest.requestId);</span>
-  }, [dispatch, record, getFilteredPlots]);
+    const payload = <span class="cstat-no" title="statement not covered" >{ ...record, plots: filteredPlots };</span>
+<span class="cstat-no" title="statement not covered" >    void updateT0(payload);</span>
+  }, [getFilteredPlots, record, updateT0]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;PageForm
@@ -577,7 +559,7 @@ export default EditPermanentPlotsTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-19T20:44:51.484Z
+                at 2025-12-19T23:07:03.145Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
