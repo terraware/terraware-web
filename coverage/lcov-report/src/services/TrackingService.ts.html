@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.11% </span>
+                <span class="strong">43.07% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>30/68</span>
+                <span class='fraction'>28/65</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.77% </span>
+                <span class="strong">43.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>30/67</span>
+                <span class='fraction'>28/64</span>
             </div>
         
             
@@ -533,18 +533,7 @@
 <a name='L468'></a><a href='#L468'>468</a>
 <a name='L469'></a><a href='#L469'>469</a>
 <a name='L470'></a><a href='#L470'>470</a>
-<a name='L471'></a><a href='#L471'>471</a>
-<a name='L472'></a><a href='#L472'>472</a>
-<a name='L473'></a><a href='#L473'>473</a>
-<a name='L474'></a><a href='#L474'>474</a>
-<a name='L475'></a><a href='#L475'>475</a>
-<a name='L476'></a><a href='#L476'>476</a>
-<a name='L477'></a><a href='#L477'>477</a>
-<a name='L478'></a><a href='#L478'>478</a>
-<a name='L479'></a><a href='#L479'>479</a>
-<a name='L480'></a><a href='#L480'>480</a>
-<a name='L481'></a><a href='#L481'>481</a>
-<a name='L482'></a><a href='#L482'>482</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L471'></a><a href='#L471'>471</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -577,10 +566,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -995,17 +980,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1058,7 +1036,6 @@ const PLANTING_SITE_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/repo
 const PLANTING_SITE_HISTORY_ENDPOINT = '/api/v1/tracking/sites/{id}/history/{historyId}';
 const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
-const PLANTING_SITE_T0_ALL_SET_ENDPOINT = '/api/v1/tracking/t0/site/{plantingSiteId}/allSet';
 &nbsp;
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -1101,9 +1078,6 @@ export type GetPlantingSiteHistoryPayload =
 &nbsp;
 export type ListPlantingSiteHistoriesPayload =
   paths[typeof PLANTING_SITE_HISTORIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-&nbsp;
-export type GetAllSiteT0DataSetResponsePayload =
-  paths[typeof PLANTING_SITE_T0_ALL_SET_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 &nbsp;
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
 const httpPlantingSitesValidate = HttpService.root(PLANTING_SITES_VALIDATE_ENDPOINT);
@@ -1476,12 +1450,6 @@ const getPlotsWithObservations = <span class="fstat-no" title="function not cove
 <span class="cstat-no" title="statement not covered" >  return SearchService.search&lt;T&gt;(params);</span>
 };
 &nbsp;
-const getT0AllSet = <span class="fstat-no" title="function not covered" >as</span>ync (plantingSiteId: number): Promise&lt;Response2&lt;GetAllSiteT0DataSetResponsePayload&gt;&gt; =&gt; {
-<span class="cstat-no" title="statement not covered" >  return HttpService.root(</span>
-    PLANTING_SITE_T0_ALL_SET_ENDPOINT.replace('{plantingSiteId}', plantingSiteId.toString())
-  ).get2&lt;GetAllSiteT0DataSetResponsePayload&gt;();
-};
-&nbsp;
 /**
  * Exported functions
  */
@@ -1502,7 +1470,6 @@ const TrackingService = {
   listPlantingSiteHistories,
   listOrganizationReportedPlants,
   getPlotsWithObservations,
-  getT0AllSet,
 };
 &nbsp;
 export default TrackingService;
@@ -1513,7 +1480,7 @@ export default TrackingService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-19T23:07:03.145Z
+                at 2025-12-19T23:27:13.622Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

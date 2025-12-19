@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -272,15 +272,7 @@
 <a name='L207'></a><a href='#L207'>207</a>
 <a name='L208'></a><a href='#L208'>208</a>
 <a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a>
-<a name='L215'></a><a href='#L215'>215</a>
-<a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L210'></a><a href='#L210'>210</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -361,14 +353,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -510,14 +494,14 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import {
   selectAdHocObservationResults,
   selectObservationsResults,
 } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSiteT0AllSet, selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
 import {
   PlotsWithObservationsSearchResult,
-  requestGetPlantingSiteT0AllSet,
   requestPermanentPlotsWithObservations,
 } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -542,14 +526,14 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 &nbsp;
   const [selectedPlotSelection, setSelectedPlotSelection] = <span class="cstat-no" title="statement not covered" >useState&lt;PlotSelectionType&gt;('assigned');</span>
   const [plotsRequestId, setPlotsRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const [allSetRequestId, setAllSetRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const plotsWithObservationsResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlotsWithObservations(plotsRequestId));</span>
   const [plotsWithObservations, setPlotsWithObservations] = <span class="cstat-no" title="statement not covered" >useState&lt;PlotsWithObservationsSearchResult[]&gt;();</span>
-  const t0AllSetResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSiteT0AllSet(allSetRequestId));</span>
-  const [survivalRateSet, setSurvivalRateSet] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const allObservationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectObservationsResults);</span>
   const allAdHocObservationResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdHocObservationResults);</span>
+  const plantingSiteId = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >selectedPlantingSite?.id || -1,</span> [selectedPlantingSite]);</span>
+  const { data: t0AllSet } = <span class="cstat-no" title="statement not covered" >useGetAllT0SiteDataSetQuery(plantingSiteId, { skip: plantingSiteId === -1 });</span>
+  const survivalRateSet = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >t0AllSet?.allSet,</span> [t0AllSet]);</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
   const observationsResults = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -581,16 +565,8 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >    if (selectedPlantingSite &amp;&amp; selectedPlantingSite.id !== -1) {</span>
       const requestPlots = <span class="cstat-no" title="statement not covered" >dispatch(requestPermanentPlotsWithObservations(selectedPlantingSite.id));</span>
 <span class="cstat-no" title="statement not covered" >      setPlotsRequestId(requestPlots.requestId);</span>
-      const requestAllSet = <span class="cstat-no" title="statement not covered" >dispatch(requestGetPlantingSiteT0AllSet(selectedPlantingSite.id));</span>
-<span class="cstat-no" title="statement not covered" >      setAllSetRequestId(requestAllSet.requestId);</span>
     }
   }, [dispatch, selectedPlantingSite]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (t0AllSetResponse?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      setSurvivalRateSet(t0AllSetResponse.data ?? false);</span>
-    }
-  }, [t0AllSetResponse]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (plotsWithObservationsResponse?.status === 'success') {</span>
@@ -721,7 +697,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-19T23:07:03.145Z
+                at 2025-12-19T23:27:13.622Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
