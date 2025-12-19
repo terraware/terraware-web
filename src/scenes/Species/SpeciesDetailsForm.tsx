@@ -218,18 +218,7 @@ export default function SpeciesDetailsForm({
             placeholder={strings.SELECT}
             options={conservationCategories()}
             selectedValue={record.conservationCategory}
-            tooltipTitle={
-              <>
-                {`${strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY} `}
-                <a
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  href='https://www.iucnredlist.org/resources/categories-and-criteria'
-                >
-                  {strings.LEARN_MORE}
-                </a>
-              </>
-            }
+            tooltipTitle={strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY}
           />
         </Grid>
         <Grid item xs={gridSize}>

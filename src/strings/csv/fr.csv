@@ -2141,7 +2141,7 @@ TOOLTIP_LIVE_PLANTS,Les plantes vivantes observées comprennent uniquement les p
 TOOLTIP_LIVE_PLANTS_ADHOC,Les plantes vivantes observées incluent uniquement les plantes enregistrées comme vivantes.,8f4746d4
 TOOLTIP_READY_TO_PLANT_QUANTITY,Les critères qui déterminent qu'une plante est « prête à être plantée » peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,Le nom latin binomial (genre + espèce) actuellement accepté dans la littérature botanique.,be7a8ced
-TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Catégories de la Liste Rouge de l'UICN,83da1fe2
+TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"Il s'agit de la catégorie de la Liste rouge de l'UICN à laquelle appartient l'espèce. Pour en savoir plus sur les catégories et abréviations de la Liste rouge de l'UICN, rendez-vous sur iucnredlist.org.",15d491fd
 TOOLTIP_SPECIES_FAMILY,Le nom scientifique de la famille de plantes actuellement accepté dans la littérature botanique.,53f8846c
 TOOLTIP_SPECIES_GROWTH_FORM,"Catégorie structurelle composée d'individus ou d'espèces ayant le même mode de croissance général, mais pas nécessairement apparentés.",4ec8ae3e
 TOOLTIP_SPECIES_RARE,"Espèces dont la taille des populations sauvages est limitée et qui se trouvent souvent dans des lieux géographiques isolés ; elles peuvent répondre aux critères d'un statut d'espèce en danger ou menacée, mais n'ont pas encore été légalement répertoriées ou évaluées.",c6526253

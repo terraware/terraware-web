@@ -138,18 +138,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         key: 'conservationCategory',
         name: strings.CONSERVATION_CATEGORY,
         type: 'string',
-        tooltipTitle: (
-          <>
-            {`${strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY} `}
-            <a
-              target='_blank'
-              rel='noopener noreferrer'
-              href='https://www.iucnredlist.org/resources/categories-and-criteria'
-            >
-              {strings.LEARN_MORE}
-            </a>
-          </>
-        ),
+        tooltipTitle: strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY,
       },
       {
         key: 'rare',

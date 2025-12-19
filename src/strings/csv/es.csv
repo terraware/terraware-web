@@ -2142,7 +2142,7 @@ TOOLTIP_LIVE_PLANTS,Las plantas vivas observadas solo incluyen las plantas regis
 TOOLTIP_LIVE_PLANTS_ADHOC,Las plantas vivas observadas incluyen solo las plantas registradas como vivas.,8f4746d4
 TOOLTIP_READY_TO_PLANT_QUANTITY,Lo que determina que una planta esté «Lista para plantar» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.,be7a8ced
-TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Categoría de conservación de la Lista Roja de la IUCN,83da1fe2
+TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"Esta es la categoría de la Lista Roja de la UICN en la que se encuentra la especie. Para obtener más información sobre las categorías y abreviaturas de la Lista Roja de la UICN, visite iucnredlist.org.",15d491fd
 TOOLTIP_SPECIES_FAMILY,El nombre científico de la familia de la planta aceptado en la actualidad en la bibliografía botánica.,53f8846c
 TOOLTIP_SPECIES_GROWTH_FORM,Una categoría estructural compuesta por individuos o especies del mismo hábito general de crecimiento pero no necesariamente relacionados.,4ec8ae3e
 TOOLTIP_SPECIES_RARE,"Especies de poblaciones en estado silvestre de tamaño limitado, con frecuencia encontradas en ubicaciones geográficas aisladas; pueden cumplir con los criterios de las clasificaciones ""en peligro"" o ""amenazada"", pero todavía no han sido agregadas o evaluadas legalmente.",c6526253

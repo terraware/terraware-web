@@ -186,6 +186,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id={'conservationCategory'}
               label={strings.CONSERVATION_CATEGORY}
               value={species?.conservationCategory}
+              tooltipTitle={strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY}
               type='text'
               display={true}
             />
