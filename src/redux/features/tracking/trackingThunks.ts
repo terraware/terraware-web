@@ -187,16 +187,3 @@ export const requestOrganizationReportedPlants = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
-
-export const requestPermanentPlotsWithObservations = createAsyncThunk(
-  'permanentPlotsWithObservations',
-  async (plantingSiteId: number, { rejectWithValue }) => {
-    const response = await TrackingService.getPlotsWithObservations(plantingSiteId);
-
-    if (response) {
-      return response;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);

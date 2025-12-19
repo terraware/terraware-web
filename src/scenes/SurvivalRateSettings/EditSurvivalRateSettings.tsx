@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
@@ -11,12 +11,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';
-import { selectPlotsWithObservations } from 'src/redux/features/tracking/trackingSelectors';
-import {
-  PlotsWithObservationsSearchResult,
-  requestPermanentPlotsWithObservations,
-} from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -26,11 +21,7 @@ import EditTemporaryPlotsTab from './EditTemporaryPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
 
 const EditSurvivalRateSettings = () => {
-  const [plotsRequestId, setPlotsRequestId] = useState('');
-  const plotsWithObservationsResponse = useAppSelector(selectPlotsWithObservations(plotsRequestId));
-  const [plotsWithObservations, setPlotsWithObservations] = useState<PlotsWithObservationsSearchResult[]>();
   const [showChangeTabWarning, setShowChangeTabWarning] = useState(false);
-  const dispatch = useAppDispatch();
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
   const skipPlantingSite = useMemo(
@@ -44,23 +35,13 @@ const EditSurvivalRateSettings = () => {
     skip: skipPlantingSite,
   });
   const withdrawnSpeciesPlots = useMemo(() => withdrawnSpeciesResponse?.plots, [withdrawnSpeciesResponse]);
+  const { data: plotsWithObservations } = useGetPlotsWithObservationsQuery(plantingSiteId, {
+    skip: skipPlantingSite,
+  });
 
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const navigate = useSyncNavigate();
-
-  useEffect(() => {
-    if (plantingSiteId !== -1) {
-      const requestPlots = dispatch(requestPermanentPlotsWithObservations(plantingSiteId));
-      setPlotsRequestId(requestPlots.requestId);
-    }
-  }, [plantingSiteId, dispatch]);
-
-  useEffect(() => {
-    if (plotsWithObservationsResponse?.status === 'success') {
-      setPlotsWithObservations(plotsWithObservationsResponse.data);
-    }
-  }, [plotsWithObservationsResponse]);
 
   const permanentPlots = useMemo(() => {
     return plotsWithObservations?.filter(
