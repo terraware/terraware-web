@@ -2134,7 +2134,7 @@ TOOLTIP_BATCH_NUMBER,"Los números de lote con el formato YY-L-N-XXX pueden desg
 TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el público general, en lugar de su nombre científico.",1f6fe5d2
 TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todas las accesiones con los estados Pendiente de registro, Pendiente de tratamiento, Tratamiento, Deshidratación y En almacenamiento.",5101036f
-TOOLTIP_ECOSYSTEM_TYPE,"Unidades relativamente grandes de tierra o agua que contienen un conjunto diferenciado de comunidades naturales que comparten una gran mayoría de especies, dinámicas y condiciones medioambientales.",92c6820c
+TOOLTIP_ECOSYSTEM_TYPE,"Estos tipos son unidades relativamente grandes de tierra o agua que contienen un conjunto distintivo de comunidades naturales que comparten la mayoría de las especies, dinámicas y condiciones ambientales.",0242f37b
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,«Germinación/establecimiento» indica que las plántulas aún no han emergido de las semillas. La cantidad no cuenta para determinar la cantidad total.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Lo que determina que una planta esté en «Curación» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,El ID de la accesión utilizada para crear este lote. No disponible para especies que no tienen ninguna accesión.,a6a3a0af
@@ -2142,11 +2142,11 @@ TOOLTIP_LIVE_PLANTS,Las plantas vivas observadas solo incluyen las plantas regis
 TOOLTIP_LIVE_PLANTS_ADHOC,Las plantas vivas observadas incluyen solo las plantas registradas como vivas.,8f4746d4
 TOOLTIP_READY_TO_PLANT_QUANTITY,Lo que determina que una planta esté «Lista para plantar» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.,be7a8ced
-TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Categoría de conservación de la Lista Roja de la IUCN,83da1fe2
+TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"Esta es la categoría de la Lista Roja de la UICN en la que se encuentra la especie. Para obtener más información sobre las categorías y abreviaturas de la Lista Roja de la UICN, visite iucnredlist.org.",15d491fd
 TOOLTIP_SPECIES_FAMILY,El nombre científico de la familia de la planta aceptado en la actualidad en la bibliografía botánica.,53f8846c
-TOOLTIP_SPECIES_GROWTH_FORM,Una categoría estructural compuesta por individuos o especies del mismo hábito general de crecimiento pero no necesariamente relacionados.,4ec8ae3e
+TOOLTIP_SPECIES_GROWTH_FORM,Estas son las formas que describen la morfología o estructura general y básica de la especie.,b8ee5839
 TOOLTIP_SPECIES_RARE,"Especies de poblaciones en estado silvestre de tamaño limitado, con frecuencia encontradas en ubicaciones geográficas aisladas; pueden cumplir con los criterios de las clasificaciones ""en peligro"" o ""amenazada"", pero todavía no han sido agregadas o evaluadas legalmente.",c6526253
-TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,La capacidad de las semillas para sobrevivir a la desecación y a las temperaturas hasta los niveles necesarios para el almacenamiento ex situ (fuera del sitio).,dc34da25
+TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,Esta es la capacidad de las semillas para sobrevivir a la desecación y a temperaturas hasta niveles necesarios para el almacenamiento ex situ (fuera del sitio).,779e40e3
 TOOLTIP_TIME_ZONE_MY_ACCOUNT,Usamos zonas horarias para mostrar las notificaciones en su hora local. Seleccione la zona horaria que le corresponda.,b02ac37d
 TOOLTIP_TIME_ZONE_NURSERY,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este vivero. Todo el trabajo realizado en este vivero usará esta zona horaria.,df52f6a7
 TOOLTIP_TIME_ZONE_ORGANIZATION,"Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a su organización en conjunto. Puede seleccionar zonas horarias para sus bancos de semillas, viveros y sitios de plantación en cada una de sus páginas de configuración.",5989c53b
