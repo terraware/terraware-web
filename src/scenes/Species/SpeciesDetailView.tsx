@@ -278,6 +278,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id={'seedStorageBehavior'}
               label={strings.SEED_STORAGE_BEHAVIOR}
               value={getSeedStorageBehaviorString(species)}
+              tooltipTitle={strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
               type='text'
               display={true}
             />

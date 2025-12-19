@@ -2146,7 +2146,7 @@ TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"This is the category in the IUCN Red List
 TOOLTIP_SPECIES_FAMILY,The scientific name of the plant family currently accepted in the botanical literature.,
 TOOLTIP_SPECIES_GROWTH_FORM,"These are the forms that describe the overall, basic morphology or structure of the species.",
 TOOLTIP_SPECIES_RARE,"Species with limited wild population sizes, often found in isolated geographical locations; may meet criteria for endangered or threatened status but have not yet been legally listed or assessed.",
-TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.,
+TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,This is the capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.,
 TOOLTIP_TIME_ZONE_MY_ACCOUNT,We use time zones to display notifications in your local time. Select the time zone that applies to you.,
 TOOLTIP_TIME_ZONE_NURSERY,We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this nursery. All work done in this nursery will use this time zone.,
 TOOLTIP_TIME_ZONE_ORGANIZATION,"We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to your organization as a whole. You can select time zones for your seed banks, nurseries, and planting sites in each of their settings pages.",

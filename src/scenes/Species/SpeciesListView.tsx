@@ -5,12 +5,6 @@ import { DropdownItem, SortOrder, Tooltip } from '@terraware/web-components';
 import _ from 'lodash';
 
 import PageSnackbar from 'src/components/PageSnackbar';
-import TooltipLearnMoreModal, {
-  LearnMoreLink,
-  LearnMoreModalContentGrowthForm,
-  LearnMoreModalContentSeedStorageBehavior,
-  TooltipLearnMoreModalData,
-} from 'src/components/TooltipLearnMoreModal';
 import Card from 'src/components/common/Card';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { FilterField } from 'src/components/common/FilterGroup';
@@ -88,18 +82,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     direction: 'Ascending',
   } as SearchSortOrder);
 
-  const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
-  const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
-    undefined
-  );
-  const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
-    setTooltipLearnMoreModalData(data);
-    setTooltipLearnMoreModalOpen(true);
-  };
-  const handleTooltipLearnMoreModalClose = () => {
-    setTooltipLearnMoreModalOpen(false);
-  };
-
   const columns: TableColumnType[] = React.useMemo(() => {
     // No-op to make lint happy so it doesn't think the dependency is unused.
     if (!activeLocale) {
@@ -156,19 +138,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         key: 'seedStorageBehavior',
         name: strings.SEED_STORAGE_BEHAVIOR,
         type: 'string',
-        tooltipTitle: (
-          <>
-            {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
-            <LearnMoreLink
-              onClick={() =>
-                openTooltipLearnMoreModal({
-                  title: strings.SEED_STORAGE_BEHAVIOR,
-                  content: <LearnMoreModalContentSeedStorageBehavior />,
-                })
-              }
-            />
-          </>
-        ),
+        tooltipTitle: strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,
       },
       {
         key: 'ecosystemTypes',
@@ -590,12 +560,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         open={importSpeciesModalOpen}
         onClose={onCloseImportSpeciesModal}
         setCheckDataModalOpen={setCheckDataModalOpen}
-      />
-      <TooltipLearnMoreModal
-        content={tooltipLearnMoreModalData?.content}
-        onClose={handleTooltipLearnMoreModalClose}
-        open={tooltipLearnMoreModalOpen}
-        title={tooltipLearnMoreModalData?.title}
       />
       <Grid container>
         <PageHeaderWrapper nextElement={contentRef.current}>
