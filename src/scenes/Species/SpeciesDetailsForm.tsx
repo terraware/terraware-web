@@ -260,18 +260,7 @@ export default function SpeciesDetailsForm({
           id='ecosystemTypes'
           fullWidth={true}
           label={strings.ECOSYSTEM_TYPE}
-          tooltipTitle={
-            <>
-              {`${strings.TOOLTIP_ECOSYSTEM_TYPE} `}
-              <a
-                target='_blank'
-                rel='noopener noreferrer'
-                href='https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world'
-              >
-                {strings.LEARN_MORE}
-              </a>
-            </>
-          }
+          tooltipTitle={strings.TOOLTIP_ECOSYSTEM_TYPE}
           onAdd={(type: EcosystemType) => {
             const selectedTypes = [...(record.ecosystemTypes ?? [])];
             selectedTypes.push(type);

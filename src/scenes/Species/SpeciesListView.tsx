@@ -144,18 +144,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         key: 'ecosystemTypes',
         name: strings.ECOSYSTEM_TYPE,
         type: 'string',
-        tooltipTitle: (
-          <>
-            {`${strings.TOOLTIP_ECOSYSTEM_TYPE} `}
-            <a
-              target='_blank'
-              rel='noopener noreferrer'
-              href='https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world'
-            >
-              {strings.LEARN_MORE}
-            </a>
-          </>
-        ),
+        tooltipTitle: strings.TOOLTIP_ECOSYSTEM_TYPE,
       },
     ];
   }, [activeLocale, orgHasParticipants]);

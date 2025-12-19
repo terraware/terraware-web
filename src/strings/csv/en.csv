@@ -2134,7 +2134,7 @@ TOOLTIP_BATCH_NUMBER,"Batch numbers with the format YY-L-N-XXX can be can be bro
 TOOLTIP_COMMON_NAME,"The name an organism is known by to the general public, rather than its scientific name.",
 TOOLTIP_COUNTRY_MY_ACCOUNT,Your country affects how we display numbers and other information.,
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"This number represents all accessions with the statuses Awaiting Check In, Awaiting Processing, Processing, Drying, and In Storage.",
-TOOLTIP_ECOSYSTEM_TYPE,"Relatively large units of land or water containing a distinct assemblage of natural communities sharing a large majority of species, dynamics, and environmental conditions.",
+TOOLTIP_ECOSYSTEM_TYPE,"These types are relatively large units of land or water containing a distinct assemblage of natural communities sharing a large majority of species, dynamics, and environmental conditions.",
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,“Germination/Establishment” indicates that seedlings have not yet emerged from seeds. The quantity does not count toward the total quantity.,
 TOOLTIP_HARDENING_OFF_QUANTITY,What determines a plant is in “Hardening Off” can vary and is often species specific. Example: size of plant or amount of time acclimated.,
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,The ID of the accession used to create this batch.  Unavailable for species that don't have any accessions.,

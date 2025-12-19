@@ -2133,7 +2133,7 @@ TOOLTIP_BATCH_NUMBER,"Les numéros de lots au format YY-L-N-XXX peuvent être d�
 TOOLTIP_COMMON_NAME,"Le nom sous lequel un organisme est connu du grand public, plutôt que son nom scientifique.",1f6fe5d2
 TOOLTIP_COUNTRY_MY_ACCOUNT,Votre pays influence la façon dont nous affichons les numéros et d'autres informations.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Ce numéro représente toutes les accessions dont le statut est « En attente d'enregistrement », « En attente de traitement », « En cours de traitement », « En cours de séchage » et « En cours de stockage ».",5101036f
-TOOLTIP_ECOSYSTEM_TYPE,"Unités relativement grandes de terre ou d'eau contenant un assemblage distinct de communautés naturelles partageant une grande majorité d'espèces, de dynamiques et de conditions environnementales.",92c6820c
+TOOLTIP_ECOSYSTEM_TYPE,"Ces types représentent des unités relativement vastes de terre ou d’eau contenant un ensemble distinct de communautés naturelles partageant la grande majorité des espèces, des dynamiques et des conditions environnementales.",0242f37b
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,La « germination/établissement » indique que les semis n'ont pas encore émergé des graines. La quantité ne compte pas dans la quantité totale.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Les éléments qui déterminent qu'une plante est en phase d'endurcissement peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,L'identifiant de l'accession utilisée pour créer ce lot. Pas disponible pour les espèces qui n'ont pas d'accès.,a6a3a0af

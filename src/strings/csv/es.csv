@@ -2134,7 +2134,7 @@ TOOLTIP_BATCH_NUMBER,"Los números de lote con el formato YY-L-N-XXX pueden desg
 TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el público general, en lugar de su nombre científico.",1f6fe5d2
 TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todas las accesiones con los estados Pendiente de registro, Pendiente de tratamiento, Tratamiento, Deshidratación y En almacenamiento.",5101036f
-TOOLTIP_ECOSYSTEM_TYPE,"Unidades relativamente grandes de tierra o agua que contienen un conjunto diferenciado de comunidades naturales que comparten una gran mayoría de especies, dinámicas y condiciones medioambientales.",92c6820c
+TOOLTIP_ECOSYSTEM_TYPE,"Estos tipos son unidades relativamente grandes de tierra o agua que contienen un conjunto distintivo de comunidades naturales que comparten la mayoría de las especies, dinámicas y condiciones ambientales.",0242f37b
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,«Germinación/establecimiento» indica que las plántulas aún no han emergido de las semillas. La cantidad no cuenta para determinar la cantidad total.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Lo que determina que una planta esté en «Curación» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,El ID de la accesión utilizada para crear este lote. No disponible para especies que no tienen ninguna accesión.,a6a3a0af

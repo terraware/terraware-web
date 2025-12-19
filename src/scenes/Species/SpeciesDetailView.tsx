@@ -249,6 +249,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id={'ecosystemType'}
               label={strings.ECOSYSTEM_TYPE}
               value={getEcosystemTypesString(species)}
+              tooltipTitle={strings.TOOLTIP_ECOSYSTEM_TYPE}
               type='text'
               display={true}
             />
