@@ -157,7 +157,9 @@ const MediaItem = ({
       } else if (downloadUrl) {
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.download = `${plantingSiteName}_plot${plotId}_${mediaFile.fileName}`;
+        const siteName = plantingSiteName || 'site';
+        const plotIdStr = plotId !== undefined ? plotId : 'unknown';
+        link.download = `${siteName}_plot${plotIdStr}_${mediaFile.fileName}`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
