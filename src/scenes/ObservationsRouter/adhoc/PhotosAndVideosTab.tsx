@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -30,6 +30,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
   const plantingSiteId = params.plantingSiteId;
   const observationId = params.observationId;
   const monitoringPlotId = params.monitoringPlotId;
+  const theme = useTheme();
 
   const onEdit = useCallback(() => {
     if (plantingSiteId && observationId && monitoringPlotId) {
@@ -40,6 +41,14 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
       );
     }
   }, [monitoringPlotId, navigate, observationId, plantingSiteId]);
+
+  const plotCornerPhotos = useMemo(() => {
+    return monitoringPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot');
+  }, [monitoringPlot?.photos]);
+
+  const otherPhotos = useMemo(() => {
+    return monitoringPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot');
+  }, [monitoringPlot?.photos]);
 
   return (
     <Card radius='24px'>
@@ -52,12 +61,18 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
         )}
       </Box>
       <Box marginBottom={4}>
-        <MonitoringPlotPhotosWithActions
-          observationId={Number(observationId)}
-          monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-          photos={monitoringPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot')}
-          monitoringPlotName={monitoringPlot?.monitoringPlotName}
-        />
+        {(plotCornerPhotos?.length || 0) > 0 ? (
+          <MonitoringPlotPhotosWithActions
+            observationId={Number(observationId)}
+            monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+            photos={plotCornerPhotos}
+            monitoringPlotName={monitoringPlot?.monitoringPlotName}
+          />
+        ) : (
+          <Typography color={theme.palette.TwClrTxtSecondary}>
+            {strings.YOU_HAVE_NOT_UPLOADED_ANY_PLOT_CORNER_PHOTOS}
+          </Typography>
+        )}
       </Box>
       {type === 'biomass' && (
         <>
@@ -87,11 +102,17 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
         {strings.PHOTOS_AND_VIDEOS}
       </Typography>
       <Box marginBottom={4}>
-        <MonitoringPlotPhotosWithActions
-          observationId={Number(observationId)}
-          monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-          photos={monitoringPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot')}
-        />
+        {(otherPhotos?.length || 0) > 0 ? (
+          <MonitoringPlotPhotosWithActions
+            observationId={Number(observationId)}
+            monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+            photos={otherPhotos}
+          />
+        ) : (
+          <Typography color={theme.palette.TwClrTxtSecondary}>
+            {strings.YOU_HAVE_NOT_UPLOADED_ANY_PHOTOS_OR_VIDEOS}
+          </Typography>
+        )}
       </Box>
     </Card>
   );
