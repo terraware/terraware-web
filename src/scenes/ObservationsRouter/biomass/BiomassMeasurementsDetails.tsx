@@ -265,6 +265,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
             monitoringPlot={monitoringPlot}
             type='biomass'
             isCompleted={!!observation?.completedTime}
+            plantingSiteName={plantingSite?.name}
           />
         ),
       },
@@ -282,6 +283,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     onMatchSpecies,
     observationId,
     reload,
+    plantingSite,
     observation,
   ]);
 

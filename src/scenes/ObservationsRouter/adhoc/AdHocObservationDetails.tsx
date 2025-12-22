@@ -255,6 +255,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
           <PhotosAndVideosTab
             monitoringPlot={observation?.adHocPlot}
             isCompleted={!!observation?.adHocPlot?.completedTime}
+            plantingSiteName={plantingSite?.name}
           />
         ),
       },
@@ -271,6 +272,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     unrecognizedSpecies,
     observationId,
     reload,
+    plantingSite,
   ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({

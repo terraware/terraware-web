@@ -335,11 +335,12 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
           <PhotosAndVideosTab
             monitoringPlot={monitoringPlotResult}
             isCompleted={!!monitoringPlotResult?.completedTime}
+            plantingSiteName={plantingSite?.name}
           />
         ),
       },
     ];
-  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId, reloadAll]);
+  }, [activeLocale, monitoringPlotResult, monitoringPlotSpecies, observationId, reloadAll, plantingSite]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',
