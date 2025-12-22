@@ -250,7 +250,7 @@ const SurvivalRateSettings = () => {
                     marginX={1}
                   />
                 )}
-                {(t0SiteData?.zones.length || 0) === numberOfSetZones ? (
+                {(Object.entries(zonesWithObservations).length || 0) === numberOfSetZones ? (
                   <Typography fontWeight={500} color={theme.palette.TwClrTxtSuccess}>
                     {strings.T0_SET_FOR_TEMPORARY_PLOTS}
                   </Typography>
