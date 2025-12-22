@@ -1866,7 +1866,7 @@ SILVOPASTURE,Sistema selvopastoril,9d942e38
 SIMPLE_SITE,Terreno sencillo,760ab731
 SINGLE_SPECIES_MORTALITY_RATE_MESSAGE,"Ahora mismo sólo tiene 1 especie con tasa de mortalidad. Cuando haya más, aparecerá la especie con la tasa de mortalidad más baja.",7a03186c
 SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE,"Actualmente solo hay una especie con una tasa de supervivencia. Cuando haya más especies con una tasa de supervivencia, se mostrará la especie con la tasa de supervivencia más baja.",c4ff6454
-SINGLE_ZONE_MORTALITY_RATE_MESSAGE,"En este momento sólo tiene 1 zona con tasa de mortalidad. Cuando haya más, aparecerá la zona con la tasa de mortalidad más baja.",d60bd477
+SINGLE_ZONE_MORTALITY_RATE_MESSAGE,"El sitio tiene solo una zona con una tasa de supervivencia. Cuando un sitio tiene más de una zona con una tasa de supervivencia, se mostrará la zona con la tasa de supervivencia más baja.",d9ac1a26
 SINGLE_ZONE_SURVIVAL_RATE_MESSAGE,"El sitio tiene solo una zona con una tasa de supervivencia. Cuando un sitio tenga más de una zona con una tasa de supervivencia, se mostrará la zona con la tasa de supervivencia más baja.",d9ac1a26
 SITE,Sitio,925ca15b
 SITE_BOUNDARY,Límite del sitio,ee9dc83f
