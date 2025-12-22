@@ -12,6 +12,7 @@ export type MonitoringPlotPhotosWithActionsProps = {
   observationId: number;
   monitoringPlotId: number;
   monitoringPlotName?: string;
+  plantingSiteName?: string;
   photos?: ObservationMonitoringPlotPhoto[];
 };
 
@@ -19,6 +20,7 @@ export default function MonitoringPlotPhotosWithActions({
   observationId,
   monitoringPlotId,
   monitoringPlotName,
+  plantingSiteName,
   photos,
 }: MonitoringPlotPhotosWithActionsProps): JSX.Element {
   const theme = useTheme();
@@ -92,6 +94,7 @@ export default function MonitoringPlotPhotosWithActions({
               onExpand={handleExpand}
               observationId={observationId}
               plotId={monitoringPlotId}
+              plantingSiteName={plantingSiteName}
             />
           </Box>
         ))}

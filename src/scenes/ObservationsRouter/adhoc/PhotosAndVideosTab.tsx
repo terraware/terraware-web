@@ -16,9 +16,10 @@ type PhotosAndVideosTabProps = {
   monitoringPlot?: ObservationMonitoringPlotResultsPayload;
   type?: string;
   isCompleted: boolean;
+  plantingSiteName?: string;
 };
 
-const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVideosTabProps) => {
+const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted, plantingSiteName }: PhotosAndVideosTabProps) => {
   const navigate = useSyncNavigate();
 
   const params = useParams<{
@@ -67,6 +68,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
             monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
             photos={plotCornerPhotos}
             monitoringPlotName={monitoringPlot?.monitoringPlotName}
+            plantingSiteName={plantingSiteName}
           />
         ) : (
           <Typography color={theme.palette.TwClrTxtSecondary}>
@@ -84,6 +86,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
               observationId={Number(observationId)}
               monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
               photos={monitoringPlot?.photos?.filter((photo) => photo.type === 'Quadrat')}
+              plantingSiteName={plantingSiteName}
             />
           </Box>
           <Box>
@@ -94,6 +97,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
               observationId={Number(observationId)}
               monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
               photos={monitoringPlot?.photos?.filter((photo) => photo.type === 'Soil')}
+              plantingSiteName={plantingSiteName}
             />
           </Box>
         </>
@@ -107,6 +111,7 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted }: PhotosAndVide
             observationId={Number(observationId)}
             monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
             photos={otherPhotos}
+            plantingSiteName={plantingSiteName}
           />
         ) : (
           <Typography color={theme.palette.TwClrTxtSecondary}>

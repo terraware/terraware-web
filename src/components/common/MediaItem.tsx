@@ -27,6 +27,7 @@ export type MediaItemProps = {
   downloadUrl?: string;
   observationId?: number;
   plotId?: number;
+  plantingSiteName?: string;
 };
 
 const MediaItem = ({
@@ -38,6 +39,7 @@ const MediaItem = ({
   downloadUrl,
   observationId,
   plotId,
+  plantingSiteName,
 }: MediaItemProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
@@ -155,13 +157,15 @@ const MediaItem = ({
       } else if (downloadUrl) {
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.download = mediaFile.fileName;
+        const siteName = plantingSiteName || 'site';
+        const plotIdStr = plotId !== undefined ? plotId : 'unknown';
+        link.download = `${siteName}_plot${plotIdStr}_${mediaFile.fileName}`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       }
     },
-    [downloadUrl, mediaFile.fileId, mediaFile.fileName, onDownload]
+    [downloadUrl, mediaFile.fileId, mediaFile.fileName, onDownload, plotId, plantingSiteName]
   );
 
   const onClickExpand = useCallback(
