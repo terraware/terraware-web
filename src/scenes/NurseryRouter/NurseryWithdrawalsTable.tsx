@@ -96,7 +96,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
       { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
       { key: 'project_names', name: strings.PROJECTS, type: 'string' },
-      { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
+      { key: 'substratumNames', name: strings.TO_SUBZONE, type: 'string' },
       { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
       { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
       { key: 'menu', name: '', type: 'string' },
@@ -109,7 +109,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
       { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
       { name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' },
-      { name: 'plantingSubzoneNames', label: strings.SUBZONE, type: 'multiple_selection' },
+      { name: 'substratumNames', label: strings.SUBZONE, type: 'multiple_selection' },
       {
         name: 'batchWithdrawals.batch_species_scientificName',
         label: strings.SPECIES,
@@ -143,7 +143,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         displayLabel: strings.PROJECTS,
       },
       {
-        key: 'plantingSubzoneNames',
+        key: 'substratumNames',
         displayLabel: strings.TO_SUBZONE,
       },
       {
@@ -348,8 +348,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
-        plantingSubzoneNames: {
-          field: 'plantingSubzoneNames',
+        substratumNames: {
+          field: 'substratumNames',
           operation: 'field',
           type: 'Exact',
           values: [subzoneParam],

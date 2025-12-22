@@ -11,7 +11,7 @@ const NurseryRouter = () => {
   const { species } = useSpeciesData();
   const { allPlantingSites } = usePlantingSiteData();
 
-  const plantingSubzoneNames = useMemo(() => {
+  const substratumNames = useMemo(() => {
     const subzones: Record<number, string> = {};
     for (const plantingSite of allPlantingSites ?? []) {
       for (const plantingZone of plantingSite.plantingZones ?? []) {
@@ -29,7 +29,7 @@ const NurseryRouter = () => {
       <Route path={'/withdrawals'} element={<NurseryPlantingsAndWithdrawalsView />} />
       <Route
         path={'/withdrawals/:withdrawalId'}
-        element={<NurseryWithdrawalsDetailsView species={species} plantingSubzoneNames={plantingSubzoneNames} />}
+        element={<NurseryWithdrawalsDetailsView species={species} substratumNames={substratumNames} />}
       />
       <Route path={'/reassignment/:deliveryId'} element={<NurseryReassignmentView />} />
     </Routes>

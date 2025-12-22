@@ -121,7 +121,7 @@ const listNurseryWithdrawals = async (
       'purpose',
       'facility_name',
       'destinationName',
-      'plantingSubzoneNames',
+      'substratumNames',
       'batchWithdrawals.batch_species_scientificName',
       'totalWithdrawn',
       'hasReassignments',
@@ -248,7 +248,7 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
       'purpose',
       'facility_name',
       'destinationName',
-      'plantingSubzoneNames',
+      'substratumNames',
       'batchWithdrawals.batch_species_scientificName',
     ],
     search: SearchService.convertToSearchNodePayload({}, organizationId),
@@ -261,7 +261,7 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
   return (data ?? []).reduce((acc, d) => {
     return Object.keys(d).reduce((innerAcc, k) => {
       const isBatchWithdrawals = k === 'batchWithdrawals';
-      const isSubzones = k === 'plantingSubzoneNames';
+      const isSubzones = k === 'substratumNames';
       const newKey = isBatchWithdrawals ? 'batchWithdrawals.batch_species_scientificName' : k;
       if (!innerAcc[newKey]) {
         innerAcc[newKey] = { partial: false, values: [] };
