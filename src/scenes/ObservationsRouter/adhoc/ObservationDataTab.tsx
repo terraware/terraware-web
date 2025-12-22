@@ -200,9 +200,12 @@ const ObservationDataTab = ({
 
       {monitoringPlot?.isPermanent && (
         <Box>
-          <Typography fontSize={'20px'} fontWeight={600}>
-            {strings.SURVIVAL_RATE_PER_SPECIES}
-          </Typography>
+          <Box display='flex' alignItems={'center'}>
+            <Typography fontSize={'20px'} fontWeight={600}>
+              {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
+            </Typography>
+            <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
+          </Box>
           <Box height='360px'>
             <SpeciesSurvivalRateChart
               minHeight='360px'

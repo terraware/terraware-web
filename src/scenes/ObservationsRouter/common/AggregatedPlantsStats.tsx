@@ -83,7 +83,10 @@ export default function AggregatedPlantsStats({
           </ChartWrapper>
         </Grid>
         <Grid item xs={chartGridSize}>
-          <ChartWrapper title={strings.SURVIVAL_RATE_PER_SPECIES}>
+          <ChartWrapper
+            title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
+            tooltip={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP}
+          >
             <SpeciesSurvivalRateChart
               species={hasObservedPermanentPlots ? species : []}
               minHeight='170px'
@@ -99,23 +102,21 @@ export default function AggregatedPlantsStats({
 type ChartWrapperProps = {
   title: string | React.ReactNode;
   children: React.ReactNode;
+  tooltip?: string;
 };
 
-const ChartWrapper = ({ title, children }: ChartWrapperProps): JSX.Element => {
+const ChartWrapper = ({ title, children, tooltip }: ChartWrapperProps): JSX.Element => {
   const theme = useTheme();
 
   return (
     <Card style={{ height: '240px', padding: 1 }}>
       <Box height='220px' marginLeft={-0.5} display='flex' flexDirection='column'>
-        <Typography
-          fontSize='14px'
-          lineHeight='20px'
-          fontWeight={400}
-          color={theme.palette.TwClrTxtSecondary}
-          margin={theme.spacing(2, 2, 2, 2.5)}
-        >
-          {title}
-        </Typography>
+        <Box display='flex' alignItems={'center'} margin={theme.spacing(2, 2, 2, 2.5)}>
+          <Typography fontSize='14px' lineHeight='20px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+            {title}
+          </Typography>
+          {tooltip && <IconTooltip title={tooltip} />}
+        </Box>
         <Box height='170px' display='flex' flexDirection='column' margin={theme.spacing(0, 1)}>
           {children}
         </Box>
