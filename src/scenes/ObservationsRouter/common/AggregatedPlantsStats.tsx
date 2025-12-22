@@ -111,7 +111,7 @@ const ChartWrapper = ({ title, children, tooltip }: ChartWrapperProps): JSX.Elem
   return (
     <Card style={{ height: '240px', padding: 1 }}>
       <Box height='220px' marginLeft={-0.5} display='flex' flexDirection='column'>
-        <Box display='flex' alignContent={'center'} margin={theme.spacing(2, 2, 2, 2.5)}>
+        <Box display='flex' alignItems={'center'} margin={theme.spacing(2, 2, 2, 2.5)}>
           <Typography fontSize='14px' lineHeight='20px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
             {title}
           </Typography>

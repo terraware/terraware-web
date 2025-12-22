@@ -434,7 +434,7 @@ export default function ObservationMonitoringPlot({ reloadAll }: { reloadAll: ()
             </Box>
             {monitoringPlotResult?.isPermanent && (
               <>
-                <Box display='flex' alignContent={'center'}>
+                <Box display='flex' alignItems={'center'}>
                   {title(strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION)}
                   <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
                 </Box>
