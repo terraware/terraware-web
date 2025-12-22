@@ -262,7 +262,7 @@ test.describe('InventoryTests', () => {
     await expect(page.locator('#row1-purpose')).toContainText('Planting');
     await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
-    await expect(page.locator('#row1-plantingSubzoneNames')).toContainText('East-North');
+    await expect(page.locator('#row1-substratumNames')).toContainText('East-North');
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
     await expect(page.locator('#row1-totalWithdrawn')).toContainText('60');
   });

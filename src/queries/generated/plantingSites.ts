@@ -63,7 +63,7 @@ export type ListPlantingSitesApiResponse = /** status 200 OK */ ListPlantingSite
 export type ListPlantingSitesApiArg = {
   organizationId?: number;
   projectId?: number;
-  /** If true, include planting zones and subzones for each site. */
+  /** If true, include strata and substrata for each site. */
   full?: boolean;
 };
 export type CreatePlantingSiteApiResponse = /** status 200 OK */ CreatePlantingSiteResponsePayload;
@@ -135,7 +135,7 @@ export type PlantingSeasonPayload = {
   startDate: string;
 };
 export type PlantingSubzonePayload = {
-  /** Area of planting subzone in hectares. */
+  /** Area of substratum in hectares. */
   areaHa: number;
   boundary: MultiPolygon;
   fullName: string;
@@ -144,17 +144,17 @@ export type PlantingSubzonePayload = {
   latestObservationId?: number;
   monitoringPlots: MonitoringPlotPayload[];
   name: string;
-  /** When any monitoring plot in the planting subzone was most recently observed. */
+  /** When any monitoring plot in the substratum was most recently observed. */
   observedTime?: string;
   plantingCompleted: boolean;
-  /** When planting of the planting subzone was marked as completed. */
+  /** When planting of the substratum was marked as completed. */
   plantingCompletedTime?: string;
 };
 export type PlantingZonePayload = {
-  /** Area of planting zone in hectares. */
+  /** Area of stratum in hectares. */
   areaHa: number;
   boundary: MultiPolygon;
-  /** When the boundary of this planting zone was last modified. Modifications of other attributes of the planting zone do not cause this timestamp to change. */
+  /** When the boundary of this stratum was last modified. Modifications of other attributes of the stratum do not cause this timestamp to change. */
   boundaryModifiedTime: string;
   id: number;
   latestObservationCompletedTime?: string;
@@ -167,7 +167,7 @@ export type PlantingZonePayload = {
 };
 export type PlantingSitePayload = {
   adHocPlots: MonitoringPlotPayload[];
-  /** Area of planting site in hectares. Only present if the site has planting zones. */
+  /** Area of planting site in hectares. Only present if the site has strata. */
   areaHa?: number;
   boundary?: MultiPolygon;
   countryCode?: string;
@@ -200,12 +200,12 @@ export type NewPlantingSeasonPayload = {
 };
 export type NewPlantingSubzonePayload = {
   boundary: MultiPolygon | Polygon;
-  /** Name of this planting subzone. Two subzones in the same planting zone may not have the same name, but using the same subzone name in different planting zones is valid. */
+  /** Name of this substratum. Two substrata in the same stratum may not have the same name, but using the same substratum name in different strata is valid. */
   name: string;
 };
 export type NewPlantingZonePayload = {
   boundary: MultiPolygon | Polygon;
-  /** Name of this planting zone. Two zones in the same planting site may not have the same name. */
+  /** Name of this stratum. Two strata in the same planting site may not have the same name. */
   name: string;
   plantingSubzones?: NewPlantingSubzonePayload[];
   targetPlantingDensity?: number;
@@ -217,7 +217,7 @@ export type CreatePlantingSiteRequestPayload = {
   name: string;
   organizationId: number;
   plantingSeasons?: NewPlantingSeasonPayload[];
-  /** List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+  /** List of strata to create. If present and not empty, "boundary" must also be specified. */
   plantingZones?: NewPlantingZonePayload[];
   projectId?: number;
   /** Time zone name in IANA tz database format */
@@ -257,25 +257,25 @@ export type ListPlantingSiteReportedPlantsResponsePayload = {
   status: SuccessOrError;
 };
 export type PlantingSiteValidationProblemPayload = {
-  /** If the problem is a conflict between two planting zones or two subzones, the list of the conflicting zone or subzone names. */
+  /** If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
   conflictsWith?: string[];
-  /** If the problem relates to a particular subzone, its name. If this is present, plantingZone will also be present and will be the name of the zone that contains this subzone. */
+  /** If the problem relates to a particular substratum, its name. If this is present, plantingZone will also be present and will be the name of the stratum that contains this substratum. */
   plantingSubzone?: string;
-  /** If the problem relates to a particular planting zone, its name. */
+  /** If the problem relates to a particular stratum, its name. */
   plantingZone?: string;
   problemType:
-    | 'DuplicateSubzoneName'
-    | 'DuplicateZoneName'
+    | 'DuplicateSubstratumName'
+    | 'DuplicateStratumName'
     | 'ExclusionWithoutBoundary'
     | 'SiteTooLarge'
-    | 'SubzoneBoundaryOverlaps'
-    | 'SubzoneInExclusionArea'
-    | 'SubzoneNotInZone'
-    | 'ZoneBoundaryOverlaps'
-    | 'ZoneHasNoSubzones'
-    | 'ZoneNotInSite'
-    | 'ZoneTooSmall'
-    | 'ZonesWithoutSiteBoundary';
+    | 'SubstratumBoundaryOverlaps'
+    | 'SubstratumInExclusionArea'
+    | 'SubstratumNotInStratum'
+    | 'StratumBoundaryOverlaps'
+    | 'StratumHasNoSubstrata'
+    | 'StratumNotInSite'
+    | 'StratumTooSmall'
+    | 'StrataWithoutSiteBoundary';
 };
 export type ValidatePlantingSiteResponsePayload = {
   /** True if the request was valid. */
@@ -328,7 +328,7 @@ export type PlantingSubzoneHistoryPayload = {
   id: number;
   monitoringPlots: MonitoringPlotHistoryPayload[];
   name: string;
-  /** ID of planting subzone if it exists in the current version of the site. */
+  /** ID of substratum if it exists in the current version of the site. */
   plantingSubzoneId?: number;
 };
 export type PlantingZoneHistoryPayload = {
@@ -337,7 +337,7 @@ export type PlantingZoneHistoryPayload = {
   id: number;
   name: string;
   plantingSubzones: PlantingSubzoneHistoryPayload[];
-  /** ID of planting zone if it exists in the current version of the site. */
+  /** ID of stratum if it exists in the current version of the site. */
   plantingZoneId?: number;
 };
 export type PlantingSiteHistoryPayload = {

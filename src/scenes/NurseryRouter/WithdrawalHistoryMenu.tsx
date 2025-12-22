@@ -45,15 +45,13 @@ export default function WithdrawalHistoryMenu(props: WithdrawalHistoryMenuProps)
         }}
       >
         <MenuList sx={{ padding: theme.spacing(2, 0) }}>
-          {withdrawal.purpose === OUTPLANT &&
-            withdrawal.plantingSubzoneNames &&
-            withdrawal.hasReassignments === 'false' && (
-              <MenuItem id='reassign' onClick={reassign} sx={{ padding: theme.spacing(1, 2) }}>
-                <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-                  {strings.REASSIGN}
-                </Typography>
-              </MenuItem>
-            )}
+          {withdrawal.purpose === OUTPLANT && withdrawal.substratumNames && withdrawal.hasReassignments === 'false' && (
+            <MenuItem id='reassign' onClick={reassign} sx={{ padding: theme.spacing(1, 2) }}>
+              <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
+                {strings.REASSIGN}
+              </Typography>
+            </MenuItem>
+          )}
           <MenuItem
             id='undoWithdrawal'
             onClick={(event) => openUndoWithdrawalHandler(event)}
