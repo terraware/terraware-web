@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766432180804" clover="3.2.0">
-  <project timestamp="1766432180804" name="All files">
-    <metrics statements="36239" coveredstatements="1341" conditionals="25345" coveredconditionals="393" methods="11224" coveredmethods="213" elements="72808" coveredelements="1947" complexity="0" loc="36239" ncloc="36239" packages="286" files="1423" classes="1423"/>
+<coverage generated="1766434305483" clover="3.2.0">
+  <project timestamp="1766434305483" name="All files">
+    <metrics statements="36242" coveredstatements="1341" conditionals="25353" coveredconditionals="393" methods="11226" coveredmethods="213" elements="72821" coveredelements="1947" complexity="0" loc="36242" ncloc="36242" packages="286" files="1423" classes="1423"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -29742,7 +29742,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.adhoc">
-      <metrics statements="252" coveredstatements="0" conditionals="245" coveredconditionals="0" methods="85" coveredmethods="0"/>
+      <metrics statements="255" coveredstatements="0" conditionals="253" coveredconditionals="0" methods="87" coveredmethods="0"/>
       <file name="AdHocObservationDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/AdHocObservationDetails.tsx">
         <metrics statements="67" coveredstatements="0" conditionals="76" coveredconditionals="0" methods="21" coveredmethods="0"/>
         <line num="44" count="0" type="stmt"/>
@@ -29887,21 +29887,24 @@
         <line num="165" count="0" type="stmt"/>
       </file>
       <file name="PhotosAndVideosTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/PhotosAndVideosTab.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="17" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="93" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
       </file>
       <file name="SpeciesEditableTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/adhoc/SpeciesEditableTable.tsx">
         <metrics statements="20" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
