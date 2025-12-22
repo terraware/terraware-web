@@ -27,6 +27,9 @@ const config: ConfigFile = {
     './src/queries/generated/plantingSites.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/sites'),
     },
+    './src/queries/generated/t0.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/t0'),
+    },
     // Disable regenerating Search API until OpenAPI annotation fix is completed.
     // './src/queries/generated/search.ts': {
     //   filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),

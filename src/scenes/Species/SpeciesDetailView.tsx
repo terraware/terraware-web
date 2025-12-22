@@ -186,6 +186,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id={'conservationCategory'}
               label={strings.CONSERVATION_CATEGORY}
               value={species?.conservationCategory}
+              tooltipTitle={strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY}
               type='text'
               display={true}
             />
@@ -195,6 +196,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id={'growthForms'}
               label={strings.GROWTH_FORM}
               value={getGrowthFormsString(species)}
+              tooltipTitle={strings.TOOLTIP_SPECIES_GROWTH_FORM}
               type='text'
               aria-label='date-picker'
               display={true}
@@ -247,6 +249,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id={'ecosystemType'}
               label={strings.ECOSYSTEM_TYPE}
               value={getEcosystemTypesString(species)}
+              tooltipTitle={strings.TOOLTIP_ECOSYSTEM_TYPE}
               type='text'
               display={true}
             />
@@ -276,6 +279,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id={'seedStorageBehavior'}
               label={strings.SEED_STORAGE_BEHAVIOR}
               value={getSeedStorageBehaviorString(species)}
+              tooltipTitle={strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
               type='text'
               display={true}
             />

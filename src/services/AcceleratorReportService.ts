@@ -4,12 +4,14 @@ import {
   AcceleratorReport,
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
+  CreateStandardMetricRequestPayload,
   ExistingAcceleratorReportConfig,
   ReportReviewPayload,
   ReviewAcceleratorReportMetricsRequestPayload,
   SystemMetricName,
   UpdateAcceleratorReportConfigPayload,
   UpdateProjectMetricRequest,
+  UpdateStandardMetricRequestPayload,
 } from 'src/types/AcceleratorReport';
 import { UpdateReportMetricTargets } from 'src/types/Report';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -45,6 +47,7 @@ type UpdateConfigResponse =
 
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
+const STANDARD_METRIC_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics/{metricId}';
 const SYSTEM_METRICS_ENDPOINT = '/api/v1/accelerator/reports/systemMetrics';
 const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
 const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
@@ -85,10 +88,15 @@ export type ListSystemMetricsResponsePayload =
 type CreateProjectMetricResponse =
   paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
+type CreateStandardMetricResponse =
+  paths[typeof STANDARD_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
 type ListAcceleratorReportsResponsePayload =
   paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateProjectMetricResponse =
   paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type UpdateStandardMetricResponse =
+  paths[typeof STANDARD_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type ReviewAcceleratorReportMetricsResponse =
   paths[typeof REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type RefreshAcceleratorReportSystemMetricsResponse =
@@ -181,6 +189,14 @@ const createProjectMetric = async (
   );
 };
 
+const createStandardMetric = async (
+  request: CreateStandardMetricRequestPayload
+): Promise<Response2<CreateStandardMetricResponse>> => {
+  return HttpService.root(STANDARD_METRICS_ENDPOINT).put2<CreateStandardMetricResponse>({
+    entity: request,
+  });
+};
+
 const listAcceleratorReports = async (
   projectId: string,
   locale?: string,
@@ -243,6 +259,16 @@ const updateProjectMetric = async (
     PROJECT_METRIC_ENDPOINT.replace('{projectId}', projectId.toString()).replace('{metricId}', metricId.toString())
   ).post2<UpdateProjectMetricResponse>({
     entity: rest,
+  });
+};
+
+const updateStandardMetric = async (
+  request: UpdateStandardMetricRequestPayload
+): Promise<Response2<UpdateStandardMetricResponse>> => {
+  return HttpService.root(
+    STANDARD_METRIC_ENDPOINT.replace('{metricId}', request.metric.id.toString())
+  ).post2<UpdateStandardMetricResponse>({
+    entity: request,
   });
 };
 
@@ -379,10 +405,12 @@ const ReportService = {
   listStandardMetrics,
   listSystemdMetrics,
   createProjectMetric,
+  createStandardMetric,
   listAcceleratorReports,
   updateAcceleratorReport,
   updateMetricTargets,
   updateProjectMetric,
+  updateStandardMetric,
   reviewAcceleratorReportMetrics,
   reviewAcceleratorReport,
   refreshAcceleratorReportSystemMetrics,

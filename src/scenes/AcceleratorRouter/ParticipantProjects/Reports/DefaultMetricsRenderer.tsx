@@ -5,7 +5,7 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import { useUser } from 'src/providers';
 
-export default function SpecificMetricsRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function DefaultMetricsRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index, value, onRowClick } = props;
   const { isAllowed } = useUser();
 

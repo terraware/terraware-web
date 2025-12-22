@@ -40,7 +40,6 @@ type ObservationDataTabProps = {
   onExportData?: () => void;
   onMatchSpecies?: () => void;
   reloadAll: () => void;
-  isCompleted: boolean;
 };
 
 const ObservationDataTab = ({
@@ -52,7 +51,6 @@ const ObservationDataTab = ({
   onMatchSpecies,
   observationId,
   reloadAll,
-  isCompleted,
 }: ObservationDataTabProps) => {
   const { plantingSite, reload } = usePlantingSiteData();
   const defaultTimeZone = useDefaultTimeZone();
@@ -178,7 +176,7 @@ const ObservationDataTab = ({
           observationId={observationId}
         />
       )}
-      <ObservationDataNumbers items={items} isCompleted={isCompleted} />
+      <ObservationDataNumbers items={items} isCompleted={!!monitoringPlot.completedTime} />
       {species && (
         <Box>
           <Box display='flex' alignContent={'center'}>
@@ -195,7 +193,7 @@ const ObservationDataTab = ({
           </Box>
 
           <Box height='360px'>
-            <SpeciesTotalPlantsChart minHeight='360px' species={species} isCompleted={isCompleted} />
+            <SpeciesTotalPlantsChart minHeight='360px' species={species} isCompleted={!!monitoringPlot.completedTime} />
           </Box>
         </Box>
       )}
@@ -206,7 +204,11 @@ const ObservationDataTab = ({
             {strings.SURVIVAL_RATE_PER_SPECIES}
           </Typography>
           <Box height='360px'>
-            <SpeciesSurvivalRateChart minHeight='360px' species={species} isCompleted={isCompleted} />
+            <SpeciesSurvivalRateChart
+              minHeight='360px'
+              species={species}
+              isCompleted={!!monitoringPlot.completedTime}
+            />
           </Box>
         </Box>
       )}
@@ -232,7 +234,7 @@ const ObservationDataTab = ({
             )}
           </Typography>
         )}
-        {monitoringPlot && isCompleted && (
+        {monitoringPlot && !!monitoringPlot.completedTime && (
           <Button
             id='edit'
             label={strings.EDIT}
@@ -261,7 +263,7 @@ const ObservationDataTab = ({
           observationId={Number(observationId)}
           plotId={Number(monitoringPlot?.monitoringPlotId)}
           reload={reloadAll}
-          isCompleted={isCompleted}
+          isCompleted={!!monitoringPlot.completedTime}
           type={type}
         />
       </Box>

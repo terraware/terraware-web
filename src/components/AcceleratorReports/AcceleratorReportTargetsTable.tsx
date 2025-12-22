@@ -162,7 +162,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         });
       });
       report.standardMetrics.forEach((sm) => {
-        metrics.set(sm.id.toString(), {
+        metrics.set(`standardMetric-${sm.id.toString()}`, {
           name: sm.name,
           type: sm.type,
           reference: sm.reference,
@@ -173,7 +173,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         });
       });
       report.projectMetrics.forEach((pm) => {
-        metrics.set(pm.id.toString(), {
+        metrics.set(`projectMetric-${pm.id.toString()}`, {
           name: pm.name,
           type: pm.type,
           reference: pm.reference,

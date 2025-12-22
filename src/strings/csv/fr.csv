@@ -108,6 +108,8 @@ ADD_SPECIES,Ajouter des espèces,70fa0cc0
 ADD_SPECIES_MANUALLY_DESCRIPTION,"Saisir manuellement le nom scientifique, ainsi que les autres champs facultatifs, une espèce à la fois.",8fbef04a
 ADD_SPECIES_ONBOARDING_DESCRIPTION,Gérer les espèces que votre organisation collecte et plante.,623f0854
 ADD_SPECIES_TO_PROJECT,Ajouter une espèce au projet,b3eef36e
+ADD_STANDARD_METRIC,Ajouter un indicateur standard,b072c692
+ADD_STANDARD_METRIC_CONFIRMATION,Vous êtes sur le point d’ajouter un indicateur standard qui sera ajouté à TOUS les projets. Êtes-vous sûr de vouloir ajouter cet indicateur à tous les projets ?,9eb37ed2
 ADD_SUB_LOCATION,Ajouter un sous-emplacement,d0ad4ffd
 ADD_SUBSET_WEIGHT_AND_COUNT,Ajouter le poids et le nombre de sous-ensembles,e1b6fdf2
 ADD_TEST,Ajouter un test,2a608b3f
@@ -581,6 +583,8 @@ EDIT_SCORES,Modifier les scores,95db2e9b
 EDIT_SEED_BANK,Modifier la banque de semences,e2400ded
 EDIT_SETTINGS,Modifier les paramètres,f9c91817
 EDIT_SPECIES,Modifier les espèces,0893d9a0
+EDIT_STANDARD_METRIC,Modifier l’indicateur standard,f67c5fd1
+EDIT_STANDARD_METRIC_CONFIRMATION,Les modifications apportées à cet indicateur standard seront appliquées à TOUS les projets. Êtes-vous sûr de vouloir appliquer ces mises à jour à tous les projets ?,6b4ab5e6
 EDIT_STATUS,Modifier le statut,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Modifier les paramètres du taux de survie pour {0},669ad74c
 EDIT_TEMPORARY_PLOTS,Modifier les parcelles temporaires,3df84c06
@@ -1970,6 +1974,8 @@ STAKEHOLDER_ENGAGEMENT,Engagement des parties prenantes,2c5cfa82
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Parties prenantes et impact communautaire,a0af66ae
 STANDARD,Norme,88d7d08c
 STANDARD_DEVIATION,Écart type,f2864fab
+STANDARD_METRIC,Indicateur standard,2704b8e6
+STANDARD_METRIC_SAVED,Indicateur standard enregistré,85edf50b
 STANDARD_METRICS,Indicateurs standards,426fe201
 START,Début,85c0e4d4
 START_DATE,Date de début,892f6912
@@ -2133,7 +2139,7 @@ TOOLTIP_BATCH_NUMBER,"Les numéros de lots au format YY-L-N-XXX peuvent être d�
 TOOLTIP_COMMON_NAME,"Le nom sous lequel un organisme est connu du grand public, plutôt que son nom scientifique.",1f6fe5d2
 TOOLTIP_COUNTRY_MY_ACCOUNT,Votre pays influence la façon dont nous affichons les numéros et d'autres informations.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Ce numéro représente toutes les accessions dont le statut est « En attente d'enregistrement », « En attente de traitement », « En cours de traitement », « En cours de séchage » et « En cours de stockage ».",5101036f
-TOOLTIP_ECOSYSTEM_TYPE,"Unités relativement grandes de terre ou d'eau contenant un assemblage distinct de communautés naturelles partageant une grande majorité d'espèces, de dynamiques et de conditions environnementales.",92c6820c
+TOOLTIP_ECOSYSTEM_TYPE,"Ces types représentent des unités relativement vastes de terre ou d’eau contenant un ensemble distinct de communautés naturelles partageant la grande majorité des espèces, des dynamiques et des conditions environnementales.",0242f37b
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,La « germination/établissement » indique que les semis n'ont pas encore émergé des graines. La quantité ne compte pas dans la quantité totale.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Les éléments qui déterminent qu'une plante est en phase d'endurcissement peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,082384cb
 TOOLTIP_INVENTORY_ADD_ACCESSION_ID,L'identifiant de l'accession utilisée pour créer ce lot. Pas disponible pour les espèces qui n'ont pas d'accès.,a6a3a0af
@@ -2141,11 +2147,11 @@ TOOLTIP_LIVE_PLANTS,Les plantes vivantes observées comprennent uniquement les p
 TOOLTIP_LIVE_PLANTS_ADHOC,Les plantes vivantes observées incluent uniquement les plantes enregistrées comme vivantes.,8f4746d4
 TOOLTIP_READY_TO_PLANT_QUANTITY,Les critères qui déterminent qu'une plante est « prête à être plantée » peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,c15993f4
 TOOLTIP_SCIENTIFIC_NAME,Le nom latin binomial (genre + espèce) actuellement accepté dans la littérature botanique.,be7a8ced
-TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Catégories de la Liste Rouge de l'UICN,83da1fe2
+TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"Il s'agit de la catégorie de la Liste rouge de l'UICN à laquelle appartient l'espèce. Pour en savoir plus sur les catégories et abréviations de la Liste rouge de l'UICN, rendez-vous sur iucnredlist.org.",15d491fd
 TOOLTIP_SPECIES_FAMILY,Le nom scientifique de la famille de plantes actuellement accepté dans la littérature botanique.,53f8846c
-TOOLTIP_SPECIES_GROWTH_FORM,"Catégorie structurelle composée d'individus ou d'espèces ayant le même mode de croissance général, mais pas nécessairement apparentés.",4ec8ae3e
+TOOLTIP_SPECIES_GROWTH_FORM,Ce sont les formes qui décrivent la morphologie ou la structure générale et fondamentale de l'espèce.,b8ee5839
 TOOLTIP_SPECIES_RARE,"Espèces dont la taille des populations sauvages est limitée et qui se trouvent souvent dans des lieux géographiques isolés ; elles peuvent répondre aux critères d'un statut d'espèce en danger ou menacée, mais n'ont pas encore été légalement répertoriées ou évaluées.",c6526253
-TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,La capacité des graines à survivre à la dessiccation et aux températures jusqu'aux niveaux nécessaires pour la conservation hors site.,dc34da25
+TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,Il s'agit de la capacité des semences à survivre à la dessiccation et à des températures permettant leur conservation ex situ (hors site).,779e40e3
 TOOLTIP_TIME_ZONE_MY_ACCOUNT,Nous utilisons les fuseaux horaires pour afficher les notifications à l'heure locale. Sélectionnez le fuseau horaire qui vous concerne.,b02ac37d
 TOOLTIP_TIME_ZONE_NURSERY,Nous utilisons les fuseaux horaires pour les notifications et pour déterminer la date correcte pour votre région. Sélectionnez le fuseau horaire qui s'applique à cette pépinière. Tous les travaux effectués dans cette crèche seront effectués dans ce fuseau horaire.,df52f6a7
 TOOLTIP_TIME_ZONE_ORGANIZATION,"Nous utilisons les fuseaux horaires pour les notifications et pour déterminer la date correcte pour votre région. Sélectionnez le fuseau horaire qui s'applique à l'ensemble de votre organisation. Vous pouvez sélectionner les fuseaux horaires pour vos banques de semences, vos pépinières et vos sites de plantation dans chacune de leurs pages de configuration.",5989c53b

@@ -6695,6 +6695,7 @@ export interface components {
             reference: string;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+            unit?: string;
         };
         /** @description A row in a table. Each row has its own value ID. ExistingVariableValuesPayload includes this ID for values of variables that are defined as columns of a table. */
         ExistingTableValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {

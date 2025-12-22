@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
-import { TableColumnType } from '@terraware/web-components/components/table/types';
+import { Option, TableColumnType } from '@terraware/web-components/components/table/types';
 import { ColumnHeader } from 'export-to-csv/output/lib/types';
 
 import { FilterField } from 'src/components/common/FilterGroup';
@@ -28,11 +28,13 @@ import {
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import WithdrawalLogRenderer from 'src/scenes/NurseryRouter/WithdrawalLogRenderer';
+import { NurseryWithdrawalPurpose, purposeLabel } from 'src/types/Batch';
 import { Project } from 'src/types/Project';
 import {
   AndNodePayload,
   FieldNodePayload,
   FieldOptionsMap,
+  FieldValuesPayload,
   NotNodePayload,
   OrNodePayload,
   SearchNodePayload,
@@ -163,6 +165,19 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       filterColumns,
       filterOptions,
       noScroll: false,
+      optionsRenderer: (filterName: string, fieldValues: FieldValuesPayload): Option[] | undefined => {
+        if (filterName !== 'purpose') {
+          return;
+        }
+
+        return fieldValues[filterName]?.values.map(
+          (value): Option => ({
+            disabled: false,
+            label: purposeLabel(value as NurseryWithdrawalPurpose),
+            value,
+          })
+        );
+      },
     }),
     [filterColumns, filterOptions, filters]
   );
