@@ -73,7 +73,7 @@ const ObservationListView = (): JSX.Element => {
       {
         id: 'plantMonitoring',
         label: strings.PLANT_MONITORING,
-        children: <PlantMonitoringList />,
+        children: <PlantMonitoringList siteId={selectedPlantingSiteId} />,
       },
       {
         id: 'biomassMeasurements',
