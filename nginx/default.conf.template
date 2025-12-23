@@ -21,7 +21,36 @@ server {
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
+        # Direct the browser to always re-validate the (very small and
+        # dynamically-generated) HTML resources before re-using them
+        # from cache. (Despite the name, `no-cache` does not disable
+        # caching, but rather tells the client to re-validate the
+        # cache before each use.)
+        #
+        # The generated HTML includes references to
+        # /static/js/foo.$HASH.js pathnames which are effectively
+        # ephemeral (they are invalidated with each production push),
+        # so without this, the browser might try to re-use cached but
+        # stale HTML which refers to static resources which no longer
+        # exist on the server after a push.
+        #
+        # This does not specify `no-store`, since it's OK to store
+        # these responses, but they must be re-validated with the
+        # origin before serving the stored response.
+        add_header Cache-Control "no-cache, max-age=0, must-revalidate";
         try_files $uri $uri/ /index.html =404;
+    }
+
+    location /static/ {
+        # Direct the browser as well as public caches to cache static
+        # resources for up to 1 year.
+        #
+        # The build process includes a hash in the path name for all
+        # static resources in order to bust the cache whenever a new
+        # build is created, so these resources are immutable and safe
+        # to cache long term. (The browser is still free to evict
+        # these resources whenever needed.)
+        add_header Cache-Control "public, max-age=31536000, immutable";
     }
 
     # redirect server error pages to the static page /50x.html
