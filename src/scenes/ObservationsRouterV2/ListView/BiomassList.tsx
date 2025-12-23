@@ -124,7 +124,7 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
         columns={columns}
         defaultSortOrder={defaultSearchOrder}
         fuzzySearchColumns={fuzzySearchColumns}
-        id='accelerator-reports-table'
+        id='biomass-measurement-table'
         Renderer={BiomassRenderer}
         rows={adHocObservationsResults}
         title={strings.BIOMASS_MONITORING}
