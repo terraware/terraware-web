@@ -1,3 +1,5 @@
+36a8591ff6d SW-7808 Rename survival rate card components (#4945)
+3cfe88511cb Don't fail CI check on deleted source files (#4949)
 e6e8ba10617 SW-7869 Remove plot numbers from quadrat title in edit view (#4944)
 3f9f676c0f9 SW-7846 Update copy (#4940)
 87510b5461b SW-7896 Add missing root specifier to new nginx /static/ location stanza (#4946)

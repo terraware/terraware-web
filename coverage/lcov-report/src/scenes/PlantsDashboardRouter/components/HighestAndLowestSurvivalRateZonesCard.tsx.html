@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/PlantsDashboardRouter/components/HighestAndLowestMortalityRateZonesCard.tsx</title>
+    <title>Code coverage report for src/scenes/PlantsDashboardRouter/components/HighestAndLowestSurvivalRateZonesCard.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/PlantsDashboardRouter/components</a> HighestAndLowestMortalityRateZonesCard.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/PlantsDashboardRouter/components</a> HighestAndLowestSurvivalRateZonesCard.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -346,37 +346,37 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings from 'src/strings';
 import { PlantingZoneObservationSummary } from 'src/types/Observations';
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >TotalMortalityRateCard(</span>): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >HighestAndLowestSurvivalRateZonesCard(</span>): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { observationSummaries, plantingSite } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
 &nbsp;
-  const [highestMortalityRate, setHighestMortalityRate] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
-  const [lowestMortalityRate, setLowestMortalityRate] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
+  const [highestSurvivalRate, setHighestSurvivalRate] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
+  const [lowestSurvivalRate, setLowestSurvivalRate] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
   const [highestZoneId, setHighestZoneId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
   const [lowestZoneId, setLowestZoneId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    let _highestMortalityRate = <span class="cstat-no" title="statement not covered" >0;</span>
-    let _lowestMortalityRate = <span class="cstat-no" title="statement not covered" >Infinity;</span>
+    let _highestSurvivalRate = <span class="cstat-no" title="statement not covered" >0;</span>
+    let _lowestSurvivalRate = <span class="cstat-no" title="statement not covered" >Infinity;</span>
     let _highestZoneId: number | undefined;
     let _lowestZoneId: number | undefined;
 <span class="cstat-no" title="statement not covered" >    observationSummaries?.[0]?.plantingZones.forEach(<span class="fstat-no" title="function not covered" >(z</span>one: PlantingZoneObservationSummary) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (zone.survivalRate !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >        if (zone.survivalRate &gt;= _highestMortalityRate) {</span>
-<span class="cstat-no" title="statement not covered" >          _highestMortalityRate = zone.survivalRate;</span>
+<span class="cstat-no" title="statement not covered" >        if (zone.survivalRate &gt;= _highestSurvivalRate) {</span>
+<span class="cstat-no" title="statement not covered" >          _highestSurvivalRate = zone.survivalRate;</span>
 <span class="cstat-no" title="statement not covered" >          _highestZoneId = zone.plantingZoneId;</span>
         }
-<span class="cstat-no" title="statement not covered" >        if (zone.survivalRate &lt; _lowestMortalityRate) {</span>
-<span class="cstat-no" title="statement not covered" >          _lowestMortalityRate = zone.survivalRate;</span>
+<span class="cstat-no" title="statement not covered" >        if (zone.survivalRate &lt; _lowestSurvivalRate) {</span>
+<span class="cstat-no" title="statement not covered" >          _lowestSurvivalRate = zone.survivalRate;</span>
 <span class="cstat-no" title="statement not covered" >          _lowestZoneId = zone.plantingZoneId;</span>
         }
       }
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    setLowestMortalityRate(_lowestZoneId ? _lowestMortalityRate : undefined);</span>
+<span class="cstat-no" title="statement not covered" >    setLowestSurvivalRate(_lowestZoneId ? _lowestSurvivalRate : undefined);</span>
 <span class="cstat-no" title="statement not covered" >    setLowestZoneId(_lowestZoneId);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    setHighestMortalityRate(_highestZoneId ? _highestMortalityRate : undefined);</span>
+<span class="cstat-no" title="statement not covered" >    setHighestSurvivalRate(_highestZoneId ? _highestSurvivalRate : undefined);</span>
 <span class="cstat-no" title="statement not covered" >    setHighestZoneId(_highestZoneId);</span>
   }, [observationSummaries]);
 &nbsp;
@@ -390,7 +390,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box&gt;
-      {highestPlantingZone &amp;&amp; highestMortalityRate !== undefined &amp;&amp; (
+      {highestPlantingZone &amp;&amp; highestSurvivalRate !== undefined &amp;&amp; (
         &lt;&gt;
           &lt;Box
             sx={{
@@ -407,7 +407,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
               {highestPlantingZone.name}
             &lt;/Typography&gt;
             &lt;Typography fontSize='24px' fontWeight={600}&gt;
-              &lt;FormattedNumber value={highestMortalityRate} /&gt;%
+              &lt;FormattedNumber value={highestSurvivalRate} /&gt;%
             &lt;/Typography&gt;
           &lt;/Box&gt;
           {(!lowestPlantingZone || lowestPlantingZone.id === highestPlantingZone.id) &amp;&amp; (
@@ -432,11 +432,11 @@ export default function <span class="fstat-no" title="function not covered" >Tot
             {lowestPlantingZone.name}
           &lt;/Typography&gt;
           &lt;Typography fontSize='24px' fontWeight={600}&gt;
-            &lt;FormattedNumber value={lowestMortalityRate || 0} /&gt;%
+            &lt;FormattedNumber value={lowestSurvivalRate || 0} /&gt;%
           &lt;/Typography&gt;
         &lt;/Box&gt;
       )}
-      {highestMortalityRate === undefined &amp;&amp; lowestMortalityRate === undefined &amp;&amp; (
+      {highestSurvivalRate === undefined &amp;&amp; lowestSurvivalRate === undefined &amp;&amp; (
         &lt;&gt;
           &lt;Box
             sx={{
@@ -481,7 +481,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-23T20:23:00.328Z
+                at 2025-12-23T21:08:45.432Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
