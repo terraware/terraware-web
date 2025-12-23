@@ -64,7 +64,7 @@ const InvasiveAndThreatenedSpeciesTab = ({
       <QuadratComponent position='NortheastCorner' monitoringPlot={monitoringPlot} reload={reload} />
       <QuadratComponent position='SoutheastCorner' monitoringPlot={monitoringPlot} reload={reload} />
       {monitoringPlot?.monitoringPlotId && (
-        <EventLog observationId={Number(observationId)} plotId={monitoringPlot.monitoringPlotId} />
+        <EventLog observationId={Number(observationId)} plotId={monitoringPlot.monitoringPlotId} isBiomass />
       )}
     </Card>
   );

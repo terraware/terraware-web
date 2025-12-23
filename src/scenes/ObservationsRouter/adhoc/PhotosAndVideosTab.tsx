@@ -121,7 +121,11 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted, plantingSiteNam
         )}
       </Box>
       {monitoringPlot?.monitoringPlotId && (
-        <EventLog observationId={Number(observationId)} plotId={monitoringPlot.monitoringPlotId} />
+        <EventLog
+          observationId={Number(observationId)}
+          plotId={monitoringPlot.monitoringPlotId}
+          isBiomass={type === 'biomass'}
+        />
       )}
     </Card>
   );
