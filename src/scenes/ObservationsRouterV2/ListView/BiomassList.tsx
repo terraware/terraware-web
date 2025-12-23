@@ -67,7 +67,7 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
     direction: 'Descending',
   };
 
-  const fuzzySearchColumns = ['monitoringPlotNumber'];
+  const fuzzySearchColumns = ['monitoringPlotNumber', 'monitoringPlotDescription'];
 
   const { selectedOrganization } = useOrganization();
   const [listPlantingSites, listPlantingSitesResult] = useLazySearchPlantingSitesQuery();
