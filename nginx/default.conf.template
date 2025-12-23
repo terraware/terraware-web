@@ -21,12 +21,10 @@ server {
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
-        if ($uri = '/index.html') {
-            # Direct the browser to never cache the (very small) HTML files,
-            # since they include references to /static/js/foo.$HASH.js pathnames
-            # which are effectively ephemeral (they are invalidated with each push).
-            add_header Cache-Control no-store always;
-        }
+        # Direct the browser to never cache the (very small) HTML files,
+        # since they include references to /static/js/foo.$HASH.js pathnames
+        # which are effectively ephemeral (they are invalidated with each push).
+        add_header Cache-Control "no-cache, no-store, max-age=0, must-revalidate";
         try_files $uri $uri/ /index.html =404;
     }
 
@@ -38,7 +36,7 @@ server {
         # static resources in order to bust the cache whenever a new
         # build is created, so these resources are immutable and safe
         # to cache long term.
-        add_header Cache-Control "public, max-age: 31536000";
+        add_header Cache-Control "public, max-age=31536000";
     }
 
     # redirect server error pages to the static page /50x.html
