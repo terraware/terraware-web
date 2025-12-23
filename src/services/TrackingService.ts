@@ -166,56 +166,6 @@ const reassignPlantings = async (deliveryId: number, reassignments: ReassignPost
   });
 };
 
-// helper to get search criteria
-const getSearchNode = (organizationId: number, siteId: number): SearchNodePayload => ({
-  children: [
-    {
-      operation: 'field',
-      field: 'plantingSite_id',
-      values: [siteId.toString()],
-    },
-    {
-      operation: 'field',
-      field: 'plantingSite_organization_id',
-      values: [organizationId.toString()],
-    },
-  ],
-  operation: 'and',
-});
-
-/**
- * Get planting zone total plants
- */
-const getTotalPlantsInZones = async (organizationId: number, siteId: number): Promise<PlantingSiteZone[] | null> => {
-  return await SearchService.search({
-    prefix: 'plantingZones',
-    fields: [
-      'plantingSubzones.id',
-      'plantingSubzones.fullName',
-      'plantingSubzones.populations.species_scientificName',
-      'plantingSubzones.populations.species_organization_id',
-      'plantingSubzones.populations.totalPlants(raw)',
-      'plantingSubzones.populations.totalPlants',
-      'id',
-      'name',
-    ],
-    search: getSearchNode(organizationId, siteId),
-    count: 0,
-  });
-};
-
-/**
- * Get total plants in planting site
- */
-const getTotalPlantsInSite = async (organizationId: number, siteId: number): Promise<Population[] | null> => {
-  return (await SearchService.search({
-    prefix: 'plantingSitePopulations',
-    fields: ['species_scientificName', 'totalPlants(raw)'],
-    search: getSearchNode(organizationId, siteId),
-    count: 0,
-  })) as unknown as Population[] | null;
-};
-
 /**
  * Get Reported Plants by Planting Site
  */
@@ -389,8 +339,6 @@ const TrackingService = {
   getDelivery,
   getPlantingSite,
   getReportedPlants,
-  getTotalPlantsInSite,
-  getTotalPlantsInZones,
   listPlantingSites,
   reassignPlantings,
   searchMonitoringPlots,
