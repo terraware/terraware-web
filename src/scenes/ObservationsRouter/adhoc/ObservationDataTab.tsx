@@ -268,6 +268,7 @@ const ObservationDataTab = ({
           reload={reloadAll}
           isCompleted={!!monitoringPlot.completedTime}
           type={type}
+          unknownSpecies={monitoringPlot.unknownSpecies}
         />
       </Box>
       {monitoringPlot.monitoringPlotId && (
