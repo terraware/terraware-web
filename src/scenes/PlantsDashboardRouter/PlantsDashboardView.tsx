@@ -14,7 +14,6 @@ import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useAppDispatch } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
-import SurvivalRateCard from 'src/scenes/PlantsDashboardRouter/components/SurvivalRateCard';
 import strings from 'src/strings';
 import { isAfter } from 'src/utils/dateUtils';
 
@@ -23,6 +22,7 @@ import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
+import SurvivalRateCard from './components/SurvivalRateCard';
 
 type PlantsDashboardViewProps = {
   projectId?: number;
