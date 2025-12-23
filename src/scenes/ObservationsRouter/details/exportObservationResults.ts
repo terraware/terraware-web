@@ -93,8 +93,8 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
       displayLabel: strings.PLANT_DENSITY,
     },
     {
-      key: 'mortalityRate',
-      displayLabel: strings.CUMULATIVE_MORTALITY_RATE,
+      key: 'survivalRate',
+      displayLabel: strings.SURVIVAL_RATE,
     },
     {
       key: 'detailsLink',
@@ -139,7 +139,6 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
           northwestLatitude: plotCoordinates[3][1],
           northwestLongitude: plotCoordinates[3][0],
           monitoringPlotNumber: monitoringPlot.monitoringPlotNumber,
-          mortalityRate: monitoringPlot.mortalityRate,
           plantingDensity: monitoringPlot.plantingDensity,
           plotType: monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY,
           southeastLatitude: plotCoordinates[1][1],
@@ -148,6 +147,7 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
           southwestLongitude: plotCoordinates[0][0],
           status: getPlotStatus(monitoringPlot.status),
           subzoneName: subzone.name,
+          survivalRate: monitoringPlot.survivalRate,
           totalDead,
           totalExisting,
           totalLive,
