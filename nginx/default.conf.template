@@ -42,6 +42,7 @@ server {
     }
 
     location /static/ {
+        root   /usr/share/nginx/html;
         # Direct the browser as well as public caches to cache static
         # resources for up to 1 year.
         #
