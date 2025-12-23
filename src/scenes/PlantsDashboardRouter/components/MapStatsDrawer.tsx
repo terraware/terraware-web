@@ -11,7 +11,6 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 type MapStatsProperties = {
   areaHa: number | undefined;
   name: string | undefined;
-  mortalityRate: number | undefined;
   survivalRate: number | undefined;
   observed: boolean;
   observedPlants: number | undefined;
@@ -60,7 +59,6 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
       return {
         type: strings.SITE,
         areaHa: plantingSite?.areaHa,
-        mortalityRate: latestSummary?.mortalityRate,
         survivalRate: latestSummary?.survivalRate,
         name: plantingSite?.name,
         observed: latestSummary !== undefined,
@@ -82,7 +80,6 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
       return {
         type: strings.ZONE,
         areaHa: zone?.areaHa,
-        mortalityRate: zoneSummary?.mortalityRate,
         survivalRate: zoneSummary?.survivalRate,
         name: zone?.name,
         observed: zoneSummary !== undefined,
@@ -107,7 +104,6 @@ const MapStatsDrawer = ({ layerFeatureId, plantingSiteId }: MapStatsDrawerProps)
       return {
         type: strings.SUBZONE,
         areaHa: subzone?.areaHa,
-        mortalityRate: subzoneSummary?.mortalityRate,
         survivalRate: subzoneSummary?.survivalRate,
         name: subzone?.name,
         observed: subzoneSummary !== undefined,
