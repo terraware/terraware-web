@@ -17,12 +17,12 @@ import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/S
 import strings from 'src/strings';
 import { isAfter } from 'src/utils/dateUtils';
 
-import MortalityRateCard from './components/MortalityRateCard';
 import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
 import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
+import SurvivalRateCard from './components/SurvivalRateCard';
 
 type PlantsDashboardViewProps = {
   projectId?: number;
@@ -158,7 +158,7 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <MortalityRateCard />
+            <SurvivalRateCard />
           </Grid>
         </>
       ) : undefined,
