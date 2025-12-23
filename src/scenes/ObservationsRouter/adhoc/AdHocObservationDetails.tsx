@@ -20,7 +20,6 @@ import { useAppSelector } from 'src/redux/store';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
-import SpeciesMortalityRateChart from 'src/scenes/ObservationsRouter/common/SpeciesMortalityRateChart';
 import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
@@ -354,18 +353,6 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlot?.species} />
             </Box>
-            {monitoringPlot?.isPermanent && (
-              <>
-                {title(strings.MORTALITY_RATE_PER_SPECIES)}
-                <Box height='360px'>
-                  <SpeciesMortalityRateChart
-                    minHeight='360px'
-                    species={monitoringPlot?.species}
-                    isCompleted={!!monitoringPlot?.completedTime}
-                  />
-                </Box>
-              </>
-            )}
             {title(strings.PHOTOS)}
             <MonitoringPlotPhotos
               observationId={Number(observationId)}
