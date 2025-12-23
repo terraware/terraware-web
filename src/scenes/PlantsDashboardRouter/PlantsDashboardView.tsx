@@ -14,10 +14,10 @@ import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useAppDispatch } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
+import SurvivalRateCard from 'src/scenes/PlantsDashboardRouter/components/SurvivalRateCard';
 import strings from 'src/strings';
 import { isAfter } from 'src/utils/dateUtils';
 
-import MortalityRateCard from './components/MortalityRateCard';
 import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
 import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
@@ -158,7 +158,7 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <MortalityRateCard />
+            <SurvivalRateCard />
           </Grid>
         </>
       ) : undefined,

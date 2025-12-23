@@ -7,37 +7,37 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings from 'src/strings';
 import { PlantingZoneObservationSummary } from 'src/types/Observations';
 
-export default function TotalMortalityRateCard(): JSX.Element {
+export default function HighestAndLowestSurvivalRateZonesCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries, plantingSite } = usePlantingSiteData();
 
-  const [highestMortalityRate, setHighestMortalityRate] = useState<number>();
-  const [lowestMortalityRate, setLowestMortalityRate] = useState<number>();
+  const [highestSurvivalRate, setHighestSurvivalRate] = useState<number>();
+  const [lowestSurvivalRate, setLowestSurvivalRate] = useState<number>();
   const [highestZoneId, setHighestZoneId] = useState<number>();
   const [lowestZoneId, setLowestZoneId] = useState<number>();
 
   useEffect(() => {
-    let _highestMortalityRate = 0;
-    let _lowestMortalityRate = Infinity;
+    let _highestSurvivalRate = 0;
+    let _lowestSurvivalRate = Infinity;
     let _highestZoneId: number | undefined;
     let _lowestZoneId: number | undefined;
     observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
       if (zone.survivalRate !== undefined) {
-        if (zone.survivalRate >= _highestMortalityRate) {
-          _highestMortalityRate = zone.survivalRate;
+        if (zone.survivalRate >= _highestSurvivalRate) {
+          _highestSurvivalRate = zone.survivalRate;
           _highestZoneId = zone.plantingZoneId;
         }
-        if (zone.survivalRate < _lowestMortalityRate) {
-          _lowestMortalityRate = zone.survivalRate;
+        if (zone.survivalRate < _lowestSurvivalRate) {
+          _lowestSurvivalRate = zone.survivalRate;
           _lowestZoneId = zone.plantingZoneId;
         }
       }
     });
 
-    setLowestMortalityRate(_lowestZoneId ? _lowestMortalityRate : undefined);
+    setLowestSurvivalRate(_lowestZoneId ? _lowestSurvivalRate : undefined);
     setLowestZoneId(_lowestZoneId);
 
-    setHighestMortalityRate(_highestZoneId ? _highestMortalityRate : undefined);
+    setHighestSurvivalRate(_highestZoneId ? _highestSurvivalRate : undefined);
     setHighestZoneId(_highestZoneId);
   }, [observationSummaries]);
 
@@ -51,7 +51,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
 
   return (
     <Box>
-      {highestPlantingZone && highestMortalityRate !== undefined && (
+      {highestPlantingZone && highestSurvivalRate !== undefined && (
         <>
           <Box
             sx={{
@@ -68,7 +68,7 @@ export default function TotalMortalityRateCard(): JSX.Element {
               {highestPlantingZone.name}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
-              <FormattedNumber value={highestMortalityRate} />%
+              <FormattedNumber value={highestSurvivalRate} />%
             </Typography>
           </Box>
           {(!lowestPlantingZone || lowestPlantingZone.id === highestPlantingZone.id) && (
@@ -93,11 +93,11 @@ export default function TotalMortalityRateCard(): JSX.Element {
             {lowestPlantingZone.name}
           </Typography>
           <Typography fontSize='24px' fontWeight={600}>
-            <FormattedNumber value={lowestMortalityRate || 0} />%
+            <FormattedNumber value={lowestSurvivalRate || 0} />%
           </Typography>
         </Box>
       )}
-      {highestMortalityRate === undefined && lowestMortalityRate === undefined && (
+      {highestSurvivalRate === undefined && lowestSurvivalRate === undefined && (
         <>
           <Box
             sx={{

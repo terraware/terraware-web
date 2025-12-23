@@ -9,13 +9,13 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import HighestAndLowestSurvivalRateSpeciesCard from 'src/scenes/PlantsDashboardRouter/components/HighestAndLowestSurvivalRateSpeciesCard';
+import HighestAndLowestSurvivalRateZonesCard from 'src/scenes/PlantsDashboardRouter/components/HighestAndLowestSurvivalRateZonesCard';
 import strings from 'src/strings';
 
-import HighestAndLowestMortalityRateSpeciesCard from './HighestAndLowestMortalityRateSpeciesCard';
-import HighestAndLowestMortalityRateZonesCard from './HighestAndLowestMortalityRateZonesCard';
 import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
-export default function MortalityRateCard(): JSX.Element {
+export default function SurvivalRateCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries, plantingSite } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
@@ -97,7 +97,7 @@ export default function MortalityRateCard(): JSX.Element {
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <HighestAndLowestMortalityRateZonesCard />
+          <HighestAndLowestSurvivalRateZonesCard />
         </Box>
       </Box>
       <div style={separatorStyles} />
@@ -113,7 +113,7 @@ export default function MortalityRateCard(): JSX.Element {
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <HighestAndLowestMortalityRateSpeciesCard />
+          <HighestAndLowestSurvivalRateSpeciesCard />
         </Box>
       </Box>
       <div style={separatorStyles} />

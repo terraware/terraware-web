@@ -8,13 +8,13 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings from 'src/strings';
 import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
-export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element {
+export default function HighestAndLowestSurvivalRateSpeciesCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries } = usePlantingSiteData();
   const { species } = useSpeciesData();
 
-  const [highestMortalityRate, setHighestMortalityRate] = useState<number>();
-  const [lowestMortalityRate, setLowestMortalityRate] = useState<number>();
+  const [highestSurvivalRate, setHighestSurvivalRate] = useState<number>();
+  const [lowestSurvivalRate, setLowestSurvivalRate] = useState<number>();
   const [highestSpeciesName, setHighestSpeciesName] = useState<string>();
   const [lowestSpeciesName, setLowestSpeciesName] = useState<string>();
 
@@ -31,34 +31,34 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
   );
 
   useEffect(() => {
-    let _highestMortalityRate = 0;
-    let _lowestMortalityRate = Infinity;
+    let _highestSurvivalRate = 0;
+    let _lowestSurvivalRate = Infinity;
     let _highestSpeciesName: string | undefined;
     let _lowestSpeciesName: string | undefined;
     observationSummaries?.[0]?.species.forEach((observationSpecies: ObservationSpeciesResultsPayload) => {
       const speciesName = getSpeciesName(observationSpecies);
       if (observationSpecies.survivalRate !== undefined && speciesName !== undefined) {
-        if (observationSpecies.survivalRate >= _highestMortalityRate) {
-          _highestMortalityRate = observationSpecies.survivalRate;
+        if (observationSpecies.survivalRate >= _highestSurvivalRate) {
+          _highestSurvivalRate = observationSpecies.survivalRate;
           _highestSpeciesName = speciesName;
         }
-        if (observationSpecies.survivalRate < _lowestMortalityRate) {
-          _lowestMortalityRate = observationSpecies.survivalRate;
+        if (observationSpecies.survivalRate < _lowestSurvivalRate) {
+          _lowestSurvivalRate = observationSpecies.survivalRate;
           _lowestSpeciesName = speciesName;
         }
       }
     });
 
-    setLowestMortalityRate(_lowestSpeciesName ? _lowestMortalityRate : undefined);
+    setLowestSurvivalRate(_lowestSpeciesName ? _lowestSurvivalRate : undefined);
     setLowestSpeciesName(_lowestSpeciesName);
 
-    setHighestMortalityRate(_highestSpeciesName ? _highestMortalityRate : undefined);
+    setHighestSurvivalRate(_highestSpeciesName ? _highestSurvivalRate : undefined);
     setHighestSpeciesName(_highestSpeciesName);
   }, [observationSummaries, getSpeciesName]);
 
   return (
     <Box>
-      {highestSpeciesName && highestMortalityRate !== undefined && (
+      {highestSpeciesName && highestSurvivalRate !== undefined && (
         <>
           <Box
             sx={{
@@ -75,7 +75,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
               {highestSpeciesName}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
-              <FormattedNumber value={highestMortalityRate} />%
+              <FormattedNumber value={highestSurvivalRate} />%
             </Typography>
           </Box>
           {(!lowestSpeciesName || lowestSpeciesName === highestSpeciesName) && (
@@ -100,11 +100,11 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
             {lowestSpeciesName}
           </Typography>
           <Typography fontSize='24px' fontWeight={600}>
-            <FormattedNumber value={lowestMortalityRate || 0} />%
+            <FormattedNumber value={lowestSurvivalRate || 0} />%
           </Typography>
         </Box>
       )}
-      {highestMortalityRate === undefined && lowestMortalityRate === undefined && (
+      {highestSurvivalRate === undefined && lowestSurvivalRate === undefined && (
         <>
           <Box
             sx={{
