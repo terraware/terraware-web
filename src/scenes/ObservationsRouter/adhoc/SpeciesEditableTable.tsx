@@ -8,7 +8,7 @@ import {
   MonitoringSpeciesUpdateOperationPayload,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
-import { ObservationSpeciesResults } from 'src/types/Observations';
+import { ObservationSpeciesResults, ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
 type SpeciesEditableTableProps = {
   species?: ObservationSpeciesResults[];
@@ -17,6 +17,7 @@ type SpeciesEditableTableProps = {
   reload: () => void;
   isCompleted: boolean;
   type?: string;
+  unknownSpecies?: ObservationSpeciesResultsPayload;
 };
 
 export default function SpeciesEditableTable({
@@ -26,10 +27,30 @@ export default function SpeciesEditableTable({
   plotId,
   isCompleted,
   type,
+  unknownSpecies,
 }: SpeciesEditableTableProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
   const [update, updateResult] = useUpdateCompletedObservationPlotMutation();
+
+  const unknownObservationSpeciesResult: ObservationSpeciesResults | undefined = useMemo(() => {
+    if (!unknownSpecies) {
+      return undefined;
+    }
+    return {
+      ...unknownSpecies,
+      speciesCommonName: strings.UNKNOWN,
+      speciesScientificName: strings.UNKNOWN,
+    } as ObservationSpeciesResults;
+  }, [strings.UNKNOWN, unknownSpecies]);
+
+  const speciesData: ObservationSpeciesResults[] = useMemo(() => {
+    const result: ObservationSpeciesResults[] = species ? [...species] : [];
+    if (unknownObservationSpeciesResult) {
+      result.push(unknownObservationSpeciesResult);
+    }
+    return result;
+  }, [species, unknownObservationSpeciesResult]);
 
   useEffect(() => {
     if (updateResult.isSuccess) {
@@ -103,7 +124,7 @@ export default function SpeciesEditableTable({
 
   const table = useMaterialReactTable({
     columns,
-    data: isCompleted ? species || [] : [],
+    data: isCompleted ? speciesData || [] : [],
     editDisplayMode: 'cell',
     enableColumnOrdering: false,
     enableColumnPinning: false,
