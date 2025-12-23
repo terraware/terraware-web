@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766525681991" clover="3.2.0">
-  <project timestamp="1766525681991" name="All files">
-    <metrics statements="36235" coveredstatements="1338" conditionals="25359" coveredconditionals="393" methods="11221" coveredmethods="213" elements="72815" coveredelements="1944" complexity="0" loc="36235" ncloc="36235" packages="286" files="1422" classes="1422"/>
+<coverage generated="1766527683360" clover="3.2.0">
+  <project timestamp="1766527683360" name="All files">
+    <metrics statements="36231" coveredstatements="1338" conditionals="25355" coveredconditionals="393" methods="11220" coveredmethods="213" elements="72806" coveredelements="1944" complexity="0" loc="36231" ncloc="36231" packages="286" files="1421" classes="1421"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -34081,7 +34081,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter.components">
-      <metrics statements="919" coveredstatements="0" conditionals="582" coveredconditionals="0" methods="281" coveredmethods="0"/>
+      <metrics statements="915" coveredstatements="0" conditionals="578" coveredconditionals="0" methods="280" coveredmethods="0"/>
       <file name="HighestAndLowestSurvivalRateSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/HighestAndLowestSurvivalRateSpeciesCard.tsx">
         <metrics statements="29" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
@@ -34922,13 +34922,6 @@
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="36" count="0" type="stmt"/>
-      </file>
-      <file name="TotalMoratlityRateCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/TotalMoratlityRateCard.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
       </file>
       <file name="ZoneLevelDataMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/ZoneLevelDataMap.tsx">
         <metrics statements="69" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="23" coveredmethods="0"/>
