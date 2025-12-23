@@ -25,8 +25,8 @@ import PlotActions from '../biomass/PlotActions';
 import EditQualitativeDataConfirmationModal from '../common/EditQualitativeDataConfirmationModal';
 import EditQualitativeDataModal from '../common/EditQualitativeDataModal';
 import EventLog from '../common/EventLog';
-import SpeciesTotalPlantsChart from '../common/SpeciesMortalityRateChart';
 import SpeciesSurvivalRateChart from '../common/SpeciesSurvivalRateChart';
+import SpeciesTotalPlantsChart from '../common/SpeciesTotalPlantsChart';
 import ExtraData from './ExtraData';
 import ObservationDataNumbers from './ObservationDataNumbers';
 import SpeciesEditableTable from './SpeciesEditableTable';
@@ -193,7 +193,7 @@ const ObservationDataTab = ({
           </Box>
 
           <Box height='360px'>
-            <SpeciesTotalPlantsChart minHeight='360px' species={species} isCompleted={!!monitoringPlot.completedTime} />
+            <SpeciesTotalPlantsChart minHeight='360px' species={species} />
           </Box>
         </Box>
       )}
