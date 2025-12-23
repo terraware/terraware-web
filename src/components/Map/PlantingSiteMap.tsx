@@ -26,16 +26,16 @@ const mapImages = [
     url: '/assets/survival-rate-indicator.png',
   },
   {
-    name: 'survival-rate-less-25',
-    url: '/assets/survival-rate-less-25.png',
-  },
-  {
     name: 'survival-rate-less-50',
     url: '/assets/survival-rate-less-50.png',
   },
   {
     name: 'survival-rate-more-50',
     url: '/assets/survival-rate-more-50.png',
+  },
+  {
+    name: 'survival-rate-more-75',
+    url: '/assets/survival-rate-more-75.png',
   },
 ];
 
@@ -49,8 +49,8 @@ export type PlantingSiteMapProps = {
   focusEntities?: MapEntityId[];
   // layers to be displayed on map
   layers?: MapLayer[];
-  showMortalityRateFill?: boolean;
   showRecencyFill?: boolean;
+  showSurvivalRateFill?: boolean;
   zoneInteractive?: boolean;
   subzoneInteractive?: boolean;
   showSiteMarker?: boolean;
@@ -65,8 +65,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     highlightEntities,
     focusEntities,
     layers,
-    showMortalityRateFill,
     showRecencyFill,
+    showSurvivalRateFill,
     zoneInteractive,
     subzoneInteractive,
     showSiteMarker,
@@ -163,14 +163,14 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 getRenderAttributes('subzone').fillColor,
               ]
             : getRenderAttributes('subzone').fillColor,
-          patternFill: showMortalityRateFill
+          patternFill: showSurvivalRateFill
             ? [
                 'case',
-                ['>', ['number', ['get', 'mortalityRate']], 50],
+                ['>', ['number', ['get', 'survivalRate']], 75],
+                'survival-rate-more-75',
+                ['>', ['number', ['get', 'survivalRate']], 50],
                 'survival-rate-more-50',
-                ['>', ['number', ['get', 'mortalityRate']], 25],
                 'survival-rate-less-50',
-                'survival-rate-less-25',
               ]
             : undefined,
         });
@@ -236,8 +236,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     mapOptions,
     layers,
     getRenderAttributes,
-    showMortalityRateFill,
     showRecencyFill,
+    showSurvivalRateFill,
     subzoneInteractive,
     theme,
     zoneInteractive,

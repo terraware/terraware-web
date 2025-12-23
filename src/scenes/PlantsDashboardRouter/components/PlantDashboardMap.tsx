@@ -427,18 +427,16 @@ const PlantDashboardMap = ({
     [observationResults, selectPlant, selectedPlants]
   );
 
-  const mortalityRateHighlights = useMemo(() => {
-    const lessThanTwentyFive: MapLayerFeatureId[] = [];
+  const survivalRateHighlights = useMemo(() => {
     const lessThanFifty: MapLayerFeatureId[] = [];
-    const greaterThanFifty: MapLayerFeatureId[] = [];
     const lessThanSeventyFive: MapLayerFeatureId[] = [];
     const greaterThanSeventyFive: MapLayerFeatureId[] = [];
 
     if (observationResults.length === 0) {
       return {
-        lessThanTwentyFive,
         lessThanFifty,
-        greaterThanFifty,
+        lessThanSeventyFive,
+        greaterThanSeventyFive,
       };
     }
 
@@ -629,23 +627,23 @@ const PlantDashboardMap = ({
         highlightId: 'mortalityRate',
         highlights: [
           {
-            featureIds: mortalityRateHighlights.lessThanFifty,
-            style: {
-              fillPatternUrl: '/assets/survival-rate-more-50.png',
-              type: 'fill',
-            },
-          },
-          {
-            featureIds: mortalityRateHighlights.lessThanSeventyFive!,
+            featureIds: survivalRateHighlights.lessThanFifty,
             style: {
               fillPatternUrl: '/assets/survival-rate-less-50.png',
               type: 'fill',
             },
           },
           {
-            featureIds: mortalityRateHighlights.greaterThanSeventyFive!,
+            featureIds: survivalRateHighlights.lessThanSeventyFive,
             style: {
-              fillPatternUrl: '/assets/survival-rate-less-25.png',
+              fillPatternUrl: '/assets/survival-rate-more-50.png',
+              type: 'fill',
+            },
+          },
+          {
+            featureIds: survivalRateHighlights.greaterThanSeventyFive,
+            style: {
+              fillPatternUrl: '/assets/survival-rate-more-75.png',
               type: 'fill',
             },
           },
@@ -655,7 +653,7 @@ const PlantDashboardMap = ({
     ];
   }, [
     baseObservationEventStyle,
-    mortalityRateHighlights,
+    survivalRateHighlights,
     mortalityRateVisible,
     observationEventsHighlights,
     observationEventsVisible,
@@ -744,7 +742,7 @@ const PlantDashboardMap = ({
           {
             label: strings.LESS_THAN_FIFTY_PERCENT,
             style: {
-              fillPatternUrl: '/assets/survival-rate-more-50.png',
+              fillPatternUrl: '/assets/survival-rate-less-50.png',
               opacity: 1.0,
               type: 'fill',
             },
@@ -752,7 +750,7 @@ const PlantDashboardMap = ({
           {
             label: strings.FIFTY_TO_SEVENTY_FIVE_PERCENT,
             style: {
-              fillPatternUrl: '/assets/survival-rate-less-50.png',
+              fillPatternUrl: '/assets/survival-rate-more-50.png',
               opacity: 1.0,
               type: 'fill',
             },
@@ -760,7 +758,7 @@ const PlantDashboardMap = ({
           {
             label: strings.GREATER_THAN_SEVENTY_FIVE_PERCENT,
             style: {
-              fillPatternUrl: '/assets/survival-rate-less-25.png',
+              fillPatternUrl: '/assets/survival-rate-more-75.png',
               opacity: 1.0,
               type: 'fill',
             },
