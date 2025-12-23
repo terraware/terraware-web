@@ -22,20 +22,20 @@ import useRenderAttributes from './useRenderAttributes';
 
 const mapImages = [
   {
-    name: 'mortality-rate-indicator',
-    url: '/assets/mortality-rate-indicator.png',
+    name: 'survival-rate-indicator',
+    url: '/assets/survival-rate-indicator.png',
   },
   {
-    name: 'mortality-rate-less-25',
-    url: '/assets/mortality-rate-less-25.png',
+    name: 'survival-rate-less-25',
+    url: '/assets/survival-rate-less-25.png',
   },
   {
-    name: 'mortality-rate-less-50',
-    url: '/assets/mortality-rate-less-50.png',
+    name: 'survival-rate-less-50',
+    url: '/assets/survival-rate-less-50.png',
   },
   {
-    name: 'mortality-rate-more-50',
-    url: '/assets/mortality-rate-more-50.png',
+    name: 'survival-rate-more-50',
+    url: '/assets/survival-rate-more-50.png',
   },
 ];
 
@@ -167,10 +167,10 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             ? [
                 'case',
                 ['>', ['number', ['get', 'mortalityRate']], 50],
-                'mortality-rate-more-50',
+                'survival-rate-more-50',
                 ['>', ['number', ['get', 'mortalityRate']], 25],
-                'mortality-rate-less-50',
-                'mortality-rate-less-25',
+                'survival-rate-less-50',
+                'survival-rate-less-25',
               ]
             : undefined,
         });
