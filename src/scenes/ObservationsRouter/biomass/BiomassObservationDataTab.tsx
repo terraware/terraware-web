@@ -247,7 +247,7 @@ const BiomassObservationDataTab = ({
           </Box>
         </Tooltip>
       </Box>
-      <Box height='360px'>
+      <Box height='300px'>
         <LiveTreesPerSpecies trees={biomassMeasurement?.trees} />
       </Box>
       <PlotActions
