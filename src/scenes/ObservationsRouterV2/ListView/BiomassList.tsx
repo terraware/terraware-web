@@ -3,11 +3,12 @@ import React, { useEffect, useMemo } from 'react';
 import { Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
+import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
-import Table from 'src/components/common/table';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
+import { SearchSortOrder } from 'src/types/Search';
 
 import BiomassRenderer from './BiomassRenderer';
 
@@ -60,6 +61,13 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
     ],
     [strings]
   );
+
+  const defaultSearchOrder: SearchSortOrder = {
+    field: 'completedDate',
+    direction: 'Descending',
+  };
+
+  const fuzzySearchColumns = ['monitoringPlotNumber'];
 
   const { selectedOrganization } = useOrganization();
   const [listPlantingSites, listPlantingSitesResult] = useLazySearchPlantingSitesQuery();
@@ -124,13 +132,15 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
       >
         {strings.BIOMASS_MONITORING}
       </Typography>
-      <Table
-        id='biomass-measurement-table'
+      <ClientSideFilterTable
+        busy={adHocObservationsResultsResponse.isLoading}
         columns={columns}
-        rows={adHocObservationsResults}
-        orderBy='startDate'
-        showTopBar={true}
+        defaultSortOrder={defaultSearchOrder}
+        fuzzySearchColumns={fuzzySearchColumns}
+        id='accelerator-reports-table'
         Renderer={BiomassRenderer}
+        rows={adHocObservationsResults}
+        title={strings.BIOMASS_MONITORING}
       />
     </Card>
   );
