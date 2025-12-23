@@ -21,9 +21,11 @@ server {
     location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
-        # Direct the browser to never cache the (very small) HTML files,
-        # since they include references to /static/js/foo.$HASH.js pathnames
-        # which are effectively ephemeral (they are invalidated with each push).
+        # Direct the browser to never cache the (very small and
+        # dynamically-generated) HTML files, since they include
+        # references to /static/js/foo.$HASH.js pathnames which are
+        # effectively ephemeral (they are invalidated with each
+        # production push).
         add_header Cache-Control "no-cache, no-store, max-age=0, must-revalidate";
         try_files $uri $uri/ /index.html =404;
     }
@@ -35,7 +37,8 @@ server {
         # The build process includes a hash in the path name for all
         # static resources in order to bust the cache whenever a new
         # build is created, so these resources are immutable and safe
-        # to cache long term.
+        # to cache long term. (The browser is still free to evict
+        # these resources whenever needed.)
         add_header Cache-Control "public, max-age=31536000";
     }
 
