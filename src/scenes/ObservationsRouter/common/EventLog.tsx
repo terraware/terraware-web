@@ -19,7 +19,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const { species } = useSpeciesData();
 
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
-  const [showEventLog, setShowEventLog] = useState(true);
+  const [showEventLog, setShowEventLog] = useState(false);
 
   const MangroveFields = useMemo(
     () => ['pH', 'salinity (ppt)', 'tide', 'tide measurement time', 'water depth (cm)'],

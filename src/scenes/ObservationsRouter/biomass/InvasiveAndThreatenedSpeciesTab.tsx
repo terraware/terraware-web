@@ -8,6 +8,7 @@ import QuadratComponent from 'src/scenes/ObservationsRouter/biomass/QuadratCompo
 import strings from 'src/strings';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 
+import EventLog from '../common/EventLog';
 import EditNotesModal from './EditNotesModal';
 
 type InvasiveAndThreatenedSpeciesTabProps = {
@@ -62,6 +63,9 @@ const InvasiveAndThreatenedSpeciesTab = ({
       <QuadratComponent position='NorthwestCorner' monitoringPlot={monitoringPlot} reload={reload} />
       <QuadratComponent position='NortheastCorner' monitoringPlot={monitoringPlot} reload={reload} />
       <QuadratComponent position='SoutheastCorner' monitoringPlot={monitoringPlot} reload={reload} />
+      {monitoringPlot?.monitoringPlotId && (
+        <EventLog observationId={Number(observationId)} plotId={monitoringPlot.monitoringPlotId} />
+      )}
     </Card>
   );
 };

@@ -10,6 +10,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
 import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 
+import EventLog from '../common/EventLog';
 import MonitoringPlotPhotosWithActions from '../common/MonitoringPlotPhotosWithActions';
 
 type PhotosAndVideosTabProps = {
@@ -119,6 +120,9 @@ const PhotosAndVideosTab = ({ monitoringPlot, type, isCompleted, plantingSiteNam
           </Typography>
         )}
       </Box>
+      {monitoringPlot?.monitoringPlotId && (
+        <EventLog observationId={Number(observationId)} plotId={monitoringPlot.monitoringPlotId} />
+      )}
     </Card>
   );
 };
