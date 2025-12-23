@@ -1,10 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import {
-  CreatePlantingSiteRequestPayload,
-  PlantingSiteZone,
-  Population,
-  ValidatePlantingSiteResponsePayload,
-} from 'src/types/PlantingSite';
+import { CreatePlantingSiteRequestPayload, ValidatePlantingSiteResponsePayload } from 'src/types/PlantingSite';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import { Delivery, MonitoringPlotSearchResult, PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
 
