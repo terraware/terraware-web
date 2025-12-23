@@ -88,7 +88,7 @@ const MonitoringPlotPhotoPreview = ({
       )}
       {mediaItem.data.type === 'Quadrat' && mediaItem.data.position && (
         <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
-          {monitoringPlotName} {getQuadratLabel(mediaItem.data.position)}
+          {getQuadratLabel(mediaItem.data.position)}
         </Typography>
       )}
       <Box display='flex' flexDirection='column' gap={2}>
