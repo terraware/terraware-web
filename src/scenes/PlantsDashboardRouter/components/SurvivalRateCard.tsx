@@ -9,10 +9,10 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import HighestAndLowestSurvivalRateSpeciesCard from 'src/scenes/PlantsDashboardRouter/components/HighestAndLowestSurvivalRateSpeciesCard';
-import HighestAndLowestSurvivalRateZonesCard from 'src/scenes/PlantsDashboardRouter/components/HighestAndLowestSurvivalRateZonesCard';
 import strings from 'src/strings';
 
+import HighestAndLowestSurvivalRateSpeciesCard from './HighestAndLowestSurvivalRateSpeciesCard';
+import HighestAndLowestSurvivalRateZonesCard from './HighestAndLowestSurvivalRateZonesCard';
 import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
 export default function SurvivalRateCard(): JSX.Element {
