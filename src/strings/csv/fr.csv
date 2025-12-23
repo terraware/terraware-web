@@ -1074,19 +1074,12 @@ MONTH_12,Décembre,dc3ea137
 MORE,Plus,58c3e1ca
 MORE_INFO,Plus d'informations,50ec3d8a
 MORE_OPTIONS,Autres options,40289137
-MORTALITY_BREAKDOWN,Répartition de la mortalité,c40d995a
-MORTALITY_BREAKDOWN_TOOLTIP,La répartition de la mortalité montre le nombre de plantes par espèce qui ont été enregistrées comme vivantes et mortes dans toutes les zones observées.,df9e877d
 MORTALITY_RATE,Taux de mortalité,f1ef57f9
-MORTALITY_RATE_CARD_TITLE,Quel est le taux de mortalité de mes plantes en date du {0} ?,de26b99f
-MORTALITY_RATE_CLARIFICATION,"Il s'agit du pourcentage total de vos plantations qui sont mortes, toutes espèces et zones confondues",e025392b
 MORTALITY_RATE_IN_FIELD,Taux de mortalité dans champ (%),48a2d543
 MORTALITY_RATE_IN_FIELD_REQUIRED,Taux de mortalité sur le terrain (%) *,cdddfe98
 MORTALITY_RATE_INFO,Le taux de mortalité est basé sur le nombre de plantes observées comme étant mortes dans les zones entièrement cultivées.,1d21a7e1
-MORTALITY_RATE_PER_SPECIES,Taux de mortalité par espèce,e49670ca
 MORTALITY_RATE_PERCENT,Taux de mortalité (%),2640a01f
 MORTALITY_RATE_PERCENT_REQUIRED,Taux de mortalité (%) *,c7d13833
-MORTALITY_RATE_TOOLTIP,Le taux de mortalité est basé sur le nombre de plantes identifiées comme mortes dans toutes les zones observées.,4173239f
-MORTALITY_RATE_TREND_TOOLTIP,La rubrique « Tendance du taux de mortalité » représente les pourcentages de plantes qui ont été enregistrées comme mortes dans les parcelles permanentes au cours de toutes les observations.,73559f3f
 MOSS,Mousse,5b67a19f
 MOST_RECENT_OBSERVATION,Observation la plus récente,a614018e
 MOVE,Déplacer,abe6be41
@@ -1137,7 +1130,6 @@ NO_INVENTORY_DESCRIPTION,"Il semble que vous n'avez pas encore ajouté d'inventa
 NO_LINK_ADDED,Aucun lien ajouté,14e4907f
 NO_LOCATION_FOUND,Emplacement non trouvé,8b4b8dab
 NO_MAP_DATA,Aucune donnée cartographique n'est affichée pour ce site de plantation.,1c2d3fa2
-NO_MORTALITY_RATE_WARNING,Les données de cette observation sont insuffisantes pour calculer les taux de mortalité. Les taux de mortalité sont basés sur des observations comprenant des placettes permanentes.,357160ae
 NO_NOTIFICATIONS,Aucune notification à afficher,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer votre inventaire de pépinières, vous devez avoir une pépinière et des espèces dans Terraware. Seuls les administrateurs peuvent ajouter des pépinières ; veuillez contacter le vôtre pour obtenir de l'aide.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,Aucune observation n'a été planifiée,c05456cd
@@ -1862,9 +1854,7 @@ SHRUB,Arbuste,af50871c
 SHRUBS,Arbustes,377018f6
 SILVOPASTURE,Sylviculture,9d942e38
 SIMPLE_SITE,Site simple,760ab731
-SINGLE_SPECIES_MORTALITY_RATE_MESSAGE,"Vous n'avez qu'une seule espèce avec un taux de mortalité pour le moment. Lorsqu'il y en aura plus, l'espèce ayant le taux de mortalité le plus bas apparaîtra.",7a03186c
 SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE,"Il n’y a actuellement qu’une seule espèce avec un taux de survie. Lorsque plusieurs espèces auront un taux de survie, celle avec le taux de survie le plus bas sera affichée.",c4ff6454
-SINGLE_ZONE_MORTALITY_RATE_MESSAGE,"Vous n'avez qu'une seule zone avec un taux de mortalité pour le moment. Lorsqu'il y en aura plus, la zone avec le taux de mortalité le plus bas apparaîtra.",d60bd477
 SINGLE_ZONE_SURVIVAL_RATE_MESSAGE,"Le site ne comporte actuellement qu’une seule zone avec un taux de survie. Lorsqu’un site aura plusieurs zones avec un taux de survie, celle avec le taux de survie le plus bas sera affichée.",d9ac1a26
 SITE,Site,925ca15b
 SITE_BOUNDARY,Limite du site,ee9dc83f
@@ -1947,8 +1937,6 @@ SPECIES_LIST_DELIVERABLE_ADD_SPECIES_RECENT_DELIVERABLE_INFO,L’ajout de cette 
 SPECIES_LIST_NO_ORGANIZATION_SPECIES_BODY,Allez dans « Espèces » et ajoutez des espèces à votre organisation afin de les sélectionner pour ce projet. Vous trouverez des instructions plus détaillées dans notre [base de connaissances].,b3033148
 SPECIES_LIST_NO_ORGANIZATION_SPECIES_TITLE,Aucune espèce pour l'organisation,8fc21ed9
 SPECIES_MATCHED,Espèces appariées,429dfb05
-SPECIES_MORTALITY,Mortalité des espèces,dcb7fa5b
-SPECIES_MORTALITY_TOOLTIP,La rubrique « Mortalité des espèces » indique les espèces présentant les taux de mortalité les plus élevés et les plus faibles parmi les zones observées.,7a719486
 SPECIES_NAME,Nom de l'espèce,26123a34
 SPECIES_NOT_ACCEPTED,Espèces non acceptées,5383ef6c
 SPECIES_OBSERVED,Espèces observées,1759de27
@@ -2427,8 +2415,6 @@ ZERO,zéro,16bd92ef
 ZONE,Zone,17bc60dc
 ZONE_BOUNDARIES,Limites de la zone,15e88feb
 ZONE_GEOMETRY_CHANGED,La géométrie de {0} a changé sur {1},9eec74cc
-ZONE_MORTALITY,Mortalité par zone,56e56acb
-ZONE_MORTALITY_TOOLTIP,"La rubrique « Mortalité de la zone » indique les zones présentant les taux de mortalité les plus élevés et les plus faibles, parmi les zones observées.",80d7ce42
 ZONE_NAME_IN_USE,Le nom de la zone est déjà utilisé.,d75e052d
 ZONE_NAME_MAXIMUM_LENGTH,Le nom de la zone ne doit pas comporter plus de 15 caractères.,73baca0a
 ZONE_REQUIRED,Zone *,548cc1ed
