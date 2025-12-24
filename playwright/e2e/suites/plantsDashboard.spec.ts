@@ -180,7 +180,7 @@ test.describe('PlantsDashboardTests', () => {
     await expect(page.getByText('Plants per Ha', { exact: true })).toBeVisible();
     await expect(page.locator('#plantsPerHaChart')).toBeVisible();
     await expect(page.getByText('Survival Rate').first()).toBeVisible();
-    await expect(page.locator('#mortalityChart')).toBeVisible();
+    await expect(page.locator('#survivalChart')).toBeVisible();
     await expect(page.getByText('Plant Density', { exact: true })).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').first()).toBeVisible();
     await expect(
