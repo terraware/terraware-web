@@ -3,10 +3,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useOrganization } from 'src/providers';
 import { CachedUserService, PreferencesService } from 'src/services';
 
-const useStickyPlantingSiteId = (preferenceName: string) => {
+const useStickyPlantingSiteId = (preferenceName: string, defaultValue?: number | undefined) => {
   const { selectedOrganization } = useOrganization();
 
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>(defaultValue);
   useEffect(() => {
     if (selectedOrganization) {
       const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
