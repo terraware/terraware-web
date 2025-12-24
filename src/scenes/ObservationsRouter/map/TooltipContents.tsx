@@ -38,7 +38,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const numShrubs = monitoringPlot?.totalShrubs;
   const numSpecies = monitoringPlot?.totalSpecies;
   const plantingDensity = monitoringPlot?.plantingDensity;
-  const percentMortality = monitoringPlot?.mortalityRate;
+  const percentSurvival = monitoringPlot?.survivalRate;
 
   const openModal = useCallback(() => {
     setShowReplacePlotModal(true);
@@ -88,7 +88,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
                     {`${strings.PLANT_DENSITY}: ${plantingDensity ? `${plantingDensity} ${strings.PLANTS_PER_HECTARE}` : strings.UNKNOWN} `}
                   </Typography>
                   <Typography fontSize='16px' fontWeight={400}>
-                    {`${strings.MORTALITY_RATE}: ${percentMortality ? `${percentMortality} %` : strings.UNKNOWN} `}
+                    {`${strings.SURVIVAL_RATE}: ${percentSurvival ? `${percentSurvival} %` : strings.UNKNOWN} `}
                   </Typography>
                 </>
               )}
