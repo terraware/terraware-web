@@ -10,7 +10,6 @@ import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import {
   MapFillComponentStyle,
   MapHighlightGroup,
-  MapIconComponentStyle,
   MapLayer,
   MapLayerFeature,
   MapLayerFeatureId,
@@ -19,6 +18,7 @@ import {
   MapNameTag,
   MapPoint,
 } from 'src/components/NewMap/types';
+import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useLocalization } from 'src/providers';
@@ -86,62 +86,8 @@ const PlantDashboardMap = ({
   const [selectedPlants, setSelectedPlants] = useState<PlotPlant[]>([]);
   const [selectedLayer, setSelectedLayer] = useState<string | undefined>('zones');
 
-  const sitesLayerStyle = useMemo(
-    (): MapFillComponentStyle => ({
-      borderColor: theme.palette.TwClrBaseGreen300,
-      fillColor: theme.palette.TwClrBaseGreen300,
-      opacity: 0.2,
-      type: 'fill',
-    }),
-    [theme]
-  );
-
-  const zonesLayerStyle = useMemo(
-    (): MapFillComponentStyle => ({
-      borderColor: theme.palette.TwClrBasePurple300,
-      fillColor: theme.palette.TwClrBasePurple300,
-      opacity: 0.2,
-      type: 'fill',
-    }),
-    [theme]
-  );
-
-  const subzonesLayerStyle = useMemo(
-    (): MapFillComponentStyle => ({
-      borderColor: theme.palette.TwClrBaseBlue300,
-      fillColor: theme.palette.TwClrBaseBlue300,
-      opacity: 0.2,
-      type: 'fill',
-    }),
-    [theme]
-  );
-
-  const plotPhotoStyle = useMemo(
-    (): MapIconComponentStyle => ({
-      iconColor: '#CC79A7',
-      iconName: 'iconPhoto',
-      type: 'icon',
-    }),
-    []
-  );
-
-  const livePlantStyle = useMemo(
-    (): MapIconComponentStyle => ({
-      iconColor: '#40B0A6',
-      iconName: 'iconLivePlant',
-      type: 'icon',
-    }),
-    []
-  );
-
-  const deadPlantStyle = useMemo(
-    (): MapIconComponentStyle => ({
-      iconColor: '#E1BE6A',
-      iconName: 'iconLivePlant',
-      type: 'icon',
-    }),
-    []
-  );
+  const { sitesLayerStyle, zonesLayerStyle, subzonesLayerStyle, plotPhotoStyle, livePlantStyle, deadPlantStyle } =
+    useMapFeatureStyles();
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [drawerSize, setDrawerSize] = useState<MapDrawerSize>('small');

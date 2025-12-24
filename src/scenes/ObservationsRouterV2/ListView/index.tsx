@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Separator, Tabs } from '@terraware/web-components';
@@ -41,13 +41,20 @@ const ObservationListView = (): JSX.Element => {
         ? [
             {
               label: strings.ALL_PLANTING_SITES,
-              value: undefined,
+              value: -1,
             },
           ]
         : [];
 
     return [...allSiteOptions, ...sitesOptions];
   }, [plantingSites, strings]);
+
+  const onPlantingSiteDropdown = useCallback(
+    (value: any) => {
+      selectPlantingSite(Number(value));
+    },
+    [selectPlantingSite]
+  );
 
   const PageHeaderPlantingSiteDropdown = useMemo(
     () => (
@@ -61,24 +68,25 @@ const ObservationListView = (): JSX.Element => {
           required
           selectedValue={selectedPlantingSiteId}
           options={plantingSiteOptions}
-          onChange={(newValue: string) => selectPlantingSite(Number(newValue))}
+          onChange={onPlantingSiteDropdown}
         />
       </Box>
     ),
-    [plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId, strings, theme]
+    [onPlantingSiteDropdown, plantingSiteOptions, selectedPlantingSiteId, strings, theme]
   );
 
   const tabs = useMemo(() => {
+    const siteId = selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId;
     return [
       {
         id: 'plantMonitoring',
         label: strings.PLANT_MONITORING,
-        children: <PlantMonitoringList siteId={selectedPlantingSiteId} />,
+        children: <PlantMonitoringList plantingSiteId={siteId} />,
       },
       {
         id: 'biomassMeasurements',
         label: strings.BIOMASS_MONITORING,
-        children: <BiomassList siteId={selectedPlantingSiteId} />,
+        children: <BiomassList plantingSiteId={siteId} />,
       },
     ];
   }, [selectedPlantingSiteId, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]);
@@ -93,7 +101,7 @@ const ObservationListView = (): JSX.Element => {
     <Page title={strings.OBSERVATIONS} leftComponent={PageHeaderPlantingSiteDropdown}>
       <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
-          <ObservationMap />
+          <ObservationMap selectPlantingSiteId={selectPlantingSite} />
         </Card>
       </Tabs>
       <Box marginTop={'24px'} width={'100%'}>

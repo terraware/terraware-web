@@ -36,10 +36,10 @@ type PlantMonitoringRow = {
 };
 
 export type PlantMonitoringListProps = {
-  siteId?: number;
+  plantingSiteId?: number;
 };
 
-const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
+const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { selectedOrganization } = useOrganization();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const { strings } = useLocalization();
@@ -162,7 +162,7 @@ const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
       void listAdHocObservations(
         {
           organizationId: selectedOrganization.id,
-          plantingSiteId: siteId,
+          plantingSiteId,
         },
         true
       );
@@ -171,7 +171,7 @@ const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
         void listAdHocObservationResults(
           {
             organizationId: selectedOrganization.id,
-            plantingSiteId: siteId,
+            plantingSiteId,
             includePlants: true,
           },
           true
@@ -180,14 +180,14 @@ const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
         void listObservations(
           {
             organizationId: selectedOrganization.id,
-            plantingSiteId: siteId,
+            plantingSiteId,
           },
           true
         );
         void listObservationResults(
           {
             organizationId: selectedOrganization.id,
-            plantingSiteId: siteId,
+            plantingSiteId,
             includePlants: true,
           },
           true
@@ -202,7 +202,7 @@ const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
     listPlantingSites,
     selectedPlotSelection,
     selectedOrganization,
-    siteId,
+    plantingSiteId,
   ]);
 
   const observations = useMemo(() => {
