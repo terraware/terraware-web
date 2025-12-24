@@ -58,8 +58,8 @@ type LayerFeature = {
 type PlantDashboardMapProps = {
   disablePhotoMarkers?: boolean;
   disablePlantMarkers?: boolean;
-  disableMortalityRate?: boolean;
   disableObserationEvents?: boolean;
+  disableSurvivalRate?: boolean;
   plantingSites: PlantingSite[];
   observationResults: ObservationResultsPayload[];
   latestSummary?: ObservationSummary;
@@ -68,8 +68,8 @@ type PlantDashboardMapProps = {
 const PlantDashboardMap = ({
   disablePhotoMarkers,
   disablePlantMarkers,
-  disableMortalityRate,
   disableObserationEvents,
+  disableSurvivalRate,
   plantingSites,
   observationResults,
   latestSummary,
@@ -525,7 +525,7 @@ const PlantDashboardMap = ({
   const [plotPhotoVisible, setPlotPhotoVisible] = useState<boolean>(false);
   const [livePlantsVisible, setLivePlantsVisible] = useState<boolean>(false);
   const [deadPlantsVisible, setDeadPlantsVisible] = useState<boolean>(false);
-  const [mortalityRateVisible, setMortalityRateVisible] = useState<boolean>(false);
+  const [survivalRateVisible, setSurvivalRateVisible] = useState<boolean>(false);
   const [observationEventsVisible, setObservationEventsVisible] = useState<boolean>(false);
 
   const markers = useMemo((): MapMarkerGroup[] => {
@@ -624,7 +624,7 @@ const PlantDashboardMap = ({
         visible: observationEventsVisible,
       },
       {
-        highlightId: 'mortalityRate',
+        highlightId: 'survivalRate',
         highlights: [
           {
             featureIds: survivalRateHighlights.lessThanFifty,
@@ -648,13 +648,13 @@ const PlantDashboardMap = ({
             },
           },
         ],
-        visible: mortalityRateVisible,
+        visible: survivalRateVisible,
       },
     ];
   }, [
     baseObservationEventStyle,
     survivalRateHighlights,
-    mortalityRateVisible,
+    survivalRateVisible,
     observationEventsHighlights,
     observationEventsVisible,
   ]);
@@ -737,7 +737,7 @@ const PlantDashboardMap = ({
         visible: observationEventsVisible,
       },
       {
-        disabled: disableMortalityRate || latestSummary === undefined,
+        disabled: disableSurvivalRate || latestSummary === undefined,
         items: [
           {
             label: strings.LESS_THAN_FIFTY_PERCENT,
@@ -766,21 +766,21 @@ const PlantDashboardMap = ({
         ],
         title: strings.SURVIVAL_RATE,
         type: 'group-toggle',
-        setVisible: setMortalityRateVisible,
-        visible: mortalityRateVisible,
+        setVisible: setSurvivalRateVisible,
+        visible: survivalRateVisible,
       },
     ];
   }, [
     baseObservationEventStyle,
     deadPlantStyle,
     deadPlantsVisible,
-    disableMortalityRate,
+    disableSurvivalRate,
     disableObserationEvents,
     disablePhotoMarkers,
     disablePlantMarkers,
     livePlantStyle,
     livePlantsVisible,
-    mortalityRateVisible,
+    survivalRateVisible,
     observationEventsVisible,
     observationResults.length,
     latestSummary,
