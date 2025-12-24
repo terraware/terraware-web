@@ -7,6 +7,7 @@ import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
 import { ObservationMonitoringPlotPhoto, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 
 const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
+const MEDIA_URL = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/media/{fileId}';
 
 export type MonitoringPlotPhotosWithActionsProps = {
   observationId: number;
@@ -26,7 +27,13 @@ export default function MonitoringPlotPhotosWithActions({
   const theme = useTheme();
   const [lightboxFileId, setLightboxFileId] = useState<number | undefined>(undefined);
 
-  const rootUrl = useMemo(
+  const rootMediaUrl = useMemo(
+    () =>
+      MEDIA_URL.replace('{observationId}', observationId.toString()).replace('{plotId}', monitoringPlotId.toString()),
+    [observationId, monitoringPlotId]
+  );
+
+  const rootPhotoUrl = useMemo(
     () =>
       PHOTO_URL.replace('{observationId}', observationId.toString()).replace(
         '{monitoringPlotId}',
@@ -48,12 +55,20 @@ export default function MonitoringPlotPhotosWithActions({
     [photos]
   );
 
-  const getMediaUrl = useCallback(
-    (fileId: number, raw?: boolean) => {
-      const url = rootUrl.replace('{fileId}', fileId.toString());
-      return raw ? `${url}?raw=true` : url;
+  const getStaticPhotoUrl = useCallback(
+    (fileId: number) => {
+      const url = rootPhotoUrl.replace('{fileId}', fileId.toString());
+      return url;
     },
-    [rootUrl]
+    [rootPhotoUrl]
+  );
+
+  const getMediaUrl = useCallback(
+    (fileId: number) => {
+      const url = rootMediaUrl.replace('{fileId}', fileId.toString());
+      return url;
+    },
+    [rootMediaUrl]
   );
 
   const handleExpand = useCallback((fileId: number) => {
@@ -89,8 +104,8 @@ export default function MonitoringPlotPhotosWithActions({
             )}
             <MediaItem
               mediaFile={mediaFile}
-              imageSrc={getMediaUrl(mediaFile.fileId)}
-              downloadUrl={getMediaUrl(mediaFile.fileId, true)}
+              imageSrc={getStaticPhotoUrl(mediaFile.fileId)}
+              downloadUrl={getMediaUrl(mediaFile.fileId)}
               onExpand={handleExpand}
               observationId={observationId}
               plotId={monitoringPlotId}

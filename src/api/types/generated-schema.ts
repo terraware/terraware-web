@@ -3572,7 +3572,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Reassigns some of the seedlings from a delivery to a different planting subzone. */
+        /** Reassigns some of the seedlings from a delivery to a different substratum. */
         post: operations["reassignDelivery"];
         delete?: never;
         options?: never;
@@ -3832,6 +3832,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/observations/{observationId}/plots/{plotId}/media/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Downloads a video or photo of an observation.
+         * @description For videos, this returns a video file, not a stream.
+         */
+        get: operations["getObservationMediaFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/observations/{observationId}/plots/{plotId}/media/{fileId}/stream": {
         parameters: {
             query?: never;
@@ -3977,7 +3997,7 @@ export interface paths {
         };
         /**
          * Gets a list of an organization's planting sites.
-         * @description The list can optionally contain information about planting zones and subzones.
+         * @description The list can optionally contain information about strata and substrata.
          */
         get: operations["listPlantingSites"];
         put?: never;
@@ -3997,7 +4017,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Lists the total number of plants planted at a planting site and in each planting zone.
+         * Lists the total number of plants planted at a planting site and in each stratum.
          * @description The totals are based on nursery withdrawals.
          */
         get: operations["listPlantingSiteReportedPlants"];
@@ -4035,7 +4055,7 @@ export interface paths {
         };
         /**
          * Gets information about a specific planting site.
-         * @description Includes information about the site's planting zones and subzones.
+         * @description Includes information about the site's strata and substrata.
          */
         get: operations["getPlantingSite"];
         /** Updates information about an existing planting site. */
@@ -4093,11 +4113,28 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Gets the total number of plants planted at a planting site and in each planting zone.
+         * Gets the total number of plants planted at a planting site and in each stratum.
          * @description The totals are based on nursery withdrawals.
          */
         get: operations["getPlantingSiteReportedPlants"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/substrata/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Updates the planting-completed state of a substratum. */
+        put: operations["updateSubstrata"];
         post?: never;
         delete?: never;
         options?: never;
@@ -4113,7 +4150,11 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** Updates the planting-completed state of a planting subzone. */
+        /**
+         * Updates the planting-completed state of a substratum.
+         * @deprecated
+         * @description Deprecated, use /substrata/{id} instead
+         */
         put: operations["updatePlantingSubzone"];
         post?: never;
         delete?: never;
@@ -4130,10 +4171,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Gets a list of the species that may have been planted in a planting subzone.
+         * Gets a list of the species that may have been planted in a substratum.
          * @description The list is based on nursery withdrawals to the planting site as well as past observations.
          */
-        get: operations["listPlantingSubzoneSpecies"];
+        get: operations["listSubstratumSpecies"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4222,7 +4263,7 @@ export interface paths {
         };
         /**
          * Lists all the species that have been withdrawn to a planting site or recorded in observations (if not withdrawn).
-         * @description Species with densities are species that were withdrawn, species with null densities are species that were recorded in observations but not withdrawn to the plot's subzone.
+         * @description Species with densities are species that were withdrawn, species with null densities are species that were recorded in observations but not withdrawn to the plot's substratum.
          */
         get: operations["getT0SpeciesForPlantingSite"];
         put?: never;
@@ -5837,12 +5878,12 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining planting subzones, the number of subzones defined so far.
+             * @description If the user has started defining substrata, the number of substrata defined so far.
              */
             numPlantingSubzones?: number;
             /**
              * Format: int32
-             * @description If the user has started defining planting zones, the number of zones defined so far.
+             * @description If the user has started defining strata, the number of strata defined so far.
              */
             numPlantingZones?: number;
             /** Format: int64 */
@@ -5972,7 +6013,7 @@ export interface components {
             plantingSiteId?: number;
             /**
              * Format: int64
-             * @description If purpose is "Out Plant", the ID of the planting subzone to which the seedlings were delivered. Must be specified if the planting site has planting subzones, but must be omitted or set to null if the planting site has no planting subzones.
+             * @description If purpose is "Out Plant", the ID of the substratum to which the seedlings were delivered. Must be specified if the planting site has substrata, but must be omitted or set to null if the planting site has no substrata.
              */
             plantingSubzoneId?: number;
             /** @enum {string} */
@@ -6046,7 +6087,7 @@ export interface components {
             /** Format: int64 */
             organizationId: number;
             plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
-            /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+            /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
             plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
@@ -6458,12 +6499,12 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining planting subzones, the number of subzones defined so far.
+             * @description If the user has started defining substrata, the number of substrata defined so far.
              */
             numPlantingSubzones?: number;
             /**
              * Format: int32
-             * @description If the user has started defining planting zones, the number of zones defined so far.
+             * @description If the user has started defining strata, the number of strata defined so far.
              */
             numPlantingZones?: number;
             /** Format: int64 */
@@ -7766,10 +7807,6 @@ export interface components {
             sites: components["schemas"]["PlantingSitePayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
-        ListPlantingSubzoneSpeciesResponsePayload: {
-            species: components["schemas"]["PlantingSubzoneSpeciesPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
         ListProjectAcceleratorDetailsResponsePayload: {
             details: components["schemas"]["ProjectAcceleratorDetailsPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -7853,6 +7890,10 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             subLocations: components["schemas"]["SubLocationPayload"][];
         };
+        ListSubstratumSpeciesResponsePayload: {
+            species: (components["schemas"]["PlantingSubzoneSpeciesPayload"] | components["schemas"]["SubstratumSpeciesPayload"])[];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListSupportRequestTypesResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             types: ("Bug Report" | "Feature Request" | "Contact Us")[];
@@ -7906,7 +7947,7 @@ export interface components {
         };
         MetricProgressPayload: {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             progress: number;
         };
@@ -7991,6 +8032,29 @@ export interface components {
             plotNumber: number;
             /** Format: int32 */
             sizeMeters: number;
+        };
+        MonitoringSpeciesUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            /** @enum {string} */
+            certainty: "Known" | "Other" | "Unknown";
+            /**
+             * Format: int64
+             * @description Required if certainty is Known. Ignored if certainty is Other or Unknown.
+             */
+            speciesId?: number;
+            /** @description Required if certainty is Other. Ignored if certainty is Known or Unknown. */
+            speciesName?: string;
+            /** Format: int32 */
+            totalDead?: number;
+            /** Format: int32 */
+            totalExisting?: number;
+            /** Format: int32 */
+            totalLive?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "MonitoringSpecies";
         };
         MultiLineString: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             coordinates: number[][][];
@@ -8155,13 +8219,13 @@ export interface components {
         };
         NewPlantingSubzonePayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
-            /** @description Name of this planting subzone. Two subzones in the same planting zone may not have the same name, but using the same subzone name in different planting zones is valid. */
+            /** @description Name of this substratum. Two substrata in the same stratum may not have the same name, but using the same substratum name in different strata is valid. */
             name: string;
         };
-        /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+        /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
         NewPlantingZonePayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
-            /** @description Name of this planting zone. Two zones in the same planting site may not have the same name. */
+            /** @description Name of this stratum. Two strata in the same planting site may not have the same name. */
             name: string;
             plantingSubzones?: components["schemas"]["NewPlantingSubzonePayload"][];
             targetPlantingDensity?: number;
@@ -8406,7 +8470,7 @@ export interface components {
             /** @enum {string} */
             type: "Plot" | "Quadrat" | "Soil";
         };
-        /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
+        /** @description Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
         ObservationMonitoringPlotResultsPayload: {
             boundary: components["schemas"]["Polygon"];
             claimedByName?: string;
@@ -8424,7 +8488,7 @@ export interface components {
             media: components["schemas"]["ObservationMonitoringPlotMediaPayload"][];
             /** Format: int64 */
             monitoringPlotId: number;
-            /** @description Full name of this monitoring plot, including zone and subzone prefixes. */
+            /** @description Full name of this monitoring plot, including stratum and substratum prefixes. */
             monitoringPlotName: string;
             /**
              * Format: int64
@@ -8506,7 +8570,7 @@ export interface components {
             /** Format: int64 */
             plantingSiteId: number;
             plantingSiteName: string;
-            /** @description If specific subzones were requested for this observation, their IDs. */
+            /** @description If specific substrata were requested for this observation, their IDs. */
             requestedSubzoneIds?: number[];
             /**
              * Format: date
@@ -8518,104 +8582,75 @@ export interface components {
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
         };
+        /**
+         * @deprecated
+         * @description Use ObservationSubstratumResultsPayload instead
+         */
         ObservationPlantingSubzoneResultsPayload: {
-            /** @description Area of this planting subzone in hectares. */
             areaHa: number;
             /** Format: date-time */
             completedTime?: string;
-            /**
-             * Format: int32
-             * @description Estimated number of plants in planting subzone based on estimated planting density and subzone area. Only present if the subzone has completed planting.
-             */
+            /** Format: int32 */
             estimatedPlants?: number;
-            /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
             monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
             /** Format: int32 */
             mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             name: string;
-            /**
-             * Format: int32
-             * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots.
-             */
+            /** Format: int32 */
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
-            /**
-             * Format: int64
-             * @description ID of the subzone. Absent if the subzone was deleted after the observation.
-             */
+            /** Format: int64 */
             plantingSubzoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /** Format: int32 */
             survivalRate?: number;
             /** Format: int32 */
             survivalRateStdDev?: number;
-            /**
-             * Format: int32
-             * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
-             */
+            /** Format: int32 */
             totalPlants: number;
-            /**
-             * Format: int32
-             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
-             */
+            /** Format: int32 */
             totalSpecies: number;
         };
+        /**
+         * @deprecated
+         * @description Use ObservationStratumResultsPayload instead
+         */
         ObservationPlantingZoneResultsPayload: {
-            /** @description Area of this planting zone in hectares. */
             areaHa: number;
             /** Format: date-time */
             completedTime?: string;
-            /**
-             * Format: int32
-             * @description Estimated number of plants in planting zone based on estimated planting density and planting zone area. Only present if all the subzones in the zone have been marked as having completed planting.
-             */
+            /** Format: int32 */
             estimatedPlants?: number;
-            /**
-             * Format: int32
-             * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
-             */
+            /** Format: int32 */
             mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             name: string;
-            /**
-             * Format: int32
-             * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots.
-             */
+            /** Format: int32 */
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
-            /**
-             * Format: int64
-             * @description ID of the zone. Absent if the zone was deleted after the observation.
-             */
+            /** Format: int64 */
             plantingZoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
-            /**
-             * Format: int32
-             * @description Percentage of plants of all species in this zone's permanent monitoring plots that have survived since the t0 point.
-             */
+            /** Format: int32 */
             survivalRate?: number;
             /** Format: int32 */
             survivalRateStdDev?: number;
-            /**
-             * Format: int32
-             * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
-             */
+            /** Format: int32 */
             totalPlants: number;
-            /**
-             * Format: int32
-             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
-             */
+            /** Format: int32 */
             totalSpecies: number;
         };
         ObservationPlotMediaSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
             fileId: number;
+            /** @description True if this file was uploaded as part of the original submission of observation data; false if it was uploaded later. */
+            isOriginal: boolean;
             /** @enum {string} */
             mediaKind: "Photo" | "Video";
             /** Format: int64 */
@@ -8663,7 +8698,7 @@ export interface components {
             completedTime?: string;
             /**
              * Format: int32
-             * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as having completed planting.
+             * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the substrata in the site have been marked as having completed planting.
              */
             estimatedPlants?: number;
             /** @description Percentage of plants of all species that were dead in this site's permanent monitoring plots. */
@@ -8691,6 +8726,7 @@ export interface components {
             startDate: string;
             /** @enum {string} */
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
+            strata: components["schemas"]["ObservationStratumResultsPayload"][];
             /** Format: int32 */
             survivalRate?: number;
             /** Format: int32 */
@@ -8753,6 +8789,100 @@ export interface components {
              * @description Total number of live and existing plants of this species.
              */
             totalPlants: number;
+        };
+        ObservationStratumResultsPayload: {
+            /** @description Area of this stratum in hectares. */
+            areaHa: number;
+            /** Format: date-time */
+            completedTime?: string;
+            /**
+             * Format: int32
+             * @description Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting.
+             */
+            estimatedPlants?: number;
+            /**
+             * Format: int32
+             * @description Percentage of plants of all species that were dead in this stratum's permanent monitoring plots.
+             */
+            mortalityRate?: number;
+            /** Format: int32 */
+            mortalityRateStdDev?: number;
+            name: string;
+            /**
+             * Format: int32
+             * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
+             */
+            plantingDensity: number;
+            /** Format: int32 */
+            plantingDensityStdDev?: number;
+            /**
+             * Format: int64
+             * @description ID of the stratum. Absent if the stratum was deleted after the observation.
+             */
+            plantingZoneId?: number;
+            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /** @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
+            substrata: components["schemas"]["ObservationSubstratumResultsPayload"][];
+            /** Format: int32 */
+            survivalRate?: number;
+            /** Format: int32 */
+            survivalRateStdDev?: number;
+            /**
+             * Format: int32
+             * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
+             */
+            totalPlants: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+             */
+            totalSpecies: number;
+        };
+        /** @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
+        ObservationSubstratumResultsPayload: {
+            /** @description Area of this substratum in hectares. */
+            areaHa: number;
+            /** Format: date-time */
+            completedTime?: string;
+            /**
+             * Format: int32
+             * @description Estimated number of plants in substratum based on estimated planting density and substratum area. Only present if the substratum has completed planting.
+             */
+            estimatedPlants?: number;
+            /** @description Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
+            monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
+            /** Format: int32 */
+            mortalityRate?: number;
+            /** Format: int32 */
+            mortalityRateStdDev?: number;
+            name: string;
+            /**
+             * Format: int32
+             * @description Estimated planting density for the substratum based on the observed planting densities of monitoring plots.
+             */
+            plantingDensity: number;
+            /** Format: int32 */
+            plantingDensityStdDev?: number;
+            /**
+             * Format: int64
+             * @description ID of the substratum. Absent if the substratum was deleted after the observation.
+             */
+            plantingSubzoneId?: number;
+            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /** Format: int32 */
+            survivalRate?: number;
+            /** Format: int32 */
+            survivalRateStdDev?: number;
+            /**
+             * Format: int32
+             * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
+             */
+            totalPlants: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+             */
+            totalSpecies: number;
         };
         ObservationUpdateOperationPayload: {
             type: string;
@@ -9012,7 +9142,7 @@ export interface components {
             earliestObservationTime: string;
             /**
              * Format: int32
-             * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as having completed planting.
+             * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the substrata in the site have been marked as having completed planting.
              */
             estimatedPlants?: number;
             /**
@@ -9037,7 +9167,7 @@ export interface components {
             /** Format: int64 */
             plantingSiteId: number;
             plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
-            /** @description Combined list of observed species and their statuses from the latest observation of each subzone within each zone. */
+            /** @description Combined list of observed species and their statuses from the latest observation of each substratum within each stratum. */
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
              * Format: int32
@@ -9048,7 +9178,7 @@ export interface components {
             survivalRateStdDev?: number;
             /**
              * Format: int32
-             * @description Total number of plants recorded from the latest observations of each subzone within each zone. Includes all plants, regardless of live/dead status or species.
+             * @description Total number of plants recorded from the latest observations of each substratum within each stratum. Includes all plants, regardless of live/dead status or species.
              */
             totalPlants: number;
             /**
@@ -9059,7 +9189,7 @@ export interface components {
         };
         PlantingSitePayload: {
             adHocPlots: components["schemas"]["MonitoringPlotPayload"][];
-            /** @description Area of planting site in hectares. Only present if the site has planting zones. */
+            /** @description Area of planting site in hectares. Only present if the site has strata. */
             areaHa?: number;
             boundary?: components["schemas"]["MultiPolygon"];
             countryCode?: string;
@@ -9098,14 +9228,14 @@ export interface components {
             totalPlants: number;
         };
         PlantingSiteValidationProblemPayload: {
-            /** @description If the problem is a conflict between two planting zones or two subzones, the list of the conflicting zone or subzone names. */
+            /** @description If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
             conflictsWith?: string[];
-            /** @description If the problem relates to a particular subzone, its name. If this is present, plantingZone will also be present and will be the name of the zone that contains this subzone. */
+            /** @description If the problem relates to a particular substratum, its name. If this is present, plantingZone will also be present and will be the name of the stratum that contains this substratum. */
             plantingSubzone?: string;
-            /** @description If the problem relates to a particular planting zone, its name. */
+            /** @description If the problem relates to a particular stratum, its name. */
             plantingZone?: string;
             /** @enum {string} */
-            problemType: "DuplicateSubzoneName" | "DuplicateZoneName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubzoneBoundaryOverlaps" | "SubzoneInExclusionArea" | "SubzoneNotInZone" | "ZoneBoundaryOverlaps" | "ZoneHasNoSubzones" | "ZoneNotInSite" | "ZoneTooSmall" | "ZonesWithoutSiteBoundary";
+            problemType: "DuplicateSubstratumName" | "DuplicateStratumName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubstratumBoundaryOverlaps" | "SubstratumInExclusionArea" | "SubstratumNotInStratum" | "StratumBoundaryOverlaps" | "StratumHasNoSubstrata" | "StratumNotInSite" | "StratumTooSmall" | "StrataWithoutSiteBoundary";
         };
         PlantingSubzoneHistoryPayload: {
             areaHa: number;
@@ -9117,12 +9247,12 @@ export interface components {
             name: string;
             /**
              * Format: int64
-             * @description ID of planting subzone if it exists in the current version of the site.
+             * @description ID of substratum if it exists in the current version of the site.
              */
             plantingSubzoneId?: number;
         };
         PlantingSubzonePayload: {
-            /** @description Area of planting subzone in hectares. */
+            /** @description Area of substratum in hectares. */
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
             fullName: string;
@@ -9136,13 +9266,13 @@ export interface components {
             name: string;
             /**
              * Format: date-time
-             * @description When any monitoring plot in the planting subzone was most recently observed.
+             * @description When any monitoring plot in the substratum was most recently observed.
              */
             observedTime?: string;
             plantingCompleted: boolean;
             /**
              * Format: date-time
-             * @description When planting of the planting subzone was marked as completed.
+             * @description When planting of the substratum was marked as completed.
              */
             plantingCompletedTime?: string;
         };
@@ -9157,7 +9287,11 @@ export interface components {
             /** Format: int32 */
             totalSpecies: number;
         };
-        PlantingSubzoneSpeciesPayload: {
+        /**
+         * @deprecated
+         * @description Use SubstratumSpeciesPayload instead
+         */
+        PlantingSubzoneSpeciesPayload: components["schemas"]["SpeciesPayload"] & {
             commonName?: string;
             /** Format: int64 */
             id: number;
@@ -9172,12 +9306,12 @@ export interface components {
             plantingSubzones: components["schemas"]["PlantingSubzoneHistoryPayload"][];
             /**
              * Format: int64
-             * @description ID of planting zone if it exists in the current version of the site.
+             * @description ID of stratum if it exists in the current version of the site.
              */
             plantingZoneId?: number;
         };
         PlantingZoneObservationSummaryPayload: {
-            /** @description Area of this planting zone in hectares. */
+            /** @description Area of this stratum in hectares. */
             areaHa: number;
             /**
              * Format: date-time
@@ -9186,7 +9320,7 @@ export interface components {
             earliestObservationTime: string;
             /**
              * Format: int32
-             * @description Estimated number of plants in planting zone based on estimated planting density and planting zone area. Only present if all the subzones in the zone have been marked as having completed planting.
+             * @description Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting.
              */
             estimatedPlants?: number;
             /**
@@ -9196,34 +9330,39 @@ export interface components {
             latestObservationTime: string;
             /**
              * Format: int32
-             * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
+             * @description Percentage of plants of all species that were dead in this stratum's permanent monitoring plots.
              */
             mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /**
              * Format: int32
-             * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots.
+             * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
              */
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
-            /** @description List of subzone observations used in this summary. */
+            /**
+             * @deprecated
+             * @description Use substrata instead
+             */
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
             /** Format: int64 */
             plantingZoneId: number;
-            /** @description Combined list of observed species and their statuses from the latest observation of each subzone. */
+            /** @description Combined list of observed species and their statuses from the latest observation of each substratum. */
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /** @description List of substratum observations used in this summary. */
+            substrata: components["schemas"]["ObservationSubstratumResultsPayload"][];
             /**
              * Format: int32
-             * @description Percentage of plants of all species in this zone's permanent monitoring plots that have survived since the t0 point.
+             * @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point.
              */
             survivalRate?: number;
             /** Format: int32 */
             survivalRateStdDev?: number;
             /**
              * Format: int32
-             * @description Total number of plants recorded from the latest observations of each subzone. Includes all plants, regardless of live/dead status or species.
+             * @description Total number of plants recorded from the latest observations of each substratum. Includes all plants, regardless of live/dead status or species.
              */
             totalPlants: number;
             /**
@@ -9233,12 +9372,12 @@ export interface components {
             totalSpecies: number;
         };
         PlantingZonePayload: {
-            /** @description Area of planting zone in hectares. */
+            /** @description Area of stratum in hectares. */
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
             /**
              * Format: date-time
-             * @description When the boundary of this planting zone was last modified. Modifications of other attributes of the planting zone do not cause this timestamp to change.
+             * @description When the boundary of this stratum was last modified. Modifications of other attributes of the stratum do not cause this timestamp to change.
              */
             boundaryModifiedTime: string;
             /** Format: int64 */
@@ -9859,7 +9998,7 @@ export interface components {
         };
         ReportSystemMetricEntriesPayload: {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
@@ -9875,7 +10014,7 @@ export interface components {
             description?: string;
             isPublishable: boolean;
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
@@ -9941,7 +10080,7 @@ export interface components {
              * @description Which planting site this observation needs to be scheduled for.
              */
             plantingSiteId: number;
-            /** @description The IDs of the subzones this observation should cover. */
+            /** @description The IDs of the substrata this observation should cover. */
             requestedSubzoneIds: number[];
             /**
              * Format: date
@@ -10123,6 +10262,7 @@ export interface components {
             partial: boolean;
             status: components["schemas"]["SuccessOrError"];
         };
+        SpeciesPayload: Record<string, never>;
         SpeciesProblemElement: {
             /** @enum {string} */
             field: "Scientific Name";
@@ -10289,6 +10429,12 @@ export interface components {
             issueKey: string;
             status: components["schemas"]["SuccessOrError"];
         };
+        SubstratumSpeciesPayload: components["schemas"]["SpeciesPayload"] & {
+            commonName?: string;
+            /** Format: int64 */
+            id: number;
+            scientificName: string;
+        };
         /**
          * @description Indicates of success or failure of the requested operation.
          * @enum {string}
@@ -10327,7 +10473,7 @@ export interface components {
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             description: string;
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
             name: string;
             reference: string;
             /** @enum {string} */
@@ -10654,12 +10800,12 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining planting subzones, the number of subzones defined so far.
+             * @description If the user has started defining substrata, the number of substrata defined so far.
              */
             numPlantingSubzones?: number;
             /**
              * Format: int32
-             * @description If the user has started defining planting zones, the number of zones defined so far.
+             * @description If the user has started defining strata, the number of strata defined so far.
              */
             numPlantingZones?: number;
             /**
@@ -10733,7 +10879,7 @@ export interface components {
         };
         UpdateObservationRequestPayload: {
             /** @description List of changes to make to different parts of the observation. Changes are all-or-nothing; if any of them fails, none of them is applied. */
-            updates: (components["schemas"]["BiomassSpeciesUpdateOperationPayload"] | components["schemas"]["BiomassUpdateOperationPayload"] | components["schemas"]["ObservationPlotUpdateOperationPayload"] | components["schemas"]["QuadratSpeciesUpdateOperationPayload"] | components["schemas"]["QuadratUpdateOperationPayload"] | components["schemas"]["RecordedTreeUpdateOperationPayload"])[];
+            updates: (components["schemas"]["BiomassSpeciesUpdateOperationPayload"] | components["schemas"]["BiomassUpdateOperationPayload"] | components["schemas"]["MonitoringSpeciesUpdateOperationPayload"] | components["schemas"]["ObservationPlotUpdateOperationPayload"] | components["schemas"]["QuadratSpeciesUpdateOperationPayload"] | components["schemas"]["QuadratUpdateOperationPayload"] | components["schemas"]["RecordedTreeUpdateOperationPayload"])[];
         };
         UpdateOrganizationInternalTagsRequestPayload: {
             tagIds: number[];
@@ -10936,9 +11082,12 @@ export interface components {
             /** @enum {string} */
             status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
         };
+        UpdateSubstratumRequestPayload: {
+            plantingCompleted: boolean;
+        };
         UpdateSystemMetricTargetsPayload: Omit<WithRequired<components["schemas"]["UpdateMetricTargetsPayload"], "targets">, "type"> & {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate";
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -13686,7 +13835,7 @@ export interface operations {
     refreshAcceleratorReportSystemMetrics: {
         parameters: {
             query: {
-                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted" | "Survival Rate")[];
+                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Hectares Planted" | "Survival Rate")[];
             };
             header?: never;
             path: {
@@ -19921,6 +20070,39 @@ export interface operations {
             };
         };
     };
+    getObservationMediaFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                plotId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a video with the requested ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     getObservationMediaStream: {
         parameters: {
             query?: never;
@@ -20232,7 +20414,7 @@ export interface operations {
             query?: {
                 organizationId?: number;
                 projectId?: number;
-                /** @description If true, include planting zones and subzones for each site. */
+                /** @description If true, include strata and substrata for each site. */
                 full?: boolean;
             };
             header?: never;
@@ -20469,6 +20651,32 @@ export interface operations {
             };
         };
     };
+    updateSubstrata: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSubstratumRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
     updatePlantingSubzone: {
         parameters: {
             query?: never;
@@ -20495,7 +20703,7 @@ export interface operations {
             };
         };
     };
-    listPlantingSubzoneSpecies: {
+    listSubstratumSpecies: {
         parameters: {
             query?: never;
             header?: never;
@@ -20512,7 +20720,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ListPlantingSubzoneSpeciesResponsePayload"];
+                    "application/json": components["schemas"]["ListSubstratumSpeciesResponsePayload"];
                 };
             };
         };
