@@ -2,11 +2,17 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import MapComponent from 'src/components/NewMap';
+import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import { MapLayer, MapNameTag, MapPoint } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
+import useObservationEventsMapLegend from 'src/components/NewMap/useObservationEventsMapLegend';
+import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLegend';
+import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
+import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
+import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -16,12 +22,17 @@ type ObservationMapProps = {
 };
 
 const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMapProps) => {
-  const { strings } = useLocalization();
   const { mapId, token } = useMapboxToken();
+  const { selectedOrganization } = useOrganization();
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
 
-  const { selectedOrganization } = useOrganization();
+  const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
+  const { plantMakersLegendGroup } = usePlantMarkersMapLegend(plantingSiteId === undefined);
+  const { observationEventsLegendGroup } = useObservationEventsMapLegend(plantingSiteId === undefined);
+  const { plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
+  const { survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
+
   const { sitesLayerStyle, zonesLayerStyle, subzonesLayerStyle } = useMapFeatureStyles();
 
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
@@ -60,7 +71,6 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
               coordinates: site.boundary?.coordinates ?? [],
             },
           })),
-          label: strings.SITE,
           layerId: 'sites',
           style: sitesLayerStyle,
           visible: true,
@@ -78,10 +88,9 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
               },
             },
           ],
-          label: strings.SITE,
           layerId: 'sites',
           style: sitesLayerStyle,
-          visible: true,
+          visible: selectedLayer === 'sites',
         },
         {
           features:
@@ -91,11 +100,11 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
                 type: 'MultiPolygon',
                 coordinates: zone.boundary?.coordinates ?? [],
               },
+              label: zone.name,
             })) ?? [],
-          label: strings.ZONE,
           layerId: 'zones',
           style: zonesLayerStyle,
-          visible: true,
+          visible: selectedLayer === 'zones',
         },
         {
           features:
@@ -106,12 +115,12 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
                   type: 'MultiPolygon',
                   coordinates: subzone.boundary?.coordinates ?? [],
                 },
+                label: subzone.name,
               }))
             ) ?? [],
-          label: strings.SUBZONES,
           layerId: 'subzones',
           style: subzonesLayerStyle,
-          visible: true,
+          visible: selectedLayer === 'subzones',
         },
       ];
     }
@@ -120,10 +129,8 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
     allPlantingSites,
     plantingSite,
     plantingSiteId,
+    selectedLayer,
     sitesLayerStyle,
-    strings.SITE,
-    strings.SUBZONES,
-    strings.ZONE,
     subzonesLayerStyle,
     zonesLayerStyle,
   ]);
@@ -187,7 +194,41 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
     }
   }, [allPlantingSites, fitBounds, plantingSite, plantingSiteId, selectPlantingSiteId]);
 
-  return <MapComponent mapLayers={layers} mapId={mapId} mapRef={mapRef} nameTags={nameTags} token={token ?? ''} />;
+  const legends = useMemo((): MapLegendGroup[] => {
+    const siteLegendGroup =
+      plantingSiteId === undefined
+        ? {
+            ...plantingSiteLegendGroup,
+            selectedLayer: 'sites',
+          }
+        : plantingSiteLegendGroup;
+
+    return [
+      siteLegendGroup,
+      plotPhotosLegendGroup,
+      plantMakersLegendGroup,
+      observationEventsLegendGroup,
+      survivalRateLegendGroup,
+    ];
+  }, [
+    plantingSiteId,
+    plantingSiteLegendGroup,
+    plotPhotosLegendGroup,
+    plantMakersLegendGroup,
+    observationEventsLegendGroup,
+    survivalRateLegendGroup,
+  ]);
+
+  return (
+    <MapComponent
+      legends={legends}
+      mapLayers={layers}
+      mapId={mapId}
+      mapRef={mapRef}
+      nameTags={nameTags}
+      token={token ?? ''}
+    />
+  );
 };
 
 export default ObservationMap;

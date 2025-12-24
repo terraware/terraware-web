@@ -54,7 +54,6 @@ export type MapLayerFeature = {
 export type MapLayer = {
   disabled?: boolean;
   features: MapLayerFeature[];
-  label: string;
   layerId: string;
   style: MapFillComponentStyle;
   visible: boolean;

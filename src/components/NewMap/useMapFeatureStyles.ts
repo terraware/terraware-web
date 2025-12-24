@@ -7,6 +7,14 @@ import { MapFillComponentStyle, MapIconComponentStyle } from './types';
 const useMapFeatureStyles = () => {
   const theme = useTheme();
 
+  const observationEventStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      fillColor: theme.palette.TwClrBasePink200,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
   const sitesLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
       borderColor: theme.palette.TwClrBaseGreen300,
@@ -64,12 +72,43 @@ const useMapFeatureStyles = () => {
     []
   );
 
+  const survivalRateLessThan50 = useMemo(
+    (): MapFillComponentStyle => ({
+      fillPatternUrl: '/assets/survival-rate-less-50.png',
+      opacity: 1.0,
+      type: 'fill',
+    }),
+    []
+  );
+
+  const survivalRate50To75 = useMemo(
+    (): MapFillComponentStyle => ({
+      fillPatternUrl: '/assets/survival-rate-more-75.png',
+      opacity: 1.0,
+      type: 'fill',
+    }),
+    []
+  );
+
+  const survivalRateMoreThan75 = useMemo(
+    (): MapFillComponentStyle => ({
+      fillPatternUrl: '/assets/survival-rate-more-75.png',
+      opacity: 1.0,
+      type: 'fill',
+    }),
+    []
+  );
+
   return {
     deadPlantStyle,
     livePlantStyle,
+    observationEventStyle,
     plotPhotoStyle,
     sitesLayerStyle,
     subzonesLayerStyle,
+    survivalRateLessThan50,
+    survivalRate50To75,
+    survivalRateMoreThan75,
     zonesLayerStyle,
   };
 };
