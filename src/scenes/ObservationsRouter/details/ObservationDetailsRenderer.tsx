@@ -7,7 +7,7 @@ import { APP_PATHS } from 'src/constants';
 import { has25mPlots } from 'src/redux/features/observations/utils';
 import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
 
-const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
+const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies'];
 
 const ObservationDetailsRenderer =
   (plantingSiteId: number, observationId: number) =>
@@ -35,15 +35,6 @@ const ObservationDetailsRenderer =
     if (column.key === 'plantingZoneName') {
       return (
         <CellRenderer {...props} value={createLinkToPlantingZoneObservation(value as string)} title={value as string} />
-      );
-    }
-
-    if (column.key === 'mortalityRate') {
-      return (
-        <CellRenderer
-          {...props}
-          value={value !== undefined && value !== null && row.hasObservedPermanentPlots ? `${value as number}%` : ''}
-        />
       );
     }
 

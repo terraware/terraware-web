@@ -12,7 +12,7 @@ import strings from 'src/strings';
 import { Observation, ObservationState, getStatus } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 
-const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
+const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies'];
 
 const OrgObservationsRenderer =
   (
@@ -72,10 +72,6 @@ const OrgObservationsRenderer =
 
     if (column.key === 'state') {
       return <CellRenderer {...props} value={getStatus(value as ObservationState)} />;
-    }
-
-    if (column.key === 'mortalityRate') {
-      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value as number}%` : ''} />;
     }
 
     if (column.key === 'survivalRate') {

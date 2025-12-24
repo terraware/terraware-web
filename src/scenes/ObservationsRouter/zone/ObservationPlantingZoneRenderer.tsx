@@ -13,7 +13,7 @@ import {
   getPlotStatus,
 } from 'src/types/Observations';
 
-const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate', 'plantingDensity'];
+const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'plantingDensity'];
 
 const ObservationPlantingZoneRenderer =
   (
@@ -55,10 +55,6 @@ const ObservationPlantingZoneRenderer =
           title={value as string}
         />
       );
-    }
-
-    if (column.key === 'mortalityRate') {
-      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value as number}%` : ''} />;
     }
 
     if (column.key === 'survivalRate') {
