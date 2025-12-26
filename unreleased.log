@@ -1,3 +1,4 @@
+3f8b08f618e SW-7898 Run prod-like build with yarn docker:start:prod (#4964)
 3069bd1b899 Remove autoprefixer warnings (#4962)
 4dbbf45117b SW-7808 Export survival rate instead of mortality (#4953)
 4a9c2a38baf SW-7808 Remove mortality rate from map stats (#4952)
