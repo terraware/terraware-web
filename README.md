@@ -175,10 +175,10 @@ running on localhost port 8080 (`REACT_APP_TERRAWARE_API` from
 `yarn start`; if you want to locally test any changes to its
 configuration file (`nginx/default.conf.template`), you'll need to:
 
-1) Install `nginx` locally
-2) Substitute the configuration variables in `nginx/default.config.template`
+1. Install `nginx` locally
+2. Substitute the configuration variables in `nginx/default.config.template`
    to point it at your local API server running on port 8080
-3) Launch `nginx`
+3. Launch `nginx`
 
 For example, when using Homebrew on a Mac, `nginx`'s default
 configuration serves static resources from `/opt/homebrew/var/www` and
