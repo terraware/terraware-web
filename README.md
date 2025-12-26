@@ -159,7 +159,7 @@ To exit the PostgreSQL client, type `\quit` or hit control-D.
 
 Developer builds use non-optimized, hot-reloading builds served via
 Craco on http://localhost:3000 . These are ideal for the normal
-developer workflow, but you'll want to run a produciton-like build in
+developer workflow, but you'll want to run a production-like build in
 order to test changes to:
 
 - The `nginx` configuration (`nginx/default.conf.template`)
