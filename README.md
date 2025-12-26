@@ -157,45 +157,33 @@ To exit the PostgreSQL client, type `\quit` or hit control-D.
 
 ## Running a prod-like build locally with `nginx`
 
-In production, `nginx` is the publicly-accessible HTTP front-end to
-`terraware-web`. It serves the static resources (JS, CSS, and image
-assets) and proxies HTTP requests to the API server, which is not
-exposed publicly in production.
+Developer builds use non-optimized, hot-reloading builds served via
+Craco on http://localhost:3000 . These are ideal for the normal
+developer workflow, but you'll want to run a produciton-like build in
+order to test changes to:
 
-Developer builds, in contrast, launch an HTTP server using [Craco's
-`devServer`
-functionality](https://webpack.js.org/configuration/dev-server/#devserver)
-which [listens on localhost port
-3000](https://create-react-app.dev/docs/advanced-configuration/) to
-serve static resources and proxy API requests to the API server
-running on localhost port 8080 (`REACT_APP_TERRAWARE_API` from
-`.env`).
+* The `nginx` configuration (`nginx/default.conf.template`)
+* The build process
+* The optimization/packaging process
 
-`nginx` is neither installed nor launched via `yarn docker:start` or
-`yarn start`; if you want to locally test any changes to its
-configuration file (`nginx/default.conf.template`), you'll need to:
-
-1. Install `nginx` locally
-2. Substitute the configuration variables in `nginx/default.config.template`
-   to point it at your local API server running on port 8080
-3. Launch `nginx`
-
-For example, when using Homebrew on a Mac, `nginx`'s default
-configuration serves static resources from `/opt/homebrew/var/www` and
-reads per-site configuration from
-`/opt/homebrew/etc/nginx/servers/*.conf`. The following steps install,
-configure, and launch `nginx` on localhost port 80:
+then run the following steps to launch a prod-like build on
+http://localhost:3001 :
 
 ```shell
-brew install nginx
-yarn build
-cp -a build/* /opt/homebrew/var/www
-SERVER_URL=http://localhost:8080 envsubst '${SERVER_URL}' < \
-  nginx/default.conf.template | \
-  perl -pe 's@/usr/share/nginx/html@/opt/homebrew/var/www@' > \
-  /opt/homebrew/etc/nginx/servers/default.conf
-yarn docker:start
-/opt/homebrew/opt/nginx/bin/nginx -g daemon\ off\;
+yarn docker:start:prod      # run once to start terraware-server and nginx
+yarn generate-strings       # optional: only run if new strings have been added since last build
+yarn build                  # run each time JS/CSS/image resources change (including strings)
+curl http://localhost:3001  # optional: verify that nginx is running correctly
+```
+
+Each time you change JS, Typescript, CSS, or other static resources,
+you must re-run `yarn build`. This is fairly slow, which is why it's
+not the normal developer workflow.
+
+When finished, shut down the prod-like build with:
+
+```shell
+yarn docker:stop:prod
 ```
 
 ## Useful links

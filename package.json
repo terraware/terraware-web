@@ -23,6 +23,8 @@
     "format:changed": "git diff -z --name-only --diff-filter=ACMR main -- '**.js' '**.ts' '**.tsx' '**.json' '**.css' '**.scss' '**.md' | xargs -0r prettier --write",
     "docker:start": "./scripts/launch_server.sh",
     "docker:stop": "docker compose down",
+    "docker:start:prod": "./scripts/launch_server.sh --profile prod",
+    "docker:stop:prod": "docker compose --profile prod down",
     "docker:remote-be:start": "docker compose -f remote-backend/docker-compose.yml up --detach",
     "docker:remote-be:stop": "docker compose -f remote-backend/docker-compose.yml down",
     "wait-be": "wait-on -t 120000 http://localhost:8080/swagger-ui/index.html",
