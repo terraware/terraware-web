@@ -33,3 +33,18 @@ services:
       - './photo-data:/photos'
     depends_on:
       - 'postgres'
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx:/etc/nginx/templates
+      - ./build:/usr/share/nginx/html
+    ports:
+      - '3001:80'
+    environment:
+      - 'SERVER_URL=http://terraware-server:8080'
+    depends_on:
+      - 'terraware-server'
+    # Only launch nginx listening on http://localhost:3001 if
+    # `--profile prod` is passed to `docker compose`.
+    profiles: [prod]

@@ -155,6 +155,37 @@ docker compose exec postgres psql -U postgres terraware
 
 To exit the PostgreSQL client, type `\quit` or hit control-D.
 
+## Running a prod-like build locally with `nginx`
+
+Developer builds use non-optimized, hot-reloading builds served via
+Craco on http://localhost:3000 . These are ideal for the normal
+developer workflow, but you'll want to run a production-like build in
+order to test changes to:
+
+- The `nginx` configuration (`nginx/default.conf.template`)
+- The build process
+- The optimization/packaging process
+
+then run the following steps to launch a prod-like build on
+http://localhost:3001 :
+
+```shell
+yarn docker:start:prod      # run once to start terraware-server and nginx
+yarn generate-strings       # optional: only run if new strings have been added since last build
+yarn build                  # run each time JS/CSS/image resources change (including strings)
+curl http://localhost:3001  # optional: verify that nginx is running correctly
+```
+
+Each time you change JS, Typescript, CSS, or other static resources,
+you must re-run `yarn build`. This is fairly slow, which is why it's
+not the normal developer workflow.
+
+When finished, shut down the prod-like build with:
+
+```shell
+yarn docker:stop:prod
+```
+
 ## Useful links
 
 - The API Swagger documentation [link](http://localhost:8080/docs)
