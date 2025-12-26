@@ -155,6 +155,49 @@ docker compose exec postgres psql -U postgres terraware
 
 To exit the PostgreSQL client, type `\quit` or hit control-D.
 
+## Running a prod-like build locally with `nginx`
+
+In production, `nginx` is the publicly-accessible HTTP front-end to
+`terraware-web`. It serves the static resources (JS, CSS, and image
+assets) and proxies HTTP requests to the API server, which is not
+exposed publicly in production.
+
+Developer builds, in contrast, launch an HTTP server using [Craco's
+`devServer`
+functionality](https://webpack.js.org/configuration/dev-server/#devserver)
+which [listens on localhost port
+3000](https://create-react-app.dev/docs/advanced-configuration/] to
+serve static resources and proxy API requests to the API server
+running on localhost port 8080 (`REACT_APP_TERRAWARE_API` from
+`.env`).
+
+`nginx` is neither installed nor launched via `yarn docker:start` or
+`yarn start`; if you want to locally test any changes to its
+configuration file (`nginx/default.conf.template`), you'll need to:
+
+1) Install `nginx` locally
+2) Substitute the configuration variables in `nginx/default.config.template`
+   to point it at your local API server running on port 8080
+3) Launch `nginx`
+
+For example, when using Homebrew on a Mac, `nginx`'s default
+configuration serves static resources from `/opt/homebrew/var/www` and
+reads per-site configuration from
+`/opt/homebrew/etc/nginx/servers/*.conf`. The following steps install,
+configure, and launch `nginx` on localhost port 80:
+
+```shell
+brew install nginx
+yarn build
+cp -a build/* /opt/homebrew/var/www
+SERVER_URL=http://localhost:8080 envsubst '${SERVER_URL}' < \
+  nginx/default.conf.template | \
+  perl -pe 's@/usr/share/nginx/html@/opt/homebrew/var/www@' > \
+  /opt/homebrew/etc/nginx/servers/default.conf
+yarn docker:start
+/opt/homebrew/opt/nginx/bin/nginx -g daemon\ off\;
+```
+
 ## Useful links
 
 - The API Swagger documentation [link](http://localhost:8080/docs)
