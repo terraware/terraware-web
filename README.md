@@ -162,9 +162,9 @@ Craco on http://localhost:3000 . These are ideal for the normal
 developer workflow, but you'll want to run a produciton-like build in
 order to test changes to:
 
-* The `nginx` configuration (`nginx/default.conf.template`)
-* The build process
-* The optimization/packaging process
+- The `nginx` configuration (`nginx/default.conf.template`)
+- The build process
+- The optimization/packaging process
 
 then run the following steps to launch a prod-like build on
 http://localhost:3001 :
