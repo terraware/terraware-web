@@ -166,7 +166,7 @@ Developer builds, in contrast, launch an HTTP server using [Craco's
 `devServer`
 functionality](https://webpack.js.org/configuration/dev-server/#devserver)
 which [listens on localhost port
-3000](https://create-react-app.dev/docs/advanced-configuration/] to
+3000](https://create-react-app.dev/docs/advanced-configuration/) to
 serve static resources and proxy API requests to the API server
 running on localhost port 8080 (`REACT_APP_TERRAWARE_API` from
 `.env`).
