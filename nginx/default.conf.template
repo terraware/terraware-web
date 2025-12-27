@@ -37,7 +37,7 @@ server {
         # This does not specify `no-store`, since it's OK to store
         # these responses, but they must be re-validated with the
         # origin before serving the stored response.
-        add_header Cache-Control "no-cache, max-age=0, must-revalidate";
+        add_header Cache-Control "no-cache";
         try_files $uri $uri/ /index.html =404;
     }
 
