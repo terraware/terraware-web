@@ -13,7 +13,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
   const theme = useTheme();
   const [zonesOptions, setZoneOptions] = useState<DropdownItem[]>();
   const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<number>();
-  const [selectedMortalityZone, setSelectedMortalityZone] = useState<number>();
+  const [selectedSurvivalZone, setSelectedSurvivalZone] = useState<number>();
   const { plantingSite, observationSummaries } = usePlantingSiteData();
   const { isDesktop, isMobile } = useDeviceInfo();
 
@@ -22,7 +22,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
     if (zoneOpts) {
       setZoneOptions(zoneOpts);
       setSelectedPlantsPerHaZone(zoneOpts[0].value);
-      setSelectedMortalityZone(zoneOpts[0].value);
+      setSelectedSurvivalZone(zoneOpts[0].value);
     }
   }, [plantingSite]);
 
@@ -77,7 +77,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
     };
   }, [observationSummaries, selectedPlantsPerHaZone]);
 
-  const mortalityChartData: ChartData = useMemo(() => {
+  const survivalChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
       const zone = sc.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
       if (zone?.survivalRate !== undefined) {
@@ -86,7 +86,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
-      const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedMortalityZone);
+      const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedSurvivalZone);
       return zone?.survivalRate || 0;
     });
 
@@ -101,7 +101,7 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
         },
       ],
     };
-  }, [observationSummaries, selectedMortalityZone, selectedPlantsPerHaZone]);
+  }, [observationSummaries, selectedPlantsPerHaZone, selectedSurvivalZone]);
 
   return (
     <Card
@@ -176,20 +176,20 @@ export default function PlantingSiteTrendsCard(): JSX.Element {
           <Dropdown
             placeholder={strings.SELECT}
             options={zonesOptions}
-            onChange={(newValue) => setSelectedMortalityZone(Number(newValue))}
-            selectedValue={selectedMortalityZone}
+            onChange={(newValue) => setSelectedSurvivalZone(Number(newValue))}
+            selectedValue={selectedSurvivalZone}
           />
         </Box>
         <Box id='legend-container-mr' sx={{ marginTop: 3 }} />
         <Box paddingTop={2}>
           <Chart
-            chartId='mortalityChart'
-            chartData={mortalityChartData}
+            chartId='survivalChart'
+            chartData={survivalChartData}
             maxWidth='100%'
             minHeight='100px'
             yLimits={{
               min: 0,
-              max: mortalityChartData.datasets[0]?.values.every((value) => (value as number) <= 100) ? 100 : undefined,
+              max: survivalChartData.datasets[0]?.values.every((value) => (value as number) <= 100) ? 100 : undefined,
             }}
             type={'line'}
             xAxisType='time'
