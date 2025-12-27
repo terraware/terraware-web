@@ -382,9 +382,9 @@ const extractSubzonesFromHistoryAndResult = (
         const recency = subzone?.latestObservationCompletedTime
           ? getRecencyFromTime(subzone.latestObservationCompletedTime)
           : -1;
-        const mortalityRate = subzoneResult?.mortalityRate;
+        const survivalRate = subzoneResult?.survivalRate;
         return {
-          properties: { id, name, fullName, type: 'subzone', zoneId: plantingZoneId, recency, mortalityRate },
+          properties: { id, name, fullName, type: 'subzone', zoneId: plantingZoneId, recency, survivalRate },
           boundary: getPolygons(boundary),
           id,
         };
@@ -709,7 +709,7 @@ const getMapDataFromObservation = (
         id: zone.plantingZoneId || -1,
         name: zoneFromObservation?.plantingZoneName || zone.name || '',
         type: 'zone',
-        mortalityRate: zoneFromObservation?.mortalityRate,
+        survivalRate: zoneFromObservation?.survivalRate,
         hasObservedPermanentPlots: zoneFromObservation?.hasObservedPermanentPlots,
       },
       boundary: getPolygons(zone.boundary),
@@ -730,7 +730,7 @@ const getMapDataFromObservation = (
       properties: {
         id: subzone.plantingSubzoneId || -1,
         name: subzoneFromObservation?.plantingSubzoneName || subzone.name || '',
-        mortalityRate: zoneFromObservation?.mortalityRate,
+        survivalRate: zoneFromObservation?.survivalRate,
         type: 'subzone',
       },
       boundary: getPolygons(subzone.boundary),

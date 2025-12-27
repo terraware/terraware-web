@@ -100,25 +100,25 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     });
 
     result.push({
-      title: strings.MORTALITY_RATE,
+      title: strings.SURVIVAL_RATE,
       items: [
         {
-          label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
-          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-          fillColor: 'transparent',
-          fillPatternUrl: '/assets/survival-rate-less-25.png',
-        },
-        {
-          label: strings.TWENTY_FIVE_TO_FIFTY_PERCENT,
+          label: strings.LESS_THAN_FIFTY_PERCENT,
           borderColor: theme.palette.TwClrBaseLightGreen300 as string,
           fillColor: 'transparent',
           fillPatternUrl: '/assets/survival-rate-less-50.png',
         },
         {
-          label: strings.GREATER_THAN_FIFTY_PERCENT,
+          label: strings.FIFTY_TO_SEVENTY_FIVE_PERCENT,
           borderColor: theme.palette.TwClrBaseLightGreen300 as string,
           fillColor: 'transparent',
           fillPatternUrl: '/assets/survival-rate-more-50.png',
+        },
+        {
+          label: strings.GREATER_THAN_SEVENTY_FIVE_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/survival-rate-more-75.png',
         },
       ],
       switch: true,
@@ -203,10 +203,10 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
                 value: lastZoneSummary.areaHa,
               },
               {
-                key: strings.MORTALITY_RATE,
+                key: strings.SURVIVAL_RATE,
                 value:
-                  lastZoneSummary.mortalityRate !== undefined
-                    ? `${lastZoneSummary.mortalityRate}%`
+                  lastZoneSummary.survivalRate !== undefined
+                    ? `${lastZoneSummary.survivalRate}%`
                     : strings.INSUFFICIENT_DATA,
               },
               {
@@ -313,7 +313,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             mapData={mapData}
             style={{ borderRadius: '8px' }}
             layers={['Planting Site', 'Zones', 'Sub-Zones']}
-            showMortalityRateFill={!!latestResult && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
+            showSurvivalRateFill={!!latestResult && legends.find((l) => l.title === strings.SURVIVAL_RATE)?.checked}
             showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_EVENTS)?.checked}
             focusEntities={focusEntities}
             contextRenderer={{
