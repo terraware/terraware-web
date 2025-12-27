@@ -137,7 +137,7 @@ export default function PlantsDashboardView({
     );
   }, [plantingSite, isAcceleratorRoute]);
 
-  const renderMortalityRate = useCallback(
+  const renderSurvivalRate = useCallback(
     () =>
       plantingSite ? (
         <>
@@ -446,7 +446,7 @@ export default function PlantsDashboardView({
         {renderTotalPlantsAndSpecies()}
         {hasObservations && plantingSite?.id !== -1 && renderPlantingSiteTrends()}
         {plantingSite?.id !== -1 && hasObservations && renderPlantingProgressAndDensity()}
-        {hasObservations && plantingSite?.id !== -1 && renderMortalityRate()}
+        {hasObservations && plantingSite?.id !== -1 && renderSurvivalRate()}
         {plantingSite?.id !== -1 && hasPlantingZones && renderZoneLevelData()}
         {plantingSite?.id !== -1 && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
         {(plantingSite?.id === -1 || !plantingSite) && renderMapWithSites()}
