@@ -1,3 +1,4 @@
+fbb91b5764b SW-7808 Remove unused mortality rate strings (#4955)
 bb935756466 SW-7808 Use survival rates for map shading (#4954)
 3f8b08f618e SW-7898 Run prod-like build with yarn docker:start:prod (#4964)
 3069bd1b899 Remove autoprefixer warnings (#4962)
