@@ -486,7 +486,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const [zonesOptions, setZoneOptions] = <span class="cstat-no" title="statement not covered" >useState&lt;DropdownItem[]&gt;();</span>
   const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
-  const [selectedMortalityZone, setSelectedMortalityZone] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
+  const [selectedSurvivalZone, setSelectedSurvivalZone] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
   const { plantingSite, observationSummaries } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
   const { isDesktop, isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
@@ -495,7 +495,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >    if (zoneOpts) {</span>
 <span class="cstat-no" title="statement not covered" >      setZoneOptions(zoneOpts);</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedPlantsPerHaZone(zoneOpts[0].value);</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedMortalityZone(zoneOpts[0].value);</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedSurvivalZone(zoneOpts[0].value);</span>
     }
   }, [plantingSite]);
 &nbsp;
@@ -550,7 +550,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     };
   }, [observationSummaries, selectedPlantsPerHaZone]);
 &nbsp;
-  const mortalityChartData: ChartData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const survivalChartData: ChartData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const filteredSummaries = <span class="cstat-no" title="statement not covered" >observationSummaries?.filter(<span class="fstat-no" title="function not covered" >(s</span>c) =&gt; {</span>
       const zone = <span class="cstat-no" title="statement not covered" >sc.plantingZones.find(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt; <span class="cstat-no" title="statement not covered" >pz.plantingZoneId === selectedPlantsPerHaZone)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (zone?.survivalRate !== undefined) {</span>
@@ -559,7 +559,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     });
     const labels = <span class="cstat-no" title="statement not covered" >filteredSummaries?.map(<span class="fstat-no" title="function not covered" >(s</span>m) =&gt; <span class="cstat-no" title="statement not covered" >sm.latestObservationTime)</span>;</span>
     const values = <span class="cstat-no" title="statement not covered" >filteredSummaries?.map(<span class="fstat-no" title="function not covered" >(s</span>m) =&gt; {</span>
-      const zone = <span class="cstat-no" title="statement not covered" >sm.plantingZones.find(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt; <span class="cstat-no" title="statement not covered" >pz.plantingZoneId === selectedMortalityZone)</span>;</span>
+      const zone = <span class="cstat-no" title="statement not covered" >sm.plantingZones.find(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt; <span class="cstat-no" title="statement not covered" >pz.plantingZoneId === selectedSurvivalZone)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      return zone?.survivalRate || 0;</span>
     });
 &nbsp;
@@ -574,7 +574,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
         },
       ],
     };
-  }, [observationSummaries, selectedMortalityZone, selectedPlantsPerHaZone]);
+  }, [observationSummaries, selectedPlantsPerHaZone, selectedSurvivalZone]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Card
@@ -649,20 +649,20 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           &lt;Dropdown
             placeholder={strings.SELECT}
             options={zonesOptions}
-            onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setSelectedMortalityZone(Number(newValue))}</span>
-            selectedValue={selectedMortalityZone}
+            onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setSelectedSurvivalZone(Number(newValue))}</span>
+            selectedValue={selectedSurvivalZone}
           /&gt;
         &lt;/Box&gt;
         &lt;Box id='legend-container-mr' sx={{ marginTop: 3 }} /&gt;
         &lt;Box paddingTop={2}&gt;
           &lt;Chart
-            chartId='mortalityChart'
-            chartData={mortalityChartData}
+            chartId='survivalChart'
+            chartData={survivalChartData}
             maxWidth='100%'
             minHeight='100px'
             yLimits={{
               min: 0,
-              max: mortalityChartData.datasets[0]?.values.every(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >(value as number) &lt;= 100)</span> ? 100 : undefined,
+              max: survivalChartData.datasets[0]?.values.every(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >(value as number) &lt;= 100)</span> ? 100 : undefined,
             }}
             type={'line'}
             xAxisType='time'
@@ -682,7 +682,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-27T00:58:31.830Z
+                at 2025-12-27T01:15:13.878Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
