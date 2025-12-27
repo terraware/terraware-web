@@ -1075,19 +1075,12 @@ MONTH_12,Diciembre,dc3ea137
 MORE,Más,58c3e1ca
 MORE_INFO,Más información,50ec3d8a
 MORE_OPTIONS,Más opciones,40289137
-MORTALITY_BREAKDOWN,Desglose de la mortalidad,c40d995a
-MORTALITY_BREAKDOWN_TOOLTIP,El análisis de mortalidad muestra la cantidad de plantas por especie registradas como vivas o muertas en todas las zonas observadas.,df9e877d
 MORTALITY_RATE,Tasa de mortalidad,f1ef57f9
-MORTALITY_RATE_CARD_TITLE,¿Cuál es la tasa de mortalidad de mi planta desde el {0}?,de26b99f
-MORTALITY_RATE_CLARIFICATION,Este es el porcentaje total de sus plantaciones que han muerto en todas las especies y zonas.,e025392b
 MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%),48a2d543
 MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *,cdddfe98
 MORTALITY_RATE_INFO,El índice de mortalidad se basa en el número de plantas que se observaron muertas en las zonas totalmente plantadas.,1d21a7e1
-MORTALITY_RATE_PER_SPECIES,Tasa de mortalidad por especie,e49670ca
 MORTALITY_RATE_PERCENT,Tasa de mortalidad (%),2640a01f
 MORTALITY_RATE_PERCENT_REQUIRED,Tasa de mortalidad (%) *,c7d13833
-MORTALITY_RATE_TOOLTIP,La tasa de mortandad se basa en la cantidad de plantas que se ven muertas en todas las zonas observadas.,4173239f
-MORTALITY_RATE_TREND_TOOLTIP,"La ""Tendencia de la tasa de mortalidad"" representa los porcentajes de plantas que se registraron como muertas en parcelas permanentes a lo largo de todas las observaciones.",73559f3f
 MOSS,Musgo,5b67a19f
 MOST_RECENT_OBSERVATION,Observación más reciente,a614018e
 MOVE,Mover,abe6be41
@@ -1138,7 +1131,6 @@ NO_INVENTORY_DESCRIPTION,Parece que aún no ha añadido inventario. Puede import
 NO_LINK_ADDED,Sin enlace agregado,14e4907f
 NO_LOCATION_FOUND,Ubicación no encontrada,8b4b8dab
 NO_MAP_DATA,No hay datos cartográficos que mostrar para este sitio de plantación.,1c2d3fa2
-NO_MORTALITY_RATE_WARNING,Los datos de esta observación son insuficientes para calcular las tasas de mortalidad. Las tasas de mortalidad se basan en las observaciones que incluyen las parcelas permanentes.,357160ae
 NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
@@ -1863,9 +1855,7 @@ SHRUB,Arbusto,af50871c
 SHRUBS,Arbustos,377018f6
 SILVOPASTURE,Sistema selvopastoril,9d942e38
 SIMPLE_SITE,Terreno sencillo,760ab731
-SINGLE_SPECIES_MORTALITY_RATE_MESSAGE,"Ahora mismo sólo tiene 1 especie con tasa de mortalidad. Cuando haya más, aparecerá la especie con la tasa de mortalidad más baja.",7a03186c
 SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE,"Actualmente solo hay una especie con una tasa de supervivencia. Cuando haya más especies con una tasa de supervivencia, se mostrará la especie con la tasa de supervivencia más baja.",c4ff6454
-SINGLE_ZONE_MORTALITY_RATE_MESSAGE,"En este momento sólo tiene 1 zona con tasa de mortalidad. Cuando haya más, aparecerá la zona con la tasa de mortalidad más baja.",d60bd477
 SINGLE_ZONE_SURVIVAL_RATE_MESSAGE,"El sitio tiene solo una zona con una tasa de supervivencia. Cuando un sitio tenga más de una zona con una tasa de supervivencia, se mostrará la zona con la tasa de supervivencia más baja.",d9ac1a26
 SITE,Sitio,925ca15b
 SITE_BOUNDARY,Límite del sitio,ee9dc83f
@@ -1948,8 +1938,6 @@ SPECIES_LIST_DELIVERABLE_ADD_SPECIES_RECENT_DELIVERABLE_INFO,Añadir esta especi
 SPECIES_LIST_NO_ORGANIZATION_SPECIES_BODY,"Diríjase a ""Especies"" y agregue especies a su organización con el fin de seleccionarlas para este proyecto. Encontrará más instrucciones detalladas en nuestra [Base de conocimientos].",b3033148
 SPECIES_LIST_NO_ORGANIZATION_SPECIES_TITLE,Sin especies para la organización,8fc21ed9
 SPECIES_MATCHED,Especies coincidentes,429dfb05
-SPECIES_MORTALITY,Mortalidad por especies,dcb7fa5b
-SPECIES_MORTALITY_TOOLTIP,"La ""Mortalidad por especie"" indica las especies con las tasas de mortalidad más altas y más bajas de las zonas observadas.",7a719486
 SPECIES_NAME,Nombre de la especie,26123a34
 SPECIES_NOT_ACCEPTED,Especies no aceptadas,5383ef6c
 SPECIES_OBSERVED,Especies observadas,1759de27
@@ -2428,8 +2416,6 @@ ZERO,Cero,16bd92ef
 ZONE,Zona,17bc60dc
 ZONE_BOUNDARIES,Límites de la zona,15e88feb
 ZONE_GEOMETRY_CHANGED,La geometría para {0} cambió el {1},9eec74cc
-ZONE_MORTALITY,Mortalidad por zonas,56e56acb
-ZONE_MORTALITY_TOOLTIP,"La ""Mortalidad por zona"" indica las zonas con las tasas de mortalidad más altas y más bajas de las zonas observadas.",80d7ce42
 ZONE_NAME_IN_USE,El nombre de la zona ya está en uso.,d75e052d
 ZONE_NAME_MAXIMUM_LENGTH,El nombre de la zona debe tener 15 caracteres o menos.,73baca0a
 ZONE_REQUIRED,Zona *,548cc1ed
