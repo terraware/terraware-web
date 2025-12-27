@@ -45,9 +45,9 @@ export type CreateDraftPlantingSiteRequestPayload = {
   };
   description?: string;
   name: string;
-  /** If the user has started defining planting subzones, the number of subzones defined so far. */
+  /** If the user has started defining substrata, the number of substrata defined so far. */
   numPlantingSubzones?: number;
-  /** If the user has started defining planting zones, the number of zones defined so far. */
+  /** If the user has started defining strata, the number of strata defined so far. */
   numPlantingZones?: number;
   organizationId: number;
   /** If the draft is associated with a project, its ID. */
@@ -70,9 +70,9 @@ export type DraftPlantingSitePayload = {
   id: number;
   modifiedTime: string;
   name: string;
-  /** If the user has started defining planting subzones, the number of subzones defined so far. */
+  /** If the user has started defining substrata, the number of substrata defined so far. */
   numPlantingSubzones?: number;
-  /** If the user has started defining planting zones, the number of zones defined so far. */
+  /** If the user has started defining strata, the number of strata defined so far. */
   numPlantingZones?: number;
   organizationId: number;
   /** If the draft is associated with a project, its ID. */
@@ -91,9 +91,9 @@ export type UpdateDraftPlantingSiteRequestPayload = {
   };
   description?: string;
   name: string;
-  /** If the user has started defining planting subzones, the number of subzones defined so far. */
+  /** If the user has started defining substrata, the number of substrata defined so far. */
   numPlantingSubzones?: number;
-  /** If the user has started defining planting zones, the number of zones defined so far. */
+  /** If the user has started defining strata, the number of strata defined so far. */
   numPlantingZones?: number;
   /** If the draft is associated with a project, its ID. */
   projectId?: number;

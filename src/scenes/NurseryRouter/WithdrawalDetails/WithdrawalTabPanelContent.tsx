@@ -14,7 +14,7 @@ import Photos from './sections/Photos';
 
 type WithdrawalTabPanelContentProps = {
   species: Species[];
-  plantingSubzoneNames: Record<number, string>;
+  substratumNames: Record<number, string>;
   withdrawal?: NurseryWithdrawal;
   withdrawalSummary?: WithdrawalSummary;
   delivery?: Delivery;
@@ -23,7 +23,7 @@ type WithdrawalTabPanelContentProps = {
 
 export default function WithdrawalTabPanelContent({
   species,
-  plantingSubzoneNames,
+  substratumNames,
   withdrawal,
   withdrawalSummary,
   delivery,
@@ -40,7 +40,7 @@ export default function WithdrawalTabPanelContent({
       <Box marginTop={theme.spacing(3)}>
         <OutplantWithdrawalTable
           species={species}
-          subzoneNames={plantingSubzoneNames}
+          subzoneNames={substratumNames}
           delivery={delivery}
           batches={batches}
           withdrawal={withdrawal}
