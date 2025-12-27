@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766778441688" clover="3.2.0">
-  <project timestamp="1766778441688" name="All files">
-    <metrics statements="36231" coveredstatements="1338" conditionals="25355" coveredconditionals="393" methods="11220" coveredmethods="213" elements="72806" coveredelements="1944" complexity="0" loc="36231" ncloc="36231" packages="286" files="1421" classes="1421"/>
+<coverage generated="1766796093709" clover="3.2.0">
+  <project timestamp="1766796093709" name="All files">
+    <metrics statements="36229" coveredstatements="1338" conditionals="25355" coveredconditionals="393" methods="11220" coveredmethods="213" elements="72804" coveredelements="1944" complexity="0" loc="36229" ncloc="36229" packages="286" files="1421" classes="1421"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -34081,7 +34081,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter.components">
-      <metrics statements="915" coveredstatements="0" conditionals="578" coveredconditionals="0" methods="280" coveredmethods="0"/>
+      <metrics statements="913" coveredstatements="0" conditionals="578" coveredconditionals="0" methods="280" coveredmethods="0"/>
       <file name="HighestAndLowestSurvivalRateSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/HighestAndLowestSurvivalRateSpeciesCard.tsx">
         <metrics statements="29" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
@@ -34465,7 +34465,7 @@
         <line num="267" count="0" type="stmt"/>
       </file>
       <file name="PlantDashboardMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantDashboardMap.tsx">
-        <metrics statements="202" coveredstatements="0" conditionals="56" coveredconditionals="0" methods="66" coveredmethods="0"/>
+        <metrics statements="200" coveredstatements="0" conditionals="56" coveredconditionals="0" methods="66" coveredmethods="0"/>
         <line num="68" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
@@ -34598,76 +34598,74 @@
         <line num="431" count="0" type="stmt"/>
         <line num="432" count="0" type="stmt"/>
         <line num="433" count="0" type="stmt"/>
-        <line num="434" count="0" type="stmt"/>
-        <line num="435" count="0" type="stmt"/>
-        <line num="437" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="438" count="0" type="stmt"/>
-        <line num="445" count="0" type="stmt"/>
-        <line num="446" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="435" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="436" count="0" type="stmt"/>
+        <line num="443" count="0" type="stmt"/>
+        <line num="444" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="445" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="446" count="0" type="stmt"/>
         <line num="447" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="448" count="0" type="stmt"/>
-        <line num="449" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="450" count="0" type="stmt"/>
-        <line num="452" count="0" type="stmt"/>
-        <line num="457" count="0" type="stmt"/>
+        <line num="455" count="0" type="stmt"/>
+        <line num="456" count="0" type="stmt"/>
         <line num="458" count="0" type="stmt"/>
+        <line num="459" count="0" type="stmt"/>
         <line num="460" count="0" type="stmt"/>
-        <line num="461" count="0" type="stmt"/>
         <line num="462" count="0" type="stmt"/>
+        <line num="463" count="0" type="stmt"/>
         <line num="464" count="0" type="stmt"/>
-        <line num="465" count="0" type="stmt"/>
-        <line num="466" count="0" type="stmt"/>
-        <line num="470" count="0" type="stmt"/>
+        <line num="468" count="0" type="stmt"/>
+        <line num="475" count="0" type="stmt"/>
+        <line num="476" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="477" count="0" type="stmt"/>
-        <line num="478" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="479" count="0" type="stmt"/>
+        <line num="480" count="0" type="stmt"/>
         <line num="481" count="0" type="stmt"/>
         <line num="482" count="0" type="stmt"/>
-        <line num="483" count="0" type="stmt"/>
-        <line num="484" count="0" type="stmt"/>
-        <line num="488" count="0" type="stmt"/>
-        <line num="489" count="0" type="stmt"/>
-        <line num="491" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="492" count="0" type="stmt"/>
+        <line num="486" count="0" type="stmt"/>
+        <line num="487" count="0" type="stmt"/>
+        <line num="489" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="490" count="0" type="stmt"/>
+        <line num="493" count="0" type="stmt"/>
+        <line num="494" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="495" count="0" type="stmt"/>
-        <line num="496" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="497" count="0" type="stmt"/>
-        <line num="498" count="0" type="stmt"/>
+        <line num="496" count="0" type="stmt"/>
+        <line num="500" count="0" type="stmt"/>
+        <line num="501" count="0" type="stmt"/>
         <line num="502" count="0" type="stmt"/>
-        <line num="503" count="0" type="stmt"/>
         <line num="504" count="0" type="stmt"/>
+        <line num="505" count="0" type="stmt"/>
         <line num="506" count="0" type="stmt"/>
         <line num="507" count="0" type="stmt"/>
         <line num="508" count="0" type="stmt"/>
         <line num="509" count="0" type="stmt"/>
-        <line num="510" count="0" type="stmt"/>
-        <line num="511" count="0" type="stmt"/>
-        <line num="516" count="0" type="stmt"/>
-        <line num="519" count="0" type="stmt"/>
-        <line num="520" count="0" type="stmt"/>
+        <line num="514" count="0" type="stmt"/>
+        <line num="517" count="0" type="stmt"/>
+        <line num="518" count="0" type="stmt"/>
+        <line num="525" count="0" type="stmt"/>
+        <line num="526" count="0" type="stmt"/>
         <line num="527" count="0" type="stmt"/>
         <line num="528" count="0" type="stmt"/>
         <line num="529" count="0" type="stmt"/>
-        <line num="530" count="0" type="stmt"/>
         <line num="531" count="0" type="stmt"/>
-        <line num="533" count="0" type="stmt"/>
-        <line num="534" count="0" type="stmt"/>
-        <line num="585" count="0" type="stmt"/>
-        <line num="586" count="0" type="stmt"/>
-        <line num="664" count="0" type="stmt"/>
-        <line num="665" count="0" type="stmt"/>
-        <line num="798" count="0" type="stmt"/>
-        <line num="799" count="0" type="stmt"/>
-        <line num="801" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="802" count="0" type="stmt"/>
-        <line num="806" count="0" type="stmt"/>
+        <line num="532" count="0" type="stmt"/>
+        <line num="583" count="0" type="stmt"/>
+        <line num="584" count="0" type="stmt"/>
+        <line num="662" count="0" type="stmt"/>
+        <line num="663" count="0" type="stmt"/>
+        <line num="796" count="0" type="stmt"/>
+        <line num="797" count="0" type="stmt"/>
+        <line num="799" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="800" count="0" type="stmt"/>
+        <line num="804" count="0" type="stmt"/>
+        <line num="810" count="0" type="stmt"/>
+        <line num="811" count="0" type="stmt"/>
         <line num="812" count="0" type="stmt"/>
-        <line num="813" count="0" type="stmt"/>
         <line num="814" count="0" type="stmt"/>
-        <line num="816" count="0" type="stmt"/>
-        <line num="820" count="0" type="stmt"/>
-        <line num="824" count="0" type="stmt"/>
-        <line num="827" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="818" count="0" type="stmt"/>
+        <line num="822" count="0" type="stmt"/>
+        <line num="825" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="PlantingDensityCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantingDensityCard.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="1" coveredmethods="0"/>
