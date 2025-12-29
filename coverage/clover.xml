@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766801063698" clover="3.2.0">
-  <project timestamp="1766801063698" name="All files">
-    <metrics statements="36223" coveredstatements="1338" conditionals="25336" coveredconditionals="393" methods="11220" coveredmethods="213" elements="72779" coveredelements="1944" complexity="0" loc="36223" ncloc="36223" packages="286" files="1421" classes="1421"/>
+<coverage generated="1767033478315" clover="3.2.0">
+  <project timestamp="1767033478315" name="All files">
+    <metrics statements="36223" coveredstatements="1338" conditionals="25330" coveredconditionals="393" methods="11220" coveredmethods="213" elements="72773" coveredelements="1944" complexity="0" loc="36223" ncloc="36223" packages="286" files="1421" classes="1421"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8724,7 +8724,7 @@
       </file>
     </package>
     <package name="src.components.SeedFundReports.LocationSelection">
-      <metrics statements="169" coveredstatements="0" conditionals="278" coveredconditionals="0" methods="61" coveredmethods="0"/>
+      <metrics statements="169" coveredstatements="0" conditionals="272" coveredconditionals="0" methods="61" coveredmethods="0"/>
       <file name="InfoField.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SeedFundReports/LocationSelection/InfoField.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -8742,7 +8742,7 @@
         <line num="29" count="0" type="stmt"/>
       </file>
       <file name="PlantingSite.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SeedFundReports/LocationSelection/PlantingSite.tsx">
-        <metrics statements="82" coveredstatements="0" conditionals="86" coveredconditionals="0" methods="34" coveredmethods="0"/>
+        <metrics statements="82" coveredstatements="0" conditionals="80" coveredconditionals="0" methods="34" coveredmethods="0"/>
         <line num="29" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
@@ -8823,8 +8823,8 @@
         <line num="223" count="0" type="stmt"/>
         <line num="241" count="0" type="stmt"/>
         <line num="258" count="0" type="stmt"/>
-        <line num="282" count="0" type="stmt"/>
-        <line num="302" count="0" type="stmt"/>
+        <line num="276" count="0" type="stmt"/>
+        <line num="296" count="0" type="stmt"/>
       </file>
       <file name="PlantingSitesSpeciesCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SeedFundReports/LocationSelection/PlantingSitesSpeciesCellRenderer.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="6" coveredmethods="0"/>
