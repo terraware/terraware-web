@@ -1,3 +1,6 @@
+8a81903f9f5 SW-7890 Remove focus style for events button (#4961)
+b73d5a9d58c SW-7897 Video files uploaded to Observations are downloaded as .jpeg files (#4960)
+e457dbea81c SW-7896 Tidy up cache-control headers for HTML resources (#4963)
 beba5c7bcf3 SW-7808 Remove default mortality rate from reports (#4967)
 2cdca5da29c SW-7808 Remove remaining mortality rate references (#4959)
 cda14323887 SW-7808 Remove mortality rate table cell rendering (#4958)
