@@ -6,7 +6,6 @@ import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import { MapLayer, MapNameTag, MapPoint } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
-import useObservationEventsMapLegend from 'src/components/NewMap/useObservationEventsMapLegend';
 import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLegend';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
@@ -29,7 +28,6 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
   const { plantMakersLegendGroup } = usePlantMarkersMapLegend(plantingSiteId === undefined);
-  const { observationEventsLegendGroup } = useObservationEventsMapLegend(plantingSiteId === undefined);
   const { plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
   const { survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
 
@@ -203,21 +201,8 @@ const ObservationMap = ({ plantingSiteId, selectPlantingSiteId }: ObservationMap
           }
         : plantingSiteLegendGroup;
 
-    return [
-      siteLegendGroup,
-      plotPhotosLegendGroup,
-      plantMakersLegendGroup,
-      observationEventsLegendGroup,
-      survivalRateLegendGroup,
-    ];
-  }, [
-    plantingSiteId,
-    plantingSiteLegendGroup,
-    plotPhotosLegendGroup,
-    plantMakersLegendGroup,
-    observationEventsLegendGroup,
-    survivalRateLegendGroup,
-  ]);
+    return [siteLegendGroup, plotPhotosLegendGroup, plantMakersLegendGroup, survivalRateLegendGroup];
+  }, [plantingSiteId, plantingSiteLegendGroup, plotPhotosLegendGroup, plantMakersLegendGroup, survivalRateLegendGroup]);
 
   return (
     <MapComponent
