@@ -36,7 +36,7 @@
     "playwright:run": "yarn run playwright test playwright/e2e",
     "playwright:debug": "yarn run playwright test playwright/e2e --debug",
     "playwright:demo": "SLOW_MO=750 TIMEOUT=600000 yarn run playwright test playwright/e2e --headed",
-    "test:e2e": "NODE_OPTIONS=--max-old-space-size=16384 REACT_APP_TERRAWARE_TIER=test start-server-and-test start http://127.0.0.1:3000 playwright:run",
+    "test:e2e": "NODE_OPTIONS=--max-old-space-size=16384 start-server-and-test docker:start:prod http://127.0.0.1:3001 playwright:run",
     "dump:local": "./scripts/dump.sh local",
     "dump:docker": "./scripts/dump.sh docker",
     "postinstall": "patch-package",

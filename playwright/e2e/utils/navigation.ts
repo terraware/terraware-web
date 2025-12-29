@@ -1,9 +1,10 @@
 import type { Page } from 'playwright-core';
 
+import { TERRAWARE_WEB_URL } from '../constants';
 import { waitFor } from './utils';
 
 export const navigateToProjectProfile = async (projectDealName: string, page: Page) => {
-  await page.goto('http://127.0.0.1:3000');
+  await page.goto(TERRAWARE_WEB_URL);
   await waitFor(page, '#acceleratorConsoleButton');
   await page.getByRole('link', { name: 'Accelerator Console' }).click();
   await page.waitForTimeout(1000);
@@ -11,7 +12,7 @@ export const navigateToProjectProfile = async (projectDealName: string, page: Pa
 };
 
 export const navigateToFundingEntities = async (page: Page) => {
-  await page.goto('http://127.0.0.1:3000');
+  await page.goto(TERRAWARE_WEB_URL);
   await waitFor(page, '#acceleratorConsoleButton');
   await page.getByRole('link', { name: 'Accelerator Console' }).click();
   await page.getByRole('button', { name: 'Funding Entities' }).click();

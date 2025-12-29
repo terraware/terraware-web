@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 
+import { TERRAWARE_WEB_URL } from '../constants';
 import { ProjectDetails, publishProjectProfile, validateProjectProfilePage } from '../utils/projectProfile';
 import { changeToFunderUser, changeToSuperAdmin } from '../utils/userUtils';
 
@@ -11,7 +12,7 @@ test.describe('FunderProjectProfileTests', () => {
 
     // view published project
     await changeToFunderUser(context);
-    await page.goto('http://127.0.0.1:3000');
+    await page.goto(TERRAWARE_WEB_URL);
     await page.getByRole('tab', { name: 'Project Profile' }).click();
 
     const projectDetails: ProjectDetails = {
