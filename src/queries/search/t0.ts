@@ -11,9 +11,9 @@ const injectedRtkApi = api.injectEndpoints({
           fields: [
             'id',
             'name',
-            'plantingSubzone_name',
-            'plantingSubzone_plantingZone_name',
-            'plantingSubzone_plantingZone_id',
+            'substratum_name',
+            'substratum_stratum_name',
+            'substratum_stratum_id',
             'observationPlots.observation_id',
             'observationPlots.observation_startDate',
             'observationPlots.observation_completedTime',
@@ -33,7 +33,7 @@ const injectedRtkApi = api.injectEndpoints({
                 operation: 'not',
                 child: {
                   operation: 'field',
-                  field: 'plantingSubzone_id',
+                  field: 'substratum_id',
                   type: 'Exact',
                   values: [null],
                 },
@@ -69,9 +69,9 @@ const injectedRtkApi = api.injectEndpoints({
 type PlotsWithObservationsApiResult = {
   id: string;
   name: string;
-  plantingSubzone_name: string;
-  plantingSubzone_plantingZone_name: string;
-  plantingSubzone_plantingZone_id: string;
+  substratum_name: string;
+  substratum_stratum_name: string;
+  substratum_stratum_id: string;
   observationPlots: PlotT0Observation[];
   permanentIndex?: string;
 };
@@ -90,9 +90,9 @@ export type PlotT0Observation = {
 export type PlotsWithObservations = {
   id: number;
   name: string;
-  plantingSubzone_name: string;
-  plantingSubzone_plantingZone_name: string;
-  plantingSubzone_plantingZone_id: string;
+  substratum_name: string;
+  substratum_stratum_name: string;
+  substratum_stratum_id: string;
   observationPlots: PlotT0Observation[];
   permanentIndex?: string;
 };

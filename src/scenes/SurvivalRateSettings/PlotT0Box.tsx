@@ -59,13 +59,13 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                 <Typography fontWeight={600} paddingRight={0.5}>
                   {strings.ZONE}
                 </Typography>
-                <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
+                <Typography>{plot.substratum_stratum_name}</Typography>
               </Box>
               <Box display='flex'>
                 <Typography fontWeight={600} paddingRight={0.5}>
                   {strings.SUBZONE}
                 </Typography>
-                <Typography>{plot.plantingSubzone_name}</Typography>
+                <Typography>{plot.substratum_name}</Typography>
               </Box>
             </Box>
           </Box>
@@ -164,13 +164,13 @@ const PlotT0Box = ({ plot, plantingSiteId, t0Plot, withdrawnSpeciesPlot }: PlotT
                 <Typography fontWeight={600} paddingRight={0.5}>
                   {strings.ZONE}
                 </Typography>
-                <Typography>{plot.plantingSubzone_plantingZone_name}</Typography>
+                <Typography>{plot.substratum_stratum_name}</Typography>
               </Box>
               <Box display='flex'>
                 <Typography fontWeight={600} paddingRight={0.5}>
                   {strings.SUBZONE}
                 </Typography>
-                <Typography>{plot.plantingSubzone_name}</Typography>
+                <Typography>{plot.substratum_name}</Typography>
               </Box>
             </Box>
           </Box>

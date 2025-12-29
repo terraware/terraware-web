@@ -86,7 +86,7 @@ const EditTemporaryPlotsTab = ({
     }
     return temporaryPlotsWithObservations.reduce(
       (acc, plot) => {
-        const zoneId = plot.plantingSubzone_plantingZone_id;
+        const zoneId = plot.substratum_stratum_id;
         if (!zoneId) {
           return acc;
         }
