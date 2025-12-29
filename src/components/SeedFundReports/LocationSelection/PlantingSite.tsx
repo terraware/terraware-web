@@ -131,7 +131,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [latestResult]);
 
   const deadPlants = useMemo(() => {
-    return latestResult?.species.reduce((acc, sp) => (acc = acc + sp.cumulativeDead), 0);
+    return latestResult?.species.reduce((acc, sp) => (acc = acc + sp.totalDead), 0);
   }, [latestResult]);
 
   const numberOfPlots = useMemo(() => {
@@ -269,13 +269,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         <InfoField
           id={`${location.id}-mortality-rate`}
           label={strings.MORTALITY_RATE_PERCENT_REQUIRED}
-          value={
-            editable
-              ? (location as ReportPlantingSite).mortalityRate ?? ''
-              : (location as ReportPlantingSite).mortalityRate
-                ? `${(location as ReportPlantingSite).mortalityRate}%`
-                : ''
-          }
+          value=''
           minNum={0}
           maxNum={100}
           editable={editable}
@@ -373,8 +367,8 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           <Grid item xs={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
-              title={strings.MORTALITY_RATE_PERCENT}
-              contents={latestResult.mortalityRate}
+              title={strings.SURVIVAL_RATE}
+              contents={latestResult.survivalRate}
               sx={infoCardStyles}
             />
           </Grid>
