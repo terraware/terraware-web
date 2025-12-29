@@ -16,7 +16,7 @@ const injectedRtkApi = api.injectEndpoints({
             'delivery_withdrawal_id',
             'numPlants(raw)',
             'plantingSite_id',
-            'plantingSubzone_id',
+            'substratum_id',
             'species.id',
             'species.scientificName',
             'species.rare',
@@ -39,7 +39,7 @@ const injectedRtkApi = api.injectEndpoints({
           deliveryId: Number(result.delivery_id),
           numPlants: Number(result['numPlants(raw)']),
           plantingSiteId: Number(result.plantingSite_id),
-          plantingSubzoneId: Number(result.plantingSubzone_id),
+          plantingSubzoneId: Number(result.substratum_id),
           type: result.type,
           species: result.species.map((speciesResult) => ({
             conservationCategory: speciesResult.conservationCategory,
@@ -60,7 +60,7 @@ type PlantingsApiResult = {
   delivery_withdrawal_id: string;
   'numPlants(raw)': string;
   plantingSite_id: string;
-  plantingSubzone_id: string;
+  substratum_id: string;
   type: string;
   species: {
     id: string;

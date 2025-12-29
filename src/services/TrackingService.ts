@@ -270,7 +270,7 @@ async function searchMonitoringPlots(
       operation: 'and',
       children: [
         {
-          field: 'plantingSubzone_plantingSite_id',
+          field: 'substratum_plantingSite_id',
           operation: 'field',
           values: [plantingSiteId],
         },
