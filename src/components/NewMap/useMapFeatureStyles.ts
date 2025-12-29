@@ -45,6 +45,36 @@ const useMapFeatureStyles = () => {
     [theme]
   );
 
+  const permanentPlotsLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBasePink300,
+      fillColor: theme.palette.TwClrBasePink300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
+  const temporaryPlotsLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBaseYellow300,
+      fillColor: theme.palette.TwClrBaseYellow300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
+  const adHocPlotsLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBaseOrange300,
+      fillColor: theme.palette.TwClrBaseOrange300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
   const plotPhotoStyle = useMemo(
     (): MapIconComponentStyle => ({
       iconColor: '#CC79A7',
@@ -100,15 +130,18 @@ const useMapFeatureStyles = () => {
   );
 
   return {
+    adHocPlotsLayerStyle,
     deadPlantStyle,
     livePlantStyle,
     observationEventStyle,
+    permanentPlotsLayerStyle,
     plotPhotoStyle,
     sitesLayerStyle,
     subzonesLayerStyle,
     survivalRateLessThan50,
     survivalRate50To75,
     survivalRateMoreThan75,
+    temporaryPlotsLayerStyle,
     zonesLayerStyle,
   };
 };

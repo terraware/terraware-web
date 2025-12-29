@@ -92,11 +92,14 @@ const ObservationListView = (): JSX.Element => {
     viewIdentifier: 'observations',
   });
 
+  const isBiomass = useMemo(() => activeTab === 'biomassMeasurements', [activeTab]);
+
   return (
     <Page title={strings.OBSERVATIONS} leftComponent={PageHeaderPlantingSiteDropdown}>
       <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
           <ObservationMap
+            isBiomass={isBiomass}
             plantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
             selectPlantingSiteId={selectPlantingSite}
           />
