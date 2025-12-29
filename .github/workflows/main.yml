@@ -96,16 +96,6 @@ jobs:
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
           TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
-      - name: build
-        run: yarn build
-        env:
-          REACT_APP_TERRAWARE_API: ''
-          REACT_APP_TERRAWARE_TIER: ${{ env.LOWER_TIER }}
-          REACT_APP_DATADOG_APP_ID: ${{ secrets.DATADOG_APP_ID }}
-          REACT_APP_DATADOG_CLIENT_TOKEN: ${{ secrets.DATADOG_CLIENT_TOKEN }}
-          REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
-          REACT_APP_MIXPANEL_TOKEN: ${{ secrets[env.MIXPANEL_SECRET_NAME] }}
-
       - name: Install Playwright Browsers
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') && steps.playwright-cache.outputs.cache-hit != 'true'
         run: yarn playwright install --with-deps chromium-headless-shell
@@ -113,6 +103,7 @@ jobs:
       - name: Run end-to-end playwright tests
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
         uses: nick-fields/retry@v3
+        needs: build
         with:
           timeout_minutes: 20
           max_attempts: 2
@@ -139,6 +130,16 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+
+      - name: build
+        run: yarn build
+        env:
+          REACT_APP_TERRAWARE_API: ''
+          REACT_APP_TERRAWARE_TIER: ${{ env.LOWER_TIER }}
+          REACT_APP_DATADOG_APP_ID: ${{ secrets.DATADOG_APP_ID }}
+          REACT_APP_DATADOG_CLIENT_TOKEN: ${{ secrets.DATADOG_CLIENT_TOKEN }}
+          REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
+          REACT_APP_MIXPANEL_TOKEN: ${{ secrets[env.MIXPANEL_SECRET_NAME] }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
