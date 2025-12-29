@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon, IconTooltip } from '@terraware/web-components';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
@@ -60,6 +60,7 @@ const ObservationDataTab = ({
   const [update] = useUpdateCompletedObservationPlotMutation();
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
 
   const [record, setRecord] = useForm(monitoringPlot);
 
@@ -177,44 +178,46 @@ const ObservationDataTab = ({
         />
       )}
       <ObservationDataNumbers items={items} isCompleted={!!monitoringPlot.completedTime} />
-      {species && (
-        <Box>
-          <Box display='flex' alignContent={'center'}>
-            <Typography fontSize={'20px'} fontWeight={600}>
-              {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
-            </Typography>
-            <IconTooltip
-              title={
-                type === 'adHoc'
-                  ? strings.AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
-                  : strings.ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
-              }
-            />
-          </Box>
+      <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap'>
+        {species && (
+          <Box flex={1} minWidth='500px'>
+            <Box display='flex' alignContent={'center'}>
+              <Typography fontSize={'20px'} fontWeight={600}>
+                {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+              </Typography>
+              <IconTooltip
+                title={
+                  type === 'adHoc'
+                    ? strings.AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
+                    : strings.ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP
+                }
+              />
+            </Box>
 
-          <Box height='360px'>
-            <SpeciesTotalPlantsChart minHeight='360px' species={species} />
+            <Box height='245px'>
+              <SpeciesTotalPlantsChart minHeight='245px' species={species} />
+            </Box>
           </Box>
-        </Box>
-      )}
+        )}
 
-      {monitoringPlot?.isPermanent && (
-        <Box>
-          <Box display='flex' alignItems={'center'}>
-            <Typography fontSize={'20px'} fontWeight={600}>
-              {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
-            </Typography>
-            <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
+        {monitoringPlot?.isPermanent && (
+          <Box flex={1} minWidth='500px'>
+            <Box display='flex' alignItems={'center'}>
+              <Typography fontSize={'20px'} fontWeight={600}>
+                {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}
+              </Typography>
+              <IconTooltip title={strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION_TOOLTIP} />
+            </Box>
+            <Box height='245px'>
+              <SpeciesSurvivalRateChart
+                minHeight='245px'
+                species={species}
+                isCompleted={!!monitoringPlot.completedTime}
+              />
+            </Box>
           </Box>
-          <Box height='360px'>
-            <SpeciesSurvivalRateChart
-              minHeight='360px'
-              species={species}
-              isCompleted={!!monitoringPlot.completedTime}
-            />
-          </Box>
-        </Box>
-      )}
+        )}
+      </Box>
       {type === 'adHoc' && onExportData && onMatchSpecies && (
         <PlotActions
           unrecognizedSpecies={unrecognizedSpecies}
