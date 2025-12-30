@@ -1,1 +1,1 @@
-export const TERRAWARE_WEB_URL: string = 'http://localhost:3000';
+export const TERRAWARE_WEB_URL: string = 'http://localhost:3001';

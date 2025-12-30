@@ -14,7 +14,9 @@ elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
   export TIER=STAGING
   APP_VERSION=x$APP_VERSION
 else
-  echo "IS_CD=false" >> $GITHUB_ENV
+  echo "
+IS_CD=false
+APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
   exit
 fi
 
