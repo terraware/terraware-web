@@ -79,7 +79,7 @@ const ZoneT0EditBox = ({
   const zoneTotalDensity = useMemo(() => {
     const editingZoneId = plotsWithObservations?.length ? plotsWithObservations[0].substratum_stratum_id : null;
     if (editingZoneId) {
-      const selectedZone = record.zones.find((z) => z.plantingZoneId.toString() === editingZoneId.toString());
+      const selectedZone = (record.zones || []).find((z) => z.plantingZoneId.toString() === editingZoneId.toString());
       const total =
         selectedZone?.densityData.reduce((sum, density) => {
           return isNaN(density.density) ? sum : sum + density.density;
@@ -94,7 +94,7 @@ const ZoneT0EditBox = ({
       return { plantingZoneId: 0, densityData: [] };
     }
 
-    const existingZone = record.zones.find(
+    const existingZone = (record.zones || []).find(
       (zone) => plotsWithObservations?.[0].substratum_stratum_id === zone.plantingZoneId.toString()
     );
     if (existingZone) {
@@ -148,7 +148,7 @@ const ZoneT0EditBox = ({
         }
 
         // Remove the existing zone, then add the updated one
-        const otherZones = record.zones.filter(
+        const otherZones = (record.zones || []).filter(
           (z) => z.plantingZoneId.toString() !== plotsWithObservations?.[0].substratum_stratum_id.toString()
         );
         setRecord({ ...record, zones: otherZones ? [...otherZones, zoneCopy] : [zoneCopy] });
