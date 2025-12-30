@@ -98,5 +98,5 @@ export type PlotT0Data = components['schemas']['PlotT0DataPayload'];
 export type SiteT0Data = components['schemas']['SiteT0DataResponsePayload'];
 export type AssignSiteT0Data = components['schemas']['AssignSiteT0DataRequestPayload'];
 export type AssignSiteT0TempData = components['schemas']['AssignSiteT0TempDataRequestPayload'];
-export type ZoneT0Data = components['schemas']['ZoneT0DataPayload'];
+export type StratumT0Data = components['schemas']['StratumT0DataPayload'];
 export type SpeciesPlot = components['schemas']['PlotSpeciesDensitiesPayload'];

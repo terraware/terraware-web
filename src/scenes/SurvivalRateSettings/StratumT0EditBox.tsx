@@ -9,7 +9,7 @@ import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import { AssignSiteT0TempData, SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
+import { AssignSiteT0TempData, SpeciesPlot, StratumT0Data } from 'src/types/Tracking';
 import { allowOneDecimal, roundToDecimal } from 'src/utils/numbers';
 
 import { AddedSpecies } from './PlotT0EditBox';
@@ -17,7 +17,7 @@ import { AddedSpecies } from './PlotT0EditBox';
 type StratumT0EditBoxProps = {
   plotsWithObservations: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlot?: SpeciesPlot[];
-  zoneData?: ZoneT0Data;
+  zoneData?: StratumT0Data;
   record: AssignSiteT0TempData;
   setRecord: React.Dispatch<React.SetStateAction<AssignSiteT0TempData>>;
 };
@@ -79,7 +79,7 @@ const StratumT0EditBox = ({
   const zoneTotalDensity = useMemo(() => {
     const editingZoneId = plotsWithObservations?.length ? plotsWithObservations[0].substratum_stratum_id : null;
     if (editingZoneId) {
-      const selectedZone = (record.zones || []).find((z) => z.plantingZoneId.toString() === editingZoneId.toString());
+      const selectedZone = (record.strata || []).find((z) => z.stratumId.toString() === editingZoneId.toString());
       const total =
         selectedZone?.densityData.reduce((sum, density) => {
           return isNaN(density.density) ? sum : sum + density.density;
@@ -91,17 +91,17 @@ const StratumT0EditBox = ({
 
   const zoneToSave = useMemo(() => {
     if (!plotsWithObservations?.length) {
-      return { plantingZoneId: 0, densityData: [] };
+      return { stratumId: 0, densityData: [] };
     }
 
-    const existingZone = (record.zones || []).find(
-      (zone) => plotsWithObservations?.[0].substratum_stratum_id === zone.plantingZoneId.toString()
+    const existingZone = (record.strata || []).find(
+      (zone) => plotsWithObservations?.[0].substratum_stratum_id === zone.stratumId.toString()
     );
     if (existingZone) {
       return existingZone;
     }
     return {
-      plantingZoneId: Number(plotsWithObservations?.[0].substratum_stratum_id),
+      stratumId: Number(plotsWithObservations?.[0].substratum_stratum_id),
       densityData: [],
     };
   }, [plotsWithObservations, record]);
@@ -112,7 +112,7 @@ const StratumT0EditBox = ({
         const densityDataToUpdate = zoneToSave.densityData.find(
           (densityData) => densityData.speciesId.toString() === id
         );
-        let zoneCopy: ZoneT0Data;
+        let zoneCopy: StratumT0Data;
 
         if (value !== undefined) {
           if (densityDataToUpdate?.plotDensity !== undefined || densityDataToUpdate?.density !== undefined) {
@@ -148,10 +148,10 @@ const StratumT0EditBox = ({
         }
 
         // Remove the existing zone, then add the updated one
-        const otherZones = (record.zones || []).filter(
-          (z) => z.plantingZoneId.toString() !== plotsWithObservations?.[0].substratum_stratum_id.toString()
+        const otherZones = (record.strata || []).filter(
+          (z) => z.stratumId.toString() !== plotsWithObservations?.[0].substratum_stratum_id.toString()
         );
-        setRecord({ ...record, zones: otherZones ? [...otherZones, zoneCopy] : [zoneCopy] });
+        setRecord({ ...record, strata: otherZones ? [...otherZones, zoneCopy] : [zoneCopy] });
       }
     },
     [plotsWithObservations, record, setRecord, zoneToSave]

@@ -7,13 +7,13 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
-import { SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
+import { SpeciesPlot, StratumT0Data } from 'src/types/Tracking';
 import { roundToDecimal } from 'src/utils/numbers';
 
 type StratumT0BoxProps = {
   plotsWithObservations: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlot?: SpeciesPlot[];
-  t0Zone?: ZoneT0Data;
+  t0Zone?: StratumT0Data;
 };
 
 const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: StratumT0BoxProps) => {

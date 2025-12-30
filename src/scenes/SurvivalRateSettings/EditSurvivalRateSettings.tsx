@@ -83,7 +83,7 @@ const EditSurvivalRateSettings = () => {
           <EditTemporaryPlotsTab
             plantingSiteId={plantingSiteId}
             temporaryPlotsWithObservations={temporaryPlots}
-            zones={t0SiteData?.zones}
+            zones={t0SiteData?.strata}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
             alreadyIncluding={t0SiteData?.survivalRateIncludesTempPlots}
           />
