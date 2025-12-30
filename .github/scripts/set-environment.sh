@@ -6,6 +6,9 @@ set -euo pipefail
 commit_sha="${GITHUB_SHA:0:12}"
 APP_VERSION=$commit_sha
 
+# Store app version in build version file
+echo $APP_VERSION > public/build-version.txt
+
 # Define tier based on branch ref
 if [[ "$GITHUB_REF" =~ refs/tags/(v[0-9]+\.[0-9.]+) ]]; then
   export TIER=PROD
@@ -37,6 +40,3 @@ LOWER_TIER=$(echo $TIER | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 echo "AWS_REGION_SECRET_NAME=${TIER}_AWS_REGION
 AWS_ROLE_SECRET_NAME=${TIER}_AWS_ROLE
 MIXPANEL_SECRET_NAME=MIXPANEL_${TIER}_TOKEN" >> $GITHUB_ENV
-
-# Store app version in build version file
-echo $APP_VERSION > public/build-version.txt
