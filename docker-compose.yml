@@ -42,7 +42,7 @@ services:
     ports:
       - '3001:80'
     environment:
-      - 'SERVER_URL=http://terraware-server:8080'
+      - 'SERVER_URL=${SERVER_URL:-http://terraware-server:8080}'
     depends_on:
       - 'terraware-server'
     # Only launch nginx listening on http://localhost:3001 if
