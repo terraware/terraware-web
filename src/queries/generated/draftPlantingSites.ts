@@ -45,10 +45,14 @@ export type CreateDraftPlantingSiteRequestPayload = {
   };
   description?: string;
   name: string;
-  /** If the user has started defining planting subzones, the number of subzones defined so far. */
+  /** Use numSubstrata instead */
   numPlantingSubzones?: number;
-  /** If the user has started defining planting zones, the number of zones defined so far. */
+  /** Use numStrata instead */
   numPlantingZones?: number;
+  /** If the user has started defining strata, the number of strata defined so far. */
+  numStrata?: number;
+  /** If the user has started defining substrata, the number of substrata defined so far. */
+  numSubstrata?: number;
   organizationId: number;
   /** If the draft is associated with a project, its ID. */
   projectId?: number;
@@ -70,10 +74,14 @@ export type DraftPlantingSitePayload = {
   id: number;
   modifiedTime: string;
   name: string;
-  /** If the user has started defining planting subzones, the number of subzones defined so far. */
+  /** Use numSubstrata instead. */
   numPlantingSubzones?: number;
-  /** If the user has started defining planting zones, the number of zones defined so far. */
+  /** Use numStrata instead. */
   numPlantingZones?: number;
+  /** If the user has started defining strata, the number of strata defined so far. */
+  numStrata?: number;
+  /** If the user has started defining substrata, the number of substrata defined so far. */
+  numSubstrata?: number;
   organizationId: number;
   /** If the draft is associated with a project, its ID. */
   projectId?: number;
@@ -91,10 +99,14 @@ export type UpdateDraftPlantingSiteRequestPayload = {
   };
   description?: string;
   name: string;
-  /** If the user has started defining planting subzones, the number of subzones defined so far. */
+  /** Use numSubstrata instead */
   numPlantingSubzones?: number;
-  /** If the user has started defining planting zones, the number of zones defined so far. */
+  /** Use numStrata instead */
   numPlantingZones?: number;
+  /** If the user has started defining strata, the number of strata defined so far. */
+  numStrata?: number;
+  /** If the user has started defining substrata, the number of substrata defined so far. */
+  numSubstrata?: number;
   /** If the draft is associated with a project, its ID. */
   projectId?: number;
   /** Time zone name in IANA tz database format */
