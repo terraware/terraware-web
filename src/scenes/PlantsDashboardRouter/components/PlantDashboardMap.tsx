@@ -17,8 +17,8 @@ import {
   MapPoint,
 } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
-import useMapPhotoDrawer from 'src/components/NewMap/useMapPhotoDrawer';
-import useMapPlantDrawer from 'src/components/NewMap/useMapPlantDrawer';
+import useMapPhotoDrawer, { PlotPhoto } from 'src/components/NewMap/useMapPhotoDrawer';
+import useMapPlantDrawer, { PlotPlant } from 'src/components/NewMap/useMapPlantDrawer';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import useObservationEventsMapLegend from 'src/components/NewMap/useObservationEventsMapLegend';
 import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLegend';
@@ -39,18 +39,6 @@ import { PlantingSite } from 'src/types/Tracking';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapStatsDrawer from './MapStatsDrawer';
-
-type PlotPhoto = {
-  observationId: number;
-  monitoringPlotId: number;
-  photo: ObservationMonitoringPlotPhotoWithGps;
-};
-
-type PlotPlant = {
-  observationId: number;
-  monitoringPlotId: number;
-  plant: RecordedPlant;
-};
 
 type LayerFeature = {
   plantingSiteId: number;

@@ -43,14 +43,17 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
     }
   }, [result]);
 
+  const monitoringPlot = useMemo(() => {
+    const monitoringPlots =
+      result?.strata.flatMap((stratum) => stratum.substrata).flatMap((substratum) => substratum.monitoringPlots) ?? [];
+    const adHocPlots = result?.adHocPlot ? [result.adHocPlot] : [];
+
+    return [...monitoringPlots, ...adHocPlots].find((plot) => plot.monitoringPlotId === monitoringPlotId);
+  }, [monitoringPlotId, result?.adHocPlot, result?.strata]);
+
   const observer = useMemo(() => {
-    if (result) {
-      return result.strata
-        .flatMap((zone) => zone.substrata)
-        .flatMap((subzone) => subzone.monitoringPlots)
-        .find((plot) => plot.monitoringPlotId === monitoringPlotId)?.claimedByName;
-    }
-  }, [monitoringPlotId, result]);
+    return monitoringPlot?.claimedByName;
+  }, [monitoringPlot?.claimedByName]);
 
   const formatGPS = useCallback(
     (lon: number, lat: number): string => {

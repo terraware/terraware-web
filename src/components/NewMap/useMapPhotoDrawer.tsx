@@ -6,7 +6,7 @@ import { MapDrawerSize } from './MapDrawer';
 import MapDrawerPagination from './MapDrawerPagination';
 import MapPhotoDrawer from './MapPhotoDrawer';
 
-type PlotPhoto = {
+export type PlotPhoto = {
   observationId: number;
   monitoringPlotId: number;
   photo: ObservationMonitoringPlotPhotoWithGps;

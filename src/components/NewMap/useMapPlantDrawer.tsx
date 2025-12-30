@@ -6,7 +6,7 @@ import { MapDrawerSize } from './MapDrawer';
 import MapDrawerPagination from './MapDrawerPagination';
 import MapPlantDrawer from './MapPlantDrawer';
 
-type PlotPlant = {
+export type PlotPlant = {
   observationId: number;
   monitoringPlotId: number;
   plant: RecordedPlant;
