@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -19,10 +19,10 @@ type MapPhotoDrawerProps = {
 };
 
 const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDrawerProps): JSX.Element | undefined => {
-  const { observationResults } = usePlantingSiteData();
   const { activeLocale, strings } = useLocalization();
 
   const { format } = useNumberFormatter(activeLocale);
+  const { data } = useGetObservationResultsQuery({ observationId });
 
   const photoUrl = useMemo(() => {
     return PHOTO_URL.replace(':observationId', `${observationId}`)
@@ -31,8 +31,8 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
   }, [observationId, monitoringPlotId, photo]);
 
   const result = useMemo(() => {
-    return observationResults?.find((_result) => _result.observationId === observationId);
-  }, [observationId, observationResults]);
+    return data?.observation;
+  }, [data?.observation]);
 
   const observationUrl = useMemo(() => {
     if (result) {

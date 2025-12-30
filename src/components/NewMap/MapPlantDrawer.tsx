@@ -6,7 +6,7 @@ import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { RecordedPlant } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -18,16 +18,16 @@ type MapPlantDrawerProps = {
 };
 
 const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDrawerProps): JSX.Element | undefined => {
-  const { observationResults } = usePlantingSiteData();
   const { activeLocale, strings } = useLocalization();
 
   const { format } = useNumberFormatter(activeLocale);
+  const { data } = useGetObservationResultsQuery({ observationId });
 
   const { species } = useSpeciesData();
 
   const result = useMemo(() => {
-    return observationResults?.find((_result) => _result.observationId === observationId);
-  }, [observationId, observationResults]);
+    return data?.observation;
+  }, [data?.observation]);
 
   const observationUrl = useMemo(() => {
     if (result) {
