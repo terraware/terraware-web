@@ -177,13 +177,13 @@ export default function ObservationMapView({
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   useEffect(() => {
     const entities = (observationsResults ?? [])
-      .flatMap((obs) => obs.plantingZones)
+      .flatMap((obs) => obs.strata)
       .filter(
         (zone) =>
-          (!filterZoneNames.length || filterZoneNames.includes(zone.plantingZoneName)) &&
-          regexMatch(zone.plantingZoneName, search)
+          (!filterZoneNames.length || filterZoneNames.includes(zone.stratumName)) &&
+          regexMatch(zone.stratumName, search)
       )
-      .map((zone) => ({ sourceId: 'zones', id: zone.plantingZoneId }));
+      .map((zone) => ({ sourceId: 'zones', id: zone.stratumId }));
     setSearchZoneEntities(entities);
   }, [observationsResults, search, selectedObservation, filterZoneNames]);
 
@@ -208,14 +208,14 @@ export default function ObservationMapView({
         entity = selectedObservation;
       } else if (properties.type === 'zone') {
         entity =
-          selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id) ||
-          plantingSiteHistory?.plantingZones.find((z) => z.plantingZoneId === properties.id);
+          selectedObservation?.strata?.find((z) => z.stratumId === properties.id) ||
+          plantingSiteHistory?.strata.find((z) => z.stratumId === properties.id);
       } else {
         // monitoring plot
         entity =
           selectedAdHocObservation?.adHocPlot ||
-          selectedObservation?.plantingZones
-            ?.flatMap((z) => z.plantingSubzones)
+          selectedObservation?.strata
+            ?.flatMap((z) => z.substrata)
             ?.flatMap((sz) => sz.monitoringPlots)
             ?.find((p) => p.monitoringPlotId === properties.id);
       }

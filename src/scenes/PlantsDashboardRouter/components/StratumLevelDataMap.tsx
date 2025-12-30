@@ -173,19 +173,17 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
       (entity: MapSourceProperties): JSX.Element => {
         let properties: TooltipProperty[] = [];
 
-        const zoneHistory = latestResultSiteHistory?.plantingZones.find(
-          (_zoneHistory) => _zoneHistory.id === entity.id
-        );
+        const zoneHistory = latestResultSiteHistory?.strata.find((_zoneHistory) => _zoneHistory.id === entity.id);
 
         // If zone history is not found, the id in the base map uses current zone ID instead.
-        const zoneId = zoneHistory?.plantingZoneId ?? entity.id;
-        const zoneObservation = latestResult?.plantingZones.find(
-          (zoneResult) => zoneResult.plantingZoneId === zoneHistory?.plantingZoneId
+        const zoneId = zoneHistory?.stratumId ?? entity.id;
+        const zoneObservation = latestResult?.strata.find(
+          (zoneResult) => zoneResult.stratumId === zoneHistory?.stratumId
         );
         const zoneStat = zoneId !== undefined ? zonesStats[zoneId] : undefined;
         const progress = zoneId !== undefined ? zonesProgress[zoneId] : undefined;
         const zoneArea = zoneId !== undefined ? findZoneArea(zoneId) : undefined;
-        const lastZoneSummary = latestSummary?.plantingZones.find((pz) => pz.plantingZoneId === zoneId);
+        const lastZoneSummary = latestSummary?.strata.find((pz) => pz.stratumId === zoneId);
 
         if (!zoneStat) {
           properties = [
@@ -249,7 +247,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
           }
         }
 
-        const latestZoneObservationTime = plantingSite?.plantingZones?.find(
+        const latestZoneObservationTime = plantingSite?.strata?.find(
           (z) => z.id === zoneId
         )?.latestObservationCompletedTime;
 
@@ -277,13 +275,13 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         );
       },
     [
-      latestResultSiteHistory?.plantingZones,
-      latestResult?.plantingZones,
+      latestResultSiteHistory?.strata,
+      latestResult?.strata,
       zonesStats,
       zonesProgress,
       findZoneArea,
-      latestSummary?.plantingZones,
-      plantingSite?.plantingZones,
+      latestSummary?.strata,
+      plantingSite?.strata,
       timeZone,
       theme,
     ]

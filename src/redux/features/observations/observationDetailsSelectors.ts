@@ -3,7 +3,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { createCachedSelector } from 're-reselect';
 
 import { RootState } from 'src/redux/rootReducer';
-import { ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
+import { ObservationResults, ObservationStratumResults } from 'src/types/Observations';
 
 import { ALL_STATES, selectMergedPlantingSiteObservations } from './observationsSelectors';
 import { searchResultZones } from './utils';
@@ -61,9 +61,6 @@ export const selectDetailsZoneNames: (
     selectObservationDetails(state, { plantingSiteId, observationId, orgId, search: '', zoneNames: [] }, ''),
   (details) =>
     Array.from(
-      new Set(
-        details?.plantingZones.map((plantingZone: ObservationPlantingZoneResults) => plantingZone.plantingZoneName) ??
-          []
-      )
+      new Set(details?.strata.map((plantingZone: ObservationStratumResults) => plantingZone.stratumName) ?? [])
     )
 )((state: RootState, plantingSiteId: number, observationId: number) => `${plantingSiteId}_${observationId}`);

@@ -21,8 +21,8 @@ import strings from 'src/strings';
 import {
   AdHocObservationResults,
   Observation,
-  ObservationPlantingZoneResults,
   ObservationResults,
+  ObservationStratumResults,
 } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
@@ -261,9 +261,7 @@ export default function OrgObservationsListView({
       (observationsResults ?? []).map((observation: ObservationResults) => {
         return {
           ...observation,
-          plantingZones: observation.plantingZones
-            .map((zone: ObservationPlantingZoneResults) => zone.plantingZoneName)
-            .join('\r'),
+          plantingZones: observation.strata.map((zone: ObservationStratumResults) => zone.stratumName).join('\r'),
           endDate: endDates[observation.observationId] ?? '',
           observationDate: observation.completedDate || observation.startDate,
         };

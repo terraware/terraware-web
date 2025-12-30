@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { ObservationMonitoringPlotResults, ObservationPlantingSubzoneResults } from 'src/types/Observations';
+import { ObservationMonitoringPlotResults, ObservationSubstratumResults } from 'src/types/Observations';
 
 import { ZoneParams, selectObservationPlantingZone } from './observationPlantingZoneSelectors';
 
@@ -17,12 +17,12 @@ export const selectObservationMonitoringPlot = createSelector(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [selectObservationPlantingZone, (state, params, defaultTimeZone) => params],
   (observationPlantingZone, params) =>
-    observationPlantingZone?.plantingSubzones
-      .flatMap((subzone: ObservationPlantingSubzoneResults): PlotObservations[] =>
+    observationPlantingZone?.substrata
+      .flatMap((subzone: ObservationSubstratumResults): PlotObservations[] =>
         subzone.monitoringPlots.map((plot: ObservationMonitoringPlotResults) => ({
           ...plot,
-          plantingZoneName: observationPlantingZone.plantingZoneName,
-          plantingSubzoneName: subzone.plantingSubzoneName,
+          plantingZoneName: observationPlantingZone.stratumName,
+          plantingSubzoneName: subzone.substratumName,
         }))
       )
       .find((monitoringPlot: PlotObservations) => monitoringPlot.monitoringPlotId === params.monitoringPlotId)

@@ -7,14 +7,14 @@ import {
   MonitoringPlotStatus,
   ObservationMonitoringPlotResults,
   ObservationMonitoringPlotResultsPayload,
-  ObservationPlantingSubzoneResults,
-  ObservationPlantingSubzoneResultsPayload,
-  ObservationPlantingZoneResults,
-  ObservationPlantingZoneResultsPayload,
   ObservationResults,
   ObservationResultsPayload,
   ObservationSpeciesResults,
   ObservationSpeciesResultsPayload,
+  ObservationStratumResults,
+  ObservationStratumResultsPayload,
+  ObservationSubstratumResults,
+  ObservationSubstratumResultsPayload,
   PlotCondition,
 } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
@@ -25,14 +25,14 @@ import { regexMatch } from 'src/utils/search';
 
 // utils
 
-export const searchResultPlots = (search: string, plotType?: boolean, zone?: ObservationPlantingZoneResults) => {
+export const searchResultPlots = (search: string, plotType?: boolean, zone?: ObservationStratumResults) => {
   if ((!search.trim() && plotType === undefined) || !zone) {
     return zone;
   }
   return {
     ...zone,
-    plantingSubzones: zone.plantingSubzones
-      .map((subzone: ObservationPlantingSubzoneResults) => ({
+    substrata: zone.substrata
+      .map((subzone: ObservationSubstratumResults) => ({
         ...subzone,
         monitoringPlots: subzone.monitoringPlots.filter(
           (plot: ObservationMonitoringPlotResults) =>
@@ -40,7 +40,7 @@ export const searchResultPlots = (search: string, plotType?: boolean, zone?: Obs
             (plotType === undefined || plot.isPermanent === plotType)
         ),
       }))
-      .filter((subzone: ObservationPlantingSubzoneResults) => subzone.monitoringPlots.length > 0),
+      .filter((subzone: ObservationSubstratumResults) => subzone.monitoringPlots.length > 0),
   };
 };
 
@@ -50,9 +50,9 @@ export const searchResultZones = (search: string, zoneNames: string[], observati
   }
   return {
     ...observation,
-    plantingZones: observation.plantingZones.filter(
-      (zone: ObservationPlantingZoneResults) =>
-        (!zoneNames.length || zoneNames.includes(zone.plantingZoneName)) && matchZone(zone, search)
+    strata: observation.strata.filter(
+      (zone: ObservationStratumResults) =>
+        (!zoneNames.length || zoneNames.includes(zone.stratumName)) && matchZone(zone, search)
     ),
   };
 };
@@ -69,16 +69,14 @@ export const searchZonesAndDates = (
   return observations?.filter((observation: ObservationResults) => {
     return (
       ((!zoneNames.length ||
-        observation.plantingZones.some((zone: ObservationPlantingZoneResults) =>
-          zoneNames.includes(zone.plantingZoneName)
-        )) &&
-        observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search))) ||
+        observation.strata.some((zone: ObservationStratumResults) => zoneNames.includes(zone.stratumName))) &&
+        observation.strata.some((zone: ObservationStratumResults) => matchZone(zone, search))) ||
       matchDate(observation.completedDate ? observation.completedDate : observation.startDate, search, locale)
     );
   });
 };
 
-const matchZone = (zone: ObservationPlantingZoneResults, search: string) => regexMatch(zone.plantingZoneName, search);
+const matchZone = (zone: ObservationStratumResults, search: string) => regexMatch(zone.stratumName, search);
 const matchDate = (date: string, search: string, locale?: string) => {
   if (date) {
     return regexMatch(getShortDate(date, locale), search);
@@ -146,7 +144,7 @@ export const mergeObservations = (
       const site = sites[plantingSiteId];
       const timeZone = site.timeZone ?? defaultTimeZone;
 
-      const mergedZones = mergeZones(observation.plantingZones, species, timeZone);
+      const mergedZones = mergeZones(observation.strata, species, timeZone);
       const mergedSpecies = mergeSpecies(observation.species, species);
 
       return {
@@ -155,11 +153,11 @@ export const mergeObservations = (
         boundary: site.boundary,
         completedDate: observation.completedTime ? getDateDisplayValue(observation.completedTime, site.timeZone) : '',
         startDate: getDateDisplayValue(observation.startDate, site.timeZone),
-        plantingZones: mergedZones,
+        strata: mergedZones,
         species: mergedSpecies,
         timeZone,
         totalLive: getObservationSpeciesLivePlantsCount(observation.species),
-        totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
+        totalPlants: observation.strata.reduce((acc, curr) => acc + curr.totalPlants, 0),
         hasObservedPermanentPlots: mergedZones.some((zone) => zone.hasObservedPermanentPlots),
         hasObservedTemporaryPlots: mergedZones.some((zone) => zone.hasObservedTemporaryPlots),
       };
@@ -175,57 +173,55 @@ const StatusWeights: Record<MonitoringPlotStatus, number> = {
 
 /** Merges additional data into the results of a planting zone observation. */
 const mergeZones = (
-  zoneObservations: ObservationPlantingZoneResultsPayload[],
+  zoneObservations: ObservationStratumResultsPayload[],
   species: Record<number, SpeciesValue>,
   timeZone?: string
-): ObservationPlantingZoneResults[] => {
-  return zoneObservations.map(
-    (zoneObservation: ObservationPlantingZoneResultsPayload): ObservationPlantingZoneResults => {
-      const monitoringPlots: ObservationMonitoringPlotResultsPayload[] = zoneObservation.plantingSubzones.flatMap(
-        (subZone: ObservationPlantingSubzoneResultsPayload) => subZone.monitoringPlots
-      );
-      const status: MonitoringPlotStatus | undefined = monitoringPlots.reduce(
-        (acc: MonitoringPlotStatus | undefined, mp: ObservationMonitoringPlotResultsPayload) => {
-          if (!acc || StatusWeights[mp.status] > StatusWeights[acc]) {
-            return mp.status;
-          } else {
-            return acc;
-          }
-        },
-        undefined
-      );
+): ObservationStratumResults[] => {
+  return zoneObservations.map((zoneObservation: ObservationStratumResultsPayload): ObservationStratumResults => {
+    const monitoringPlots: ObservationMonitoringPlotResultsPayload[] = zoneObservation.substrata.flatMap(
+      (subZone: ObservationSubstratumResultsPayload) => subZone.monitoringPlots
+    );
+    const status: MonitoringPlotStatus | undefined = monitoringPlots.reduce(
+      (acc: MonitoringPlotStatus | undefined, mp: ObservationMonitoringPlotResultsPayload) => {
+        if (!acc || StatusWeights[mp.status] > StatusWeights[acc]) {
+          return mp.status;
+        } else {
+          return acc;
+        }
+      },
+      undefined
+    );
 
-      return {
-        ...zoneObservation,
-        plantingZoneName: zoneObservation.name,
-        completedDate: zoneObservation.completedTime
-          ? getDateDisplayValue(zoneObservation.completedTime, timeZone)
-          : undefined,
-        species: mergeSpecies(zoneObservation.species, species),
-        plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, species, timeZone),
-        status,
-        hasObservedPermanentPlots: zoneObservation.plantingSubzones.some((plantingSubzone) =>
-          plantingSubzone.monitoringPlots.some((plot) => plot.isPermanent && plot.completedTime)
-        ),
-        hasObservedTemporaryPlots: zoneObservation.plantingSubzones.some((plantingSubzone) =>
-          plantingSubzone.monitoringPlots.some((plot) => !plot.isPermanent && plot.completedTime)
-        ),
-      };
-    }
-  );
+    return {
+      ...zoneObservation,
+      stratumName: zoneObservation.name,
+      completedDate: zoneObservation.completedTime
+        ? getDateDisplayValue(zoneObservation.completedTime, timeZone)
+        : undefined,
+      species: mergeSpecies(zoneObservation.species, species),
+      substrata: mergeSubzones(zoneObservation.substrata, species, timeZone),
+      status,
+      hasObservedPermanentPlots: zoneObservation.substrata.some((plantingSubzone) =>
+        plantingSubzone.monitoringPlots.some((plot) => plot.isPermanent && plot.completedTime)
+      ),
+      hasObservedTemporaryPlots: zoneObservation.substrata.some((plantingSubzone) =>
+        plantingSubzone.monitoringPlots.some((plot) => !plot.isPermanent && plot.completedTime)
+      ),
+    };
+  });
 };
 
 // merge subzone
 const mergeSubzones = (
-  subzoneObservations: ObservationPlantingSubzoneResultsPayload[],
+  subzoneObservations: ObservationSubstratumResultsPayload[],
   species: Record<number, SpeciesValue>,
   timeZone?: string
-): ObservationPlantingSubzoneResults[] => {
+): ObservationSubstratumResults[] => {
   return subzoneObservations.map(
-    (subzoneObservation: ObservationPlantingSubzoneResultsPayload): ObservationPlantingSubzoneResults => {
+    (subzoneObservation: ObservationSubstratumResultsPayload): ObservationSubstratumResults => {
       return {
         ...subzoneObservation,
-        plantingSubzoneName: subzoneObservation.name,
+        substratumName: subzoneObservation.name,
         monitoringPlots: subzoneObservation.monitoringPlots.map(
           (monitoringPlot: ObservationMonitoringPlotResultsPayload) => {
             return {
@@ -261,9 +257,7 @@ const mergeSpecies = (
     );
 };
 
-export const has25mPlots = (
-  subzones: ObservationPlantingSubzoneResults[] | ObservationPlantingSubzoneResultsPayload[]
-) => {
+export const has25mPlots = (subzones: ObservationSubstratumResults[] | ObservationSubstratumResultsPayload[]) => {
   return subzones
     ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
     .some((size: number) => size.toString() === '25');
@@ -286,19 +280,19 @@ export const mergeAdHocObservations = (
       const adHocPlot = observation.adHocPlot!;
       const timeZone = site.timeZone ?? defaultTimeZone;
 
-      const mergedZones = mergeZones(observation.plantingZones, species, site.timeZone ?? defaultTimeZone);
+      const mergedZones = mergeZones(observation.strata, species, site.timeZone ?? defaultTimeZone);
 
       return {
         ...observation,
         adHocPlot,
         boundary: site.boundary,
         plantingSiteName: site.name,
-        plantingZones: mergedZones,
+        strata: mergedZones,
         plotName: adHocPlot.monitoringPlotName,
         plotNumber: adHocPlot.monitoringPlotNumber,
         timeZone,
         totalLive: getObservationSpeciesLivePlantsCount(adHocPlot.species),
-        totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
+        totalPlants: observation.strata.reduce((acc, curr) => acc + curr.totalPlants, 0),
       };
     });
 };

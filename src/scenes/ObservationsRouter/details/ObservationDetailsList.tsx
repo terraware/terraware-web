@@ -74,12 +74,12 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
 
   const rows = useMemo(() => {
     return (
-      details?.plantingZones.map((zone) => {
+      details?.strata.map((zone) => {
         const totalLive = getObservationSpeciesLivePlantsCount(zone.species);
         return { ...zone, totalLive };
       }) ?? []
     );
-  }, [details?.plantingZones]);
+  }, [details?.strata]);
 
   useEffect(() => {
     if (!details) {
@@ -100,7 +100,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   }, [zoneNames, searchProps.filtersProps]);
 
   const has25mPlotsZones = () => {
-    const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));
+    const allSubzones = details?.strata.flatMap((zone) => zone.substrata.flatMap((subzone) => subzone));
     if (allSubzones) {
       return has25mPlots(allSubzones);
     }

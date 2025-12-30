@@ -148,9 +148,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   const statusSummary = useMemo<ObservationStatusSummary | undefined>(() => {
     if (observation && details && Date.now() <= new Date(observation.endDate).getTime()) {
-      const plots = details.plantingZones.flatMap((zone) =>
-        zone.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots)
-      );
+      const plots = details.strata.flatMap((zone) => zone.substrata.flatMap((subzone) => subzone.monitoringPlots));
       const pendingPlots = plots.filter((plot) => !plot.completedTime).length;
       const totalPlots = plots.length;
       const observedPlots = totalPlots - pendingPlots;

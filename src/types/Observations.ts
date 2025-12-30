@@ -25,13 +25,13 @@ type Boundary = {
 };
 
 // expanded information on an observation including observed results down to monitoring plot level detail
-// requires navigating a tree of zone results -> subzone results -> ( species results | monitoring plot results )
+// requires navigating a tree of stratum results -> substratum results -> ( species results | monitoring plot results )
 export type ObservationResultsPayload = components['schemas']['ObservationResultsPayload'];
 export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
   Boundary & {
     completedDate?: string;
     plantingSiteName: string;
-    plantingZones: ObservationPlantingZoneResults[];
+    strata: ObservationStratumResults[];
     species: ObservationSpeciesResults[];
     timeZone: string;
     totalLive: number | undefined;
@@ -40,11 +40,11 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     hasObservedTemporaryPlots: boolean;
   };
 
-export type AdHocObservationResults = Omit<ObservationResultsPayload, 'plantingZones' | 'adHocPlot'> &
+export type AdHocObservationResults = Omit<ObservationResultsPayload, 'strata' | 'adHocPlot'> &
   Boundary & {
     adHocPlot: components['schemas']['ObservationMonitoringPlotResultsPayload'];
     plantingSiteName: string;
-    plantingZones: ObservationPlantingZoneResultsWithLastObv[];
+    strata: ObservationStratumResultsWithLastObv[];
     plotName?: string;
     plotNumber?: number;
     timeZone: string;
@@ -57,40 +57,39 @@ export type ObservationResultsWithLastObv = Omit<
     Boundary & {
       completedDate?: string;
       plantingSiteName: string;
-      plantingZones: ObservationPlantingZoneResults[];
+      strata: ObservationStratumResults[];
       species: ObservationSpeciesResults[];
       totalPlants: number;
       hasObservedPermanentPlots: boolean;
       hasObservedTemporaryPlots: boolean;
     },
-  'plantingZones'
-> & { plantingZones: ObservationPlantingZoneResultsWithLastObv[] };
+  'strata'
+> & { strata: ObservationStratumResultsWithLastObv[] };
 
-// zone level results -> contains a list of subzone level results
-export type ObservationPlantingZoneResultsPayload = components['schemas']['ObservationPlantingZoneResultsPayload'];
-export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload & {
+// stratum level results -> contains a list of substratum level results
+export type ObservationStratumResultsPayload = components['schemas']['ObservationStratumResultsPayload'];
+export type ObservationStratumResults = ObservationStratumResultsPayload & {
   completedDate?: string;
-  plantingZoneName: string;
-  plantingSubzones: ObservationPlantingSubzoneResults[];
+  stratumName: string;
+  substrata: ObservationSubstratumResults[];
   species: ObservationSpeciesResults[];
   status?: MonitoringPlotStatus;
   hasObservedPermanentPlots: boolean;
   hasObservedTemporaryPlots: boolean;
 };
 
-export type ObservationPlantingZoneResultsWithLastObv = Omit<ObservationPlantingZoneResults, 'plantingSubzones'> & {
+export type ObservationStratumResultsWithLastObv = Omit<ObservationStratumResults, 'substrata'> & {
   lastObv?: string;
-  plantingSubzones: ObservationPlantingSubzoneResultsWithLastObv[];
+  substrata: ObservationSubstratumResultsWithLastObv[];
 };
 
-// subzone level results -> contains lists of both species level results and monitoring plot level results
-export type ObservationPlantingSubzoneResultsPayload =
-  components['schemas']['ObservationPlantingSubzoneResultsPayload'];
-export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResultsPayload & {
-  plantingSubzoneName: string;
+// substratum level results -> contains lists of both species level results and monitoring plot level results
+export type ObservationSubstratumResultsPayload = components['schemas']['ObservationSubstratumResultsPayload'];
+export type ObservationSubstratumResults = ObservationSubstratumResultsPayload & {
+  substratumName: string;
   monitoringPlots: ObservationMonitoringPlotResults[];
 };
-export type ObservationPlantingSubzoneResultsWithLastObv = ObservationPlantingSubzoneResults & {
+export type ObservationSubstratumResultsWithLastObv = ObservationSubstratumResults & {
   lastObv?: string;
 };
 // monitoring plot level results
@@ -164,7 +163,7 @@ export type RecordedPlantStatus = RecordedPlant['status'];
 
 export type ObservationSummary = components['schemas']['PlantingSiteObservationSummaryPayload'];
 
-export type PlantingZoneObservationSummary = components['schemas']['PlantingZoneObservationSummaryPayload'];
+export type StratumObservationSummary = components['schemas']['StratumObservationSummaryPayload'];
 
 export type ExistingTreePayload = components['schemas']['ExistingTreePayload'];
 

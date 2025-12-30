@@ -150,7 +150,7 @@ export default function ObservationStratum(): JSX.Element {
 
   const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string; totalLive?: number })[] = useMemo(
     () =>
-      plantingZone?.plantingSubzones?.flatMap((subzone) =>
+      plantingZone?.substrata?.flatMap((subzone) =>
         subzone.monitoringPlots.map((plot) => ({
           ...plot,
           subzoneName: subzone.name,
@@ -203,9 +203,7 @@ export default function ObservationStratum(): JSX.Element {
                   observation?.state
                 )}
                 tableComments={
-                  plantingZone?.plantingSubzones && has25mPlots(plantingZone.plantingSubzones)
-                    ? strings.PLOTS_SIZE_NOTE
-                    : undefined
+                  plantingZone?.substrata && has25mPlots(plantingZone.substrata) ? strings.PLOTS_SIZE_NOTE : undefined
                 }
               />
             </Box>

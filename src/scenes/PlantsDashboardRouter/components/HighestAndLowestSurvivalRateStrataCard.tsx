@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
-import { PlantingZoneObservationSummary } from 'src/types/Observations';
+import { StratumObservationSummary } from 'src/types/Observations';
 
 export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
   const theme = useTheme();
@@ -21,15 +21,15 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
     let _lowestSurvivalRate = Infinity;
     let _highestZoneId: number | undefined;
     let _lowestZoneId: number | undefined;
-    observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
+    observationSummaries?.[0]?.strata.forEach((zone: StratumObservationSummary) => {
       if (zone.survivalRate !== undefined) {
         if (zone.survivalRate >= _highestSurvivalRate) {
           _highestSurvivalRate = zone.survivalRate;
-          _highestZoneId = zone.plantingZoneId;
+          _highestZoneId = zone.stratumId;
         }
         if (zone.survivalRate < _lowestSurvivalRate) {
           _lowestSurvivalRate = zone.survivalRate;
-          _lowestZoneId = zone.plantingZoneId;
+          _lowestZoneId = zone.stratumId;
         }
       }
     });
@@ -42,11 +42,11 @@ export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
   }, [observationSummaries]);
 
   const highestPlantingZone = useMemo(() => {
-    return plantingSite?.plantingZones?.find((zone) => zone.id === highestZoneId);
+    return plantingSite?.strata?.find((zone) => zone.id === highestZoneId);
   }, [plantingSite, highestZoneId]);
 
   const lowestPlantingZone = useMemo(() => {
-    return plantingSite?.plantingZones?.find((zone) => zone.id === lowestZoneId);
+    return plantingSite?.strata?.find((zone) => zone.id === lowestZoneId);
   }, [plantingSite, lowestZoneId]);
 
   return (
