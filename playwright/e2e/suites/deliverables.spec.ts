@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { TERRAWARE_WEB_URL } from '../constants';
 import { openTodoFromHome } from '../participantHome';
 import {
   addQuestionnaireComments,
@@ -39,7 +40,7 @@ import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 test.describe('DeliverableTests', () => {
   test.beforeEach(async ({ page, context }) => {
     await changeToSuperAdmin(context);
-    await page.goto('http://127.0.0.1:3000');
+    await page.goto(TERRAWARE_WEB_URL);
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
   });
@@ -71,12 +72,12 @@ test.describe('DeliverableTests', () => {
     await expect(page.getByText('Deliverables', exactOptions)).toBeVisible();
 
     await changeToContributor(context);
-    await page.goto('http://127.0.0.1:3000');
+    await page.goto(TERRAWARE_WEB_URL);
     await expect(page.getByText('Deliverables', exactOptions)).toBeHidden();
 
     // read only shouldn't be able to approve a whole deliverable
     await changeToReadOnlyUser(context);
-    await page.goto('http://127.0.0.1:3000');
+    await page.goto(TERRAWARE_WEB_URL);
     await navigateToConsoleDeliverables(page);
     await page.getByRole('link', { name: 'Phase 1 Questions' }).click();
     await expect(page.getByText('#approveDeliverable')).toBeHidden();
@@ -275,7 +276,7 @@ test.describe('DeliverableTests', () => {
   });
 
   test.skip('Document Deliverable', async ({ page }) => {
-    await page.goto('http://127.0.0.1:3000');
+    await page.goto(TERRAWARE_WEB_URL);
     await waitFor(page, '#home');
 
     await page.getByText('Deliverables', exactOptions).click();

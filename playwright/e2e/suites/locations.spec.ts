@@ -1,12 +1,13 @@
 import { expect, test } from '@playwright/test';
 
+import { TERRAWARE_WEB_URL } from '../constants';
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { selectOrg, waitFor } from '../utils/utils';
 
 test.describe('LocationTests', () => {
   test.beforeEach(async ({ page, context }, testInfo) => {
     await changeToSuperAdmin(context);
-    await page.goto('http://127.0.0.1:3000');
+    await page.goto(TERRAWARE_WEB_URL);
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
   });
