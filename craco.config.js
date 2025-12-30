@@ -3,7 +3,10 @@ const fs = require('fs');
 const { whenDev } = require('@craco/craco');
 const { convertAllLocales } = require('./src/strings/export');
 
+const CracoEsbuildPlugin = require('craco-esbuild');
+
 module.exports = {
+  plugins: [{ plugin: CracoEsbuildPlugin }],
   devServer: (devServerConfig, { paths }) => ({
     ...devServerConfig,
 
