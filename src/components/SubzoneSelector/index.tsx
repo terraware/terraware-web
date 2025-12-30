@@ -14,7 +14,7 @@ export type SubzoneInfo = {
 export type ZoneInfo = {
   id: number | string;
   name: string;
-  plantingSubzones?: SubzoneInfo[];
+  substrata?: SubzoneInfo[];
 };
 
 export type SubzoneSelectorProps = {
@@ -53,7 +53,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
   };
 
   const onChangeSubzone = (subzone: any) => {
-    const foundSubzone = selectedZone?.plantingSubzones?.find(
+    const foundSubzone = selectedZone?.substrata?.find(
       (subzoneItem) => subzoneItem.id.toString() === subzone?.value?.toString()
     );
     onSubzoneSelected(foundSubzone);
@@ -87,16 +87,16 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
 
   const zoneOptions: any[] = useMemo(() => {
     return zones
-      .filter((zone) => zone.plantingSubzones)
+      .filter((zone) => zone.substrata)
       .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
       .map((zone) => zoneToDropdownItem(zone));
   }, [zones]);
 
   const subzoneOptions: any[] = useMemo(() => {
-    if (!selectedZone?.plantingSubzones) {
+    if (!selectedZone?.substrata) {
       return [];
     }
-    return [...selectedZone.plantingSubzones]
+    return [...selectedZone.substrata]
       .sort((a, b) => a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
       .map((subzone) => subzoneToDropdownItem(subzone));
   }, [selectedZone]);
@@ -144,7 +144,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
           options={subzoneOptions}
           onChange={(value) => onChangeSubzone(value)}
           errorText={subzoneError}
-          disabled={!selectedZone?.plantingSubzones?.length}
+          disabled={!selectedZone?.substrata?.length}
           isEqual={isEqual}
           freeSolo={false}
           hideClearIcon={true}
