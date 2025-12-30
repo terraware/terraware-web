@@ -19,11 +19,11 @@ export const selectPlantingsForSite = createSelector(
 
 export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
   return plantings?.reduce((plantingsBySubzone: { [key: string]: number }, planting) => {
-    if (!planting.plantingSubzone) {
+    if (!planting.substratum) {
       return plantingsBySubzone;
     }
-    const subzoneId = planting.plantingSubzone.id;
-    plantingsBySubzone[subzoneId] = planting.plantingSubzone['totalPlants(raw)'];
+    const subzoneId = planting.substratum.id;
+    plantingsBySubzone[subzoneId] = planting.substratum['totalPlants(raw)'];
     return plantingsBySubzone;
   }, {});
 };
