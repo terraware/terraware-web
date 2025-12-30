@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import MapComponent from 'src/components/NewMap';
+import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import {
   MapHighlightGroup,
@@ -13,6 +14,8 @@ import {
   MapPoint,
 } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
+import useMapPhotoDrawer from 'src/components/NewMap/useMapPhotoDrawer';
+import useMapPlantDrawer from 'src/components/NewMap/useMapPlantDrawer';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import useMonitoringPlotsMapLegend from 'src/components/NewMap/useMonitoringPlotsMapLegend';
 import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLegend';
@@ -49,6 +52,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
   const { selectedOrganization } = useOrganization();
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
   const { livePlantsVisible, deadPlantsVisible, plantMakersLegendGroup } = usePlantMarkersMapLegend(
@@ -70,6 +74,9 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     survivalRateLessThan50,
     survivalRateMoreThan75,
   } = useMapFeatureStyles();
+
+  const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
+  const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
@@ -663,8 +670,54 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     survivalRateLegendGroup,
   ]);
 
+  const drawerContent = useMemo(() => {
+    if (selectedPhotos.length > 0) {
+      return photoDrawerContent;
+    }
+    if (selectedPlants.length > 0) {
+      return plantDrawerContent;
+    }
+  }, [photoDrawerContent, plantDrawerContent, selectedPhotos.length, selectedPlants.length]);
+
+  const drawerHeader = useMemo(() => {
+    if (selectedPhotos.length > 0) {
+      return photoDrawerHeader;
+    } else if (selectedPlants.length > 0) {
+      return plantDrawerHeader;
+    } else {
+      return undefined;
+    }
+  }, [photoDrawerHeader, plantDrawerHeader, selectedPhotos.length, selectedPlants.length]);
+
+  const drawerSize: MapDrawerSize = useMemo(() => {
+    if (selectedPhotos.length > 0) {
+      return photoDrawerSize;
+    } else if (selectedPlants.length > 0) {
+      return plantDrawerSize;
+    } else {
+      return 'small';
+    }
+  }, [photoDrawerSize, plantDrawerSize, selectedPhotos.length, selectedPlants.length]);
+
+  const setDrawerOpenCallback = useCallback(
+    (open: boolean) => {
+      if (open) {
+        setDrawerOpen(true);
+      } else {
+        setDrawerOpen(false);
+        selectPhotos([]);
+        selectPlants([]);
+      }
+    },
+    [selectPhotos, selectPlants]
+  );
+
   return (
     <MapComponent
+      drawerChildren={drawerContent}
+      drawerHeader={drawerHeader}
+      drawerOpen={drawerOpen}
+      drawerSize={drawerSize}
       legends={legends}
       mapHighlights={highlights}
       mapMarkers={markers}
@@ -673,6 +726,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       mapRef={mapRef}
       nameTags={nameTags}
       token={token ?? ''}
+      setDrawerOpen={setDrawerOpenCallback}
     />
   );
 };
