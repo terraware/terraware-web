@@ -45,7 +45,7 @@ test.describe('ObservationDetailsTests', () => {
     await expect(page.getByRole('columnheader', { name: 'Survival Rate' })).toBeVisible();
 
     // table row values
-    await expect(page.locator('#row1-plantingZoneName a:has-text("Zone 01")')).toBeVisible();
+    await expect(page.locator('#row1-stratumName a:has-text("Zone 01")')).toBeVisible();
     await expect(page.locator('#row1-completedDate p:has-text("2025-05-29")')).toBeVisible();
     await expect(page.locator('#row1-status p:has-text("Completed")')).toBeVisible();
     await expect(page.locator('#row1-totalPlants p:has-text("944")')).toBeVisible();

@@ -37,7 +37,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   const columns = useCallback(
     () =>
       [
-        { key: 'plantingZoneName', name: strings.ZONE, type: 'string' },
+        { key: 'stratumName', name: strings.ZONE, type: 'string' },
         { key: 'completedDate', name: strings.DATE, type: 'string' },
         { key: 'status', name: strings.STATUS, type: 'string' },
         { key: 'totalLive', name: strings.LIVE_PLANTS, tooltipTitle: strings.TOOLTIP_LIVE_PLANTS, type: 'number' },
@@ -111,7 +111,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
       id='observation-details-table'
       columns={columns}
       rows={rows}
-      orderBy='plantingZoneName'
+      orderBy='stratumName'
       Renderer={ObservationDetailsRenderer(plantingSiteId, observationId)}
       tableComments={has25mPlotsZones() ? strings.PLOTS_SIZE_NOTE : undefined}
     />
