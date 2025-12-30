@@ -118,7 +118,9 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: playwright-test-results
-          path: playwright/test-results
+          path: |
+            playwright/test-results
+            playwright-report
           retention-days: ${{ job.status == 'failure' && '30' || '3' }}
 
       - name: Cache playwright binaries
