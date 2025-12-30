@@ -6,7 +6,7 @@ import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
-import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
+import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { SearchSortOrder } from 'src/types/Search';
 
 import BiomassRenderer from './BiomassRenderer';
@@ -68,11 +68,12 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
   const fuzzySearchColumns = ['monitoringPlotNumber', 'monitoringPlotDescription'];
 
   const { selectedOrganization } = useOrganization();
-  const [listPlantingSites, listPlantingSitesResult] = useLazySearchPlantingSitesQuery();
+  const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
+  const [listAdHocObservationResults, adHocObservationsResultsResponse] = useLazyListAdHocObservationResultsQuery();
 
   const plantingSitesNames = useMemo(
     () =>
-      (listPlantingSitesResult.data ?? []).reduce(
+      (listPlantingSitesResult.data?.sites ?? []).reduce(
         (siteNames, site) => {
           siteNames[site.id] = site.name;
           return siteNames;
@@ -84,14 +85,7 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, searchOrder: [{ field: 'name' }] }, true);
-    }
-  }, [listPlantingSites, selectedOrganization]);
-  const [listAdHocObservationResults, adHocObservationsResultsResponse] = useLazyListAdHocObservationResultsQuery();
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, searchOrder: [{ field: 'name' }] }, true);
+      void listPlantingSites({ organizationId: selectedOrganization.id }, true);
       void listAdHocObservationResults(
         { plantingSiteId: siteId, organizationId: selectedOrganization.id, includePlants: true },
         true
