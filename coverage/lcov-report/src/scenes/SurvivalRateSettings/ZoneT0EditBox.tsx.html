@@ -503,9 +503,7 @@
 <a name='L438'></a><a href='#L438'>438</a>
 <a name='L439'></a><a href='#L439'>439</a>
 <a name='L440'></a><a href='#L440'>440</a>
-<a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a>
-<a name='L443'></a><a href='#L443'>443</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L441'></a><a href='#L441'>441</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -585,8 +583,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1026,9 +1022,7 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
   }, [allWithdrawnSpecies, newSpeciesRows, species]);
 &nbsp;
   const zoneTotalDensity = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const editingZoneId = <span class="cstat-no" title="statement not covered" >plotsWithObservations?.length</span>
-      ? plotsWithObservations[0].plantingSubzone_plantingZone_id
-      : null;
+    const editingZoneId = <span class="cstat-no" title="statement not covered" >plotsWithObservations?.length ? plotsWithObservations[0].substratum_stratum_id : null;</span>
 <span class="cstat-no" title="statement not covered" >    if (editingZoneId) {</span>
       const selectedZone = <span class="cstat-no" title="statement not covered" >record.zones.find(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId.toString() === editingZoneId.toString())</span>;</span>
       const total =
@@ -1046,13 +1040,13 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
     }
 &nbsp;
     const existingZone = <span class="cstat-no" title="statement not covered" >record.zones.find(</span>
-<span class="fstat-no" title="function not covered" >      (z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >plotsWithObservations?.[0].plantingSubzone_plantingZone_id === zone.plantingZoneId.toString()</span>
+<span class="fstat-no" title="function not covered" >      (z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >plotsWithObservations?.[0].substratum_stratum_id === zone.plantingZoneId.toString()</span>
     );
 <span class="cstat-no" title="statement not covered" >    if (existingZone) {</span>
 <span class="cstat-no" title="statement not covered" >      return existingZone;</span>
     }
 <span class="cstat-no" title="statement not covered" >    return {</span>
-      plantingZoneId: Number(plotsWithObservations?.[0].plantingSubzone_plantingZone_id),
+      plantingZoneId: Number(plotsWithObservations?.[0].substratum_stratum_id),
       densityData: [],
     };
   }, [plotsWithObservations, record]);
@@ -1100,7 +1094,7 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
 &nbsp;
         // Remove the existing zone, then add the updated one
         const otherZones = <span class="cstat-no" title="statement not covered" >record.zones.filter(</span>
-<span class="fstat-no" title="function not covered" >          (z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId.toString() !== plotsWithObservations?.[0].plantingSubzone_plantingZone_id.toString()</span>
+<span class="fstat-no" title="function not covered" >          (z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId.toString() !== plotsWithObservations?.[0].substratum_stratum_id.toString()</span>
         );
 <span class="cstat-no" title="statement not covered" >        setRecord({ ...record, zones: otherZones ? [...otherZones, zoneCopy] : [zoneCopy] });</span>
       }
@@ -1233,7 +1227,7 @@ const ZoneT0EditBox = <span class="cstat-no" title="statement not covered" ><spa
           flexDirection={'column'}
         &gt;
           &lt;Typography fontWeight={600}&gt;{strings.ZONE}&lt;/Typography&gt;
-          &lt;Typography&gt;{plotsWithObservations?.[0].plantingSubzone_plantingZone_name}&lt;/Typography&gt;
+          &lt;Typography&gt;{plotsWithObservations?.[0].substratum_stratum_name}&lt;/Typography&gt;
         &lt;/Box&gt;
         &lt;Box width={'100%'}&gt;
           &lt;table&gt;
@@ -1396,7 +1390,7 @@ export default ZoneT0EditBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-29T19:29:05.017Z
+                at 2025-12-30T18:10:44.368Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

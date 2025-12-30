@@ -1,3 +1,5 @@
+216e290b4b8 SW-7895 Rename zone->strata in search sublists for t0 files (#4968)
+a15792c5c31 SW-7900 Integrate Playwright logs with GitHub actions (#4974)
 924291a3280 SW-7894 Charts: put charts side-by-side (#4941)
 8a81903f9f5 SW-7890 Remove focus style for events button (#4961)
 b73d5a9d58c SW-7897 Video files uploaded to Observations are downloaded as .jpeg files (#4960)
