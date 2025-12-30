@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { APP_PATHS } from '../../../src/constants';
+import { TERRAWARE_WEB_URL } from '../constants';
 import { navigateToProjectProfile } from '../utils/navigation';
 import { changeToSuperAdmin } from '../utils/userUtils';
 
@@ -30,8 +31,8 @@ test.describe('ProjectDocumentsTests', () => {
 
     // click the Add Document button and wait for the new page to load
     await page.getByRole('button', { name: 'Add Document' }).click();
-    await page.waitForURL(`http://127.0.0.1:3000${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
+    await page.waitForURL(`${TERRAWARE_WEB_URL}${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
 
-    expect(page.url()).toBe(`http://127.0.0.1:3000${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
+    expect(page.url()).toBe(`${TERRAWARE_WEB_URL}${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW}`);
   });
 });

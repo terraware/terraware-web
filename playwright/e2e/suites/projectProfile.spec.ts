@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 
+import { TERRAWARE_WEB_URL } from '../constants';
 import { navigateToProjectProfile } from '../utils/navigation';
 import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProfile';
 import { changeToSuperAdmin } from '../utils/userUtils';
@@ -11,7 +12,7 @@ test.describe('ProjectProfileTests', () => {
   });
 
   test('View Project Profile for project in application', async ({ page }, testInfo) => {
-    await page.goto('http://127.0.0.1:3000');
+    await page.goto(TERRAWARE_WEB_URL);
     await waitFor(page, '#acceleratorConsoleButton');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
     await page.getByRole('button', { name: 'Applications' }).click();
