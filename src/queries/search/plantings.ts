@@ -41,12 +41,12 @@ const injectedRtkApi = api.injectEndpoints({
           plantingSiteId: Number(result.plantingSite_id),
           plantingSubzoneId: Number(result.substratum_id),
           type: result.type,
-          species: result.species.map((speciesResult) => ({
-            conservationCategory: speciesResult.conservationCategory,
-            rare: Boolean(speciesResult.rare),
-            scientificName: speciesResult.scientificName,
-            speciesId: Number(speciesResult.id),
-          })),
+          species: {
+            conservationCategory: result.species.conservationCategory,
+            rare: Boolean(result.species.rare),
+            scientificName: result.species.scientificName,
+            speciesId: Number(result.species.id),
+          },
           withdrawalId: Number(result.delivery_withdrawal_id),
         })),
     }),
@@ -67,7 +67,7 @@ type PlantingsApiResult = {
     conservationCategory: string;
     scientificName: string;
     rare: string;
-  }[];
+  };
 };
 
 type SearchPlantingsApiResponse = {
@@ -88,7 +88,7 @@ export type Plantings = {
   numPlants: number;
   plantingSiteId: number;
   plantingSubzoneId: number;
-  species: PlantingSpecies[];
+  species: PlantingSpecies;
   type: string;
   withdrawalId: number;
 };
