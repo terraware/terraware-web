@@ -2,11 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { PlantingsService, Response } from 'src/services';
 import strings from 'src/strings';
-import { UpdatePlantingSubzonePayload } from 'src/types/PlantingSite';
+import { UpdateSubstratumPayload } from 'src/types/PlantingSite';
 
 export type UpdateRequest = {
   subzoneId: number;
-  planting: UpdatePlantingSubzonePayload;
+  planting: UpdateSubstratumPayload;
 };
 
 export const requestUpdatePlantingCompleted = createAsyncThunk(
@@ -23,7 +23,7 @@ export const requestUpdatePlantingCompleted = createAsyncThunk(
 
 export type BulkUpdateRequest = {
   subzoneIds: number[];
-  planting: UpdatePlantingSubzonePayload;
+  planting: UpdateSubstratumPayload;
 };
 
 export const requestUpdatePlantingsCompleted = createAsyncThunk(
