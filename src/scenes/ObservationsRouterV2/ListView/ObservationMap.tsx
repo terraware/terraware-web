@@ -3,7 +3,7 @@ import { MapRef } from 'react-map-gl/mapbox';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
-import { MapLayer, MapNameTag, MapPoint } from 'src/components/NewMap/types';
+import { MapHighlightGroup, MapLayer, MapLayerFeatureId, MapNameTag, MapPoint } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import useMonitoringPlotsMapLegend from 'src/components/NewMap/useMonitoringPlotsMapLegend';
@@ -40,14 +40,22 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites', plantingSiteId === undefined);
   const { plantMakersLegendGroup } = usePlantMarkersMapLegend(plantingSiteId === undefined);
   const { plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
-  const { survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
+  const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
   const { adHocPlotsVisible, monitoringPlotsLegendGroup } = useMonitoringPlotsMapLegend(
     plantingSiteId === undefined,
     isBiomass,
     isBiomass
   );
 
-  const { sitesLayerStyle, zonesLayerStyle, subzonesLayerStyle, adHocPlotsLayerStyle } = useMapFeatureStyles();
+  const {
+    sitesLayerStyle,
+    zonesLayerStyle,
+    subzonesLayerStyle,
+    adHocPlotsLayerStyle,
+    survivalRate50To75,
+    survivalRateLessThan50,
+    survivalRateMoreThan75,
+  } = useMapFeatureStyles();
 
   const [listPlantingSites, listPlantingSitesResult] = useLazyListPlantingSitesQuery();
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
@@ -179,7 +187,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         {
           features: [
             {
-              featureId: `${selectedHistory.id}`,
+              featureId: `${selectedHistory.plantingSiteId}`,
               geometry: {
                 type: 'MultiPolygon',
                 coordinates: selectedHistory.boundary?.coordinates ?? [],
@@ -193,7 +201,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         {
           features:
             selectedHistory.plantingZones?.map((zone) => ({
-              featureId: `${zone.id}`,
+              featureId: `${zone.plantingZoneId}`,
               geometry: {
                 type: 'MultiPolygon',
                 coordinates: zone.boundary?.coordinates ?? [],
@@ -208,7 +216,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
           features:
             selectedHistory.plantingZones?.flatMap((zone) =>
               zone.plantingSubzones.map((subzone) => ({
-                featureId: `${subzone.id}`,
+                featureId: `${subzone.plantingSubzoneId}`,
                 geometry: {
                   type: 'MultiPolygon',
                   coordinates: subzone.boundary?.coordinates ?? [],
@@ -356,6 +364,80 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     }
   }, [allPlantingSites, fitBounds, plantingSite, plantingSiteId, selectPlantingSiteId]);
 
+  const survivalRateHighlights = useMemo(() => {
+    const lessThanFifty: MapLayerFeatureId[] = [];
+    const lessThanSeventyFive: MapLayerFeatureId[] = [];
+    const greaterThanSeventyFive: MapLayerFeatureId[] = [];
+
+    if (selectedResults === undefined || selectedHistory === undefined) {
+      return {
+        lessThanFifty,
+        lessThanSeventyFive,
+        greaterThanSeventyFive,
+      };
+    }
+
+    const sortFeatureBySurvivalRate = (entityId: MapLayerFeatureId, survivalRate: number | undefined) => {
+      if (survivalRate !== undefined) {
+        if (survivalRate < 50) {
+          lessThanFifty.push(entityId);
+        } else if (survivalRate < 75) {
+          lessThanSeventyFive.push(entityId);
+        } else {
+          greaterThanSeventyFive.push(entityId);
+        }
+      }
+    };
+
+    const siteId = { layerId: 'sites', featureId: `${selectedHistory.id}` };
+    sortFeatureBySurvivalRate(siteId, selectedResults.survivalRate);
+
+    selectedResults.plantingZones.forEach((zone) => {
+      const selectedZoneHistory = selectedHistory.plantingZones.find(
+        (zoneHistory) => zoneHistory.plantingZoneId === zone.plantingZoneId
+      );
+      const zoneId = { layerId: 'zones', featureId: `${selectedZoneHistory?.id}` };
+      sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
+
+      zone.plantingSubzones.forEach((subzone) => {
+        const selectedSubzoneHistory = selectedZoneHistory?.plantingSubzones.find(
+          (subzoneHistory) => subzoneHistory.plantingSubzoneId === subzone.plantingSubzoneId
+        );
+        const subzoneId = { layerId: 'subzones', featureId: `${selectedSubzoneHistory?.plantingSubzoneId}` };
+        sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
+      });
+    });
+
+    return {
+      lessThanFifty,
+      lessThanSeventyFive,
+      greaterThanSeventyFive,
+    };
+  }, [selectedHistory, selectedResults]);
+
+  const highlights = useMemo((): MapHighlightGroup[] => {
+    return [
+      {
+        highlightId: 'survivalRate',
+        highlights: [
+          {
+            featureIds: survivalRateHighlights.lessThanFifty,
+            style: survivalRateLessThan50,
+          },
+          {
+            featureIds: survivalRateHighlights.lessThanSeventyFive,
+            style: survivalRate50To75,
+          },
+          {
+            featureIds: survivalRateHighlights.greaterThanSeventyFive,
+            style: survivalRateMoreThan75,
+          },
+        ],
+        visible: survivalRateVisible,
+      },
+    ];
+  }, [survivalRate50To75, survivalRateHighlights, survivalRateLessThan50, survivalRateMoreThan75, survivalRateVisible]);
+
   const legends = useMemo((): MapLegendGroup[] => {
     const siteLegendGroup =
       plantingSiteId === undefined
@@ -370,22 +452,24 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       monitoringPlotsLegendGroup,
       plotPhotosLegendGroup,
       plantMakersLegendGroup,
-      survivalRateLegendGroup,
-    ];
+      !isBiomass ? survivalRateLegendGroup : undefined,
+    ].filter((group): group is MapLegendGroup => group !== undefined);
   }, [
     plantingSiteId,
     plantingSiteLegendGroup,
     monitoringPlotsLegendGroup,
     plotPhotosLegendGroup,
     plantMakersLegendGroup,
+    isBiomass,
     survivalRateLegendGroup,
   ]);
 
   return (
     <MapComponent
       legends={legends}
-      mapLayers={layers}
+      mapHighlights={highlights}
       mapId={mapId}
+      mapLayers={layers}
       mapRef={mapRef}
       nameTags={nameTags}
       token={token ?? ''}
