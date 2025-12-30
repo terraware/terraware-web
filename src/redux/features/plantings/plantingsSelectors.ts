@@ -56,8 +56,8 @@ export const selectPlantingProgress = createSelector(
           return {
             siteId: ps.id,
             siteName: ps.name,
-            reported: ps.plantingZones?.flatMap((zone) =>
-              zone.plantingSubzones
+            reported: ps.strata?.flatMap((zone) =>
+              zone.substrata
                 .filter((sz) => plantingsBySubzone[sz.id])
                 .map((sz) => ({
                   subzoneId: sz.id,

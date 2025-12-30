@@ -1,4 +1,4 @@
-import { MultiPolygon, PlantingSeason, MinimalPlantingZone } from 'src/types/Tracking';
+import { MultiPolygon, PlantingSeason, MinimalStratum } from 'src/types/Tracking';
 import { DraftPlantingSite, DraftPlantingSitePayload } from 'src/types/PlantingSite';
 import { fromDraft, toDraft } from './draftPlantingSiteUtils';
 
@@ -124,12 +124,12 @@ const subzone22: MultiPolygon = {
 
 const plantingSeasons: PlantingSeason[] = [{ id: 1, startDate: '2024-01-01', endDate: '2024-02-01' }];
 
-const plantingZones: MinimalPlantingZone[] = [
+const strata: MinimalStratum[] = [
   {
     boundary: zone1,
     id: 1,
     name: 'zone1',
-    plantingSubzones: [
+    substrata: [
       {
         boundary: subzone11,
         fullName: 'subzone11',
@@ -151,7 +151,7 @@ const plantingZones: MinimalPlantingZone[] = [
     boundary: zone2,
     id: 2,
     name: 'zone2',
-    plantingSubzones: [
+    substrata: [
       {
         boundary: subzone21,
         fullName: 'subzone21',
@@ -190,7 +190,7 @@ describe('fromDraft', () => {
         boundary: undefined,
         exclusion: undefined,
         plantingSeasons: [],
-        plantingZones: undefined,
+        strata: undefined,
         siteEditStep: 'details',
         siteType: 'simple',
       },
@@ -214,7 +214,7 @@ describe('fromDraft', () => {
       name: 'draft site',
       organizationId: 3,
       plantingSeasons,
-      plantingZones,
+      strata,
       projectId: 6,
       siteEditStep: 'subzone_boundaries',
       siteType: 'detailed',
@@ -227,7 +227,7 @@ describe('fromDraft', () => {
         boundary,
         exclusion,
         plantingSeasons,
-        plantingZones,
+        strata,
         siteEditStep: 'subzone_boundaries',
         siteType: 'detailed',
       },
@@ -251,7 +251,7 @@ describe('toDraft', () => {
         boundary: undefined,
         exclusion: undefined,
         plantingSeasons: [],
-        plantingZones: undefined,
+        strata: undefined,
         siteEditStep: 'details',
         siteType: 'simple',
       },
@@ -273,7 +273,7 @@ describe('toDraft', () => {
       name: 'draft site',
       organizationId: 3,
       plantingSeasons: [],
-      plantingZones: undefined,
+      strata: undefined,
       projectId: undefined,
       siteEditStep: 'details',
       siteType: 'simple',
@@ -288,7 +288,7 @@ describe('toDraft', () => {
         boundary,
         exclusion,
         plantingSeasons,
-        plantingZones,
+        strata,
         siteEditStep: 'subzone_boundaries',
         siteType: 'detailed',
       },
@@ -311,7 +311,7 @@ describe('toDraft', () => {
       name: 'draft site',
       organizationId: 3,
       plantingSeasons,
-      plantingZones,
+      strata,
       projectId: 6,
       siteEditStep: 'subzone_boundaries',
       siteType: 'detailed',

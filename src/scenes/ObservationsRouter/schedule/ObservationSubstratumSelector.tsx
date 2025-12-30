@@ -9,7 +9,7 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
-import { PlantingZone } from 'src/types/Tracking';
+import { Stratum } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
 interface ObservationSubstratumSelectorProps {
@@ -51,9 +51,9 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
   );
 
   const onChangeZoneCheckbox = useCallback(
-    (zone: PlantingZone) => (value: boolean) => {
+    (zone: Stratum) => (value: boolean) => {
       const nextSelectedSubzones = new Map(selectedSubzones);
-      zone.plantingSubzones.forEach((subzone) => {
+      zone.substrata.forEach((subzone) => {
         nextSelectedSubzones.set(subzone.id, value);
       });
 
@@ -62,19 +62,16 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
     [handleOnChangeSelectedSubzones, selectedSubzones]
   );
 
-  const isZoneFullySelected = (zone: PlantingZone) =>
-    zone.plantingSubzones.every((subzone) => selectedSubzones.get(subzone.id));
+  const isZoneFullySelected = (zone: Stratum) => zone.substrata.every((subzone) => selectedSubzones.get(subzone.id));
 
-  const isZonePartiallySelected = (zone: PlantingZone) =>
-    !isZoneFullySelected(zone) && zone.plantingSubzones.some((subzone) => selectedSubzones.get(subzone.id));
+  const isZonePartiallySelected = (zone: Stratum) =>
+    !isZoneFullySelected(zone) && zone.substrata.some((subzone) => selectedSubzones.get(subzone.id));
 
   useEffect(() => {
     if (plantingSite) {
       // Initialize all subzone selections
       const initialSelectedSubzones = new Map(
-        plantingSite.plantingZones?.flatMap((zone) =>
-          zone.plantingSubzones.map((subzone) => [subzone.id, selectAll ? true : false])
-        )
+        plantingSite.strata?.flatMap((zone) => zone.substrata.map((subzone) => [subzone.id, selectAll ? true : false]))
       );
       handleOnChangeSelectedSubzones(initialSelectedSubzones);
     }
@@ -82,7 +79,7 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
 
   return (
     plantingSite &&
-    plantingSite.plantingZones?.length && (
+    plantingSite.strata?.length && (
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography> {strings.SCHEDULE_OBSERVATION_MESSAGE}</Typography>
@@ -97,7 +94,7 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
             onChange={setSelectAll}
           />
         </Grid>
-        {plantingSite.plantingZones?.map((zone, index) => {
+        {plantingSite.strata?.map((zone, index) => {
           return (
             <Grid item xs={12} key={index}>
               <Checkbox
@@ -145,7 +142,7 @@ const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: 
                   </Box>
                 )}
               <Box sx={{ columnGap: theme.spacing(3), paddingLeft: `${theme.spacing(4)}` }}>
-                {zone.plantingSubzones.map((subzone, _index) => {
+                {zone.substrata.map((subzone, _index) => {
                   return (
                     <Box sx={{ display: 'inline-block', width: '100%' }} key={_index}>
                       <Checkbox

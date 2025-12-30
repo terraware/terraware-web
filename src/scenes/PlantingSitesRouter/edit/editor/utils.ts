@@ -8,11 +8,11 @@ import { SQ_M_TO_HECTARES } from 'src/constants';
 import strings from 'src/strings';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
+import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 
-export type DefaultZonePayload = Omit<MinimalPlantingZone, 'plantingSubzones'>;
+export type DefaultZonePayload = Omit<MinimalStratum, 'substrata'>;
 
-export const defaultZonePayload = (payload: DefaultZonePayload): MinimalPlantingZone => {
+export const defaultZonePayload = (payload: DefaultZonePayload): MinimalStratum => {
   const { boundary, id, name, targetPlantingDensity } = payload;
   const subzoneName = subzoneNameGenerator(new Set(), strings.SUBZONE);
 
@@ -20,7 +20,7 @@ export const defaultZonePayload = (payload: DefaultZonePayload): MinimalPlanting
     boundary,
     id,
     name,
-    plantingSubzones: [
+    substrata: [
       {
         boundary,
         fullName: subzoneName,
@@ -78,7 +78,7 @@ export const toZoneFeature = (feature: Feature, idGenerator: () => number) =>
  * Utility to generate a feature from planting zone data.
  * This is from BE planting zone data to a zone feature.
  */
-export const plantingZoneToFeature = (zone: MinimalPlantingZone): Feature => {
+export const plantingZoneToFeature = (zone: MinimalStratum): Feature => {
   const { boundary, id, name, targetPlantingDensity } = zone;
   return toFeature(boundary, { id, name, targetPlantingDensity }, id);
 };
@@ -87,7 +87,7 @@ export const plantingZoneToFeature = (zone: MinimalPlantingZone): Feature => {
  * Utility to generate a feature from planting subzone data.
  * This is from BE planting subzone data to a subzone feature.
  */
-export const plantingSubzoneToFeature = (subzone: MinimalPlantingSubzone): Feature => {
+export const plantingSubzoneToFeature = (subzone: MinimalSubstratum): Feature => {
   const { boundary, id, name } = subzone;
   return toFeature(boundary, { id, name }, id);
 };

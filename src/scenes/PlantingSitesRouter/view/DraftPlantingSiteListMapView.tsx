@@ -103,7 +103,7 @@ function DraftPlantingSiteMapView({ plantingSite, search }: PlantingSiteMapViewP
     if (!search) {
       setSearchZoneEntities([]);
     } else {
-      const entities = plantingSite?.plantingZones
+      const entities = plantingSite?.strata
         ?.filter((zone) => regexMatch(zone.name, search))
         .map((zone) => ({ sourceId: 'zones', id: zone.id }));
       setSearchZoneEntities(entities ?? []);
@@ -169,21 +169,21 @@ const ContextRenderer =
   (site: MinimalPlantingSite) =>
   // eslint-disable-next-line react/display-name
   (entity: MapSourceProperties): JSX.Element | null => {
-    const zones = site.plantingZones ?? [];
+    const zones = site.strata ?? [];
     let properties: TooltipProperty[] = [];
     let title: string;
     if (entity.type === 'site') {
       title = site.name;
       properties = [
         { key: strings.ZONES, value: zones.length },
-        { key: strings.SUBZONES, value: zones.flatMap((z) => z.plantingSubzones).length },
+        { key: strings.SUBZONES, value: zones.flatMap((z) => z.substrata).length },
       ];
     } else if (entity.type === 'zone') {
       const zone = zones.find((z) => z.id === entity.id);
       title = zone?.name ?? '';
       properties = [
         { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
-        { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
+        { key: strings.SUBZONES, value: zone?.substrata.length ?? 0 },
       ];
     } else {
       return null;

@@ -56,7 +56,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       return [];
     }
     return allPlantingSites?.filter((site) => {
-      if (!site.plantingZones?.length) {
+      if (!site.strata?.length) {
         return false;
       }
       const sitePlants = reportedPlants.find((_sitePlants) => _sitePlants.id === site.id);

@@ -156,7 +156,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const plantingSite = allPlantingSites
       ? allPlantingSites.find((site) => site.id.toString() === value.toString())
       : null;
-    setZones(plantingSite?.plantingZones || []);
+    setZones(plantingSite?.strata || []);
     setZoneId(undefined);
   };
 

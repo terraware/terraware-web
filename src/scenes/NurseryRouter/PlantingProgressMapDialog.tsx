@@ -37,7 +37,7 @@ export default function PlantingProgressMapDialog({
     if (!plantingSiteReportedPlants) {
       return undefined;
     }
-    const subzones = plantingSiteReportedPlants.plantingZones.flatMap((zone) => zone.plantingSubzones);
+    const subzones = plantingSiteReportedPlants.strata.flatMap((zone) => zone.substrata);
     return subzones.find((subzone) => subzone.id === subzoneId);
   }, [plantingSiteReportedPlants, subzoneId]);
 

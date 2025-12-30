@@ -17,8 +17,8 @@ export type ObservationStatusSummary = {
 };
 
 type ObservationStatusSummaryMessageProps = {
-  plantingZones?: PlantingSite['plantingZones'];
-  requestedSubzoneIds?: Observation['requestedSubzoneIds'];
+  plantingZones?: PlantingSite['strata'];
+  requestedSubzoneIds?: Observation['requestedSubstratumIds'];
   statusSummary?: ObservationStatusSummary;
 };
 
@@ -36,7 +36,7 @@ const ObservationStatusSummaryMessage = ({
 
     const zoneListItems: JSX.Element[] = plantingZones
       .map((zone, index): JSX.Element | null => {
-        const subzoneNames = zone.plantingSubzones
+        const subzoneNames = zone.substrata
           .filter((subzone) => requestedSubzoneIds.includes(subzone.id))
           .map((subzone) => subzone.name);
 

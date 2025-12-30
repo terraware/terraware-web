@@ -5,7 +5,7 @@ import {
   SiteEditStep,
   SiteType,
 } from 'src/types/PlantingSite';
-import { MinimalPlantingZone, MultiPolygon, PlantingSeason } from 'src/types/Tracking';
+import { MinimalStratum, MultiPolygon, PlantingSeason } from 'src/types/Tracking';
 
 /**
  * Utils to convert from DraftPlantingSitePayload `data` JSON
@@ -23,7 +23,7 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
     name,
     organizationId,
     plantingSeasons,
-    plantingZones,
+    strata,
     projectId,
     siteEditStep,
     siteType,
@@ -35,15 +35,15 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
     boundary,
     exclusion,
     plantingSeasons,
-    plantingZones,
+    strata,
     siteEditStep,
     siteType,
   };
 
-  const numStrata = plantingZones?.length;
-  const numSubstrata = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length;
+  const numStrata = strata?.length;
+  const numSubstrata = strata?.flatMap((zone) => zone.substrata)?.length;
 
-  const payload: DraftPlantingSitePayload = {
+  return {
     createdBy,
     data,
     description,
@@ -55,8 +55,6 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
     projectId,
     timeZone,
   };
-
-  return payload;
 };
 
 // convert from BE representation to client representation
@@ -66,11 +64,11 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =>
   const boundary: MultiPolygon | undefined = data.boundary as MultiPolygon | undefined;
   const exclusion: MultiPolygon | undefined = data.exclusion as MultiPolygon | undefined;
   const plantingSeasons: PlantingSeason[] = data.plantingSeasons as PlantingSeason[];
-  const plantingZones: MinimalPlantingZone[] | undefined = data.plantingZones as MinimalPlantingZone[] | undefined;
+  const strata: MinimalStratum[] | undefined = data.strata as MinimalStratum[] | undefined;
   const siteEditStep: SiteEditStep = data.siteEditStep as SiteEditStep;
   const siteType: SiteType = data.siteType as SiteType;
 
-  const draft: DraftPlantingSite = {
+  return {
     boundary,
     createdBy,
     description,
@@ -79,40 +77,26 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =>
     name,
     organizationId,
     plantingSeasons,
-    plantingZones,
+    strata,
     projectId,
     siteEditStep,
     siteType,
     timeZone,
   };
-
-  return draft;
 };
 
 export const fromDraftToCreate = (site: DraftPlantingSite): CreatePlantingSiteRequestPayload => {
-  const {
-    boundary,
-    description,
-    exclusion,
-    name,
-    organizationId,
-    plantingSeasons,
-    plantingZones,
-    projectId,
-    timeZone,
-  } = site;
+  const { boundary, description, exclusion, name, organizationId, plantingSeasons, strata, projectId, timeZone } = site;
 
-  const payload: CreatePlantingSiteRequestPayload = {
+  return {
     boundary,
     description,
     exclusion,
     name,
     organizationId,
     plantingSeasons,
-    plantingZones,
+    plantingZones: strata,
     projectId,
     timeZone,
   };
-
-  return payload;
 };

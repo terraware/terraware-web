@@ -20,7 +20,7 @@ import {
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { MinimalPlantingZone } from 'src/types/Tracking';
+import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
@@ -65,8 +65,8 @@ const createDraftSiteWith = (site: DraftPlantingSite) => (cutZones: GeometryFeat
 
 // create zone feature collections from the site
 const featureSiteZones = (site: DraftPlantingSite): FeatureCollection | undefined => {
-  if (site.plantingZones) {
-    const features = site.plantingZones.map(plantingZoneToFeature);
+  if (site.strata) {
+    const features = site.strata.map(plantingZoneToFeature);
     return { type: 'FeatureCollection', features };
   } else {
     return undefined;
@@ -127,13 +127,13 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
             return undefined;
           }
         })
-        .filter((zone) => !!zone) as MinimalPlantingZone[] | undefined;
+        .filter((zone) => !!zone) as MinimalStratum[] | undefined;
 
       const numZones = plantingZones?.length ?? 0;
 
       // callback with status of error and completion of this step
       const completed = numZones > 1;
-      const data = plantingZones ? { plantingZones } : undefined;
+      const data = plantingZones ? { strata: plantingZones } : undefined;
       onValidate.apply(data === undefined, data, completed);
     }
   }, [onValidate, snackbar, zones, zonesData?.errorAnnotations]);

@@ -232,7 +232,7 @@ const extractPlantingZonesFromSites = (sites: MinimalPlantingSite[]): MapSourceB
   const zonesEntities: MapEntity[] = [];
 
   sites.forEach((ps) => {
-    const zonesData = ps.plantingZones?.map((zone) => {
+    const zonesData = ps.strata?.map((zone) => {
       const { id, name, boundary } = zone;
       return {
         properties: { id, name, type: 'zone', recency: 0 },
@@ -256,7 +256,7 @@ const extractPlantingZonesFromSites = (sites: MinimalPlantingSite[]): MapSourceB
  */
 const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
   const zonesData =
-    site.plantingZones?.map((zone) => {
+    site.strata?.map((zone) => {
       const { id, name, boundary } = zone;
       return {
         properties: { id, name, type: 'zone', recency: 0 },
@@ -276,10 +276,10 @@ const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
  */
 const extractPlantingZonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
   const zonesData =
-    site.plantingZones?.map((zone) => {
-      const { id, plantingZoneId, name, boundary } = zone;
+    site.strata?.map((zone) => {
+      const { id, stratumId, name, boundary } = zone;
       return {
-        properties: { id, plantingZoneId, name, type: 'zone', recency: 0 },
+        properties: { id, stratumId, name, type: 'zone', recency: 0 },
         boundary: getPolygons(boundary),
         id,
       };
@@ -298,9 +298,9 @@ const extractSubzonesFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseDa
   const subzoneEntities: MapEntity[] = [];
 
   sites.forEach((ps) => {
-    const allPlantingSubzonesData = ps.plantingZones?.flatMap((zone) => {
-      const { plantingSubzones } = zone;
-      return plantingSubzones.map((subzone) => {
+    const allPlantingSubzonesData = ps.strata?.flatMap((zone) => {
+      const { substrata } = zone;
+      return substrata.map((subzone) => {
         const { id, name, fullName, boundary } = subzone;
         return {
           properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
@@ -325,9 +325,9 @@ const extractSubzonesFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseDa
  */
 const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData => {
   const allPlantingSubzonesData =
-    site.plantingZones?.flatMap((zone) => {
-      const { plantingSubzones } = zone;
-      return plantingSubzones.map((subzone) => {
+    site.strata?.flatMap((zone) => {
+      const { substrata } = zone;
+      return substrata.map((subzone) => {
         const { id, name, fullName, boundary } = subzone;
         return {
           properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
@@ -345,9 +345,9 @@ const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData => {
 
 const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
   const allPlantingSubzonesData =
-    site.plantingZones?.flatMap((zone) => {
-      const { plantingSubzones } = zone;
-      return plantingSubzones.map((subzone) => {
+    site.strata?.flatMap((zone) => {
+      const { substrata } = zone;
+      return substrata.map((subzone) => {
         const { id, name, fullName, boundary } = subzone;
         return {
           properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
@@ -369,22 +369,20 @@ const extractSubzonesFromHistoryAndResult = (
   result: ObservationSummary
 ): MapSourceBaseData => {
   const allPlantingSubzonesData =
-    history.plantingZones?.flatMap((zoneHistory) => {
-      const { plantingZoneId, plantingSubzones } = zoneHistory;
-      const zone = site.plantingZones?.find((_zone) => _zone.id === plantingZoneId);
-      const zoneResult = result.plantingZones.find((_zone) => _zone.plantingZoneId === plantingZoneId);
-      return plantingSubzones.map((subzoneHistory) => {
-        const { id, plantingSubzoneId, name, fullName, boundary } = subzoneHistory;
-        const subzone = zone?.plantingSubzones?.find((_subzone) => _subzone.id === plantingSubzoneId);
-        const subzoneResult = zoneResult?.plantingSubzones?.find(
-          (_subzone) => _subzone.plantingSubzoneId === plantingSubzoneId
-        );
+    history.strata?.flatMap((zoneHistory) => {
+      const { stratumId, substrata } = zoneHistory;
+      const zone = site.strata?.find((_zone) => _zone.id === stratumId);
+      const zoneResult = result.strata.find((_zone) => _zone.stratumId === stratumId);
+      return substrata.map((subzoneHistory) => {
+        const { id, substratumId, name, fullName, boundary } = subzoneHistory;
+        const subzone = zone?.substrata?.find((_subzone) => _subzone.id === substratumId);
+        const subzoneResult = zoneResult?.substrata?.find((_subzone) => _subzone.substratumId === substratumId);
         const recency = subzone?.latestObservationCompletedTime
           ? getRecencyFromTime(subzone.latestObservationCompletedTime)
           : -1;
         const survivalRate = subzoneResult?.survivalRate;
         return {
-          properties: { id, name, fullName, type: 'subzone', zoneId: plantingZoneId, recency, survivalRate },
+          properties: { id, name, fullName, type: 'subzone', zoneId: stratumId, recency, survivalRate },
           boundary: getPolygons(boundary),
           id,
         };

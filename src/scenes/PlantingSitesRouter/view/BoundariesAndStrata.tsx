@@ -67,8 +67,8 @@ export default function BoundariesAndStrata({
   const plantingCompleteArea = useMemo(() => {
     let total = 0;
     if (plantingSite) {
-      plantingSite.plantingZones?.forEach((zone) => {
-        zone.plantingSubzones.forEach((subzone) => {
+      plantingSite.strata?.forEach((zone) => {
+        zone.substrata.forEach((subzone) => {
           if (subzone.plantingCompleted) {
             total += subzone.areaHa;
           }
@@ -201,7 +201,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
     if (!search) {
       setSearchZoneEntities([]);
     } else {
-      const entities = plantingSite?.plantingZones
+      const entities = plantingSite?.strata
         ?.filter((zone) => regexMatch(zone.name, search))
         .map((zone) => ({ sourceId: 'zones', id: zone.id }));
       setSearchZoneEntities(entities ?? []);
@@ -228,12 +228,12 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
         if (entity.type === 'site') {
           title = plantingSite.name;
           properties = [
-            { key: strings.ZONES, value: selectedHistory.plantingZones.length },
-            { key: strings.SUBZONES, value: selectedHistory.plantingZones.flatMap((z) => z.plantingSubzones).length },
+            { key: strings.ZONES, value: selectedHistory.strata.length },
+            { key: strings.SUBZONES, value: selectedHistory.strata.flatMap((z) => z.substrata).length },
           ];
         } else if (entity.type === 'zone') {
-          const zoneHistory = selectedHistory.plantingZones.find((_zoneHistory) => _zoneHistory.id === entity.id);
-          const zone = plantingSite.plantingZones?.find((_zone) => _zone.id === zoneHistory?.plantingZoneId);
+          const zoneHistory = selectedHistory.strata.find((_zoneHistory) => _zoneHistory.id === entity.id);
+          const zone = plantingSite.strata?.find((_zone) => _zone.id === zoneHistory?.stratumId);
           title = zoneHistory?.name ?? zone?.name ?? '';
 
           properties = [
@@ -241,9 +241,9 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
             { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
             {
               key: strings.PLANTING_COMPLETE,
-              value: zone?.plantingSubzones?.every((subzone) => subzone.plantingCompleted) ? strings.YES : strings.NO,
+              value: zone?.substrata?.every((subzone) => subzone.plantingCompleted) ? strings.YES : strings.NO,
             },
-            { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
+            { key: strings.SUBZONES, value: zone?.substrata.length ?? 0 },
             {
               key: strings.LAST_OBSERVED,
               value: zone?.latestObservationCompletedTime
@@ -252,12 +252,12 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
             },
           ];
         } else if (entity.type === 'subzone') {
-          const subzoneHistory = selectedHistory.plantingZones
-            .flatMap((_zoneHistory) => _zoneHistory.plantingSubzones)
+          const subzoneHistory = selectedHistory.strata
+            .flatMap((_zoneHistory) => _zoneHistory.substrata)
             .find((_subzoneHistory) => _subzoneHistory.id === entity.id);
-          const subzone = plantingSite.plantingZones
-            ?.flatMap((_zone) => _zone.plantingSubzones)
-            .find((_subzone) => _subzone.id === subzoneHistory?.plantingSubzoneId);
+          const subzone = plantingSite.strata
+            ?.flatMap((_zone) => _zone.substrata)
+            .find((_subzone) => _subzone.id === subzoneHistory?.substratumId);
           title = subzoneHistory?.name ?? subzone?.name ?? '';
           properties = [
             {

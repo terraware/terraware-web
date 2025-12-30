@@ -52,9 +52,9 @@ const initializeOptionalStepsStatus = (site: DraftPlantingSite): Record<Optional
     status.exclusion_areas = true;
   }
 
-  if (site.plantingZones) {
-    const numZones = site.plantingZones.length;
-    const numSubzones = site.plantingZones.flatMap((zone) => zone.plantingSubzones).length;
+  if (site.strata) {
+    const numZones = site.strata.length;
+    const numSubzones = site.strata.flatMap((zone) => zone.substrata).length;
 
     // if we have more than just the default zone, mark this optional step as completed
     status.zone_boundaries = numZones > 1;
@@ -268,7 +268,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       // edits to name, description, planting seasons and project are preserved
       boundary: undefined,
       exclusion: undefined,
-      plantingZones: undefined,
+      strata: undefined,
       siteEditStep: nextStep,
     };
 

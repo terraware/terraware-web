@@ -273,8 +273,8 @@ const PlantDashboardMap = ({
       zoneFeatures: MapLayerFeature[];
       subzoneFeatures: MapLayerFeature[];
     } => {
-      const zones = site.plantingZones ?? [];
-      const subzones = site.plantingZones?.flatMap((zone) => zone.plantingSubzones);
+      const zones = site.strata ?? [];
+      const subzones = site.strata?.flatMap((zone) => zone.substrata);
 
       return {
         siteFeatures: [
@@ -455,12 +455,12 @@ const PlantDashboardMap = ({
     const siteId = { layerId: 'sites', featureId: `${latestSummary?.plantingSiteId}` };
     sortFeatureBySurvivalRate(siteId, latestSummary?.survivalRate);
 
-    latestSummary?.plantingZones.forEach((zone) => {
-      const zoneId = { layerId: 'zones', featureId: `${zone.plantingZoneId}` };
+    latestSummary?.strata.forEach((zone) => {
+      const zoneId = { layerId: 'zones', featureId: `${zone.stratumId}` };
       sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
 
-      zone.plantingSubzones.forEach((subzone) => {
-        const subzoneId = { layerId: 'subzones', featureId: `${subzone.plantingSubzoneId}` };
+      zone.substrata.forEach((subzone) => {
+        const subzoneId = { layerId: 'subzones', featureId: `${subzone.substratumId}` };
         sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
       });
     });
@@ -501,10 +501,10 @@ const PlantDashboardMap = ({
       const siteId = { layerId: 'sites', featureId: `${plantingSite.id}` };
       sortFeatureByObservationRecency(siteId, plantingSite.latestObservationCompletedTime);
 
-      plantingSite.plantingZones?.forEach((zone) => {
+      plantingSite.strata?.forEach((zone) => {
         const zoneId = { layerId: 'zones', featureId: `${zone.id}` };
         sortFeatureByObservationRecency(zoneId, zone.latestObservationCompletedTime);
-        zone.plantingSubzones.forEach((subzone) => {
+        zone.substrata.forEach((subzone) => {
           const subzoneId = { layerId: 'subzones', featureId: `${subzone.id}` };
           sortFeatureByObservationRecency(subzoneId, subzone.latestObservationCompletedTime);
         });

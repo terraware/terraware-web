@@ -68,8 +68,8 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
 
   const subzonesAreaHa: Record<number, number> = useMemo(() => {
     const result: Record<number, number> = {};
-    plantingSite?.plantingZones
-      ?.flatMap((zone) => zone.plantingSubzones)
+    plantingSite?.strata
+      ?.flatMap((zone) => zone.substrata)
       ?.forEach((sz) => {
         result[sz.id] = sz.areaHa;
       });
@@ -78,8 +78,8 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
 
   const subzonesComplete: Record<number, boolean> = useMemo(() => {
     const result: Record<number, boolean> = {};
-    plantingSite?.plantingZones
-      ?.flatMap((zone) => zone.plantingSubzones)
+    plantingSite?.strata
+      ?.flatMap((zone) => zone.substrata)
       ?.forEach((sz) => {
         result[sz.id] = sz.plantingCompleted;
       });
@@ -119,13 +119,11 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
         completeUpdate(id, val);
       } else {
         setStatsWarningDialogProps({ id, val });
-        const selectedZone = plantingSite?.plantingZones?.find((zone) =>
-          zone.plantingSubzones.map((sz) => sz.id).includes(id)
-        );
+        const selectedZone = plantingSite?.strata?.find((zone) => zone.substrata.map((sz) => sz.id).includes(id));
         setZoneIdSelected(selectedZone?.id ?? -1);
       }
     },
-    [selectedZoneHasStats, completeUpdate, plantingSite?.plantingZones]
+    [selectedZoneHasStats, completeUpdate, plantingSite?.strata]
   );
 
   return mapData ? (

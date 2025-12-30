@@ -15,7 +15,7 @@ import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { MinimalPlantingZone } from 'src/types/Tracking';
+import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
@@ -29,7 +29,7 @@ export type SiteBoundaryProps = {
 };
 
 // create default planting zones off the site boundary
-const createPlantingZoneWith = (boundary?: MultiPolygon): MinimalPlantingZone | undefined => {
+const createPlantingZoneWith = (boundary?: MultiPolygon): MinimalStratum | undefined => {
   if (!boundary) {
     return undefined;
   }
@@ -108,7 +108,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         // create one zone per disjoint polygon in the site boundary
         const plantingZone = createPlantingZoneWith(boundary);
         const plantingZones = plantingZone ? [plantingZone] : [];
-        onValidate.apply(false, { boundary, plantingZones });
+        onValidate.apply(false, { boundary, strata: plantingZones });
       }
     }
   }, [boundary, errorAnnotations, onValidate, site.id, snackbar]);
@@ -167,7 +167,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       {
         ...site,
         boundary: newBoundary,
-        plantingZones,
+        strata: plantingZones,
       },
       'site_boundary',
       []

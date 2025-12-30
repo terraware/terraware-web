@@ -31,7 +31,7 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
   const { site, status } = useDraftPlantingSiteGet({ draftId: Number(plantingSiteId) });
 
   const plantingZone = useMemo(() => {
-    return site?.plantingZones?.find((zone) => zone.id === Number(zoneId));
+    return site?.strata?.find((zone) => zone.id === Number(zoneId));
   }, [site, zoneId]);
 
   const navigate = useSyncNavigate();
@@ -82,7 +82,7 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
           <Table
             id='planting-site-zone-details-table'
             columns={columns}
-            rows={plantingZone?.plantingSubzones ?? []}
+            rows={plantingZone?.substrata ?? []}
             orderBy='fullName'
           />
         </Box>

@@ -16,11 +16,11 @@ export default function PlantingSiteDensityCard(): JSX.Element {
       return true;
     }
 
-    const allSubzones = plantingSite.plantingZones?.flatMap((zone) => zone.plantingSubzones);
-    const allSubzonesObserved = observationSummaries[0].plantingZones.flatMap((zone) => zone.plantingSubzones);
+    const allSubzones = plantingSite.strata?.flatMap((zone) => zone.substrata);
+    const allSubzonesObserved = observationSummaries[0].strata.flatMap((zone) => zone.substrata);
     return allSubzones?.every((subzone) =>
       allSubzonesObserved.find(
-        (subzoneObv) => subzoneObv.plantingSubzoneId === subzone.id && subzoneObv.monitoringPlots.length > 0
+        (subzoneObv) => subzoneObv.substratumId === subzone.id && subzoneObv.monitoringPlots.length > 0
       )
     );
   }, [observationSummaries, plantingSite]);

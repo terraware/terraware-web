@@ -45,8 +45,8 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
 
   const observer = useMemo(() => {
     if (result) {
-      return result.plantingZones
-        .flatMap((zone) => zone.plantingSubzones)
+      return result.strata
+        .flatMap((zone) => zone.substrata)
         .flatMap((subzone) => subzone.monitoringPlots)
         .find((plot) => plot.monitoringPlotId === monitoringPlotId)?.claimedByName;
     }
@@ -70,8 +70,8 @@ const MapPhotoDrawer = ({ monitoringPlotId, observationId, photo }: MapPhotoDraw
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     if (result) {
-      const zone = result.plantingZones.find((_zone) =>
-        _zone.plantingSubzones.some((subzone) =>
+      const zone = result.strata.find((_zone) =>
+        _zone.substrata.some((subzone) =>
           subzone.monitoringPlots.some((plot) => plot.monitoringPlotId === monitoringPlotId)
         )
       );

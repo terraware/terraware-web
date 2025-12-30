@@ -33,7 +33,7 @@ export default function PlantsReportedPerSpeciesCard({
 
   if (!plantingSite) {
     return <RolledUpCard projectId={projectId} />;
-  } else if (!plantingSite.plantingZones?.length) {
+  } else if (!plantingSite.strata?.length) {
     return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else {
     return <SiteWithZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;

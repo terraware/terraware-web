@@ -33,7 +33,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
   const plantingSite = useMemo(() => result.site, [result]);
 
   const isMapView = useMemo<boolean>(
-    () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.plantingZones === undefined),
+    () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.strata === undefined),
     [plantingSite, view]
   );
 
@@ -73,7 +73,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
               }}
             >
               <PlantingSiteDetailsCard plantingSite={plantingSite} />
-              {plantingSite.boundary && plantingSite.plantingZones && (
+              {plantingSite.boundary && plantingSite.strata && (
                 <DraftPlantingSiteListMapView
                   plantingSite={plantingSite}
                   search={search}
@@ -82,7 +82,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
                   view={view}
                 />
               )}
-              {plantingSite.boundary && !plantingSite.plantingZones && (
+              {plantingSite.boundary && !plantingSite.strata && (
                 <Grid container flexGrow={1}>
                   <Grid item xs={12} display='flex'>
                     <SimplePlantingSite plantingSite={plantingSite} />

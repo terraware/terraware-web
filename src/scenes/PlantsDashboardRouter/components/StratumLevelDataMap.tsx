@@ -28,9 +28,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
   const zonesProgress = useMemo(() => {
     const zoneProgress: Record<number, { name: string; progress: number; targetDensity: number }> = {};
 
-    plantingSite?.plantingZones?.forEach((zone) => {
-      const percentProgress =
-        plantingSiteReportedPlants?.plantingZones?.find((z) => z.id === zone.id)?.progressPercent ?? 0;
+    plantingSite?.strata?.forEach((zone) => {
+      const percentProgress = plantingSiteReportedPlants?.strata?.find((z) => z.id === zone.id)?.progressPercent ?? 0;
       zoneProgress[zone.id] = { name: zone.name, progress: percentProgress, targetDensity: zone.targetPlantingDensity };
     });
 
@@ -39,8 +38,8 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
 
   const zonesStats = useMemo(() => {
     const zoneStats: Record<number, { name: string; reportedPlants: number; reportedSpecies: number }> = {};
-    plantingSite?.plantingZones?.forEach((zone) => {
-      const zoneReportedPlants = plantingSiteReportedPlants?.plantingZones?.find((z) => z.id === zone.id);
+    plantingSite?.strata?.forEach((zone) => {
+      const zoneReportedPlants = plantingSiteReportedPlants?.strata?.find((z) => z.id === zone.id);
       const reportedPlants = zoneReportedPlants?.totalPlants ?? 0;
       const reportedSpecies = 0; // zoneReportedPlants?.totalSpecies ?? 0;
       zoneStats[zone.id] = { name: zone.name, reportedPlants, reportedSpecies };
@@ -161,7 +160,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
 
   const findZoneArea = useCallback(
     (zoneId: number) => {
-      const selectedZone = plantingSite?.plantingZones?.find((pZone) => pZone.id === zoneId);
+      const selectedZone = plantingSite?.strata?.find((pZone) => pZone.id === zoneId);
       return selectedZone?.areaHa;
     },
     [plantingSite]

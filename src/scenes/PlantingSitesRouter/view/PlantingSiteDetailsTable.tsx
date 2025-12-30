@@ -10,7 +10,7 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { MinimalPlantingSite, MinimalPlantingSubzone } from 'src/types/Tracking';
+import { MinimalPlantingSite, MinimalSubstratum } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 /**
@@ -65,7 +65,7 @@ export default function PlantingSiteDetailsTable({ plantingSite }: PlantingSiteD
       <Table
         id='planting-site-details-table'
         columns={columns}
-        rows={plantingSite.plantingZones ?? []}
+        rows={plantingSite.strata ?? []}
         orderBy='name'
         Renderer={DetailsRenderer(timeZone, plantingSite.id)}
       />
@@ -145,7 +145,7 @@ const DetailsRenderer =
     }
 
     if (column.key === 'plantingCompleted') {
-      const isPlantingCompleted = row.plantingSubzones.every((psz: MinimalPlantingSubzone) => psz.plantingCompleted);
+      const isPlantingCompleted = row.plantingSubzones.every((psz: MinimalSubstratum) => psz.plantingCompleted);
       return (
         <CellRenderer
           {...props}

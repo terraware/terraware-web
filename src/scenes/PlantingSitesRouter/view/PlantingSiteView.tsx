@@ -38,8 +38,8 @@ export default function PlantingSiteView(): JSX.Element {
   }, [plantingSite, navigate]);
 
   const isMapView = useMemo<boolean>(
-    () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.plantingZones === undefined),
-    [plantingSite?.boundary, plantingSite?.plantingZones, view]
+    () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.strata === undefined),
+    [plantingSite?.boundary, plantingSite?.strata, view]
   );
 
   const openModal = useCallback(() => setDeleteModalOpen(true), []);
@@ -69,10 +69,10 @@ export default function PlantingSiteView(): JSX.Element {
           }}
         >
           <PlantingSiteDetailsCard plantingSite={plantingSite} />
-          {plantingSite.boundary && plantingSite.plantingZones && (
+          {plantingSite.boundary && plantingSite.strata && (
             <BoundariesAndStrata search={search} setSearch={setSearch} setView={setView} view={view} />
           )}
-          {plantingSite.boundary && !plantingSite.plantingZones && (
+          {plantingSite.boundary && !plantingSite.strata && (
             <Grid container flexGrow={1}>
               <Grid item xs={12} display='flex'>
                 <SimplePlantingSite plantingSite={plantingSite} />

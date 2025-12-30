@@ -142,8 +142,8 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
     if (plantingSite) {
       const totalArea = plantingSite.areaHa ?? 0;
       const totalPlantedArea =
-        plantingSite?.plantingZones
-          ?.flatMap((zone) => zone.plantingSubzones)
+        plantingSite?.strata
+          ?.flatMap((zone) => zone.substrata)
           ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0;
       const percentagePlanted = totalArea > 0 ? Math.round((totalPlantedArea / totalArea) * 100) : 0;
       return `${percentagePlanted}%`;
@@ -154,7 +154,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   const plantingDensityForZones = useMemo(() => {
     const zoneNameWithDensities: string[] = [];
     if (plantingSite && plantingDensity) {
-      plantingSite.plantingZones?.reduce((acc, zone) => {
+      plantingSite.strata?.reduce((acc, zone) => {
         if (plantingDensity[zone.name] !== '') {
           zoneNameWithDensities.push(`${zone.name}: ${plantingDensity[zone.name]}`);
         }
