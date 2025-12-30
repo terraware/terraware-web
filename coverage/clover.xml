@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1767120521691" clover="3.2.0">
-  <project timestamp="1767120521691" name="All files">
-    <metrics statements="36232" coveredstatements="1338" conditionals="25342" coveredconditionals="393" methods="11222" coveredmethods="213" elements="72796" coveredelements="1944" complexity="0" loc="36232" ncloc="36232" packages="286" files="1421" classes="1421"/>
+<coverage generated="1767125916754" clover="3.2.0">
+  <project timestamp="1767125916754" name="All files">
+    <metrics statements="36231" coveredstatements="1338" conditionals="25342" coveredconditionals="393" methods="11221" coveredmethods="213" elements="72794" coveredelements="1944" complexity="0" loc="36231" ncloc="36231" packages="286" files="1421" classes="1421"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -14141,7 +14141,7 @@
       </file>
     </package>
     <package name="src.queries.search">
-      <metrics statements="38" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="33" coveredmethods="0"/>
+      <metrics statements="37" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="32" coveredmethods="0"/>
       <file name="draftPlantingSites.ts" path="/home/runner/work/terraware-web/terraware-web/src/queries/search/draftPlantingSites.ts">
         <metrics statements="10" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -14178,13 +14178,12 @@
         <line num="132" count="0" type="stmt"/>
       </file>
       <file name="plantings.ts" path="/home/runner/work/terraware-web/terraware-web/src/queries/search/plantings.ts">
-        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
         <line num="98" count="0" type="stmt"/>
       </file>
       <file name="t0.ts" path="/home/runner/work/terraware-web/terraware-web/src/queries/search/t0.ts">
