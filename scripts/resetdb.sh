@@ -41,7 +41,7 @@ fi
 
 restore_dump dump/dump.sql
 
-yarn docker:start
+yarn docker:start:prod
 if yarn wait-be; then
     :
 else
