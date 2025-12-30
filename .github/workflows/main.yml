@@ -24,8 +24,8 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  deploy:
-    runs-on: ubuntu-24-8core
+  test:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6
@@ -35,20 +35,6 @@ jobs:
         with:
           node-version: '24'
           cache: yarn
-
-      - name: Set Environment
-        run: ./.github/scripts/set-environment.sh
-
-      - name: Get installed Playwright version
-        id: playwright-version
-        run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test --depth=0 | grep @playwright/test | cut -d @ -f 3)" >> $GITHUB_ENV
-
-      - name: Restore playwright binaries from cache
-        uses: actions/cache/restore@v5
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -87,8 +73,37 @@ jobs:
       - name: Run unit tests
         run: yarn test --ci
 
+  playwright:
+    runs-on: ubuntu-24-8core
+    if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: yarn
+
+      - name: Set Environment
+        run: ./.github/scripts/set-environment.sh
+
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test --depth=0 | grep @playwright/test | cut -d @ -f 3)" >> $GITHUB_ENV
+
+      - name: Restore playwright binaries from cache
+        uses: actions/cache/restore@v5
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Download and start backend
-        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
         run: yarn server:reset
         env:
           SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
@@ -97,11 +112,10 @@ jobs:
           TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
       - name: Install Playwright Browsers
-        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') && steps.playwright-cache.outputs.cache-hit != 'true'
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: yarn playwright install --with-deps chromium-headless-shell
 
       - name: Run end-to-end playwright tests
-        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 20
@@ -129,6 +143,26 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+
+  build-and-deploy:
+    runs-on: ubuntu-24-8core
+    needs: [test, playwright]
+    if: always() && (needs.test.result == 'success') && (needs.playwright.result == 'success' || needs.playwright.result == 'skipped')
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: yarn
+
+      - name: Set Environment
+        run: ./.github/scripts/set-environment.sh
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
       - name: build
         run: yarn build
