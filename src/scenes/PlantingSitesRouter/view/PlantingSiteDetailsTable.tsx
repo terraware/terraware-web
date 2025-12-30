@@ -45,7 +45,7 @@ const columns = (): TableColumnType[] => [
     type: 'number',
   },
   {
-    key: 'plantingSubzones',
+    key: 'substrata',
     name: strings.SUBZONES,
     type: 'number',
   },
@@ -127,8 +127,8 @@ const DetailsRenderer =
       return <CellRenderer {...props} value={value || ''} sx={textStyles} />;
     }
 
-    if (column.key === 'plantingSubzones') {
-      return <CellRenderer {...props} value={row.plantingSubzones.length} sx={textStyles} />;
+    if (column.key === 'substrata') {
+      return <CellRenderer {...props} value={row.substrata.length} sx={textStyles} />;
     }
 
     if (column.key === 'plotNumber') {
@@ -145,7 +145,7 @@ const DetailsRenderer =
     }
 
     if (column.key === 'plantingCompleted') {
-      const isPlantingCompleted = row.plantingSubzones.every((psz: MinimalSubstratum) => psz.plantingCompleted);
+      const isPlantingCompleted = row.substrata.every((psz: MinimalSubstratum) => psz.plantingCompleted);
       return (
         <CellRenderer
           {...props}

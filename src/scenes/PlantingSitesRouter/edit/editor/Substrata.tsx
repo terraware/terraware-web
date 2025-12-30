@@ -168,7 +168,7 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
           }
         })
         .filter((subzone) => !!subzone) as MinimalSubstratum[];
-      return { ...zone, plantingSubzones };
+      return { ...zone, substrata: plantingSubzones };
     });
     const numZones = site.strata?.length ?? 0;
     const numSubzones = plantingZones?.flatMap((zone) => zone.substrata)?.length ?? 0;
