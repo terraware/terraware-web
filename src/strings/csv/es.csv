@@ -52,6 +52,7 @@ AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observada
 AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas.,142e44c5
 AD_HOC_PLOT_SPECIES_TOOLTIP,Especies es el número de especies representadas por todas las plantas observadas.,ed7c35b1
 AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas.",b2fd163f
+AD_HOC_PLOTS,Parcelas ad hoc,104e30b2
 ADD,Añadir,2ffae546
 ADD_A_NURSERY,Añadir un vivero,758726df
 ADD_A_PLANTING_SITE,Añadir un sitio de plantación,edbe08ae

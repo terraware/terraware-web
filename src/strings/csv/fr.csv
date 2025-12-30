@@ -52,6 +52,7 @@ AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes
 AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées.,142e44c5
 AD_HOC_PLOT_SPECIES_TOOLTIP,Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées.,ed7c35b1
 AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total de plantes observées, y compris les plantes enregistrées comme vivantes et mortes.",b2fd163f
+AD_HOC_PLOTS,Parcelles ad hoc,104e30b2
 ADD,Ajouter,2ffae546
 ADD_A_NURSERY,Ajouter une pépinière,758726df
 ADD_A_PLANTING_SITE,Ajouter un site de plantation,edbe08ae

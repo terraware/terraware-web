@@ -52,6 +52,7 @@ AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Live Plants is the number of observed plants rec
 AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,Plant Density (plants per hectare) is calculated based on the number of observed plants.,
 AD_HOC_PLOT_SPECIES_TOOLTIP,Species is the number of species represented by all of the observed plants.,
 AD_HOC_PLOT_TOTAL_PLANTS_TOOLTIP,"Total Plants is the number of all observed plants, including plants recorded as live and dead.",
+AD_HOC_PLOTS,Ad Hoc Plots,
 ADD,Add,
 ADD_A_NURSERY,Add a Nursery,
 ADD_A_PLANTING_SITE,Add a Planting Site,
