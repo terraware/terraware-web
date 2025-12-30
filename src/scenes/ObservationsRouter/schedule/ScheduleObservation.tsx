@@ -33,7 +33,7 @@ export default function ScheduleObservation(): JSX.Element {
 
   const onSave = useCallback(
     (data: ScheduleObservationRequestPayload) => {
-      schedule(data.plantingSiteId, data.startDate, data.endDate, data.requestedSubzoneIds);
+      schedule(data.plantingSiteId, data.startDate, data.endDate, data.requestedSubstratumIds);
     },
     [schedule]
   );
