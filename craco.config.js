@@ -35,5 +35,5 @@ module.exports = {
       })),
     },
   },
-  plugins: [{ plugin: CracoEsbuildPlugin }],
+  plugins: [{ plugin: CracoEsbuildPlugin, options: { esbuildJestOptions: { loaders: { '.tsx': 'tsx' } } } }],
 };
