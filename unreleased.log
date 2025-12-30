@@ -1,3 +1,4 @@
+39be978a6cf SW-7903 Preemptively fix newly optional BE properties (#4977)
 339eeb4d7e7 SW-7895 Rename zone->strata in search sublists for remaining files (#4969)
 216e290b4b8 SW-7895 Rename zone->strata in search sublists for t0 files (#4968)
 a15792c5c31 SW-7900 Integrate Playwright logs with GitHub actions (#4974)

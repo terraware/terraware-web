@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1767119316934" clover="3.2.0">
-  <project timestamp="1767119316934" name="All files">
-    <metrics statements="36230" coveredstatements="1338" conditionals="25330" coveredconditionals="393" methods="11222" coveredmethods="213" elements="72782" coveredelements="1944" complexity="0" loc="36230" ncloc="36230" packages="286" files="1421" classes="1421"/>
+<coverage generated="1767120521691" clover="3.2.0">
+  <project timestamp="1767120521691" name="All files">
+    <metrics statements="36232" coveredstatements="1338" conditionals="25342" coveredconditionals="393" methods="11222" coveredmethods="213" elements="72796" coveredelements="1944" complexity="0" loc="36232" ncloc="36232" packages="286" files="1421" classes="1421"/>
     <package name="src">
       <metrics statements="193" coveredstatements="9" conditionals="138" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11997,7 +11997,7 @@
       </file>
     </package>
     <package name="src.hooks">
-      <metrics statements="723" coveredstatements="25" conditionals="279" coveredconditionals="6" methods="238" coveredmethods="11"/>
+      <metrics statements="725" coveredstatements="25" conditionals="281" coveredconditionals="6" methods="238" coveredmethods="11"/>
       <file name="useAcceleratorConsole.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAcceleratorConsole.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -12760,16 +12760,18 @@
         <line num="28" count="0" type="stmt"/>
       </file>
       <file name="useScheduleObservation.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useScheduleObservation.ts">
-        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
       </file>
       <file name="useSeedBankSummary.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useSeedBankSummary.ts">
         <metrics statements="21" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
@@ -36273,7 +36275,7 @@
       </file>
     </package>
     <package name="src.scenes.SurvivalRateSettings">
-      <metrics statements="586" coveredstatements="0" conditionals="378" coveredconditionals="0" methods="243" coveredmethods="0"/>
+      <metrics statements="586" coveredstatements="0" conditionals="388" coveredconditionals="0" methods="243" coveredmethods="0"/>
       <file name="ChangeTabWarningModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/ChangeTabWarningModal.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -36383,7 +36385,7 @@
         <line num="125" count="0" type="stmt"/>
       </file>
       <file name="EditTemporaryPlotsTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/EditTemporaryPlotsTab.tsx">
-        <metrics statements="88" coveredstatements="0" conditionals="48" coveredconditionals="0" methods="27" coveredmethods="0"/>
+        <metrics statements="88" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="27" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
@@ -36434,12 +36436,12 @@
         <line num="120" count="0" type="stmt"/>
         <line num="124" count="0" type="stmt"/>
         <line num="126" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
+        <line num="127" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="128" count="0" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
         <line num="131" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="132" count="0" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
+        <line num="137" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="138" count="0" type="stmt"/>
         <line num="139" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="140" count="0" type="stmt"/>
@@ -36698,7 +36700,7 @@
         <line num="105" count="0" type="stmt"/>
       </file>
       <file name="ZoneT0EditBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/SurvivalRateSettings/ZoneT0EditBox.tsx">
-        <metrics statements="112" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="55" coveredmethods="0"/>
+        <metrics statements="112" coveredstatements="0" conditionals="66" coveredconditionals="0" methods="55" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
@@ -36732,7 +36734,7 @@
         <line num="79" count="0" type="stmt"/>
         <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="87" count="0" type="stmt"/>
@@ -36740,7 +36742,7 @@
         <line num="92" count="0" type="stmt"/>
         <line num="93" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="94" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
+        <line num="97" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="98" count="0" type="stmt"/>
         <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="101" count="0" type="stmt"/>
@@ -36757,7 +36759,7 @@
         <line num="133" count="0" type="stmt"/>
         <line num="143" count="0" type="stmt"/>
         <line num="144" count="0" type="stmt"/>
-        <line num="151" count="0" type="stmt"/>
+        <line num="151" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="152" count="0" type="stmt"/>
         <line num="154" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="160" count="0" type="stmt"/>
