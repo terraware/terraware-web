@@ -91,7 +91,6 @@ export type MapMarkerCluster = {
 
 export type MapMarkerGroup = {
   disabled?: boolean;
-  label: string;
   markers: MapMarker[];
   markerGroupId: string;
   onClusterClick?: (markers: MapMarker[]) => void;

@@ -103,7 +103,6 @@ export default function MapSplitView({
         .filter((marker): marker is MapMarker => marker !== undefined);
 
       return {
-        label: `Activity ${activity.payload.id}`,
         markers,
         markerGroupId: `activity-${activity.payload.id}`,
         style: {

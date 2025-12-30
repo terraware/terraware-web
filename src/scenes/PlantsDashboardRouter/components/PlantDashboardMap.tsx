@@ -25,7 +25,6 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import { useLocalization } from 'src/providers';
 import { MapService } from 'src/services';
 import {
   ObservationMonitoringPlotPhoto,
@@ -81,7 +80,6 @@ const PlantDashboardMap = ({
   const { mapId, refreshToken, token } = useMapboxToken();
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
-  const { strings } = useLocalization();
 
   const [drawerPage, setDrawerPage] = useState<number>(1);
   const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
@@ -475,7 +473,6 @@ const PlantDashboardMap = ({
   const markers = useMemo((): MapMarkerGroup[] => {
     return [
       {
-        label: strings.MONITORING_PLOTS,
         markers: photoMarkers,
         markerGroupId: 'plot-photos',
         onClusterClick: selectPhotosFromMarkers,
@@ -487,7 +484,6 @@ const PlantDashboardMap = ({
         visible: plotPhotosVisible,
       },
       {
-        label: strings.LIVE_PLANTS,
         markers: plantsMarkers('Live'),
         markerGroupId: 'live-plants',
         onClusterClick: selectPlantsFromMarkers,
@@ -499,7 +495,6 @@ const PlantDashboardMap = ({
         visible: livePlantsVisible,
       },
       {
-        label: strings.DEAD_PLANTS,
         markers: plantsMarkers('Dead'),
         markerGroupId: 'dead-plants',
         onClusterClick: selectPlantsFromMarkers,
@@ -519,9 +514,6 @@ const PlantDashboardMap = ({
     plotPhotosVisible,
     selectPhotosFromMarkers,
     selectPlantsFromMarkers,
-    strings.DEAD_PLANTS,
-    strings.LIVE_PLANTS,
-    strings.MONITORING_PLOTS,
   ]);
 
   const highlights = useMemo((): MapHighlightGroup[] => {
