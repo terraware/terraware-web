@@ -24,9 +24,9 @@ export type PlotT0Observation = {
 export type PlotsWithObservationsSearchResult = {
   id: number;
   name: string;
-  plantingSubzone_name: string;
-  plantingSubzone_plantingZone_name: string;
-  plantingSubzone_plantingZone_id: string;
+  substratum_name: string;
+  substratum_stratum_name: string;
+  substratum_stratum_id: string;
   observationPlots: PlotT0Observation[];
   permanentIndex?: string;
 };

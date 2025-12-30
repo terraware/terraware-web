@@ -77,9 +77,7 @@ const ZoneT0EditBox = ({
   }, [allWithdrawnSpecies, newSpeciesRows, species]);
 
   const zoneTotalDensity = useMemo(() => {
-    const editingZoneId = plotsWithObservations?.length
-      ? plotsWithObservations[0].plantingSubzone_plantingZone_id
-      : null;
+    const editingZoneId = plotsWithObservations?.length ? plotsWithObservations[0].substratum_stratum_id : null;
     if (editingZoneId) {
       const selectedZone = record.zones.find((z) => z.plantingZoneId.toString() === editingZoneId.toString());
       const total =
@@ -97,13 +95,13 @@ const ZoneT0EditBox = ({
     }
 
     const existingZone = record.zones.find(
-      (zone) => plotsWithObservations?.[0].plantingSubzone_plantingZone_id === zone.plantingZoneId.toString()
+      (zone) => plotsWithObservations?.[0].substratum_stratum_id === zone.plantingZoneId.toString()
     );
     if (existingZone) {
       return existingZone;
     }
     return {
-      plantingZoneId: Number(plotsWithObservations?.[0].plantingSubzone_plantingZone_id),
+      plantingZoneId: Number(plotsWithObservations?.[0].substratum_stratum_id),
       densityData: [],
     };
   }, [plotsWithObservations, record]);
@@ -151,7 +149,7 @@ const ZoneT0EditBox = ({
 
         // Remove the existing zone, then add the updated one
         const otherZones = record.zones.filter(
-          (z) => z.plantingZoneId.toString() !== plotsWithObservations?.[0].plantingSubzone_plantingZone_id.toString()
+          (z) => z.plantingZoneId.toString() !== plotsWithObservations?.[0].substratum_stratum_id.toString()
         );
         setRecord({ ...record, zones: otherZones ? [...otherZones, zoneCopy] : [zoneCopy] });
       }
@@ -284,7 +282,7 @@ const ZoneT0EditBox = ({
           flexDirection={'column'}
         >
           <Typography fontWeight={600}>{strings.ZONE}</Typography>
-          <Typography>{plotsWithObservations?.[0].plantingSubzone_plantingZone_name}</Typography>
+          <Typography>{plotsWithObservations?.[0].substratum_stratum_name}</Typography>
         </Box>
         <Box width={'100%'}>
           <table>

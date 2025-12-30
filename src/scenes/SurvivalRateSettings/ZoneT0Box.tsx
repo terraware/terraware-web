@@ -67,7 +67,7 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
           padding={2}
         >
           <Typography fontWeight={600}>{strings.ZONE}</Typography>
-          <Typography>{plotsWithObservations?.[0].plantingSubzone_plantingZone_name}</Typography>
+          <Typography>{plotsWithObservations?.[0].substratum_stratum_name}</Typography>
         </Box>
         <Box flexGrow={1} display={'flex'} alignItems={'center'}>
           {t0Zone && !someWithdrawnSpeciesMissing ? (
