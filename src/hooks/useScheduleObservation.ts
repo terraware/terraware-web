@@ -11,7 +11,12 @@ const useScheduleObservation = () => {
   const scheduleResult = useAppSelector(selectScheduleObservation(requestId));
 
   const schedule = useCallback(
-    (plantingSiteId: number, startDate: string, endDate: string, requestedSubzoneIds: number[]) => {
+    (plantingSiteId: number, startDate: string, endDate: string, requestedSubzoneIds: number[] | undefined) => {
+      if (requestedSubzoneIds === undefined) {
+        // this is a temporary solution because the type on the BE payload is optional, until all references no longer
+        // use the old name
+        throw new Error('requestedSubzoneIds is undefined');
+      }
       const request = dispatch(requestScheduleObservation({ endDate, plantingSiteId, requestedSubzoneIds, startDate }));
 
       setRequestId(request.requestId);

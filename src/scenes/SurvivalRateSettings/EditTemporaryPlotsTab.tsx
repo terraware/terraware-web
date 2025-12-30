@@ -124,7 +124,7 @@ const EditTemporaryPlotsTab = ({
       const allWithdrawnSpeciesForZone = Array.from(speciesMap.values());
 
       allWithdrawnSpeciesForZone.forEach((spec) => {
-        const correspondingZone = record.zones.find((z) => z.plantingZoneId.toString() === zoneId.toString());
+        const correspondingZone = (record.zones || []).find((z) => z.plantingZoneId.toString() === zoneId.toString());
         const correspondingSpecies = correspondingZone?.densityData.find(
           (denData) => denData.speciesId.toString() === spec.speciesId.toString()
         );
@@ -134,7 +134,7 @@ const EditTemporaryPlotsTab = ({
       });
     });
 
-    record.zones.forEach((zone) => {
+    (record.zones || []).forEach((zone) => {
       zone.densityData.forEach((denData) => {
         if (denData.density === undefined || denData.density === null) {
           shouldShowWarning = true;
