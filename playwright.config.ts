@@ -21,7 +21,7 @@ export default defineConfig({
   /* Opt out of parallel tests. */
   workers: process.env.CI ? 2 : 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: process.env.CI ? 'github' : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Collect trace for the first failure. See https://playwright.dev/docs/trace-viewer */
