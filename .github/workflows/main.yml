@@ -146,7 +146,7 @@ jobs:
 
   build-and-deploy:
     runs-on: ubuntu-24-8core
-    needs: [test, playwright]
+    needs: [ test, playwright ]
     if: always() && (needs.test.result == 'success') && (needs.playwright.result == 'success' || needs.playwright.result == 'skipped')
 
     steps:
@@ -163,6 +163,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Generate strings
+        run: yarn generate-strings
 
       - name: build
         run: yarn build
