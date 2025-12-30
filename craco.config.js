@@ -2,6 +2,7 @@ const chokidar = require('chokidar');
 const fs = require('fs');
 const { whenDev } = require('@craco/craco');
 const { convertAllLocales } = require('./src/strings/export');
+const CracoEsbuildPlugin = require('craco-esbuild');
 
 module.exports = {
   devServer: (devServerConfig, { paths }) => ({
@@ -34,4 +35,5 @@ module.exports = {
       })),
     },
   },
+  plugins: [{ plugin: CracoEsbuildPlugin }],
 };
