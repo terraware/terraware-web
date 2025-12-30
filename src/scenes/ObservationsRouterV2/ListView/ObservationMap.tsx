@@ -41,17 +41,16 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
   const { plantMakersLegendGroup } = usePlantMarkersMapLegend(plantingSiteId === undefined);
   const { plotPhotosLegendGroup } = usePlotPhotosMapLegend(plantingSiteId === undefined);
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
-  const { adHocPlotsVisible, monitoringPlotsLegendGroup } = useMonitoringPlotsMapLegend(
-    plantingSiteId === undefined,
-    isBiomass,
-    isBiomass
-  );
+  const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
+    useMonitoringPlotsMapLegend(plantingSiteId === undefined, isBiomass, isBiomass);
 
   const {
     sitesLayerStyle,
     zonesLayerStyle,
     subzonesLayerStyle,
     adHocPlotsLayerStyle,
+    permanentPlotsLayerStyle,
+    temporaryPlotsLayerStyle,
     survivalRate50To75,
     survivalRateLessThan50,
     survivalRateMoreThan75,
@@ -141,6 +140,16 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     }
   }, [adHocObservationResults, observationResults]);
 
+  const monitoringPlots = useMemo(() => {
+    if (selectedResults) {
+      return selectedResults.plantingZones
+        .flatMap((zone) => zone.plantingSubzones)
+        .flatMap((subzone) => subzone.monitoringPlots);
+    } else {
+      return [];
+    }
+  }, [selectedResults]);
+
   const adHocPlots = useMemo(() => {
     return adHocObservationResults
       .filter((observation) => observation.isAdHoc)
@@ -229,6 +238,36 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
           visible: selectedLayer === 'subzones',
         },
         {
+          features: monitoringPlots
+            .filter((plot) => plot.isPermanent)
+            .map((plot) => ({
+              featureId: `${plot.monitoringPlotId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: [plot.boundary?.coordinates ?? []],
+              },
+              label: `${plot.monitoringPlotNumber}`,
+            })),
+          layerId: 'permanentPlots',
+          style: permanentPlotsLayerStyle,
+          visible: permanentPlotsVisible,
+        },
+        {
+          features: monitoringPlots
+            .filter((plot) => !plot.isPermanent)
+            .map((plot) => ({
+              featureId: `${plot.monitoringPlotId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: [plot.boundary?.coordinates ?? []],
+              },
+              label: `${plot.monitoringPlotNumber}`,
+            })),
+          layerId: 'temporaryPlot',
+          style: temporaryPlotsLayerStyle,
+          visible: temporaryPlotsVisible,
+        },
+        {
           features: adHocPlots.map((plot) => ({
             featureId: `${plot.monitoringPlotId}`,
             geometry: {
@@ -296,12 +335,17 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     adHocPlotsLayerStyle,
     adHocPlotsVisible,
     allPlantingSites,
+    monitoringPlots,
+    permanentPlotsLayerStyle,
+    permanentPlotsVisible,
     plantingSite,
     plantingSiteId,
     selectedHistory,
     selectedLayer,
     sitesLayerStyle,
     subzonesLayerStyle,
+    temporaryPlotsLayerStyle,
+    temporaryPlotsVisible,
     zonesLayerStyle,
   ]);
 
