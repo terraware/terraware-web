@@ -117,6 +117,11 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
       }),
     }),
+    getObservationMediaFile: build.query<GetObservationMediaFileApiResponse, GetObservationMediaFileApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/media/${queryArg.fileId}`,
+      }),
+    }),
     getObservationMediaStream: build.query<GetObservationMediaStreamApiResponse, GetObservationMediaStreamApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/media/${queryArg.fileId}/stream`,
@@ -273,6 +278,12 @@ export type ClaimMonitoringPlotApiArg = {
   observationId: number;
   plotId: number;
 };
+export type GetObservationMediaFileApiResponse = /** status 200 The requested operation succeeded. */ Blob;
+export type GetObservationMediaFileApiArg = {
+  observationId: number;
+  plotId: number;
+  fileId: number;
+};
 export type GetObservationMediaStreamApiResponse =
   /** status 200 The requested operation succeeded. */ GetMuxStreamResponsePayload;
 export type GetObservationMediaStreamApiArg = {
@@ -358,6 +369,8 @@ export type ObservationPayload = {
   plantingSiteId: number;
   plantingSiteName: string;
   /** If specific substrata were requested for this observation, their IDs. */
+  requestedSubstratumIds?: number[];
+  /** Use requestedSubstratumIds instead. */
   requestedSubzoneIds?: number[];
   /** Date this observation started. */
   startDate: string;
@@ -383,7 +396,9 @@ export type ScheduleObservationRequestPayload = {
   /** Which planting site this observation needs to be scheduled for. */
   plantingSiteId: number;
   /** The IDs of the substrata this observation should cover. */
-  requestedSubzoneIds: number[];
+  requestedSubstratumIds?: number[];
+  /** Use requestedSubstratumIds instead */
+  requestedSubzoneIds?: number[];
   /** The start date for this observation, can be up to a year from the date this schedule request occurs on. */
   startDate: string;
 };
@@ -552,10 +567,6 @@ export type ObservationMonitoringPlotMediaPayload = {
 };
 export type ObservationSpeciesResultsPayload = {
   certainty: 'Known' | 'Other' | 'Unknown';
-  /** Number of dead plants observed in permanent monitoring plots in all observations including this one. 0 if this is a plot-level result for a temporary monitoring plot. */
-  cumulativeDead: number;
-  /** Percentage of plants in permanent monitoring plots that are dead. If there are no permanent monitoring plots (or if this is a plot-level result for a temporary monitoring plot) this will be null. */
-  mortalityRate?: number;
   /** Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if ths is a plot-level result for a temporary monitoring plot. */
   permanentLive: number;
   /** If certainty is Known, the ID of the species. Null if certainty is Other or Unknown. */
@@ -611,8 +622,6 @@ export type ObservationMonitoringPlotResultsPayload = {
   monitoringPlotName: string;
   /** Organization-unique number of this monitoring plot. */
   monitoringPlotNumber: number;
-  /** If this is a permanent monitoring plot in this observation, percentage of plants of all species that were dead. */
-  mortalityRate?: number;
   notes?: string;
   /** IDs of any newer monitoring plots that overlap with this one. */
   overlappedByPlotIds: number[];
@@ -693,8 +702,6 @@ export type ObservationPlantingSubzoneResultsPayload = {
   completedTime?: string;
   estimatedPlants?: number;
   monitoringPlots: ObservationMonitoringPlotResultsPayload[];
-  mortalityRate?: number;
-  mortalityRateStdDev?: number;
   name: string;
   plantingDensity: number;
   plantingDensityStdDev?: number;
@@ -709,8 +716,6 @@ export type ObservationPlantingZoneResultsPayload = {
   areaHa: number;
   completedTime?: string;
   estimatedPlants?: number;
-  mortalityRate?: number;
-  mortalityRateStdDev?: number;
   name: string;
   plantingDensity: number;
   plantingDensityStdDev?: number;
@@ -730,15 +735,13 @@ export type ObservationSubstratumResultsPayload = {
   estimatedPlants?: number;
   /** Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
   monitoringPlots: ObservationMonitoringPlotResultsPayload[];
-  mortalityRate?: number;
-  mortalityRateStdDev?: number;
   name: string;
   /** Estimated planting density for the substratum based on the observed planting densities of monitoring plots. */
   plantingDensity: number;
   plantingDensityStdDev?: number;
-  /** ID of the substratum. Absent if the substratum was deleted after the observation. */
-  plantingSubzoneId?: number;
   species: ObservationSpeciesResultsPayload[];
+  /** ID of the substratum. Absent if the substratum was deleted after the observation. */
+  substratumId?: number;
   survivalRate?: number;
   survivalRateStdDev?: number;
   /** Total number of plants recorded. Includes all plants, regardless of live/dead status or species. */
@@ -752,16 +755,13 @@ export type ObservationStratumResultsPayload = {
   completedTime?: string;
   /** Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting. */
   estimatedPlants?: number;
-  /** Percentage of plants of all species that were dead in this stratum's permanent monitoring plots. */
-  mortalityRate?: number;
-  mortalityRateStdDev?: number;
   name: string;
   /** Estimated planting density for the stratum based on the observed planting densities of monitoring plots. */
   plantingDensity: number;
   plantingDensityStdDev?: number;
-  /** ID of the stratum. Absent if the stratum was deleted after the observation. */
-  plantingZoneId?: number;
   species: ObservationSpeciesResultsPayload[];
+  /** ID of the stratum. Absent if the stratum was deleted after the observation. */
+  stratumId?: number;
   /** Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
   substrata: ObservationSubstratumResultsPayload[];
   survivalRate?: number;
@@ -780,14 +780,13 @@ export type ObservationResultsPayload = {
   estimatedPlants?: number;
   /** Percentage of plants of all species that were dead in this site's permanent monitoring plots. */
   isAdHoc: boolean;
-  mortalityRate?: number;
-  mortalityRateStdDev?: number;
   observationId: number;
   /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
   plantingDensity: number;
   plantingDensityStdDev?: number;
   plantingSiteHistoryId?: number;
   plantingSiteId: number;
+  /** Use strata instead */
   plantingZones: ObservationPlantingZoneResultsPayload[];
   species: ObservationSpeciesResultsPayload[];
   startDate: string;
@@ -808,6 +807,22 @@ export type ListObservationResultsResponsePayload = {
   status: SuccessOrError;
 };
 export type PlantingZoneObservationSummaryPayload = {
+  areaHa: number;
+  earliestObservationTime: string;
+  estimatedPlants?: number;
+  latestObservationTime: string;
+  plantingDensity: number;
+  plantingDensityStdDev?: number;
+  plantingSubzones: ObservationPlantingSubzoneResultsPayload[];
+  plantingZoneId: number;
+  species: ObservationSpeciesResultsPayload[];
+  substrata: ObservationSubstratumResultsPayload[];
+  survivalRate?: number;
+  survivalRateStdDev?: number;
+  totalPlants: number;
+  totalSpecies: number;
+};
+export type StratumObservationSummaryPayload = {
   /** Area of this stratum in hectares. */
   areaHa: number;
   /** The earliest time of the observations used in this summary. */
@@ -816,17 +831,12 @@ export type PlantingZoneObservationSummaryPayload = {
   estimatedPlants?: number;
   /** The latest time of the observations used in this summary. */
   latestObservationTime: string;
-  /** Percentage of plants of all species that were dead in this stratum's permanent monitoring plots. */
-  mortalityRate?: number;
-  mortalityRateStdDev?: number;
   /** Estimated planting density for the stratum based on the observed planting densities of monitoring plots. */
   plantingDensity: number;
   plantingDensityStdDev?: number;
-  /** Use substrata instead */
-  plantingSubzones: ObservationPlantingSubzoneResultsPayload[];
-  plantingZoneId: number;
   /** Combined list of observed species and their statuses from the latest observation of each substratum. */
   species: ObservationSpeciesResultsPayload[];
+  stratumId: number;
   /** List of substratum observations used in this summary. */
   substrata: ObservationSubstratumResultsPayload[];
   /** Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
@@ -844,16 +854,15 @@ export type PlantingSiteObservationSummaryPayload = {
   estimatedPlants?: number;
   /** The latest time of the observations used in this summary. */
   latestObservationTime: string;
-  /** Percentage of plants of all species that were dead in this site's permanent monitoring plots. */
-  mortalityRate?: number;
-  mortalityRateStdDev?: number;
   /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
   plantingDensity: number;
   plantingDensityStdDev?: number;
   plantingSiteId: number;
+  /** Use strata instead */
   plantingZones: PlantingZoneObservationSummaryPayload[];
   /** Combined list of observed species and their statuses from the latest observation of each substratum within each stratum. */
   species: ObservationSpeciesResultsPayload[];
+  strata: StratumObservationSummaryPayload[];
   /** Percentage of plants of all species in this site's permanent monitoring plots that have survived since the t0 point. */
   survivalRate?: number;
   survivalRateStdDev?: number;
@@ -936,14 +945,20 @@ export type AssignedPlotPayload = {
   isFirstObservation: boolean;
   isPermanent: boolean;
   observationId: number;
+  /** Use substratumId instead */
   plantingSubzoneId?: number;
+  /** Use substratumName instead */
   plantingSubzoneName: string;
+  /** Use stratumName instead */
   plantingZoneName: string;
   plotId: number;
   plotName: string;
   plotNumber: number;
   /** Length of each edge of the monitoring plot in meters. */
   sizeMeters: number;
+  stratumName: string;
+  substratumId?: number;
+  substratumName: string;
 };
 export type GetOneAssignedPlotResponsePayload = {
   plot: AssignedPlotPayload;
@@ -1156,6 +1171,8 @@ export const {
   useCompletePlotObservationMutation,
   useUpdatePlotObservationMutation,
   useClaimMonitoringPlotMutation,
+  useGetObservationMediaFileQuery,
+  useLazyGetObservationMediaFileQuery,
   useGetObservationMediaStreamQuery,
   useLazyGetObservationMediaStreamQuery,
   useUploadOtherPlotMediaMutation,

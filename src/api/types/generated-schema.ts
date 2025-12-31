@@ -4142,6 +4142,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/substrata/{id}/species": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets a list of the species that may have been planted in a substratum.
+         * @description The list is based on nursery withdrawals to the planting site as well as past observations.
+         */
+        get: operations["listSubstratumSpecies_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/subzones/{id}": {
         parameters: {
             query?: never;
@@ -5104,7 +5124,12 @@ export interface components {
         AssignSiteT0TempDataRequestPayload: {
             /** Format: int64 */
             plantingSiteId: number;
-            zones: components["schemas"]["ZoneT0DataPayload"][];
+            strata?: components["schemas"]["StratumT0DataPayload"][];
+            /**
+             * @deprecated
+             * @description Use strata instead
+             */
+            zones?: components["schemas"]["ZoneT0DataPayload"][];
         };
         AssignTerraformationContactRequestPayload: {
             /** Format: int64 */
@@ -5126,9 +5151,21 @@ export interface components {
             isPermanent: boolean;
             /** Format: int64 */
             observationId: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use substratumId instead
+             */
             plantingSubzoneId?: number;
+            /**
+             * @deprecated
+             * @description Use substratumName instead
+             */
             plantingSubzoneName: string;
+            /**
+             * @deprecated
+             * @description Use stratumName instead
+             */
             plantingZoneName: string;
             /** Format: int64 */
             plotId: number;
@@ -5140,6 +5177,10 @@ export interface components {
              * @description Length of each edge of the monitoring plot in meters.
              */
             sizeMeters: number;
+            stratumName: string;
+            /** Format: int64 */
+            substratumId?: number;
+            substratumName: string;
         };
         AutomationPayload: {
             /** @description Human-readable description of this automation. */
@@ -5878,14 +5919,26 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining substrata, the number of substrata defined so far.
+             * @deprecated
+             * @description Use numSubstrata instead
              */
             numPlantingSubzones?: number;
             /**
              * Format: int32
-             * @description If the user has started defining strata, the number of strata defined so far.
+             * @deprecated
+             * @description Use numStrata instead
              */
             numPlantingZones?: number;
+            /**
+             * Format: int32
+             * @description If the user has started defining strata, the number of strata defined so far.
+             */
+            numStrata?: number;
+            /**
+             * Format: int32
+             * @description If the user has started defining substrata, the number of substrata defined so far.
+             */
+            numSubstrata?: number;
             /** Format: int64 */
             organizationId: number;
             /**
@@ -6013,7 +6066,8 @@ export interface components {
             plantingSiteId?: number;
             /**
              * Format: int64
-             * @description If purpose is "Out Plant", the ID of the substratum to which the seedlings were delivered. Must be specified if the planting site has substrata, but must be omitted or set to null if the planting site has no substrata.
+             * @deprecated
+             * @description Use substratumId instead
              */
             plantingSubzoneId?: number;
             /** @enum {string} */
@@ -6023,6 +6077,11 @@ export interface components {
              * @description If purpose is "Nursery Transfer", the estimated ready-by date to use for the batches that are created at the other nursery.
              */
             readyByDate?: string;
+            /**
+             * Format: int64
+             * @description If purpose is "Out Plant", the ID of the substratum to which the seedlings were delivered. Must be specified if the planting site has substrata, but must be omitted or set to null if the planting site has no substrata.
+             */
+            substratumId?: number;
             /** Format: date */
             withdrawnDate: string;
         };
@@ -6087,10 +6146,15 @@ export interface components {
             /** Format: int64 */
             organizationId: number;
             plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
-            /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
+            /**
+             * @deprecated
+             * @description Use strata instead
+             */
             plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
+            /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
+            strata?: components["schemas"]["NewStratumPayload"][];
             /**
              * @description Time zone name in IANA tz database format
              * @example America/New_York
@@ -6499,14 +6563,26 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining substrata, the number of substrata defined so far.
+             * @deprecated
+             * @description Use numSubstrata instead.
              */
             numPlantingSubzones?: number;
             /**
              * Format: int32
-             * @description If the user has started defining strata, the number of strata defined so far.
+             * @deprecated
+             * @description Use numStrata instead.
              */
             numPlantingZones?: number;
+            /**
+             * Format: int32
+             * @description If the user has started defining strata, the number of strata defined so far.
+             */
+            numStrata?: number;
+            /**
+             * Format: int32
+             * @description If the user has started defining substrata, the number of substrata defined so far.
+             */
+            numSubstrata?: number;
             /** Format: int64 */
             organizationId: number;
             /**
@@ -6980,7 +7056,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
+            geometries: Record<string, never>[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -8217,15 +8293,20 @@ export interface components {
             /** Format: date */
             startDate: string;
         };
+        /**
+         * @deprecated
+         * @description Use NewSubstratumPayload
+         */
         NewPlantingSubzonePayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
-            /** @description Name of this substratum. Two substrata in the same stratum may not have the same name, but using the same substratum name in different strata is valid. */
             name: string;
         };
-        /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
+        /**
+         * @deprecated
+         * @description Use NewStratumPayload
+         */
         NewPlantingZonePayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
-            /** @description Name of this stratum. Two strata in the same planting site may not have the same name. */
             name: string;
             plantingSubzones?: components["schemas"]["NewPlantingSubzonePayload"][];
             targetPlantingDensity?: number;
@@ -8279,6 +8360,19 @@ export interface components {
              * @enum {string}
              */
             growthForm: "shrub";
+        };
+        /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
+        NewStratumPayload: {
+            boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            /** @description Name of this stratum. Two strata in the same planting site may not have the same name. */
+            name: string;
+            substrata?: components["schemas"]["NewSubstratumPayload"][];
+            targetPlantingDensity?: number;
+        };
+        NewSubstratumPayload: {
+            boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            /** @description Name of this substratum. Two substrata in the same stratum may not have the same name, but using the same substratum name in different strata is valid. */
+            name: string;
         };
         NewTableValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             /** @description Citations on table values can be used if you want a citation that is associated with the table as a whole rather than with individual cells, or if you want a citation on an empty table: append a row with no column values but with a citation. */
@@ -8495,11 +8589,6 @@ export interface components {
              * @description Organization-unique number of this monitoring plot.
              */
             monitoringPlotNumber: number;
-            /**
-             * Format: int32
-             * @description If this is a permanent monitoring plot in this observation, percentage of plants of all species that were dead.
-             */
-            mortalityRate?: number;
             notes?: string;
             /** @description IDs of any newer monitoring plots that overlap with this one. */
             overlappedByPlotIds: number[];
@@ -8571,6 +8660,11 @@ export interface components {
             plantingSiteId: number;
             plantingSiteName: string;
             /** @description If specific substrata were requested for this observation, their IDs. */
+            requestedSubstratumIds?: number[];
+            /**
+             * @deprecated
+             * @description Use requestedSubstratumIds instead.
+             */
             requestedSubzoneIds?: number[];
             /**
              * Format: date
@@ -8593,10 +8687,6 @@ export interface components {
             /** Format: int32 */
             estimatedPlants?: number;
             monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
-            /** Format: int32 */
-            mortalityRate?: number;
-            /** Format: int32 */
-            mortalityRateStdDev?: number;
             name: string;
             /** Format: int32 */
             plantingDensity: number;
@@ -8624,10 +8714,6 @@ export interface components {
             completedTime?: string;
             /** Format: int32 */
             estimatedPlants?: number;
-            /** Format: int32 */
-            mortalityRate?: number;
-            /** Format: int32 */
-            mortalityRateStdDev?: number;
             name: string;
             /** Format: int32 */
             plantingDensity: number;
@@ -8703,10 +8789,6 @@ export interface components {
             estimatedPlants?: number;
             /** @description Percentage of plants of all species that were dead in this site's permanent monitoring plots. */
             isAdHoc: boolean;
-            /** Format: int32 */
-            mortalityRate?: number;
-            /** Format: int32 */
-            mortalityRateStdDev?: number;
             /** Format: int64 */
             observationId: number;
             /**
@@ -8720,6 +8802,10 @@ export interface components {
             plantingSiteHistoryId?: number;
             /** Format: int64 */
             plantingSiteId: number;
+            /**
+             * @deprecated
+             * @description Use strata instead
+             */
             plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /** Format: date */
@@ -8742,16 +8828,6 @@ export interface components {
         ObservationSpeciesResultsPayload: {
             /** @enum {string} */
             certainty: "Known" | "Other" | "Unknown";
-            /**
-             * Format: int32
-             * @description Number of dead plants observed in permanent monitoring plots in all observations including this one. 0 if this is a plot-level result for a temporary monitoring plot.
-             */
-            cumulativeDead: number;
-            /**
-             * Format: int32
-             * @description Percentage of plants in permanent monitoring plots that are dead. If there are no permanent monitoring plots (or if this is a plot-level result for a temporary monitoring plot) this will be null.
-             */
-            mortalityRate?: number;
             /**
              * Format: int32
              * @description Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if ths is a plot-level result for a temporary monitoring plot.
@@ -8800,13 +8876,6 @@ export interface components {
              * @description Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting.
              */
             estimatedPlants?: number;
-            /**
-             * Format: int32
-             * @description Percentage of plants of all species that were dead in this stratum's permanent monitoring plots.
-             */
-            mortalityRate?: number;
-            /** Format: int32 */
-            mortalityRateStdDev?: number;
             name: string;
             /**
              * Format: int32
@@ -8815,12 +8884,12 @@ export interface components {
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
+            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
              * Format: int64
              * @description ID of the stratum. Absent if the stratum was deleted after the observation.
              */
-            plantingZoneId?: number;
-            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            stratumId?: number;
             /** @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
             substrata: components["schemas"]["ObservationSubstratumResultsPayload"][];
             /** Format: int32 */
@@ -8851,10 +8920,6 @@ export interface components {
             estimatedPlants?: number;
             /** @description Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
             monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
-            /** Format: int32 */
-            mortalityRate?: number;
-            /** Format: int32 */
-            mortalityRateStdDev?: number;
             name: string;
             /**
              * Format: int32
@@ -8863,12 +8928,12 @@ export interface components {
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
+            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
              * Format: int64
              * @description ID of the substratum. Absent if the substratum was deleted after the observation.
              */
-            plantingSubzoneId?: number;
-            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            substratumId?: number;
             /** Format: int32 */
             survivalRate?: number;
             /** Format: int32 */
@@ -9106,10 +9171,16 @@ export interface components {
              * @description Number of plants planted or reassigned. If type is "Reassignment From", this will be negative.
              */
             numPlants: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use substratumId instead.
+             */
             plantingSubzoneId?: number;
             /** Format: int64 */
             speciesId: number;
+            /** Format: int64 */
+            substratumId?: number;
             /** @enum {string} */
             type: "Delivery" | "Reassignment From" | "Reassignment To" | "Undo";
         };
@@ -9131,7 +9202,12 @@ export interface components {
             id: number;
             /** Format: int64 */
             plantingSiteId: number;
+            /**
+             * @deprecated
+             * @description Use strata instead
+             */
             plantingZones: components["schemas"]["PlantingZoneHistoryPayload"][];
+            strata: components["schemas"]["StratumHistoryResponsePayload"][];
         };
         /** @description History of rollup summaries of planting site observations in order of observation time, latest first.  */
         PlantingSiteObservationSummaryPayload: {
@@ -9152,13 +9228,6 @@ export interface components {
             latestObservationTime: string;
             /**
              * Format: int32
-             * @description Percentage of plants of all species that were dead in this site's permanent monitoring plots.
-             */
-            mortalityRate?: number;
-            /** Format: int32 */
-            mortalityRateStdDev?: number;
-            /**
-             * Format: int32
              * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots.
              */
             plantingDensity: number;
@@ -9166,9 +9235,14 @@ export interface components {
             plantingDensityStdDev?: number;
             /** Format: int64 */
             plantingSiteId: number;
+            /**
+             * @deprecated
+             * @description Use strata instead
+             */
             plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
             /** @description Combined list of observed species and their statuses from the latest observation of each substratum within each stratum. */
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            strata: components["schemas"]["StratumObservationSummaryPayload"][];
             /**
              * Format: int32
              * @description Percentage of plants of all species in this site's permanent monitoring plots that have survived since the t0 point.
@@ -9205,9 +9279,14 @@ export interface components {
             /** Format: int64 */
             organizationId: number;
             plantingSeasons: components["schemas"]["PlantingSeasonPayload"][];
+            /**
+             * @deprecated
+             * @description Use strata instead
+             */
             plantingZones?: components["schemas"]["PlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
+            strata?: components["schemas"]["StratumResponsePayload"][];
             survivalRateIncludesTempPlots?: boolean;
             /**
              * @description Time zone name in IANA tz database format
@@ -9218,25 +9297,44 @@ export interface components {
         PlantingSiteReportedPlantsPayload: {
             /** Format: int64 */
             id: number;
+            /**
+             * @deprecated
+             * @description Use strata instead
+             */
             plantingZones: components["schemas"]["PlantingZoneReportedPlantsPayload"][];
             /** Format: int32 */
             plantsSinceLastObservation: number;
             /** Format: int32 */
             progressPercent?: number;
             species: components["schemas"]["ReportedSpeciesPayload"][];
+            strata: components["schemas"]["StratumReportedPlantsResponsePayload"][];
             /** Format: int32 */
             totalPlants: number;
         };
         PlantingSiteValidationProblemPayload: {
             /** @description If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
             conflictsWith?: string[];
-            /** @description If the problem relates to a particular substratum, its name. If this is present, plantingZone will also be present and will be the name of the stratum that contains this substratum. */
+            /**
+             * @deprecated
+             * @description Use substratum instead
+             */
             plantingSubzone?: string;
-            /** @description If the problem relates to a particular stratum, its name. */
+            /**
+             * @deprecated
+             * @description Use stratum instead
+             */
             plantingZone?: string;
             /** @enum {string} */
             problemType: "DuplicateSubstratumName" | "DuplicateStratumName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubstratumBoundaryOverlaps" | "SubstratumInExclusionArea" | "SubstratumNotInStratum" | "StratumBoundaryOverlaps" | "StratumHasNoSubstrata" | "StratumNotInSite" | "StratumTooSmall" | "StrataWithoutSiteBoundary";
+            /** @description If the problem relates to a particular stratum, its name. */
+            stratum?: string;
+            /** @description If the problem relates to a particular substratum, its name. If this is present, stratum will also be present and will be the name of the stratum that contains this substratum. */
+            substratum?: string;
         };
+        /**
+         * @deprecated
+         * @description Use SubstratumHistoryResponsePayload instead
+         */
         PlantingSubzoneHistoryPayload: {
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
@@ -9245,14 +9343,14 @@ export interface components {
             id: number;
             monitoringPlots: components["schemas"]["MonitoringPlotHistoryPayload"][];
             name: string;
-            /**
-             * Format: int64
-             * @description ID of substratum if it exists in the current version of the site.
-             */
+            /** Format: int64 */
             plantingSubzoneId?: number;
         };
+        /**
+         * @deprecated
+         * @description Use SubstratumResponsePayload instead
+         */
         PlantingSubzonePayload: {
-            /** @description Area of substratum in hectares. */
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
             fullName: string;
@@ -9264,18 +9362,16 @@ export interface components {
             latestObservationId?: number;
             monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
             name: string;
-            /**
-             * Format: date-time
-             * @description When any monitoring plot in the substratum was most recently observed.
-             */
+            /** Format: date-time */
             observedTime?: string;
             plantingCompleted: boolean;
-            /**
-             * Format: date-time
-             * @description When planting of the substratum was marked as completed.
-             */
+            /** Format: date-time */
             plantingCompletedTime?: string;
         };
+        /**
+         * @deprecated
+         * @description Use SubstratumReportedPlantsResponsePayload instead
+         */
         PlantingSubzoneReportedPlantsPayload: {
             /** Format: int64 */
             id: number;
@@ -9297,6 +9393,10 @@ export interface components {
             id: number;
             scientificName: string;
         };
+        /**
+         * @deprecated
+         * @description Use StratumHistoryResponsePayload instead
+         */
         PlantingZoneHistoryPayload: {
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
@@ -9304,81 +9404,47 @@ export interface components {
             id: number;
             name: string;
             plantingSubzones: components["schemas"]["PlantingSubzoneHistoryPayload"][];
-            /**
-             * Format: int64
-             * @description ID of stratum if it exists in the current version of the site.
-             */
+            /** Format: int64 */
             plantingZoneId?: number;
         };
+        /**
+         * @deprecated
+         * @description Use StratumObservationSummaryPayload instead
+         */
         PlantingZoneObservationSummaryPayload: {
-            /** @description Area of this stratum in hectares. */
             areaHa: number;
-            /**
-             * Format: date-time
-             * @description The earliest time of the observations used in this summary.
-             */
+            /** Format: date-time */
             earliestObservationTime: string;
-            /**
-             * Format: int32
-             * @description Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting.
-             */
-            estimatedPlants?: number;
-            /**
-             * Format: date-time
-             * @description The latest time of the observations used in this summary.
-             */
-            latestObservationTime: string;
-            /**
-             * Format: int32
-             * @description Percentage of plants of all species that were dead in this stratum's permanent monitoring plots.
-             */
-            mortalityRate?: number;
             /** Format: int32 */
-            mortalityRateStdDev?: number;
-            /**
-             * Format: int32
-             * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
-             */
+            estimatedPlants?: number;
+            /** Format: date-time */
+            latestObservationTime: string;
+            /** Format: int32 */
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
-            /**
-             * @deprecated
-             * @description Use substrata instead
-             */
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
             /** Format: int64 */
             plantingZoneId: number;
-            /** @description Combined list of observed species and their statuses from the latest observation of each substratum. */
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
-            /** @description List of substratum observations used in this summary. */
             substrata: components["schemas"]["ObservationSubstratumResultsPayload"][];
-            /**
-             * Format: int32
-             * @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point.
-             */
+            /** Format: int32 */
             survivalRate?: number;
             /** Format: int32 */
             survivalRateStdDev?: number;
-            /**
-             * Format: int32
-             * @description Total number of plants recorded from the latest observations of each substratum. Includes all plants, regardless of live/dead status or species.
-             */
+            /** Format: int32 */
             totalPlants: number;
-            /**
-             * Format: int32
-             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
-             */
+            /** Format: int32 */
             totalSpecies: number;
         };
+        /**
+         * @deprecated
+         * @description Use StratumResponsePayload instead
+         */
         PlantingZonePayload: {
-            /** @description Area of stratum in hectares. */
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
-            /**
-             * Format: date-time
-             * @description When the boundary of this stratum was last modified. Modifications of other attributes of the stratum do not cause this timestamp to change.
-             */
+            /** Format: date-time */
             boundaryModifiedTime: string;
             /** Format: int64 */
             id: number;
@@ -9394,6 +9460,10 @@ export interface components {
             plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
             targetPlantingDensity: number;
         };
+        /**
+         * @deprecated
+         * @description Use StratumReportedPlantsResponsePayload instead
+         */
         PlantingZoneReportedPlantsPayload: {
             /** Format: int64 */
             id: number;
@@ -9786,11 +9856,17 @@ export interface components {
             notes?: string;
             /**
              * Format: int32
-             * @description Number of plants to reassign from the planting's original subzone to the new one. Must be less than or equal to the number of plants in the original planting.
+             * @description Number of plants to reassign from the planting's original substratum to the new one. Must be less than or equal to the number of plants in the original planting.
              */
             numPlants: number;
+            /**
+             * Format: int64
+             * @deprecated
+             * @description Use toSubstratumId instead
+             */
+            toPlantingSubzoneId?: number;
             /** Format: int64 */
-            toPlantingSubzoneId: number;
+            toSubstratumId?: number;
         };
         RecordTimeseriesValuesRequestPayload: {
             timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -10081,7 +10157,12 @@ export interface components {
              */
             plantingSiteId: number;
             /** @description The IDs of the substrata this observation should cover. */
-            requestedSubzoneIds: number[];
+            requestedSubstratumIds?: number[];
+            /**
+             * @deprecated
+             * @description Use requestedSubstratumIds instead
+             */
+            requestedSubzoneIds?: number[];
             /**
              * Format: date
              * @description The start date for this observation, can be up to a year from the date this schedule request occurs on.
@@ -10219,6 +10300,7 @@ export interface components {
             /** Format: int64 */
             plantingSiteId: number;
             plots: components["schemas"]["PlotT0DataPayload"][];
+            strata: components["schemas"]["StratumT0DataPayload"][];
             survivalRateIncludesTempPlots: boolean;
             zones: components["schemas"]["ZoneT0DataPayload"][];
         };
@@ -10383,6 +10465,110 @@ export interface components {
              */
             totalWithdrawn: number;
         };
+        StratumHistoryResponsePayload: {
+            areaHa: number;
+            boundary: components["schemas"]["MultiPolygon"];
+            /** Format: int64 */
+            id: number;
+            name: string;
+            /**
+             * Format: int64
+             * @description ID of stratum if it exists in the current version of the site.
+             */
+            stratumId?: number;
+            substrata: components["schemas"]["SubstratumHistoryResponsePayload"][];
+        };
+        StratumObservationSummaryPayload: {
+            /** @description Area of this stratum in hectares. */
+            areaHa: number;
+            /**
+             * Format: date-time
+             * @description The earliest time of the observations used in this summary.
+             */
+            earliestObservationTime: string;
+            /**
+             * Format: int32
+             * @description Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting.
+             */
+            estimatedPlants?: number;
+            /**
+             * Format: date-time
+             * @description The latest time of the observations used in this summary.
+             */
+            latestObservationTime: string;
+            /**
+             * Format: int32
+             * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
+             */
+            plantingDensity: number;
+            /** Format: int32 */
+            plantingDensityStdDev?: number;
+            /** @description Combined list of observed species and their statuses from the latest observation of each substratum. */
+            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /** Format: int64 */
+            stratumId: number;
+            /** @description List of substratum observations used in this summary. */
+            substrata: components["schemas"]["ObservationSubstratumResultsPayload"][];
+            /**
+             * Format: int32
+             * @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point.
+             */
+            survivalRate?: number;
+            /** Format: int32 */
+            survivalRateStdDev?: number;
+            /**
+             * Format: int32
+             * @description Total number of plants recorded from the latest observations of each substratum. Includes all plants, regardless of live/dead status or species.
+             */
+            totalPlants: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+             */
+            totalSpecies: number;
+        };
+        StratumReportedPlantsResponsePayload: {
+            /** Format: int64 */
+            id: number;
+            /** Format: int32 */
+            plantsSinceLastObservation: number;
+            /** Format: int32 */
+            progressPercent: number;
+            species: components["schemas"]["ReportedSpeciesPayload"][];
+            substrata: components["schemas"]["SubstratumReportedPlantsResponsePayload"][];
+            /** Format: int32 */
+            totalPlants: number;
+            /** Format: int32 */
+            totalSpecies: number;
+        };
+        StratumResponsePayload: {
+            /** @description Area of stratum in hectares. */
+            areaHa: number;
+            boundary: components["schemas"]["MultiPolygon"];
+            /**
+             * Format: date-time
+             * @description When the boundary of this stratum was last modified. Modifications of other attributes of the stratum do not cause this timestamp to change.
+             */
+            boundaryModifiedTime: string;
+            /** Format: int64 */
+            id: number;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
+            name: string;
+            /** Format: int32 */
+            numPermanentPlots: number;
+            /** Format: int32 */
+            numTemporaryPlots: number;
+            substrata: components["schemas"]["SubstratumResponsePayload"][];
+            targetPlantingDensity: number;
+        };
+        StratumT0DataPayload: {
+            densityData: components["schemas"]["SpeciesDensityPayload"][];
+            /** Format: int64 */
+            stratumId: number;
+        };
         SubLocationPayload: {
             /**
              * Format: int32
@@ -10428,6 +10614,56 @@ export interface components {
         SubmitSupportRequestResponsePayload: {
             issueKey: string;
             status: components["schemas"]["SuccessOrError"];
+        };
+        SubstratumHistoryResponsePayload: {
+            areaHa: number;
+            boundary: components["schemas"]["MultiPolygon"];
+            fullName: string;
+            /** Format: int64 */
+            id: number;
+            monitoringPlots: components["schemas"]["MonitoringPlotHistoryPayload"][];
+            name: string;
+            /**
+             * Format: int64
+             * @description ID of substratum if it exists in the current version of the site.
+             */
+            substratumId?: number;
+        };
+        SubstratumReportedPlantsResponsePayload: {
+            /** Format: int64 */
+            id: number;
+            /** Format: int32 */
+            plantsSinceLastObservation: number;
+            species: components["schemas"]["ReportedSpeciesPayload"][];
+            /** Format: int32 */
+            totalPlants: number;
+            /** Format: int32 */
+            totalSpecies: number;
+        };
+        SubstratumResponsePayload: {
+            /** @description Area of substratum in hectares. */
+            areaHa: number;
+            boundary: components["schemas"]["MultiPolygon"];
+            fullName: string;
+            /** Format: int64 */
+            id: number;
+            /** Format: date-time */
+            latestObservationCompletedTime?: string;
+            /** Format: int64 */
+            latestObservationId?: number;
+            monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
+            name: string;
+            /**
+             * Format: date-time
+             * @description When any monitoring plot in the substratum was most recently observed.
+             */
+            observedTime?: string;
+            plantingCompleted: boolean;
+            /**
+             * Format: date-time
+             * @description When planting of the substratum was marked as completed.
+             */
+            plantingCompletedTime?: string;
         };
         SubstratumSpeciesPayload: components["schemas"]["SpeciesPayload"] & {
             commonName?: string;
@@ -10800,14 +11036,26 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining substrata, the number of substrata defined so far.
+             * @deprecated
+             * @description Use numSubstrata instead
              */
             numPlantingSubzones?: number;
             /**
              * Format: int32
-             * @description If the user has started defining strata, the number of strata defined so far.
+             * @deprecated
+             * @description Use numStrata instead
              */
             numPlantingZones?: number;
+            /**
+             * Format: int32
+             * @description If the user has started defining strata, the number of strata defined so far.
+             */
+            numStrata?: number;
+            /**
+             * Format: int32
+             * @description If the user has started defining substrata, the number of substrata defined so far.
+             */
+            numSubstrata?: number;
             /**
              * Format: int64
              * @description If the draft is associated with a project, its ID.
@@ -11484,6 +11732,10 @@ export interface components {
             /** Format: int32 */
             volunteers?: number;
         };
+        /**
+         * @deprecated
+         * @description Use strata instead
+         */
         ZoneT0DataPayload: {
             densityData: components["schemas"]["SpeciesDensityPayload"][];
             /** Format: int64 */
@@ -20673,6 +20925,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    listSubstratumSpecies_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListSubstratumSpeciesResponsePayload"];
                 };
             };
         };

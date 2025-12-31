@@ -40,8 +40,8 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
     siteType,
   };
 
-  const numPlantingZones = plantingZones?.length;
-  const numPlantingSubzones = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length;
+  const numStrata = plantingZones?.length;
+  const numSubstrata = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length;
 
   const payload: DraftPlantingSitePayload = {
     createdBy,
@@ -49,8 +49,8 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
     description,
     id,
     name,
-    numPlantingSubzones,
-    numPlantingZones,
+    numStrata,
+    numSubstrata,
     organizationId,
     projectId,
     timeZone,

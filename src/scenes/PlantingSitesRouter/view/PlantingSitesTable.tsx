@@ -48,8 +48,8 @@ const columns = (): TableColumnType[] => [
     name: strings.PROJECT,
     type: 'string',
   },
-  { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'number' },
-  { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'number' },
+  { key: 'numStrata', name: strings.PLANTING_ZONES, type: 'number' },
+  { key: 'numSubstrata', name: strings.SUBZONES, type: 'number' },
   { key: 'timeZoneId', name: strings.TIME_ZONE, type: 'string' },
 ];
 
