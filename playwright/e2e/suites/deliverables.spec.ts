@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-import { TERRAWARE_WEB_URL } from '../constants';
 import { openTodoFromHome } from '../participantHome';
 import {
   addQuestionnaireComments,
@@ -38,14 +37,14 @@ import { changeToContributor, changeToReadOnlyUser, changeToSuperAdmin } from '.
 import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
 test.describe('DeliverableTests', () => {
-  test.beforeEach(async ({ page, context }) => {
-    await changeToSuperAdmin(context);
-    await page.goto(TERRAWARE_WEB_URL);
+  test.beforeEach(async ({ page, context, baseURL }) => {
+    await changeToSuperAdmin(context, baseURL);
+    await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
   });
 
-  test('Deliverables tab shows up once cohort has module with deliverables', async ({ page, context }) => {
+  test('Deliverables tab shows up once cohort has module with deliverables', async ({ page, context, baseURL }) => {
     const today = new Date();
     const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
@@ -71,13 +70,13 @@ test.describe('DeliverableTests', () => {
     await waitFor(page, '#home');
     await expect(page.getByText('Deliverables', exactOptions)).toBeVisible();
 
-    await changeToContributor(context);
-    await page.goto(TERRAWARE_WEB_URL);
+    await changeToContributor(context, baseURL);
+    await page.goto('/');
     await expect(page.getByText('Deliverables', exactOptions)).toBeHidden();
 
     // read only shouldn't be able to approve a whole deliverable
-    await changeToReadOnlyUser(context);
-    await page.goto(TERRAWARE_WEB_URL);
+    await changeToReadOnlyUser(context, baseURL);
+    await page.goto('/');
     await navigateToConsoleDeliverables(page);
     await page.getByRole('link', { name: 'Phase 1 Questions' }).click();
     await expect(page.getByText('#approveDeliverable')).toBeHidden();
@@ -276,7 +275,7 @@ test.describe('DeliverableTests', () => {
   });
 
   test.skip('Document Deliverable', async ({ page }) => {
-    await page.goto(TERRAWARE_WEB_URL);
+    await page.goto('/');
     await waitFor(page, '#home');
 
     await page.getByText('Deliverables', exactOptions).click();

@@ -4,8 +4,8 @@ import { navigateToProjectProfile } from '../utils/navigation';
 import { changeToSuperAdmin } from '../utils/userUtils';
 
 test.describe('ProjectDeliverablesTests', () => {
-  test.beforeEach(async ({ context }, testInfo) => {
-    await changeToSuperAdmin(context);
+  test.beforeEach(async ({ context, baseURL }, testInfo) => {
+    await changeToSuperAdmin(context, baseURL);
   });
 
   test('View Project Deliverables Table', async ({ page }, testInfo) => {

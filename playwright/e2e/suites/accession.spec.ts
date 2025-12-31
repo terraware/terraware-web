@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-import { TERRAWARE_WEB_URL } from '../constants';
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
@@ -11,9 +10,9 @@ test.describe('AccessionTests', () => {
   test.describe.configure({ mode: 'serial' });
 
   let accessionId = 'UNSET';
-  test.beforeEach(async ({ page, context }, testInfo) => {
-    await changeToSuperAdmin(context);
-    await page.goto(TERRAWARE_WEB_URL);
+  test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
+    await changeToSuperAdmin(context, baseURL);
+    await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
   });

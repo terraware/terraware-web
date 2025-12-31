@@ -1,18 +1,17 @@
 import { test } from '@playwright/test';
 
-import { TERRAWARE_WEB_URL } from '../constants';
 import { navigateToProjectProfile } from '../utils/navigation';
 import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProfile';
 import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions, waitFor } from '../utils/utils';
 
 test.describe('ProjectProfileTests', () => {
-  test.beforeEach(async ({ context }, testInfo) => {
-    await changeToSuperAdmin(context);
+  test.beforeEach(async ({ context, baseURL }, testInfo) => {
+    await changeToSuperAdmin(context, baseURL);
   });
 
   test('View Project Profile for project in application', async ({ page }, testInfo) => {
-    await page.goto(TERRAWARE_WEB_URL);
+    await page.goto('/');
     await waitFor(page, '#acceleratorConsoleButton');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
     await page.getByRole('button', { name: 'Applications' }).click();
