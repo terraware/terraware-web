@@ -2,39 +2,17 @@ import { components } from 'src/api/types/generated-schema';
 
 import { MinimalPlantingSite, MultiPolygon } from './Tracking';
 
-export type Population = {
-  species_scientificName: string;
-  totalPlants: number;
-  'totalPlants(raw)': number;
-};
-
-export type PlantingSiteSubzone = {
-  id: string;
-  fullName: string;
-  populations: Population[];
-};
-
-export type PlantingSiteZone = {
-  id: string;
-  name: string;
-  plantingSubzones: PlantingSiteSubzone[];
-};
-
 export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
-
-export type PlantingProgressSubzone = {
-  subzoneName: string;
-  plantingCompleted: boolean;
-  plantingSite: string;
-  zoneName: string;
-  targetPlantingDensity: number;
-  totalSeedlingsSent?: number;
-};
 
 export type UpdateSubstratumPayload = components['schemas']['UpdateSubstratumRequestPayload'];
 
 export type SiteType = 'simple' | 'detailed';
-export type SiteEditStep = 'details' | 'site_boundary' | 'exclusion_areas' | 'zone_boundaries' | 'subzone_boundaries';
+export type SiteEditStep =
+  | 'details'
+  | 'site_boundary'
+  | 'exclusion_areas'
+  | 'stratum_boundaries'
+  | 'substratum_boundaries';
 export type OptionalSiteEditStep = Exclude<SiteEditStep, 'details' | 'site_boundary'>;
 
 export type PlantingSitesFilters = {
