@@ -87,7 +87,7 @@ const useMapFeatureStyles = () => {
   const livePlantStyle = useMemo(
     (): MapIconComponentStyle => ({
       iconColor: '#40B0A6',
-      iconName: 'iconLivePlant',
+      iconName: 'iconRestorationSite',
       type: 'icon',
     }),
     []
@@ -96,7 +96,7 @@ const useMapFeatureStyles = () => {
   const deadPlantStyle = useMemo(
     (): MapIconComponentStyle => ({
       iconColor: '#E1BE6A',
-      iconName: 'iconLivePlant',
+      iconName: 'iconRestorationSite',
       type: 'icon',
     }),
     []
