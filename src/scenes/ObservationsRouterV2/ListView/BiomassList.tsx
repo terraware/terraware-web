@@ -98,9 +98,10 @@ export default function BiomassList({ siteId }: BiomassListProps): JSX.Element {
       return adHocObservationsResultsResponse.data.observations
         .filter((observation) => observation.type === 'Biomass Measurements' && observation.biomassMeasurements)
         .map((observation) => ({
-          id: observation.observationId,
+          observationId: observation.observationId,
           monitoringPlotNumber: observation.adHocPlot?.monitoringPlotNumber,
           monitoringPlotDescription: observation.biomassMeasurements?.description,
+          plantingSiteId: observation.plantingSiteId,
           plantingSiteName: plantingSitesNames[observation.plantingSiteId],
           completedDate: observation.completedTime,
           totalPlants: observation.biomassMeasurements?.trees.length,

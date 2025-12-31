@@ -8,7 +8,7 @@ import strings from 'src/strings';
 
 export default function BiomassRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row } = props;
-  const exportDetails = useExportBiomassDetailsZip(row.observationId, row.plantingSiteId, row.startDate);
+  const exportDetails = useExportBiomassDetailsZip(row.observationId, row.plantingSiteId, row.completedDate);
 
   const textStyles = {
     fontSize: '16px',
