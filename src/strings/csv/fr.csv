@@ -2009,6 +2009,7 @@ SUBSET_WEIGHT_ERROR,Le poids du sous-ensemble doit être inférieur à celui de 
 SUBSET_WEIGHT_POSITIVE,Le poids du sous-ensemble doit être un nombre positif,8f1b1fed
 SUBSET_WEIGHT_REQUIRED,Vous devez saisir le poids et le nombre d'un sous-ensemble afin de déterminer le nombre approximatif de semences lorsque vous les retirez dans une pépinière. Vous pouvez le faire en éditant la quantité de cette accession.,18baf19c
 SUBSHRUB,Sous-arbrisseau,f13ec462
+SUBSTRATA,Substrats,6dda38f7
 SUBSTRATE,Substrat,74ff28de
 SUBSTRATE_AFTER,Substrat (après),4f743cf7
 SUBSTRATE_BEFORE,Substrat (avant),34fc5273

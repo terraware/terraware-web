@@ -5,11 +5,15 @@ import { useLocalization } from 'src/providers';
 import { MapSingleSelectLegendGroup } from './MapLegend';
 import useMapFeatureStyles from './useMapFeatureStyles';
 
-export type PlantingSiteMapLayer = 'sites' | 'zones' | 'subzones';
+export type PlantingSiteMapLayer = 'sites' | 'strata' | 'substrata';
 
 const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?: boolean) => {
   const { strings } = useLocalization();
-  const { sitesLayerStyle, zonesLayerStyle, subzonesLayerStyle } = useMapFeatureStyles();
+  const {
+    sitesLayerStyle,
+    strataLayerStyle: zonesLayerStyle,
+    substrataLayerStyle: subzonesLayerStyle,
+  } = useMapFeatureStyles();
   const [selectedLayer, setSelectedLayer] = useState<PlantingSiteMapLayer | undefined>(defaultLayer);
 
   const plantingSiteLegendGroup = useMemo(
@@ -21,13 +25,13 @@ const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?
           style: sitesLayerStyle,
         },
         {
-          id: 'zones',
-          label: strings.ZONES,
+          id: 'strata',
+          label: strings.STRATA,
           style: zonesLayerStyle,
         },
         {
-          id: 'subzones',
-          label: strings.SUBZONES,
+          id: 'substrata',
+          label: strings.SUBSTRATA,
           style: subzonesLayerStyle,
         },
       ],

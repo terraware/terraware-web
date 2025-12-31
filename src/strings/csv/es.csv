@@ -2010,6 +2010,7 @@ SUBSET_WEIGHT_ERROR,El peso del subconjunto debe ser inferior al peso de las sem
 SUBSET_WEIGHT_POSITIVE,El peso del subconjunto tiene que ser un número positivo,8f1b1fed
 SUBSET_WEIGHT_REQUIRED,Usted debe introducir un peso y un recuento del subconjunto para determinar el recuento de semillas aproximado al extraerlas a un vivero. Esto puede hacerse editando la cantidad de esta accesión.,18baf19c
 SUBSHRUB,Subarbusto,f13ec462
+SUBSTRATA,Sustratos,6dda38f7
 SUBSTRATE,Sustrato,74ff28de
 SUBSTRATE_AFTER,Sustrato (después),4f743cf7
 SUBSTRATE_BEFORE,Sustrato (antes),34fc5273

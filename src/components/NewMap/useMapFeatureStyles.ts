@@ -25,7 +25,7 @@ const useMapFeatureStyles = () => {
     [theme]
   );
 
-  const zonesLayerStyle = useMemo(
+  const strataLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
       borderColor: theme.palette.TwClrBasePurple300,
       fillColor: theme.palette.TwClrBasePurple300,
@@ -35,7 +35,7 @@ const useMapFeatureStyles = () => {
     [theme]
   );
 
-  const subzonesLayerStyle = useMemo(
+  const substrataLayerStyle = useMemo(
     (): MapFillComponentStyle => ({
       borderColor: theme.palette.TwClrBaseBlue300,
       fillColor: theme.palette.TwClrBaseBlue300,
@@ -137,12 +137,12 @@ const useMapFeatureStyles = () => {
     permanentPlotsLayerStyle,
     plotPhotoStyle,
     sitesLayerStyle,
-    subzonesLayerStyle,
+    substrataLayerStyle,
     survivalRateLessThan50,
     survivalRate50To75,
     survivalRateMoreThan75,
     temporaryPlotsLayerStyle,
-    zonesLayerStyle,
+    strataLayerStyle,
   };
 };
 

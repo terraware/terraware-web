@@ -61,8 +61,8 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
 
   const {
     sitesLayerStyle,
-    zonesLayerStyle,
-    subzonesLayerStyle,
+    strataLayerStyle,
+    substrataLayerStyle,
     adHocPlotsLayerStyle,
     permanentPlotsLayerStyle,
     temporaryPlotsLayerStyle,
@@ -157,9 +157,9 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
 
   const monitoringPlots = useMemo(() => {
     if (selectedResults) {
-      return selectedResults.plantingZones
-        .flatMap((zone) => zone.plantingSubzones)
-        .flatMap((subzone) => subzone.monitoringPlots);
+      return selectedResults.strata
+        .flatMap((stratum) => stratum.substrata)
+        .flatMap((substratum) => substratum.monitoringPlots);
     } else {
       return [];
     }
@@ -224,33 +224,33 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         },
         {
           features:
-            selectedHistory.plantingZones?.map((zone) => ({
-              featureId: `${zone.plantingZoneId}`,
+            selectedHistory.strata?.map((stratum) => ({
+              featureId: `${stratum.stratumId}`,
               geometry: {
                 type: 'MultiPolygon',
-                coordinates: zone.boundary?.coordinates ?? [],
+                coordinates: stratum.boundary?.coordinates ?? [],
               },
-              label: zone.name,
+              label: stratum.name,
             })) ?? [],
-          layerId: 'zones',
-          style: zonesLayerStyle,
-          visible: selectedLayer === 'zones',
+          layerId: 'strata',
+          style: strataLayerStyle,
+          visible: selectedLayer === 'strata',
         },
         {
           features:
-            selectedHistory.plantingZones?.flatMap((zone) =>
-              zone.plantingSubzones.map((subzone) => ({
-                featureId: `${subzone.plantingSubzoneId}`,
+            selectedHistory.strata?.flatMap((stratum) =>
+              stratum.substrata.map((substratum) => ({
+                featureId: `${substratum.substratumId}`,
                 geometry: {
                   type: 'MultiPolygon',
-                  coordinates: subzone.boundary?.coordinates ?? [],
+                  coordinates: substratum.boundary?.coordinates ?? [],
                 },
-                label: subzone.name,
+                label: substratum.name,
               }))
             ) ?? [],
-          layerId: 'subzones',
-          style: subzonesLayerStyle,
-          visible: selectedLayer === 'subzones',
+          layerId: 'substrata',
+          style: substrataLayerStyle,
+          visible: selectedLayer === 'substrata',
         },
         {
           features: monitoringPlots
@@ -314,33 +314,33 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         },
         {
           features:
-            plantingSite.plantingZones?.map((zone) => ({
-              featureId: `${zone.id}`,
+            plantingSite.strata?.map((stratum) => ({
+              featureId: `${stratum.id}`,
               geometry: {
                 type: 'MultiPolygon',
-                coordinates: zone.boundary?.coordinates ?? [],
+                coordinates: stratum.boundary?.coordinates ?? [],
               },
-              label: zone.name,
+              label: stratum.name,
             })) ?? [],
-          layerId: 'zones',
-          style: zonesLayerStyle,
-          visible: selectedLayer === 'zones',
+          layerId: 'strata',
+          style: strataLayerStyle,
+          visible: selectedLayer === 'strata',
         },
         {
           features:
-            plantingSite.plantingZones?.flatMap((zone) =>
-              zone.plantingSubzones.map((subzone) => ({
-                featureId: `${subzone.id}`,
+            plantingSite.strata?.flatMap((stratum) =>
+              stratum.substrata.map((substratum) => ({
+                featureId: `${substratum.id}`,
                 geometry: {
                   type: 'MultiPolygon',
-                  coordinates: subzone.boundary?.coordinates ?? [],
+                  coordinates: substratum.boundary?.coordinates ?? [],
                 },
-                label: subzone.name,
+                label: substratum.name,
               }))
             ) ?? [],
-          layerId: 'subzones',
-          style: subzonesLayerStyle,
-          visible: selectedLayer === 'subzones',
+          layerId: 'substrata',
+          style: substrataLayerStyle,
+          visible: selectedLayer === 'substrata',
         },
       ];
     }
@@ -358,10 +358,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     selectedHistory,
     selectedLayer,
     sitesLayerStyle,
-    subzonesLayerStyle,
+    substrataLayerStyle,
     temporaryPlotsLayerStyle,
     temporaryPlotsVisible,
-    zonesLayerStyle,
+    strataLayerStyle,
   ]);
 
   const nameTags = useMemo((): MapNameTag[] | undefined => {
@@ -448,22 +448,22 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
       }
     };
 
-    const siteId = { layerId: 'sites', featureId: `${selectedHistory.id}` };
+    const siteId = { layerId: 'sites', featureId: `${selectedHistory.plantingSiteId}` };
     sortFeatureBySurvivalRate(siteId, selectedResults.survivalRate);
 
-    selectedResults.plantingZones.forEach((zone) => {
-      const selectedZoneHistory = selectedHistory.plantingZones.find(
-        (zoneHistory) => zoneHistory.plantingZoneId === zone.plantingZoneId
+    selectedResults.strata.forEach((stratum) => {
+      const selectedStratumHistory = selectedHistory.strata.find(
+        (stratumHistory) => stratumHistory.stratumId === stratum.stratumId
       );
-      const zoneId = { layerId: 'zones', featureId: `${selectedZoneHistory?.id}` };
-      sortFeatureBySurvivalRate(zoneId, zone.survivalRate);
+      const stratumId = { layerId: 'strata', featureId: `${selectedStratumHistory?.stratumId}` };
+      sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
 
-      zone.plantingSubzones.forEach((subzone) => {
-        const selectedSubzoneHistory = selectedZoneHistory?.plantingSubzones.find(
-          (subzoneHistory) => subzoneHistory.plantingSubzoneId === subzone.plantingSubzoneId
+      stratum.substrata.forEach((substratum) => {
+        const selectedSubstratumistory = selectedStratumHistory?.substrata.find(
+          (substratumistory) => substratumistory.substratumId === substratum.substratumId
         );
-        const subzoneId = { layerId: 'subzones', featureId: `${selectedSubzoneHistory?.plantingSubzoneId}` };
-        sortFeatureBySurvivalRate(subzoneId, subzone.survivalRate);
+        const substratumId = { layerId: 'substrata', featureId: `${selectedSubstratumistory?.substratumId}` };
+        sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
       });
     });
 
@@ -518,9 +518,9 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         };
       })
     );
-    const monitoringPlotPhotos = selectedResults.plantingZones
-      .flatMap((zone) => zone.plantingSubzones)
-      .flatMap((subzone) => subzone.monitoringPlots)
+    const monitoringPlotPhotos = selectedResults.strata
+      .flatMap((stratum) => stratum.substrata)
+      .flatMap((substratum) => substratum.monitoringPlots)
       .flatMap((plot): MapMarker[] =>
         plot.photos.filter(hasGpsCoordinates).map((photo) => {
           return {
@@ -564,9 +564,9 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         });
       } else {
         const recordedPlantStatus: RecordedPlantStatus = isDead ? 'Dead' : 'Live';
-        const monitoringPlotPlants = selectedResults.plantingZones
-          .flatMap((zone) => zone.plantingSubzones)
-          .flatMap((subzone) => subzone.monitoringPlots)
+        const monitoringPlotPlants = selectedResults.strata
+          .flatMap((stratum) => stratum.substrata)
+          .flatMap((substratum) => substratum.monitoringPlots)
           .flatMap((plot): MapMarker[] => {
             if (plot.plants) {
               const filteredPlants = plot.plants.filter((plant) => plant.status === recordedPlantStatus);
