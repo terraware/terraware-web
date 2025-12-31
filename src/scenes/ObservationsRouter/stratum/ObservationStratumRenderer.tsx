@@ -15,7 +15,7 @@ import {
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'plantingDensity'];
 
-const ObservationPlantingZoneRenderer =
+const ObservationStratumRenderer =
   (
     plantingSiteId: number,
     observationId: number,
@@ -90,4 +90,4 @@ const ObservationPlantingZoneRenderer =
     return <CellRenderer {...props} />;
   };
 
-export default ObservationPlantingZoneRenderer;
+export default ObservationStratumRenderer;

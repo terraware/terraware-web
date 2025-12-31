@@ -37,7 +37,7 @@ import {
   zoneNameGenerator,
 } from './utils';
 
-export type ZonesProps = {
+export type StrataProps = {
   onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
@@ -81,7 +81,7 @@ type Stack = {
   fixedBoundaries?: FeatureCollection;
 };
 
-export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
+export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
   const [zonesData, setZonesData, undo, redo] = useUndoRedoState<Stack>({
     editableBoundary: emptyBoundary(),
     errorAnnotations: [],

@@ -14,20 +14,20 @@ import { allowOneDecimal, roundToDecimal } from 'src/utils/numbers';
 
 import { AddedSpecies } from './PlotT0EditBox';
 
-type ZoneT0EditBoxProps = {
+type StratumT0EditBoxProps = {
   plotsWithObservations: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlot?: SpeciesPlot[];
   zoneData?: ZoneT0Data;
   record: AssignSiteT0TempData;
   setRecord: React.Dispatch<React.SetStateAction<AssignSiteT0TempData>>;
 };
-const ZoneT0EditBox = ({
+const StratumT0EditBox = ({
   plotsWithObservations,
   withdrawnSpeciesPlot,
   zoneData,
   record,
   setRecord,
-}: ZoneT0EditBoxProps) => {
+}: StratumT0EditBoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
   const { isMobile } = useDeviceInfo();
@@ -437,4 +437,4 @@ const ZoneT0EditBox = ({
   );
 };
 
-export default ZoneT0EditBox;
+export default StratumT0EditBox;

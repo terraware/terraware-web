@@ -18,7 +18,7 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import SpeciesDensityWarningMessage from './SpeciesDensityWarningMessage';
-import ZoneT0EditBox from './ZoneT0EditBox';
+import StratumT0EditBox from './StratumT0EditBox';
 
 type EditTemporaryPlotsTabProps = {
   plantingSiteId: number;
@@ -241,7 +241,7 @@ const EditTemporaryPlotsTab = ({
               plotIds.includes(wsp.monitoringPlotId.toString())
             );
             return (
-              <ZoneT0EditBox
+              <StratumT0EditBox
                 key={zoneId}
                 plotsWithObservations={plots}
                 withdrawnSpeciesPlot={filteredWithdrawnSpecies}

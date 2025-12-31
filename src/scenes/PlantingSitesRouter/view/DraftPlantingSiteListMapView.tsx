@@ -19,8 +19,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import DraftPlantingSiteDetailsTable from './DraftPlantingSiteDetailsTable';
 
-export type ObservationType = 'plantMonitoring' | 'biomassMeasurements';
-
 type DraftPlantingSiteListMapViewProps = {
   plantingSite: DraftPlantingSite;
   search?: string;

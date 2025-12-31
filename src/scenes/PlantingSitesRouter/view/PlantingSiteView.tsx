@@ -12,7 +12,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
 import DeletePlantingSiteModal from '../edit/DeletePlantingSiteModal';
-import BoundariesAndZones from './BoundariesAndZones';
+import BoundariesAndStrata from './BoundariesAndStrata';
 import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
 import PlantingSiteDetailsHeader from './PlantingSiteDetailsHeader';
 import SimplePlantingSite from './SimplePlantingSite';
@@ -70,7 +70,7 @@ export default function PlantingSiteView(): JSX.Element {
         >
           <PlantingSiteDetailsCard plantingSite={plantingSite} />
           {plantingSite.boundary && plantingSite.plantingZones && (
-            <BoundariesAndZones search={search} setSearch={setSearch} setView={setView} view={view} />
+            <BoundariesAndStrata search={search} setSearch={setSearch} setView={setView} view={view} />
           )}
           {plantingSite.boundary && !plantingSite.plantingZones && (
             <Grid container flexGrow={1}>

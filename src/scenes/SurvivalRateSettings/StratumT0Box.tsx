@@ -10,13 +10,13 @@ import strings from 'src/strings';
 import { SpeciesPlot, ZoneT0Data } from 'src/types/Tracking';
 import { roundToDecimal } from 'src/utils/numbers';
 
-type ZoneT0BoxProps = {
+type StratumT0BoxProps = {
   plotsWithObservations: PlotsWithObservationsSearchResult[];
   withdrawnSpeciesPlot?: SpeciesPlot[];
   t0Zone?: ZoneT0Data;
 };
 
-const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: ZoneT0BoxProps) => {
+const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: StratumT0BoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
   const { isMobile } = useDeviceInfo();
@@ -135,4 +135,4 @@ const ZoneT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Zone }: Zone
   );
 };
 
-export default ZoneT0Box;
+export default StratumT0Box;

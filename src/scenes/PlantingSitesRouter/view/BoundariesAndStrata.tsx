@@ -25,16 +25,19 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
 
-export type ObservationType = 'plantMonitoring' | 'biomassMeasurements';
-
-type BoundariesAndZonesProps = {
+type BoundariesAndStrataProps = {
   search?: string;
   setSearch: (query: string) => void;
   setView?: (view: View) => void;
   view?: View;
 };
 
-export default function BoundariesAndZones({ search, setSearch, setView, view }: BoundariesAndZonesProps): JSX.Element {
+export default function BoundariesAndStrata({
+  search,
+  setSearch,
+  setView,
+  view,
+}: BoundariesAndStrataProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { activeLocale } = useLocalization();

@@ -8,7 +8,7 @@ import Card from 'src/components/common/Card';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
-import PlantingDensityPerZoneCard from './PlantingDensityPerZoneCard';
+import PlantingDensityPerStratumCard from './PlantingDensityPerStratumCard';
 import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 
 type PlantingDensityCardProps = {
@@ -67,7 +67,7 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
               </Tooltip>
             </Box>
             <Box paddingTop={1}>
-              <PlantingDensityPerZoneCard />
+              <PlantingDensityPerStratumCard />
             </Box>
           </Box>
         </>

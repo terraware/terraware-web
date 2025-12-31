@@ -12,7 +12,7 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings from 'src/strings';
 
 import HighestAndLowestSurvivalRateSpeciesCard from './HighestAndLowestSurvivalRateSpeciesCard';
-import HighestAndLowestSurvivalRateZonesCard from './HighestAndLowestSurvivalRateZonesCard';
+import HighestAndLowestSurvivalRateStrataCard from './HighestAndLowestSurvivalRateStrataCard';
 import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
 export default function SurvivalRateCard(): JSX.Element {
@@ -97,7 +97,7 @@ export default function SurvivalRateCard(): JSX.Element {
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <HighestAndLowestSurvivalRateZonesCard />
+          <HighestAndLowestSurvivalRateStrataCard />
         </Box>
       </Box>
       <div style={separatorStyles} />

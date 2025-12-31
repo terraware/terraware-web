@@ -26,7 +26,7 @@ import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
+import ObservationStratumRenderer from './ObservationStratumRenderer';
 
 const replaceObservationPlotColumn = (): TableColumnType[] => [
   {
@@ -36,7 +36,7 @@ const replaceObservationPlotColumn = (): TableColumnType[] => [
   },
 ];
 
-export default function ObservationPlantingZone(): JSX.Element {
+export default function ObservationStratum(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
@@ -195,7 +195,7 @@ export default function ObservationPlantingZone(): JSX.Element {
                 columns={columns}
                 rows={rows}
                 orderBy='plantingZoneName'
-                Renderer={ObservationPlantingZoneRenderer(
+                Renderer={ObservationStratumRenderer(
                   plantingSiteId,
                   observationId,
                   plantingZoneName,
