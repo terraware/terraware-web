@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/ObservationsRouter/zone/index.tsx</title>
+    <title>Code coverage report for src/scenes/ObservationsRouter/stratum/index.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouter/zone</a> index.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouter/stratum</a> index.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -525,7 +525,7 @@ import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { useDefault<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Ti</span>meZone <span class="cstat-no" title="statement not covered" >} from 'src/utils/useTimeZoneUtils';</span></span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';</span>
+<span class="cstat-no" title="statement not covered" >import ObservationStratumRenderer from './ObservationStratumRenderer';</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 const replaceObservationPlotColumn = (): TableColumnType[] =&gt; [
 <span class="cstat-no" title="statement not covered" >  {</span>
@@ -535,7 +535,7 @@ const replaceObservationPlotColumn = (): TableColumnType[] =&gt; [
   },<span class="cstat-no" title="statement not covered" ></span>
 ];<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-export default func<span class="cstat-no" title="statement not covered" >tion ObservationPlantingZone(): JSX.Element {</span>
+export default func<span class="cstat-no" title="statement not covered" >tion ObservationStratum(): JSX.Element {</span>
   const { activeLocale <span class="cstat-no" title="statement not covered" >} = useLocalization();</span>
   const { selectedOrganizati<span class="cstat-no" title="statement not covered" >on } = useOrganization();</span>
   const defaultTimeZone = use<span class="cstat-no" title="statement not covered" >DefaultTimeZone();</span>
@@ -550,7 +550,7 @@ export default func<span class="cstat-no" title="statement not covered" >tion Ob
   const observationId = N<span class="cstat-no" title="statement not covered" >umber(params.observationId);</span>
   const plantingZoneName =<span class="cstat-no" title="statement not covered" > params.plantingZoneName!;</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  const { observation } = useObservation(obse<span class="cstat-no" title="statement not covered" >rvationId);</span>
+  const { observation } = useObservation<span class="cstat-no" title="statement not covered" >(observationId);</span>
   const [search, onSearch] = useState<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >&lt;s</span>trin<span class="cstat-no" title="statement not covered" >g&gt;('');</span></span>
   const [filters, setFilters] = useState&lt;Record&lt;string, any&gt;&gt;({});
   const [replaceObservationPlot, setReplaceObservationPlot] = useState&lt;
@@ -558,7 +558,7 @@ export default func<span class="cstat-no" title="statement not covered" >tion Ob
   &gt;();
   const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
 &nbsp;
-  const d<span class="fstat-no" title="function not covered" >efaultColumns = useCallb</span>ack(
+  const d<span class="fstat-no" title="function not covered" >efaultColumns = use</span>Callback(
     () =&gt;<span class="cstat-no" title="statement not covered" ></span>
       [<span class="cstat-no" title="statement not covered" ></span>
         { key: 'monitoring<span class="cstat-no" title="statement not covered" >PlotNumber', name: strings.MONITORING_PLOT, type: </span>'string' },
@@ -694,7 +694,7 @@ export default func<span class="cstat-no" title="statement not covered" >tion Ob
                 columns={columns}
                 rows={rows}
                 orderBy='plantingZoneName'
-                Renderer={ObservationPlantingZoneRenderer(
+                Renderer={ObservationStratumRenderer(
                   plantingSiteId,
                   observationId,
                   plantingZoneName,
@@ -721,7 +721,7 @@ export default func<span class="cstat-no" title="statement not covered" >tion Ob
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:06:54.289Z
+                at 2025-12-31T19:21:56.794Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

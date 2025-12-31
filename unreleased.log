@@ -1,3 +1,5 @@
+8b1609dc668 SW-7904 Rename zone->strata for component names in src/scenes (#4987)
+b74da8f1347 SW-7895 Replace references to numPlantingZones (#4988)
 ee330366f41 SW-7895 Replace references to plantingZoneNames (#4938)
 05a59fa5870 Suppress caniuse/browserslist warning (#4986)
 440c8ea8452 Ensure yarn install uses Github Actions disk cache if present (#4997)

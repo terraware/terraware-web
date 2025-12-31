@@ -256,9 +256,7 @@
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
 <a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a>
-<a name='L196'></a><a href='#L196'>196</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -435,8 +433,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -474,55 +470,53 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 import DraftPlantingSiteDetailsTable from './DraftPlantingSiteDetailsTable';
 &nbsp;
-export type ObservationType = 'plantMonitoring' | 'biomassMeasurements';
-&nbsp;
 type DraftPlantingSiteListMapViewProps = {
   plantingSite: DraftPlantingSite;
   search?: string;
-  setSearch: (query<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >: </span>string)<span class="cstat-no" title="statement not covered" > =&gt; void;</span></span>
-  setView?: (view: V<span class="cstat-no" title="statement not covered" >iew</span>) =&gt; void;
-<span class="cstat-no" title="statement not covered" >  view?: View;</span>
-};<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >export default function DraftPlantingSiteListM</span>apView({
-  plantingSite,<span class="cstat-no" title="statement not covered" ></span>
-  search,<span class="cstat-no" title="statement not covered" ></span>
+  setSearch: (query: string) =&gt; void;
+  setView?: (view: View) =&gt; void;
+  view?: View;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+};<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+export defa<span class="fstat-no" title="function not covered" >ul</span>t fu<span class="cstat-no" title="statement not covered" >nction DraftPlantingSiteListM</span>apView({
+  plantingSite,
+<span class="cstat-no" title="statement not covered" >  search,</span>
   setSearch,<span class="cstat-no" title="statement not covered" ></span>
   setView,<span class="cstat-no" title="statement not covered" ></span>
   view,<span class="cstat-no" title="statement not covered" ></span>
-}: DraftPlantingSiteListMapV<span class="cstat-no" title="statement not covered" >iewProps): JSX.Element {</span>
-  const { isMobile } = useDeviceInf<span class="cstat-no" title="statement not covered" >o();</span>
+}: DraftPlantingS<span class="cstat-no" title="statement not covered" >iteListMapViewProps): JSX.Elem</span>ent {
+  const { isMobile } = useDe<span class="cstat-no" title="statement not covered" >viceInfo();</span>
   const theme = useTheme();<span class="cstat-no" title="statement not covered" ></span>
-  const searchProps = <span class="cstat-no" title="statement not covered" >useMemo&lt;SearchProps&gt;(</span>
+  const searchProps = useMemo&lt;Searc<span class="cstat-no" title="statement not covered" >hProps&gt;(</span>
     () =&gt; ({<span class="cstat-no" title="statement not covered" ></span>
-      search: search<span class="cstat-no" title="statement not covered" > || '',</span>
-      onSearch: (value: str<span class="cstat-no" title="statement not covered" >ing) =&gt; setSearch(value),</span>
+      search: search |<span class="cstat-no" title="statement not covered" >| '',</span>
+      onSearch: (valu<span class="cstat-no" title="statement not covered" >e: string) =&gt; setSearch(value),</span>
     }),<span class="cstat-no" title="statement not covered" ></span>
-    [sear<span class="fstat-no" title="function not covered" >ch, setSearch]</span>
-  );
-&nbsp;
+    [search, setSearch]<span class="cstat-no" title="statement not covered" ></span>
+  );<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>
   const setViewCallback = useCallback(
     (newView: View) =&gt; {
       setView?.(newView);
     },
-    [setView]<span class="cstat-no" title="statement not covered" ></span>
-  );<span class="cstat-no" title="statement not covered" ></span>
+    [setView]
+  );
 <span class="cstat-no" title="statement not covered" ></span>
-  re<span class="fstat-no" title="function not covered" >tu</span>rn (<span class="cstat-no" title="statement not covered" ></span>
-    &lt;Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}&gt;
-      &lt;Box displ<span class="fstat-no" title="function not covered" >ay</span>='flex' f<span class="cstat-no" title="statement not covered" >lexGrow={0} align</span>Items='center'&gt;
+  return (<span class="cstat-no" title="statement not covered" ></span>
+    &lt;Box sx={view === <span class="cstat-no" title="statement not covered" >'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}&gt;</span>
+<span class="fstat-no" title="function not covered" ></span>      &lt;Box <span class="cstat-no" title="statement not covered" >display='flex' flexGrow={0} alignItems='center'&gt;</span>
         &lt;Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}&gt;
-          {strings.BOUNDARIES_AND_ZONES}
+          {strin<span class="fstat-no" title="function not covered" >gs</span>.BOUNDARI<span class="cstat-no" title="statement not covered" >ES_AND_ZONES}</span>
         &lt;/Typography&gt;
-      &lt;/Box&gt;<span class="cstat-no" title="statement not covered" ></span>
-<span class="fstat-no" title="function not covered" ></span>      {plantingSite.boundary &amp;&amp; (
-<span class="cstat-no" title="statement not covered" >        &lt;ListMapView</span>
-          style={{
-            padding: isMobile ? theme.spacing(0, 3, 3) : 0,
+      &lt;/Box&gt;
+      {plantingSite.boundary &amp;&amp; (
+        &lt;ListMapView<span class="cstat-no" title="statement not covered" ></span>
+<span class="fstat-no" title="function not covered" ></span>          style={{
+<span class="cstat-no" title="statement not covered" >            padding: isMobile ? theme.spacing(0, 3,</span> 3) : 0,
             ...(view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : {}),
-<span class="cstat-no" title="statement not covered" >          }}</span>
+          }}
           initialView={'map'}
-          onView={setViewCallback}
+<span class="cstat-no" title="statement not covered" >          onView={setViewCallback}</span>
           search={&lt;Search {...searchProps} /&gt;}
           list={&lt;DraftPlantingSiteDetailsTable plantingSite={plantingSite} /&gt;}
           map={&lt;DraftPlantingSiteMapView plantingSite={plantingSite} search={search ? search.trim() : ''} /&gt;}
@@ -535,45 +529,45 @@ type DraftPlantingSiteListMapViewProps = {
 type PlantingSiteMapViewProps = {
   plantingSite: MinimalPlantingSite;
   search?: string;
-};<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-function DraftPlantingSiteMapView({ plantingSite, sear<span class="cstat-no" title="statement not covered" >ch }: PlantingSiteMapViewProps)</span>: JSX.Element | null {
-  const { isDesktop } = useDeviceInfo();<span class="cstat-no" title="statement not covered" ></span>
-  const [searchZoneEntities,<span class="cstat-no" title="statement not covered" > setSearchZoneEntities] = useState&lt;MapEntityId[]&gt;([]);</span>
-  const [includedLayers, setIncludedLayers] = useState&lt;MapLayer[]&gt;(['Planting Site', 'Zones', 'Sub-Zones']);
+};
 &nbsp;
+function <span class="fstat-no" title="function not covered" >DraftPlantingSiteMapView(</span>{ plantingSite, search }: PlantingSiteMapViewProps): JSX.Element | null {
+  const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
+  const [searchZoneEntities, setSearchZoneEntities] = <span class="cstat-no" title="statement not covered" >useState&lt;MapEntityId[]&gt;([]);</span>
+  const [includedLayers, setIncludedLayers] = <span class="cstat-no" title="statement not covered" >useState&lt;MapLayer[]&gt;(['Planting Site', 'Zones', 'Sub-Zones']);</span>
+<span class="cstat-no" title="statement not covered" ></span>
   const layerOptionLabels: Record&lt;MapLayer, string&gt; = {
     'Planting Site': strings.PLANTING_SITE,
     Zones: strings.ZONES,
     'Sub-Zones': strings.SUBZONES,
-    'Monitoring Pl<span class="cstat-no" title="statement not covered" >ots': strings.MONITORING_P<span class="fstat-no" title="function not covered" >LO</span>TS,</span>
-<span class="cstat-no" title="statement not covered" >    'Project Zones': strings.PROJECT_ZONES,</span>
-  };<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  const mapData = useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (plantingSite) {<span class="fstat-no" title="function not covered" ></span></span>
+    'Monitoring Plots': strings.MONITORING_PLOTS,
+    'Project Zones': strings.PROJECT_ZONES,
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+  cons<span class="cstat-no" title="statement not covered" >t mapData = useMemo(() =&gt; {</span>
+    if (plantingSite) {
       return MapService.getMapDataFromPlantingSite(plantingSite);
-<span class="cstat-no" title="statement not covered" >    }</span>
-  }, [<span class="cstat-no" title="statement not covered" >plantingSite]);</span>
-&nbsp;
-  useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
-    if<span class="cstat-no" title="statement not covered" > (!search) {</span>
-      setSearchZoneEntities([]);
-    } else {
-      const entities = <span class="cstat-no" title="statement not covered" >plantingSite?.plantingZone<span class="fstat-no" title="function not covered" >s</span></span>
+<span class="cstat-no" title="statement not covered" >    }<span class="fstat-no" title="function not covered" ></span></span>
+  }, [plantingSite]);
+<span class="cstat-no" title="statement not covered" ></span>
+  useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
+    if (!search) {
+      setSearchZoneEnti<span class="cstat-no" title="statement not covered" >ties([]);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+    } <span class="cstat-no" title="statement not covered" >else {</span>
+      const entities = plantingSite?.plantingZones
         ?.filter((zone) =&gt; regexMatch(zone.name, search))
-        .map((zone)<span class="cstat-no" title="statement not covered" > =&gt; ({ sourceId: 'zones', id: zone.id })</span>);
-<span class="cstat-no" title="statement not covered" >      setSearchZoneEntities(entities ?? []);</span>
+        .map((zone) =&gt; <span class="cstat-no" title="statement not covered" >({ sourceId: 'zones', id: <span class="fstat-no" title="function not covered" >zo</span>ne.id }));</span>
+      setSearchZoneEntities(entities ?? []);
     }<span class="cstat-no" title="statement not covered" ></span>
-  }, [plantingSite, search]);
+  },<span class="cstat-no" title="statement not covered" > [plantingSite, search]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
   const layerOptions: MapLayer[] = useMemo(() =&gt; {
-<span class="cstat-no" title="statement not covered" >    const result: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];</span>
-<span class="cstat-no" title="statement not covered" >    if (</span>
-      mapData &amp;&amp;
-<span class="cstat-no" title="statement not covered" >      ((mapData.permanentPlot?.entities &amp;&amp; mapData.permanentPlot.entities.length &gt; 0) ||</span>
+<span class="cstat-no" title="statement not covered" >    const result: M</span>apLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];
+    if (
+<span class="cstat-no" title="statement not covered" >      mapData &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >      ((mapData.p</span>ermanentPlot?.entities &amp;&amp; mapData.permanentPlot.entities.length &gt; 0) ||
         (mapData.temporaryPlot?.entities &amp;&amp; mapData.temporaryPlot.entities.length &gt; 0))
-    ) {
+<span class="cstat-no" title="statement not covered" >    ) {</span>
       result.push('Monitoring Plots');
     }
     return result;
@@ -596,9 +590,9 @@ function DraftPlantingSiteMapView({ plantingSite, sear<span class="cstat-no" tit
           contextRenderer={{
             render: ContextRenderer(plantingSite),
             sx: {
-              '.mapboxgl-popu<span class="fstat-no" title="function not covered" >p </span>.mapboxg<span class="cstat-no" title="statement not covered" >l-popup-content': {</span>
+              '.mapboxgl-popup .mapboxgl-popup-content': {
                 borderRadius: '8px',
-                padding: '10px',
+                padding: '10p<span class="fstat-no" title="function not covered" >x'</span>,<span class="cstat-no" title="statement not covered" ></span>
                 width: 'fit-content',
                 maxWidth: '350px',
               },
@@ -606,32 +600,32 @@ function DraftPlantingSiteMapView({ plantingSite, sear<span class="cstat-no" tit
           }}
           topRightMapControl={
             &lt;MapLayerSelect
-              initialSel<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ec</span>tion={includedLayers}</span>
+              initialSelection={includedLayers}
               onUpdateSelection={setIncludedLayers}
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>              menuSections={[</span>
+              menuSectio<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ns</span>={[</span>
                 layerOptions.map((opt) =&gt; ({
-<span class="cstat-no" title="statement not covered" >                  label: layerOptionLabels[opt],</span>
-                  val<span class="cstat-no" title="statement not covered" >ue:</span> opt,
-                })),
-<span class="cstat-no" title="statement not covered" >              ]}</span>
-<span class="cstat-no" title="statement not covered" >            /&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>                  label: layerOptionLabels[opt],</span>
+                  value: opt,
+                })<span class="cstat-no" title="statement not covered" >),</span>
+              ]}<span class="cstat-no" title="statement not covered" ></span>
+            /&gt;
 <span class="cstat-no" title="statement not covered" >          }</span>
-        /&gt;
-      )}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >        /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      )}</span>
     &lt;/Box&gt;
-  );<span class="cstat-no" title="statement not covered" ></span>
-}<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  );<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+}
 <span class="cstat-no" title="statement not covered" ></span>
-const <span class="cstat-no" title="statement not covered" >ContextRenderer =</span>
-  (site: MinimalPlantingSite) =&gt;
-  // eslint-disable-next-line react/display-name
+const ContextRender<span class="cstat-no" title="statement not covered" >er =<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+  (sit<span class="cstat-no" title="statement not covered" >e: MinimalPlantingSite) =&gt;</span>
+  // e<span class="cstat-no" title="statement not covered" >slint-disable-next-line react/display-name</span>
   (entity: MapSourceProperties): JSX.Element | null =&gt; {
     const zones = site.plantingZones ?? [];
-    le<span class="cstat-no" title="statement not covered" >t properties:</span> TooltipProperty[] = [];
+    let properties: TooltipProperty[] = [];
     let title: string;
-<span class="cstat-no" title="statement not covered" >    if (entity.type === 'site') {</span>
+    if<span class="cstat-no" title="statement not covered" > (entity.type</span> === 'site') {
       title = site.name;
-      properties = [
+<span class="cstat-no" title="statement not covered" >      properties = [</span>
         { key: strings.ZONES, value: zones.length },
         { key: strings.SUBZONES, value: zones.flatMap((z) =&gt; z.plantingSubzones).length },
       ];
@@ -655,7 +649,7 @@ const <span class="cstat-no" title="statement not covered" >ContextRenderer =</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:06:54.289Z
+                at 2025-12-31T19:21:56.794Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
