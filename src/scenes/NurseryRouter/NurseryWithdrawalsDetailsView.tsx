@@ -43,12 +43,12 @@ export interface WithdrawalSummary {
 
 type NurseryWithdrawalsDetailsViewProps = {
   species: Species[];
-  plantingSubzoneNames: Record<number, string>;
+  substratumNames: Record<number, string>;
 };
 
 export default function NurseryWithdrawalsDetailsView({
   species,
-  plantingSubzoneNames,
+  substratumNames,
 }: NurseryWithdrawalsDetailsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -103,7 +103,7 @@ export default function NurseryWithdrawalsDetailsView({
             purpose: withdrawalSummaryRecord.purpose as string,
             facilityName: withdrawalSummaryRecord.facilityName as string,
             destinationName: withdrawalSummaryRecord.destinationName as string,
-            subzoneNames: withdrawalSummaryRecord.plantingSubzoneNames as string,
+            subzoneNames: withdrawalSummaryRecord.substratumNames as string,
             scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
             totalWithdrawn: withdrawalSummaryRecord.totalWithdrawn as string,
             hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
@@ -153,7 +153,7 @@ export default function NurseryWithdrawalsDetailsView({
           >
             <WithdrawalTabPanelContent
               species={species}
-              plantingSubzoneNames={plantingSubzoneNames}
+              substratumNames={substratumNames}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
               delivery={delivery}
@@ -175,7 +175,7 @@ export default function NurseryWithdrawalsDetailsView({
           >
             <ReassignmentTabPanelContent
               species={species}
-              plantingSubzoneNames={plantingSubzoneNames}
+              substratumNames={substratumNames}
               withdrawal={withdrawal}
               delivery={delivery}
               batches={batches}
@@ -184,7 +184,7 @@ export default function NurseryWithdrawalsDetailsView({
         ),
       },
     ];
-  }, [species, plantingSubzoneNames, withdrawal, withdrawalSummary, delivery, batches, activeLocale, isMobile, theme]);
+  }, [species, substratumNames, withdrawal, withdrawalSummary, delivery, batches, activeLocale, isMobile, theme]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'withdrawal',
@@ -267,7 +267,7 @@ export default function NurseryWithdrawalsDetailsView({
           <Box sx={contentPanelProps}>
             <WithdrawalTabPanelContent
               species={species}
-              plantingSubzoneNames={plantingSubzoneNames}
+              substratumNames={substratumNames}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
               delivery={delivery}
