@@ -14,11 +14,11 @@ import { MapData, MapSourceProperties } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-type ZoneLevelDataMapProps = {
+type StratumLevelDataMapProps = {
   plantingSiteId: number;
 };
 
-export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
+export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelDataMapProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =

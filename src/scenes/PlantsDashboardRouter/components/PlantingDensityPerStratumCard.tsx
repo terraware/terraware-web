@@ -10,7 +10,7 @@ import { truncate } from 'src/utils/text';
 
 const MAX_ZONE_NAME_LENGTH = 20;
 
-export default function PlantingDensityPerZoneCard(): JSX.Element {
+export default function PlantingDensityPerStratumCard(): JSX.Element {
   const theme = useTheme();
   const { plantingSite, observationSummaries } = usePlantingSiteData();
   const [labels, setLabels] = useState<string[]>();

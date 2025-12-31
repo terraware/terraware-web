@@ -23,7 +23,7 @@ const columns = (): TableColumnType[] => [
   },
 ];
 
-export default function PlantingSiteDraftZoneView(): JSX.Element | undefined {
+export default function PlantingSiteDraftStratumView(): JSX.Element | undefined {
   const { activeLocale } = useLocalization();
   const [search, setSearch] = useState<string>('');
 

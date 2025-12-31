@@ -17,7 +17,7 @@ import strings from 'src/strings';
 import { ScheduleObservationRequestPayload } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import ObservationSubzoneSelector from './ObservationSubzoneSelector';
+import ObservationSubstratumSelector from './ObservationSubstratumSelector';
 
 const WARN_IF_SITE_LESS_THAN_HECTARES = 3.0;
 
@@ -194,7 +194,7 @@ export default function ScheduleObservationForm({
             </Grid>
 
             <Grid item xs={12}>
-              <ObservationSubzoneSelector
+              <ObservationSubstratumSelector
                 errorText={validate ? subzoneError : ''}
                 onChangeSelectedSubzones={setRequestedSubzoneIds}
               />

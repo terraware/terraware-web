@@ -7,7 +7,7 @@ import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/t
 import strings from 'src/strings';
 import { SiteT0Data, SpeciesPlot } from 'src/types/Tracking';
 
-import ZoneT0Box from './ZoneT0Box';
+import StratumT0Box from './StratumT0Box';
 
 type TemporaryPlotsTabProps = {
   zonesWithObservations: Record<string, PlotsWithObservationsSearchResult[]>;
@@ -40,7 +40,7 @@ const TemporaryPlotsTab = ({
         plotIds.includes(wsp.monitoringPlotId.toString())
       );
       return (
-        <ZoneT0Box
+        <StratumT0Box
           key={zoneId}
           plotsWithObservations={plots}
           withdrawnSpeciesPlot={filteredWithdrawnSpecies}

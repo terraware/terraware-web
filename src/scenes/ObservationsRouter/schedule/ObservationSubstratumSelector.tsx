@@ -12,12 +12,12 @@ import strings from 'src/strings';
 import { PlantingZone } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
-interface ObservationSubzoneSelectorProps {
+interface ObservationSubstratumSelectorProps {
   errorText?: string;
   onChangeSelectedSubzones: (requestedSubzoneIds: number[]) => void;
 }
 
-const ObservationSubzoneSelector = ({ errorText, onChangeSelectedSubzones }: ObservationSubzoneSelectorProps) => {
+const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: ObservationSubstratumSelectorProps) => {
   const theme = useTheme();
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
@@ -185,4 +185,4 @@ const ObservationSubzoneSelector = ({ errorText, onChangeSelectedSubzones }: Obs
   );
 };
 
-export default ObservationSubzoneSelector;
+export default ObservationSubstratumSelector;

@@ -42,12 +42,12 @@ const columns = (): TableColumnType[] => [
   },
 ];
 
-export type GenericZoneViewProps = {
+export type GenericStratumViewProps = {
   plantingSite: MinimalPlantingSite;
   plantingZone: MinimalPlantingZone;
 };
 
-export default function GenericZoneView({ plantingSite, plantingZone }: GenericZoneViewProps): JSX.Element {
+export default function GenericStratumView({ plantingSite, plantingZone }: GenericStratumViewProps): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const navigate = useSyncNavigate();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();

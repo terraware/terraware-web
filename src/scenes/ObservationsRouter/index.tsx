@@ -35,7 +35,7 @@ import AdHocObservationDetails from './adhoc/AdHocObservationDetails';
 import MonitoringPlotEditPhotos from './common/MonitoringPlotEditPhotos';
 import ObservationDetails from './details';
 import { RescheduleObservation, ScheduleObservation } from './schedule';
-import ObservationPlantingZoneDetails from './zone';
+import ObservationStratumDetails from './stratum';
 
 /**
  * This page will route to the correct component based on url params
@@ -175,7 +175,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
       />
       <Route
         path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneName'}
-        element={<ObservationPlantingZoneDetails />}
+        element={<ObservationStratumDetails />}
       />
       <Route
         path={'/:plantingSiteId/results/:observationId/adHocPlot/:monitoringPlotId'}

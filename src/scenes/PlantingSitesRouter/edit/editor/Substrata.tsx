@@ -39,7 +39,7 @@ import {
   toZoneFeature,
 } from './utils';
 
-export type SubzonesProps = {
+export type SubstrataProps = {
   onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
@@ -101,7 +101,7 @@ type Stack = {
   fixedBoundaries?: Record<number, FeatureCollection>;
 };
 
-export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Element {
+export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Element {
   const [selectedZone, setSelectedZone] = useState<number | undefined>(site.plantingZones?.[0]?.id);
 
   // map of zone id to subzones

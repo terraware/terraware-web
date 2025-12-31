@@ -29,8 +29,8 @@ import Exclusions from './Exclusions';
 import Form, { PlantingSiteStep } from './Form';
 import SiteBoundary from './SiteBoundary';
 import StartOverConfirmation from './StartOverConfirmation';
-import Subzones from './Subzones';
-import Zones from './Zones';
+import Strata from './Strata';
+import Substrata from './Substrata';
 import { OnValidate } from './types';
 
 export type EditorProps = {
@@ -365,8 +365,8 @@ export default function Editor(props: EditorProps): JSX.Element {
             )}
             {currentStep === 'site_boundary' && <SiteBoundary onValidate={onValidate} site={plantingSite} />}
             {currentStep === 'exclusion_areas' && <Exclusions onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'zone_boundaries' && <Zones onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'subzone_boundaries' && <Subzones onValidate={onValidate} site={plantingSite} />}
+            {currentStep === 'zone_boundaries' && <Strata onValidate={onValidate} site={plantingSite} />}
+            {currentStep === 'subzone_boundaries' && <Substrata onValidate={onValidate} site={plantingSite} />}
           </Card>
         </Form>
       )}

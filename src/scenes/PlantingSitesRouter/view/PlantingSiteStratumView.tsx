@@ -3,9 +3,9 @@ import { useParams } from 'react-router';
 
 import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 
-import GenericZoneView from './GenericZoneView';
+import GenericStratumView from './GenericStratumView';
 
-export default function PlantingSiteZoneView(): JSX.Element | undefined {
+export default function PlantingSiteStratumView(): JSX.Element | undefined {
   const params = useParams<{ plantingSiteId: string; zoneId: string }>();
   const zoneId = Number(params.zoneId);
   const plantingSiteId = Number(params.plantingSiteId);
@@ -20,5 +20,5 @@ export default function PlantingSiteZoneView(): JSX.Element | undefined {
     return undefined;
   }
 
-  return <GenericZoneView plantingSite={plantingSite.site} plantingZone={plantingZone} />;
+  return <GenericStratumView plantingSite={plantingSite.site} plantingZone={plantingZone} />;
 }

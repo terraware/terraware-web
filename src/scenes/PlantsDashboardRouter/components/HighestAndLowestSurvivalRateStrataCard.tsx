@@ -7,7 +7,7 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings from 'src/strings';
 import { PlantingZoneObservationSummary } from 'src/types/Observations';
 
-export default function HighestAndLowestSurvivalRateZonesCard(): JSX.Element {
+export default function HighestAndLowestSurvivalRateStrataCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries, plantingSite } = usePlantingSiteData();
 
