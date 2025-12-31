@@ -42,6 +42,13 @@ import {
 } from 'src/types/Observations';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import ObservationStatsDrawer from './ObservationStatsDrawer';
+
+type LayerFeature = {
+  plantingSiteId: number;
+  layerFeatureId: MapLayerFeatureId;
+};
+
 type ObservationMapProps = {
   isBiomass?: boolean;
   plantingSiteId?: number;
@@ -76,6 +83,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     survivalRateMoreThan75,
   } = useMapFeatureStyles();
 
+  const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
   const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
@@ -197,6 +205,15 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     [getPlantingSiteHistoryResult.data?.site]
   );
 
+  const selectFeature = useCallback(
+    (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
+      setSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
+      selectPhotos([]);
+      setDrawerOpen(true);
+    },
+    [selectPhotos]
+  );
+
   const layers = useMemo((): MapLayer[] => {
     if (plantingSiteId === undefined) {
       // Show only sites if no layers selected.
@@ -224,6 +241,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
                 type: 'MultiPolygon',
                 coordinates: selectedHistory.boundary?.coordinates ?? [],
               },
+              onClick: selectFeature(selectedHistory.plantingSiteId)('sites', `${selectedHistory.plantingSiteId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'sites' &&
+                selectedFeature?.layerFeatureId.featureId === `${selectedHistory.plantingSiteId}`,
             },
           ],
           layerId: 'sites',
@@ -239,6 +260,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
                 coordinates: stratum.boundary?.coordinates ?? [],
               },
               label: stratum.name,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('strata', `${stratum.stratumId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'strata' &&
+                selectedFeature?.layerFeatureId.featureId === `${stratum.stratumId}`,
             })) ?? [],
           layerId: 'strata',
           style: strataLayerStyle,
@@ -254,6 +279,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
                   coordinates: substratum.boundary?.coordinates ?? [],
                 },
                 label: substratum.name,
+                onClick: selectFeature(selectedHistory.plantingSiteId)('substrata', `${substratum.substratumId}`),
+                selected:
+                  selectedFeature?.layerFeatureId.layerId === 'substrata' &&
+                  selectedFeature?.layerFeatureId.featureId === `${substratum.substratumId}`,
               }))
             ) ?? [],
           layerId: 'substrata',
@@ -270,6 +299,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
                 coordinates: [plot.boundary?.coordinates ?? []],
               },
               label: `${plot.monitoringPlotNumber}`,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('permanentPlots', `${plot.monitoringPlotId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'permanentPlots' &&
+                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
             })),
           layerId: 'permanentPlots',
           style: permanentPlotsLayerStyle,
@@ -285,8 +318,12 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
                 coordinates: [plot.boundary?.coordinates ?? []],
               },
               label: `${plot.monitoringPlotNumber}`,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('temporaryPlots', `${plot.monitoringPlotId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'temporaryPlots' &&
+                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
             })),
-          layerId: 'temporaryPlot',
+          layerId: 'temporaryPlots',
           style: temporaryPlotsLayerStyle,
           visible: temporaryPlotsVisible,
         },
@@ -298,6 +335,10 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
               coordinates: [plot.boundary?.coordinates ?? []],
             },
             label: `${plot.monitoringPlotNumber}`,
+            onClick: selectFeature(selectedHistory.plantingSiteId)('adHocPlots', `${plot.monitoringPlotId}`),
+            selected:
+              selectedFeature?.layerFeatureId.layerId === 'adHocPlots' &&
+              selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
           })),
           layerId: 'adHocPlots',
           style: adHocPlotsLayerStyle,
@@ -363,6 +404,9 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     permanentPlotsVisible,
     plantingSite,
     plantingSiteId,
+    selectFeature,
+    selectedFeature?.layerFeatureId.featureId,
+    selectedFeature?.layerFeatureId.layerId,
     selectedHistory,
     selectedLayer,
     sitesLayerStyle,
@@ -509,6 +553,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhotoWithGps) => () => {
       selectPhotos([{ monitoringPlotId, observationId, photo }]);
       selectPlants([]);
+      setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants]
@@ -528,6 +573,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         .filter((photo): photo is PlotPhoto => photo !== undefined);
       selectPhotos(photos);
       selectPlants([]);
+      setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants]
@@ -537,6 +583,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     (monitoringPlotId: number, observationId: number, plant: RecordedPlant) => () => {
       selectPhotos([]);
       selectPlants([{ monitoringPlotId, observationId, plant }]);
+      setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants]
@@ -556,6 +603,7 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
         .filter((plant): plant is PlotPlant => plant !== undefined);
       selectPhotos([]);
       selectPlants(plants);
+      setSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants]
@@ -786,13 +834,29 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
   ]);
 
   const drawerContent = useMemo(() => {
+    if (selectedFeature && selectedResults) {
+      return (
+        <ObservationStatsDrawer
+          layerFeatureId={selectedFeature.layerFeatureId}
+          observationId={selectedResults.observationId}
+          plantingSiteId={selectedFeature.plantingSiteId}
+        />
+      );
+    }
     if (selectedPhotos.length > 0) {
       return photoDrawerContent;
     }
     if (selectedPlants.length > 0) {
       return plantDrawerContent;
     }
-  }, [photoDrawerContent, plantDrawerContent, selectedPhotos.length, selectedPlants.length]);
+  }, [
+    photoDrawerContent,
+    plantDrawerContent,
+    selectedFeature,
+    selectedPhotos.length,
+    selectedPlants.length,
+    selectedResults,
+  ]);
 
   const drawerHeader = useMemo(() => {
     if (selectedPhotos.length > 0) {
