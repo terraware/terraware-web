@@ -34,8 +34,8 @@ const injectedRtkApi = api.injectEndpoints({
             'description',
             'id',
             'name',
-            'numPlantingZones',
-            'numPlantingSubzones',
+            'numStrata',
+            'numSubstrata',
             'project_id',
             'project_name',
             'timeZone',
@@ -77,8 +77,8 @@ const injectedRtkApi = api.injectEndpoints({
           description: result.description,
           id: Number(result.id),
           name: result.name,
-          numPlantingSubzones: result.numPlantingSubzones ? Number(result.numPlantingSubzones) : 0,
-          numPlantingZones: result.numPlantingZones ? Number(result.numPlantingZones) : 0,
+          numStrata: result.numStrata ? Number(result.numStrata) : 0,
+          numSubstrata: result.numSubstrata ? Number(result.numSubstrata) : 0,
           projectId: Number(result.project_id),
           projectName: result.project_name,
           timeZoneId: result.timeZone,
@@ -93,8 +93,8 @@ type DraftPlantingSiteSummaryApiResult = {
   description: string;
   id: string;
   name: string;
-  numPlantingSubzones: string;
-  numPlantingZones: string;
+  numStrata: string;
+  numSubstrata: string;
   project_id: string;
   project_name: string;
   timeZone: string;

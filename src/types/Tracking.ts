@@ -23,10 +23,10 @@ export type PlantingSiteSearchResult = {
   name: string;
   description?: string;
   isDraft?: boolean;
-  numPlantingSubzones: string;
-  'numPlantingSubzones(raw)': number;
-  numPlantingZones: string;
-  'numPlantingZones(raw)': number;
+  numStrata: string;
+  'numStrata(raw)': number;
+  numSubstrata: string;
+  'numSubstrata(raw)': number;
   project_id: number;
   project_name: string;
   timeZone?: string;

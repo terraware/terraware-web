@@ -33,8 +33,8 @@ const injectedRtkApi = api.injectEndpoints({
             'description',
             'id',
             'name',
-            'numPlantingZones',
-            'numPlantingSubzones',
+            'numStrata',
+            'numSubstrata',
             'project_id',
             'project_name',
             'timeZone',
@@ -76,8 +76,8 @@ const injectedRtkApi = api.injectEndpoints({
           description: result.description,
           id: Number(result.id),
           name: result.name,
-          numPlantingSubzones: Number(result.numPlantingSubzones),
-          numPlantingZones: Number(result.numPlantingZones),
+          numStrata: Number(result.numStrata),
+          numSubstrata: Number(result.numSubstrata),
           projectId: Number(result.project_id),
           projectName: result.project_name,
           timeZoneId: result.timeZone,
@@ -91,8 +91,8 @@ type PlantingSiteSummaryApiResult = {
   description: string;
   id: string;
   name: string;
-  numPlantingSubzones: string;
-  numPlantingZones: string;
+  numStrata: string;
+  numSubstrata: string;
   project_id: string;
   project_name: string;
   timeZone: string;
@@ -114,8 +114,8 @@ export type PlantingSiteSummary = {
   description: string;
   id: number;
   name: string;
-  numPlantingSubzones: number;
-  numPlantingZones: number;
+  numStrata: number;
+  numSubstrata: number;
   projectId: number;
   projectName: string;
   timeZoneId: string;

@@ -43,12 +43,12 @@ const columns = (): TableColumnType[] => [
     type: 'string',
   },
   {
-    key: 'numPlantingZones',
+    key: 'numStrata',
     name: strings.PLANTING_ZONES,
     type: 'string',
   },
   {
-    key: 'numPlantingSubzones',
+    key: 'numSubstrata',
     name: strings.SUBZONES,
     type: 'string',
   },
