@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/113</span>
+                <span class='fraction'>0/112</span>
             </div>
         
             
@@ -470,9 +470,7 @@
 <a name='L405'></a><a href='#L405'>405</a>
 <a name='L406'></a><a href='#L406'>406</a>
 <a name='L407'></a><a href='#L407'>407</a>
-<a name='L408'></a><a href='#L408'>408</a>
-<a name='L409'></a><a href='#L409'>409</a>
-<a name='L410'></a><a href='#L410'>410</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L408'></a><a href='#L408'>408</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -614,8 +612,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -957,9 +953,9 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   useE<span class="cstat-no" title="statement not covered" >ffect(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (plantingSite) {<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      const zoneDensities: Record&lt;string, number | string&gt; = {};</span>
-<span class="cstat-no" title="statement not covered" >      plantingSite.plantingZones?.forEach((z</span>one) =&gt; {
+<span class="cstat-no" title="statement not covered" >      plantingSite.strata?.forEach((zone) =&gt;</span> {
         if (latestResult) {
-          const zoneFromObs = latestResult.plantingZones.find((obsZone) =&gt; obsZone.plantingZoneId === zone.id);
+          const zoneFromObs = latestResult.strata.find((obsZone) =&gt; obsZone.stratumId === zone.id);
           zoneDensities[zone.name]<span class="cstat-no" title="statement not covered" > = zoneFromObs?.plantingDensity ?? '';</span>
         }<span class="cstat-no" title="statement not covered" ></span>
       });<span class="cstat-no" title="statement not covered" ></span>
@@ -971,7 +967,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
     if<span class="cstat-no" title="statement not covered" > (allSpecies) {<span class="fstat-no" title="function not covered" ></span></span>
       const psSpecies: PlantingSiteSpecies[] = [];
       (l<span class="cstat-no" title="statement not covered" >ocation as ReportPlantingSite).species.forEach((iSpecies) =&gt; {</span>
-        const foundSpecies = a<span class="cstat-no" title="statement not covered" >llSpecies.find((serverSpecies) =<span class="fstat-no" title="function not covered" >&gt; </span>serverSpeci<span class="cstat-no" title="statement not covered" >es.id === iSpecies.id);</span></span>
+        const foundSpecies = a<span class="cstat-no" title="statement not covered" >llSpecies.find((serverSpe<span class="fstat-no" title="function not covered" >ci</span>es) =&gt; serv<span class="cstat-no" title="statement not covered" >erSpecies.id === iSpecies.id);</span></span>
         if<span class="cstat-no" title="statement not covered" > (foundSpecies) {</span>
           psSpecies.push({
             id: iSpecies.id,
@@ -1018,13 +1014,11 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [latestResult]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   const numberOfPlots = useMemo(() =&gt; {
-    return latestResu<span class="cstat-no" title="statement not covered" >lt?.plantingZones.flatMap(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >      pz.plantingSubzones.flatMap((subzone) =&gt; subzone.monitoringPlots)<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    ).length;
-  }, [latestResult]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  cons<span class="fstat-no" title="function not covered" >t </span>marked<span class="cstat-no" title="statement not covered" >AsComplete = useMemo(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-    if (plantingSite) {
+    return latestResu<span class="cstat-no" title="statement not covered" >lt?.strata.flatMap((pz) =&gt;<span class="fstat-no" title="function not covered" > p</span>z.substrata.flatMap((subzone) =&gt; subzone.monitoringPlots)).length;</span>
+  },<span class="cstat-no" title="statement not covered" > [latestResult]);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
+  const markedAsComplete<span class="cstat-no" title="statement not covered" > = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >    if (plantingSite) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
       const totalArea = plantingSite.areaHa ?? 0;
       const totalPlantedAre<span class="cstat-no" title="statement not covered" >a =<span class="fstat-no" title="function not covered" ></span></span>
         plantingSite?.plantingZones
@@ -1297,7 +1291,7 @@ export default LocationSectionPlantingSite;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:30:05.071Z
+                at 2025-12-31T19:52:18.242Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

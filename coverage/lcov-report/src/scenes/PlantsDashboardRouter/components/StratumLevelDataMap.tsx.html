@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
@@ -408,9 +408,7 @@
 <a name='L343'></a><a href='#L343'>343</a>
 <a name='L344'></a><a href='#L344'>344</a>
 <a name='L345'></a><a href='#L345'>345</a>
-<a name='L346'></a><a href='#L346'>346</a>
-<a name='L347'></a><a href='#L347'>347</a>
-<a name='L348'></a><a href='#L348'>348</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L346'></a><a href='#L346'>346</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -597,8 +595,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -932,20 +928,18 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
       (entity: MapSourc<span class="cstat-no" title="statement not covered" >eProperties): JSX.Element =&gt; {</span>
 <span class="fstat-no" title="function not covered" ></span>        let properties: TooltipProperty[] = [];
 &nbsp;
-        const zoneHistory =<span class="cstat-no" title="statement not covered" > latestResultSiteHistory?.plantingZones.find(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >          (_zoneHistory) =&gt; _zoneHistory.id === entity.id</span>
-        );
-&nbsp;
+        const zoneHistory =<span class="cstat-no" title="statement not covered" > latestResultSiteHistory?.strata.find((_zoneHistory) =&gt; _zoneHistory.id === entity.id);<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
         // If zone history is not found, the id in the base map uses current zone ID instead.
-        const zoneId = zon<span class="cstat-no" title="statement not covered" >eHistory?.plantingZoneId ?? entity.id;</span>
-<span class="fstat-no" title="function not covered" ></span>        const zoneObservation = latestResult?.plantingZones.find(
-          (zoneResult) =&gt; zoneResult.plantingZoneId === zoneHistory?.plantingZoneId
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>        );</span>
+        const zoneId = zoneHistory?.stratumId ?? entity.id;
+        const zoneObservation = latestResult?.strata.find(
+          (zoneResult) =&gt; <span class="cstat-no" title="statement not covered" >zoneResult.stratumId === zoneHistory?.stratumId</span>
+<span class="fstat-no" title="function not covered" ></span>        );
         const zoneStat = zoneId !== undefined ? zonesStats[zoneId] : undefined;
-        const progress = <span class="cstat-no" title="statement not covered" >zon</span>eId !== undefined ? zonesProgress[zoneId] : undefined;
-        const zoneArea = zon<span class="cstat-no" title="statement not covered" >eId !== undefined ? findZoneArea(zoneId) : undefined;</span>
-        co<span class="fstat-no" title="function not covered" >ns</span>t lastZoneSummar<span class="cstat-no" title="statement not covered" >y = latestSummary?.plantingZon</span>es.find((pz) =&gt; pz.plantingZoneId === zoneId);
-&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span>        const progress = zoneId !== undefined ? zonesProgress[zoneId] : undefined;</span>
+        const zoneArea = zoneId !== undefined ? findZoneArea(zoneId) : undefined;
+        const lastZoneSum<span class="cstat-no" title="statement not covered" >mar</span>y = latestSummary?.strata.find((pz) =&gt; pz.stratumId === zoneId);
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
         if (!zoneStat) <span class="cstat-no" title="statement not covered" >{</span>
           properties = [<span class="cstat-no" title="statement not covered" ></span>
 <span class="fstat-no" title="function not covered" ></span>            {<span class="cstat-no" title="statement not covered" ></span>
@@ -1008,7 +1002,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
           }
         }
 &nbsp;
-        const latestZoneObservationTime = plantingSite?.plantingZones?.find(
+        const latestZoneObservationTime = plantingSite?.strata?.find(
           (z) =&gt; z.id === zoneId
         )?.latestObservationCompletedTime;
 &nbsp;
@@ -1036,13 +1030,13 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
         );
       },
     [
-      latestResultSiteHistory?.plantingZones,
-      latestResult?.plantingZones,
+      latestResultSiteHistory?.strata,
+      latestResult?.strata,
       zonesStats,
       zonesProgress,
       findZoneArea,
-      latestSummary?.plantingZones,
-      plantingSite?.plantingZones,
+      latestSummary?.strata,
+      plantingSite?.strata,
       timeZone,
 <span class="cstat-no" title="statement not covered" >      theme,</span>
     ]
@@ -1111,7 +1105,7 @@ export default function StratumLevelDataMap({ plantingSiteId }: StratumLevelData
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:30:05.071Z
+                at 2025-12-31T19:52:18.242Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

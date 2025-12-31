@@ -2058,12 +2058,12 @@ export default function Se<span class="cstat-no" title="statement not covered" >
   };<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" ></span>
   co<span class="cstat-no" title="statement not covered" >nst onChangePlantin</span>gSite = (value: string) =&gt; {
-    updateField('plantingSubzoneId', undefined); // clear subzone id when there's a new planting site id
+    updateField('substratumId', undefined); // clear subzone id when there's a new planting site id
     updateField('plantingSiteId<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >',</span> value);</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedZone(undefine</span>d);
 <span class="cstat-no" title="statement not covered" >    setSelectedSubzone(undefined</span>);
 <span class="cstat-no" title="statement not covered" >    const plantingSite = allPlantingSites</span>
-<span class="cstat-no" title="statement not covered" >      ? allPlantingSites.find((site) =&gt; site.i</span>d.toString() === value.toString())
+<span class="cstat-no" title="statement not covered" >      ? allPlantingSites.find((site) =&gt; s</span>ite.id.toString() === value.toString())
       : null;
     setZones(plantingSite?<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >.p</span>lantingZones || []);</span>
 <span class="cstat-no" title="statement not covered" >    setZoneId(undefined);</span>
@@ -2073,12 +2073,12 @@ export default function Se<span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >    setSelectedZone(<span class="fstat-no" title="function not covered" >va</span>lue);<span class="cstat-no" title="statement not covered" ></span></span>
     setSelectedSubzone(undefined);
     setZoneId(value?.id);
-    updateField('plantingSubzoneId', undefined); // clear subzone id when there's a new planting zone id
+    updateField('substratumId', undefined); // clear subzone id when there's a new planting zone id
   };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst onChangeSubzone = (value: any) =&gt; {</span>
     se<span class="cstat-no" title="statement not covered" >tSelectedSubzone(value);</span>
-    up<span class="cstat-no" title="statement not covered" >dateField('pla</span>ntingSubzoneId', value?.id);
+    up<span class="cstat-no" title="statement not covered" >dateField('sub</span>stratumId', value?.id);
   };<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   cons<span class="cstat-no" title="statement not covered" >t setIndividua</span>lError = (id: string, error?: string) =&gt; {
@@ -2263,11 +2263,11 @@ export default function Se<span class="cstat-no" title="statement not covered" >
       setIndividualError('zoneId', strings.REQUIRED_FIELD);
     }
 &nbsp;
-    if (!localRecord.plantingS<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ub</span>zoneId) {</span>
+    if (!localRecord.substratu<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >mI</span>d) {</span>
 <span class="cstat-no" title="statement not covered" >      setIndividualError('subzoneId', strings.REQUIRED_FIELD);</span>
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-    return localRecord.plantingSiteId &amp;&amp; localRecord.plantingSubzoneId;
+    return localRecord.plantingSiteId &amp;&amp; localRecord.substratumId;
   };
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   co<span class="cstat-no" title="statement not covered" >nst onNextHandler = () =&gt; {</span>
@@ -2293,7 +2293,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >      ...localRecord,</span>
 <span class="cstat-no" title="statement not covered" >      destinationFacilityId: isNurseryTransfer ? localRecord.destinationFacilityId : undefined,</span>
       plantingSiteId: isOutplant ? localRecord.plantingSiteId : undefined,
-<span class="cstat-no" title="statement not covered" >      plantingSubzon</span>eId: isOutplant ? localRecord.plantingSubzoneId : undefined,
+<span class="cstat-no" title="statement not covered" >      substratumId: </span>isOutplant ? localRecord.substratumId : undefined,
       facilityId: Number(selectedNursery?.id || -1),
       batchWithdrawals: batches<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >        .filter((batch: SearchResponseElement) =&gt; {</span>
@@ -2836,7 +2836,7 @@ export default function Se<span class="cstat-no" title="statement not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:30:05.071Z
+                at 2025-12-31T19:52:18.242Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

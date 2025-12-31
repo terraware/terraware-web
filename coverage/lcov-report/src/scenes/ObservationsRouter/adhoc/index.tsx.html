@@ -1010,9 +1010,9 @@ import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/Specie
 import strings from 'src/strings';
 import {
   ObservationMonitoringPlotResultsPayload,
-  ObservationPlantingSubzoneResultsPayload,
-  ObservationPlantingZoneResultsPayload,
   ObservationSpeciesResults,
+  ObservationStratumResultsPayload,
+  ObservationSubstratumResultsPayload,
 } from 'src/types/O<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bs</span>ervatio<span class="cstat-no" title="statement not covered" >ns';</span></span>
 import { getShortTim<span class="cstat-no" title="statement not covered" >e }</span> from 'src/utils/dateFormatter';
 <span class="cstat-no" title="statement not covered" >import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';</span>
@@ -1045,8 +1045,8 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
 <span class="cstat-no" title="statement not covered" ></span>
   const { species } = useSpeciesData()<span class="cstat-no" title="statement not covered" >;</span>
   const { plantingSite, adHocObs<span class="cstat-no" title="statement not covered" >ervationResults, observationResults } = u</span>sePlantingSiteData();
-  const [plantingZoneResult, set<span class="cstat-no" title="statement not covered" >PlantingZoneResult] = useState&lt;Observatio</span>nPlantingZoneResultsPayload&gt;();
-  const [<span class="fstat-no" title="function not covered" >plantingSubzoneResult, set</span>PlantingSubzoneResult] = useState&lt;ObservationPlantingSubzoneResultsPayload&gt;();
+  const [plantingZoneResult, set<span class="cstat-no" title="statement not covered" >PlantingZoneResult] = useState&lt;Observatio</span>nStratumResultsPayload&gt;();
+  const [<span class="fstat-no" title="function not covered" >plantingSubzoneResult, set</span>PlantingSubzoneResult] = useState&lt;ObservationSubstratumResultsPayload&gt;();
   const [monitori<span class="cstat-no" title="statement not covered" >ngPlotResult, setMonitoringPlotResult</span>] = useState&lt;ObservationMonitoringPlotResultsPayload&gt;();
   const isEditObservation<span class="cstat-no" title="statement not covered" >sEnabled = isEnabled('Edit Obs</span>ervations');
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1072,8 +1072,8 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
   useEffect(() =&gt; {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >    let plotFound = false;</span>
     if<span class="cstat-no" title="statement not covered" > (result) {</span>
-      result.plantingZones.forEach((zone) =&gt;
-        zone.plantingSubzones.forEach((subzone) =&gt;
+      result.strata.forEach((zone) =&gt;
+        zone.substrata.forEach((subzone) =&gt;
           subzone.monitoringPlots.forEach((plot) =&gt; {
             if (plot.monitoringPlotId === monitoringPlotId) {
 <span class="cstat-no" title="statement not covered" >              setPlantingZoneR<span class="fstat-no" title="function not covered" >es</span>ult(zone);</span>
@@ -1093,13 +1093,13 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
 &nbsp;
   const plantingZone = useMemo(() =&gt; {
     if<span class="cstat-no" title="statement not covered" > (plantingZoneResult) {</span>
-      re<span class="cstat-no" title="statement not covered" >turn plantingSite?.planti</span>ngZones?.find((zone) =&gt; zone.id === plantingZoneResult.plantingZoneId);
+      re<span class="cstat-no" title="statement not covered" >turn plantingSite?.strata</span>?.find((zone) =&gt; zone.id === plantingZoneResult.stratumId);
     }
   }, [plantingSite, plantingZoneResult]);
 &nbsp;
   const plantingSubzone<span class="cstat-no" title="statement not covered" > = useMemo(() =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
     if (plantingSubzoneResult) {
-<span class="cstat-no" title="statement not covered" >      return plantingZone?.plantingSubzones?.find((subzone) =&gt; subzone.id === plantingSubzoneResult.plantingSubzoneId);</span>
+<span class="cstat-no" title="statement not covered" >      return plantingZone?.substrata?.find((subzone) =&gt; subzone.id === plantingSubzoneResult.substratumId);</span>
     }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
   }, [plantingZone, plantingSubzoneResult]);
 &nbsp;
@@ -1267,8 +1267,8 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
     const names<span class="cstat-no" title="statement not covered" > =<span class="fstat-no" title="function not covered" ></span></span>
 <span class="cstat-no" title="statement not covered" >      monitoringPlotResult?.overlapsWithPlotIds.map((plotId, index) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        const all</span>Plots = observationResults?.flatMap((obv) =&gt;
-          obv.plantingZones.flatMap((pz) =&gt;
-<span class="cstat-no" title="statement not covered" >            pz.plantingSubzones.flatMap((subzone) =&gt;</span>
+          obv.strata.flatMap((pz) =&gt;
+<span class="cstat-no" title="statement not covered" >            pz.substrata.flatMap((subzone) =&gt;</span>
               subzone.monitoringPlots.map((plot) =&gt; {
                 return { ...plot, observationId: obv.observationId };
               })
@@ -1456,7 +1456,7 @@ export default fun<span class="cstat-no" title="statement not covered" >ction Ob
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:30:05.071Z
+                at 2025-12-31T19:52:18.242Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
