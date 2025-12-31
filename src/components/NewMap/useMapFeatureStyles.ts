@@ -83,7 +83,7 @@ const useMapFeatureStyles = () => {
 
   const survivalRate50To75 = useMemo(
     (): MapFillComponentStyle => ({
-      fillPatternUrl: '/assets/survival-rate-more-75.png',
+      fillPatternUrl: '/assets/survival-rate-more-50.png',
       opacity: 1.0,
       type: 'fill',
     }),
