@@ -14,8 +14,8 @@ import { useOrganization } from 'src/providers';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import {
   PlantingProgress,
+  selectStrataHaveStatistics,
   selectUpdatePlantingsCompleted,
-  selectZonesHaveStatistics,
 } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
@@ -96,7 +96,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
   const [selectedZoneIdsBySiteId, setSelectedZoneIdsBySiteId] = useState<Record<number, Set<number>>>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
   const subzonesStatisticsResult = useAppSelector((state) =>
-    selectZonesHaveStatistics(state, selectedOrganization?.id || -1, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
+    selectStrataHaveStatistics(state, selectedOrganization?.id || -1, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
   );
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
@@ -104,7 +104,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
 
   useEffect(() => {
     if (rows && hasZones === undefined) {
-      setHasZones(rows.some((d) => d.subzoneName));
+      setHasZones(rows.some((d) => d.substratumName));
     }
   }, [rows, hasZones]);
 
@@ -146,7 +146,7 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
     (complete: boolean) => {
       const subzoneIds = selectedRows.map((row) => row.subzoneId);
       const request = dispatch(
-        requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
+        requestUpdatePlantingsCompleted({ substratumIds: subzoneIds, planting: { plantingCompleted: complete } })
       );
       setMarkingAsComplete(complete);
       setRequestId(request.requestId);

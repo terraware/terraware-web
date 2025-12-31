@@ -53,7 +53,7 @@ const makePlantingProgressCsv = ({
     },
   ];
 
-  const columnHeaders = plantingProgress?.some((progress) => !!progress?.subzoneName)
+  const columnHeaders = plantingProgress?.some((progress) => !!progress?.substratumName)
     ? columnHeadersWithZones
     : columnHeadersWithoutZones;
 

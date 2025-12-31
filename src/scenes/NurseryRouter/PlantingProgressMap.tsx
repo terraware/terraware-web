@@ -7,8 +7,8 @@ import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import {
+  selectStrataHaveStatistics,
   selectUpdatePlantingCompleted,
-  selectZonesHaveStatistics,
 } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
@@ -42,7 +42,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const [statsWarningDialogProps, setStatsWarningDialogProps] = useState<{ id: number; val: boolean } | undefined>();
 
   const selectedZoneHasStats = useAppSelector((state) =>
-    selectZonesHaveStatistics(
+    selectStrataHaveStatistics(
       state,
       selectedOrganization?.id || -1,
       { [plantingSiteId]: new Set([zoneIdSelected]) },
@@ -101,7 +101,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
     (id: number, val: boolean) => {
       const request = dispatch(
         requestUpdatePlantingCompleted({
-          subzoneId: id,
+          substratumId: id,
           planting: {
             plantingCompleted: val,
           },
