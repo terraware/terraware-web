@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -121,7 +121,10 @@
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -166,7 +169,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,7 +195,7 @@ import strings <span class="cstat-no" title="statement not covered" ><span class
 im<span class="cstat-no" title="statement not covered" >port useDeviceInfo from 'src/utils/useDeviceInfo';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 type AddPhotosProps = {
-  onNext: (photos:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > F</span>ile[]) =&gt; void;</span>
+  onNext: (photos:<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > F</span>ile[]) =&gt; Promise&lt;void&gt;;</span>
 <span class="cstat-no" title="statement not covered" >  onCancel: () =&gt; void;</span>
   sa<span class="cstat-no" title="statement not covered" >veText: string;</span>
 };<span class="cstat-no" title="statement not covered" ></span>
@@ -197,35 +203,38 @@ export d<span class="cstat-no" title="statement not covered" >efault function Ad
   const { onNext, onCancel, saveText } = props;
 <span class="cstat-no" title="statement not covered" >  const [phot</span>os, setPhotos] = useState&lt;File[]&gt;([]);
   const theme = useTheme();
-  const { isMo<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >bi</span>le } = useDeviceInfo();<span class="cstat-no" title="statement not covered" ></span></span>
+  const [busy,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > s</span>etBusy] = useState(false);<span class="cstat-no" title="statement not covered" ></span></span>
+  const { isMobile } = useDeviceInfo();
 &nbsp;
   const onPhotosChanged = (photosList: File[]) =&gt; {
     setPhotos(photosList);
   };
 &nbsp;
   const onNextHandler = async () =&gt; {
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    await onNext(ph<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ot</span>os);<span class="cstat-no" title="statement not covered" ></span></span>
-  };<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" ></span>
-  return (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    &lt;PageForm
-<span class="cstat-no" title="statement not covered" >      cancelID='cancelAddPhotos'</span>
-      saveID='saveA<span class="cstat-no" title="statement not covered" >ddPhotos'</span>
-      onCancel={onCanc<span class="cstat-no" title="statement not covered" >el}</span>
-      onSave={() =&gt; vo<span class="cstat-no" title="statement not covered" >id onNextHandler()}</span>
-      saveButtonText={save<span class="cstat-no" title="statement not covered" >Text}</span>
+    setBusy(true);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    await onNext(pho<span class="cstat-no" title="statement not covered" >tos</span>);
+<span class="cstat-no" title="statement not covered" >    setBusy(false);</span>
+  };<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;PageForm<span class="cstat-no" title="statement not covered" ></span>
+      cancelID='cancel<span class="cstat-no" title="statement not covered" >AddPhotos'</span>
+      saveID='saveAddP<span class="cstat-no" title="statement not covered" >hotos'</span>
+      onCancel={onCancel}<span class="cstat-no" title="statement not covered" ></span>
+      onSave={() =&gt; v<span class="cstat-no" title="statement not covered" >oid onNextHandler()}</span>
+      saveButtonText={saveT<span class="cstat-no" title="statement not covered" >ext}</span>
+      bus<span class="fstat-no" title="function not covered" >y={busy}</span>
     &gt;<span class="cstat-no" title="statement not covered" ></span>
       &lt;Container<span class="cstat-no" title="statement not covered" ></span>
-        m<span class="fstat-no" title="function not covered" >axWidth={f</span>alse}
+        maxWidth<span class="cstat-no" title="statement not covered" >={false}</span>
         sx={{<span class="cstat-no" title="statement not covered" ></span>
-          display: 'flex',<span class="cstat-no" title="statement not covered" ></span>
-          margin<span class="cstat-no" title="statement not covered" >: '0 auto',</span>
-          width: isMobi<span class="cstat-no" title="statement not covered" >le ? '100%' : '700px',</span>
-          paddingLeft: the<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >me</span>.spacing(isMobile ? 1 : 4),</span>
-<span class="cstat-no" title="statement not covered" >          paddingRight: the</span>me.spacing(isMobile ? 1 : 4),
-          paddingTop: theme.spacing(5),
-        }}<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+          display: 'fle<span class="cstat-no" title="statement not covered" >x',</span>
+          margin: '0 auto'<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >,</span></span>
+<span class="cstat-no" title="statement not covered" >          width: isMobile ?</span> '100%' : '700px',
+          paddingLeft: theme.spacing(isMobile ? 1 : 4),
+          paddingRight: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >th</span>eme.spacing(isMobile ? 1 : 4),</span>
+<span class="cstat-no" title="statement not covered" >          paddingTo</span>p: theme.spacing(5),
+<span class="cstat-no" title="statement not covered" >        }}</span>
 <span class="cstat-no" title="statement not covered" >      &gt;</span>
         &lt;SelectPhotos
 <span class="cstat-no" title="statement not covered" >          onPhotosChanged={onPhotosChanged}</span>
@@ -244,7 +253,7 @@ export d<span class="cstat-no" title="statement not covered" >efault function Ad
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T19:21:56.794Z
+                at 2025-12-31T19:30:05.071Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
