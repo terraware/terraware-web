@@ -1,3 +1,4 @@
+c1b2d849a62 SW-7904 Rename zones->strata in planting site types (#5002)
 84c4f01952a SW-7903 Finish rename zone->strata BE api updates (#5001)
 b36400f8ed8 SW-7903 Update request payloads for requestedSubzoneIds and toPlantingSubzoneId (#4978)
 1e2b289005d SW-7909 Ensure /build-version.txt contains same value as APP_VERSION environment variable (#5000)

@@ -120,29 +120,7 @@
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L58'></a><a href='#L58'>58</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -157,28 +135,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,39 +181,17 @@
 <span class="cstat-no" title="statement not covered" ></span>
 import { MinimalPlanting<span class="cstat-no" title="statement not covered" >Site, MultiPolygon } from '</span>./Tracking';
 <span class="cstat-no" title="statement not covered" ></span>
-export type Popula<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>on = {</span>
-<span class="cstat-no" title="statement not covered" >  species_scientificName: string;</span>
-  to<span class="cstat-no" title="statement not covered" >talPlants: number;</span>
-  'tot<span class="cstat-no" title="statement not covered" >alPlants(raw)': number;</span>
-};<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-&nbsp;
-ex<span class="cstat-no" title="statement not covered" >port type P</span>lantingSiteSubzone = {
-  id: string;
-  fullName: string;<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  populations: Popul<span class="cstat-no" title="statement not covered" >ati</span>on[];
-<span class="cstat-no" title="statement not covered" >};</span>
-&nbsp;
-export type PlantingSiteZone = {
-  id: string;
-  name: string;
-  plantingSubzones: PlantingSiteSubzone[];
-};
-&nbsp;
-export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
-&nbsp;
-export type PlantingProgressSubzone = {
-  subzoneName: string;
-  plantingCompleted: boolean;
-  plantingSite: string;
-  zoneName: string;
-  targetPlantingDensity: number;
-  totalSeedlingsSent?: number;
-};
-&nbsp;
-export type UpdateSubstratumPayload = components['schemas']['UpdateSubstratumRequestPayload'];
-&nbsp;
-export type SiteType = 'simple' | 'detailed';
-export type SiteEditStep = 'details' | 'site_boundary' | 'exclusion_areas' | 'zone_boundaries' | 'subzone_boundaries';
+export type Planti<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ng</span>SiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+expo<span class="cstat-no" title="statement not covered" >rt type UpdateSubstratumPayload = components['schemas']['UpdateSubstratumRequestPayload'];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+export t<span class="cstat-no" title="statement not covered" >ype SiteType = 'simple' | <span class="fstat-no" title="function not covered" >'d</span>etai<span class="cstat-no" title="statement not covered" >led';</span></span>
+export type SiteEditStep =
+<span class="cstat-no" title="statement not covered" >  | 'details'</span>
+  | 'site_boundary'
+  | 'exclusion_area<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >s'<span class="cstat-no" title="statement not covered" ></span></span></span>
+  | 'stratum_boundar<span class="cstat-no" title="statement not covered" >ies</span>'
+<span class="cstat-no" title="statement not covered" >  | 'substratum_boundaries';</span>
 export type OptionalSiteEditStep = Exclude&lt;SiteEditStep, 'details' | 'site_boundary'&gt;;
 &nbsp;
 export type PlantingSitesFilters = {
@@ -307,7 +241,7 @@ export type DraftPlantingSite = MinimalPlantingSite &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T21:48:30.781Z
+                at 2025-12-31T22:04:30.050Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
