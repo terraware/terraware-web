@@ -26,13 +26,12 @@ type PlantMonitoringRow = {
   observationDate?: string;
   state: ObservationState;
   plantingSiteName?: string;
-  plantingZones?: string;
+  strata?: string;
   totalLive?: number;
   totalPlants?: number;
   totalSpecies?: number;
   plantingDensity?: number;
   survivalRate?: number;
-  mortalityRate?: number;
   completedDate?: string;
 };
 
@@ -63,8 +62,8 @@ const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
         type: 'string',
       },
       {
-        key: 'plantingZones',
-        name: strings.ZONES,
+        key: 'strata',
+        name: strings.STRATA,
         type: 'string',
       },
       {
@@ -122,7 +121,7 @@ const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
     direction: 'Descending',
   };
 
-  const fuzzySearchColumns = ['plantingSiteName', 'plantingZones'];
+  const fuzzySearchColumns = ['plantingSiteName', 'strata'];
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
 
@@ -262,14 +261,12 @@ const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
         const observation = observationsById[observationResult.observationId];
         const plantingSite = plantingSitesById[observationResult.plantingSiteId];
 
-        const plantingZones = observationResult.plantingZones.reduce((zoneNames, zone) => {
-          const observedZone = plantingSite?.plantingZones?.find(
-            (plantingZone) => plantingZone.id === zone.plantingZoneId
-          );
-          if (observedZone) {
-            return zoneNames + `\r${observedZone.name}`;
+        const strata = observationResult.strata.reduce((stratumNames, stratumResult) => {
+          const obsrvedStratum = plantingSite?.strata?.find((stratum) => stratum.id === stratumResult.stratumId);
+          if (obsrvedStratum) {
+            return stratumNames + `\r${obsrvedStratum.name}`;
           } else {
-            return zoneNames;
+            return stratumNames;
           }
         }, '');
 
@@ -277,12 +274,11 @@ const PlantMonitoringList = ({ siteId }: PlantMonitoringListProps) => {
           observationDate: observation?.endDate,
           state: observationResult.state,
           plantingSiteName: plantingSite?.name,
-          plantingZones,
-          totalLive: observationResult.totalPlants,
+          strata,
+          totalPlants: observationResult.totalPlants,
           totalSpecies: observationResult.totalSpecies,
           plantingDensity: observationResult.plantingDensity,
           survivalRate: observationResult.survivalRate,
-          mortalityRate: observationResult.mortalityRate,
           completedDate: observationResult.completedTime,
         };
       }),
