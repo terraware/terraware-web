@@ -10,7 +10,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import {
   searchObservationDetails,
-  selectDetailsZoneNames,
+  selectDetailsStratumNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
 import { useAppSelector } from 'src/redux/store';
@@ -62,14 +62,14 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
         observationId,
         orgId: selectedOrganization?.id || -1,
         search: searchProps.search,
-        zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
+        stratumNames: searchProps.filtersProps?.filters.zone?.values ?? [],
       },
       defaultTimeZone.get().id
     )
   );
 
   const zoneNames = useAppSelector((state) =>
-    selectDetailsZoneNames(state, plantingSiteId, observationId, selectedOrganization?.id || -1)
+    selectDetailsStratumNames(state, plantingSiteId, observationId, selectedOrganization?.id || -1)
   );
 
   const rows = useMemo(() => {

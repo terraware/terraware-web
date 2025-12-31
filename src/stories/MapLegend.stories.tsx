@@ -48,12 +48,12 @@ export const Default: Story = {
           {
             fillColor: '#0000ff',
             borderColor: '#000099',
-            label: 'Zone',
+            label: 'Stratum',
           },
           {
             fillColor: '#ff0000',
             borderColor: '#000000',
-            label: 'Subzone',
+            label: 'Substratum',
           },
         ],
       },

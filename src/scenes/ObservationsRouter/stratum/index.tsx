@@ -13,7 +13,7 @@ import { APP_PATHS } from 'src/constants';
 import useObservation from 'src/hooks/useObservation';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
+import { searchObservationStratum } from 'src/redux/features/observations/observationStratumSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
 import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
@@ -119,13 +119,13 @@ export default function ObservationStratum(): JSX.Element {
   }, [setReplaceObservationPlot]);
 
   const plantingZone = useAppSelector((state) =>
-    searchObservationPlantingZone(
+    searchObservationStratum(
       state,
       {
         plantingSiteId,
         observationId,
         orgId: selectedOrganization?.id || -1,
-        plantingZoneName,
+        stratumName: plantingZoneName,
         search,
         plotType: filters.plotType === undefined ? undefined : filters.plotType.values[0] === strings.PERMANENT,
       },

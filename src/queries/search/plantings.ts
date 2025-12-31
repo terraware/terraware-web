@@ -39,7 +39,7 @@ const injectedRtkApi = api.injectEndpoints({
           deliveryId: Number(result.delivery_id),
           numPlants: Number(result['numPlants(raw)']),
           plantingSiteId: Number(result.plantingSite_id),
-          plantingSubzoneId: Number(result.substratum_id),
+          substratumId: Number(result.substratum_id),
           type: result.type,
           species: {
             conservationCategory: result.species.conservationCategory,
@@ -87,7 +87,7 @@ export type Plantings = {
   deliveryId: number;
   numPlants: number;
   plantingSiteId: number;
-  plantingSubzoneId: number;
+  substratumId: number;
   species: PlantingSpecies;
   type: string;
   withdrawalId: number;
