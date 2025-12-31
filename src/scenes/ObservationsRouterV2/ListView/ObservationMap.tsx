@@ -234,40 +234,59 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
     } else if (selectedHistory) {
       return [
         {
-          features: [
-            {
-              featureId: `${selectedHistory.plantingSiteId}`,
-              geometry: {
-                type: 'MultiPolygon',
-                coordinates: selectedHistory.boundary?.coordinates ?? [],
-              },
-              onClick: selectFeature(selectedHistory.plantingSiteId)('sites', `${selectedHistory.plantingSiteId}`),
-              selected:
-                selectedFeature?.layerFeatureId.layerId === 'sites' &&
-                selectedFeature?.layerFeatureId.featureId === `${selectedHistory.plantingSiteId}`,
+          features: adHocPlots.map((plot) => ({
+            featureId: `${plot.monitoringPlotId}`,
+            geometry: {
+              type: 'MultiPolygon',
+              coordinates: [plot.boundary?.coordinates ?? []],
             },
-          ],
-          layerId: 'sites',
-          style: sitesLayerStyle,
-          visible: selectedLayer === 'sites',
+            label: `${plot.monitoringPlotNumber}`,
+            onClick: selectFeature(selectedHistory.plantingSiteId)('adHocPlots', `${plot.monitoringPlotId}`),
+            selected:
+              selectedFeature?.layerFeatureId.layerId === 'adHocPlots' &&
+              selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
+          })),
+          layerId: 'adHocPlots',
+          style: adHocPlotsLayerStyle,
+          visible: adHocPlotsVisible,
         },
         {
-          features:
-            selectedHistory.strata?.map((stratum) => ({
-              featureId: `${stratum.stratumId}`,
+          features: monitoringPlots
+            .filter((plot) => !plot.isPermanent)
+            .map((plot) => ({
+              featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
-                coordinates: stratum.boundary?.coordinates ?? [],
+                coordinates: [plot.boundary?.coordinates ?? []],
               },
-              label: stratum.name,
-              onClick: selectFeature(selectedHistory.plantingSiteId)('strata', `${stratum.stratumId}`),
+              label: `${plot.monitoringPlotNumber}`,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('temporaryPlots', `${plot.monitoringPlotId}`),
               selected:
-                selectedFeature?.layerFeatureId.layerId === 'strata' &&
-                selectedFeature?.layerFeatureId.featureId === `${stratum.stratumId}`,
-            })) ?? [],
-          layerId: 'strata',
-          style: strataLayerStyle,
-          visible: selectedLayer === 'strata',
+                selectedFeature?.layerFeatureId.layerId === 'temporaryPlots' &&
+                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
+            })),
+          layerId: 'temporaryPlots',
+          style: temporaryPlotsLayerStyle,
+          visible: temporaryPlotsVisible,
+        },
+        {
+          features: monitoringPlots
+            .filter((plot) => plot.isPermanent)
+            .map((plot) => ({
+              featureId: `${plot.monitoringPlotId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: [plot.boundary?.coordinates ?? []],
+              },
+              label: `${plot.monitoringPlotNumber}`,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('permanentPlots', `${plot.monitoringPlotId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'permanentPlots' &&
+                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
+            })),
+          layerId: 'permanentPlots',
+          style: permanentPlotsLayerStyle,
+          visible: permanentPlotsVisible,
         },
         {
           features:
@@ -290,59 +309,40 @@ const ObservationMap = ({ isBiomass, plantingSiteId, selectPlantingSiteId }: Obs
           visible: selectedLayer === 'substrata',
         },
         {
-          features: monitoringPlots
-            .filter((plot) => plot.isPermanent)
-            .map((plot) => ({
-              featureId: `${plot.monitoringPlotId}`,
+          features:
+            selectedHistory.strata?.map((stratum) => ({
+              featureId: `${stratum.stratumId}`,
               geometry: {
                 type: 'MultiPolygon',
-                coordinates: [plot.boundary?.coordinates ?? []],
+                coordinates: stratum.boundary?.coordinates ?? [],
               },
-              label: `${plot.monitoringPlotNumber}`,
-              onClick: selectFeature(selectedHistory.plantingSiteId)('permanentPlots', `${plot.monitoringPlotId}`),
+              label: stratum.name,
+              onClick: selectFeature(selectedHistory.plantingSiteId)('strata', `${stratum.stratumId}`),
               selected:
-                selectedFeature?.layerFeatureId.layerId === 'permanentPlots' &&
-                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
-            })),
-          layerId: 'permanentPlots',
-          style: permanentPlotsLayerStyle,
-          visible: permanentPlotsVisible,
+                selectedFeature?.layerFeatureId.layerId === 'strata' &&
+                selectedFeature?.layerFeatureId.featureId === `${stratum.stratumId}`,
+            })) ?? [],
+          layerId: 'strata',
+          style: strataLayerStyle,
+          visible: selectedLayer === 'strata',
         },
         {
-          features: monitoringPlots
-            .filter((plot) => !plot.isPermanent)
-            .map((plot) => ({
-              featureId: `${plot.monitoringPlotId}`,
+          features: [
+            {
+              featureId: `${selectedHistory.plantingSiteId}`,
               geometry: {
                 type: 'MultiPolygon',
-                coordinates: [plot.boundary?.coordinates ?? []],
+                coordinates: selectedHistory.boundary?.coordinates ?? [],
               },
-              label: `${plot.monitoringPlotNumber}`,
-              onClick: selectFeature(selectedHistory.plantingSiteId)('temporaryPlots', `${plot.monitoringPlotId}`),
+              onClick: selectFeature(selectedHistory.plantingSiteId)('sites', `${selectedHistory.plantingSiteId}`),
               selected:
-                selectedFeature?.layerFeatureId.layerId === 'temporaryPlots' &&
-                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
-            })),
-          layerId: 'temporaryPlots',
-          style: temporaryPlotsLayerStyle,
-          visible: temporaryPlotsVisible,
-        },
-        {
-          features: adHocPlots.map((plot) => ({
-            featureId: `${plot.monitoringPlotId}`,
-            geometry: {
-              type: 'MultiPolygon',
-              coordinates: [plot.boundary?.coordinates ?? []],
+                selectedFeature?.layerFeatureId.layerId === 'sites' &&
+                selectedFeature?.layerFeatureId.featureId === `${selectedHistory.plantingSiteId}`,
             },
-            label: `${plot.monitoringPlotNumber}`,
-            onClick: selectFeature(selectedHistory.plantingSiteId)('adHocPlots', `${plot.monitoringPlotId}`),
-            selected:
-              selectedFeature?.layerFeatureId.layerId === 'adHocPlots' &&
-              selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
-          })),
-          layerId: 'adHocPlots',
-          style: adHocPlotsLayerStyle,
-          visible: adHocPlotsVisible,
+          ],
+          layerId: 'sites',
+          style: sitesLayerStyle,
+          visible: selectedLayer === 'sites',
         },
       ];
     } else if (plantingSiteId !== undefined && plantingSite !== undefined) {
