@@ -17,7 +17,9 @@ const useScheduleObservation = () => {
         // use the old name
         throw new Error('requestedSubzoneIds is undefined');
       }
-      const request = dispatch(requestScheduleObservation({ endDate, plantingSiteId, requestedSubzoneIds, startDate }));
+      const request = dispatch(
+        requestScheduleObservation({ endDate, plantingSiteId, requestedSubstratumIds: requestedSubzoneIds, startDate })
+      );
 
       setRequestId(request.requestId);
     },

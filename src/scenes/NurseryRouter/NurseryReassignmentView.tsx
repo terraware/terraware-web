@@ -134,7 +134,7 @@ export default function NurseryReassignmentView(): JSX.Element {
       reassignments: validReassignments.map((reassignment) => ({
         fromPlantingId: reassignment.plantingId,
         numPlants: reassignment.quantity!,
-        toPlantingSubzoneId: reassignment.newSubzoneId!,
+        toSubstratumId: reassignment.newSubzoneId!,
         notes: reassignment.notes,
       })),
     };

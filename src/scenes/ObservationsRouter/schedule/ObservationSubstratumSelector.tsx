@@ -14,7 +14,7 @@ import { isAfter } from 'src/utils/dateUtils';
 
 interface ObservationSubstratumSelectorProps {
   errorText?: string;
-  onChangeSelectedSubzones: (requestedSubzoneIds: number[]) => void;
+  onChangeSelectedSubzones: (requestedSubstratumIds: number[]) => void;
 }
 
 const ObservationSubstratumSelector = ({ errorText, onChangeSelectedSubzones }: ObservationSubstratumSelectorProps) => {

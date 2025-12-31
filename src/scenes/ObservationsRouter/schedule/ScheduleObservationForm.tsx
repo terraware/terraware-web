@@ -144,7 +144,7 @@ export default function ScheduleObservationForm({
 
   const doSave = useCallback(() => {
     if (startDate && endDate && requestedSubzoneIds && plantingSite) {
-      onSave({ startDate, endDate, requestedSubzoneIds, plantingSiteId: plantingSite.id });
+      onSave({ startDate, endDate, requestedSubstratumIds: requestedSubzoneIds, plantingSiteId: plantingSite.id });
     }
   }, [endDate, onSave, plantingSite, requestedSubzoneIds, startDate]);
 
