@@ -57,13 +57,13 @@ type InternalUserItem = Omit<UpdateProjectInternalUsersRequestPayload['internalU
 };
 
 const HighlightPhotoStableId = '551';
-const ZoneFigureStableId = '525';
+const ProjectZoneFigureStableId = '525';
 const standardStableId = '350';
 const methodologyNumberStableId = '351';
 const carbonCertificationsStableId = '552';
 const variableStableIds = [
   HighlightPhotoStableId,
-  ZoneFigureStableId,
+  ProjectZoneFigureStableId,
   standardStableId,
   methodologyNumberStableId,
   carbonCertificationsStableId,
@@ -362,7 +362,7 @@ const ProjectProfileEdit = () => {
       }
       if (mapPhoto) {
         imageValues.push({
-          variableId: stableToVariable[ZoneFigureStableId].id,
+          variableId: stableToVariable[ProjectZoneFigureStableId].id,
           file: mapPhoto.file,
           caption: '',
           citation: '',

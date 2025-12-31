@@ -73,7 +73,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     return <CellRenderer index={index} column={column} value={getTruncated(value)} row={row} />;
   }
 
-  if (column.key === 'subzoneNames' && value) {
+  if (column.key === 'substratumNames' && value) {
     return <CellRenderer index={index} column={column} value={getTruncated([value])} row={row} />;
   }
 

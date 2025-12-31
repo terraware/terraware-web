@@ -11,9 +11,9 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import strings from 'src/strings';
 
 type PlantingProgressMapDialogProps = {
-  subzoneId: number;
-  subzoneName: string;
-  subzoneAreaHa: number;
+  substratumId: number;
+  substratumName: string;
+  substratumAreaHa: number;
   siteName: string;
   plantingComplete: boolean;
   onUpdatePlantingComplete: (id: number, val: boolean) => void;
@@ -21,9 +21,9 @@ type PlantingProgressMapDialogProps = {
 };
 
 export default function PlantingProgressMapDialog({
-  subzoneId,
-  subzoneName,
-  subzoneAreaHa,
+  substratumId,
+  substratumName,
+  substratumAreaHa,
   siteName,
   plantingComplete,
   onUpdatePlantingComplete,
@@ -33,21 +33,21 @@ export default function PlantingProgressMapDialog({
   const { plantingSiteReportedPlants } = usePlantingSiteData();
   const { species } = useSpeciesData();
 
-  const subzoneReportedPlants = useMemo(() => {
+  const substratumReportedPlants = useMemo(() => {
     if (!plantingSiteReportedPlants) {
       return undefined;
     }
-    const subzones = plantingSiteReportedPlants.strata.flatMap((zone) => zone.substrata);
-    return subzones.find((subzone) => subzone.id === subzoneId);
-  }, [plantingSiteReportedPlants, subzoneId]);
+    const substrata = plantingSiteReportedPlants.strata.flatMap((stratum) => stratum.substrata);
+    return substrata.find((substratum) => substratum.id === substratumId);
+  }, [plantingSiteReportedPlants, substratumId]);
 
   const totalPlants = useMemo(() => {
-    if (subzoneReportedPlants) {
-      return subzoneReportedPlants.species.reduce((acc, reportedSpecies) => acc + reportedSpecies.totalPlants, 0);
+    if (substratumReportedPlants) {
+      return substratumReportedPlants.species.reduce((acc, reportedSpecies) => acc + reportedSpecies.totalPlants, 0);
     } else {
       return 0;
     }
-  }, [subzoneReportedPlants]);
+  }, [substratumReportedPlants]);
 
   const getSpeciesName = useCallback(
     (speciesId: number) => {
@@ -57,7 +57,7 @@ export default function PlantingProgressMapDialog({
   );
 
   const getWithdrawalHistoryLink = () => {
-    const filterParam = `substratumName=${encodeURIComponent(subzoneName)}&siteName=${encodeURIComponent(siteName)}`;
+    const filterParam = `substratumName=${encodeURIComponent(substratumName)}&siteName=${encodeURIComponent(siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (
       <Link
@@ -86,12 +86,12 @@ export default function PlantingProgressMapDialog({
         }}
       >
         <Typography fontSize='16px' fontWeight={600}>
-          {subzoneName}
+          {substratumName}
         </Typography>
         <Typography fontSize='16px' fontWeight={400}>
           {strings.AREA_HA}
           {': '}
-          {subzoneAreaHa}
+          {substratumAreaHa}
         </Typography>
         <Typography fontSize='16px' fontWeight={400}>
           <FormattedNumber value={totalPlants} />
@@ -99,8 +99,8 @@ export default function PlantingProgressMapDialog({
         </Typography>
 
         <ul style={{ margin: 0, paddingLeft: theme.spacing(3) }}>
-          {subzoneReportedPlants &&
-            subzoneReportedPlants.species?.map((reportedSpecies) => (
+          {substratumReportedPlants &&
+            substratumReportedPlants.species?.map((reportedSpecies) => (
               <li key={reportedSpecies.id}>
                 <Typography fontSize='16px' fontWeight={400}>
                   <FormattedNumber value={reportedSpecies.totalPlants} />
@@ -122,7 +122,7 @@ export default function PlantingProgressMapDialog({
         }}
       >
         <Button
-          onClick={() => onUpdatePlantingComplete(subzoneId, !plantingComplete)}
+          onClick={() => onUpdatePlantingComplete(substratumId, !plantingComplete)}
           label={plantingComplete ? strings.UNDO_PLANTING_COMPLETE : strings.SET_PLANTING_COMPLETE}
           type={plantingComplete ? 'passive' : 'productive'}
           disabled={busy}

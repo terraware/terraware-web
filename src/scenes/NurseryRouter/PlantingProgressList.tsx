@@ -23,7 +23,7 @@ import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-const columnsWithoutZones = (): TableColumnType[] => [
+const columnsWithoutStrata = (): TableColumnType[] => [
   {
     key: 'siteName',
     name: strings.PLANTING_SITE,
@@ -41,7 +41,7 @@ const columnsWithoutZones = (): TableColumnType[] => [
   },
 ];
 
-const columnsWithZones = (): TableColumnType[] => [
+const columnsWithStrata = (): TableColumnType[] => [
   {
     key: 'substratumName',
     name: strings.SUBZONE,
@@ -87,39 +87,44 @@ export type PlantingProgressListProps = {
 };
 
 export default function PlantingProgressList({ rows, reloadTracking }: PlantingProgressListProps): JSX.Element {
-  const [hasZones, setHasZones] = useState<boolean | undefined>();
+  const [hasStrata, setHasStrata] = useState<boolean | undefined>();
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();
   const { selectedOrganization } = useOrganization();
   const [requestId, setRequestId] = useState<string>('');
-  const [selectedZoneIdsBySiteId, setSelectedZoneIdsBySiteId] = useState<Record<number, Set<number>>>();
+  const [selectedStratumIdsBySiteId, setSelectedStratumIdsBySiteId] = useState<Record<number, Set<number>>>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
-  const subzonesStatisticsResult = useAppSelector((state) =>
-    selectStrataHaveStatistics(state, selectedOrganization?.id || -1, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
+  const substrataStatisticsResult = useAppSelector((state) =>
+    selectStrataHaveStatistics(
+      state,
+      selectedOrganization?.id || -1,
+      selectedStratumIdsBySiteId,
+      defaultTimeZone.get().id
+    )
   );
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [markingAsComplete, setMarkingAsComplete] = useState(false);
 
   useEffect(() => {
-    if (rows && hasZones === undefined) {
-      setHasZones(rows.some((d) => d.substratumName));
+    if (rows && hasStrata === undefined) {
+      setHasStrata(rows.some((d) => d.substratumName));
     }
-  }, [rows, hasZones]);
+  }, [rows, hasStrata]);
 
   useEffect(() => {
     if (selectedRows) {
-      const zoneIds = selectedRows.reduce((selectedZoneIdsBySiteIdObj: Record<number, Set<number>>, row) => {
+      const stratumIds = selectedRows.reduce((selectedStratumIdsBySiteIdObj: Record<number, Set<number>>, row) => {
         const siteId = row.siteId;
-        if (selectedZoneIdsBySiteIdObj[siteId]) {
-          selectedZoneIdsBySiteIdObj[siteId].add(row.stratumId);
+        if (selectedStratumIdsBySiteIdObj[siteId]) {
+          selectedStratumIdsBySiteIdObj[siteId].add(row.stratumId);
         } else {
-          selectedZoneIdsBySiteIdObj[siteId] = new Set([row.stratumId]);
+          selectedStratumIdsBySiteIdObj[siteId] = new Set([row.stratumId]);
         }
-        return selectedZoneIdsBySiteIdObj;
+        return selectedStratumIdsBySiteIdObj;
       }, {});
-      setSelectedZoneIdsBySiteId(zoneIds);
+      setSelectedStratumIdsBySiteId(stratumIds);
     }
   }, [selectedRows]);
 
@@ -144,9 +149,9 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
 
   const setPlantingCompleted = useCallback(
     (complete: boolean) => {
-      const subzoneIds = selectedRows.map((row) => row.substratumId);
+      const substratumIds = selectedRows.map((row) => row.substratumId);
       const request = dispatch(
-        requestUpdatePlantingsCompleted({ substratumIds: subzoneIds, planting: { plantingCompleted: complete } })
+        requestUpdatePlantingsCompleted({ substratumIds, planting: { plantingCompleted: complete } })
       );
       setMarkingAsComplete(complete);
       setRequestId(request.requestId);
@@ -165,12 +170,12 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
 
   const isClickable = useCallback(() => false, []);
 
-  if (!rows || hasZones === undefined) {
+  if (!rows || hasStrata === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
   const validateUndoPlantingComplete = () => {
-    if (subzonesStatisticsResult) {
+    if (substrataStatisticsResult) {
       setShowWarningModal(true);
       return;
     }
@@ -208,10 +213,10 @@ export default function PlantingProgressList({ rows, reloadTracking }: PlantingP
       )}
       <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
       <Table
-        id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
-        columns={hasZones ? columnsWithZones : columnsWithoutZones}
+        id={hasStrata ? 'plantings-progress-table-with-strata' : 'plantings-progress-table-without-strata'}
+        columns={hasStrata ? columnsWithStrata : columnsWithoutStrata}
         rows={rows}
-        orderBy={hasZones ? 'substratumName' : 'siteName'}
+        orderBy={hasStrata ? 'substratumName' : 'siteName'}
         Renderer={DetailsRenderer}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}

@@ -7,7 +7,7 @@ const makePlantingProgressCsv = ({
 }: {
   plantingProgress: Partial<PlantingProgress>[] | undefined;
 }): Blob => {
-  const columnHeadersWithoutZones = [
+  const columnHeadersWithoutStrata = [
     {
       key: 'siteName',
       displayLabel: strings.PLANTING_SITE,
@@ -22,9 +22,9 @@ const makePlantingProgressCsv = ({
     },
   ];
 
-  const columnHeadersWithZones = [
+  const columnHeadersWithStrata = [
     {
-      key: 'subzoneName',
+      key: 'substratumName',
       displayLabel: strings.SUBZONE,
     },
     {
@@ -40,7 +40,7 @@ const makePlantingProgressCsv = ({
       displayLabel: strings.PROJECT,
     },
     {
-      key: 'zoneName',
+      key: 'stratumName',
       displayLabel: strings.ZONE,
     },
     {
@@ -54,8 +54,8 @@ const makePlantingProgressCsv = ({
   ];
 
   const columnHeaders = plantingProgress?.some((progress) => !!progress?.substratumName)
-    ? columnHeadersWithZones
-    : columnHeadersWithoutZones;
+    ? columnHeadersWithStrata
+    : columnHeadersWithoutStrata;
 
   const data = (plantingProgress || []).map((progress) => ({
     ...progress,
