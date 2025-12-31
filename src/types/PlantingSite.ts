@@ -31,7 +31,7 @@ export type PlantingProgressSubzone = {
   totalSeedlingsSent?: number;
 };
 
-export type UpdatePlantingSubzonePayload = components['schemas']['UpdatePlantingSubzoneRequestPayload'];
+export type UpdateSubstratumPayload = components['schemas']['UpdateSubstratumRequestPayload'];
 
 export type SiteType = 'simple' | 'detailed';
 export type SiteEditStep = 'details' | 'site_boundary' | 'exclusion_areas' | 'zone_boundaries' | 'subzone_boundaries';
